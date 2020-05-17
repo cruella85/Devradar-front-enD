@@ -46,4 +46,35 @@
 #include <time.h>
 #endif
 
-#if (
+#if (defined(__linux__) || defined(__FreeBSD__)) && defined(__has_feature)
+#if __has_feature(modules)
+#if !defined(__arm__)
+#include <stdio.h> // for off_t (to match Glibc.modulemap)
+#endif
+#endif
+#endif
+
+#define DISPATCH_API_VERSION 20181008
+
+#ifndef __DISPATCH_INDIRECT__
+#define __DISPATCH_INDIRECT__
+#endif
+
+#include <os/object.h>
+#include <os/workgroup.h>
+#include <dispatch/base.h>
+#include <dispatch/time.h>
+#include <dispatch/object.h>
+#include <dispatch/queue.h>
+#include <dispatch/block.h>
+#include <dispatch/source.h>
+#include <dispatch/group.h>
+#include <dispatch/semaphore.h>
+#include <dispatch/once.h>
+#include <dispatch/data.h>
+#include <dispatch/io.h>
+#include <dispatch/workloop.h>
+
+#undef __DISPATCH_INDIRECT__
+
+#endif
