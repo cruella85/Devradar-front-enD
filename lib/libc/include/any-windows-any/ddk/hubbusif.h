@@ -733,4 +733,61 @@ typedef struct _USB_DEVICE_INFORMATION_0 {
   USB_DEVICE_SPEED  DeviceSpeed;
   USB_DEVICE_TYPE  DeviceType;
   ULONG  NumberOfOpenPipes;
-  USB_PIPE_IN
+  USB_PIPE_INFORMATION_0  PipeList[1];
+} USB_DEVICE_INFORMATION_0, *PUSB_DEVICE_INFORMATION_0;
+
+typedef struct _USB_CONTROLLER_INFORMATION_0 {
+  ULONG  InformationLevel;
+  ULONG  ActualLength;
+  BOOLEAN SelectiveSuspendEnabled;
+  BOOLEAN IsHighSpeedController;
+} USB_CONTROLLER_INFORMATION_0, *PUSB_CONTROLLER_INFORMATION_0;
+
+typedef struct _USB_CONTROLLER_INFORMATION_1 {
+  ULONG  InformationLevel;
+  ULONG  ActualLength;
+  BOOLEAN SelectiveSuspendEnabled;
+  BOOLEAN IsHighSpeedController;
+  ULONG  HcBusNumber;
+  ULONG  HcBusDevice;
+  ULONG  HcBusFunction;
+} USB_CONTROLLER_INFORMATION_1, *PUSB_CONTROLLER_INFORMATION_1;
+
+typedef struct _USB_EXTPORT_INFORMATION_0 {
+  ULONG  PhysicalPortNumber;
+  ULONG  PortLabelNumber;
+  USHORT VidOverride;
+  USHORT PidOverride;
+  ULONG  PortAttributes;
+} USB_EXTPORT_INFORMATION_0, *PUSB_EXTPORT_INFORMATION;
+
+typedef struct _USB_EXTHUB_INFORMATION_0 {
+  ULONG  InformationLevel;
+  ULONG  NumberOfPorts;
+  USB_EXTPORT_INFORMATION_0  Port[255];
+} USB_EXTHUB_INFORMATION_0, *PUSB_EXTHUB_INFORMATION_0;
+
+typedef struct _USB_DEVICE_PERFORMANCE_INFO_0 {
+  ULONG  InformationLevel;
+  ULONG  ActualLength;
+  ULONG  BulkBytes;
+  ULONG  BulkUrbCount;
+  ULONG  ControlDataBytes;
+  ULONG  ControlUrbCount;
+  ULONG  IsoBytes;
+  ULONG  IsoUrbCount;
+  ULONG  InterruptBytes;
+  ULONG  InterruptUrbCount;
+  ULONG  AllocedInterrupt[6];
+  ULONG  AllocedIso;
+  ULONG  Total32secBandwidth;
+  ULONG  TotalTtBandwidth;
+  ULONG  TotalIsoLatency;
+  ULONG  DroppedIsoPackets;
+  ULONG  TransferErrors;
+} USB_DEVICE_PERFORMANCE_INFO_0, *PUSB_DEVICE_PERFORMANCE_INFO_0;
+
+#include <poppack.h>
+
+#endif /* NTDDI_VERSION >= NTDDI_WINXP */
+
