@@ -560,4 +560,16 @@ PDH_FUNCTION PdhAddEnglishCounterA(PDH_HQUERY hQuery,LPCSTR szFullCounterPath,DW
 
 #define PdhAddEnglishCounter __MINGW_NAME_AW(PdhAddEnglishCounter)
 
-PDH_FUNCTION PdhCollectQueryDataWith
+PDH_FUNCTION PdhCollectQueryDataWithTime(PDH_HQUERY hQuery,LONGLONG *pllTimeStamp);
+
+PDH_FUNCTION PdhValidatePathExW(PDH_HLOG hDataSource,LPCWSTR szFullPathBuffer);
+PDH_FUNCTION PdhValidatePathExA(PDH_HLOG hDataSource,LPCSTR szFullPathBuffer);
+
+#define PdhValidatePathEx __MINGW_NAME_AW(PdhValidatePathEx)
+
+#endif /*(_WIN32_WINNT >= 0x0600)*/
+
+#ifdef __cplusplus
+}
+#endif
+#endif
