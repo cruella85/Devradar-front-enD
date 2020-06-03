@@ -238,4 +238,55 @@ fn testLock(allocator: Allocator, lock: *RwLock) callconv(.Async) void {
     var write_nodes: [shared_it_count]Loop.NextTickNode = undefined;
     for (write_nodes) |*write_node| {
         const frame = allocator.create(@Frame(writeRunner)) catch @panic("memory");
-        write_node.data = frame
+        write_node.data = frame;
+        frame.* = async writeRunner(lock);
+        Loop.instance.?.onNextTick(write_node);
+    }
+
+    for (write_nodes) |*write_node| {
+        const casted = @ptrCast(*const @Frame(writeRunner), write_node.data);
+        await casted;
+        allocator.destroy(casted);
+    }
+    for (read_nodes) |*read_node| {
+        const casted = @ptrCast(*const @Frame(readRunner), read_node.data);
+        await casted;
+        allocator.destroy(casted);
+    }
+}
+
+const shared_it_count = 10;
+var shared_test_data = [1]i32{0} ** 10;
+var shared_test_index: usize = 0;
+var shared_count: usize = 0;
+fn writeRunner(lock: *RwLock) callconv(.Async) void {
+    suspend {} // resumed by onNextTick
+
+    var i: usize = 0;
+    while (i < shared_test_data.len) : (i += 1) {
+        std.time.sleep(100 * std.time.microsecond);
+        const lock_promise = async lock.acquireWrite();
+        const handle = await lock_promise;
+        defer handle.release();
+
+        shared_count += 1;
+        while (shared_test_index < shared_test_data.len) : (shared_test_index += 1) {
+            shared_test_data[shared_test_index] = shared_test_data[shared_test_index] + 1;
+        }
+        shared_test_index = 0;
+    }
+}
+fn readRunner(lock: *RwLock) callconv(.Async) void {
+    suspend {} // resumed by onNextTick
+    std.time.sleep(1);
+
+    var i: usize = 0;
+    while (i < shared_test_data.len) : (i += 1) {
+        const lock_promise = async lock.acquireRead();
+        const handle = await lock_promise;
+        defer handle.release();
+
+        try testing.expect(shared_test_index == 0);
+        try testing.expect(shared_test_data[i] == @intCast(i32, shared_count));
+    }
+}
