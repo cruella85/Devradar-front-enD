@@ -339,4 +339,116 @@ extern "C" {
     virtual HRESULT WINAPI GetPosition(VARIANT *pvarX,VARIANT *pvarY,VARIANT *pvarWidth,VARIANT *pvarHeight) = 0;
     virtual HRESULT WINAPI get_TopMost(VARIANT_BOOL *pVal) = 0;
     virtual HRESULT WINAPI put_TopMost(VARIANT_BOOL newVal) = 0;
-    virtual HRESU
+    virtual HRESULT WINAPI get_Window(__LONG32 *pVal) = 0;
+  };
+#else
+  typedef struct IMSIMWindowVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IMSIMWindow *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IMSIMWindow *This);
+      ULONG (WINAPI *Release)(IMSIMWindow *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IMSIMWindow *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IMSIMWindow *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IMSIMWindow *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IMSIMWindow *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Object)(IMSIMWindow *This,IDispatch **ppDisp);
+      HRESULT (WINAPI *Move)(IMSIMWindow *This,__LONG32 nX,__LONG32 nY,__LONG32 nWidth,__LONG32 nHeight);
+      HRESULT (WINAPI *Focus)(IMSIMWindow *This);
+      HRESULT (WINAPI *Show)(IMSIMWindow *This);
+      HRESULT (WINAPI *Hide)(IMSIMWindow *This);
+      HRESULT (WINAPI *get_Title)(IMSIMWindow *This,BSTR *pVal);
+      HRESULT (WINAPI *put_Title)(IMSIMWindow *This,BSTR newVal);
+      HRESULT (WINAPI *Close)(IMSIMWindow *This);
+      HRESULT (WINAPI *get_HasFocus)(IMSIMWindow *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *get_IsVisible)(IMSIMWindow *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *GetPosition)(IMSIMWindow *This,VARIANT *pvarX,VARIANT *pvarY,VARIANT *pvarWidth,VARIANT *pvarHeight);
+      HRESULT (WINAPI *get_TopMost)(IMSIMWindow *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *put_TopMost)(IMSIMWindow *This,VARIANT_BOOL newVal);
+      HRESULT (WINAPI *get_Window)(IMSIMWindow *This,__LONG32 *pVal);
+    END_INTERFACE
+  } IMSIMWindowVtbl;
+  struct IMSIMWindow {
+    CONST_VTBL struct IMSIMWindowVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IMSIMWindow_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMSIMWindow_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMSIMWindow_Release(This) (This)->lpVtbl->Release(This)
+#define IMSIMWindow_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IMSIMWindow_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IMSIMWindow_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IMSIMWindow_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IMSIMWindow_get_Object(This,ppDisp) (This)->lpVtbl->get_Object(This,ppDisp)
+#define IMSIMWindow_Move(This,nX,nY,nWidth,nHeight) (This)->lpVtbl->Move(This,nX,nY,nWidth,nHeight)
+#define IMSIMWindow_Focus(This) (This)->lpVtbl->Focus(This)
+#define IMSIMWindow_Show(This) (This)->lpVtbl->Show(This)
+#define IMSIMWindow_Hide(This) (This)->lpVtbl->Hide(This)
+#define IMSIMWindow_get_Title(This,pVal) (This)->lpVtbl->get_Title(This,pVal)
+#define IMSIMWindow_put_Title(This,newVal) (This)->lpVtbl->put_Title(This,newVal)
+#define IMSIMWindow_Close(This) (This)->lpVtbl->Close(This)
+#define IMSIMWindow_get_HasFocus(This,pVal) (This)->lpVtbl->get_HasFocus(This,pVal)
+#define IMSIMWindow_get_IsVisible(This,pVal) (This)->lpVtbl->get_IsVisible(This,pVal)
+#define IMSIMWindow_GetPosition(This,pvarX,pvarY,pvarWidth,pvarHeight) (This)->lpVtbl->GetPosition(This,pvarX,pvarY,pvarWidth,pvarHeight)
+#define IMSIMWindow_get_TopMost(This,pVal) (This)->lpVtbl->get_TopMost(This,pVal)
+#define IMSIMWindow_put_TopMost(This,newVal) (This)->lpVtbl->put_TopMost(This,newVal)
+#define IMSIMWindow_get_Window(This,pVal) (This)->lpVtbl->get_Window(This,pVal)
+#endif
+#endif
+  HRESULT WINAPI IMSIMWindow_get_Object_Proxy(IMSIMWindow *This,IDispatch **ppDisp);
+  void __RPC_STUB IMSIMWindow_get_Object_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_Move_Proxy(IMSIMWindow *This,__LONG32 nX,__LONG32 nY,__LONG32 nWidth,__LONG32 nHeight);
+  void __RPC_STUB IMSIMWindow_Move_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_Focus_Proxy(IMSIMWindow *This);
+  void __RPC_STUB IMSIMWindow_Focus_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_Show_Proxy(IMSIMWindow *This);
+  void __RPC_STUB IMSIMWindow_Show_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_Hide_Proxy(IMSIMWindow *This);
+  void __RPC_STUB IMSIMWindow_Hide_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_get_Title_Proxy(IMSIMWindow *This,BSTR *pVal);
+  void __RPC_STUB IMSIMWindow_get_Title_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_put_Title_Proxy(IMSIMWindow *This,BSTR newVal);
+  void __RPC_STUB IMSIMWindow_put_Title_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_Close_Proxy(IMSIMWindow *This);
+  void __RPC_STUB IMSIMWindow_Close_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_get_HasFocus_Proxy(IMSIMWindow *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IMSIMWindow_get_HasFocus_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_get_IsVisible_Proxy(IMSIMWindow *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IMSIMWindow_get_IsVisible_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_GetPosition_Proxy(IMSIMWindow *This,VARIANT *pvarX,VARIANT *pvarY,VARIANT *pvarWidth,VARIANT *pvarHeight);
+  void __RPC_STUB IMSIMWindow_GetPosition_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_get_TopMost_Proxy(IMSIMWindow *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IMSIMWindow_get_TopMost_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_put_TopMost_Proxy(IMSIMWindow *This,VARIANT_BOOL newVal);
+  void __RPC_STUB IMSIMWindow_put_TopMost_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMWindow_get_Window_Proxy(IMSIMWindow *This,__LONG32 *pVal);
+  void __RPC_STUB IMSIMWindow_get_Window_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __DMSIMWindowEvents_DISPINTERFACE_DEFINED__
+#define __DMSIMWindowEvents_DISPINTERFACE_DEFINED__
+  EXTERN_C const IID DIID_DMSIMWindowEvents;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct DMSIMWindowEvents : public IDispatch {
+  };
+#else
+  typedef struct DMSIMWindowEventsVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(DMSIMWindowEvents *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(DMSIMWindowEvents *This);
+      ULONG (WINAPI *Release)(DMSIMWindowEvents *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(DMSIMWindowEvents *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(DMSIMWindowEvents *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(DMSIMWindowEvents *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(DMSIMWindowEvents *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+    END_INTERFACE
+  } DMSIMWindowEventsVtbl;
+  struct DMSIMWindowEvents {
+    CONST_VTBL struct DMSIMWindowEventsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define DMSIMWindowEvents_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define DMSIMWindowEvents_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define DMSIMWindowEvents_Release(This) (This)->lpVtbl->Release(This)
+#define DMSIMWindowEvents_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define DMSIMWindowEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define DMSIMWindowEvents_GetIDsOfNames(This,riid,rgszNames,cNames,
