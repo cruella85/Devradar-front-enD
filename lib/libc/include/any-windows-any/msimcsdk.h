@@ -226,4 +226,117 @@ extern "C" {
     virtual HRESULT WINAPI CreateContext(VARIANT Profile,VARIANT Flags,IDispatch **ppInterface) = 0;
     virtual HRESULT WINAPI ShowOptions(void) = 0;
     virtual HRESULT WINAPI get_Profiles(IDispatch **pProfile) = 0;
-    virtual HRESULT WINAPI HostWindow(BSTR bstrControl,__LONG32 lStyle,VARIANT_BOOL fShowOnTaskbar,IDispatch **pp
+    virtual HRESULT WINAPI HostWindow(BSTR bstrControl,__LONG32 lStyle,VARIANT_BOOL fShowOnTaskbar,IDispatch **ppMSIMWnd) = 0;
+    virtual HRESULT WINAPI CreateProfile(BSTR bstrProfile,IDispatch **ppProfile) = 0;
+    virtual HRESULT WINAPI PopupMessage(BSTR bstrMessage,__LONG32 nTimeout,VARIANT_BOOL fClick,__LONG32 *plCookie) = 0;
+    virtual HRESULT WINAPI HostWindowEx(BSTR bstrControl,__LONG32 lStyle,__LONG32 lExStyle,IStream *pStream,IMSIMWindow **ppMSIMWindow,IUnknown **ppUnk,REFIID iidAdvise,IUnknown *punkSink) = 0;
+  };
+#else
+  typedef struct IMSIMHostVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IMSIMHost *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IMSIMHost *This);
+      ULONG (WINAPI *Release)(IMSIMHost *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IMSIMHost *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IMSIMHost *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IMSIMHost *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IMSIMHost *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *CreateContext)(IMSIMHost *This,VARIANT Profile,VARIANT Flags,IDispatch **ppInterface);
+      HRESULT (WINAPI *ShowOptions)(IMSIMHost *This);
+      HRESULT (WINAPI *get_Profiles)(IMSIMHost *This,IDispatch **pProfile);
+      HRESULT (WINAPI *HostWindow)(IMSIMHost *This,BSTR bstrControl,__LONG32 lStyle,VARIANT_BOOL fShowOnTaskbar,IDispatch **ppMSIMWnd);
+      HRESULT (WINAPI *CreateProfile)(IMSIMHost *This,BSTR bstrProfile,IDispatch **ppProfile);
+      HRESULT (WINAPI *PopupMessage)(IMSIMHost *This,BSTR bstrMessage,__LONG32 nTimeout,VARIANT_BOOL fClick,__LONG32 *plCookie);
+      HRESULT (WINAPI *HostWindowEx)(IMSIMHost *This,BSTR bstrControl,__LONG32 lStyle,__LONG32 lExStyle,IStream *pStream,IMSIMWindow **ppMSIMWindow,IUnknown **ppUnk,REFIID iidAdvise,IUnknown *punkSink);
+    END_INTERFACE
+  } IMSIMHostVtbl;
+  struct IMSIMHost {
+    CONST_VTBL struct IMSIMHostVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IMSIMHost_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMSIMHost_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMSIMHost_Release(This) (This)->lpVtbl->Release(This)
+#define IMSIMHost_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IMSIMHost_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IMSIMHost_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IMSIMHost_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IMSIMHost_CreateContext(This,Profile,Flags,ppInterface) (This)->lpVtbl->CreateContext(This,Profile,Flags,ppInterface)
+#define IMSIMHost_ShowOptions(This) (This)->lpVtbl->ShowOptions(This)
+#define IMSIMHost_get_Profiles(This,pProfile) (This)->lpVtbl->get_Profiles(This,pProfile)
+#define IMSIMHost_HostWindow(This,bstrControl,lStyle,fShowOnTaskbar,ppMSIMWnd) (This)->lpVtbl->HostWindow(This,bstrControl,lStyle,fShowOnTaskbar,ppMSIMWnd)
+#define IMSIMHost_CreateProfile(This,bstrProfile,ppProfile) (This)->lpVtbl->CreateProfile(This,bstrProfile,ppProfile)
+#define IMSIMHost_PopupMessage(This,bstrMessage,nTimeout,fClick,plCookie) (This)->lpVtbl->PopupMessage(This,bstrMessage,nTimeout,fClick,plCookie)
+#define IMSIMHost_HostWindowEx(This,bstrControl,lStyle,lExStyle,pStream,ppMSIMWindow,ppUnk,iidAdvise,punkSink) (This)->lpVtbl->HostWindowEx(This,bstrControl,lStyle,lExStyle,pStream,ppMSIMWindow,ppUnk,iidAdvise,punkSink)
+#endif
+#endif
+  HRESULT WINAPI IMSIMHost_CreateContext_Proxy(IMSIMHost *This,VARIANT Profile,VARIANT Flags,IDispatch **ppInterface);
+  void __RPC_STUB IMSIMHost_CreateContext_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMHost_ShowOptions_Proxy(IMSIMHost *This);
+  void __RPC_STUB IMSIMHost_ShowOptions_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMHost_get_Profiles_Proxy(IMSIMHost *This,IDispatch **pProfile);
+  void __RPC_STUB IMSIMHost_get_Profiles_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMHost_HostWindow_Proxy(IMSIMHost *This,BSTR bstrControl,__LONG32 lStyle,VARIANT_BOOL fShowOnTaskbar,IDispatch **ppMSIMWnd);
+  void __RPC_STUB IMSIMHost_HostWindow_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMHost_CreateProfile_Proxy(IMSIMHost *This,BSTR bstrProfile,IDispatch **ppProfile);
+  void __RPC_STUB IMSIMHost_CreateProfile_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMHost_PopupMessage_Proxy(IMSIMHost *This,BSTR bstrMessage,__LONG32 nTimeout,VARIANT_BOOL fClick,__LONG32 *plCookie);
+  void __RPC_STUB IMSIMHost_PopupMessage_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IMSIMHost_HostWindowEx_Proxy(IMSIMHost *This,BSTR bstrControl,__LONG32 lStyle,__LONG32 lExStyle,IStream *pStream,IMSIMWindow **ppMSIMWindow,IUnknown **ppUnk,REFIID iidAdvise,IUnknown *punkSink);
+  void __RPC_STUB IMSIMHost_HostWindowEx_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __DMSIMHostEvents_DISPINTERFACE_DEFINED__
+#define __DMSIMHostEvents_DISPINTERFACE_DEFINED__
+  EXTERN_C const IID DIID_DMSIMHostEvents;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct DMSIMHostEvents : public IDispatch {
+  };
+#else
+  typedef struct DMSIMHostEventsVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(DMSIMHostEvents *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(DMSIMHostEvents *This);
+      ULONG (WINAPI *Release)(DMSIMHostEvents *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(DMSIMHostEvents *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(DMSIMHostEvents *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(DMSIMHostEvents *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(DMSIMHostEvents *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+    END_INTERFACE
+  } DMSIMHostEventsVtbl;
+  struct DMSIMHostEvents {
+    CONST_VTBL struct DMSIMHostEventsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define DMSIMHostEvents_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define DMSIMHostEvents_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define DMSIMHostEvents_Release(This) (This)->lpVtbl->Release(This)
+#define DMSIMHostEvents_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define DMSIMHostEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define DMSIMHostEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define DMSIMHostEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#endif
+#endif
+#endif
+
+#ifndef __IMSIMWindow_INTERFACE_DEFINED__
+#define __IMSIMWindow_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IMSIMWindow;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+
+  struct IMSIMWindow : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Object(IDispatch **ppDisp) = 0;
+    virtual HRESULT WINAPI Move(__LONG32 nX,__LONG32 nY,__LONG32 nWidth,__LONG32 nHeight) = 0;
+    virtual HRESULT WINAPI Focus(void) = 0;
+    virtual HRESULT WINAPI Show(void) = 0;
+    virtual HRESULT WINAPI Hide(void) = 0;
+    virtual HRESULT WINAPI get_Title(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI put_Title(BSTR newVal) = 0;
+    virtual HRESULT WINAPI Close(void) = 0;
+    virtual HRESULT WINAPI get_HasFocus(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI get_IsVisible(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI GetPosition(VARIANT *pvarX,VARIANT *pvarY,VARIANT *pvarWidth,VARIANT *pvarHeight) = 0;
+    virtual HRESULT WINAPI get_TopMost(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI put_TopMost(VARIANT_BOOL newVal) = 0;
+    virtual HRESU
