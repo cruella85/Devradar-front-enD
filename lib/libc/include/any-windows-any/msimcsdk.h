@@ -451,4 +451,105 @@ extern "C" {
 #define DMSIMWindowEvents_Release(This) (This)->lpVtbl->Release(This)
 #define DMSIMWindowEvents_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
 #define DMSIMWindowEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
-#define DMSIMWindowEvents_GetIDsOfNames(This,riid,rgszNames,cNames,
+#define DMSIMWindowEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define DMSIMWindowEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#endif
+#endif
+#endif
+
+#ifndef __IIMService_INTERFACE_DEFINED__
+#define __IIMService_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IIMService;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IIMService : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Server(BSTR *pbstrName) = 0;
+    virtual HRESULT WINAPI get_IMAddress(BSTR *pbstrName) = 0;
+    virtual HRESULT WINAPI put_FriendlyName(BSTR bstrName) = 0;
+    virtual HRESULT WINAPI get_FriendlyName(BSTR *pbstrName) = 0;
+    virtual HRESULT WINAPI Logoff(void) = 0;
+    virtual HRESULT WINAPI FindContact(BSTR bstrFirstName,BSTR bstrLastName,BSTR bstrAlias,BSTR bstrCity,BSTR bstrState,BSTR bstrCountry,LONG *plCookie) = 0;
+    virtual HRESULT WINAPI Logon(VARIANT varParameter) = 0;
+    virtual HRESULT WINAPI CreateContact(BSTR bstrAlias,IDispatch **ppContact) = 0;
+    virtual HRESULT WINAPI SetLocalState(__LONG32 lState,BSTR bstrDescription,VARIANT varData) = 0;
+    virtual HRESULT WINAPI GetLocalState(VARIANT *pvarState,VARIANT *pvarDescription,VARIANT *pvarData) = 0;
+    virtual HRESULT WINAPI CreateIMSession(VARIANT varIMContact,IDispatch **ppIMSession) = 0;
+    virtual HRESULT WINAPI get_IMSessions(IDispatch **ppIMSessions) = 0;
+    virtual HRESULT WINAPI NewList(BSTR bstrListName,__LONG32 bfProperties,IDispatch **ppList) = 0;
+    virtual HRESULT WINAPI List(BSTR bstrListName,IDispatch **ppList) = 0;
+    virtual HRESULT WINAPI RemoveList(BSTR bstrListName) = 0;
+    virtual HRESULT WINAPI SendNetMeetingInvite(VARIANT varContact,__LONG32 lInviteCookie,__LONG32 *plSendCookie) = 0;
+    virtual HRESULT WINAPI SendNetMeetingAccept(VARIANT varContact,__LONG32 lInviteCookie,__LONG32 lInviteType,__LONG32 *plSendCookie) = 0;
+    virtual HRESULT WINAPI SendNetMeetingCancel(VARIANT varContact,__LONG32 lInviteCookie,__LONG32 hrReason,__LONG32 *plSendCookie) = 0;
+    virtual HRESULT WINAPI get_BlockByDefault(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI put_BlockByDefault(VARIANT_BOOL newVal) = 0;
+  };
+#else
+  typedef struct IIMServiceVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IIMService *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IIMService *This);
+      ULONG (WINAPI *Release)(IIMService *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IIMService *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IIMService *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IIMService *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IIMService *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Server)(IIMService *This,BSTR *pbstrName);
+      HRESULT (WINAPI *get_IMAddress)(IIMService *This,BSTR *pbstrName);
+      HRESULT (WINAPI *put_FriendlyName)(IIMService *This,BSTR bstrName);
+      HRESULT (WINAPI *get_FriendlyName)(IIMService *This,BSTR *pbstrName);
+      HRESULT (WINAPI *Logoff)(IIMService *This);
+      HRESULT (WINAPI *FindContact)(IIMService *This,BSTR bstrFirstName,BSTR bstrLastName,BSTR bstrAlias,BSTR bstrCity,BSTR bstrState,BSTR bstrCountry,LONG *plCookie);
+      HRESULT (WINAPI *Logon)(IIMService *This,VARIANT varParameter);
+      HRESULT (WINAPI *CreateContact)(IIMService *This,BSTR bstrAlias,IDispatch **ppContact);
+      HRESULT (WINAPI *SetLocalState)(IIMService *This,__LONG32 lState,BSTR bstrDescription,VARIANT varData);
+      HRESULT (WINAPI *GetLocalState)(IIMService *This,VARIANT *pvarState,VARIANT *pvarDescription,VARIANT *pvarData);
+      HRESULT (WINAPI *CreateIMSession)(IIMService *This,VARIANT varIMContact,IDispatch **ppIMSession);
+      HRESULT (WINAPI *get_IMSessions)(IIMService *This,IDispatch **ppIMSessions);
+      HRESULT (WINAPI *NewList)(IIMService *This,BSTR bstrListName,__LONG32 bfProperties,IDispatch **ppList);
+      HRESULT (WINAPI *List)(IIMService *This,BSTR bstrListName,IDispatch **ppList);
+      HRESULT (WINAPI *RemoveList)(IIMService *This,BSTR bstrListName);
+      HRESULT (WINAPI *SendNetMeetingInvite)(IIMService *This,VARIANT varContact,__LONG32 lInviteCookie,__LONG32 *plSendCookie);
+      HRESULT (WINAPI *SendNetMeetingAccept)(IIMService *This,VARIANT varContact,__LONG32 lInviteCookie,__LONG32 lInviteType,__LONG32 *plSendCookie);
+      HRESULT (WINAPI *SendNetMeetingCancel)(IIMService *This,VARIANT varContact,__LONG32 lInviteCookie,__LONG32 hrReason,__LONG32 *plSendCookie);
+      HRESULT (WINAPI *get_BlockByDefault)(IIMService *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *put_BlockByDefault)(IIMService *This,VARIANT_BOOL newVal);
+    END_INTERFACE
+  } IIMServiceVtbl;
+  struct IIMService {
+    CONST_VTBL struct IIMServiceVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IIMService_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IIMService_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IIMService_Release(This) (This)->lpVtbl->Release(This)
+#define IIMService_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IIMService_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IIMService_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IIMService_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IIMService_get_Server(This,pbstrName) (This)->lpVtbl->get_Server(This,pbstrName)
+#define IIMService_get_IMAddress(This,pbstrName) (This)->lpVtbl->get_IMAddress(This,pbstrName)
+#define IIMService_put_FriendlyName(This,bstrName) (This)->lpVtbl->put_FriendlyName(This,bstrName)
+#define IIMService_get_FriendlyName(This,pbstrName) (This)->lpVtbl->get_FriendlyName(This,pbstrName)
+#define IIMService_Logoff(This) (This)->lpVtbl->Logoff(This)
+#define IIMService_FindContact(This,bstrFirstName,bstrLastName,bstrAlias,bstrCity,bstrState,bstrCountry,plCookie) (This)->lpVtbl->FindContact(This,bstrFirstName,bstrLastName,bstrAlias,bstrCity,bstrState,bstrCountry,plCookie)
+#define IIMService_Logon(This,varParameter) (This)->lpVtbl->Logon(This,varParameter)
+#define IIMService_CreateContact(This,bstrAlias,ppContact) (This)->lpVtbl->CreateContact(This,bstrAlias,ppContact)
+#define IIMService_SetLocalState(This,lState,bstrDescription,varData) (This)->lpVtbl->SetLocalState(This,lState,bstrDescription,varData)
+#define IIMService_GetLocalState(This,pvarState,pvarDescription,pvarData) (This)->lpVtbl->GetLocalState(This,pvarState,pvarDescription,pvarData)
+#define IIMService_CreateIMSession(This,varIMContact,ppIMSession) (This)->lpVtbl->CreateIMSession(This,varIMContact,ppIMSession)
+#define IIMService_get_IMSessions(This,ppIMSessions) (This)->lpVtbl->get_IMSessions(This,ppIMSessions)
+#define IIMService_NewList(This,bstrListName,bfProperties,ppList) (This)->lpVtbl->NewList(This,bstrListName,bfProperties,ppList)
+#define IIMService_List(This,bstrListName,ppList) (This)->lpVtbl->List(This,bstrListName,ppList)
+#define IIMService_RemoveList(This,bstrListName) (This)->lpVtbl->RemoveList(This,bstrListName)
+#define IIMService_SendNetMeetingInvite(This,varContact,lInviteCookie,plSendCookie) (This)->lpVtbl->SendNetMeetingInvite(This,varContact,lInviteCookie,plSendCookie)
+#define IIMService_SendNetMeetingAccept(This,varContact,lInviteCookie,lInviteType,plSendCookie) (This)->lpVtbl->SendNetMeetingAccept(This,varContact,lInviteCookie,lInviteType,plSendCookie)
+#define IIMService_SendNetMeetingCancel(This,varContact,lInviteCookie,hrReason,plSendCookie) (This)->lpVtbl->SendNetMeetingCancel(This,varContact,lInviteCookie,hrReason,plSendCookie)
+#define IIMService_get_BlockByDefault(This,pVal) (This)->lpVtbl->get_BlockByDefault(This,pVal)
+#define IIMService_put_BlockByDefault(This,newVal) (This)->lpVtbl->put_BlockByDefault(This,newVal)
+#endif
+#endif
+  HRESULT WINAPI IIMService_get_Server_Proxy(IIMService *This,BSTR *pbstrName);
+  void __RPC_STUB IIMService_get_Server_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_get_IMAddress_Proxy(IIMService *This,BSTR *pbstrName);
+  void __RPC_STUB IIMService_get_IMAddress_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_p
