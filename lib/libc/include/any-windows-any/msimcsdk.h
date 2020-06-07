@@ -552,4 +552,104 @@ extern "C" {
   HRESULT WINAPI IIMService_get_Server_Proxy(IIMService *This,BSTR *pbstrName);
   void __RPC_STUB IIMService_get_Server_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
   HRESULT WINAPI IIMService_get_IMAddress_Proxy(IIMService *This,BSTR *pbstrName);
-  void __RPC_STUB IIMService_get_IMAddress_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_p
+  void __RPC_STUB IIMService_get_IMAddress_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_put_FriendlyName_Proxy(IIMService *This,BSTR bstrName);
+  void __RPC_STUB IIMService_put_FriendlyName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_get_FriendlyName_Proxy(IIMService *This,BSTR *pbstrName);
+  void __RPC_STUB IIMService_get_FriendlyName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_Logoff_Proxy(IIMService *This);
+  void __RPC_STUB IIMService_Logoff_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_FindContact_Proxy(IIMService *This,BSTR bstrFirstName,BSTR bstrLastName,BSTR bstrAlias,BSTR bstrCity,BSTR bstrState,BSTR bstrCountry,LONG *plCookie);
+  void __RPC_STUB IIMService_FindContact_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_Logon_Proxy(IIMService *This,VARIANT varParameter);
+  void __RPC_STUB IIMService_Logon_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_CreateContact_Proxy(IIMService *This,BSTR bstrAlias,IDispatch **ppContact);
+  void __RPC_STUB IIMService_CreateContact_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_SetLocalState_Proxy(IIMService *This,__LONG32 lState,BSTR bstrDescription,VARIANT varData);
+  void __RPC_STUB IIMService_SetLocalState_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_GetLocalState_Proxy(IIMService *This,VARIANT *pvarState,VARIANT *pvarDescription,VARIANT *pvarData);
+  void __RPC_STUB IIMService_GetLocalState_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_CreateIMSession_Proxy(IIMService *This,VARIANT varIMContact,IDispatch **ppIMSession);
+  void __RPC_STUB IIMService_CreateIMSession_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_get_IMSessions_Proxy(IIMService *This,IDispatch **ppIMSessions);
+  void __RPC_STUB IIMService_get_IMSessions_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_NewList_Proxy(IIMService *This,BSTR bstrListName,__LONG32 bfProperties,IDispatch **ppList);
+  void __RPC_STUB IIMService_NewList_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_List_Proxy(IIMService *This,BSTR bstrListName,IDispatch **ppList);
+  void __RPC_STUB IIMService_List_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_RemoveList_Proxy(IIMService *This,BSTR bstrListName);
+  void __RPC_STUB IIMService_RemoveList_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_SendNetMeetingInvite_Proxy(IIMService *This,VARIANT varContact,__LONG32 lInviteCookie,__LONG32 *plSendCookie);
+  void __RPC_STUB IIMService_SendNetMeetingInvite_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_SendNetMeetingAccept_Proxy(IIMService *This,VARIANT varContact,__LONG32 lInviteCookie,__LONG32 lInviteType,__LONG32 *plSendCookie);
+  void __RPC_STUB IIMService_SendNetMeetingAccept_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_SendNetMeetingCancel_Proxy(IIMService *This,VARIANT varContact,__LONG32 lInviteCookie,__LONG32 hrReason,__LONG32 *plSendCookie);
+  void __RPC_STUB IIMService_SendNetMeetingCancel_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_get_BlockByDefault_Proxy(IIMService *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IIMService_get_BlockByDefault_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMService_put_BlockByDefault_Proxy(IIMService *This,VARIANT_BOOL newVal);
+  void __RPC_STUB IIMService_put_BlockByDefault_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __DIMServiceEvents_DISPINTERFACE_DEFINED__
+#define __DIMServiceEvents_DISPINTERFACE_DEFINED__
+  EXTERN_C const IID DIID_DIMServiceEvents;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct DIMServiceEvents : public IDispatch {
+  };
+#else
+  typedef struct DIMServiceEventsVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(DIMServiceEvents *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(DIMServiceEvents *This);
+      ULONG (WINAPI *Release)(DIMServiceEvents *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(DIMServiceEvents *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(DIMServiceEvents *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(DIMServiceEvents *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(DIMServiceEvents *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+    END_INTERFACE
+  } DIMServiceEventsVtbl;
+  struct DIMServiceEvents {
+    CONST_VTBL struct DIMServiceEventsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define DIMServiceEvents_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define DIMServiceEvents_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define DIMServiceEvents_Release(This) (This)->lpVtbl->Release(This)
+#define DIMServiceEvents_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define DIMServiceEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define DIMServiceEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define DIMServiceEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#endif
+#endif
+#endif
+
+#ifndef __IIMContact_INTERFACE_DEFINED__
+#define __IIMContact_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IIMContact;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IIMContact : public IDispatch {
+  public:
+    virtual HRESULT WINAPI put_FriendlyName(BSTR bstrFriendlyName) = 0;
+    virtual HRESULT WINAPI get_FriendlyName(BSTR *pbstrFriendlyName) = 0;
+    virtual HRESULT WINAPI get_EmailAddress(BSTR *pbstrEmailAddress) = 0;
+    virtual HRESULT WINAPI get_State(IM_STATE *pmState) = 0;
+    virtual HRESULT WINAPI get_LogonName(BSTR *pbstrLogonName) = 0;
+    virtual HRESULT WINAPI SendText(BSTR bstrMsgHeader,BSTR bstrMsgText,IM_MSG_TYPE MsgType,LONG *plCookie) = 0;
+    virtual HRESULT WINAPI get_Service(IDispatch **ppService) = 0;
+  };
+#else
+  typedef struct IIMContactVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IIMContact *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IIMContact *This);
+      ULONG (WINAPI *Release)(IIMContact *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IIMContact *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IIMContact *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IIMContact *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IIMContact *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *put_FriendlyName)(IIMContact *This,BSTR bstrFriendlyName);
+      HRESULT (WINAPI *get_FriendlyName)(IIMContact *This,BSTR *pbstrFriendlyName);
+      HRESULT (WINAPI *get_EmailAddress)(IIMContact *This,BSTR *pbstrEmailAddress);
+      HRESULT (WINAPI *get_State)(IIMContact *This,IM_STATE *pmState);
+     
