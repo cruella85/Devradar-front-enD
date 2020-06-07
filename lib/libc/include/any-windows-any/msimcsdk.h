@@ -652,4 +652,113 @@ extern "C" {
       HRESULT (WINAPI *get_FriendlyName)(IIMContact *This,BSTR *pbstrFriendlyName);
       HRESULT (WINAPI *get_EmailAddress)(IIMContact *This,BSTR *pbstrEmailAddress);
       HRESULT (WINAPI *get_State)(IIMContact *This,IM_STATE *pmState);
-     
+      HRESULT (WINAPI *get_LogonName)(IIMContact *This,BSTR *pbstrLogonName);
+      HRESULT (WINAPI *SendText)(IIMContact *This,BSTR bstrMsgHeader,BSTR bstrMsgText,IM_MSG_TYPE MsgType,LONG *plCookie);
+      HRESULT (WINAPI *get_Service)(IIMContact *This,IDispatch **ppService);
+    END_INTERFACE
+  } IIMContactVtbl;
+  struct IIMContact {
+    CONST_VTBL struct IIMContactVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IIMContact_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IIMContact_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IIMContact_Release(This) (This)->lpVtbl->Release(This)
+#define IIMContact_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IIMContact_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IIMContact_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IIMContact_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IIMContact_put_FriendlyName(This,bstrFriendlyName) (This)->lpVtbl->put_FriendlyName(This,bstrFriendlyName)
+#define IIMContact_get_FriendlyName(This,pbstrFriendlyName) (This)->lpVtbl->get_FriendlyName(This,pbstrFriendlyName)
+#define IIMContact_get_EmailAddress(This,pbstrEmailAddress) (This)->lpVtbl->get_EmailAddress(This,pbstrEmailAddress)
+#define IIMContact_get_State(This,pmState) (This)->lpVtbl->get_State(This,pmState)
+#define IIMContact_get_LogonName(This,pbstrLogonName) (This)->lpVtbl->get_LogonName(This,pbstrLogonName)
+#define IIMContact_SendText(This,bstrMsgHeader,bstrMsgText,MsgType,plCookie) (This)->lpVtbl->SendText(This,bstrMsgHeader,bstrMsgText,MsgType,plCookie)
+#define IIMContact_get_Service(This,ppService) (This)->lpVtbl->get_Service(This,ppService)
+#endif
+#endif
+  HRESULT WINAPI IIMContact_put_FriendlyName_Proxy(IIMContact *This,BSTR bstrFriendlyName);
+  void __RPC_STUB IIMContact_put_FriendlyName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContact_get_FriendlyName_Proxy(IIMContact *This,BSTR *pbstrFriendlyName);
+  void __RPC_STUB IIMContact_get_FriendlyName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContact_get_EmailAddress_Proxy(IIMContact *This,BSTR *pbstrEmailAddress);
+  void __RPC_STUB IIMContact_get_EmailAddress_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContact_get_State_Proxy(IIMContact *This,IM_STATE *pmState);
+  void __RPC_STUB IIMContact_get_State_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContact_get_LogonName_Proxy(IIMContact *This,BSTR *pbstrLogonName);
+  void __RPC_STUB IIMContact_get_LogonName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContact_SendText_Proxy(IIMContact *This,BSTR bstrMsgHeader,BSTR bstrMsgText,IM_MSG_TYPE MsgType,LONG *plCookie);
+  void __RPC_STUB IIMContact_SendText_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContact_get_Service_Proxy(IIMContact *This,IDispatch **ppService);
+  void __RPC_STUB IIMContact_get_Service_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IIMContacts_INTERFACE_DEFINED__
+#define __IIMContacts_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IIMContacts;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IIMContacts : public IDispatch {
+  public:
+    virtual HRESULT WINAPI Item(VARIANT varItem,IDispatch **ppContact) = 0;
+    virtual HRESULT WINAPI get_Count(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI Add(IDispatch *pContact) = 0;
+    virtual HRESULT WINAPI Remove(IDispatch *pContact) = 0;
+    virtual HRESULT WINAPI get_Name(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI put_Name(BSTR newVal) = 0;
+    virtual HRESULT WINAPI get_Properties(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_Cookie(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IUnknown **ppVal) = 0;
+  };
+#else
+  typedef struct IIMContactsVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IIMContacts *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IIMContacts *This);
+      ULONG (WINAPI *Release)(IIMContacts *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IIMContacts *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IIMContacts *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IIMContacts *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IIMContacts *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *Item)(IIMContacts *This,VARIANT varItem,IDispatch **ppContact);
+      HRESULT (WINAPI *get_Count)(IIMContacts *This,__LONG32 *pVal);
+      HRESULT (WINAPI *Add)(IIMContacts *This,IDispatch *pContact);
+      HRESULT (WINAPI *Remove)(IIMContacts *This,IDispatch *pContact);
+      HRESULT (WINAPI *get_Name)(IIMContacts *This,BSTR *pVal);
+      HRESULT (WINAPI *put_Name)(IIMContacts *This,BSTR newVal);
+      HRESULT (WINAPI *get_Properties)(IIMContacts *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_Cookie)(IIMContacts *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get__NewEnum)(IIMContacts *This,IUnknown **ppVal);
+    END_INTERFACE
+  } IIMContactsVtbl;
+  struct IIMContacts {
+    CONST_VTBL struct IIMContactsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IIMContacts_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IIMContacts_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IIMContacts_Release(This) (This)->lpVtbl->Release(This)
+#define IIMContacts_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IIMContacts_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IIMContacts_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IIMContacts_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IIMContacts_Item(This,varItem,ppContact) (This)->lpVtbl->Item(This,varItem,ppContact)
+#define IIMContacts_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
+#define IIMContacts_Add(This,pContact) (This)->lpVtbl->Add(This,pContact)
+#define IIMContacts_Remove(This,pContact) (This)->lpVtbl->Remove(This,pContact)
+#define IIMContacts_get_Name(This,pVal) (This)->lpVtbl->get_Name(This,pVal)
+#define IIMContacts_put_Name(This,newVal) (This)->lpVtbl->put_Name(This,newVal)
+#define IIMContacts_get_Properties(This,pVal) (This)->lpVtbl->get_Properties(This,pVal)
+#define IIMContacts_get_Cookie(This,pVal) (This)->lpVtbl->get_Cookie(This,pVal)
+#define IIMContacts_get__NewEnum(This,ppVal) (This)->lpVtbl->get__NewEnum(This,ppVal)
+#endif
+#endif
+  HRESULT WINAPI IIMContacts_Item_Proxy(IIMContacts *This,VARIANT varItem,IDispatch **ppContact);
+  void __RPC_STUB IIMContacts_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_get_Count_Proxy(IIMContacts *This,__LONG32 *pVal);
+  void __RPC_STUB IIMContacts_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_Add_Proxy(IIMContacts *This,IDispatch *pContact);
+  void __RPC_STUB IIMContacts_Add_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_Remove_Proxy(IIMContacts *This,IDispatch *pContact);
+  void __RPC_STUB IIMContacts_Remove_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_get_Name_Proxy(IIMContacts *This,BSTR *pVal);
+  void __RPC_STUB IIMContacts_get_Name_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRP
