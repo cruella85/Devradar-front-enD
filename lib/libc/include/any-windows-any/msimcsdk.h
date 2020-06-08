@@ -761,4 +761,121 @@ extern "C" {
   HRESULT WINAPI IIMContacts_Remove_Proxy(IIMContacts *This,IDispatch *pContact);
   void __RPC_STUB IIMContacts_Remove_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
   HRESULT WINAPI IIMContacts_get_Name_Proxy(IIMContacts *This,BSTR *pVal);
-  void __RPC_STUB IIMContacts_get_Name_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRP
+  void __RPC_STUB IIMContacts_get_Name_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_put_Name_Proxy(IIMContacts *This,BSTR newVal);
+  void __RPC_STUB IIMContacts_put_Name_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_get_Properties_Proxy(IIMContacts *This,__LONG32 *pVal);
+  void __RPC_STUB IIMContacts_get_Properties_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_get_Cookie_Proxy(IIMContacts *This,__LONG32 *pVal);
+  void __RPC_STUB IIMContacts_get_Cookie_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMContacts_get__NewEnum_Proxy(IIMContacts *This,IUnknown **ppVal);
+  void __RPC_STUB IIMContacts_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IIMSession_INTERFACE_DEFINED__
+#define __IIMSession_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IIMSession;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IIMSession : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Members(IDispatch **ppMembers) = 0;
+    virtual HRESULT WINAPI get_State(IM_SSTATE *psState) = 0;
+    virtual HRESULT WINAPI get_Service(IDispatch **ppService) = 0;
+    virtual HRESULT WINAPI get_Invitees(IDispatch **ppInvitees) = 0;
+    virtual HRESULT WINAPI LeaveSession(void) = 0;
+    virtual HRESULT WINAPI InviteContact(VARIANT vContact) = 0;
+    virtual HRESULT WINAPI SendText(BSTR bstrMsgHeader,BSTR bstrMsgText,IM_MSG_TYPE MsgType,LONG *plCookie) = 0;
+  };
+#else
+  typedef struct IIMSessionVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IIMSession *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IIMSession *This);
+      ULONG (WINAPI *Release)(IIMSession *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IIMSession *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IIMSession *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IIMSession *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IIMSession *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Members)(IIMSession *This,IDispatch **ppMembers);
+      HRESULT (WINAPI *get_State)(IIMSession *This,IM_SSTATE *psState);
+      HRESULT (WINAPI *get_Service)(IIMSession *This,IDispatch **ppService);
+      HRESULT (WINAPI *get_Invitees)(IIMSession *This,IDispatch **ppInvitees);
+      HRESULT (WINAPI *LeaveSession)(IIMSession *This);
+      HRESULT (WINAPI *InviteContact)(IIMSession *This,VARIANT vContact);
+      HRESULT (WINAPI *SendText)(IIMSession *This,BSTR bstrMsgHeader,BSTR bstrMsgText,IM_MSG_TYPE MsgType,LONG *plCookie);
+    END_INTERFACE
+  } IIMSessionVtbl;
+  struct IIMSession {
+    CONST_VTBL struct IIMSessionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IIMSession_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IIMSession_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IIMSession_Release(This) (This)->lpVtbl->Release(This)
+#define IIMSession_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IIMSession_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IIMSession_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IIMSession_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IIMSession_get_Members(This,ppMembers) (This)->lpVtbl->get_Members(This,ppMembers)
+#define IIMSession_get_State(This,psState) (This)->lpVtbl->get_State(This,psState)
+#define IIMSession_get_Service(This,ppService) (This)->lpVtbl->get_Service(This,ppService)
+#define IIMSession_get_Invitees(This,ppInvitees) (This)->lpVtbl->get_Invitees(This,ppInvitees)
+#define IIMSession_LeaveSession(This) (This)->lpVtbl->LeaveSession(This)
+#define IIMSession_InviteContact(This,vContact) (This)->lpVtbl->InviteContact(This,vContact)
+#define IIMSession_SendText(This,bstrMsgHeader,bstrMsgText,MsgType,plCookie) (This)->lpVtbl->SendText(This,bstrMsgHeader,bstrMsgText,MsgType,plCookie)
+#endif
+#endif
+  HRESULT WINAPI IIMSession_get_Members_Proxy(IIMSession *This,IDispatch **ppMembers);
+  void __RPC_STUB IIMSession_get_Members_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSession_get_State_Proxy(IIMSession *This,IM_SSTATE *psState);
+  void __RPC_STUB IIMSession_get_State_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSession_get_Service_Proxy(IIMSession *This,IDispatch **ppService);
+  void __RPC_STUB IIMSession_get_Service_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSession_get_Invitees_Proxy(IIMSession *This,IDispatch **ppInvitees);
+  void __RPC_STUB IIMSession_get_Invitees_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSession_LeaveSession_Proxy(IIMSession *This);
+  void __RPC_STUB IIMSession_LeaveSession_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSession_InviteContact_Proxy(IIMSession *This,VARIANT vContact);
+  void __RPC_STUB IIMSession_InviteContact_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSession_SendText_Proxy(IIMSession *This,BSTR bstrMsgHeader,BSTR bstrMsgText,IM_MSG_TYPE MsgType,LONG *plCookie);
+  void __RPC_STUB IIMSession_SendText_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IIMSessions_INTERFACE_DEFINED__
+#define __IIMSessions_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IIMSessions;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IIMSessions : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Count(__LONG32 *pcSessions) = 0;
+    virtual HRESULT WINAPI Item(__LONG32 Index,IDispatch **ppIMSession) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IUnknown **ppUnknown) = 0;
+  };
+#else
+  typedef struct IIMSessionsVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IIMSessions *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IIMSessions *This);
+      ULONG (WINAPI *Release)(IIMSessions *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IIMSessions *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IIMSessions *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IIMSessions *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IIMSessions *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Count)(IIMSessions *This,__LONG32 *pcSessions);
+      HRESULT (WINAPI *Item)(IIMSessions *This,__LONG32 Index,IDispatch **ppIMSession);
+      HRESULT (WINAPI *get__NewEnum)(IIMSessions *This,IUnknown **ppUnknown);
+    END_INTERFACE
+  } IIMSessionsVtbl;
+  struct IIMSessions {
+    CONST_VTBL struct IIMSessionsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IIMSessions_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IIMSessions_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IIMSessions_Release(This) (This)->lpVtbl->Release(This)
+#define IIMSessions_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IIMSessions_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IIMSessions_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IIMSessions_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IIMSessions_get_Count(This,pcSessions) (This)->lpVtbl->get_Count(This,pcSessions)
+#define IIMSessions_Item
