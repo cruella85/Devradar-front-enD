@@ -878,4 +878,41 @@ extern "C" {
 #define IIMSessions_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
 #define IIMSessions_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 #define IIMSessions_get_Count(This,pcSessions) (This)->lpVtbl->get_Count(This,pcSessions)
-#define IIMSessions_Item
+#define IIMSessions_Item(This,Index,ppIMSession) (This)->lpVtbl->Item(This,Index,ppIMSession)
+#define IIMSessions_get__NewEnum(This,ppUnknown) (This)->lpVtbl->get__NewEnum(This,ppUnknown)
+#endif
+#endif
+  HRESULT WINAPI IIMSessions_get_Count_Proxy(IIMSessions *This,__LONG32 *pcSessions);
+  void __RPC_STUB IIMSessions_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSessions_Item_Proxy(IIMSessions *This,__LONG32 Index,IDispatch **ppIMSession);
+  void __RPC_STUB IIMSessions_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IIMSessions_get__NewEnum_Proxy(IIMSessions *This,IUnknown **ppUnknown);
+  void __RPC_STUB IIMSessions_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+  EXTERN_C const CLSID CLSID_MSIMHost;
+#ifdef __cplusplus
+  class MSIMHost;
+#endif
+  EXTERN_C const CLSID CLSID_MSIMService;
+#ifdef __cplusplus
+  class MSIMService;
+#endif
+  EXTERN_C const CLSID CLSID_MSIMWindow;
+#ifdef __cplusplus
+  class MSIMWindow;
+#endif
+  EXTERN_C const CLSID CLSID_MSIMHostOption;
+#ifdef __cplusplus
+  class MSIMHostOption;
+#endif
+  EXTERN_C const CLSID CLSID_MSIMHostProfiles;
+#ifdef __cplusplus
+  class MSIMHostProfiles;
+#endif
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+#endif
