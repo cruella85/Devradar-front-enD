@@ -47,4 +47,73 @@ pub fn classifyType(ty: Type, target: Target) [2]Class {
         .Float => {
             const float_bits = ty.floatBits(target);
             if (float_bits <= 64) return direct;
-            if
+            if (float_bits <= 128) return .{ .direct, .direct };
+            return memory;
+        },
+        .Bool => return direct,
+        .Array => return memory,
+        .Optional => {
+            std.debug.assert(ty.isPtrLikeOptional());
+            return direct;
+        },
+        .Pointer => {
+            std.debug.assert(!ty.isSlice());
+            return direct;
+        },
+        .Union => {
+            if (ty.containerLayout() == .Packed) {
+                if (ty.bitSize(target) <= 64) return direct;
+                return .{ .direct, .direct };
+            }
+            const layout = ty.unionGetLayout(target);
+            std.debug.assert(layout.tag_size == 0);
+            if (ty.unionFields().count() > 1) return memory;
+            return classifyType(ty.unionFields().values()[0].ty, target);
+        },
+        .ErrorUnion,
+        .Frame,
+        .AnyFrame,
+        .NoReturn,
+        .Void,
+        .Type,
+        .ComptimeFloat,
+        .ComptimeInt,
+        .Undefined,
+        .Null,
+        .Fn,
+        .Opaque,
+        .EnumLiteral,
+        => unreachable,
+    }
+}
+
+/// Returns the scalar type a given type can represent.
+/// Asserts given type can be represented as scalar, such as
+/// a struct with a single scalar field.
+pub fn scalarType(ty: Type, target: std.Target) Type {
+    switch (ty.zigTypeTag()) {
+        .Struct => {
+            switch (ty.containerLayout()) {
+                .Packed => {
+                    const struct_obj = ty.castTag(.@"struct").?.data;
+                    return scalarType(struct_obj.backing_int_ty, target);
+                },
+                else => {
+                    std.debug.assert(ty.structFieldCount() == 1);
+                    return scalarType(ty.structFieldType(0), target);
+                },
+            }
+        },
+        .Union => {
+            if (ty.containerLayout() != .Packed) {
+                const layout = ty.unionGetLayout(target);
+                if (layout.payload_size == 0 and layout.tag_size != 0) {
+                    return scalarType(ty.unionTagTypeSafety().?, target);
+                }
+                std.debug.assert(ty.unionFields().count() == 1);
+            }
+            return scalarType(ty.unionFields().values()[0].ty, target);
+        },
+        else => return ty,
+    }
+}
