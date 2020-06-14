@@ -51,4 +51,51 @@ expl:
 	fld %st(1)
 		# c = 0x1p32+1
 	pushl $0x41f00000
-	pushl $0x0010000
+	pushl $0x00100000
+	fldl (%esp)
+		# xh = x - c*x + c*x
+		# xl = x - xh
+	fmulp
+	fld %st(2)
+	fsub %st(1), %st
+	faddp
+	fld %st(2)
+	fsub %st(1), %st
+		# yh = log2e_hi - c*log2e_hi + c*log2e_hi
+	pushl $0x3ff71547
+	pushl $0x65200000
+	fldl (%esp)
+		# fpu stack: 2^hi x hi xh xl yh
+		# lo = hi - xh*yh + xl*yh
+	fld %st(2)
+	fmul %st(1), %st
+	fsubp %st, %st(4)
+	fmul %st(1), %st
+	faddp %st, %st(3)
+		# yl = log2e_hi - yh
+	pushl $0x3de705fc
+	pushl $0x2f000000
+	fldl (%esp)
+		# fpu stack: 2^hi x lo xh xl yl
+		# lo += xh*yl + xl*yl
+	fmul %st, %st(2)
+	fmulp %st, %st(1)
+	fxch %st(2)
+	faddp
+	faddp
+		# log2e_lo
+	pushl $0xbfbe
+	pushl $0x82f0025f
+	pushl $0x2dc582ee
+	fldt (%esp)
+	addl $36,%esp
+		# fpu stack: 2^hi x lo log2e_lo
+		# lo += log2e_lo*x
+		# return 2^hi + 2^hi (2^lo - 1)
+	fmulp %st, %st(2)
+	faddp
+	f2xm1
+	fmul %st(1), %st
+	faddp
+1:	addl $44, %esp
+	ret
