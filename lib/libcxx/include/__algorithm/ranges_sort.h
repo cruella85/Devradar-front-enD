@@ -61,4 +61,19 @@ struct __fn {
     requires sortable<iterator_t<_Range>, _Comp, _Proj>
   _LIBCPP_HIDE_FROM_ABI constexpr
   borrowed_iterator_t<_Range> operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const {
-    return __sort_fn_impl(ranges::begin(__r), ranges::end(__r), 
+    return __sort_fn_impl(ranges::begin(__r), ranges::end(__r), __comp, __proj);
+  }
+};
+
+} // namespace __sort
+
+inline namespace __cpo {
+  inline constexpr auto sort = __sort::__fn{};
+} // namespace __cpo
+} // namespace ranges
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP_STD_VER > 17 && !defined(_LIBCPP_HAS_NO_INCOMPLETE_RANGES)
+
+#endif // _LIBCPP___ALGORITHM_RANGES_SORT_H
