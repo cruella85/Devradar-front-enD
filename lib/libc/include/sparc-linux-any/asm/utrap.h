@@ -35,4 +35,18 @@
 #define UT_TRAP_INSTRUCTION_23			25
 #define UT_TRAP_INSTRUCTION_24			26
 #define UT_TRAP_INSTRUCTION_25			27
-#define UT_TRAP_IN
+#define UT_TRAP_INSTRUCTION_26			28
+#define UT_TRAP_INSTRUCTION_27			29
+#define UT_TRAP_INSTRUCTION_28			30
+#define UT_TRAP_INSTRUCTION_29			31
+#define UT_TRAP_INSTRUCTION_30			32
+#define UT_TRAP_INSTRUCTION_31			33
+
+#define	UTH_NOCHANGE				(-1)
+
+#ifndef __ASSEMBLY__
+typedef int utrap_entry_t;
+typedef void *utrap_handler_t;
+#endif /* __ASSEMBLY__ */
+
+#endif /* !(__ASM_SPARC64_PROCESSOR_H) */
