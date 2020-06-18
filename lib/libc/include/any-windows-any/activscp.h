@@ -2015,3 +2015,1305 @@ static FORCEINLINE ULONG IActiveScriptParseProcedure32_Release(IActiveScriptPars
 /*** IActiveScriptParseProcedure32 methods ***/
 static FORCEINLINE HRESULT IActiveScriptParseProcedure32_ParseProcedureText(IActiveScriptParseProcedure32* This,LPCOLESTR pstrCode,LPCOLESTR pstrFormalParams,LPCOLESTR pstrProcedureName,LPCOLESTR pstrItemName,IUnknown *punkContext,LPCOLESTR pstrDelimiter,DWORD dwSourceContextCookie,ULONG ulStartingLineNumber,DWORD dwFlags,IDispatch **ppdisp) {
     return This->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptParseProcedure32_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptParseProcedure64 interface
+ */
+#ifndef __IActiveScriptParseProcedure64_INTERFACE_DEFINED__
+#define __IActiveScriptParseProcedure64_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptParseProcedure64, 0xc64713b6, 0xe029, 0x4cc5, 0x92,0x00, 0x43,0x8b,0x72,0x89,0x0b,0x6a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c64713b6-e029-4cc5-9200-438b72890b6a")
+IActiveScriptParseProcedure64 : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE ParseProcedureText(
+        LPCOLESTR pstrCode,
+        LPCOLESTR pstrFormalParams,
+        LPCOLESTR pstrProcedureName,
+        LPCOLESTR pstrItemName,
+        IUnknown *punkContext,
+        LPCOLESTR pstrDelimiter,
+        DWORDLONG dwSourceContextCookie,
+        ULONG ulStartingLineNumber,
+        DWORD dwFlags,
+        IDispatch **ppdisp) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptParseProcedure64, 0xc64713b6, 0xe029, 0x4cc5, 0x92,0x00, 0x43,0x8b,0x72,0x89,0x0b,0x6a)
+#endif
+#else
+typedef struct IActiveScriptParseProcedure64Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptParseProcedure64 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptParseProcedure64 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptParseProcedure64 *This);
+
+    /*** IActiveScriptParseProcedure64 methods ***/
+    HRESULT (STDMETHODCALLTYPE *ParseProcedureText)(
+        IActiveScriptParseProcedure64 *This,
+        LPCOLESTR pstrCode,
+        LPCOLESTR pstrFormalParams,
+        LPCOLESTR pstrProcedureName,
+        LPCOLESTR pstrItemName,
+        IUnknown *punkContext,
+        LPCOLESTR pstrDelimiter,
+        DWORDLONG dwSourceContextCookie,
+        ULONG ulStartingLineNumber,
+        DWORD dwFlags,
+        IDispatch **ppdisp);
+
+    END_INTERFACE
+} IActiveScriptParseProcedure64Vtbl;
+
+interface IActiveScriptParseProcedure64 {
+    CONST_VTBL IActiveScriptParseProcedure64Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptParseProcedure64_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptParseProcedure64_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptParseProcedure64_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptParseProcedure64 methods ***/
+#define IActiveScriptParseProcedure64_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp) (This)->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptParseProcedure64_QueryInterface(IActiveScriptParseProcedure64* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptParseProcedure64_AddRef(IActiveScriptParseProcedure64* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptParseProcedure64_Release(IActiveScriptParseProcedure64* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptParseProcedure64 methods ***/
+static FORCEINLINE HRESULT IActiveScriptParseProcedure64_ParseProcedureText(IActiveScriptParseProcedure64* This,LPCOLESTR pstrCode,LPCOLESTR pstrFormalParams,LPCOLESTR pstrProcedureName,LPCOLESTR pstrItemName,IUnknown *punkContext,LPCOLESTR pstrDelimiter,DWORDLONG dwSourceContextCookie,ULONG ulStartingLineNumber,DWORD dwFlags,IDispatch **ppdisp) {
+    return This->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptParseProcedure64_INTERFACE_DEFINED__ */
+
+
+#ifdef _WIN64
+#define IActiveScriptParseProcedure IActiveScriptParseProcedure64
+#define IID_IActiveScriptParseProcedure IID_IActiveScriptParseProcedure64
+#else
+#define IActiveScriptParseProcedure IActiveScriptParseProcedure32
+#define IID_IActiveScriptParseProcedure IID_IActiveScriptParseProcedure32
+#endif
+
+typedef IActiveScriptParseProcedure *PIActiveScriptParseProcedure;
+
+/*****************************************************************************
+ * IActiveScriptParseProcedure2_32 interface
+ */
+#ifndef __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__
+#define __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptParseProcedure2_32, 0x71ee5b20, 0xfb04, 0x11d1, 0xb3,0xa8, 0x00,0xa0,0xc9,0x11,0xe8,0xb2);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("71ee5b20-fb04-11d1-b3a8-00a0c911e8b2")
+IActiveScriptParseProcedure2_32 : public IActiveScriptParseProcedure32
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptParseProcedure2_32, 0x71ee5b20, 0xfb04, 0x11d1, 0xb3,0xa8, 0x00,0xa0,0xc9,0x11,0xe8,0xb2)
+#endif
+#else
+typedef struct IActiveScriptParseProcedure2_32Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptParseProcedure2_32 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptParseProcedure2_32 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptParseProcedure2_32 *This);
+
+    /*** IActiveScriptParseProcedure32 methods ***/
+    HRESULT (STDMETHODCALLTYPE *ParseProcedureText)(
+        IActiveScriptParseProcedure2_32 *This,
+        LPCOLESTR pstrCode,
+        LPCOLESTR pstrFormalParams,
+        LPCOLESTR pstrProcedureName,
+        LPCOLESTR pstrItemName,
+        IUnknown *punkContext,
+        LPCOLESTR pstrDelimiter,
+        DWORD dwSourceContextCookie,
+        ULONG ulStartingLineNumber,
+        DWORD dwFlags,
+        IDispatch **ppdisp);
+
+    END_INTERFACE
+} IActiveScriptParseProcedure2_32Vtbl;
+
+interface IActiveScriptParseProcedure2_32 {
+    CONST_VTBL IActiveScriptParseProcedure2_32Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptParseProcedure2_32_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptParseProcedure2_32_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptParseProcedure2_32_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptParseProcedure32 methods ***/
+#define IActiveScriptParseProcedure2_32_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp) (This)->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptParseProcedure2_32_QueryInterface(IActiveScriptParseProcedure2_32* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptParseProcedure2_32_AddRef(IActiveScriptParseProcedure2_32* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptParseProcedure2_32_Release(IActiveScriptParseProcedure2_32* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptParseProcedure32 methods ***/
+static FORCEINLINE HRESULT IActiveScriptParseProcedure2_32_ParseProcedureText(IActiveScriptParseProcedure2_32* This,LPCOLESTR pstrCode,LPCOLESTR pstrFormalParams,LPCOLESTR pstrProcedureName,LPCOLESTR pstrItemName,IUnknown *punkContext,LPCOLESTR pstrDelimiter,DWORD dwSourceContextCookie,ULONG ulStartingLineNumber,DWORD dwFlags,IDispatch **ppdisp) {
+    return This->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptParseProcedure2_32_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptParseProcedure2_64 interface
+ */
+#ifndef __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__
+#define __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptParseProcedure2_64, 0xfe7c4271, 0x210c, 0x448d, 0x9f,0x54, 0x76,0xda,0xb7,0x04,0x7b,0x28);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("fe7c4271-210c-448d-9f54-76dab7047b28")
+IActiveScriptParseProcedure2_64 : public IActiveScriptParseProcedure64
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptParseProcedure2_64, 0xfe7c4271, 0x210c, 0x448d, 0x9f,0x54, 0x76,0xda,0xb7,0x04,0x7b,0x28)
+#endif
+#else
+typedef struct IActiveScriptParseProcedure2_64Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptParseProcedure2_64 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptParseProcedure2_64 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptParseProcedure2_64 *This);
+
+    /*** IActiveScriptParseProcedure64 methods ***/
+    HRESULT (STDMETHODCALLTYPE *ParseProcedureText)(
+        IActiveScriptParseProcedure2_64 *This,
+        LPCOLESTR pstrCode,
+        LPCOLESTR pstrFormalParams,
+        LPCOLESTR pstrProcedureName,
+        LPCOLESTR pstrItemName,
+        IUnknown *punkContext,
+        LPCOLESTR pstrDelimiter,
+        DWORDLONG dwSourceContextCookie,
+        ULONG ulStartingLineNumber,
+        DWORD dwFlags,
+        IDispatch **ppdisp);
+
+    END_INTERFACE
+} IActiveScriptParseProcedure2_64Vtbl;
+
+interface IActiveScriptParseProcedure2_64 {
+    CONST_VTBL IActiveScriptParseProcedure2_64Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptParseProcedure2_64_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptParseProcedure2_64_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptParseProcedure2_64_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptParseProcedure64 methods ***/
+#define IActiveScriptParseProcedure2_64_ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp) (This)->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptParseProcedure2_64_QueryInterface(IActiveScriptParseProcedure2_64* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptParseProcedure2_64_AddRef(IActiveScriptParseProcedure2_64* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptParseProcedure2_64_Release(IActiveScriptParseProcedure2_64* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptParseProcedure64 methods ***/
+static FORCEINLINE HRESULT IActiveScriptParseProcedure2_64_ParseProcedureText(IActiveScriptParseProcedure2_64* This,LPCOLESTR pstrCode,LPCOLESTR pstrFormalParams,LPCOLESTR pstrProcedureName,LPCOLESTR pstrItemName,IUnknown *punkContext,LPCOLESTR pstrDelimiter,DWORDLONG dwSourceContextCookie,ULONG ulStartingLineNumber,DWORD dwFlags,IDispatch **ppdisp) {
+    return This->lpVtbl->ParseProcedureText(This,pstrCode,pstrFormalParams,pstrProcedureName,pstrItemName,punkContext,pstrDelimiter,dwSourceContextCookie,ulStartingLineNumber,dwFlags,ppdisp);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptParseProcedure2_64_INTERFACE_DEFINED__ */
+
+
+#ifdef _WIN64
+#define IActiveScriptParseProcedure2 IActiveScriptParseProcedure2_64
+#define IID_IActiveScriptParseProcedure2 IID_IActiveScriptParseProcedure2_64
+#else
+#define IActiveScriptParseProcedure2 IActiveScriptParseProcedure2_32
+#define IID_IActiveScriptParseProcedure2 IID_IActiveScriptParseProcedure2_32
+#endif
+
+typedef IActiveScriptParseProcedure2 *PIActiveScriptParseProcedure2;
+
+/*****************************************************************************
+ * IActiveScriptEncode interface
+ */
+#ifndef __IActiveScriptEncode_INTERFACE_DEFINED__
+#define __IActiveScriptEncode_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptEncode, 0xbb1a2ae3, 0xa4f9, 0x11cf, 0x8f,0x20, 0x00,0x80,0x5f,0x2c,0xd0,0x64);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("bb1a2ae3-a4f9-11cf-8f20-00805f2cd064")
+IActiveScriptEncode : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE EncodeSection(
+        LPCOLESTR pchIn,
+        DWORD cchIn,
+        LPOLESTR pchOut,
+        DWORD cchOut,
+        DWORD *pcchRet) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE DecodeScript(
+        LPCOLESTR pchIn,
+        DWORD cchIn,
+        LPOLESTR pchOut,
+        DWORD cchOut,
+        DWORD *pcchRet) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetEncodeProgId(
+        BSTR *pbstrOut) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptEncode, 0xbb1a2ae3, 0xa4f9, 0x11cf, 0x8f,0x20, 0x00,0x80,0x5f,0x2c,0xd0,0x64)
+#endif
+#else
+typedef struct IActiveScriptEncodeVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptEncode *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptEncode *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptEncode *This);
+
+    /*** IActiveScriptEncode methods ***/
+    HRESULT (STDMETHODCALLTYPE *EncodeSection)(
+        IActiveScriptEncode *This,
+        LPCOLESTR pchIn,
+        DWORD cchIn,
+        LPOLESTR pchOut,
+        DWORD cchOut,
+        DWORD *pcchRet);
+
+    HRESULT (STDMETHODCALLTYPE *DecodeScript)(
+        IActiveScriptEncode *This,
+        LPCOLESTR pchIn,
+        DWORD cchIn,
+        LPOLESTR pchOut,
+        DWORD cchOut,
+        DWORD *pcchRet);
+
+    HRESULT (STDMETHODCALLTYPE *GetEncodeProgId)(
+        IActiveScriptEncode *This,
+        BSTR *pbstrOut);
+
+    END_INTERFACE
+} IActiveScriptEncodeVtbl;
+
+interface IActiveScriptEncode {
+    CONST_VTBL IActiveScriptEncodeVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptEncode_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptEncode_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptEncode_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptEncode methods ***/
+#define IActiveScriptEncode_EncodeSection(This,pchIn,cchIn,pchOut,cchOut,pcchRet) (This)->lpVtbl->EncodeSection(This,pchIn,cchIn,pchOut,cchOut,pcchRet)
+#define IActiveScriptEncode_DecodeScript(This,pchIn,cchIn,pchOut,cchOut,pcchRet) (This)->lpVtbl->DecodeScript(This,pchIn,cchIn,pchOut,cchOut,pcchRet)
+#define IActiveScriptEncode_GetEncodeProgId(This,pbstrOut) (This)->lpVtbl->GetEncodeProgId(This,pbstrOut)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptEncode_QueryInterface(IActiveScriptEncode* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptEncode_AddRef(IActiveScriptEncode* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptEncode_Release(IActiveScriptEncode* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptEncode methods ***/
+static FORCEINLINE HRESULT IActiveScriptEncode_EncodeSection(IActiveScriptEncode* This,LPCOLESTR pchIn,DWORD cchIn,LPOLESTR pchOut,DWORD cchOut,DWORD *pcchRet) {
+    return This->lpVtbl->EncodeSection(This,pchIn,cchIn,pchOut,cchOut,pcchRet);
+}
+static FORCEINLINE HRESULT IActiveScriptEncode_DecodeScript(IActiveScriptEncode* This,LPCOLESTR pchIn,DWORD cchIn,LPOLESTR pchOut,DWORD cchOut,DWORD *pcchRet) {
+    return This->lpVtbl->DecodeScript(This,pchIn,cchIn,pchOut,cchOut,pcchRet);
+}
+static FORCEINLINE HRESULT IActiveScriptEncode_GetEncodeProgId(IActiveScriptEncode* This,BSTR *pbstrOut) {
+    return This->lpVtbl->GetEncodeProgId(This,pbstrOut);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptEncode_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptHostEncode interface
+ */
+#ifndef __IActiveScriptHostEncode_INTERFACE_DEFINED__
+#define __IActiveScriptHostEncode_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptHostEncode, 0xbee9b76e, 0xcfe3, 0x11d1, 0xb7,0x47, 0x00,0xc0,0x4f,0xc2,0xb0,0x85);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("bee9b76e-cfe3-11d1-b747-00c04fc2b085")
+IActiveScriptHostEncode : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE EncodeScriptHostFile(
+        BSTR bstrInFile,
+        BSTR *pbstrOutFile,
+        ULONG cFlags,
+        BSTR bstrDefaultLang) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptHostEncode, 0xbee9b76e, 0xcfe3, 0x11d1, 0xb7,0x47, 0x00,0xc0,0x4f,0xc2,0xb0,0x85)
+#endif
+#else
+typedef struct IActiveScriptHostEncodeVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptHostEncode *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptHostEncode *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptHostEncode *This);
+
+    /*** IActiveScriptHostEncode methods ***/
+    HRESULT (STDMETHODCALLTYPE *EncodeScriptHostFile)(
+        IActiveScriptHostEncode *This,
+        BSTR bstrInFile,
+        BSTR *pbstrOutFile,
+        ULONG cFlags,
+        BSTR bstrDefaultLang);
+
+    END_INTERFACE
+} IActiveScriptHostEncodeVtbl;
+
+interface IActiveScriptHostEncode {
+    CONST_VTBL IActiveScriptHostEncodeVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptHostEncode_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptHostEncode_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptHostEncode_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptHostEncode methods ***/
+#define IActiveScriptHostEncode_EncodeScriptHostFile(This,bstrInFile,pbstrOutFile,cFlags,bstrDefaultLang) (This)->lpVtbl->EncodeScriptHostFile(This,bstrInFile,pbstrOutFile,cFlags,bstrDefaultLang)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptHostEncode_QueryInterface(IActiveScriptHostEncode* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptHostEncode_AddRef(IActiveScriptHostEncode* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptHostEncode_Release(IActiveScriptHostEncode* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptHostEncode methods ***/
+static FORCEINLINE HRESULT IActiveScriptHostEncode_EncodeScriptHostFile(IActiveScriptHostEncode* This,BSTR bstrInFile,BSTR *pbstrOutFile,ULONG cFlags,BSTR bstrDefaultLang) {
+    return This->lpVtbl->EncodeScriptHostFile(This,bstrInFile,pbstrOutFile,cFlags,bstrDefaultLang);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptHostEncode_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IBindEventHandler interface
+ */
+#ifndef __IBindEventHandler_INTERFACE_DEFINED__
+#define __IBindEventHandler_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IBindEventHandler, 0x63cdbcb0, 0xc1b1, 0x11d0, 0x93,0x36, 0x00,0xa0,0xc9,0x0d,0xca,0xa9);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("63cdbcb0-c1b1-11d0-9336-00a0c90dcaa9")
+IBindEventHandler : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE BindHandler(
+        LPCOLESTR pstrEvent,
+        IDispatch *pdisp) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IBindEventHandler, 0x63cdbcb0, 0xc1b1, 0x11d0, 0x93,0x36, 0x00,0xa0,0xc9,0x0d,0xca,0xa9)
+#endif
+#else
+typedef struct IBindEventHandlerVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IBindEventHandler *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IBindEventHandler *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IBindEventHandler *This);
+
+    /*** IBindEventHandler methods ***/
+    HRESULT (STDMETHODCALLTYPE *BindHandler)(
+        IBindEventHandler *This,
+        LPCOLESTR pstrEvent,
+        IDispatch *pdisp);
+
+    END_INTERFACE
+} IBindEventHandlerVtbl;
+
+interface IBindEventHandler {
+    CONST_VTBL IBindEventHandlerVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IBindEventHandler_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IBindEventHandler_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IBindEventHandler_Release(This) (This)->lpVtbl->Release(This)
+/*** IBindEventHandler methods ***/
+#define IBindEventHandler_BindHandler(This,pstrEvent,pdisp) (This)->lpVtbl->BindHandler(This,pstrEvent,pdisp)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IBindEventHandler_QueryInterface(IBindEventHandler* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IBindEventHandler_AddRef(IBindEventHandler* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IBindEventHandler_Release(IBindEventHandler* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IBindEventHandler methods ***/
+static FORCEINLINE HRESULT IBindEventHandler_BindHandler(IBindEventHandler* This,LPCOLESTR pstrEvent,IDispatch *pdisp) {
+    return This->lpVtbl->BindHandler(This,pstrEvent,pdisp);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IBindEventHandler_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptStats interface
+ */
+#ifndef __IActiveScriptStats_INTERFACE_DEFINED__
+#define __IActiveScriptStats_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptStats, 0xb8da6310, 0xe19b, 0x11d0, 0x93,0x3c, 0x00,0xa0,0xc9,0x0d,0xca,0xa9);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b8da6310-e19b-11d0-933c-00a0c90dcaa9")
+IActiveScriptStats : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetStat(
+        DWORD stid,
+        ULONG *pluHi,
+        ULONG *pluLo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetStatEx(
+        REFGUID guid,
+        ULONG *pluHi,
+        ULONG *pluLo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetStats(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptStats, 0xb8da6310, 0xe19b, 0x11d0, 0x93,0x3c, 0x00,0xa0,0xc9,0x0d,0xca,0xa9)
+#endif
+#else
+typedef struct IActiveScriptStatsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptStats *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptStats *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptStats *This);
+
+    /*** IActiveScriptStats methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetStat)(
+        IActiveScriptStats *This,
+        DWORD stid,
+        ULONG *pluHi,
+        ULONG *pluLo);
+
+    HRESULT (STDMETHODCALLTYPE *GetStatEx)(
+        IActiveScriptStats *This,
+        REFGUID guid,
+        ULONG *pluHi,
+        ULONG *pluLo);
+
+    HRESULT (STDMETHODCALLTYPE *ResetStats)(
+        IActiveScriptStats *This);
+
+    END_INTERFACE
+} IActiveScriptStatsVtbl;
+
+interface IActiveScriptStats {
+    CONST_VTBL IActiveScriptStatsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptStats_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptStats_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptStats_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptStats methods ***/
+#define IActiveScriptStats_GetStat(This,stid,pluHi,pluLo) (This)->lpVtbl->GetStat(This,stid,pluHi,pluLo)
+#define IActiveScriptStats_GetStatEx(This,guid,pluHi,pluLo) (This)->lpVtbl->GetStatEx(This,guid,pluHi,pluLo)
+#define IActiveScriptStats_ResetStats(This) (This)->lpVtbl->ResetStats(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptStats_QueryInterface(IActiveScriptStats* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptStats_AddRef(IActiveScriptStats* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptStats_Release(IActiveScriptStats* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptStats methods ***/
+static FORCEINLINE HRESULT IActiveScriptStats_GetStat(IActiveScriptStats* This,DWORD stid,ULONG *pluHi,ULONG *pluLo) {
+    return This->lpVtbl->GetStat(This,stid,pluHi,pluLo);
+}
+static FORCEINLINE HRESULT IActiveScriptStats_GetStatEx(IActiveScriptStats* This,REFGUID guid,ULONG *pluHi,ULONG *pluLo) {
+    return This->lpVtbl->GetStatEx(This,guid,pluHi,pluLo);
+}
+static FORCEINLINE HRESULT IActiveScriptStats_ResetStats(IActiveScriptStats* This) {
+    return This->lpVtbl->ResetStats(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptStats_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptProperty interface
+ */
+#ifndef __IActiveScriptProperty_INTERFACE_DEFINED__
+#define __IActiveScriptProperty_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptProperty, 0x4954e0d0, 0xfbc7, 0x11d1, 0x84,0x10, 0x00,0x60,0x08,0xc3,0xfb,0xfc);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("4954e0d0-fbc7-11d1-8410-006008c3fbfc")
+IActiveScriptProperty : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetProperty(
+        DWORD dwProperty,
+        VARIANT *pvarIndex,
+        VARIANT *pvarValue) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetProperty(
+        DWORD dwProperty,
+        VARIANT *pvarIndex,
+        VARIANT *pvarValue) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptProperty, 0x4954e0d0, 0xfbc7, 0x11d1, 0x84,0x10, 0x00,0x60,0x08,0xc3,0xfb,0xfc)
+#endif
+#else
+typedef struct IActiveScriptPropertyVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptProperty *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptProperty *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptProperty *This);
+
+    /*** IActiveScriptProperty methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetProperty)(
+        IActiveScriptProperty *This,
+        DWORD dwProperty,
+        VARIANT *pvarIndex,
+        VARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *SetProperty)(
+        IActiveScriptProperty *This,
+        DWORD dwProperty,
+        VARIANT *pvarIndex,
+        VARIANT *pvarValue);
+
+    END_INTERFACE
+} IActiveScriptPropertyVtbl;
+
+interface IActiveScriptProperty {
+    CONST_VTBL IActiveScriptPropertyVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptProperty_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptProperty_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptProperty_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptProperty methods ***/
+#define IActiveScriptProperty_GetProperty(This,dwProperty,pvarIndex,pvarValue) (This)->lpVtbl->GetProperty(This,dwProperty,pvarIndex,pvarValue)
+#define IActiveScriptProperty_SetProperty(This,dwProperty,pvarIndex,pvarValue) (This)->lpVtbl->SetProperty(This,dwProperty,pvarIndex,pvarValue)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptProperty_QueryInterface(IActiveScriptProperty* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptProperty_AddRef(IActiveScriptProperty* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptProperty_Release(IActiveScriptProperty* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptProperty methods ***/
+static FORCEINLINE HRESULT IActiveScriptProperty_GetProperty(IActiveScriptProperty* This,DWORD dwProperty,VARIANT *pvarIndex,VARIANT *pvarValue) {
+    return This->lpVtbl->GetProperty(This,dwProperty,pvarIndex,pvarValue);
+}
+static FORCEINLINE HRESULT IActiveScriptProperty_SetProperty(IActiveScriptProperty* This,DWORD dwProperty,VARIANT *pvarIndex,VARIANT *pvarValue) {
+    return This->lpVtbl->SetProperty(This,dwProperty,pvarIndex,pvarValue);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptProperty_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * ITridentEventSink interface
+ */
+#ifndef __ITridentEventSink_INTERFACE_DEFINED__
+#define __ITridentEventSink_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ITridentEventSink, 0x1dc9ca50, 0x06ef, 0x11d2, 0x84,0x15, 0x00,0x60,0x08,0xc3,0xfb,0xfc);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("1dc9ca50-06ef-11d2-8415-006008c3fbfc")
+ITridentEventSink : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE FireEvent(
+        LPCOLESTR pstrEvent,
+        DISPPARAMS *pdp,
+        VARIANT *pvarRes,
+        EXCEPINFO *pei) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ITridentEventSink, 0x1dc9ca50, 0x06ef, 0x11d2, 0x84,0x15, 0x00,0x60,0x08,0xc3,0xfb,0xfc)
+#endif
+#else
+typedef struct ITridentEventSinkVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ITridentEventSink *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ITridentEventSink *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ITridentEventSink *This);
+
+    /*** ITridentEventSink methods ***/
+    HRESULT (STDMETHODCALLTYPE *FireEvent)(
+        ITridentEventSink *This,
+        LPCOLESTR pstrEvent,
+        DISPPARAMS *pdp,
+        VARIANT *pvarRes,
+        EXCEPINFO *pei);
+
+    END_INTERFACE
+} ITridentEventSinkVtbl;
+
+interface ITridentEventSink {
+    CONST_VTBL ITridentEventSinkVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ITridentEventSink_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ITridentEventSink_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ITridentEventSink_Release(This) (This)->lpVtbl->Release(This)
+/*** ITridentEventSink methods ***/
+#define ITridentEventSink_FireEvent(This,pstrEvent,pdp,pvarRes,pei) (This)->lpVtbl->FireEvent(This,pstrEvent,pdp,pvarRes,pei)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ITridentEventSink_QueryInterface(ITridentEventSink* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ITridentEventSink_AddRef(ITridentEventSink* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ITridentEventSink_Release(ITridentEventSink* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ITridentEventSink methods ***/
+static FORCEINLINE HRESULT ITridentEventSink_FireEvent(ITridentEventSink* This,LPCOLESTR pstrEvent,DISPPARAMS *pdp,VARIANT *pvarRes,EXCEPINFO *pei) {
+    return This->lpVtbl->FireEvent(This,pstrEvent,pdp,pvarRes,pei);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ITridentEventSink_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptGarbageCollector interface
+ */
+#ifndef __IActiveScriptGarbageCollector_INTERFACE_DEFINED__
+#define __IActiveScriptGarbageCollector_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptGarbageCollector, 0x6aa2c4a0, 0x2b53, 0x11d4, 0xa2,0xa0, 0x00,0x10,0x4b,0xd3,0x50,0x90);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("6aa2c4a0-2b53-11d4-a2a0-00104bd35090")
+IActiveScriptGarbageCollector : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE CollectGarbage(
+        SCRIPTGCTYPE scriptgctype) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptGarbageCollector, 0x6aa2c4a0, 0x2b53, 0x11d4, 0xa2,0xa0, 0x00,0x10,0x4b,0xd3,0x50,0x90)
+#endif
+#else
+typedef struct IActiveScriptGarbageCollectorVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptGarbageCollector *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptGarbageCollector *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptGarbageCollector *This);
+
+    /*** IActiveScriptGarbageCollector methods ***/
+    HRESULT (STDMETHODCALLTYPE *CollectGarbage)(
+        IActiveScriptGarbageCollector *This,
+        SCRIPTGCTYPE scriptgctype);
+
+    END_INTERFACE
+} IActiveScriptGarbageCollectorVtbl;
+
+interface IActiveScriptGarbageCollector {
+    CONST_VTBL IActiveScriptGarbageCollectorVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptGarbageCollector_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptGarbageCollector_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptGarbageCollector_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptGarbageCollector methods ***/
+#define IActiveScriptGarbageCollector_CollectGarbage(This,scriptgctype) (This)->lpVtbl->CollectGarbage(This,scriptgctype)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptGarbageCollector_QueryInterface(IActiveScriptGarbageCollector* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptGarbageCollector_AddRef(IActiveScriptGarbageCollector* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptGarbageCollector_Release(IActiveScriptGarbageCollector* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptGarbageCollector methods ***/
+static FORCEINLINE HRESULT IActiveScriptGarbageCollector_CollectGarbage(IActiveScriptGarbageCollector* This,SCRIPTGCTYPE scriptgctype) {
+    return This->lpVtbl->CollectGarbage(This,scriptgctype);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptGarbageCollector_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptSIPInfo interface
+ */
+#ifndef __IActiveScriptSIPInfo_INTERFACE_DEFINED__
+#define __IActiveScriptSIPInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptSIPInfo, 0x764651d0, 0x38de, 0x11d4, 0xa2,0xa3, 0x00,0x10,0x4b,0xd3,0x50,0x90);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("764651d0-38de-11d4-a2a3-00104bd35090")
+IActiveScriptSIPInfo : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetSIPOID(
+        GUID *poid_sip) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptSIPInfo, 0x764651d0, 0x38de, 0x11d4, 0xa2,0xa3, 0x00,0x10,0x4b,0xd3,0x50,0x90)
+#endif
+#else
+typedef struct IActiveScriptSIPInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptSIPInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptSIPInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptSIPInfo *This);
+
+    /*** IActiveScriptSIPInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetSIPOID)(
+        IActiveScriptSIPInfo *This,
+        GUID *poid_sip);
+
+    END_INTERFACE
+} IActiveScriptSIPInfoVtbl;
+
+interface IActiveScriptSIPInfo {
+    CONST_VTBL IActiveScriptSIPInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptSIPInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptSIPInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptSIPInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptSIPInfo methods ***/
+#define IActiveScriptSIPInfo_GetSIPOID(This,poid_sip) (This)->lpVtbl->GetSIPOID(This,poid_sip)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptSIPInfo_QueryInterface(IActiveScriptSIPInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptSIPInfo_AddRef(IActiveScriptSIPInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptSIPInfo_Release(IActiveScriptSIPInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptSIPInfo methods ***/
+static FORCEINLINE HRESULT IActiveScriptSIPInfo_GetSIPOID(IActiveScriptSIPInfo* This,GUID *poid_sip) {
+    return This->lpVtbl->GetSIPOID(This,poid_sip);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptSIPInfo_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptSiteTraceInfo interface
+ */
+#ifndef __IActiveScriptSiteTraceInfo_INTERFACE_DEFINED__
+#define __IActiveScriptSiteTraceInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptSiteTraceInfo, 0x4b7272ae, 0x1955, 0x4bfe, 0x98,0xb0, 0x78,0x06,0x21,0x88,0x85,0x69);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("4b7272ae-1955-4bfe-98b0-780621888569")
+IActiveScriptSiteTraceInfo : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SendScriptTraceInfo(
+        SCRIPTTRACEINFO stiEventType,
+        GUID guidContextID,
+        DWORD dwScriptContextCookie,
+        LONG lScriptStatementStart,
+        LONG lScriptStatementEnd,
+        DWORD64 dwReserved) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptSiteTraceInfo, 0x4b7272ae, 0x1955, 0x4bfe, 0x98,0xb0, 0x78,0x06,0x21,0x88,0x85,0x69)
+#endif
+#else
+typedef struct IActiveScriptSiteTraceInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptSiteTraceInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptSiteTraceInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptSiteTraceInfo *This);
+
+    /*** IActiveScriptSiteTraceInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *SendScriptTraceInfo)(
+        IActiveScriptSiteTraceInfo *This,
+        SCRIPTTRACEINFO stiEventType,
+        GUID guidContextID,
+        DWORD dwScriptContextCookie,
+        LONG lScriptStatementStart,
+        LONG lScriptStatementEnd,
+        DWORD64 dwReserved);
+
+    END_INTERFACE
+} IActiveScriptSiteTraceInfoVtbl;
+
+interface IActiveScriptSiteTraceInfo {
+    CONST_VTBL IActiveScriptSiteTraceInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptSiteTraceInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptSiteTraceInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptSiteTraceInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptSiteTraceInfo methods ***/
+#define IActiveScriptSiteTraceInfo_SendScriptTraceInfo(This,stiEventType,guidContextID,dwScriptContextCookie,lScriptStatementStart,lScriptStatementEnd,dwReserved) (This)->lpVtbl->SendScriptTraceInfo(This,stiEventType,guidContextID,dwScriptContextCookie,lScriptStatementStart,lScriptStatementEnd,dwReserved)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptSiteTraceInfo_QueryInterface(IActiveScriptSiteTraceInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptSiteTraceInfo_AddRef(IActiveScriptSiteTraceInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptSiteTraceInfo_Release(IActiveScriptSiteTraceInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptSiteTraceInfo methods ***/
+static FORCEINLINE HRESULT IActiveScriptSiteTraceInfo_SendScriptTraceInfo(IActiveScriptSiteTraceInfo* This,SCRIPTTRACEINFO stiEventType,GUID guidContextID,DWORD dwScriptContextCookie,LONG lScriptStatementStart,LONG lScriptStatementEnd,DWORD64 dwReserved) {
+    return This->lpVtbl->SendScriptTraceInfo(This,stiEventType,guidContextID,dwScriptContextCookie,lScriptStatementStart,lScriptStatementEnd,dwReserved);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptSiteTraceInfo_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptTraceInfo interface
+ */
+#ifndef __IActiveScriptTraceInfo_INTERFACE_DEFINED__
+#define __IActiveScriptTraceInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptTraceInfo, 0xc35456e7, 0xbebf, 0x4a1b, 0x86,0xa9, 0x24,0xd5,0x6b,0xe8,0xb3,0x69);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c35456e7-bebf-4a1b-86a9-24d56be8b369")
+IActiveScriptTraceInfo : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE StartScriptTracing(
+        IActiveScriptSiteTraceInfo *pSiteTraceInfo,
+        GUID guidContextID) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE StopScriptTracing(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptTraceInfo, 0xc35456e7, 0xbebf, 0x4a1b, 0x86,0xa9, 0x24,0xd5,0x6b,0xe8,0xb3,0x69)
+#endif
+#else
+typedef struct IActiveScriptTraceInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptTraceInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptTraceInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptTraceInfo *This);
+
+    /*** IActiveScriptTraceInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *StartScriptTracing)(
+        IActiveScriptTraceInfo *This,
+        IActiveScriptSiteTraceInfo *pSiteTraceInfo,
+        GUID guidContextID);
+
+    HRESULT (STDMETHODCALLTYPE *StopScriptTracing)(
+        IActiveScriptTraceInfo *This);
+
+    END_INTERFACE
+} IActiveScriptTraceInfoVtbl;
+
+interface IActiveScriptTraceInfo {
+    CONST_VTBL IActiveScriptTraceInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptTraceInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptTraceInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptTraceInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptTraceInfo methods ***/
+#define IActiveScriptTraceInfo_StartScriptTracing(This,pSiteTraceInfo,guidContextID) (This)->lpVtbl->StartScriptTracing(This,pSiteTraceInfo,guidContextID)
+#define IActiveScriptTraceInfo_StopScriptTracing(This) (This)->lpVtbl->StopScriptTracing(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptTraceInfo_QueryInterface(IActiveScriptTraceInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptTraceInfo_AddRef(IActiveScriptTraceInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptTraceInfo_Release(IActiveScriptTraceInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptTraceInfo methods ***/
+static FORCEINLINE HRESULT IActiveScriptTraceInfo_StartScriptTracing(IActiveScriptTraceInfo* This,IActiveScriptSiteTraceInfo *pSiteTraceInfo,GUID guidContextID) {
+    return This->lpVtbl->StartScriptTracing(This,pSiteTraceInfo,guidContextID);
+}
+static FORCEINLINE HRESULT IActiveScriptTraceInfo_StopScriptTracing(IActiveScriptTraceInfo* This) {
+    return This->lpVtbl->StopScriptTracing(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptTraceInfo_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IActiveScriptStringCompare interface
+ */
+#ifndef __IActiveScriptStringCompare_INTERFACE_DEFINED__
+#define __IActiveScriptStringCompare_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IActiveScriptStringCompare, 0x58562769, 0xed52, 0x42f7, 0x84,0x03, 0x49,0x63,0x51,0x4e,0x1f,0x11);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("58562769-ed52-42f7-8403-4963514e1f11")
+IActiveScriptStringCompare : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE StrComp(
+        BSTR bszStr1,
+        BSTR bszStr2,
+        LONG *iRet) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IActiveScriptStringCompare, 0x58562769, 0xed52, 0x42f7, 0x84,0x03, 0x49,0x63,0x51,0x4e,0x1f,0x11)
+#endif
+#else
+typedef struct IActiveScriptStringCompareVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IActiveScriptStringCompare *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IActiveScriptStringCompare *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IActiveScriptStringCompare *This);
+
+    /*** IActiveScriptStringCompare methods ***/
+    HRESULT (STDMETHODCALLTYPE *StrComp)(
+        IActiveScriptStringCompare *This,
+        BSTR bszStr1,
+        BSTR bszStr2,
+        LONG *iRet);
+
+    END_INTERFACE
+} IActiveScriptStringCompareVtbl;
+
+interface IActiveScriptStringCompare {
+    CONST_VTBL IActiveScriptStringCompareVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IActiveScriptStringCompare_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IActiveScriptStringCompare_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IActiveScriptStringCompare_Release(This) (This)->lpVtbl->Release(This)
+/*** IActiveScriptStringCompare methods ***/
+#define IActiveScriptStringCompare_StrComp(This,bszStr1,bszStr2,iRet) (This)->lpVtbl->StrComp(This,bszStr1,bszStr2,iRet)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IActiveScriptStringCompare_QueryInterface(IActiveScriptStringCompare* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IActiveScriptStringCompare_AddRef(IActiveScriptStringCompare* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IActiveScriptStringCompare_Release(IActiveScriptStringCompare* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IActiveScriptStringCompare methods ***/
+static FORCEINLINE HRESULT IActiveScriptStringCompare_StrComp(IActiveScriptStringCompare* This,BSTR bszStr1,BSTR bszStr2,LONG *iRet) {
+    return This->lpVtbl->StrComp(This,bszStr1,bszStr2,iRet);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IActiveScriptStringCompare_INTERFACE_DEFINED__ */
+
+#endif
+
+#endif
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER VARIANT_UserSize     (ULONG *, ULONG, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserMarshal  (ULONG *, unsigned char *, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserUnmarshal(ULONG *, unsigned char *, VARIANT *);
+void            __RPC_USER VARIANT_UserFree     (ULONG *, VARIANT *);
+ULONG           __RPC_USER HWND_UserSize     (ULONG *, ULONG, HWND *);
+unsigned char * __RPC_USER HWND_UserMarshal  (ULONG *, unsigned char *, HWND *);
+unsigned char * __RPC_USER HWND_UserUnmarshal(ULONG *, unsigned char *, HWND *);
+void            __RPC_USER HWND_UserFree     (ULONG *, HWND *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __activscp_h__ */
