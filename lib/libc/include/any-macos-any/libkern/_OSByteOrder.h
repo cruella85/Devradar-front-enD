@@ -58,4 +58,76 @@
 	        (((__uint64_t)(x) & 0x00000000ff000000ULL) <<  8) | \
 	        (((__uint64_t)(x) & 0x0000000000ff0000ULL) << 24) | \
 	        (((__uint64_t)(x) & 0x000000000000ff00ULL) << 40) | \
-	        (((
+	        (((__uint64_t)(x) & 0x00000000000000ffULL) << 56)))
+
+#if defined(__GNUC__)
+
+#if !defined(__DARWIN_OS_INLINE)
+# if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+#        define __DARWIN_OS_INLINE static inline
+# elif defined(__MWERKS__) || defined(__cplusplus)
+#        define __DARWIN_OS_INLINE static inline
+# else
+#        define __DARWIN_OS_INLINE static __inline__
+# endif
+#endif
+
+#if defined(__i386__) || defined(__x86_64__)
+#include <libkern/i386/_OSByteOrder.h>
+#endif
+
+#if defined (__arm__) || defined(__arm64__)
+#include <libkern/arm/OSByteOrder.h>
+#endif
+
+
+#define __DARWIN_OSSwapInt16(x) \
+    ((__uint16_t)(__builtin_constant_p(x) ? __DARWIN_OSSwapConstInt16(x) : _OSSwapInt16(x)))
+
+#define __DARWIN_OSSwapInt32(x) \
+    (__builtin_constant_p(x) ? __DARWIN_OSSwapConstInt32(x) : _OSSwapInt32(x))
+
+#define __DARWIN_OSSwapInt64(x) \
+    (__builtin_constant_p(x) ? __DARWIN_OSSwapConstInt64(x) : _OSSwapInt64(x))
+
+#else /* ! __GNUC__ */
+
+#if defined(__i386__) || defined(__x86_64__)
+
+__DARWIN_OS_INLINE
+uint16_t
+_OSSwapInt16(
+	uint16_t                    data
+	)
+{
+	return __DARWIN_OSSwapConstInt16(data);
+}
+
+__DARWIN_OS_INLINE
+uint32_t
+_OSSwapInt32(
+	uint32_t                    data
+	)
+{
+	return __DARWIN_OSSwapConstInt32(data);
+}
+
+__DARWIN_OS_INLINE
+uint64_t
+_OSSwapInt64(
+	uint64_t                    data
+	)
+{
+	return __DARWIN_OSSwapConstInt64(data);
+}
+#endif
+
+#define __DARWIN_OSSwapInt16(x) _OSSwapInt16(x)
+
+#define __DARWIN_OSSwapInt32(x) _OSSwapInt32(x)
+
+#define __DARWIN_OSSwapInt64(x) _OSSwapInt64(x)
+
+#endif /* __GNUC__ */
+
+#endif /* ! _OS__OSBYTEORDER_H */
