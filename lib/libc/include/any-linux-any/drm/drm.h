@@ -408,3 +408,342 @@ struct drm_dma {
 enum drm_ctx_flags {
 	_DRM_CONTEXT_PRESERVED = 0x01,
 	_DRM_CONTEXT_2DONLY = 0x02
+};
+
+/*
+ * DRM_IOCTL_ADD_CTX ioctl argument type.
+ *
+ * \sa drmCreateContext() and drmDestroyContext().
+ */
+struct drm_ctx {
+	drm_context_t handle;
+	enum drm_ctx_flags flags;
+};
+
+/*
+ * DRM_IOCTL_RES_CTX ioctl argument type.
+ */
+struct drm_ctx_res {
+	int count;
+	struct drm_ctx *contexts;
+};
+
+/*
+ * DRM_IOCTL_ADD_DRAW and DRM_IOCTL_RM_DRAW ioctl argument type.
+ */
+struct drm_draw {
+	drm_drawable_t handle;
+};
+
+/*
+ * DRM_IOCTL_UPDATE_DRAW ioctl argument type.
+ */
+typedef enum {
+	DRM_DRAWABLE_CLIPRECTS
+} drm_drawable_info_type_t;
+
+struct drm_update_draw {
+	drm_drawable_t handle;
+	unsigned int type;
+	unsigned int num;
+	unsigned long long data;
+};
+
+/*
+ * DRM_IOCTL_GET_MAGIC and DRM_IOCTL_AUTH_MAGIC ioctl argument type.
+ */
+struct drm_auth {
+	drm_magic_t magic;
+};
+
+/*
+ * DRM_IOCTL_IRQ_BUSID ioctl argument type.
+ *
+ * \sa drmGetInterruptFromBusID().
+ */
+struct drm_irq_busid {
+	int irq;	/**< IRQ number */
+	int busnum;	/**< bus number */
+	int devnum;	/**< device number */
+	int funcnum;	/**< function number */
+};
+
+enum drm_vblank_seq_type {
+	_DRM_VBLANK_ABSOLUTE = 0x0,	/**< Wait for specific vblank sequence number */
+	_DRM_VBLANK_RELATIVE = 0x1,	/**< Wait for given number of vblanks */
+	/* bits 1-6 are reserved for high crtcs */
+	_DRM_VBLANK_HIGH_CRTC_MASK = 0x0000003e,
+	_DRM_VBLANK_EVENT = 0x4000000,   /**< Send event instead of blocking */
+	_DRM_VBLANK_FLIP = 0x8000000,   /**< Scheduled buffer swap should flip */
+	_DRM_VBLANK_NEXTONMISS = 0x10000000,	/**< If missed, wait for next vblank */
+	_DRM_VBLANK_SECONDARY = 0x20000000,	/**< Secondary display controller */
+	_DRM_VBLANK_SIGNAL = 0x40000000	/**< Send signal instead of blocking, unsupported */
+};
+#define _DRM_VBLANK_HIGH_CRTC_SHIFT 1
+
+#define _DRM_VBLANK_TYPES_MASK (_DRM_VBLANK_ABSOLUTE | _DRM_VBLANK_RELATIVE)
+#define _DRM_VBLANK_FLAGS_MASK (_DRM_VBLANK_EVENT | _DRM_VBLANK_SIGNAL | \
+				_DRM_VBLANK_SECONDARY | _DRM_VBLANK_NEXTONMISS)
+
+struct drm_wait_vblank_request {
+	enum drm_vblank_seq_type type;
+	unsigned int sequence;
+	unsigned long signal;
+};
+
+struct drm_wait_vblank_reply {
+	enum drm_vblank_seq_type type;
+	unsigned int sequence;
+	long tval_sec;
+	long tval_usec;
+};
+
+/*
+ * DRM_IOCTL_WAIT_VBLANK ioctl argument type.
+ *
+ * \sa drmWaitVBlank().
+ */
+union drm_wait_vblank {
+	struct drm_wait_vblank_request request;
+	struct drm_wait_vblank_reply reply;
+};
+
+#define _DRM_PRE_MODESET 1
+#define _DRM_POST_MODESET 2
+
+/*
+ * DRM_IOCTL_MODESET_CTL ioctl argument type
+ *
+ * \sa drmModesetCtl().
+ */
+struct drm_modeset_ctl {
+	__u32 crtc;
+	__u32 cmd;
+};
+
+/*
+ * DRM_IOCTL_AGP_ENABLE ioctl argument type.
+ *
+ * \sa drmAgpEnable().
+ */
+struct drm_agp_mode {
+	unsigned long mode;	/**< AGP mode */
+};
+
+/*
+ * DRM_IOCTL_AGP_ALLOC and DRM_IOCTL_AGP_FREE ioctls argument type.
+ *
+ * \sa drmAgpAlloc() and drmAgpFree().
+ */
+struct drm_agp_buffer {
+	unsigned long size;	/**< In bytes -- will round to page boundary */
+	unsigned long handle;	/**< Used for binding / unbinding */
+	unsigned long type;	/**< Type of memory to allocate */
+	unsigned long physical;	/**< Physical used by i810 */
+};
+
+/*
+ * DRM_IOCTL_AGP_BIND and DRM_IOCTL_AGP_UNBIND ioctls argument type.
+ *
+ * \sa drmAgpBind() and drmAgpUnbind().
+ */
+struct drm_agp_binding {
+	unsigned long handle;	/**< From drm_agp_buffer */
+	unsigned long offset;	/**< In bytes -- will round to page boundary */
+};
+
+/*
+ * DRM_IOCTL_AGP_INFO ioctl argument type.
+ *
+ * \sa drmAgpVersionMajor(), drmAgpVersionMinor(), drmAgpGetMode(),
+ * drmAgpBase(), drmAgpSize(), drmAgpMemoryUsed(), drmAgpMemoryAvail(),
+ * drmAgpVendorId() and drmAgpDeviceId().
+ */
+struct drm_agp_info {
+	int agp_version_major;
+	int agp_version_minor;
+	unsigned long mode;
+	unsigned long aperture_base;	/* physical address */
+	unsigned long aperture_size;	/* bytes */
+	unsigned long memory_allowed;	/* bytes */
+	unsigned long memory_used;
+
+	/* PCI information */
+	unsigned short id_vendor;
+	unsigned short id_device;
+};
+
+/*
+ * DRM_IOCTL_SG_ALLOC ioctl argument type.
+ */
+struct drm_scatter_gather {
+	unsigned long size;	/**< In bytes -- will round to page boundary */
+	unsigned long handle;	/**< Used for mapping / unmapping */
+};
+
+/*
+ * DRM_IOCTL_SET_VERSION ioctl argument type.
+ */
+struct drm_set_version {
+	int drm_di_major;
+	int drm_di_minor;
+	int drm_dd_major;
+	int drm_dd_minor;
+};
+
+/* DRM_IOCTL_GEM_CLOSE ioctl argument type */
+struct drm_gem_close {
+	/** Handle of the object to be closed. */
+	__u32 handle;
+	__u32 pad;
+};
+
+/* DRM_IOCTL_GEM_FLINK ioctl argument type */
+struct drm_gem_flink {
+	/** Handle for the object being named */
+	__u32 handle;
+
+	/** Returned global name */
+	__u32 name;
+};
+
+/* DRM_IOCTL_GEM_OPEN ioctl argument type */
+struct drm_gem_open {
+	/** Name of object being opened */
+	__u32 name;
+
+	/** Returned handle for the object */
+	__u32 handle;
+
+	/** Returned size of the object */
+	__u64 size;
+};
+
+/**
+ * DRM_CAP_DUMB_BUFFER
+ *
+ * If set to 1, the driver supports creating dumb buffers via the
+ * &DRM_IOCTL_MODE_CREATE_DUMB ioctl.
+ */
+#define DRM_CAP_DUMB_BUFFER		0x1
+/**
+ * DRM_CAP_VBLANK_HIGH_CRTC
+ *
+ * If set to 1, the kernel supports specifying a :ref:`CRTC index<crtc_index>`
+ * in the high bits of &drm_wait_vblank_request.type.
+ *
+ * Starting kernel version 2.6.39, this capability is always set to 1.
+ */
+#define DRM_CAP_VBLANK_HIGH_CRTC	0x2
+/**
+ * DRM_CAP_DUMB_PREFERRED_DEPTH
+ *
+ * The preferred bit depth for dumb buffers.
+ *
+ * The bit depth is the number of bits used to indicate the color of a single
+ * pixel excluding any padding. This is different from the number of bits per
+ * pixel. For instance, XRGB8888 has a bit depth of 24 but has 32 bits per
+ * pixel.
+ *
+ * Note that this preference only applies to dumb buffers, it's irrelevant for
+ * other types of buffers.
+ */
+#define DRM_CAP_DUMB_PREFERRED_DEPTH	0x3
+/**
+ * DRM_CAP_DUMB_PREFER_SHADOW
+ *
+ * If set to 1, the driver prefers userspace to render to a shadow buffer
+ * instead of directly rendering to a dumb buffer. For best speed, userspace
+ * should do streaming ordered memory copies into the dumb buffer and never
+ * read from it.
+ *
+ * Note that this preference only applies to dumb buffers, it's irrelevant for
+ * other types of buffers.
+ */
+#define DRM_CAP_DUMB_PREFER_SHADOW	0x4
+/**
+ * DRM_CAP_PRIME
+ *
+ * Bitfield of supported PRIME sharing capabilities. See &DRM_PRIME_CAP_IMPORT
+ * and &DRM_PRIME_CAP_EXPORT.
+ *
+ * PRIME buffers are exposed as dma-buf file descriptors. See
+ * Documentation/gpu/drm-mm.rst, section "PRIME Buffer Sharing".
+ */
+#define DRM_CAP_PRIME			0x5
+/**
+ * DRM_PRIME_CAP_IMPORT
+ *
+ * If this bit is set in &DRM_CAP_PRIME, the driver supports importing PRIME
+ * buffers via the &DRM_IOCTL_PRIME_FD_TO_HANDLE ioctl.
+ */
+#define  DRM_PRIME_CAP_IMPORT		0x1
+/**
+ * DRM_PRIME_CAP_EXPORT
+ *
+ * If this bit is set in &DRM_CAP_PRIME, the driver supports exporting PRIME
+ * buffers via the &DRM_IOCTL_PRIME_HANDLE_TO_FD ioctl.
+ */
+#define  DRM_PRIME_CAP_EXPORT		0x2
+/**
+ * DRM_CAP_TIMESTAMP_MONOTONIC
+ *
+ * If set to 0, the kernel will report timestamps with ``CLOCK_REALTIME`` in
+ * struct drm_event_vblank. If set to 1, the kernel will report timestamps with
+ * ``CLOCK_MONOTONIC``. See ``clock_gettime(2)`` for the definition of these
+ * clocks.
+ *
+ * Starting from kernel version 2.6.39, the default value for this capability
+ * is 1. Starting kernel version 4.15, this capability is always set to 1.
+ */
+#define DRM_CAP_TIMESTAMP_MONOTONIC	0x6
+/**
+ * DRM_CAP_ASYNC_PAGE_FLIP
+ *
+ * If set to 1, the driver supports &DRM_MODE_PAGE_FLIP_ASYNC.
+ */
+#define DRM_CAP_ASYNC_PAGE_FLIP		0x7
+/**
+ * DRM_CAP_CURSOR_WIDTH
+ *
+ * The ``CURSOR_WIDTH`` and ``CURSOR_HEIGHT`` capabilities return a valid
+ * width x height combination for the hardware cursor. The intention is that a
+ * hardware agnostic userspace can query a cursor plane size to use.
+ *
+ * Note that the cross-driver contract is to merely return a valid size;
+ * drivers are free to attach another meaning on top, eg. i915 returns the
+ * maximum plane size.
+ */
+#define DRM_CAP_CURSOR_WIDTH		0x8
+/**
+ * DRM_CAP_CURSOR_HEIGHT
+ *
+ * See &DRM_CAP_CURSOR_WIDTH.
+ */
+#define DRM_CAP_CURSOR_HEIGHT		0x9
+/**
+ * DRM_CAP_ADDFB2_MODIFIERS
+ *
+ * If set to 1, the driver supports supplying modifiers in the
+ * &DRM_IOCTL_MODE_ADDFB2 ioctl.
+ */
+#define DRM_CAP_ADDFB2_MODIFIERS	0x10
+/**
+ * DRM_CAP_PAGE_FLIP_TARGET
+ *
+ * If set to 1, the driver supports the &DRM_MODE_PAGE_FLIP_TARGET_ABSOLUTE and
+ * &DRM_MODE_PAGE_FLIP_TARGET_RELATIVE flags in
+ * &drm_mode_crtc_page_flip_target.flags for the &DRM_IOCTL_MODE_PAGE_FLIP
+ * ioctl.
+ */
+#define DRM_CAP_PAGE_FLIP_TARGET	0x11
+/**
+ * DRM_CAP_CRTC_IN_VBLANK_EVENT
+ *
+ * If set to 1, the kernel supports reporting the CRTC ID in
+ * &drm_event_vblank.crtc_id for the &DRM_EVENT_VBLANK and
+ * &DRM_EVENT_FLIP_COMPLETE events.
+ *
+ * Starting kernel version 4.12, this capability is always set to 1.
+ */
+#define DRM_CAP_CRTC_IN_VBLANK_EVENT	0x12
