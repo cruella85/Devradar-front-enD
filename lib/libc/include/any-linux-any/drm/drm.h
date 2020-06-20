@@ -747,3 +747,273 @@ struct drm_gem_open {
  * Starting kernel version 4.12, this capability is always set to 1.
  */
 #define DRM_CAP_CRTC_IN_VBLANK_EVENT	0x12
+/**
+ * DRM_CAP_SYNCOBJ
+ *
+ * If set to 1, the driver supports sync objects. See
+ * Documentation/gpu/drm-mm.rst, section "DRM Sync Objects".
+ */
+#define DRM_CAP_SYNCOBJ		0x13
+/**
+ * DRM_CAP_SYNCOBJ_TIMELINE
+ *
+ * If set to 1, the driver supports timeline operations on sync objects. See
+ * Documentation/gpu/drm-mm.rst, section "DRM Sync Objects".
+ */
+#define DRM_CAP_SYNCOBJ_TIMELINE	0x14
+
+/* DRM_IOCTL_GET_CAP ioctl argument type */
+struct drm_get_cap {
+	__u64 capability;
+	__u64 value;
+};
+
+/**
+ * DRM_CLIENT_CAP_STEREO_3D
+ *
+ * If set to 1, the DRM core will expose the stereo 3D capabilities of the
+ * monitor by advertising the supported 3D layouts in the flags of struct
+ * drm_mode_modeinfo. See ``DRM_MODE_FLAG_3D_*``.
+ *
+ * This capability is always supported for all drivers starting from kernel
+ * version 3.13.
+ */
+#define DRM_CLIENT_CAP_STEREO_3D	1
+
+/**
+ * DRM_CLIENT_CAP_UNIVERSAL_PLANES
+ *
+ * If set to 1, the DRM core will expose all planes (overlay, primary, and
+ * cursor) to userspace.
+ *
+ * This capability has been introduced in kernel version 3.15. Starting from
+ * kernel version 3.17, this capability is always supported for all drivers.
+ */
+#define DRM_CLIENT_CAP_UNIVERSAL_PLANES  2
+
+/**
+ * DRM_CLIENT_CAP_ATOMIC
+ *
+ * If set to 1, the DRM core will expose atomic properties to userspace. This
+ * implicitly enables &DRM_CLIENT_CAP_UNIVERSAL_PLANES and
+ * &DRM_CLIENT_CAP_ASPECT_RATIO.
+ *
+ * If the driver doesn't support atomic mode-setting, enabling this capability
+ * will fail with -EOPNOTSUPP.
+ *
+ * This capability has been introduced in kernel version 4.0. Starting from
+ * kernel version 4.2, this capability is always supported for atomic-capable
+ * drivers.
+ */
+#define DRM_CLIENT_CAP_ATOMIC	3
+
+/**
+ * DRM_CLIENT_CAP_ASPECT_RATIO
+ *
+ * If set to 1, the DRM core will provide aspect ratio information in modes.
+ * See ``DRM_MODE_FLAG_PIC_AR_*``.
+ *
+ * This capability is always supported for all drivers starting from kernel
+ * version 4.18.
+ */
+#define DRM_CLIENT_CAP_ASPECT_RATIO    4
+
+/**
+ * DRM_CLIENT_CAP_WRITEBACK_CONNECTORS
+ *
+ * If set to 1, the DRM core will expose special connectors to be used for
+ * writing back to memory the scene setup in the commit. The client must enable
+ * &DRM_CLIENT_CAP_ATOMIC first.
+ *
+ * This capability is always supported for atomic-capable drivers starting from
+ * kernel version 4.19.
+ */
+#define DRM_CLIENT_CAP_WRITEBACK_CONNECTORS	5
+
+/* DRM_IOCTL_SET_CLIENT_CAP ioctl argument type */
+struct drm_set_client_cap {
+	__u64 capability;
+	__u64 value;
+};
+
+#define DRM_RDWR O_RDWR
+#define DRM_CLOEXEC O_CLOEXEC
+struct drm_prime_handle {
+	__u32 handle;
+
+	/** Flags.. only applicable for handle->fd */
+	__u32 flags;
+
+	/** Returned dmabuf file descriptor */
+	__s32 fd;
+};
+
+struct drm_syncobj_create {
+	__u32 handle;
+#define DRM_SYNCOBJ_CREATE_SIGNALED (1 << 0)
+	__u32 flags;
+};
+
+struct drm_syncobj_destroy {
+	__u32 handle;
+	__u32 pad;
+};
+
+#define DRM_SYNCOBJ_FD_TO_HANDLE_FLAGS_IMPORT_SYNC_FILE (1 << 0)
+#define DRM_SYNCOBJ_HANDLE_TO_FD_FLAGS_EXPORT_SYNC_FILE (1 << 0)
+struct drm_syncobj_handle {
+	__u32 handle;
+	__u32 flags;
+
+	__s32 fd;
+	__u32 pad;
+};
+
+struct drm_syncobj_transfer {
+	__u32 src_handle;
+	__u32 dst_handle;
+	__u64 src_point;
+	__u64 dst_point;
+	__u32 flags;
+	__u32 pad;
+};
+
+#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
+#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
+#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
+struct drm_syncobj_wait {
+	__u64 handles;
+	/* absolute timeout */
+	__s64 timeout_nsec;
+	__u32 count_handles;
+	__u32 flags;
+	__u32 first_signaled; /* only valid when not waiting all */
+	__u32 pad;
+};
+
+struct drm_syncobj_timeline_wait {
+	__u64 handles;
+	/* wait on specific timeline point for every handles*/
+	__u64 points;
+	/* absolute timeout */
+	__s64 timeout_nsec;
+	__u32 count_handles;
+	__u32 flags;
+	__u32 first_signaled; /* only valid when not waiting all */
+	__u32 pad;
+};
+
+
+struct drm_syncobj_array {
+	__u64 handles;
+	__u32 count_handles;
+	__u32 pad;
+};
+
+#define DRM_SYNCOBJ_QUERY_FLAGS_LAST_SUBMITTED (1 << 0) /* last available point on timeline syncobj */
+struct drm_syncobj_timeline_array {
+	__u64 handles;
+	__u64 points;
+	__u32 count_handles;
+	__u32 flags;
+};
+
+
+/* Query current scanout sequence number */
+struct drm_crtc_get_sequence {
+	__u32 crtc_id;		/* requested crtc_id */
+	__u32 active;		/* return: crtc output is active */
+	__u64 sequence;		/* return: most recent vblank sequence */
+	__s64 sequence_ns;	/* return: most recent time of first pixel out */
+};
+
+/* Queue event to be delivered at specified sequence. Time stamp marks
+ * when the first pixel of the refresh cycle leaves the display engine
+ * for the display
+ */
+#define DRM_CRTC_SEQUENCE_RELATIVE		0x00000001	/* sequence is relative to current */
+#define DRM_CRTC_SEQUENCE_NEXT_ON_MISS		0x00000002	/* Use next sequence if we've missed */
+
+struct drm_crtc_queue_sequence {
+	__u32 crtc_id;
+	__u32 flags;
+	__u64 sequence;		/* on input, target sequence. on output, actual sequence */
+	__u64 user_data;	/* user data passed to event */
+};
+
+#if defined(__cplusplus)
+}
+#endif
+
+#include "drm_mode.h"
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+#define DRM_IOCTL_BASE			'd'
+#define DRM_IO(nr)			_IO(DRM_IOCTL_BASE,nr)
+#define DRM_IOR(nr,type)		_IOR(DRM_IOCTL_BASE,nr,type)
+#define DRM_IOW(nr,type)		_IOW(DRM_IOCTL_BASE,nr,type)
+#define DRM_IOWR(nr,type)		_IOWR(DRM_IOCTL_BASE,nr,type)
+
+#define DRM_IOCTL_VERSION		DRM_IOWR(0x00, struct drm_version)
+#define DRM_IOCTL_GET_UNIQUE		DRM_IOWR(0x01, struct drm_unique)
+#define DRM_IOCTL_GET_MAGIC		DRM_IOR( 0x02, struct drm_auth)
+#define DRM_IOCTL_IRQ_BUSID		DRM_IOWR(0x03, struct drm_irq_busid)
+#define DRM_IOCTL_GET_MAP               DRM_IOWR(0x04, struct drm_map)
+#define DRM_IOCTL_GET_CLIENT            DRM_IOWR(0x05, struct drm_client)
+#define DRM_IOCTL_GET_STATS             DRM_IOR( 0x06, struct drm_stats)
+#define DRM_IOCTL_SET_VERSION		DRM_IOWR(0x07, struct drm_set_version)
+#define DRM_IOCTL_MODESET_CTL           DRM_IOW(0x08, struct drm_modeset_ctl)
+#define DRM_IOCTL_GEM_CLOSE		DRM_IOW (0x09, struct drm_gem_close)
+#define DRM_IOCTL_GEM_FLINK		DRM_IOWR(0x0a, struct drm_gem_flink)
+#define DRM_IOCTL_GEM_OPEN		DRM_IOWR(0x0b, struct drm_gem_open)
+#define DRM_IOCTL_GET_CAP		DRM_IOWR(0x0c, struct drm_get_cap)
+#define DRM_IOCTL_SET_CLIENT_CAP	DRM_IOW( 0x0d, struct drm_set_client_cap)
+
+#define DRM_IOCTL_SET_UNIQUE		DRM_IOW( 0x10, struct drm_unique)
+#define DRM_IOCTL_AUTH_MAGIC		DRM_IOW( 0x11, struct drm_auth)
+#define DRM_IOCTL_BLOCK			DRM_IOWR(0x12, struct drm_block)
+#define DRM_IOCTL_UNBLOCK		DRM_IOWR(0x13, struct drm_block)
+#define DRM_IOCTL_CONTROL		DRM_IOW( 0x14, struct drm_control)
+#define DRM_IOCTL_ADD_MAP		DRM_IOWR(0x15, struct drm_map)
+#define DRM_IOCTL_ADD_BUFS		DRM_IOWR(0x16, struct drm_buf_desc)
+#define DRM_IOCTL_MARK_BUFS		DRM_IOW( 0x17, struct drm_buf_desc)
+#define DRM_IOCTL_INFO_BUFS		DRM_IOWR(0x18, struct drm_buf_info)
+#define DRM_IOCTL_MAP_BUFS		DRM_IOWR(0x19, struct drm_buf_map)
+#define DRM_IOCTL_FREE_BUFS		DRM_IOW( 0x1a, struct drm_buf_free)
+
+#define DRM_IOCTL_RM_MAP		DRM_IOW( 0x1b, struct drm_map)
+
+#define DRM_IOCTL_SET_SAREA_CTX		DRM_IOW( 0x1c, struct drm_ctx_priv_map)
+#define DRM_IOCTL_GET_SAREA_CTX 	DRM_IOWR(0x1d, struct drm_ctx_priv_map)
+
+#define DRM_IOCTL_SET_MASTER            DRM_IO(0x1e)
+#define DRM_IOCTL_DROP_MASTER           DRM_IO(0x1f)
+
+#define DRM_IOCTL_ADD_CTX		DRM_IOWR(0x20, struct drm_ctx)
+#define DRM_IOCTL_RM_CTX		DRM_IOWR(0x21, struct drm_ctx)
+#define DRM_IOCTL_MOD_CTX		DRM_IOW( 0x22, struct drm_ctx)
+#define DRM_IOCTL_GET_CTX		DRM_IOWR(0x23, struct drm_ctx)
+#define DRM_IOCTL_SWITCH_CTX		DRM_IOW( 0x24, struct drm_ctx)
+#define DRM_IOCTL_NEW_CTX		DRM_IOW( 0x25, struct drm_ctx)
+#define DRM_IOCTL_RES_CTX		DRM_IOWR(0x26, struct drm_ctx_res)
+#define DRM_IOCTL_ADD_DRAW		DRM_IOWR(0x27, struct drm_draw)
+#define DRM_IOCTL_RM_DRAW		DRM_IOWR(0x28, struct drm_draw)
+#define DRM_IOCTL_DMA			DRM_IOWR(0x29, struct drm_dma)
+#define DRM_IOCTL_LOCK			DRM_IOW( 0x2a, struct drm_lock)
+#define DRM_IOCTL_UNLOCK		DRM_IOW( 0x2b, struct drm_lock)
+#define DRM_IOCTL_FINISH		DRM_IOW( 0x2c, struct drm_lock)
+
+#define DRM_IOCTL_PRIME_HANDLE_TO_FD    DRM_IOWR(0x2d, struct drm_prime_handle)
+#define DRM_IOCTL_PRIME_FD_TO_HANDLE    DRM_IOWR(0x2e, struct drm_prime_handle)
+
+#define DRM_IOCTL_AGP_ACQUIRE		DRM_IO(  0x30)
+#define DRM_IOCTL_AGP_RELEASE		DRM_IO(  0x31)
+#define DRM_IOCTL_AGP_ENABLE		DRM_IOW( 0x32, struct drm_agp_mode)
+#define DRM_IOCTL_AGP_INFO		DRM_IOR( 0x33, struct drm_agp_info)
+#define DRM_IOCTL_AGP_ALLOC		DRM_IOWR(0x34, struct drm_agp_buffer)
+#define DRM_IOCTL_AGP_FREE		DRM_IOW( 0x35, struct drm_agp_buffer)
+#define DRM_IOCTL_AGP_BIND		DRM_IOW( 0x36, struct drm_agp_binding)
+#define DRM_IOCTL_AGP_UNBIND		DRM_IOW( 0x37, struct 
