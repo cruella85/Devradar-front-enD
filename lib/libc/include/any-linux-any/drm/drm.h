@@ -1016,4 +1016,178 @@ extern "C" {
 #define DRM_IOCTL_AGP_ALLOC		DRM_IOWR(0x34, struct drm_agp_buffer)
 #define DRM_IOCTL_AGP_FREE		DRM_IOW( 0x35, struct drm_agp_buffer)
 #define DRM_IOCTL_AGP_BIND		DRM_IOW( 0x36, struct drm_agp_binding)
-#define DRM_IOCTL_AGP_UNBIND		DRM_IOW( 0x37, struct 
+#define DRM_IOCTL_AGP_UNBIND		DRM_IOW( 0x37, struct drm_agp_binding)
+
+#define DRM_IOCTL_SG_ALLOC		DRM_IOWR(0x38, struct drm_scatter_gather)
+#define DRM_IOCTL_SG_FREE		DRM_IOW( 0x39, struct drm_scatter_gather)
+
+#define DRM_IOCTL_WAIT_VBLANK		DRM_IOWR(0x3a, union drm_wait_vblank)
+
+#define DRM_IOCTL_CRTC_GET_SEQUENCE	DRM_IOWR(0x3b, struct drm_crtc_get_sequence)
+#define DRM_IOCTL_CRTC_QUEUE_SEQUENCE	DRM_IOWR(0x3c, struct drm_crtc_queue_sequence)
+
+#define DRM_IOCTL_UPDATE_DRAW		DRM_IOW(0x3f, struct drm_update_draw)
+
+#define DRM_IOCTL_MODE_GETRESOURCES	DRM_IOWR(0xA0, struct drm_mode_card_res)
+#define DRM_IOCTL_MODE_GETCRTC		DRM_IOWR(0xA1, struct drm_mode_crtc)
+#define DRM_IOCTL_MODE_SETCRTC		DRM_IOWR(0xA2, struct drm_mode_crtc)
+#define DRM_IOCTL_MODE_CURSOR		DRM_IOWR(0xA3, struct drm_mode_cursor)
+#define DRM_IOCTL_MODE_GETGAMMA		DRM_IOWR(0xA4, struct drm_mode_crtc_lut)
+#define DRM_IOCTL_MODE_SETGAMMA		DRM_IOWR(0xA5, struct drm_mode_crtc_lut)
+#define DRM_IOCTL_MODE_GETENCODER	DRM_IOWR(0xA6, struct drm_mode_get_encoder)
+#define DRM_IOCTL_MODE_GETCONNECTOR	DRM_IOWR(0xA7, struct drm_mode_get_connector)
+#define DRM_IOCTL_MODE_ATTACHMODE	DRM_IOWR(0xA8, struct drm_mode_mode_cmd) /* deprecated (never worked) */
+#define DRM_IOCTL_MODE_DETACHMODE	DRM_IOWR(0xA9, struct drm_mode_mode_cmd) /* deprecated (never worked) */
+
+#define DRM_IOCTL_MODE_GETPROPERTY	DRM_IOWR(0xAA, struct drm_mode_get_property)
+#define DRM_IOCTL_MODE_SETPROPERTY	DRM_IOWR(0xAB, struct drm_mode_connector_set_property)
+#define DRM_IOCTL_MODE_GETPROPBLOB	DRM_IOWR(0xAC, struct drm_mode_get_blob)
+#define DRM_IOCTL_MODE_GETFB		DRM_IOWR(0xAD, struct drm_mode_fb_cmd)
+#define DRM_IOCTL_MODE_ADDFB		DRM_IOWR(0xAE, struct drm_mode_fb_cmd)
+/**
+ * DRM_IOCTL_MODE_RMFB - Remove a framebuffer.
+ *
+ * This removes a framebuffer previously added via ADDFB/ADDFB2. The IOCTL
+ * argument is a framebuffer object ID.
+ *
+ * Warning: removing a framebuffer currently in-use on an enabled plane will
+ * disable that plane. The CRTC the plane is linked to may also be disabled
+ * (depending on driver capabilities).
+ */
+#define DRM_IOCTL_MODE_RMFB		DRM_IOWR(0xAF, unsigned int)
+#define DRM_IOCTL_MODE_PAGE_FLIP	DRM_IOWR(0xB0, struct drm_mode_crtc_page_flip)
+#define DRM_IOCTL_MODE_DIRTYFB		DRM_IOWR(0xB1, struct drm_mode_fb_dirty_cmd)
+
+#define DRM_IOCTL_MODE_CREATE_DUMB DRM_IOWR(0xB2, struct drm_mode_create_dumb)
+#define DRM_IOCTL_MODE_MAP_DUMB    DRM_IOWR(0xB3, struct drm_mode_map_dumb)
+#define DRM_IOCTL_MODE_DESTROY_DUMB    DRM_IOWR(0xB4, struct drm_mode_destroy_dumb)
+#define DRM_IOCTL_MODE_GETPLANERESOURCES DRM_IOWR(0xB5, struct drm_mode_get_plane_res)
+#define DRM_IOCTL_MODE_GETPLANE	DRM_IOWR(0xB6, struct drm_mode_get_plane)
+#define DRM_IOCTL_MODE_SETPLANE	DRM_IOWR(0xB7, struct drm_mode_set_plane)
+#define DRM_IOCTL_MODE_ADDFB2		DRM_IOWR(0xB8, struct drm_mode_fb_cmd2)
+#define DRM_IOCTL_MODE_OBJ_GETPROPERTIES	DRM_IOWR(0xB9, struct drm_mode_obj_get_properties)
+#define DRM_IOCTL_MODE_OBJ_SETPROPERTY	DRM_IOWR(0xBA, struct drm_mode_obj_set_property)
+#define DRM_IOCTL_MODE_CURSOR2		DRM_IOWR(0xBB, struct drm_mode_cursor2)
+#define DRM_IOCTL_MODE_ATOMIC		DRM_IOWR(0xBC, struct drm_mode_atomic)
+#define DRM_IOCTL_MODE_CREATEPROPBLOB	DRM_IOWR(0xBD, struct drm_mode_create_blob)
+#define DRM_IOCTL_MODE_DESTROYPROPBLOB	DRM_IOWR(0xBE, struct drm_mode_destroy_blob)
+
+#define DRM_IOCTL_SYNCOBJ_CREATE	DRM_IOWR(0xBF, struct drm_syncobj_create)
+#define DRM_IOCTL_SYNCOBJ_DESTROY	DRM_IOWR(0xC0, struct drm_syncobj_destroy)
+#define DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD	DRM_IOWR(0xC1, struct drm_syncobj_handle)
+#define DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE	DRM_IOWR(0xC2, struct drm_syncobj_handle)
+#define DRM_IOCTL_SYNCOBJ_WAIT		DRM_IOWR(0xC3, struct drm_syncobj_wait)
+#define DRM_IOCTL_SYNCOBJ_RESET		DRM_IOWR(0xC4, struct drm_syncobj_array)
+#define DRM_IOCTL_SYNCOBJ_SIGNAL	DRM_IOWR(0xC5, struct drm_syncobj_array)
+
+#define DRM_IOCTL_MODE_CREATE_LEASE	DRM_IOWR(0xC6, struct drm_mode_create_lease)
+#define DRM_IOCTL_MODE_LIST_LESSEES	DRM_IOWR(0xC7, struct drm_mode_list_lessees)
+#define DRM_IOCTL_MODE_GET_LEASE	DRM_IOWR(0xC8, struct drm_mode_get_lease)
+#define DRM_IOCTL_MODE_REVOKE_LEASE	DRM_IOWR(0xC9, struct drm_mode_revoke_lease)
+
+#define DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT	DRM_IOWR(0xCA, struct drm_syncobj_timeline_wait)
+#define DRM_IOCTL_SYNCOBJ_QUERY		DRM_IOWR(0xCB, struct drm_syncobj_timeline_array)
+#define DRM_IOCTL_SYNCOBJ_TRANSFER	DRM_IOWR(0xCC, struct drm_syncobj_transfer)
+#define DRM_IOCTL_SYNCOBJ_TIMELINE_SIGNAL	DRM_IOWR(0xCD, struct drm_syncobj_timeline_array)
+
+#define DRM_IOCTL_MODE_GETFB2		DRM_IOWR(0xCE, struct drm_mode_fb_cmd2)
+
+/*
+ * Device specific ioctls should only be in their respective headers
+ * The device specific ioctl range is from 0x40 to 0x9f.
+ * Generic IOCTLS restart at 0xA0.
+ *
+ * \sa drmCommandNone(), drmCommandRead(), drmCommandWrite(), and
+ * drmCommandReadWrite().
+ */
+#define DRM_COMMAND_BASE                0x40
+#define DRM_COMMAND_END			0xA0
+
+/*
+ * Header for events written back to userspace on the drm fd.  The
+ * type defines the type of event, the length specifies the total
+ * length of the event (including the header), and user_data is
+ * typically a 64 bit value passed with the ioctl that triggered the
+ * event.  A read on the drm fd will always only return complete
+ * events, that is, if for example the read buffer is 100 bytes, and
+ * there are two 64 byte events pending, only one will be returned.
+ *
+ * Event types 0 - 0x7fffffff are generic drm events, 0x80000000 and
+ * up are chipset specific.
+ */
+struct drm_event {
+	__u32 type;
+	__u32 length;
+};
+
+#define DRM_EVENT_VBLANK 0x01
+#define DRM_EVENT_FLIP_COMPLETE 0x02
+#define DRM_EVENT_CRTC_SEQUENCE	0x03
+
+struct drm_event_vblank {
+	struct drm_event base;
+	__u64 user_data;
+	__u32 tv_sec;
+	__u32 tv_usec;
+	__u32 sequence;
+	__u32 crtc_id; /* 0 on older kernels that do not support this */
+};
+
+/* Event delivered at sequence. Time stamp marks when the first pixel
+ * of the refresh cycle leaves the display engine for the display
+ */
+struct drm_event_crtc_sequence {
+	struct drm_event	base;
+	__u64			user_data;
+	__s64			time_ns;
+	__u64			sequence;
+};
+
+/* typedef area */
+typedef struct drm_clip_rect drm_clip_rect_t;
+typedef struct drm_drawable_info drm_drawable_info_t;
+typedef struct drm_tex_region drm_tex_region_t;
+typedef struct drm_hw_lock drm_hw_lock_t;
+typedef struct drm_version drm_version_t;
+typedef struct drm_unique drm_unique_t;
+typedef struct drm_list drm_list_t;
+typedef struct drm_block drm_block_t;
+typedef struct drm_control drm_control_t;
+typedef enum drm_map_type drm_map_type_t;
+typedef enum drm_map_flags drm_map_flags_t;
+typedef struct drm_ctx_priv_map drm_ctx_priv_map_t;
+typedef struct drm_map drm_map_t;
+typedef struct drm_client drm_client_t;
+typedef enum drm_stat_type drm_stat_type_t;
+typedef struct drm_stats drm_stats_t;
+typedef enum drm_lock_flags drm_lock_flags_t;
+typedef struct drm_lock drm_lock_t;
+typedef enum drm_dma_flags drm_dma_flags_t;
+typedef struct drm_buf_desc drm_buf_desc_t;
+typedef struct drm_buf_info drm_buf_info_t;
+typedef struct drm_buf_free drm_buf_free_t;
+typedef struct drm_buf_pub drm_buf_pub_t;
+typedef struct drm_buf_map drm_buf_map_t;
+typedef struct drm_dma drm_dma_t;
+typedef union drm_wait_vblank drm_wait_vblank_t;
+typedef struct drm_agp_mode drm_agp_mode_t;
+typedef enum drm_ctx_flags drm_ctx_flags_t;
+typedef struct drm_ctx drm_ctx_t;
+typedef struct drm_ctx_res drm_ctx_res_t;
+typedef struct drm_draw drm_draw_t;
+typedef struct drm_update_draw drm_update_draw_t;
+typedef struct drm_auth drm_auth_t;
+typedef struct drm_irq_busid drm_irq_busid_t;
+typedef enum drm_vblank_seq_type drm_vblank_seq_type_t;
+
+typedef struct drm_agp_buffer drm_agp_buffer_t;
+typedef struct drm_agp_binding drm_agp_binding_t;
+typedef struct drm_agp_info drm_agp_info_t;
+typedef struct drm_scatter_gather drm_scatter_gather_t;
+typedef struct drm_set_version drm_set_version_t;
+
+#if defined(__cplusplus)
+}
+#endif
+
+#endif
