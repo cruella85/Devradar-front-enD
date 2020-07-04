@@ -888,4 +888,56 @@ test "kdf" {
             &dk,
             password,
             salt,
-            .{ .t = v.time, .m = v.memory, .p = v.threads }
+            .{ .t = v.time, .m = v.memory, .p = v.threads },
+            v.mode,
+        );
+
+        try std.testing.expectEqualSlices(u8, &dk, &want);
+    }
+}
+
+test "phc format hasher" {
+    const allocator = std.testing.allocator;
+    const password = "testpass";
+
+    var buf: [128]u8 = undefined;
+    const hash = try PhcFormatHasher.create(
+        allocator,
+        password,
+        .{ .t = 3, .m = 32, .p = 4 },
+        .argon2id,
+        &buf,
+    );
+    try PhcFormatHasher.verify(allocator, hash, password);
+}
+
+test "password hash and password verify" {
+    const allocator = std.testing.allocator;
+    const password = "testpass";
+
+    var buf: [128]u8 = undefined;
+    const hash = try strHash(
+        password,
+        .{ .allocator = allocator, .params = .{ .t = 3, .m = 32, .p = 4 } },
+        &buf,
+    );
+    try strVerify(hash, password, .{ .allocator = allocator });
+}
+
+test "kdf derived key length" {
+    const allocator = std.testing.allocator;
+
+    const password = "testpass";
+    const salt = "saltsalt";
+    const params = Params{ .t = 3, .m = 32, .p = 4 };
+    const mode = Mode.argon2id;
+
+    var dk1: [11]u8 = undefined;
+    try kdf(allocator, &dk1, password, salt, params, mode);
+
+    var dk2: [77]u8 = undefined;
+    try kdf(allocator, &dk2, password, salt, params, mode);
+
+    var dk3: [111]u8 = undefined;
+    try kdf(allocator, &dk3, password, salt, params, mode);
+}
