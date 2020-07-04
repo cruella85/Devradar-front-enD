@@ -277,4 +277,301 @@ fn processSegment(
     passes: u32,
     memory: u32,
     threads: u24,
-    m
+    mode: Mode,
+    lanes: u32,
+    segments: u32,
+    n: u32,
+    slice: u32,
+    lane: u24,
+) void {
+    var addresses align(16) = [_]u64{0} ** block_length;
+    var in align(16) = [_]u64{0} ** block_length;
+    const zero align(16) = [_]u64{0} ** block_length;
+    if (mode == .argon2i or (mode == .argon2id and n == 0 and slice < sync_points / 2)) {
+        in[0] = n;
+        in[1] = lane;
+        in[2] = slice;
+        in[3] = memory;
+        in[4] = passes;
+        in[5] = @enumToInt(mode);
+    }
+    var index: u32 = 0;
+    if (n == 0 and slice == 0) {
+        index = 2;
+        if (mode == .argon2i or mode == .argon2id) {
+            in[6] += 1;
+            processBlock(&addresses, &in, &zero);
+            processBlock(&addresses, &addresses, &zero);
+        }
+    }
+    var offset = lane * lanes + slice * segments + index;
+    var random: u64 = 0;
+    while (index < segments) : ({
+        index += 1;
+        offset += 1;
+    }) {
+        var prev = offset -% 1;
+        if (index == 0 and slice == 0) {
+            prev +%= lanes;
+        }
+        if (mode == .argon2i or (mode == .argon2id and n == 0 and slice < sync_points / 2)) {
+            if (index % block_length == 0) {
+                in[6] += 1;
+                processBlock(&addresses, &in, &zero);
+                processBlock(&addresses, &addresses, &zero);
+            }
+            random = addresses[index % block_length];
+        } else {
+            random = blocks.items[prev][0];
+        }
+        const new_offset = indexAlpha(random, lanes, segments, threads, n, slice, lane, index);
+        processBlockXor(&blocks.items[offset], &blocks.items[prev], &blocks.items[new_offset]);
+    }
+}
+
+fn processBlock(
+    out: *align(16) [block_length]u64,
+    in1: *align(16) const [block_length]u64,
+    in2: *align(16) const [block_length]u64,
+) void {
+    processBlockGeneric(out, in1, in2, false);
+}
+
+fn processBlockXor(
+    out: *[block_length]u64,
+    in1: *const [block_length]u64,
+    in2: *const [block_length]u64,
+) void {
+    processBlockGeneric(out, in1, in2, true);
+}
+
+fn processBlockGeneric(
+    out: *[block_length]u64,
+    in1: *const [block_length]u64,
+    in2: *const [block_length]u64,
+    comptime xor: bool,
+) void {
+    var t: [block_length]u64 = undefined;
+    for (&t, 0..) |*v, i| {
+        v.* = in1[i] ^ in2[i];
+    }
+    var i: usize = 0;
+    while (i < block_length) : (i += 16) {
+        blamkaGeneric(t[i..][0..16]);
+    }
+    i = 0;
+    var buffer: [16]u64 = undefined;
+    while (i < block_length / 8) : (i += 2) {
+        var j: usize = 0;
+        while (j < block_length / 8) : (j += 2) {
+            buffer[j] = t[j * 8 + i];
+            buffer[j + 1] = t[j * 8 + i + 1];
+        }
+        blamkaGeneric(&buffer);
+        j = 0;
+        while (j < block_length / 8) : (j += 2) {
+            t[j * 8 + i] = buffer[j];
+            t[j * 8 + i + 1] = buffer[j + 1];
+        }
+    }
+    if (xor) {
+        for (t, 0..) |v, j| {
+            out[j] ^= in1[j] ^ in2[j] ^ v;
+        }
+    } else {
+        for (t, 0..) |v, j| {
+            out[j] = in1[j] ^ in2[j] ^ v;
+        }
+    }
+}
+
+const QuarterRound = struct { a: usize, b: usize, c: usize, d: usize };
+
+fn Rp(a: usize, b: usize, c: usize, d: usize) QuarterRound {
+    return .{ .a = a, .b = b, .c = c, .d = d };
+}
+
+fn fBlaMka(x: u64, y: u64) u64 {
+    const xy = @as(u64, @truncate(u32, x)) * @as(u64, @truncate(u32, y));
+    return x +% y +% 2 *% xy;
+}
+
+fn blamkaGeneric(x: *[16]u64) void {
+    const rounds = comptime [_]QuarterRound{
+        Rp(0, 4, 8, 12),
+        Rp(1, 5, 9, 13),
+        Rp(2, 6, 10, 14),
+        Rp(3, 7, 11, 15),
+        Rp(0, 5, 10, 15),
+        Rp(1, 6, 11, 12),
+        Rp(2, 7, 8, 13),
+        Rp(3, 4, 9, 14),
+    };
+    inline for (rounds) |r| {
+        x[r.a] = fBlaMka(x[r.a], x[r.b]);
+        x[r.d] = math.rotr(u64, x[r.d] ^ x[r.a], 32);
+        x[r.c] = fBlaMka(x[r.c], x[r.d]);
+        x[r.b] = math.rotr(u64, x[r.b] ^ x[r.c], 24);
+        x[r.a] = fBlaMka(x[r.a], x[r.b]);
+        x[r.d] = math.rotr(u64, x[r.d] ^ x[r.a], 16);
+        x[r.c] = fBlaMka(x[r.c], x[r.d]);
+        x[r.b] = math.rotr(u64, x[r.b] ^ x[r.c], 63);
+    }
+}
+
+fn finalize(
+    blocks: *Blocks,
+    memory: u32,
+    threads: u24,
+    out: []u8,
+) void {
+    const lanes = memory / threads;
+    var lane: u24 = 0;
+    while (lane < threads - 1) : (lane += 1) {
+        for (blocks.items[(lane * lanes) + lanes - 1], 0..) |v, i| {
+            blocks.items[memory - 1][i] ^= v;
+        }
+    }
+    var block: [1024]u8 = undefined;
+    for (blocks.items[memory - 1], 0..) |v, i| {
+        mem.writeIntLittle(u64, block[i * 8 ..][0..8], v);
+    }
+    blake2bLong(out, &block);
+}
+
+fn indexAlpha(
+    rand: u64,
+    lanes: u32,
+    segments: u32,
+    threads: u24,
+    n: u32,
+    slice: u32,
+    lane: u24,
+    index: u32,
+) u32 {
+    var ref_lane = @intCast(u32, rand >> 32) % threads;
+    if (n == 0 and slice == 0) {
+        ref_lane = lane;
+    }
+    var m = 3 * segments;
+    var s = ((slice + 1) % sync_points) * segments;
+    if (lane == ref_lane) {
+        m += index;
+    }
+    if (n == 0) {
+        m = slice * segments;
+        s = 0;
+        if (slice == 0 or lane == ref_lane) {
+            m += index;
+        }
+    }
+    if (index == 0 or lane == ref_lane) {
+        m -= 1;
+    }
+    var p = @as(u64, @truncate(u32, rand));
+    p = (p * p) >> 32;
+    p = (p * m) >> 32;
+    return ref_lane * lanes + @intCast(u32, ((s + m - (p + 1)) % lanes));
+}
+
+/// Derives a key from the password, salt, and argon2 parameters.
+///
+/// Derived key has to be at least 4 bytes length.
+///
+/// Salt has to be at least 8 bytes length.
+pub fn kdf(
+    allocator: mem.Allocator,
+    derived_key: []u8,
+    password: []const u8,
+    salt: []const u8,
+    params: Params,
+    mode: Mode,
+) KdfError!void {
+    if (derived_key.len < 4) return KdfError.WeakParameters;
+    if (derived_key.len > max_int) return KdfError.OutputTooLong;
+
+    if (password.len > max_int) return KdfError.WeakParameters;
+    if (salt.len < 8 or salt.len > max_int) return KdfError.WeakParameters;
+    if (params.t < 1 or params.p < 1) return KdfError.WeakParameters;
+
+    var h0 = initHash(password, salt, params, derived_key.len, mode);
+    const memory = math.max(
+        params.m / (sync_points * params.p) * (sync_points * params.p),
+        2 * sync_points * params.p,
+    );
+
+    var blocks = try Blocks.initCapacity(allocator, memory);
+    defer blocks.deinit();
+
+    blocks.appendNTimesAssumeCapacity([_]u64{0} ** block_length, memory);
+
+    initBlocks(&blocks, &h0, memory, params.p);
+    try processBlocks(allocator, &blocks, params.t, memory, params.p, mode);
+    finalize(&blocks, memory, params.p, derived_key);
+}
+
+const PhcFormatHasher = struct {
+    const BinValue = phc_format.BinValue;
+
+    const HashResult = struct {
+        alg_id: []const u8,
+        alg_version: ?u32,
+        m: u32,
+        t: u32,
+        p: u24,
+        salt: BinValue(max_salt_len),
+        hash: BinValue(max_hash_len),
+    };
+
+    pub fn create(
+        allocator: mem.Allocator,
+        password: []const u8,
+        params: Params,
+        mode: Mode,
+        buf: []u8,
+    ) HasherError![]const u8 {
+        if (params.secret != null or params.ad != null) return HasherError.InvalidEncoding;
+
+        var salt: [default_salt_len]u8 = undefined;
+        crypto.random.bytes(&salt);
+
+        var hash: [default_hash_len]u8 = undefined;
+        try kdf(allocator, &hash, password, &salt, params, mode);
+
+        return phc_format.serialize(HashResult{
+            .alg_id = @tagName(mode),
+            .alg_version = version,
+            .m = params.m,
+            .t = params.t,
+            .p = params.p,
+            .salt = try BinValue(max_salt_len).fromSlice(&salt),
+            .hash = try BinValue(max_hash_len).fromSlice(&hash),
+        }, buf);
+    }
+
+    pub fn verify(
+        allocator: mem.Allocator,
+        str: []const u8,
+        password: []const u8,
+    ) HasherError!void {
+        const hash_result = try phc_format.deserialize(HashResult, str);
+
+        const mode = std.meta.stringToEnum(Mode, hash_result.alg_id) orelse
+            return HasherError.PasswordVerificationFailed;
+        if (hash_result.alg_version) |v| {
+            if (v != version) return HasherError.InvalidEncoding;
+        }
+        const params = Params{ .t = hash_result.t, .m = hash_result.m, .p = hash_result.p };
+
+        const expected_hash = hash_result.hash.constSlice();
+        var hash_buf: [max_hash_len]u8 = undefined;
+        if (expected_hash.len > hash_buf.len) return HasherError.InvalidEncoding;
+        var hash = hash_buf[0..expected_hash.len];
+
+        try kdf(allocator, hash, password, hash_result.salt.constSlice(), params, mode);
+        if (!mem.eql(u8, hash, expected_hash)) return HasherError.PasswordVerificationFailed;
+    }
+};
+
+/// Options for hashing a password.
+//
