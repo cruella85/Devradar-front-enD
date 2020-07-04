@@ -84,4 +84,11 @@ struct sigaction
 /* Values for the HOW argument to `sigprocmask'.  */
 #define SIG_NOP	      0		/* 0 is unused to catch errors */
 #define	SIG_BLOCK     1		/* Block signals.  */
-#define	SIG_UNBLOCK   2		/* Unb
+#define	SIG_UNBLOCK   2		/* Unblock signals.  */
+#define	SIG_SETMASK   3		/* Set the set of blocked signals.  */
+#ifdef __USE_MISC
+# define SIG_SETMASK32 256	/* Goodie from SGI for BSD compatibility:
+				   set only the low 32 bit of the sigset.  */
+#endif
+
+#endif
