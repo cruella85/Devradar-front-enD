@@ -561,4 +561,250 @@ typedef MDL NDIS_BUFFER, *PNDIS_BUFFER;
 #define NDIS_ERROR_CODE_HARDWARE_FAILURE                EVENT_NDIS_HARDWARE_FAILURE
 #define NDIS_ERROR_CODE_ADAPTER_NOT_FOUND               EVENT_NDIS_ADAPTER_NOT_FOUND
 #define NDIS_ERROR_CODE_INTERRUPT_CONNECT               EVENT_NDIS_INTERRUPT_CONNECT
-#define NDIS_ERROR_CODE_DRIV
+#define NDIS_ERROR_CODE_DRIVER_FAILURE                  EVENT_NDIS_DRIVER_FAILURE
+#define NDIS_ERROR_CODE_BAD_VERSION                     EVENT_NDIS_BAD_VERSION
+#define NDIS_ERROR_CODE_TIMEOUT                         EVENT_NDIS_TIMEOUT
+#define NDIS_ERROR_CODE_NETWORK_ADDRESS                 EVENT_NDIS_NETWORK_ADDRESS
+#define NDIS_ERROR_CODE_UNSUPPORTED_CONFIGURATION       EVENT_NDIS_UNSUPPORTED_CONFIGURATION
+#define NDIS_ERROR_CODE_INVALID_VALUE_FROM_ADAPTER      EVENT_NDIS_INVALID_VALUE_FROM_ADAPTER
+#define NDIS_ERROR_CODE_MISSING_CONFIGURATION_PARAMETER EVENT_NDIS_MISSING_CONFIGURATION_PARAMETER
+#define NDIS_ERROR_CODE_BAD_IO_BASE_ADDRESS             EVENT_NDIS_BAD_IO_BASE_ADDRESS
+#define NDIS_ERROR_CODE_RECEIVE_SPACE_SMALL             EVENT_NDIS_RECEIVE_SPACE_SMALL
+#define NDIS_ERROR_CODE_ADAPTER_DISABLED                EVENT_NDIS_ADAPTER_DISABLED
+
+/* Memory allocation flags. Used by Ndis[Allocate|Free]Memory */
+#define NDIS_MEMORY_CONTIGUOUS            0x00000001
+#define NDIS_MEMORY_NONCACHED             0x00000002
+
+/* NIC attribute flags. Used by NdisMSetAttributes(Ex) */
+#define	NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT    0x00000001
+#define NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT   0x00000002
+#define NDIS_ATTRIBUTE_IGNORE_TOKEN_RING_ERRORS 0x00000004
+#define NDIS_ATTRIBUTE_BUS_MASTER               0x00000008
+#define NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER      0x00000010
+#define NDIS_ATTRIBUTE_DESERIALIZE              0x00000020
+#define NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND       0x00000040
+#define NDIS_ATTRIBUTE_SURPRISE_REMOVE_OK       0x00000080
+#define NDIS_ATTRIBUTE_NOT_CO_NDIS              0x00000100
+#define NDIS_ATTRIBUTE_USES_SAFE_BUFFER_APIS    0x00000200
+
+/* Lock */
+
+#if NDIS_SUPPORT_60_COMPATIBLE_API
+
+typedef union _NDIS_RW_LOCK_REFCOUNT {
+  UINT RefCount;
+  UCHAR cacheLine[16];
+} NDIS_RW_LOCK_REFCOUNT;
+
+typedef struct _NDIS_RW_LOCK {
+  __MINGW_EXTENSION union {
+    __MINGW_EXTENSION struct {
+      KSPIN_LOCK SpinLock;
+      PVOID Context;
+    };
+    UCHAR Reserved[16];
+  };
+  __MINGW_EXTENSION union {
+    NDIS_RW_LOCK_REFCOUNT RefCount[MAXIMUM_PROCESSORS]; 
+    ULONG RefCountEx[sizeof(NDIS_RW_LOCK_REFCOUNT)/sizeof(ULONG) * MAXIMUM_PROCESSORS];
+    __MINGW_EXTENSION struct {
+      KSPIN_LOCK RefCountLock;
+      volatile ULONG SharedRefCount;
+      volatile BOOLEAN WriterWaiting;
+    };
+  };
+} NDIS_RW_LOCK, *PNDIS_RW_LOCK;
+
+typedef struct _LOCK_STATE {
+  USHORT LockState;
+  KIRQL OldIrql;
+} LOCK_STATE, *PLOCK_STATE;
+
+#endif /* NDIS_SUPPORT_60_COMPATIBLE_API */
+
+/* Timer */
+
+typedef VOID
+(NTAPI NDIS_TIMER_FUNCTION)(
+  IN PVOID SystemSpecific1,
+  IN PVOID FunctionContext,
+  IN PVOID SystemSpecific2,
+  IN PVOID SystemSpecific3);
+typedef NDIS_TIMER_FUNCTION *PNDIS_TIMER_FUNCTION;
+
+typedef struct _NDIS_TIMER {
+  KTIMER Timer;
+  KDPC Dpc;
+} NDIS_TIMER, *PNDIS_TIMER;
+
+/* Hardware */
+
+typedef CM_MCA_POS_DATA NDIS_MCA_POS_DATA, *PNDIS_MCA_POS_DATA;
+typedef CM_EISA_SLOT_INFORMATION NDIS_EISA_SLOT_INFORMATION, *PNDIS_EISA_SLOT_INFORMATION;
+typedef CM_EISA_FUNCTION_INFORMATION NDIS_EISA_FUNCTION_INFORMATION, *PNDIS_EISA_FUNCTION_INFORMATION;
+typedef CM_PARTIAL_RESOURCE_LIST NDIS_RESOURCE_LIST, *PNDIS_RESOURCE_LIST;
+
+/* Flag bits */
+#define	READABLE_LOCAL_CLOCK                    0x00000001
+#define	CLOCK_NETWORK_DERIVED                   0x00000002
+#define	CLOCK_PRECISION                         0x00000004
+#define	RECEIVE_TIME_INDICATION_CAPABLE         0x00000008
+#define	TIMED_SEND_CAPABLE                      0x00000010
+#define	TIME_STAMP_CAPABLE                      0x00000020
+
+/* NDIS packet filter bits (OID_GEN_CURRENT_PACKET_FILTER) */
+#define NDIS_PACKET_TYPE_DIRECTED               0x00000001
+#define NDIS_PACKET_TYPE_MULTICAST              0x00000002
+#define NDIS_PACKET_TYPE_ALL_MULTICAST          0x00000004
+#define NDIS_PACKET_TYPE_BROADCAST              0x00000008
+#define NDIS_PACKET_TYPE_SOURCE_ROUTING         0x00000010
+#define NDIS_PACKET_TYPE_PROMISCUOUS            0x00000020
+#define NDIS_PACKET_TYPE_SMT                    0x00000040
+#define NDIS_PACKET_TYPE_ALL_LOCAL              0x00000080
+#define NDIS_PACKET_TYPE_GROUP                  0x00001000
+#define NDIS_PACKET_TYPE_ALL_FUNCTIONAL         0x00002000
+#define NDIS_PACKET_TYPE_FUNCTIONAL             0x00004000
+#define NDIS_PACKET_TYPE_MAC_FRAME              0x00008000
+
+/* NDIS protocol option bits (OID_GEN_PROTOCOL_OPTIONS) */
+#define NDIS_PROT_OPTION_ESTIMATED_LENGTH       0x00000001
+#define NDIS_PROT_OPTION_NO_LOOPBACK            0x00000002
+#define NDIS_PROT_OPTION_NO_RSVD_ON_RCVPKT      0x00000004
+
+/* NDIS MAC option bits (OID_GEN_MAC_OPTIONS) */
+#define NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA     0x00000001
+#define NDIS_MAC_OPTION_RECEIVE_SERIALIZED      0x00000002
+#define NDIS_MAC_OPTION_TRANSFERS_NOT_PEND      0x00000004
+#define NDIS_MAC_OPTION_NO_LOOPBACK             0x00000008
+#define NDIS_MAC_OPTION_FULL_DUPLEX             0x00000010
+#define	NDIS_MAC_OPTION_EOTX_INDICATION         0x00000020
+#define	NDIS_MAC_OPTION_8021P_PRIORITY          0x00000040
+#define NDIS_MAC_OPTION_RESERVED                0x80000000
+
+#define	NDIS_GUID_TO_OID                  0x00000001
+#define	NDIS_GUID_TO_STATUS               0x00000002
+#define	NDIS_GUID_ANSI_STRING             0x00000004
+#define	NDIS_GUID_UNICODE_STRING          0x00000008
+#define	NDIS_GUID_ARRAY                   0x00000010
+
+#if NDIS_LEGACY_DRIVER
+
+/* NDIS_PACKET_PRIVATE.Flags constants */
+#define fPACKET_WRAPPER_RESERVED             0x3f
+#define fPACKET_CONTAINS_MEDIA_SPECIFIC_INFO 0x40
+#define fPACKET_ALLOCATED_BY_NDIS            0x80
+
+#define NDIS_FLAGS_PROTOCOL_ID_MASK          0x0000000f
+#define NDIS_FLAGS_MULTICAST_PACKET          0x00000010
+#define NDIS_FLAGS_RESERVED2                 0x00000020
+#define NDIS_FLAGS_RESERVED3                 0x00000040
+#define NDIS_FLAGS_DONT_LOOPBACK             0x00000080
+#define NDIS_FLAGS_IS_LOOPBACK_PACKET        0x00000100
+#define NDIS_FLAGS_LOOPBACK_ONLY             0x00000200
+#define NDIS_FLAGS_RESERVED4                 0x00000400
+#define NDIS_FLAGS_DOUBLE_BUFFERED           0x00000800
+#define NDIS_FLAGS_SENT_AT_DPC               0x00001000
+#define NDIS_FLAGS_USES_SG_BUFFER_LIST       0x00002000
+#define NDIS_FLAGS_USES_ORIGINAL_PACKET      0x00004000
+#define NDIS_FLAGS_PADDED                    0x00010000
+#define NDIS_FLAGS_XLATE_AT_TOP              0x00020000
+
+typedef NDIS_HANDLE PNDIS_PACKET_POOL;
+
+typedef struct _NDIS_PACKET_PRIVATE {
+  UINT PhysicalCount;
+  UINT TotalLength;
+  PNDIS_BUFFER Head;
+  PNDIS_BUFFER Tail;
+  PNDIS_PACKET_POOL Pool;
+  UINT Count;
+  ULONG Flags;
+  BOOLEAN ValidCounts;
+  UCHAR NdisPacketFlags;
+  USHORT NdisPacketOobOffset;
+} NDIS_PACKET_PRIVATE, *PNDIS_PACKET_PRIVATE;
+
+typedef struct _NDIS_PACKET {
+  NDIS_PACKET_PRIVATE Private;
+  __MINGW_EXTENSION union {
+    __MINGW_EXTENSION struct {
+      UCHAR MiniportReserved[2 * sizeof(PVOID)];
+      UCHAR WrapperReserved[2 * sizeof(PVOID)];
+    };
+    __MINGW_EXTENSION struct {
+      UCHAR MiniportReservedEx[3 * sizeof(PVOID)];
+      UCHAR WrapperReservedEx[sizeof(PVOID)];
+    };
+    __MINGW_EXTENSION struct {
+      UCHAR MacReserved[4 * sizeof(PVOID)];
+    };
+  };
+  ULONG_PTR Reserved[2];
+  UCHAR ProtocolReserved[1];
+} NDIS_PACKET, *PNDIS_PACKET, **PPNDIS_PACKET;
+
+typedef struct _NDIS_PACKET_STACK {
+  ULONG_PTR IMReserved[2];
+  ULONG_PTR NdisReserved[4];
+} NDIS_PACKET_STACK, *PNDIS_PACKET_STACK;
+
+#endif /* NDIS_LEGACY_DRIVER */
+
+typedef enum _NDIS_CLASS_ID {
+  NdisClass802_3Priority,
+  NdisClassWirelessWanMbxMailbox,
+  NdisClassIrdaPacketInfo,
+  NdisClassAtmAALInfo
+} NDIS_CLASS_ID;
+
+typedef struct _MEDIA_SPECIFIC_INFORMATION {
+  UINT NextEntryOffset;
+  NDIS_CLASS_ID ClassId;
+  UINT Size;
+  UCHAR ClassInformation[1];
+} MEDIA_SPECIFIC_INFORMATION, *PMEDIA_SPECIFIC_INFORMATION;
+
+#if NDIS_LEGACY_DRIVER
+typedef struct _NDIS_PACKET_OOB_DATA {
+  __MINGW_EXTENSION union {
+    ULONGLONG TimeToSend;
+    ULONGLONG TimeSent;
+  };
+  ULONGLONG TimeReceived;
+  UINT HeaderSize;
+  UINT SizeMediaSpecificInfo;
+  PVOID MediaSpecificInformation;
+  NDIS_STATUS Status;
+} NDIS_PACKET_OOB_DATA, *PNDIS_PACKET_OOB_DATA;
+#endif
+
+/* Request types used by NdisRequest */
+typedef enum _NDIS_REQUEST_TYPE {
+  NdisRequestQueryInformation,
+  NdisRequestSetInformation,
+  NdisRequestQueryStatistics,
+  NdisRequestOpen,
+  NdisRequestClose,
+  NdisRequestSend,
+  NdisRequestTransferData,
+  NdisRequestReset,
+  NdisRequestGeneric1,
+  NdisRequestGeneric2,
+  NdisRequestGeneric3,
+  NdisRequestGeneric4,
+#if NDIS_SUPPORT_NDIS6
+  NdisRequestMethod,
+#endif
+} NDIS_REQUEST_TYPE, *PNDIS_REQUEST_TYPE;
+
+#if NDIS_LEGACY_DRIVER
+typedef struct _NDIS_REQUEST {
+  UCHAR MacReserved[4 * sizeof(PVOID)];
+  NDIS_REQUEST_TYPE RequestType;
+  union _DATA {
+    struct QUERY_INFORMATION {
+      NDIS_OID Oid;
+      PVOID InformationBuffer;
+      UINT InformationBufferLength;
+      UINT BytesWr
