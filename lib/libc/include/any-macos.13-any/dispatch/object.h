@@ -417,4 +417,194 @@ dispatch_resume(dispatch_object_t object);
  *  - QOS_CLASS_DEFAULT
  *  - QOS_CLASS_UTILITY
  *  - QOS_CLASS_BACKGROUND
- * 
+ * Passing any other value is undefined.
+ *
+ * @param relative_priority
+ * A relative priority within the QOS class. This value is a negative
+ * offset from the maximum supported scheduler priority for the given class.
+ * Passing a value greater than zero or less than QOS_MIN_RELATIVE_PRIORITY
+ * is undefined.
+ */
+API_AVAILABLE(macos(10.14), ios(12.0), tvos(12.0), watchos(5.0))
+DISPATCH_EXPORT DISPATCH_NOTHROW
+void
+dispatch_set_qos_class_floor(dispatch_object_t object,
+		dispatch_qos_class_t qos_class, int relative_priority);
+
+#ifdef __BLOCKS__
+/*!
+ * @function dispatch_wait
+ *
+ * @abstract
+ * Wait synchronously for an object or until the specified timeout has elapsed.
+ *
+ * @discussion
+ * Type-generic macro that maps to dispatch_block_wait, dispatch_group_wait or
+ * dispatch_semaphore_wait, depending on the type of the first argument.
+ * See documentation for these functions for more details.
+ * This function is unavailable for any other object type.
+ *
+ * @param object
+ * The object to wait on.
+ * The result of passing NULL in this parameter is undefined.
+ *
+ * @param timeout
+ * When to timeout (see dispatch_time). As a convenience, there are the
+ * DISPATCH_TIME_NOW and DISPATCH_TIME_FOREVER constants.
+ *
+ * @result
+ * Returns zero on success or non-zero on error (i.e. timed out).
+ */
+DISPATCH_UNAVAILABLE
+DISPATCH_EXPORT DISPATCH_NONNULL1 DISPATCH_NOTHROW
+intptr_t
+dispatch_wait(void *object, dispatch_time_t timeout);
+#if __has_extension(c_generic_selections)
+#define dispatch_wait(object, timeout) \
+		_Generic((object), \
+			dispatch_block_t:dispatch_block_wait, \
+			dispatch_group_t:dispatch_group_wait, \
+			dispatch_semaphore_t:dispatch_semaphore_wait \
+		)((object),(timeout))
+#endif
+
+/*!
+ * @function dispatch_notify
+ *
+ * @abstract
+ * Schedule a notification block to be submitted to a queue when the execution
+ * of a specified object has completed.
+ *
+ * @discussion
+ * Type-generic macro that maps to dispatch_block_notify or
+ * dispatch_group_notify, depending on the type of the first argument.
+ * See documentation for these functions for more details.
+ * This function is unavailable for any other object type.
+ *
+ * @param object
+ * The object to observe.
+ * The result of passing NULL in this parameter is undefined.
+ *
+ * @param queue
+ * The queue to which the supplied notification block will be submitted when
+ * the observed object completes.
+ *
+ * @param notification_block
+ * The block to submit when the observed object completes.
+ */
+DISPATCH_UNAVAILABLE
+DISPATCH_EXPORT DISPATCH_NONNULL_ALL DISPATCH_NOTHROW
+void
+dispatch_notify(void *object, dispatch_object_t queue,
+		dispatch_block_t notification_block);
+#if __has_extension(c_generic_selections)
+#define dispatch_notify(object, queue, notification_block) \
+		_Generic((object), \
+			dispatch_block_t:dispatch_block_notify, \
+			dispatch_group_t:dispatch_group_notify \
+		)((object),(queue), (notification_block))
+#endif
+
+/*!
+ * @function dispatch_cancel
+ *
+ * @abstract
+ * Cancel the specified object.
+ *
+ * @discussion
+ * Type-generic macro that maps to dispatch_block_cancel or
+ * dispatch_source_cancel, depending on the type of the first argument.
+ * See documentation for these functions for more details.
+ * This function is unavailable for any other object type.
+ *
+ * @param object
+ * The object to cancel.
+ * The result of passing NULL in this parameter is undefined.
+ */
+DISPATCH_UNAVAILABLE
+DISPATCH_EXPORT DISPATCH_NONNULL_ALL DISPATCH_NOTHROW
+void
+dispatch_cancel(void *object);
+#if __has_extension(c_generic_selections)
+#define dispatch_cancel(object) \
+		_Generic((object), \
+			dispatch_block_t:dispatch_block_cancel, \
+			dispatch_source_t:dispatch_source_cancel \
+		)((object))
+#endif
+
+/*!
+ * @function dispatch_testcancel
+ *
+ * @abstract
+ * Test whether the specified object has been canceled
+ *
+ * @discussion
+ * Type-generic macro that maps to dispatch_block_testcancel or
+ * dispatch_source_testcancel, depending on the type of the first argument.
+ * See documentation for these functions for more details.
+ * This function is unavailable for any other object type.
+ *
+ * @param object
+ * The object to test.
+ * The result of passing NULL in this parameter is undefined.
+ *
+ * @result
+ * Non-zero if canceled and zero if not canceled.
+ */
+DISPATCH_UNAVAILABLE
+DISPATCH_EXPORT DISPATCH_NONNULL_ALL DISPATCH_WARN_RESULT DISPATCH_PURE
+DISPATCH_NOTHROW
+intptr_t
+dispatch_testcancel(void *object);
+#if __has_extension(c_generic_selections)
+#define dispatch_testcancel(object) \
+		_Generic((object), \
+			dispatch_block_t:dispatch_block_testcancel, \
+			dispatch_source_t:dispatch_source_testcancel \
+		)((object))
+#endif
+#endif // __BLOCKS__
+
+/*!
+ * @function dispatch_debug
+ *
+ * @abstract
+ * Programmatically log debug information about a dispatch object.
+ *
+ * @discussion
+ * Programmatically log debug information about a dispatch object. By default,
+ * the log output is sent to syslog at notice level. In the debug version of
+ * the library, the log output is sent to a file in /var/tmp.
+ * The log output destination can be configured via the LIBDISPATCH_LOG
+ * environment variable, valid values are: YES, NO, syslog, stderr, file.
+ *
+ * This function is deprecated and will be removed in a future release.
+ * Objective-C callers may use -debugDescription instead.
+ *
+ * @param object
+ * The object to introspect.
+ *
+ * @param message
+ * The message to log above and beyond the introspection.
+ */
+API_DEPRECATED("unsupported interface", macos(10.6,10.9), ios(4.0,6.0))
+DISPATCH_EXPORT DISPATCH_NONNULL2 DISPATCH_NOTHROW DISPATCH_COLD
+__attribute__((__format__(printf,2,3)))
+void
+dispatch_debug(dispatch_object_t object,
+			   const char *DISPATCH_UNSAFE_INDEXABLE message, ...);
+
+API_DEPRECATED("unsupported interface", macos(10.6,10.9), ios(4.0,6.0))
+DISPATCH_EXPORT DISPATCH_NONNULL2 DISPATCH_NOTHROW DISPATCH_COLD
+__attribute__((__format__(printf,2,0)))
+void
+dispatch_debugv(dispatch_object_t object,
+				const char *DISPATCH_UNSAFE_INDEXABLE message, va_list ap);
+
+__END_DECLS
+
+DISPATCH_ASSUME_ABI_SINGLE_END
+DISPATCH_ASSUME_NONNULL_END
+
+#endif
