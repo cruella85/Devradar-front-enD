@@ -134,3 +134,19 @@ test "math.tanh64" {
     try expect(math.approxEqAbs(f64, tanh64(-1.5), -0.905148, epsilon));
     try expect(math.approxEqAbs(f64, tanh64(-37.45), -1.0, epsilon));
 }
+
+test "math.tanh32.special" {
+    try expect(tanh32(0.0) == 0.0);
+    try expect(tanh32(-0.0) == -0.0);
+    try expect(tanh32(math.inf(f32)) == 1.0);
+    try expect(tanh32(-math.inf(f32)) == -1.0);
+    try expect(math.isNan(tanh32(math.nan(f32))));
+}
+
+test "math.tanh64.special" {
+    try expect(tanh64(0.0) == 0.0);
+    try expect(tanh64(-0.0) == -0.0);
+    try expect(tanh64(math.inf(f64)) == 1.0);
+    try expect(tanh64(-math.inf(f64)) == -1.0);
+    try expect(math.isNan(tanh64(math.nan(f64))));
+}
