@@ -807,4 +807,300 @@ typedef struct _NDIS_REQUEST {
       NDIS_OID Oid;
       PVOID InformationBuffer;
       UINT InformationBufferLength;
-      UINT BytesWr
+      UINT BytesWritten;
+      UINT BytesNeeded;
+    } QUERY_INFORMATION;
+    struct SET_INFORMATION {
+      NDIS_OID Oid;
+      PVOID InformationBuffer;
+      UINT InformationBufferLength;
+      UINT BytesRead;
+      UINT BytesNeeded;
+    } SET_INFORMATION;
+ } DATA;
+#if (defined(NDIS50) || defined(NDIS51) || defined(NDIS50_MINIPORT) || defined(NDIS51_MINIPORT))
+  UCHAR NdisReserved[9 * sizeof(PVOID)];
+  __MINGW_EXTENSION union {
+    UCHAR CallMgrReserved[2 * sizeof(PVOID)];
+    UCHAR ProtocolReserved[2 * sizeof(PVOID)];
+  };
+  UCHAR MiniportReserved[2 * sizeof(PVOID)];
+#endif
+} NDIS_REQUEST, *PNDIS_REQUEST;
+#endif /* NDIS_LEGACY_DRIVER */
+
+/* Wide Area Networks definitions */
+
+#if NDIS_LEGACY_DRIVER
+typedef struct _NDIS_WAN_PACKET {
+  LIST_ENTRY WanPacketQueue;
+  PUCHAR CurrentBuffer;
+  ULONG CurrentLength;
+  PUCHAR StartBuffer;
+  PUCHAR EndBuffer;
+  PVOID ProtocolReserved1;
+  PVOID ProtocolReserved2;
+  PVOID ProtocolReserved3;
+  PVOID ProtocolReserved4;
+  PVOID MacReserved1;
+  PVOID MacReserved2;
+  PVOID MacReserved3;
+  PVOID MacReserved4;
+} NDIS_WAN_PACKET, *PNDIS_WAN_PACKET;
+#endif
+
+/* DMA channel information */
+
+typedef struct _NDIS_DMA_DESCRIPTION {
+  BOOLEAN  DemandMode;
+  BOOLEAN  AutoInitialize;
+  BOOLEAN  DmaChannelSpecified;
+  DMA_WIDTH  DmaWidth;
+  DMA_SPEED  DmaSpeed;
+  ULONG  DmaPort;
+  ULONG  DmaChannel;
+} NDIS_DMA_DESCRIPTION, *PNDIS_DMA_DESCRIPTION;
+
+typedef struct _NDIS_DMA_BLOCK {
+  PVOID  MapRegisterBase;
+  KEVENT  AllocationEvent;
+  PADAPTER_OBJECT  SystemAdapterObject;
+  PVOID  Miniport;
+  BOOLEAN  InProgress;
+} NDIS_DMA_BLOCK, *PNDIS_DMA_BLOCK;
+
+typedef UCHAR NDIS_DMA_SIZE;
+
+#define NDIS_DMA_24BITS                         ((NDIS_DMA_SIZE)0)
+#define NDIS_DMA_32BITS                         ((NDIS_DMA_SIZE)1)
+#define NDIS_DMA_64BITS                         ((NDIS_DMA_SIZE)2)
+
+typedef enum _NDIS_PROCESSOR_TYPE {
+  NdisProcessorX86,
+  NdisProcessorMips,
+  NdisProcessorAlpha,
+  NdisProcessorPpc,
+  NdisProcessorAmd64,
+  NdisProcessorIA64
+} NDIS_PROCESSOR_TYPE, *PNDIS_PROCESSOR_TYPE;
+
+typedef enum _NDIS_ENVIRONMENT_TYPE {
+  NdisEnvironmentWindows,
+  NdisEnvironmentWindowsNt
+} NDIS_ENVIRONMENT_TYPE, *PNDIS_ENVIRONMENT_TYPE;
+
+/* Possible hardware architecture */
+typedef enum _NDIS_INTERFACE_TYPE {
+  NdisInterfaceInternal = Internal,
+  NdisInterfaceIsa = Isa,
+  NdisInterfaceEisa = Eisa,
+  NdisInterfaceMca = MicroChannel,
+  NdisInterfaceTurboChannel = TurboChannel,
+  NdisInterfacePci = PCIBus,
+  NdisInterfacePcMcia = PCMCIABus,
+  NdisInterfaceCBus = CBus,
+  NdisInterfaceMPIBus = MPIBus,
+  NdisInterfaceMPSABus = MPSABus,
+  NdisInterfaceProcessorInternal = ProcessorInternal,
+  NdisInterfaceInternalPowerBus = InternalPowerBus,
+  NdisInterfacePNPISABus = PNPISABus,
+  NdisInterfacePNPBus = PNPBus,
+  NdisInterfaceUSB,
+  NdisInterfaceIrda,
+  NdisInterface1394,
+  NdisMaximumInterfaceType
+} NDIS_INTERFACE_TYPE, *PNDIS_INTERFACE_TYPE;
+
+#define NdisInterruptLevelSensitive       LevelSensitive
+#define NdisInterruptLatched              Latched
+
+typedef KINTERRUPT_MODE NDIS_INTERRUPT_MODE, *PNDIS_INTERRUPT_MODE;
+
+typedef enum _NDIS_PARAMETER_TYPE {
+  NdisParameterInteger,
+  NdisParameterHexInteger,
+  NdisParameterString,
+  NdisParameterMultiString,
+  NdisParameterBinary
+} NDIS_PARAMETER_TYPE, *PNDIS_PARAMETER_TYPE;
+
+typedef struct _BINARY_DATA {
+  USHORT Length;
+  PVOID Buffer;
+} BINARY_DATA;
+
+typedef struct _NDIS_CONFIGURATION_PARAMETER {
+  NDIS_PARAMETER_TYPE ParameterType;
+  union {
+    ULONG IntegerData;
+    NDIS_STRING StringData;
+    BINARY_DATA BinaryData;
+  } ParameterData;
+} NDIS_CONFIGURATION_PARAMETER, *PNDIS_CONFIGURATION_PARAMETER;
+
+typedef PHYSICAL_ADDRESS NDIS_PHYSICAL_ADDRESS, *PNDIS_PHYSICAL_ADDRESS;
+
+typedef struct _NDIS_PHYSICAL_ADDRESS_UNIT {
+  NDIS_PHYSICAL_ADDRESS PhysicalAddress;
+  UINT Length;
+} NDIS_PHYSICAL_ADDRESS_UNIT, *PNDIS_PHYSICAL_ADDRESS_UNIT;
+
+typedef struct _NDIS_WAN_LINE_DOWN {
+  UCHAR RemoteAddress[6];
+  UCHAR LocalAddress[6];
+} NDIS_WAN_LINE_DOWN, *PNDIS_WAN_LINE_DOWN;
+
+typedef struct _NDIS_WAN_LINE_UP {
+  ULONG LinkSpeed;
+  ULONG MaximumTotalSize;
+  NDIS_WAN_QUALITY Quality;
+  USHORT SendWindow;
+  UCHAR RemoteAddress[6];
+  OUT UCHAR LocalAddress[6];
+  ULONG ProtocolBufferLength;
+  PUCHAR ProtocolBuffer;
+  USHORT ProtocolType;
+  NDIS_STRING DeviceName;
+} NDIS_WAN_LINE_UP, *PNDIS_WAN_LINE_UP;
+
+typedef NTSTATUS
+(NTAPI *TDI_REGISTER_CALLBACK)(
+  IN PUNICODE_STRING DeviceName,
+  OUT HANDLE *TdiHandle);
+
+typedef NTSTATUS
+(NTAPI *TDI_PNP_HANDLER)(
+  IN PUNICODE_STRING UpperComponent,
+  IN PUNICODE_STRING LowerComponent,
+  IN PUNICODE_STRING BindList,
+  IN PVOID ReconfigBuffer,
+  IN UINT ReconfigBufferSize,
+  IN UINT Operation);
+
+typedef struct _OID_LIST    OID_LIST, *POID_LIST;
+
+/* PnP state */
+
+typedef enum _NDIS_PNP_DEVICE_STATE {
+  NdisPnPDeviceAdded,
+  NdisPnPDeviceStarted,
+  NdisPnPDeviceQueryStopped,
+  NdisPnPDeviceStopped,
+  NdisPnPDeviceQueryRemoved,
+  NdisPnPDeviceRemoved,
+  NdisPnPDeviceSurpriseRemoved
+} NDIS_PNP_DEVICE_STATE;
+
+#define	NDIS_DEVICE_NOT_STOPPABLE                 0x00000001
+#define	NDIS_DEVICE_NOT_REMOVEABLE                0x00000002
+#define	NDIS_DEVICE_NOT_SUSPENDABLE               0x00000004
+#define NDIS_DEVICE_DISABLE_PM                    0x00000008
+#define NDIS_DEVICE_DISABLE_WAKE_UP               0x00000010
+#define NDIS_DEVICE_DISABLE_WAKE_ON_RECONNECT     0x00000020
+#define NDIS_DEVICE_RESERVED                      0x00000040
+#define NDIS_DEVICE_DISABLE_WAKE_ON_MAGIC_PACKET  0x00000080
+#define NDIS_DEVICE_DISABLE_WAKE_ON_PATTERN_MATCH 0x00000100
+
+/* Protocol types supported by NDIS */
+#define	NDIS_PROTOCOL_ID_DEFAULT        0x00
+#define	NDIS_PROTOCOL_ID_TCP_IP         0x02
+#define	NDIS_PROTOCOL_ID_IPX            0x06
+#define	NDIS_PROTOCOL_ID_NBF            0x07
+#define	NDIS_PROTOCOL_ID_MAX            0x0F
+#define	NDIS_PROTOCOL_ID_MASK           0x0F
+
+typedef ULONG NDIS_AF, *PNDIS_AF;
+
+#define CO_ADDRESS_FAMILY_Q2931           ((NDIS_AF)0x1)
+#define CO_ADDRESS_FAMILY_PSCHED          ((NDIS_AF)0x2)
+#define CO_ADDRESS_FAMILY_L2TP            ((NDIS_AF)0x3)
+#define CO_ADDRESS_FAMILY_IRDA            ((NDIS_AF)0x4)
+#define CO_ADDRESS_FAMILY_1394            ((NDIS_AF)0x5)
+#define CO_ADDRESS_FAMILY_PPP             ((NDIS_AF)0x6)
+#define CO_ADDRESS_FAMILY_INFINIBAND      ((NDIS_AF)0x7)
+#define CO_ADDRESS_FAMILY_TAPI            ((NDIS_AF)0x800)
+#define CO_ADDRESS_FAMILY_TAPI_PROXY      ((NDIS_AF)0x801)
+
+#define CO_ADDRESS_FAMILY_PROXY           0x80000000
+
+typedef struct _CO_ADDRESS_FAMILY {
+  NDIS_AF AddressFamily;
+  ULONG MajorVersion;
+  ULONG MinorVersion;
+} CO_ADDRESS_FAMILY, *PCO_ADDRESS_FAMILY;
+
+typedef struct _CO_SPECIFIC_PARAMETERS {
+  ULONG  ParamType;
+  ULONG  Length;
+  UCHAR  Parameters[1];
+} CO_SPECIFIC_PARAMETERS, *PCO_SPECIFIC_PARAMETERS;
+
+typedef struct _CO_CALL_MANAGER_PARAMETERS {
+  FLOWSPEC  Transmit;
+  FLOWSPEC  Receive;
+  CO_SPECIFIC_PARAMETERS  CallMgrSpecific;
+} CO_CALL_MANAGER_PARAMETERS, *PCO_CALL_MANAGER_PARAMETERS;
+
+/* CO_MEDIA_PARAMETERS.Flags constants */
+#define RECEIVE_TIME_INDICATION           0x00000001
+#define USE_TIME_STAMPS                   0x00000002
+#define TRANSMIT_VC                       0x00000004
+#define RECEIVE_VC                        0x00000008
+#define INDICATE_ERRED_PACKETS            0x00000010
+#define INDICATE_END_OF_TX                0x00000020
+#define RESERVE_RESOURCES_VC              0x00000040
+#define	ROUND_DOWN_FLOW                   0x00000080
+#define	ROUND_UP_FLOW                     0x00000100
+
+typedef struct _CO_MEDIA_PARAMETERS {
+  ULONG  Flags;
+  ULONG  ReceivePriority;
+  ULONG  ReceiveSizeHint;
+  CO_SPECIFIC_PARAMETERS  MediaSpecific;
+} CO_MEDIA_PARAMETERS, *PCO_MEDIA_PARAMETERS;
+
+/* CO_CALL_PARAMETERS.Flags constants */
+#define PERMANENT_VC                      0x00000001
+#define CALL_PARAMETERS_CHANGED           0x00000002
+#define QUERY_CALL_PARAMETERS             0x00000004
+#define BROADCAST_VC                      0x00000008
+#define MULTIPOINT_VC                     0x00000010
+
+typedef struct _CO_CALL_PARAMETERS {
+  ULONG  Flags;
+  PCO_CALL_MANAGER_PARAMETERS  CallMgrParameters;
+  PCO_MEDIA_PARAMETERS  MediaParameters;
+} CO_CALL_PARAMETERS, *PCO_CALL_PARAMETERS;
+
+typedef struct _CO_SAP {
+  ULONG SapType;
+  ULONG SapLength;
+  UCHAR Sap[1];
+} CO_SAP, *PCO_SAP;
+
+#if NDIS_LEGACY_DRIVER
+typedef struct _NDIS_IPSEC_PACKET_INFO {
+  __MINGW_EXTENSION union {
+    struct {
+      NDIS_HANDLE OffloadHandle;
+      NDIS_HANDLE NextOffloadHandle;
+    } Transmit;
+    struct {
+      ULONG SA_DELETE_REQ:1;
+      ULONG CRYPTO_DONE:1;
+      ULONG NEXT_CRYPTO_DONE:1;
+      ULONG CryptoStatus;
+    } Receive;
+  };
+} NDIS_IPSEC_PACKET_INFO, *PNDIS_IPSEC_PACKET_INFO;
+#endif
+
+#if (NDIS_SUPPORT_NDIS6 || NDIS60)
+typedef struct _NDIS_IPSEC_OFFLOAD_V1_NET_BUFFER_LIST_INFO {
+  __MINGW_EXTENSION union {
+    struct {
+      NDIS_HANDLE OffloadHandle;
+    } Transmit;
+    struct {
+      USHORT SaDeleteReq:1;
+      U
