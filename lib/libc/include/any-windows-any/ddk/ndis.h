@@ -1424,4 +1424,313 @@ typedef struct _NDIS_WAN_GET_STATS {
   ULONG SerialOverrunErrors;
   ULONG FramingErrors;
   ULONG BufferOverrunErrors;
-  ULONG BytesTransmittedUncompress
+  ULONG BytesTransmittedUncompressed;
+  ULONG BytesReceivedUncompressed;
+  ULONG BytesTransmittedCompressed;
+  ULONG BytesReceivedCompressed;
+} NDIS_WAN_GET_STATS, *PNDIS_WAN_GET_STATS;
+
+/* Call Manager */
+
+typedef VOID
+(NTAPI *CM_ACTIVATE_VC_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  CallMgrVcContext,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef NDIS_STATUS
+(NTAPI *CM_ADD_PARTY_HANDLER)(
+  IN NDIS_HANDLE  CallMgrVcContext,
+  IN OUT PCO_CALL_PARAMETERS  CallParameters,
+  IN NDIS_HANDLE  NdisPartyHandle,
+  OUT PNDIS_HANDLE  CallMgrPartyContext);
+
+typedef NDIS_STATUS
+(NTAPI *CM_CLOSE_AF_HANDLER)(
+  IN NDIS_HANDLE  CallMgrAfContext);
+
+typedef NDIS_STATUS
+(NTAPI *CM_CLOSE_CALL_HANDLER)(
+  IN NDIS_HANDLE  CallMgrVcContext,
+  IN NDIS_HANDLE  CallMgrPartyContext  OPTIONAL,
+  IN PVOID  CloseData  OPTIONAL,
+  IN UINT  Size  OPTIONAL);
+
+typedef NDIS_STATUS
+(NTAPI *CM_DEREG_SAP_HANDLER)(
+  IN NDIS_HANDLE  CallMgrSapContext);
+
+typedef VOID
+(NTAPI *CM_DEACTIVATE_VC_COMPLETE_HANDLER)(
+	IN NDIS_STATUS  Status,
+	IN NDIS_HANDLE  CallMgrVcContext);
+
+typedef NDIS_STATUS
+(NTAPI *CM_DROP_PARTY_HANDLER)(
+  IN NDIS_HANDLE  CallMgrPartyContext,
+  IN PVOID  CloseData  OPTIONAL,
+  IN UINT  Size  OPTIONAL);
+
+typedef VOID
+(NTAPI *CM_INCOMING_CALL_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  CallMgrVcContext,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef NDIS_STATUS
+(NTAPI *CM_MAKE_CALL_HANDLER)(
+  IN NDIS_HANDLE  CallMgrVcContext,
+  IN OUT PCO_CALL_PARAMETERS  CallParameters,
+  IN NDIS_HANDLE  NdisPartyHandle	OPTIONAL,
+  OUT PNDIS_HANDLE  CallMgrPartyContext  OPTIONAL);
+
+typedef NDIS_STATUS
+(NTAPI *CM_MODIFY_CALL_QOS_HANDLER)(
+  IN NDIS_HANDLE  CallMgrVcContext,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef NDIS_STATUS
+(NTAPI *CM_OPEN_AF_HANDLER)(
+	IN NDIS_HANDLE  CallMgrBindingContext,
+	IN PCO_ADDRESS_FAMILY  AddressFamily,
+	IN NDIS_HANDLE  NdisAfHandle,
+	OUT PNDIS_HANDLE  CallMgrAfContext);
+
+typedef NDIS_STATUS
+(NTAPI *CM_REG_SAP_HANDLER)(
+  IN NDIS_HANDLE  CallMgrAfContext,
+  IN PCO_SAP  Sap,
+  IN NDIS_HANDLE  NdisSapHandle,
+  OUT	PNDIS_HANDLE  CallMgrSapContext);
+
+typedef NDIS_STATUS
+(NTAPI *CO_CREATE_VC_HANDLER)(
+  IN NDIS_HANDLE  ProtocolAfContext,
+  IN NDIS_HANDLE  NdisVcHandle,
+  OUT PNDIS_HANDLE  ProtocolVcContext);
+
+typedef NDIS_STATUS
+(NTAPI *CO_DELETE_VC_HANDLER)(
+  IN NDIS_HANDLE  ProtocolVcContext);
+
+#define PROTOCOL_RESERVED_SIZE_IN_PACKET (4 * sizeof(PVOID))
+
+/* Prototypes for NDIS 5.0 protocol characteristics */
+
+typedef VOID
+(NTAPI *CO_SEND_COMPLETE_HANDLER)(
+  IN NDIS_STATUS Status,
+  IN NDIS_HANDLE ProtocolVcContext,
+  IN PNDIS_PACKET Packet);
+
+typedef VOID
+(NTAPI *CO_STATUS_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_HANDLE ProtocolVcContext OPTIONAL,
+  IN NDIS_STATUS GeneralStatus,
+  IN PVOID StatusBuffer,
+  IN UINT StatusBufferSize);
+
+typedef UINT
+(NTAPI *CO_RECEIVE_PACKET_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_HANDLE ProtocolVcContext,
+  IN PNDIS_PACKET Packet);
+
+typedef NDIS_STATUS
+(NTAPI *CO_REQUEST_HANDLER)(
+  IN NDIS_HANDLE ProtocolAfContext,
+  IN NDIS_HANDLE ProtocolVcContext OPTIONAL,
+  IN NDIS_HANDLE ProtocolPartyContext OPTIONAL,
+  IN OUT PNDIS_REQUEST NdisRequest);
+
+typedef VOID
+(NTAPI *CO_REQUEST_COMPLETE_HANDLER)(
+  IN NDIS_STATUS Status,
+  IN NDIS_HANDLE ProtocolAfContext OPTIONAL,
+  IN NDIS_HANDLE ProtocolVcContext OPTIONAL,
+  IN NDIS_HANDLE ProtocolPartyContext OPTIONAL,
+  IN PNDIS_REQUEST NdisRequest);
+
+typedef struct _NDIS_CALL_MANAGER_CHARACTERISTICS {
+	UCHAR  MajorVersion;
+	UCHAR  MinorVersion;
+	USHORT  Filler;
+	UINT  Reserved;
+	CO_CREATE_VC_HANDLER  CmCreateVcHandler;
+	CO_DELETE_VC_HANDLER  CmDeleteVcHandler;
+	CM_OPEN_AF_HANDLER  CmOpenAfHandler;
+	CM_CLOSE_AF_HANDLER	 CmCloseAfHandler;
+	CM_REG_SAP_HANDLER  CmRegisterSapHandler;
+	CM_DEREG_SAP_HANDLER  CmDeregisterSapHandler;
+	CM_MAKE_CALL_HANDLER  CmMakeCallHandler;
+	CM_CLOSE_CALL_HANDLER  CmCloseCallHandler;
+	CM_INCOMING_CALL_COMPLETE_HANDLER  CmIncomingCallCompleteHandler;
+	CM_ADD_PARTY_HANDLER  CmAddPartyHandler;
+	CM_DROP_PARTY_HANDLER  CmDropPartyHandler;
+	CM_ACTIVATE_VC_COMPLETE_HANDLER  CmActivateVcCompleteHandler;
+	CM_DEACTIVATE_VC_COMPLETE_HANDLER  CmDeactivateVcCompleteHandler;
+	CM_MODIFY_CALL_QOS_HANDLER  CmModifyCallQoSHandler;
+	CO_REQUEST_HANDLER  CmRequestHandler;
+	CO_REQUEST_COMPLETE_HANDLER  CmRequestCompleteHandler;
+} NDIS_CALL_MANAGER_CHARACTERISTICS, *PNDIS_CALL_MANAGER_CHARACTERISTICS;
+
+
+
+/* Call Manager clients */
+
+typedef VOID (*CL_OPEN_AF_COMPLETE_HANDLER)(
+  IN NDIS_STATUS Status,
+  IN NDIS_HANDLE ProtocolAfContext,
+  IN NDIS_HANDLE NdisAfHandle);
+
+typedef VOID
+(NTAPI *CL_CLOSE_AF_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolAfContext);
+
+typedef VOID
+(NTAPI *CL_REG_SAP_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolSapContext,
+  IN PCO_SAP  Sap,
+  IN NDIS_HANDLE  NdisSapHandle);
+
+typedef VOID
+(NTAPI *CL_DEREG_SAP_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolSapContext);
+
+typedef VOID
+(NTAPI *CL_MAKE_CALL_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN NDIS_HANDLE  NdisPartyHandle  OPTIONAL,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef VOID
+(NTAPI *CL_MODIFY_CALL_QOS_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef VOID
+(NTAPI *CL_CLOSE_CALL_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN NDIS_HANDLE  ProtocolPartyContext  OPTIONAL);
+
+typedef VOID
+(NTAPI *CL_ADD_PARTY_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolPartyContext,
+  IN NDIS_HANDLE  NdisPartyHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef VOID
+(NTAPI *CL_DROP_PARTY_COMPLETE_HANDLER)(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  ProtocolPartyContext);
+
+typedef NDIS_STATUS
+(NTAPI *CL_INCOMING_CALL_HANDLER)(
+  IN NDIS_HANDLE  ProtocolSapContext,
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN OUT PCO_CALL_PARAMETERS  CallParameters);
+
+typedef VOID
+(NTAPI *CL_INCOMING_CALL_QOS_CHANGE_HANDLER)(
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+typedef VOID
+(NTAPI *CL_INCOMING_CLOSE_CALL_HANDLER)(
+  IN NDIS_STATUS  CloseStatus,
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN PVOID  CloseData  OPTIONAL,
+  IN UINT  Size  OPTIONAL);
+
+typedef VOID
+(NTAPI *CL_INCOMING_DROP_PARTY_HANDLER)(
+  IN NDIS_STATUS  DropStatus,
+  IN NDIS_HANDLE  ProtocolPartyContext,
+  IN PVOID  CloseData  OPTIONAL,
+  IN UINT  Size  OPTIONAL);
+
+typedef VOID
+(NTAPI *CL_CALL_CONNECTED_HANDLER)(
+  IN NDIS_HANDLE  ProtocolVcContext);
+
+
+typedef struct _NDIS_CLIENT_CHARACTERISTICS {
+  UCHAR  MajorVersion;
+  UCHAR  MinorVersion;
+  USHORT  Filler;
+  UINT  Reserved;
+  CO_CREATE_VC_HANDLER  ClCreateVcHandler;
+  CO_DELETE_VC_HANDLER  ClDeleteVcHandler;
+  CO_REQUEST_HANDLER  ClRequestHandler;
+  CO_REQUEST_COMPLETE_HANDLER  ClRequestCompleteHandler;
+  CL_OPEN_AF_COMPLETE_HANDLER  ClOpenAfCompleteHandler;
+  CL_CLOSE_AF_COMPLETE_HANDLER  ClCloseAfCompleteHandler;
+  CL_REG_SAP_COMPLETE_HANDLER  ClRegisterSapCompleteHandler;
+  CL_DEREG_SAP_COMPLETE_HANDLER  ClDeregisterSapCompleteHandler;
+  CL_MAKE_CALL_COMPLETE_HANDLER  ClMakeCallCompleteHandler;
+  CL_MODIFY_CALL_QOS_COMPLETE_HANDLER	 ClModifyCallQoSCompleteHandler;
+  CL_CLOSE_CALL_COMPLETE_HANDLER  ClCloseCallCompleteHandler;
+  CL_ADD_PARTY_COMPLETE_HANDLER  ClAddPartyCompleteHandler;
+  CL_DROP_PARTY_COMPLETE_HANDLER  ClDropPartyCompleteHandler;
+  CL_INCOMING_CALL_HANDLER  ClIncomingCallHandler;
+  CL_INCOMING_CALL_QOS_CHANGE_HANDLER  ClIncomingCallQoSChangeHandler;
+  CL_INCOMING_CLOSE_CALL_HANDLER  ClIncomingCloseCallHandler;
+  CL_INCOMING_DROP_PARTY_HANDLER  ClIncomingDropPartyHandler;
+  CL_CALL_CONNECTED_HANDLER  ClCallConnectedHandler;
+} NDIS_CLIENT_CHARACTERISTICS, *PNDIS_CLIENT_CHARACTERISTICS;
+
+
+/* NDIS protocol structures */
+
+/* Prototypes for NDIS 3.0 protocol characteristics */
+
+typedef VOID
+(NTAPI *OPEN_ADAPTER_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_STATUS Status,
+  IN NDIS_STATUS OpenErrorStatus);
+
+typedef VOID
+(NTAPI *CLOSE_ADAPTER_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_STATUS Status);
+
+typedef VOID
+(NTAPI *RESET_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_STATUS Status);
+
+typedef VOID
+(NTAPI *REQUEST_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNDIS_REQUEST NdisRequest,
+  IN NDIS_STATUS Status);
+
+typedef VOID
+(NTAPI *STATUS_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_STATUS GeneralStatus,
+  IN PVOID StatusBuffer,
+  IN UINT StatusBufferSize);
+
+typedef VOID
+(NTAPI *STATUS_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext);
+
+typedef VOID
+(NTAPI *SEND_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNDIS_PACKET Packet,
+  IN NDIS_STATUS Status);
+
+typedef VOID
+(NTAPI *WAN_SEND_COMPLETE_HANDLER)(
+  IN NDIS_HAN
