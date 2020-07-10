@@ -1103,4 +1103,325 @@ typedef struct _NDIS_IPSEC_OFFLOAD_V1_NET_BUFFER_LIST_INFO {
     } Transmit;
     struct {
       USHORT SaDeleteReq:1;
-      U
+      USHORT CryptoDone:1;
+      USHORT NextCryptoDone:1;
+      USHORT Pad:13;
+      USHORT CryptoStatus;
+    } Receive;
+  };
+} NDIS_IPSEC_OFFLOAD_V1_NET_BUFFER_LIST_INFO, *PNDIS_IPSEC_OFFLOAD_V1_NET_BUFFER_LIST_INFO;
+#endif
+
+/* NDIS_MAC_FRAGMENT.Errors constants */
+#define WAN_ERROR_CRC					0x00000001
+#define WAN_ERROR_FRAMING				0x00000002
+#define WAN_ERROR_HARDWAREOVERRUN			0x00000004
+#define WAN_ERROR_BUFFEROVERRUN				0x00000008
+#define WAN_ERROR_TIMEOUT				0x00000010
+#define WAN_ERROR_ALIGNMENT				0x00000020
+
+typedef struct _NDIS_MAC_FRAGMENT {
+  NDIS_HANDLE  NdisLinkContext;
+  ULONG  Errors;
+} NDIS_MAC_FRAGMENT, *PNDIS_MAC_FRAGMENT;
+
+typedef struct _NDIS_MAC_LINE_DOWN {
+  NDIS_HANDLE  NdisLinkContext;
+} NDIS_MAC_LINE_DOWN, *PNDIS_MAC_LINE_DOWN;
+
+typedef struct _NDIS_MAC_LINE_UP {
+  ULONG  LinkSpeed;
+  NDIS_WAN_QUALITY  Quality;
+  USHORT  SendWindow;
+  NDIS_HANDLE  ConnectionWrapperID;
+  NDIS_HANDLE  NdisLinkHandle;
+  NDIS_HANDLE  NdisLinkContext;
+} NDIS_MAC_LINE_UP, *PNDIS_MAC_LINE_UP;
+
+typedef struct _NDIS_PACKET_8021Q_INFO {
+  __MINGW_EXTENSION union {
+    struct {
+      UINT32 UserPriority:3;
+      UINT32 CanonicalFormatId:1;
+      UINT32 VlanId:12;
+      UINT32 Reserved:16;
+    } TagHeader;
+    PVOID Value;
+  };
+} NDIS_PACKET_8021Q_INFO, *PNDIS_PACKET_8021Q_INFO;
+
+typedef enum _NDIS_PER_PACKET_INFO {
+  TcpIpChecksumPacketInfo,
+  IpSecPacketInfo,
+  TcpLargeSendPacketInfo,
+  ClassificationHandlePacketInfo,
+  NdisReserved,
+  ScatterGatherListPacketInfo,
+  Ieee8021QInfo,
+  OriginalPacketInfo,
+  PacketCancelId,
+  OriginalNetBufferList,
+  CachedNetBufferList,
+  ShortPacketPaddingInfo,
+  MaxPerPacketInfo
+} NDIS_PER_PACKET_INFO, *PNDIS_PER_PACKET_INFO;
+
+#if NDIS_LEGACY_DRIVER
+
+typedef struct _NDIS_PACKET_EXTENSION {
+  PVOID NdisPacketInfo[MaxPerPacketInfo];
+} NDIS_PACKET_EXTENSION, *PNDIS_PACKET_EXTENSION;
+
+typedef enum _NDIS_TASK {
+  TcpIpChecksumNdisTask,
+  IpSecNdisTask,
+  TcpLargeSendNdisTask,
+  MaxNdisTask
+} NDIS_TASK, *PNDIS_TASK;
+
+typedef enum _NDIS_ENCAPSULATION {
+  UNSPECIFIED_Encapsulation,
+  NULL_Encapsulation,
+  IEEE_802_3_Encapsulation,
+  IEEE_802_5_Encapsulation,
+  LLC_SNAP_ROUTED_Encapsulation,
+  LLC_SNAP_BRIDGED_Encapsulation
+} NDIS_ENCAPSULATION;
+
+typedef struct _NDIS_ENCAPSULATION_FORMAT {
+  NDIS_ENCAPSULATION Encapsulation;
+  struct {
+    ULONG FixedHeaderSize:1;
+    ULONG Reserved:31;
+  } Flags;
+  ULONG EncapsulationHeaderSize;
+} NDIS_ENCAPSULATION_FORMAT, *PNDIS_ENCAPSULATION_FORMAT;
+
+typedef struct _NDIS_TASK_OFFLOAD_HEADER {
+  ULONG Version;
+  ULONG Size;
+  ULONG Reserved;
+  ULONG OffsetFirstTask;
+  NDIS_ENCAPSULATION_FORMAT EncapsulationFormat;
+} NDIS_TASK_OFFLOAD_HEADER, *PNDIS_TASK_OFFLOAD_HEADER;
+
+typedef struct _NDIS_TASK_OFFLOAD {
+  ULONG Version;
+  ULONG Size;
+  NDIS_TASK Task;
+  ULONG OffsetNextTask;
+  ULONG TaskBufferLength;
+  UCHAR TaskBuffer[1];
+} NDIS_TASK_OFFLOAD, *PNDIS_TASK_OFFLOAD;
+
+typedef struct _NDIS_TASK_TCP_IP_CHECKSUM {
+  struct {
+    ULONG IpOptionsSupported:1;
+    ULONG TcpOptionsSupported:1;
+    ULONG TcpChecksum:1;
+    ULONG UdpChecksum:1;
+    ULONG IpChecksum:1;
+  } V4Transmit;
+  struct {
+    ULONG IpOptionsSupported:1;
+    ULONG TcpOptionsSupported:1;
+    ULONG TcpChecksum:1;
+    ULONG UdpChecksum:1;
+    ULONG IpChecksum:1;
+  } V4Receive;
+  struct {
+    ULONG IpOptionsSupported:1;
+    ULONG TcpOptionsSupported:1;
+    ULONG TcpChecksum:1;
+    ULONG UdpChecksum:1;
+  } V6Transmit;
+  struct {
+    ULONG IpOptionsSupported:1;
+    ULONG TcpOptionsSupported:1;
+    ULONG TcpChecksum:1;
+    ULONG UdpChecksum:1;
+  } V6Receive;
+} NDIS_TASK_TCP_IP_CHECKSUM, *PNDIS_TASK_TCP_IP_CHECKSUM;
+
+#define NDIS_TASK_TCP_LARGE_SEND_V0 0
+
+typedef struct _NDIS_TASK_TCP_LARGE_SEND {
+  ULONG Version;
+  ULONG MaxOffLoadSize;
+  ULONG MinSegmentCount;
+  BOOLEAN TcpOptions;
+  BOOLEAN IpOptions;
+} NDIS_TASK_TCP_LARGE_SEND, *PNDIS_TASK_TCP_LARGE_SEND;
+
+typedef struct _NDIS_TASK_IPSEC {
+  struct {
+    ULONG AH_ESP_COMBINED;
+    ULONG TRANSPORT_TUNNEL_COMBINED;
+    ULONG V4_OPTIONS;
+    ULONG RESERVED;
+  } Supported;
+  struct {
+    ULONG MD5:1;
+    ULONG SHA_1:1;
+    ULONG Transport:1;
+    ULONG Tunnel:1;
+    ULONG Send:1;
+    ULONG Receive:1;
+  } V4AH;
+  struct {
+    ULONG DES:1;
+    ULONG RESERVED:1;
+    ULONG TRIPLE_DES:1;
+    ULONG NULL_ESP:1;
+    ULONG Transport:1;
+    ULONG Tunnel:1;
+    ULONG Send:1;
+    ULONG Receive:1;
+  } V4ESP;
+} NDIS_TASK_IPSEC, *PNDIS_TASK_IPSEC;
+
+#endif /* NDIS_LEGACY_DRIVER */
+
+#define IPSEC_TPT_UDPESP_ENCAPTYPE_IKE                 0x00000001
+#define IPSEC_TUN_UDPESP_ENCAPTYPE_IKE                 0x00000002
+#define IPSEC_TPTOVERTUN_UDPESP_ENCAPTYPE_IKE          0x00000004
+#define IPSEC_TPT_UDPESP_OVER_PURE_TUN_ENCAPTYPE_IKE   0x00000008
+#define IPSEC_TPT_UDPESP_ENCAPTYPE_OTHER               0x00000010
+#define IPSEC_TUN_UDPESP_ENCAPTYPE_OTHER               0x00000020
+#define IPSEC_TPTOVERTUN_UDPESP_ENCAPTYPE_OTHER        0x00000040
+#define IPSEC_TPT_UDPESP_OVER_PURE_TUN_ENCAPTYPE_OTHER 0x00000080
+
+#if NDIS_LEGACY_DRIVER
+
+/*
+ * PNDIS_PACKET
+ * NDIS_GET_ORIGINAL_PACKET(
+ *   IN PNDIS_PACKET  Packet);
+ */
+#define NDIS_GET_ORIGINAL_PACKET(Packet) \
+  NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, OriginalPacketInfo)
+
+/*
+ * PVOID
+ * NDIS_GET_PACKET_CANCEL_ID(
+ *   IN PNDIS_PACKET  Packet);
+ */
+#define NDIS_GET_PACKET_CANCEL_ID(Packet) \
+  NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, PacketCancelId)
+
+/*
+ * PNDIS_PACKET_EXTENSION
+ * NDIS_PACKET_EXTENSION_FROM_PACKET(
+ *   IN PNDIS_PACKET  Packet);
+ */
+#define NDIS_PACKET_EXTENSION_FROM_PACKET(Packet) \
+  ((PNDIS_PACKET_EXTENSION)((PUCHAR)(Packet) \
+    + (Packet)->Private.NdisPacketOobOffset + sizeof(NDIS_PACKET_OOB_DATA)))
+
+/*
+ * PVOID
+ * NDIS_PER_PACKET_INFO_FROM_PACKET(
+ *   IN OUT  PNDIS_PACKET  Packet,
+ *   IN NDIS_PER_PACKET_INFO  InfoType);
+ */
+#define NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, InfoType) \
+  ((PNDIS_PACKET_EXTENSION)((PUCHAR)(Packet) + (Packet)->Private.NdisPacketOobOffset \
+    + sizeof(NDIS_PACKET_OOB_DATA)))->NdisPacketInfo[(InfoType)]
+
+/*
+ * VOID
+ * NDIS_SET_ORIGINAL_PACKET(
+ *   IN OUT  PNDIS_PACKET  Packet,
+ *   IN PNDIS_PACKET  OriginalPacket);
+ */
+#define NDIS_SET_ORIGINAL_PACKET(Packet, OriginalPacket) \
+  NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, OriginalPacketInfo) = (OriginalPacket)
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_CANCEL_ID(
+ *  IN PNDIS_PACKET  Packet
+ *  IN ULONG_PTR  CancelId);
+ */
+#define NDIS_SET_PACKET_CANCEL_ID(Packet, CancelId) \
+  NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, PacketCancelId) = (CancelId)
+
+#define NdisSetPacketCancelId(_Packet, _CancelId) NDIS_SET_PACKET_CANCEL_ID(_Packet, _CancelId)
+#define NdisGetPacketCancelId(_Packet) NDIS_GET_PACKET_CANCEL_ID(_Packet)
+
+#endif /* NDIS_LEGACY_DRIVER */
+
+#if NDIS_SUPPORT_NDIS6
+typedef struct _NDIS_GENERIC_OBJECT {
+  NDIS_OBJECT_HEADER Header;
+  PVOID Caller;
+  PVOID CallersCaller;
+  PDRIVER_OBJECT DriverObject;
+} NDIS_GENERIC_OBJECT, *PNDIS_GENERIC_OBJECT;
+#endif
+
+/* NDIS_TASK_OFFLOAD_HEADER.Version constants */
+#define NDIS_TASK_OFFLOAD_VERSION 1
+
+#define MAX_HASHES                     4
+#define TRUNCATED_HASH_LEN             12
+
+#define CRYPTO_SUCCESS                   0
+#define CRYPTO_GENERIC_ERROR             1
+#define CRYPTO_TRANSPORT_AH_AUTH_FAILED  2
+#define CRYPTO_TRANSPORT_ESP_AUTH_FAILED 3
+#define CRYPTO_TUNNEL_AH_AUTH_FAILED     4
+#define CRYPTO_TUNNEL_ESP_AUTH_FAILED    5
+#define CRYPTO_INVALID_PACKET_SYNTAX     6
+#define CRYPTO_INVALID_PROTOCOL          7
+
+typedef struct _NDIS_TCP_IP_CHECKSUM_PACKET_INFO {
+  __MINGW_EXTENSION union {
+    struct {
+      ULONG NdisPacketChecksumV4:1;
+      ULONG NdisPacketChecksumV6:1;
+      ULONG NdisPacketTcpChecksum:1;
+      ULONG NdisPacketUdpChecksum:1;
+      ULONG NdisPacketIpChecksum:1;
+      } Transmit;
+    struct {
+      ULONG NdisPacketTcpChecksumFailed:1;
+      ULONG NdisPacketUdpChecksumFailed:1;
+      ULONG NdisPacketIpChecksumFailed:1;
+      ULONG NdisPacketTcpChecksumSucceeded:1;
+      ULONG NdisPacketUdpChecksumSucceeded:1;
+      ULONG NdisPacketIpChecksumSucceeded:1;
+      ULONG NdisPacketLoopback:1;
+    } Receive;
+    ULONG Value;
+  };
+} NDIS_TCP_IP_CHECKSUM_PACKET_INFO, *PNDIS_TCP_IP_CHECKSUM_PACKET_INFO;
+
+typedef struct _NDIS_WAN_CO_FRAGMENT {
+  ULONG Errors;
+} NDIS_WAN_CO_FRAGMENT, *PNDIS_WAN_CO_FRAGMENT;
+
+typedef struct _NDIS_WAN_FRAGMENT {
+  UCHAR RemoteAddress[6];
+  UCHAR LocalAddress[6];
+} NDIS_WAN_FRAGMENT, *PNDIS_WAN_FRAGMENT;
+
+typedef struct _WAN_CO_LINKPARAMS {
+  ULONG TransmitSpeed;
+  ULONG ReceiveSpeed;
+  ULONG SendWindow;
+} WAN_CO_LINKPARAMS, *PWAN_CO_LINKPARAMS;
+
+typedef struct _NDIS_WAN_GET_STATS {
+  UCHAR LocalAddress[6];
+  ULONG BytesSent;
+  ULONG BytesRcvd;
+  ULONG FramesSent;
+  ULONG FramesRcvd;
+  ULONG CRCErrors;
+  ULONG TimeoutErrors;
+  ULONG AlignmentErrors;
+  ULONG SerialOverrunErrors;
+  ULONG FramingErrors;
+  ULONG BufferOverrunErrors;
+  ULONG BytesTransmittedUncompress
