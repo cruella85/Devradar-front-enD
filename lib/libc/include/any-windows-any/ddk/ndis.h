@@ -2347,4 +2347,317 @@ typedef VOID
   IN NDIS_HANDLE  NdisLinkContext);
 
 typedef VOID
-(NTAPI *WAN_RCV_HAN
+(NTAPI *WAN_RCV_HANDLER)(
+  OUT PNDIS_STATUS  Status,
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_HANDLE  NdisLinkContext,
+  IN PUCHAR  Packet,
+  IN ULONG  PacketSize);
+
+typedef VOID
+(FASTCALL *NDIS_M_DEQUEUE_WORK_ITEM)(
+  IN PNDIS_MINIPORT_BLOCK  Miniport,
+  IN NDIS_WORK_ITEM_TYPE  WorkItemType,
+  OUT PVOID  *WorkItemContext);
+
+typedef NDIS_STATUS
+(FASTCALL *NDIS_M_QUEUE_NEW_WORK_ITEM)(
+  IN PNDIS_MINIPORT_BLOCK  Miniport,
+  IN NDIS_WORK_ITEM_TYPE  WorkItemType,
+  IN PVOID  WorkItemContext);
+
+typedef NDIS_STATUS
+(FASTCALL *NDIS_M_QUEUE_WORK_ITEM)(
+  IN PNDIS_MINIPORT_BLOCK  Miniport,
+  IN NDIS_WORK_ITEM_TYPE  WorkItemType,
+  IN PVOID  WorkItemContext);
+
+typedef VOID
+(NTAPI *NDIS_M_REQ_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_STATUS  Status);
+
+typedef VOID
+(NTAPI *NDIS_M_RESET_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_STATUS  Status,
+  IN BOOLEAN  AddressingReset);
+
+typedef VOID
+(NTAPI *NDIS_M_SEND_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN PNDIS_PACKET  Packet,
+  IN NDIS_STATUS  Status);
+
+typedef VOID
+(NTAPI *NDIS_M_SEND_RESOURCES_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+typedef BOOLEAN
+(FASTCALL *NDIS_M_START_SENDS)(
+  IN PNDIS_MINIPORT_BLOCK  Miniport);
+
+typedef VOID
+(NTAPI *NDIS_M_STATUS_HANDLER)(
+  IN NDIS_HANDLE  MiniportHandle,
+  IN NDIS_STATUS  GeneralStatus,
+  IN PVOID  StatusBuffer,
+  IN UINT  StatusBufferSize);
+
+typedef VOID
+(NTAPI *NDIS_M_STS_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+typedef VOID
+(NTAPI *NDIS_M_TD_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN PNDIS_PACKET  Packet,
+  IN NDIS_STATUS  Status,
+  IN UINT  BytesTransferred);
+
+typedef VOID (NTAPI *NDIS_WM_SEND_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN PVOID  Packet,
+  IN NDIS_STATUS  Status);
+
+
+#if ARCNET
+
+#define ARC_SEND_BUFFERS                  8
+#define ARC_HEADER_SIZE                   4
+
+typedef struct _NDIS_ARC_BUF {
+  NDIS_HANDLE  ArcnetBufferPool;
+  PUCHAR  ArcnetLookaheadBuffer;
+  UINT  NumFree;
+  ARC_BUFFER_LIST ArcnetBuffers[ARC_SEND_BUFFERS];
+} NDIS_ARC_BUF, *PNDIS_ARC_BUF;
+
+#endif /* ARCNET */
+
+typedef struct _NDIS_LOG {
+  PNDIS_MINIPORT_BLOCK  Miniport;
+  KSPIN_LOCK  LogLock;
+  PIRP  Irp;
+  UINT  TotalSize;
+  UINT  CurrentSize;
+  UINT  InPtr;
+  UINT  OutPtr;
+  UCHAR  LogBuf[1];
+} NDIS_LOG, *PNDIS_LOG;
+
+#if ARCNET
+#define FILTERDBS_ARCNET_S \
+  PARC_FILTER  ArcDB;
+#else /* !ARCNET */
+#define FILTERDBS_ARCNET_S \
+  PVOID  XXXDB;
+#endif /* !ARCNET */
+
+#define FILTERDBS_S \
+  _ANONYMOUS_UNION union { \
+    PETH_FILTER  EthDB; \
+    PNULL_FILTER  NullDB; \
+  } DUMMYUNIONNAME; \
+  PTR_FILTER  TrDB; \
+  PFDDI_FILTER  FddiDB; \
+  FILTERDBS_ARCNET_S
+
+typedef struct _FILTERDBS {
+  FILTERDBS_S
+} FILTERDBS, *PFILTERDBS;
+
+struct _NDIS_MINIPORT_BLOCK {
+  NDIS_OBJECT_HEADER Header;
+  PNDIS_MINIPORT_BLOCK  NextMiniport;
+  PNDIS_M_DRIVER_BLOCK  DriverHandle;
+  NDIS_HANDLE  MiniportAdapterContext;
+  UNICODE_STRING  MiniportName;
+  PNDIS_BIND_PATHS  BindPaths;
+  NDIS_HANDLE  OpenQueue;
+  REFERENCE  ShortRef;
+  NDIS_HANDLE  DeviceContext;
+  UCHAR  Padding1;
+  UCHAR  LockAcquired;
+  UCHAR  PmodeOpens;
+  UCHAR  AssignedProcessor;
+  KSPIN_LOCK  Lock;
+  PNDIS_REQUEST  MediaRequest;
+  PNDIS_MINIPORT_INTERRUPT  Interrupt;
+  ULONG  Flags;
+  ULONG  PnPFlags;
+  LIST_ENTRY  PacketList;
+  PNDIS_PACKET  FirstPendingPacket;
+  PNDIS_PACKET  ReturnPacketsQueue;
+  ULONG  RequestBuffer;
+  PVOID  SetMCastBuffer;
+  PNDIS_MINIPORT_BLOCK  PrimaryMiniport;
+  PVOID  WrapperContext;
+  PVOID  BusDataContext;
+  ULONG  PnPCapabilities;
+  PCM_RESOURCE_LIST  Resources;
+  NDIS_TIMER  WakeUpDpcTimer;
+  UNICODE_STRING  BaseName;
+  UNICODE_STRING  SymbolicLinkName;
+  ULONG  CheckForHangSeconds;
+  USHORT  CFHangTicks;
+  USHORT  CFHangCurrentTick;
+  NDIS_STATUS  ResetStatus;
+  NDIS_HANDLE  ResetOpen;
+  FILTERDBS_S
+  FILTER_PACKET_INDICATION_HANDLER  PacketIndicateHandler;
+  NDIS_M_SEND_COMPLETE_HANDLER  SendCompleteHandler;
+  NDIS_M_SEND_RESOURCES_HANDLER  SendResourcesHandler;
+  NDIS_M_RESET_COMPLETE_HANDLER  ResetCompleteHandler;
+  NDIS_MEDIUM  MediaType;
+  ULONG  BusNumber;
+  NDIS_INTERFACE_TYPE  BusType;
+  NDIS_INTERFACE_TYPE  AdapterType;
+  PDEVICE_OBJECT  DeviceObject;
+  PDEVICE_OBJECT  PhysicalDeviceObject;
+  PDEVICE_OBJECT  NextDeviceObject;
+  PMAP_REGISTER_ENTRY  MapRegisters;
+  PNDIS_AF_LIST  CallMgrAfList;
+  PVOID  MiniportThread;
+  PVOID  SetInfoBuf;
+  USHORT  SetInfoBufLen;
+  USHORT  MaxSendPackets;
+  NDIS_STATUS  FakeStatus;
+  PVOID  LockHandler;
+  PUNICODE_STRING  pAdapterInstanceName;
+  PNDIS_MINIPORT_TIMER  TimerQueue;
+  UINT  MacOptions;
+  PNDIS_REQUEST  PendingRequest;
+  UINT  MaximumLongAddresses;
+  UINT  MaximumShortAddresses;
+  UINT  CurrentLookahead;
+  UINT  MaximumLookahead;
+  W_HANDLE_INTERRUPT_HANDLER  HandleInterruptHandler;
+  W_DISABLE_INTERRUPT_HANDLER  DisableInterruptHandler;
+  W_ENABLE_INTERRUPT_HANDLER  EnableInterruptHandler;
+  W_SEND_PACKETS_HANDLER  SendPacketsHandler;
+  NDIS_M_START_SENDS  DeferredSendHandler;
+  ETH_RCV_INDICATE_HANDLER  EthRxIndicateHandler;
+  TR_RCV_INDICATE_HANDLER  TrRxIndicateHandler;
+  FDDI_RCV_INDICATE_HANDLER  FddiRxIndicateHandler;
+  ETH_RCV_COMPLETE_HANDLER  EthRxCompleteHandler;
+  TR_RCV_COMPLETE_HANDLER  TrRxCompleteHandler;
+  FDDI_RCV_COMPLETE_HANDLER  FddiRxCompleteHandler;
+  NDIS_M_STATUS_HANDLER  StatusHandler;
+  NDIS_M_STS_COMPLETE_HANDLER  StatusCompleteHandler;
+  NDIS_M_TD_COMPLETE_HANDLER  TDCompleteHandler;
+  NDIS_M_REQ_COMPLETE_HANDLER  QueryCompleteHandler;
+  NDIS_M_REQ_COMPLETE_HANDLER  SetCompleteHandler;
+  NDIS_WM_SEND_COMPLETE_HANDLER  WanSendCompleteHandler;
+  WAN_RCV_HANDLER  WanRcvHandler;
+  WAN_RCV_COMPLETE_HANDLER  WanRcvCompleteHandler;
+#if defined(NDIS_WRAPPER)
+  PNDIS_MINIPORT_BLOCK  NextGlobalMiniport;
+  SINGLE_LIST_ENTRY  WorkQueue[NUMBER_OF_WORK_ITEM_TYPES];
+  SINGLE_LIST_ENTRY  SingleWorkItems[NUMBER_OF_SINGLE_WORK_ITEMS];
+  UCHAR  SendFlags;
+  UCHAR  TrResetRing;
+  UCHAR  ArcnetAddress;
+  UCHAR  XState;
+  _ANONYMOUS_UNION union {
+#if ARCNET
+    PNDIS_ARC_BUF  ArcBuf;
+#endif
+    PVOID  BusInterface;
+  } DUMMYUNIONNAME;
+  PNDIS_LOG  Log;
+  ULONG  SlotNumber;
+  PCM_RESOURCE_LIST  AllocatedResources;
+  PCM_RESOURCE_LIST  AllocatedResourcesTranslated;
+  SINGLE_LIST_ENTRY  PatternList;
+  NDIS_PNP_CAPABILITIES  PMCapabilities;
+  DEVICE_CAPABILITIES  DeviceCaps;
+  ULONG  WakeUpEnable;
+  DEVICE_POWER_STATE  CurrentDevicePowerState;
+  PIRP  pIrpWaitWake;
+  SYSTEM_POWER_STATE  WaitWakeSystemState;
+  LARGE_INTEGER  VcIndex;
+  KSPIN_LOCK  VcCountLock;
+  LIST_ENTRY  WmiEnabledVcs;
+  PNDIS_GUID  pNdisGuidMap;
+  PNDIS_GUID  pCustomGuidMap;
+  USHORT  VcCount;
+  USHORT  cNdisGuidMap;
+  USHORT  cCustomGuidMap;
+  USHORT  CurrentMapRegister;
+  PKEVENT  AllocationEvent;
+  USHORT  BaseMapRegistersNeeded;
+  USHORT  SGMapRegistersNeeded;
+  ULONG  MaximumPhysicalMapping;
+  NDIS_TIMER  MediaDisconnectTimer;
+  USHORT  MediaDisconnectTimeOut;
+  USHORT  InstanceNumber;
+  NDIS_EVENT  OpenReadyEvent;
+  NDIS_PNP_DEVICE_STATE  PnPDeviceState;
+  NDIS_PNP_DEVICE_STATE  OldPnPDeviceState;
+  PGET_SET_DEVICE_DATA  SetBusData;
+  PGET_SET_DEVICE_DATA  GetBusData;
+  KDPC  DeferredDpc;
+#if 0
+  /* FIXME: */
+  NDIS_STATS  NdisStats;
+#else
+  ULONG  NdisStats;
+#endif
+  PNDIS_PACKET  IndicatedPacket[MAXIMUM_PROCESSORS];
+  PKEVENT  RemoveReadyEvent;
+  PKEVENT  AllOpensClosedEvent;
+  PKEVENT  AllRequestsCompletedEvent;
+  ULONG  InitTimeMs;
+  NDIS_MINIPORT_WORK_ITEM  WorkItemBuffer[NUMBER_OF_SINGLE_WORK_ITEMS];
+  PDMA_ADAPTER  SystemAdapterObject;
+  ULONG  DriverVerifyFlags;
+  POID_LIST  OidList;
+  USHORT  InternalResetCount;
+  USHORT  MiniportResetCount;
+  USHORT  MediaSenseConnectCount;
+  USHORT  MediaSenseDisconnectCount;
+  PNDIS_PACKET  *xPackets;
+  ULONG  UserModeOpenReferences;
+  _ANONYMOUS_UNION union {
+    PVOID  SavedSendHandler;
+    PVOID  SavedWanSendHandler;
+  } DUMMYUNIONNAME2;
+  PVOID  SavedSendPacketsHandler;
+  PVOID  SavedCancelSendPacketsHandler;
+  W_SEND_PACKETS_HANDLER  WSendPacketsHandler;
+  ULONG  MiniportAttributes;
+  PDMA_ADAPTER  SavedSystemAdapterObject;
+  USHORT  NumOpens;
+  USHORT  CFHangXTicks;
+  ULONG  RequestCount;
+  ULONG  IndicatedPacketsCount;
+  ULONG  PhysicalMediumType;
+  PNDIS_REQUEST  LastRequest;
+  LONG  DmaAdapterRefCount;
+  PVOID  FakeMac;
+  ULONG  LockDbg;
+  ULONG  LockDbgX;
+  PVOID  LockThread;
+  ULONG  InfoFlags;
+  KSPIN_LOCK  TimerQueueLock;
+  PKEVENT  ResetCompletedEvent;
+  PKEVENT  QueuedBindingCompletedEvent;
+  PKEVENT  DmaResourcesReleasedEvent;
+  FILTER_PACKET_INDICATION_HANDLER  SavedPacketIndicateHandler;
+  ULONG  RegisteredInterrupts;
+  PNPAGED_LOOKASIDE_LIST  SGListLookasideList;
+  ULONG  ScatterGatherListSize;
+#endif /* _NDIS_ */
+};
+
+#if NDIS_LEGACY_DRIVER
+
+typedef NDIS_STATUS
+(NTAPI *WAN_SEND_HANDLER)(
+  IN NDIS_HANDLE MacBindingHandle,
+  IN NDIS_HANDLE LinkHandle,
+  IN PVOID Packet);
+
+typedef VOID
+(N
