@@ -1733,4 +1733,313 @@ typedef VOID
 
 typedef VOID
 (NTAPI *WAN_SEND_COMPLETE_HANDLER)(
-  IN NDIS_HAN
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNDIS_WAN_PACKET Packet,
+  IN NDIS_STATUS Status);
+
+typedef VOID
+(NTAPI *TRANSFER_DATA_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNDIS_PACKET Packet,
+  IN NDIS_STATUS Status,
+  IN UINT BytesTransferred);
+
+typedef VOID
+(NTAPI *WAN_TRANSFER_DATA_COMPLETE_HANDLER)(
+  VOID);
+
+typedef NDIS_STATUS
+(NTAPI *RECEIVE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_HANDLE MacReceiveContext,
+  IN PVOID HeaderBuffer,
+  IN UINT HeaderBufferSize,
+  IN PVOID LookAheadBuffer,
+  IN UINT LookaheadBufferSize,
+  IN UINT PacketSize);
+
+typedef NDIS_STATUS
+(NTAPI *WAN_RECEIVE_HANDLER)(
+  IN NDIS_HANDLE NdisLinkHandle,
+  IN PUCHAR Packet,
+  IN ULONG PacketSize);
+
+typedef VOID
+(NTAPI *RECEIVE_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext);
+
+/* Protocol characteristics for NDIS 3.0 protocols */
+
+#define NDIS30_PROTOCOL_CHARACTERISTICS_S \
+  UCHAR  MajorNdisVersion; \
+  UCHAR  MinorNdisVersion; \
+  USHORT  Filler; \
+  _ANONYMOUS_UNION union { \
+    UINT  Reserved; \
+    UINT  Flags; \
+  } DUMMYUNIONNAME; \
+  OPEN_ADAPTER_COMPLETE_HANDLER  OpenAdapterCompleteHandler; \
+  CLOSE_ADAPTER_COMPLETE_HANDLER  CloseAdapterCompleteHandler; \
+  _ANONYMOUS_UNION union { \
+    SEND_COMPLETE_HANDLER  SendCompleteHandler; \
+    WAN_SEND_COMPLETE_HANDLER  WanSendCompleteHandler; \
+  } DUMMYUNIONNAME2; \
+  _ANONYMOUS_UNION union { \
+    TRANSFER_DATA_COMPLETE_HANDLER  TransferDataCompleteHandler; \
+    WAN_TRANSFER_DATA_COMPLETE_HANDLER  WanTransferDataCompleteHandler; \
+  } DUMMYUNIONNAME3; \
+  RESET_COMPLETE_HANDLER  ResetCompleteHandler; \
+  REQUEST_COMPLETE_HANDLER  RequestCompleteHandler; \
+  _ANONYMOUS_UNION union { \
+    RECEIVE_HANDLER	 ReceiveHandler; \
+    WAN_RECEIVE_HANDLER  WanReceiveHandler; \
+  } DUMMYUNIONNAME4; \
+  RECEIVE_COMPLETE_HANDLER  ReceiveCompleteHandler; \
+  STATUS_HANDLER  StatusHandler; \
+  STATUS_COMPLETE_HANDLER  StatusCompleteHandler; \
+  NDIS_STRING  Name;
+
+typedef struct _NDIS30_PROTOCOL_CHARACTERISTICS {
+  NDIS30_PROTOCOL_CHARACTERISTICS_S
+} NDIS30_PROTOCOL_CHARACTERISTICS, *PNDIS30_PROTOCOL_CHARACTERISTICS;
+
+
+/* Prototypes for NDIS 4.0 protocol characteristics */
+
+typedef INT
+(NTAPI *RECEIVE_PACKET_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNDIS_PACKET Packet);
+
+typedef VOID
+(NTAPI *BIND_HANDLER)(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE BindContext,
+  IN PNDIS_STRING DeviceName,
+  IN PVOID SystemSpecific1,
+  IN PVOID SystemSpecific2);
+
+typedef VOID
+(NTAPI *UNBIND_HANDLER)(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN NDIS_HANDLE UnbindContext);
+
+typedef NDIS_STATUS
+(NTAPI *PNP_EVENT_HANDLER)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNET_PNP_EVENT NetPnPEvent);
+
+typedef VOID
+(NTAPI *UNLOAD_PROTOCOL_HANDLER)(
+  VOID);
+
+/* Protocol characteristics for NDIS 4.0 protocols */
+
+typedef struct _NDIS40_PROTOCOL_CHARACTERISTICS {
+  UCHAR MajorNdisVersion;
+  UCHAR MinorNdisVersion;
+  USHORT Filler;
+  __MINGW_EXTENSION union {
+    UINT Reserved;
+    UINT Flags;
+  };
+  OPEN_ADAPTER_COMPLETE_HANDLER OpenAdapterCompleteHandler;
+  CLOSE_ADAPTER_COMPLETE_HANDLER CloseAdapterCompleteHandler;
+  __MINGW_EXTENSION union {
+    SEND_COMPLETE_HANDLER SendCompleteHandler;
+    WAN_SEND_COMPLETE_HANDLER WanSendCompleteHandler;
+  };
+  __MINGW_EXTENSION union {
+    TRANSFER_DATA_COMPLETE_HANDLER TransferDataCompleteHandler;
+    WAN_TRANSFER_DATA_COMPLETE_HANDLER WanTransferDataCompleteHandler;
+  };
+  RESET_COMPLETE_HANDLER ResetCompleteHandler;
+  REQUEST_COMPLETE_HANDLER RequestCompleteHandler;
+  __MINGW_EXTENSION union {
+    RECEIVE_HANDLER ReceiveHandler;
+    WAN_RECEIVE_HANDLER WanReceiveHandler;
+  };
+  RECEIVE_COMPLETE_HANDLER ReceiveCompleteHandler;
+  STATUS_HANDLER StatusHandler;
+  STATUS_COMPLETE_HANDLER StatusCompleteHandler;
+  NDIS_STRING Name;
+  RECEIVE_PACKET_HANDLER ReceivePacketHandler;
+  BIND_HANDLER BindAdapterHandler;
+  UNBIND_HANDLER UnbindAdapterHandler;
+  PNP_EVENT_HANDLER PnPEventHandler;
+  UNLOAD_PROTOCOL_HANDLER UnloadHandler;
+} NDIS40_PROTOCOL_CHARACTERISTICS;
+
+typedef VOID
+(NTAPI PROTCOL_CO_AF_REGISTER_NOTIFY)(
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PCO_ADDRESS_FAMILY AddressFamily);
+typedef PROTCOL_CO_AF_REGISTER_NOTIFY *CO_AF_REGISTER_NOTIFY_HANDLER;
+
+#if NDIS_LEGACY_PROTOCOL
+
+typedef struct _NDIS50_PROTOCOL_CHARACTERISTICS {
+#ifdef __cplusplus
+  NDIS40_PROTOCOL_CHARACTERISTICS Ndis40Chars;
+#else
+  NDIS40_PROTOCOL_CHARACTERISTICS;
+#endif
+  PVOID ReservedHandlers[4];
+  CO_SEND_COMPLETE_HANDLER CoSendCompleteHandler;
+  CO_STATUS_HANDLER CoStatusHandler;
+  CO_RECEIVE_PACKET_HANDLER CoReceivePacketHandler;
+  CO_AF_REGISTER_NOTIFY_HANDLER CoAfRegisterNotifyHandler;
+} NDIS50_PROTOCOL_CHARACTERISTICS;
+
+#if (defined(NDIS50) || defined(NDIS51))
+typedef NDIS50_PROTOCOL_CHARACTERISTICS NDIS_PROTOCOL_CHARACTERISTICS;
+#else
+typedef NDIS40_PROTOCOL_CHARACTERISTICS NDIS_PROTOCOL_CHARACTERISTICS;
+#endif
+
+typedef NDIS_PROTOCOL_CHARACTERISTICS *PNDIS_PROTOCOL_CHARACTERISTICS;
+
+#endif /* NDIS_LEGACY_PROTOCOL */
+
+/* Prototypes for NDIS_MINIPORT_CHARACTERISTICS */
+
+typedef BOOLEAN
+(NTAPI *W_CHECK_FOR_HANG_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef VOID
+(NTAPI *W_DISABLE_INTERRUPT_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef VOID
+(NTAPI *W_ENABLE_INTERRUPT_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef VOID
+(NTAPI *W_HALT_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef VOID
+(NTAPI *W_HANDLE_INTERRUPT_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef NDIS_STATUS
+(NTAPI *W_INITIALIZE_HANDLER)(
+  OUT PNDIS_STATUS OpenErrorStatus,
+  OUT PUINT SelectedMediumIndex,
+  IN PNDIS_MEDIUM MediumArray,
+  IN UINT MediumArraySize,
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_HANDLE WrapperConfigurationContext);
+
+typedef VOID
+(NTAPI *W_ISR_HANDLER)(
+  OUT PBOOLEAN InterruptRecognized,
+  OUT PBOOLEAN QueueMiniportHandleInterrupt,
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef NDIS_STATUS
+(NTAPI *W_QUERY_INFORMATION_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_OID Oid,
+  IN PVOID InformationBuffer,
+  IN ULONG InformationBufferLength,
+  OUT PULONG BytesWritten,
+  OUT PULONG BytesNeeded);
+
+typedef NDIS_STATUS
+(NTAPI *W_RECONFIGURE_HANDLER)(
+  OUT PNDIS_STATUS OpenErrorStatus,
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_HANDLE WrapperConfigurationContext);
+
+typedef NDIS_STATUS
+(NTAPI *W_RESET_HANDLER)(
+  OUT PBOOLEAN AddressingReset,
+  IN NDIS_HANDLE MiniportAdapterContext);
+
+typedef NDIS_STATUS
+(NTAPI *W_SEND_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN PNDIS_PACKET Packet,
+  IN UINT Flags);
+
+typedef NDIS_STATUS
+(NTAPI *WM_SEND_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_HANDLE NdisLinkHandle,
+  IN PNDIS_WAN_PACKET Packet);
+
+typedef NDIS_STATUS
+(NTAPI *W_SET_INFORMATION_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_OID Oid,
+  IN PVOID InformationBuffer,
+  IN ULONG InformationBufferLength,
+  OUT PULONG BytesRead,
+  OUT PULONG BytesNeeded);
+
+typedef NDIS_STATUS
+(NTAPI *W_TRANSFER_DATA_HANDLER)(
+  OUT PNDIS_PACKET Packet,
+  OUT PUINT BytesTransferred,
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_HANDLE MiniportReceiveContext,
+  IN UINT ByteOffset,
+  IN UINT BytesToTransfer);
+
+typedef NDIS_STATUS
+(NTAPI *WM_TRANSFER_DATA_HANDLER)(
+  VOID);
+
+typedef VOID
+(NTAPI *ADAPTER_SHUTDOWN_HANDLER)(
+  IN PVOID ShutdownContext);
+
+typedef VOID
+(NTAPI *W_RETURN_PACKET_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN PNDIS_PACKET Packet);
+
+typedef VOID
+(NTAPI *W_SEND_PACKETS_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN PPNDIS_PACKET PacketArray,
+  IN UINT NumberOfPackets);
+
+typedef VOID
+(NTAPI *W_ALLOCATE_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN PVOID VirtualAddress,
+  IN PNDIS_PHYSICAL_ADDRESS PhysicalAddress,
+  IN ULONG Length,
+  IN PVOID Context);
+
+/* NDIS structures available only to miniport drivers */
+
+#define NDIS30_MINIPORT_CHARACTERISTICS_S \
+  UCHAR  MajorNdisVersion; \
+  UCHAR  MinorNdisVersion; \
+  UINT  Reserved; \
+  W_CHECK_FOR_HANG_HANDLER  CheckForHangHandler; \
+  W_DISABLE_INTERRUPT_HANDLER  DisableInterruptHandler; \
+  W_ENABLE_INTERRUPT_HANDLER  EnableInterruptHandler; \
+  W_HALT_HANDLER  HaltHandler; \
+  W_HANDLE_INTERRUPT_HANDLER  HandleInterruptHandler; \
+  W_INITIALIZE_HANDLER  InitializeHandler; \
+  W_ISR_HANDLER  ISRHandler; \
+  W_QUERY_INFORMATION_HANDLER  QueryInformationHandler; \
+  W_RECONFIGURE_HANDLER  ReconfigureHandler; \
+  W_RESET_HANDLER  ResetHandler; \
+  W_SEND_HANDLER  SendHandler; \
+  W_SET_INFORMATION_HANDLER  SetInformationHandler; \
+  W_TRANSFER_DATA_HANDLER  TransferDataHandler;
+
+typedef struct _NDIS30_MINIPORT_CHARACTERISTICS {
+  NDIS30_MINIPORT_CHARACTERISTICS_S
+} NDIS30_MINIPORT_CHARACTERISTICS, *PSNDIS30_MINIPORT_CHARACTERISTICS;
+
+#ifdef __cplusplus
+
+#defi
