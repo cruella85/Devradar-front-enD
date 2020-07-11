@@ -2042,4 +2042,309 @@ typedef struct _NDIS30_MINIPORT_CHARACTERISTICS {
 
 #ifdef __cplusplus
 
-#defi
+#define NDIS40_MINIPORT_CHARACTERISTICS_S \
+  NDIS30_MINIPORT_CHARACTERISTICS  Ndis30Chars; \
+  W_RETURN_PACKET_HANDLER  ReturnPacketHandler; \
+  W_SEND_PACKETS_HANDLER  SendPacketsHandler; \
+  W_ALLOCATE_COMPLETE_HANDLER  AllocateCompleteHandler;
+
+#else /* !__cplusplus */
+
+#define NDIS40_MINIPORT_CHARACTERISTICS_S \
+  NDIS30_MINIPORT_CHARACTERISTICS_S \
+  W_RETURN_PACKET_HANDLER  ReturnPacketHandler; \
+  W_SEND_PACKETS_HANDLER  SendPacketsHandler; \
+  W_ALLOCATE_COMPLETE_HANDLER  AllocateCompleteHandler;
+
+#endif /* !__cplusplus */
+
+typedef struct _NDIS40_MINIPORT_CHARACTERISTICS {
+  NDIS40_MINIPORT_CHARACTERISTICS_S
+} NDIS40_MINIPORT_CHARACTERISTICS, *PNDIS40_MINIPORT_CHARACTERISTICS;
+
+/* Extensions for NDIS 5.0 miniports */
+
+typedef NDIS_STATUS
+(NTAPI MINIPORT_CO_CREATE_VC)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_HANDLE NdisVcHandle,
+  OUT PNDIS_HANDLE MiniportVcContext);
+typedef MINIPORT_CO_CREATE_VC *W_CO_CREATE_VC_HANDLER;
+
+typedef NDIS_STATUS
+(NTAPI MINIPORT_CO_DELETE_VC)(
+  IN NDIS_HANDLE MiniportVcContext);
+typedef MINIPORT_CO_DELETE_VC *W_CO_DELETE_VC_HANDLER;
+
+typedef NDIS_STATUS
+(NTAPI MINIPORT_CO_ACTIVATE_VC)(
+  IN NDIS_HANDLE MiniportVcContext,
+  IN OUT PCO_CALL_PARAMETERS CallParameters);
+typedef MINIPORT_CO_ACTIVATE_VC *W_CO_ACTIVATE_VC_HANDLER;
+
+typedef NDIS_STATUS
+(NTAPI MINIPORT_CO_DEACTIVATE_VC)(
+  IN NDIS_HANDLE MiniportVcContext);
+typedef MINIPORT_CO_DEACTIVATE_VC *W_CO_DEACTIVATE_VC_HANDLER;
+
+typedef VOID
+(NTAPI *W_CO_SEND_PACKETS_HANDLER)(
+  IN NDIS_HANDLE MiniportVcContext,
+  IN PPNDIS_PACKET PacketArray,
+  IN UINT NumberOfPackets);
+
+typedef NDIS_STATUS
+(NTAPI *W_CO_REQUEST_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN NDIS_HANDLE MiniportVcContext OPTIONAL,
+  IN OUT PNDIS_REQUEST NdisRequest);
+
+#ifdef __cplusplus
+
+#define NDIS50_MINIPORT_CHARACTERISTICS_S \
+  NDIS40_MINIPORT_CHARACTERISTICS  Ndis40Chars; \
+  W_CO_CREATE_VC_HANDLER  CoCreateVcHandler; \
+  W_CO_DELETE_VC_HANDLER  CoDeleteVcHandler; \
+  W_CO_ACTIVATE_VC_HANDLER  CoActivateVcHandler; \
+  W_CO_DEACTIVATE_VC_HANDLER  CoDeactivateVcHandler; \
+  W_CO_SEND_PACKETS_HANDLER  CoSendPacketsHandler; \
+  W_CO_REQUEST_HANDLER  CoRequestHandler;
+
+#else /* !__cplusplus */
+
+#define NDIS50_MINIPORT_CHARACTERISTICS_S \
+  NDIS40_MINIPORT_CHARACTERISTICS_S \
+  W_CO_CREATE_VC_HANDLER  CoCreateVcHandler; \
+  W_CO_DELETE_VC_HANDLER  CoDeleteVcHandler; \
+  W_CO_ACTIVATE_VC_HANDLER  CoActivateVcHandler; \
+  W_CO_DEACTIVATE_VC_HANDLER  CoDeactivateVcHandler; \
+  W_CO_SEND_PACKETS_HANDLER  CoSendPacketsHandler; \
+  W_CO_REQUEST_HANDLER  CoRequestHandler;
+
+#endif /* !__cplusplus */
+
+typedef struct _NDIS50_MINIPORT_CHARACTERISTICS {
+   NDIS50_MINIPORT_CHARACTERISTICS_S
+} NDIS50_MINIPORT_CHARACTERISTICS, *PSNDIS50_MINIPORT_CHARACTERISTICS;
+
+/* Extensions for NDIS 5.1 miniports */
+
+typedef VOID
+(NTAPI *W_CANCEL_SEND_PACKETS_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterContext,
+  IN PVOID  CancelId);
+
+typedef VOID
+(NTAPI *W_PNP_EVENT_NOTIFY_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterContext,
+  IN NDIS_DEVICE_PNP_EVENT  PnPEvent,
+  IN PVOID  InformationBuffer,
+  IN ULONG  InformationBufferLength);
+
+typedef VOID
+(NTAPI *W_MINIPORT_SHUTDOWN_HANDLER)(
+  IN PVOID  ShutdownContext);
+
+#ifdef __cplusplus
+
+#define NDIS51_MINIPORT_CHARACTERISTICS_S \
+  NDIS50_MINIPORT_CHARACTERISTICS  Ndis50Chars; \
+  W_CANCEL_SEND_PACKETS_HANDLER  CancelSendPacketsHandler; \
+  W_PNP_EVENT_NOTIFY_HANDLER  PnPEventNotifyHandler; \
+  W_MINIPORT_SHUTDOWN_HANDLER  AdapterShutdownHandler; \
+  PVOID Reserved1; \
+  PVOID Reserved2; \
+  PVOID Reserved3; \
+  PVOID Reserved4;
+
+#else
+
+#define NDIS51_MINIPORT_CHARACTERISTICS_S \
+  NDIS50_MINIPORT_CHARACTERISTICS_S \
+  W_CANCEL_SEND_PACKETS_HANDLER  CancelSendPacketsHandler; \
+  W_PNP_EVENT_NOTIFY_HANDLER  PnPEventNotifyHandler; \
+  W_MINIPORT_SHUTDOWN_HANDLER  AdapterShutdownHandler; \
+  PVOID Reserved1; \
+  PVOID Reserved2; \
+  PVOID Reserved3; \
+  PVOID Reserved4;
+
+#endif
+
+typedef struct _NDIS51_MINIPORT_CHARACTERISTICS {
+  NDIS51_MINIPORT_CHARACTERISTICS_S
+} NDIS51_MINIPORT_CHARACTERISTICS, *PSNDIS51_MINIPORT_CHARACTERISTICS;
+
+#if defined(NDIS51_MINIPORT)
+typedef struct _NDIS_MINIPORT_CHARACTERISTICS {
+  NDIS51_MINIPORT_CHARACTERISTICS_S
+} NDIS_MINIPORT_CHARACTERISTICS, *PNDIS_MINIPORT_CHARACTERISTICS;
+#elif defined(NDIS50_MINIPORT)
+typedef struct _NDIS_MINIPORT_CHARACTERISTICS {
+  NDIS50_MINIPORT_CHARACTERISTICS_S
+} NDIS_MINIPORT_CHARACTERISTICS, *PNDIS_MINIPORT_CHARACTERISTICS;
+#elif defined(NDIS40_MINIPORT)
+typedef struct _NDIS_MINIPORT_CHARACTERISTICS {
+  NDIS40_MINIPORT_CHARACTERISTICS_S
+} NDIS_MINIPORT_CHARACTERISTICS, *PNDIS_MINIPORT_CHARACTERISTICS;
+#else /* NDIS30 */
+typedef struct _NDIS_MINIPORT_CHARACTERISTICS {
+  NDIS30_MINIPORT_CHARACTERISTICS_S
+} NDIS_MINIPORT_CHARACTERISTICS, *PNDIS_MINIPORT_CHARACTERISTICS;
+#endif
+
+typedef struct _NDIS_MINIPORT_INTERRUPT {
+  PKINTERRUPT InterruptObject;
+  KSPIN_LOCK DpcCountLock;
+  PVOID Reserved;
+  W_ISR_HANDLER MiniportIsr;
+  W_HANDLE_INTERRUPT_HANDLER MiniportDpc;
+  KDPC InterruptDpc;
+  PNDIS_MINIPORT_BLOCK Miniport;
+  UCHAR DpcCount;
+  BOOLEAN Filler1;
+  KEVENT DpcsCompletedEvent;
+  BOOLEAN SharedInterrupt;
+  BOOLEAN IsrRequested;
+} NDIS_MINIPORT_INTERRUPT, *PNDIS_MINIPORT_INTERRUPT;
+
+/* Structures available only to full MAC drivers */
+
+typedef BOOLEAN
+(NTAPI *PNDIS_INTERRUPT_SERVICE)(
+  IN PVOID  InterruptContext);
+
+typedef VOID
+(NTAPI *PNDIS_DEFERRED_PROCESSING)(
+  IN PVOID  SystemSpecific1,
+  IN PVOID  InterruptContext,
+  IN PVOID  SystemSpecific2,
+  IN PVOID  SystemSpecific3);
+
+typedef struct _NDIS_WRAPPER_HANDLE NDIS_WRAPPER_HANDLE, *PNDIS_WRAPPER_HANDLE;
+typedef struct _NDIS_PROTOCOL_BLOCK NDIS_PROTOCOL_BLOCK, *PNDIS_PROTOCOL_BLOCK;
+typedef struct _NDIS_OPEN_BLOCK NDIS_OPEN_BLOCK, *PNDIS_OPEN_BLOCK;
+typedef struct _NDIS_M_DRIVER_BLOCK NDIS_M_DRIVER_BLOCK, *PNDIS_M_DRIVER_BLOCK;
+typedef struct _NDIS_OFFLOAD NDIS_OFFLOAD, *PNDIS_OFFLOAD;
+typedef struct _NDIS_AF_LIST NDIS_AF_LIST, *PNDIS_AF_LIST;
+typedef struct _X_FILTER ETH_FILTER, *PETH_FILTER;
+#if NDIS_SUPPORT_NDIS6
+typedef USHORT NET_FRAME_TYPE, *PNET_FRAME_TYPE;
+#endif
+
+typedef struct _NDIS_MINIPORT_TIMER {
+  KTIMER  Timer;
+  KDPC  Dpc;
+  PNDIS_TIMER_FUNCTION  MiniportTimerFunction;
+  PVOID  MiniportTimerContext;
+  PNDIS_MINIPORT_BLOCK  Miniport;
+  struct _NDIS_MINIPORT_TIMER  *NextDeferredTimer;
+} NDIS_MINIPORT_TIMER, *PNDIS_MINIPORT_TIMER;
+
+typedef struct _NDIS_INTERRUPT {
+  PKINTERRUPT  InterruptObject;
+  KSPIN_LOCK  DpcCountLock;
+  PNDIS_INTERRUPT_SERVICE  MacIsr;
+  PNDIS_DEFERRED_PROCESSING  MacDpc;
+  KDPC  InterruptDpc;
+  PVOID  InterruptContext;
+  UCHAR  DpcCount;
+  BOOLEAN	 Removing;
+  KEVENT  DpcsCompletedEvent;
+} NDIS_INTERRUPT, *PNDIS_INTERRUPT;
+
+
+typedef enum _NDIS_WORK_ITEM_TYPE {
+  NdisWorkItemRequest,
+  NdisWorkItemSend,
+  NdisWorkItemReturnPackets,
+  NdisWorkItemResetRequested,
+  NdisWorkItemResetInProgress,
+  NdisWorkItemHalt,
+  NdisWorkItemSendLoopback,
+  NdisWorkItemMiniportCallback,
+  NdisMaxWorkItems
+} NDIS_WORK_ITEM_TYPE, *PNDIS_WORK_ITEM_TYPE;
+
+#define	NUMBER_OF_WORK_ITEM_TYPES         NdisMaxWorkItems
+#define	NUMBER_OF_SINGLE_WORK_ITEMS       6
+
+typedef struct _NDIS_MINIPORT_WORK_ITEM {
+	SINGLE_LIST_ENTRY  Link;
+	NDIS_WORK_ITEM_TYPE  WorkItemType;
+	PVOID  WorkItemContext;
+} NDIS_MINIPORT_WORK_ITEM, *PNDIS_MINIPORT_WORK_ITEM;
+
+struct _NDIS_WORK_ITEM;
+typedef VOID (*NDIS_PROC)(struct _NDIS_WORK_ITEM *, PVOID);
+
+typedef struct _NDIS_WORK_ITEM {
+  PVOID Context;
+  NDIS_PROC Routine;
+  UCHAR WrapperReserved[8*sizeof(PVOID)];
+} NDIS_WORK_ITEM, *PNDIS_WORK_ITEM;
+
+typedef struct _NDIS_BIND_PATHS {
+	UINT  Number;
+	NDIS_STRING  Paths[1];
+} NDIS_BIND_PATHS, *PNDIS_BIND_PATHS;
+
+
+typedef VOID
+(NTAPI *ETH_RCV_COMPLETE_HANDLER)(
+  IN PETH_FILTER  Filter);
+
+typedef VOID
+(NTAPI *ETH_RCV_INDICATE_HANDLER)(
+  IN PETH_FILTER  Filter,
+  IN NDIS_HANDLE  MacReceiveContext,
+  IN PCHAR  Address,
+  IN PVOID  HeaderBuffer,
+  IN UINT  HeaderBufferSize,
+  IN PVOID  LookaheadBuffer,
+  IN UINT  LookaheadBufferSize,
+  IN UINT  PacketSize);
+
+typedef VOID
+(NTAPI *FDDI_RCV_COMPLETE_HANDLER)(
+  IN PFDDI_FILTER  Filter);
+
+typedef VOID
+(NTAPI *FDDI_RCV_INDICATE_HANDLER)(
+  IN PFDDI_FILTER  Filter,
+  IN NDIS_HANDLE  MacReceiveContext,
+  IN PCHAR  Address,
+  IN UINT  AddressLength,
+  IN PVOID  HeaderBuffer,
+  IN UINT  HeaderBufferSize,
+  IN PVOID  LookaheadBuffer,
+  IN UINT  LookaheadBufferSize,
+  IN UINT  PacketSize);
+
+typedef VOID
+(NTAPI *FILTER_PACKET_INDICATION_HANDLER)(
+  IN NDIS_HANDLE  Miniport,
+  IN PPNDIS_PACKET  PacketArray,
+  IN UINT  NumberOfPackets);
+
+typedef VOID
+(NTAPI *TR_RCV_COMPLETE_HANDLER)(
+  IN PTR_FILTER  Filter);
+
+typedef VOID
+(NTAPI *TR_RCV_INDICATE_HANDLER)(
+  IN PTR_FILTER  Filter,
+  IN NDIS_HANDLE  MacReceiveContext,
+  IN PVOID  HeaderBuffer,
+  IN UINT  HeaderBufferSize,
+  IN PVOID  LookaheadBuffer,
+  IN UINT  LookaheadBufferSize,
+  IN UINT  PacketSize);
+
+typedef VOID
+(NTAPI *WAN_RCV_COMPLETE_HANDLER)(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_HANDLE  NdisLinkContext);
+
+typedef VOID
+(NTAPI *WAN_RCV_HAN
