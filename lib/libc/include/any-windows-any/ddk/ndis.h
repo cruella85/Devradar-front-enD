@@ -2660,4 +2660,362 @@ typedef NDIS_STATUS
   IN PVOID Packet);
 
 typedef VOID
-(N
+(NTAPI *SEND_PACKETS_HANDLER)(
+  IN NDIS_HANDLE MiniportAdapterContext,
+  IN PPNDIS_PACKET PacketArray,
+  IN UINT NumberOfPackets);
+
+typedef NDIS_STATUS
+(NTAPI *SEND_HANDLER)(
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PNDIS_PACKET Packet);
+
+typedef NDIS_STATUS
+(NTAPI *TRANSFER_DATA_HANDLER)(
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN NDIS_HANDLE MacReceiveContext,
+  IN UINT ByteOffset,
+  IN UINT BytesToTransfer,
+  OUT PNDIS_PACKET Packet,
+  OUT PUINT BytesTransferred);
+
+typedef NDIS_STATUS
+(NTAPI *RESET_HANDLER)(
+  IN NDIS_HANDLE NdisBindingHandle);
+
+typedef NDIS_STATUS
+(NTAPI *REQUEST_HANDLER)(
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PNDIS_REQUEST NdisRequest);
+
+#endif /* NDIS_LEGACY_DRIVER */
+
+#if defined(NDIS_WRAPPER)
+#define NDIS_COMMON_OPEN_BLOCK_WRAPPER_S \
+  ULONG Flags; \
+  ULONG References; \
+  KSPIN_LOCK SpinLock; \
+  NDIS_HANDLE  FilterHandle; \
+  ULONG  ProtocolOptions; \
+  USHORT  CurrentLookahead; \
+  USHORT  ConnectDampTicks; \
+  USHORT  DisconnectDampTicks; \
+  W_SEND_HANDLER  WSendHandler; \
+  W_TRANSFER_DATA_HANDLER  WTransferDataHandler; \
+  W_SEND_PACKETS_HANDLER  WSendPacketsHandler; \
+  W_CANCEL_SEND_PACKETS_HANDLER  CancelSendPacketsHandler; \
+  ULONG  WakeUpEnable; \
+  PKEVENT  CloseCompleteEvent; \
+  QUEUED_CLOSE  QC; \
+  ULONG  AfReferences; \
+  PNDIS_OPEN_BLOCK  NextGlobalOpen;
+#else
+#define NDIS_COMMON_OPEN_BLOCK_WRAPPER_S
+#endif
+
+#define NDIS_COMMON_OPEN_BLOCK_S \
+  PVOID  MacHandle; \
+  NDIS_HANDLE  BindingHandle; \
+  PNDIS_MINIPORT_BLOCK  MiniportHandle; \
+  PNDIS_PROTOCOL_BLOCK  ProtocolHandle; \
+  NDIS_HANDLE  ProtocolBindingContext; \
+  PNDIS_OPEN_BLOCK  MiniportNextOpen; \
+  PNDIS_OPEN_BLOCK  ProtocolNextOpen; \
+  NDIS_HANDLE  MiniportAdapterContext; \
+  BOOLEAN  Reserved1; \
+  BOOLEAN  Reserved2; \
+  BOOLEAN  Reserved3; \
+  BOOLEAN  Reserved4; \
+  PNDIS_STRING  BindDeviceName; \
+  KSPIN_LOCK  Reserved5; \
+  PNDIS_STRING  RootDeviceName; \
+  _ANONYMOUS_UNION union { \
+    SEND_HANDLER  SendHandler; \
+    WAN_SEND_HANDLER  WanSendHandler; \
+  } DUMMYUNIONNAME; \
+  TRANSFER_DATA_HANDLER  TransferDataHandler; \
+  SEND_COMPLETE_HANDLER  SendCompleteHandler; \
+  TRANSFER_DATA_COMPLETE_HANDLER  TransferDataCompleteHandler; \
+  RECEIVE_HANDLER  ReceiveHandler; \
+  RECEIVE_COMPLETE_HANDLER  ReceiveCompleteHandler; \
+  WAN_RECEIVE_HANDLER  WanReceiveHandler; \
+  REQUEST_COMPLETE_HANDLER  RequestCompleteHandler; \
+  RECEIVE_PACKET_HANDLER  ReceivePacketHandler; \
+  SEND_PACKETS_HANDLER  SendPacketsHandler; \
+  RESET_HANDLER  ResetHandler; \
+  REQUEST_HANDLER  RequestHandler; \
+  RESET_COMPLETE_HANDLER  ResetCompleteHandler; \
+  STATUS_HANDLER  StatusHandler; \
+  STATUS_COMPLETE_HANDLER  StatusCompleteHandler; \
+  NDIS_COMMON_OPEN_BLOCK_WRAPPER_S
+
+typedef struct _NDIS_COMMON_OPEN_BLOCK {
+  NDIS_COMMON_OPEN_BLOCK_S
+} NDIS_COMMON_OPEN_BLOCK;
+
+struct _NDIS_OPEN_BLOCK
+{
+#ifdef __cplusplus
+  NDIS_COMMON_OPEN_BLOCK NdisCommonOpenBlock;
+#else
+  NDIS_COMMON_OPEN_BLOCK_S
+#endif
+};
+
+#include <xfilter.h>
+
+#define NDIS_M_MAX_LOOKAHEAD           526
+
+NDISAPI
+VOID
+NTAPI
+NdisInitializeTimer(
+  PNDIS_TIMER Timer,
+  PNDIS_TIMER_FUNCTION TimerFunction,
+  PVOID FunctionContext);
+
+NDISAPI
+VOID
+NTAPI
+NdisCancelTimer(
+  PNDIS_TIMER Timer,
+  PBOOLEAN TimerCancelled);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetTimer(
+  PNDIS_TIMER Timer,
+  UINT MillisecondsToDelay);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetPeriodicTimer(
+  PNDIS_TIMER NdisTimer,
+  UINT MillisecondsPeriod);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetTimerEx(
+  PNDIS_TIMER NdisTimer,
+  UINT MillisecondsToDelay,
+  PVOID FunctionContext);
+
+NDISAPI
+PVOID
+NTAPI
+NdisGetRoutineAddress(
+  PNDIS_STRING NdisRoutineName);
+
+NDISAPI
+UINT
+NTAPI
+NdisGetVersion(VOID);
+
+#if NDIS_LEGACY_DRIVER
+
+NDISAPI
+VOID
+NTAPI
+NdisAllocateBuffer(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_BUFFER *Buffer,
+  IN NDIS_HANDLE PoolHandle OPTIONAL,
+  IN PVOID VirtualAddress,
+  IN UINT Length);
+
+NDISAPI
+VOID
+NTAPI
+NdisAllocateBufferPool(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_HANDLE PoolHandle,
+  IN UINT NumberOfDescriptors);
+
+NDISAPI
+VOID
+NTAPI
+NdisFreeBufferPool(
+  IN NDIS_HANDLE PoolHandle);
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisFreeBuffer(
+  IN PNDIS_BUFFER Buffer);
+*/
+#define NdisFreeBuffer IoFreeMdl
+
+NDISAPI
+VOID
+NTAPI
+NdisAllocatePacketPool(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_HANDLE PoolHandle,
+  IN UINT NumberOfDescriptors,
+  IN UINT ProtocolReservedLength);
+
+NDISAPI
+VOID
+NTAPI
+NdisAllocatePacketPoolEx(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_HANDLE PoolHandle,
+  IN UINT NumberOfDescriptors,
+  IN UINT NumberOfOverflowDescriptors,
+  IN UINT ProtocolReservedLength);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetPacketPoolProtocolId(
+  IN NDIS_HANDLE PacketPoolHandle,
+  IN UINT ProtocolId);
+
+NDISAPI
+UINT
+NTAPI
+NdisPacketPoolUsage(
+  IN NDIS_HANDLE PoolHandle);
+
+NDISAPI
+UINT
+NTAPI
+NdisPacketSize(
+  IN UINT ProtocolReservedSize);
+
+NDISAPI
+NDIS_HANDLE
+NTAPI
+NdisGetPoolFromPacket(
+  IN PNDIS_PACKET Packet);
+
+NDISAPI
+PNDIS_PACKET_STACK
+NTAPI
+NdisIMGetCurrentPacketStack(
+  IN PNDIS_PACKET Packet,
+  OUT BOOLEAN * StacksRemaining);
+
+NDISAPI
+VOID
+NTAPI
+NdisFreePacketPool(
+  IN NDIS_HANDLE PoolHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisFreePacket(
+  IN PNDIS_PACKET Packet);
+
+NDISAPI
+VOID
+NTAPI
+NdisDprFreePacket(
+  IN PNDIS_PACKET Packet);
+
+NDISAPI
+VOID
+NTAPI
+NdisDprFreePacketNonInterlocked(
+  IN PNDIS_PACKET Packet);
+
+NDISAPI
+VOID
+NTAPI
+NdisAllocatePacket(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_PACKET *Packet,
+  IN NDIS_HANDLE PoolHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisDprAllocatePacket(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_PACKET *Packet,
+  IN NDIS_HANDLE PoolHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisDprAllocatePacketNonInterlocked(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_PACKET *Packet,
+  IN NDIS_HANDLE PoolHandle);
+
+/*
+ * VOID
+ * NdisReinitializePacket(
+ *   IN OUT  PNDIS_PACKET  Packet);
+ */
+#define NdisReinitializePacket(Packet) {        \
+  (Packet)->Private.Head = (PNDIS_BUFFER)NULL;  \
+  (Packet)->Private.ValidCounts = FALSE;        \
+}
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisQueryBuffer(
+  IN PNDIS_BUFFER Buffer,
+  OUT PVOID *VirtualAddress OPTIONAL,
+  OUT PUINT Length);
+*/
+#define NdisQueryBuffer(_Buffer, _VirtualAddress, _Length) {         \
+  if (ARGUMENT_PRESENT(_VirtualAddress)) {                           \
+    *(PVOID *)(_VirtualAddress) = MmGetSystemAddressForMdl(_Buffer); \
+  }                                                                  \
+  *(_Length) = MmGetMdlByteCount(_Buffer);                           \
+}
+
+NDISAPI
+VOID
+NTAPI
+NdisGetFirstBufferFromPacket(
+  IN PNDIS_PACKET _Packet,
+  OUT PNDIS_BUFFER *_FirstBuffer,
+  OUT PVOID *_FirstBufferVA,
+  OUT PUINT _FirstBufferLength,
+  OUT PUINT _TotalBufferLength);
+
+/*
+ * VOID
+ * NdisGetFirstBufferFromPacketSafe(
+ * IN PNDIS_PACKET _Packet,
+ * OUT PNDIS_BUFFER * _FirstBuffer,
+ * OUT PVOID * _FirstBufferVA,
+ * OUT PUINT _FirstBufferLength,
+ * OUT PUINT _TotalBufferLength),
+ * IN MM_PAGE_PRIORITY _Priority)
+ */
+#define NdisGetFirstBufferFromPacketSafe(_Packet,                             \
+                                     _FirstBuffer,                            \
+                                     _FirstBufferVA,                          \
+                                     _FirstBufferLength,                      \
+                                     _TotalBufferLength,                      \
+                                     _Priority)                               \
+{                                                                             \
+  PNDIS_BUFFER _Buffer;                                                       \
+                                                                              \
+  _Buffer         = (_Packet)->Private.Head;                                  \
+  *(_FirstBuffer) = _Buffer;                                                  \
+  if (_Buffer != NULL) {                                                      \
+    *(_FirstBufferVA)     = MmGetSystemAddressForMdlSafe(_Buffer, _Priority); \
+    *(_FirstBufferLength) = MmGetMdlByteCount(_Buffer);                       \
+    _Buffer = _Buffer->Next;                                                  \
+    *(_TotalBufferLength) = *(_FirstBufferLength);                            \
+    while (_Buffer != NULL) {                                                 \
+      *(_TotalBufferLength) += MmGetMdlByteCount(_Buffer);                    \
+      _Buffer = _Buffer->Next;                                                \
+    }                                                                         \
+  }                                                                           \
+  else {                                                                      \
+    *(_FirstBufferVA) = 0;                                                    \
+    *(_FirstBufferLength) = 0;                                                \
+    *(_TotalBufferLength) = 0;         
