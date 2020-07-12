@@ -3391,4 +3391,268 @@ NdisQueryBufferOffset(
  */
 #define NDIS_GET_PACKET_TIME_RECEIVED(_Packet)  \
   ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +  \
-  (_Packet)->Private.NdisPacke
+  (_Packet)->Private.NdisPacketOobOffset))->TimeReceived
+
+/*
+ * VOID
+ * NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(
+ *   IN PNDIS_PACKET Packet,
+ *   IN PPVOID pMediaSpecificInfo,
+ *   IN PUINT pSizeMediaSpecificInfo);
+ */
+#define NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(_Packet,                                  \
+                                            _pMediaSpecificInfo,                      \
+                                            _pSizeMediaSpecificInfo)                  \
+{                                                                                     \
+  if (!((_Packet)->Private.NdisPacketFlags & fPACKET_ALLOCATED_BY_NDIS) ||            \
+      !((_Packet)->Private.NdisPacketFlags & fPACKET_CONTAINS_MEDIA_SPECIFIC_INFO))   \
+    {                                                                                 \
+      *(_pMediaSpecificInfo) = NULL;                                                  \
+      *(_pSizeMediaSpecificInfo) = 0;                                                 \
+    }                                                                                 \
+  else                                                                                \
+    {                                                                                 \
+      *(_pMediaSpecificInfo) = ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +           \
+        (_Packet)->Private.NdisPacketOobOffset))->MediaSpecificInformation;           \
+      *(_pSizeMediaSpecificInfo) = ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +       \
+        (_Packet)->Private.NdisPacketOobOffset))->SizeMediaSpecificInfo;              \
+    }                                                                                 \
+}
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_HEADER_SIZE(
+ *   IN PNDIS_PACKET Packet,
+ *   IN UINT HdrSize);
+ */
+#define NDIS_SET_PACKET_HEADER_SIZE(_Packet, _HdrSize)              \
+  ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +                      \
+  (_Packet)->Private.NdisPacketOobOffset))->HeaderSize = (_HdrSize)
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_STATUS(
+ *   IN PNDIS_PACKET Packet,
+ *   IN NDIS_STATUS Status);
+ */
+#define NDIS_SET_PACKET_STATUS(_Packet, _Status)  \
+  ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +    \
+  (_Packet)->Private.NdisPacketOobOffset))->Status = (_Status)
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_TIME_TO_SEND(
+ *   IN PNDIS_PACKET Packet,
+ *   IN ULONGLONG TimeToSend);
+ */
+#define NDIS_SET_PACKET_TIME_TO_SEND(_Packet, _TimeToSend)  \
+  ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +              \
+  (_Packet)->Private.NdisPacketOobOffset))->TimeToSend = (_TimeToSend)
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_TIME_SENT(
+ *   IN PNDIS_PACKET Packet,
+ *   IN ULONGLONG TimeSent);
+ */
+#define NDIS_SET_PACKET_TIME_SENT(_Packet, _TimeSent) \
+  ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +        \
+  (_Packet)->Private.NdisPacketOobOffset))->TimeSent = (_TimeSent)
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_TIME_RECEIVED(
+ *   IN PNDIS_PACKET Packet,
+ *   IN ULONGLONG TimeReceived);
+ */
+#define NDIS_SET_PACKET_TIME_RECEIVED(_Packet, _TimeReceived) \
+  ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +                \
+  (_Packet)->Private.NdisPacketOobOffset))->TimeReceived = (_TimeReceived)
+
+/*
+ * VOID
+ * NDIS_SET_PACKET_MEDIA_SPECIFIC_INFO(
+ *   IN PNDIS_PACKET Packet,
+ *   IN PVOID MediaSpecificInfo,
+ *   IN UINT SizeMediaSpecificInfo);
+ */
+#define NDIS_SET_PACKET_MEDIA_SPECIFIC_INFO(_Packet,                      \
+                                            _MediaSpecificInfo,           \
+                                            _SizeMediaSpecificInfo)       \
+{                                                                         \
+  if ((_Packet)->Private.NdisPacketFlags & fPACKET_ALLOCATED_BY_NDIS)     \
+    {                                                                     \
+      (_Packet)->Private.NdisPacketFlags |= fPACKET_CONTAINS_MEDIA_SPECIFIC_INFO; \
+      ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +                        \
+        (_Packet)->Private.NdisPacketOobOffset))->MediaSpecificInformation = \
+          (_MediaSpecificInfo);                                           \
+      ((PNDIS_PACKET_OOB_DATA)((PUCHAR)(_Packet) +                        \
+        (_Packet)->Private.NdisPacketOobOffset))->SizeMediaSpecificInfo = \
+          (_SizeMediaSpecificInfo);                                       \
+    }                                                                     \
+}
+
+/*
+ * VOID
+ * NdisSetPacketFlags(
+ *   IN PNDIS_PACKET  Packet,
+ *   IN UINT  Flags);
+ */
+#define NdisSetPacketFlags(Packet, Flags) (Packet)->Private.Flags |= (Flags)
+
+/*
+ * VOID
+ * NdisClearPacketFlags(
+ *   IN PNDIS_PACKET  Packet,
+ *   IN UINT  Flags);
+ */
+#define NdisClearPacketFlags(Packet, Flags) (Packet)->Private.Flags &= ~(Flags)
+
+/*
+ * VOID
+ * NdisQueryPacket(
+ *   IN PNDIS_PACKET Packet,
+ *   OUT PUINT PhysicalBufferCount OPTIONAL,
+ *   OUT PUINT BufferCount OPTIONAL,
+ *   OUT PNDIS_BUFFER *FirstBuffer OPTIONAL,
+ *   OUT PUINT TotalPacketLength OPTIONAL);
+ */
+static __inline
+VOID
+NdisQueryPacket(
+  IN PNDIS_PACKET Packet,
+  OUT PUINT PhysicalBufferCount OPTIONAL,
+  OUT PUINT BufferCount OPTIONAL,
+  OUT PNDIS_BUFFER *FirstBuffer OPTIONAL,
+  OUT PUINT TotalPacketLength OPTIONAL)
+{
+  if (FirstBuffer)
+    *FirstBuffer = Packet->Private.Head;
+  if (TotalPacketLength || BufferCount || PhysicalBufferCount) {
+    if (!Packet->Private.ValidCounts) {
+      UINT Offset;
+      UINT PacketLength;
+      PNDIS_BUFFER NdisBuffer;
+      UINT PhysicalBufferCount = 0;
+      UINT TotalPacketLength = 0;
+      UINT Count = 0;
+
+      for (NdisBuffer = Packet->Private.Head;
+           NdisBuffer != (PNDIS_BUFFER)NULL;
+           NdisBuffer = NdisBuffer->Next) {
+        PhysicalBufferCount += NDIS_BUFFER_TO_SPAN_PAGES(NdisBuffer);
+        NdisQueryBufferOffset(NdisBuffer, &Offset, &PacketLength);
+        TotalPacketLength += PacketLength;
+        Count++;
+      }
+      Packet->Private.PhysicalCount = PhysicalBufferCount;
+      Packet->Private.TotalLength = TotalPacketLength;
+      Packet->Private.Count = Count;
+      Packet->Private.ValidCounts = TRUE;
+    }
+
+    if (PhysicalBufferCount)
+      *PhysicalBufferCount = Packet->Private.PhysicalCount;
+
+    if (BufferCount)
+      *BufferCount = Packet->Private.Count;
+
+    if (TotalPacketLength)
+      *TotalPacketLength = Packet->Private.TotalLength;
+  }
+}
+
+/*
+ * VOID
+ * NdisQueryPacketLength(
+ *   IN PNDIS_PACKET Packet,
+ *   OUT PUINT PhysicalBufferCount OPTIONAL,
+ *   OUT PUINT BufferCount OPTIONAL,
+ *   OUT PNDIS_BUFFER *FirstBuffer OPTIONAL,
+ *   OUT PUINT TotalPacketLength OPTIONAL);
+ */
+#define NdisQueryPacketLength(_Packet,                              \
+                              _TotalPacketLength)                   \
+{                                                                   \
+  if (!(_Packet)->Private.ValidCounts) {                            \
+    NdisQueryPacket(_Packet, NULL, NULL, NULL, _TotalPacketLength); \
+  }                                                                 \
+  else *(_TotalPacketLength) = (_Packet)->Private.TotalLength;      \
+}
+
+#endif /* NDIS_LEGACY_DRIVER */
+
+/* Memory management routines */
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisCreateLookaheadBufferFromSharedMemory(
+  IN PVOID pSharedMemory,
+  IN UINT LookaheadLength,
+  OUT PVOID *pLookaheadBuffer);
+*/
+#define NdisCreateLookaheadBufferFromSharedMemory(_S, _L, _B) ((*(_B)) = (_S))
+
+NDISAPI
+VOID
+NTAPI
+NdisDestroyLookaheadBufferFromSharedMemory(
+  IN PVOID pLookaheadBuffer);
+
+#if defined(_M_IX86) || defined(_M_AMD64) || defined(_M_ARM) || defined(_M_PPC)
+
+/*
+ * VOID
+ * NdisMoveMappedMemory(
+ *   OUT PVOID  Destination,
+ *   IN PVOID  Source,
+ *   IN ULONG  Length);
+ */
+#define NdisMoveMappedMemory(Destination, Source, Length) \
+  RtlCopyMemory(Destination, Source, Length)
+
+/*
+ * VOID
+ * NdisZeroMappedMemory(
+ *   IN PVOID  Destination,
+ *   IN ULONG  Length);
+ */
+#define NdisZeroMappedMemory(Destination, Length) \
+  RtlZeroMemory(Destination, Length)
+
+#else
+
+#define NdisMoveMappedMemory(Destination, Source, Length) \
+{ \
+  PUCHAR _Dest = Destination, _Src = Source, _End = _Dest + Length; \
+  while (_Dest < _End) \
+    *_Dest++ = _Src++; \
+}
+
+#define NdisZeroMappedMemory(Destination, Length) \
+{ \
+  PUCHAR _Dest = Destination, _End = _Dest + Length; \
+  while (_Dest < _End) \
+    *_Dest++ = 0; \
+}
+
+#endif /* _M_IX86 or _M_AMD64 */
+
+/*
+ * VOID
+ * NdisMoveFromMappedMemory(
+ *   OUT PVOID  Destination,
+ *   IN PVOID  Source,
+ *   IN ULONG  Length);
+ */
+#define NdisMoveFromMappedMemory(Destination, Source, Length) \
+  NdisMoveMappedMemory(Destination, Source, Length)
+
+/*
+ * VOID
+ * NdisMoveToMappedMemory(
+ *   OUT PVOID  Destination,
+ *   IN PVOID  Source,
+ *   IN ULO
