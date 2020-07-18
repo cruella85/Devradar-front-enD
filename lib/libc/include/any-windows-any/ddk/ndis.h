@@ -3655,4 +3655,443 @@ NdisDestroyLookaheadBufferFromSharedMemory(
  * NdisMoveToMappedMemory(
  *   OUT PVOID  Destination,
  *   IN PVOID  Source,
- *   IN ULO
+ *   IN ULONG  Length);
+ */
+#define NdisMoveToMappedMemory(Destination, Source, Length) \
+  NdisMoveMappedMemory(Destination, Source, Length)
+
+/*
+ * VOID
+ * NdisMUpdateSharedMemory(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN ULONG  Length,
+ *   IN PVOID  VirtualAddress,
+ *   IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress);
+ */
+#define NdisMUpdateSharedMemory(_H, _L, _V, _P) \
+  NdisUpdateSharedMemory(_H, _L, _V, _P)
+
+NDISAPI
+VOID
+NTAPI
+NdisFreeMemory(
+  IN PVOID VirtualAddress,
+  IN UINT Length,
+  IN UINT MemoryFlags);
+
+NDISAPI
+VOID
+NTAPI
+NdisFreeMemoryWithTag(
+  IN PVOID VirtualAddress,
+  IN ULONG Tag);
+
+NDISAPI
+VOID
+NTAPI
+NdisImmediateReadSharedMemory(
+  IN NDIS_HANDLE WrapperConfigurationContext,
+  IN ULONG       SharedMemoryAddress,
+  OUT PUCHAR      Buffer,
+  IN ULONG       Length);
+
+NDISAPI
+VOID
+NTAPI
+NdisImmediateWriteSharedMemory(
+  IN NDIS_HANDLE WrapperConfigurationContext,
+  IN ULONG       SharedMemoryAddress,
+  IN PUCHAR      Buffer,
+  IN ULONG       Length);
+
+NDISAPI
+VOID
+NTAPI
+NdisMAllocateSharedMemory(
+  IN	NDIS_HANDLE  MiniportAdapterHandle,
+  IN	ULONG  Length,
+  IN	BOOLEAN  Cached,
+  OUT	 PVOID  *VirtualAddress,
+  OUT	 PNDIS_PHYSICAL_ADDRESS  PhysicalAddress);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMAllocateSharedMemoryAsync(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN ULONG  Length,
+  IN BOOLEAN  Cached,
+  IN PVOID  Context);
+
+#if defined(NDIS50)
+
+#define NdisUpdateSharedMemory(NdisAdapterHandle, \
+                               Length,            \
+                               VirtualAddress,    \
+                               PhysicalAddress)
+
+#else
+
+NDISAPI
+VOID
+NTAPI
+NdisUpdateSharedMemory(
+  IN NDIS_HANDLE             NdisAdapterHandle,
+  IN ULONG                   Length,
+  IN PVOID                   VirtualAddress,
+  IN NDIS_PHYSICAL_ADDRESS   PhysicalAddress);
+
+#endif /* defined(NDIS50) */
+
+/*
+ * ULONG
+ * NdisGetPhysicalAddressHigh(
+ *   IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress);
+ */
+#define NdisGetPhysicalAddressHigh(PhysicalAddress) \
+  ((PhysicalAddress).HighPart)
+
+/*
+ * VOID
+ * NdisSetPhysicalAddressHigh(
+ *   IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress,
+ *   IN ULONG  Value);
+ */
+#define NdisSetPhysicalAddressHigh(PhysicalAddress, Value) \
+  ((PhysicalAddress).HighPart) = (Value)
+
+/*
+ * ULONG
+ * NdisGetPhysicalAddressLow(
+ *   IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress);
+ */
+#define NdisGetPhysicalAddressLow(PhysicalAddress) \
+  ((PhysicalAddress).LowPart)
+
+
+/*
+ * VOID
+ * NdisSetPhysicalAddressLow(
+ *   IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress,
+ *   IN ULONG  Value);
+ */
+#define NdisSetPhysicalAddressLow(PhysicalAddress, Value) \
+  ((PhysicalAddress).LowPart) = (Value)
+
+/*
+ * VOID
+ * NDIS_PHYSICAL_ADDRESS_CONST(
+ *   IN ULONG  Low,
+ *   IN LONG  High);
+ */
+#define NDIS_PHYSICAL_ADDRESS_CONST(Low, High)  \
+    { {(ULONG)(Low), (LONG)(High)} }
+
+/*
+ * ULONG
+ * NdisEqualMemory(
+ *  IN CONST VOID  *Source1,
+ *  IN CONST VOID  *Source2,
+ *  IN ULONG  Length);
+ */
+#define NdisEqualMemory(Source1, Source2, Length) \
+  RtlEqualMemory(Source1, Source2, Length)
+
+/*
+ * VOID
+ * NdisFillMemory(
+ *   IN PVOID  Destination,
+ *   IN ULONG  Length,
+ *   IN UCHAR  Fill);
+ */
+#define NdisFillMemory(Destination, Length, Fill) \
+  RtlFillMemory(Destination, Length, Fill)
+
+/*
+ * VOID
+ * NdisMoveMemory(
+ *   OUT  PVOID  Destination,
+ *   IN PVOID  Source,
+ *   IN ULONG  Length);
+ */
+#define NdisMoveMemory(Destination, Source, Length) \
+  RtlCopyMemory(Destination, Source, Length)
+
+
+/*
+ * VOID
+ * NdisRetrieveUlong(
+ *   IN PULONG  DestinationAddress,
+ *   IN PULONG  SourceAddress);
+ */
+#define NdisRetrieveUlong(DestinationAddress, SourceAddress) \
+  RtlRetrieveUlong(DestinationAddress, SourceAddress)
+
+
+/*
+ * VOID
+ * NdisStoreUlong(
+ *   IN PULONG  DestinationAddress,
+ *   IN ULONG  Value);
+ */
+#define NdisStoreUlong(DestinationAddress, Value) \
+  RtlStoreUlong(DestinationAddress, Value)
+
+
+/*
+ * VOID
+ * NdisZeroMemory(
+ *   IN PVOID  Destination,
+ *   IN ULONG  Length)
+ */
+#define NdisZeroMemory(Destination, Length) \
+  RtlZeroMemory(Destination, Length)
+
+typedef VOID
+(NTAPI *NDIS_BLOCK_INITIALIZER) (
+    IN  PUCHAR  Block,
+    IN  SIZE_T  NumberOfBytes
+    );
+
+/* Configuration routines */
+
+#if NDIS_LEGACY_DRIVER
+NDISAPI
+VOID
+NTAPI
+NdisOpenConfiguration(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_HANDLE ConfigurationHandle,
+  IN NDIS_HANDLE WrapperConfigurationContext);
+#endif
+
+NDISAPI
+VOID
+NTAPI
+NdisReadNetworkAddress(
+  OUT PNDIS_STATUS Status,
+  OUT PVOID *NetworkAddress,
+  OUT PUINT NetworkAddressLength,
+  IN NDIS_HANDLE ConfigurationHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisReadEisaSlotInformation(
+  OUT PNDIS_STATUS  Status,
+  IN NDIS_HANDLE  WrapperConfigurationContext,
+  OUT PUINT  SlotNumber,
+  OUT PNDIS_EISA_FUNCTION_INFORMATION  EisaData);
+
+NDISAPI
+VOID
+NTAPI
+NdisReadEisaSlotInformationEx(
+  OUT PNDIS_STATUS  Status,
+  IN NDIS_HANDLE  WrapperConfigurationContext,
+  OUT PUINT  SlotNumber,
+  OUT PNDIS_EISA_FUNCTION_INFORMATION  *EisaData,
+  OUT PUINT  NumberOfFunctions);
+
+#if NDIS_LEGACY_MINIPORT
+
+NDISAPI
+ULONG
+NTAPI
+NdisReadPciSlotInformation(
+  IN NDIS_HANDLE NdisAdapterHandle,
+  IN ULONG SlotNumber,
+  IN ULONG Offset,
+  OUT PVOID Buffer,
+  IN ULONG Length);
+
+NDISAPI
+ULONG
+NTAPI
+NdisWritePciSlotInformation(
+  IN NDIS_HANDLE NdisAdapterHandle,
+  IN ULONG SlotNumber,
+  IN ULONG Offset,
+  IN PVOID Buffer,
+  IN ULONG Length);
+
+NDISAPI
+ULONG
+NTAPI
+NdisReadPcmciaAttributeMemory(
+  IN NDIS_HANDLE NdisAdapterHandle,
+  IN ULONG Offset,
+  OUT PVOID Buffer,
+  IN ULONG Length);
+
+NDISAPI
+ULONG
+NTAPI
+NdisWritePcmciaAttributeMemory(
+  IN NDIS_HANDLE NdisAdapterHandle,
+  IN ULONG Offset,
+  IN PVOID Buffer,
+  IN ULONG Length);
+
+#endif /* NDIS_LEGACY_MINIPORT */
+
+/* String management routines */
+
+/*
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisAnsiStringToUnicodeString(
+  IN OUT PNDIS_STRING DestinationString,
+  IN PNDIS_ANSI_STRING SourceString);
+*/
+#define NdisAnsiStringToUnicodeString(_us, _as) RtlAnsiStringToUnicodeString(_us, _as, FALSE)
+
+/*
+ * BOOLEAN
+ * NdisEqualString(
+ *   IN PNDIS_STRING String1,
+ *   IN PNDIS_STRING String2,
+ *   IN BOOLEAN CaseInsensitive);
+ */
+#define NdisEqualString RtlEqualString
+
+#define NdisEqualUnicodeString RtlEqualUnicodeString
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisInitAnsiString(
+  IN OUT PNDIS_ANSI_STRING DestinationString,
+  IN PCSTR SourceString);
+*/
+#define NdisInitAnsiString RtlInitString
+
+NDISAPI
+VOID
+NTAPI
+NdisInitUnicodeString(
+  IN OUT PNDIS_STRING  DestinationString,
+  IN PCWSTR  SourceString);
+
+/*
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisUnicodeStringToAnsiString(
+  IN OUT PNDIS_ANSI_STRING DestinationString,
+  IN PNDIS_STRING SourceString);
+*/
+#define NdisUnicodeStringToAnsiString(_as, _us) RtlUnicodeStringToAnsiString(_as, _us, FALSE)
+
+#define NdisFreeString(_s) NdisFreeMemory((_s).Buffer, (_s).MaximumLength, 0)
+#define NdisPrintString(_s) DbgPrint("%ls", (_s).Buffer)
+
+/* Spin lock reoutines */
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisAllocateSpinLock(
+  IN PNDIS_SPIN_LOCK SpinLock);
+*/
+#define NdisAllocateSpinLock(_SpinLock) KeInitializeSpinLock(&(_SpinLock)->SpinLock)
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisFreeSpinLock(
+  IN PNDIS_SPIN_LOCK  SpinLock);
+*/
+#define NdisFreeSpinLock(_SpinLock)
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisAcquireSpinLock(
+  IN PNDIS_SPIN_LOCK  SpinLock);
+*/
+#define NdisAcquireSpinLock(_SpinLock) KeAcquireSpinLock(&(_SpinLock)->SpinLock, &(_SpinLock)->OldIrql)
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisReleaseSpinLock(
+  IN PNDIS_SPIN_LOCK  SpinLock);
+*/
+#define NdisReleaseSpinLock(_SpinLock) KeReleaseSpinLock(&(_SpinLock)->SpinLock,(_SpinLock)->OldIrql)
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisDprAcquireSpinLock(
+  IN PNDIS_SPIN_LOCK  SpinLock);
+*/
+#define NdisDprAcquireSpinLock(_SpinLock) KeAcquireSpinLockAtDpcLevel(&(_SpinLock)->SpinLock)
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisDprReleaseSpinLock(
+  IN PNDIS_SPIN_LOCK  SpinLock);
+*/
+#define NdisDprReleaseSpinLock(_SpinLock) KeReleaseSpinLockFromDpcLevel(&(_SpinLock)->SpinLock)
+
+/* I/O routines */
+
+/*
+ * VOID
+ * NdisRawReadPortBufferUchar(
+ *   IN ULONG Port,
+ *   OUT PUCHAR Buffer,
+ *   IN ULONG Length);
+ */
+#define NdisRawReadPortBufferUchar(Port, Buffer, Length) \
+  READ_PORT_BUFFER_UCHAR((PUCHAR)(Port), (PUCHAR)(Buffer), (Length))
+
+/*
+ * VOID
+ * NdisRawReadPortBufferUlong(
+ *   IN ULONG Port,
+ *   OUT PULONG Buffer,
+ *   IN ULONG Length);
+ */
+#define NdisRawReadPortBufferUlong(Port, Buffer, Length) \
+  READ_PORT_BUFFER_ULONG((PULONG)(Port), (PULONG)(Buffer), (Length))
+
+/*
+ * VOID
+ * NdisRawReadPortBufferUshort(
+ *   IN ULONG Port,
+ *   OUT PUSHORT Buffer,
+ *   IN ULONG Length);
+ */
+#define NdisRawReadPortBufferUshort(Port, Buffer, Length) \
+  READ_PORT_BUFFER_USHORT((PUSHORT)(Port), (PUSHORT)(Buffer), (Length))
+
+/*
+ * VOID
+ * NdisRawReadPortUchar(
+ *   IN ULONG Port,
+ *   OUT PUCHAR Data);
+ */
+#define NdisRawReadPortUchar(Port, Data) \
+  *(Data) = READ_PORT_UCHAR((PUCHAR)(Port))
+
+/*
+ * VOID
+ * NdisRawReadPortUlong(
+ *   IN ULONG Port,
+ *   OUT PULONG Data);
+ */
+#define NdisRawReadPortUlong(Port, Data) \
+  *(Data) = READ_PORT_ULONG((PULONG)(Port))
+
+/
