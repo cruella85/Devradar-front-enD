@@ -143,4 +143,62 @@ inline bool FlagHandler<uptr>::Format(char *buffer, uptr size) {
 }
 
 template <>
-inline boo
+inline bool FlagHandler<s64>::Parse(const char *value) {
+  const char *value_end;
+  *t_ = internal_simple_strtoll(value, &value_end, 10);
+  bool ok = *value_end == 0;
+  if (!ok) Printf("ERROR: Invalid value for s64 option: '%s'\n", value);
+  return ok;
+}
+
+template <>
+inline bool FlagHandler<s64>::Format(char *buffer, uptr size) {
+  uptr num_symbols_should_write = internal_snprintf(buffer, size, "%lld", *t_);
+  return num_symbols_should_write < size;
+}
+
+class FlagParser {
+  static const int kMaxFlags = 200;
+  struct Flag {
+    const char *name;
+    const char *desc;
+    FlagHandlerBase *handler;
+  } *flags_;
+  int n_flags_;
+
+  const char *buf_;
+  uptr pos_;
+
+ public:
+  FlagParser();
+  void RegisterHandler(const char *name, FlagHandlerBase *handler,
+                       const char *desc);
+  void ParseString(const char *s, const char *env_name = 0);
+  void ParseStringFromEnv(const char *env_name);
+  bool ParseFile(const char *path, bool ignore_missing);
+  void PrintFlagDescriptions();
+
+  static LowLevelAllocator Alloc;
+
+ private:
+  void fatal_error(const char *err);
+  bool is_space(char c);
+  void skip_whitespace();
+  void parse_flags(const char *env_option_name);
+  void parse_flag(const char *env_option_name);
+  bool run_handler(const char *name, const char *value);
+  char *ll_strndup(const char *s, uptr n);
+};
+
+template <typename T>
+static void RegisterFlag(FlagParser *parser, const char *name, const char *desc,
+                         T *var) {
+  FlagHandler<T> *fh = new (FlagParser::Alloc) FlagHandler<T>(var);
+  parser->RegisterHandler(name, fh, desc);
+}
+
+void ReportUnrecognizedFlags();
+
+}  // namespace __sanitizer
+
+#endif  // SANITIZER_FLAG_REGISTRY_H
