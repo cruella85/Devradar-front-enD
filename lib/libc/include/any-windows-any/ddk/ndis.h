@@ -5330,4 +5330,344 @@ NdisMDeregisterIoPortRange(
  */
 #define NdisMFddiIndicateReceiveComplete(MiniportAdapterHandle) \
 {                                                               \
-    (*((PNDIS_MINIPO
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->FddiRxCompleteHandler)( \
+        ((PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle)->FddiDB);      \
+}
+
+NDISAPI
+VOID
+NTAPI
+NdisMFlushLog(
+  IN NDIS_HANDLE  LogHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisMFreeMapRegisters(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+/*
+ * VOID
+ * EXPORT
+ * NdisMIndicateReceivePacket(
+ *  IN NDIS_HANDLE  MiniportAdapterHandle,
+ *  IN PPNDIS_PACKET  ReceivePackets,
+ *  IN UINT  NumberOfPackets);
+ */
+#define NdisMIndicateReceivePacket(MiniportAdapterHandle, \
+  ReceivePackets, NumberOfPackets)                        \
+  (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->PacketIndicateHandler)( \
+  MiniportAdapterHandle, ReceivePackets, NumberOfPackets)
+
+/*
+ * VOID
+ * NdisMIndicateStatus(
+ *  IN NDIS_HANDLE  MiniportAdapterHandle,
+ *  IN NDIS_STATUS  GeneralStatus,
+ *  IN PVOID  StatusBuffer,
+ *  IN UINT  StatusBufferSize);
+ */
+
+#define NdisMIndicateStatus(MiniportAdapterHandle,  \
+   GeneralStatus, StatusBuffer, StatusBufferSize)   \
+  (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->StatusHandler)(   \
+  MiniportAdapterHandle, GeneralStatus, StatusBuffer, StatusBufferSize)
+
+/*
+ * VOID
+ * NdisMIndicateStatusComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle);
+ */
+#define NdisMIndicateStatusComplete(MiniportAdapterHandle) \
+  (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->StatusCompleteHandler)( \
+    MiniportAdapterHandle)
+
+/*
+ * VOID
+ * NdisMInitializeWrapper(
+ *   OUT PNDIS_HANDLE  NdisWrapperHandle,
+ *   IN PVOID  SystemSpecific1,
+ *   IN PVOID  SystemSpecific2,
+ *   IN PVOID  SystemSpecific3);
+ */
+#define NdisMInitializeWrapper(NdisWrapperHandle, \
+                               SystemSpecific1,   \
+                               SystemSpecific2,   \
+                               SystemSpecific3)   \
+    NdisInitializeWrapper((NdisWrapperHandle),    \
+                          (SystemSpecific1),      \
+                          (SystemSpecific2),      \
+                          (SystemSpecific3))
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMMapIoSpace(
+  OUT PVOID  *VirtualAddress,
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress,
+  IN UINT  Length);
+
+/*
+ * VOID
+ * NdisMQueryInformationComplete(
+ *  IN NDIS_HANDLE  MiniportAdapterHandle,
+ *  IN NDIS_STATUS  Status);
+ */
+#define NdisMQueryInformationComplete(MiniportAdapterHandle, Status) \
+  (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->QueryCompleteHandler)(MiniportAdapterHandle, Status)
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMRegisterIoPortRange(
+  OUT PVOID  *PortOffset,
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN UINT  InitialPort,
+  IN UINT  NumberOfPorts);
+
+NDISAPI
+VOID
+NTAPI
+NdisMSetTimer(
+  IN PNDIS_MINIPORT_TIMER  Timer,
+  IN UINT  MillisecondsToDelay);
+
+NDISAPI
+VOID
+NTAPI
+NdisMInitializeTimer(
+  IN OUT PNDIS_MINIPORT_TIMER Timer,
+  IN NDIS_HANDLE MiniportAdapterHandle,
+  IN PNDIS_TIMER_FUNCTION TimerFunction,
+  IN PVOID FunctionContext);
+
+NDISAPI
+VOID
+NTAPI
+NdisMSetPeriodicTimer(
+  IN PNDIS_MINIPORT_TIMER Timer,
+  IN UINT MillisecondPeriod);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCancelTimer(
+  IN PNDIS_MINIPORT_TIMER Timer,
+  OUT PBOOLEAN TimerCancelled);
+
+#if !defined(NDIS_WRAPPER)
+
+/*
+ * VOID
+ * NdisMResetComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN NDIS_STATUS  Status,
+ *   IN BOOLEAN  AddressingReset);
+ */
+#define	NdisMResetComplete(MiniportAdapterHandle, \
+                           Status,                \
+                           AddressingReset)       \
+{                                                 \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->ResetCompleteHandler)( \
+        MiniportAdapterHandle, Status, AddressingReset); \
+}
+
+/*
+ * VOID
+ * NdisMSendComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN PNDIS_PACKET  Packet,
+ *   IN NDIS_STATUS  Status);
+ */
+#define	NdisMSendComplete(MiniportAdapterHandle, \
+                          Packet,                \
+                          Status)                \
+{                                                \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->SendCompleteHandler)( \
+        MiniportAdapterHandle, Packet, Status);  \
+}
+
+/*
+ * VOID
+ * NdisMSendResourcesAvailable(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle);
+ */
+#define	NdisMSendResourcesAvailable(MiniportAdapterHandle) \
+{                                                \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->SendResourcesHandler)( \
+        MiniportAdapterHandle); \
+}
+
+/*
+ * VOID
+ * NdisMTransferDataComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN PNDIS_PACKET  Packet,
+ *   IN NDIS_STATUS  Status,
+ *   IN UINT  BytesTransferred);
+ */
+#define	NdisMTransferDataComplete(MiniportAdapterHandle, \
+                                  Packet,                \
+                                  Status,                \
+                                  BytesTransferred)      \
+{                                                        \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->TDCompleteHandler)( \
+        MiniportAdapterHandle, Packet, Status, BytesTransferred)           \
+}
+
+#endif /* !_NDIS_ */
+
+
+/*
+ * VOID
+ * NdisMSetAttributes(
+ *  IN NDIS_HANDLE  MiniportAdapterHandle,
+ *  IN NDIS_HANDLE  MiniportAdapterContext,
+ *  IN BOOLEAN  BusMaster,
+ *  IN NDIS_INTERFACE_TYPE  AdapterType);
+ */
+#define NdisMSetAttributes(MiniportAdapterHandle,   \
+                           MiniportAdapterContext,  \
+                           BusMaster,               \
+                           AdapterType)             \
+  NdisMSetAttributesEx(MiniportAdapterHandle,       \
+    MiniportAdapterContext,                         \
+    0,                                              \
+    (BusMaster) ? NDIS_ATTRIBUTE_BUS_MASTER : 0,    \
+    AdapterType)
+
+NDISAPI
+VOID
+NTAPI
+NdisMSetAttributesEx(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_HANDLE  MiniportAdapterContext,
+  IN UINT  CheckForHangTimeInSeconds   OPTIONAL,
+  IN ULONG  AttributeFlags,
+  IN NDIS_INTERFACE_TYPE AdapterType);
+
+/*
+ * VOID
+ * NdisMSetInformationComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN NDIS_STATUS  Status);
+ */
+#define NdisMSetInformationComplete(MiniportAdapterHandle, \
+                                    Status) \
+  (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->SetCompleteHandler)( \
+    MiniportAdapterHandle, Status)
+
+NDISAPI
+VOID
+NTAPI
+NdisMSleep(
+  IN ULONG  MicrosecondsToSleep);
+
+/*
+ * VOID
+ * NdisMTrIndicateReceive(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN NDIS_HANDLE  MiniportReceiveContext,
+ *   IN PVOID  HeaderBuffer,
+ *   IN UINT  HeaderBufferSize,
+ *   IN PVOID  LookaheadBuffer,
+ *   IN UINT  LookaheadBufferSize,
+ *   IN UINT  PacketSize);
+ */
+#define NdisMTrIndicateReceive(MiniportAdapterHandle,  \
+                               MiniportReceiveContext, \
+                               HeaderBuffer,           \
+                               HeaderBufferSize,       \
+                               LookaheadBuffer,        \
+                               LookaheadBufferSize,    \
+                               PacketSize)             \
+{                                                      \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->TrRxIndicateHandler)( \
+      (((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->TrDB),     \
+		(MiniportReceiveContext), \
+		(HeaderBuffer),           \
+		(HeaderBuffer),           \
+		(HeaderBufferSize),       \
+		(LookaheadBuffer),        \
+		(LookaheadBufferSize),    \
+		(PacketSize));            \
+}
+
+/*
+ * VOID
+ * NdisMTrIndicateReceiveComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle);
+ */
+#define NdisMTrIndicateReceiveComplete(MiniportAdapterHandle) \
+{                                                             \
+	(*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->TrRxCompleteHandler)( \
+    ((PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle)->TrDB);    \
+}
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMWriteLogData(
+  IN NDIS_HANDLE  LogHandle,
+  IN PVOID  LogBuffer,
+  IN UINT  LogBufferSize);
+
+NDISAPI
+VOID
+NTAPI
+NdisMQueryAdapterResources(
+  OUT PNDIS_STATUS  Status,
+  IN NDIS_HANDLE  WrapperConfigurationContext,
+  OUT PNDIS_RESOURCE_LIST  ResourceList,
+  IN OUT PUINT  BufferSize);
+
+NDISAPI
+VOID
+NTAPI
+NdisTerminateWrapper(
+  IN NDIS_HANDLE  NdisWrapperHandle,
+  IN PVOID  SystemSpecific);
+
+NDISAPI
+VOID
+NTAPI
+NdisMUnmapIoSpace(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN PVOID  VirtualAddress,
+  IN UINT  Length);
+
+/* Event functions */
+
+NDISAPI
+VOID
+NTAPI
+NdisInitializeEvent(
+  OUT PNDIS_EVENT Event);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetEvent(
+  IN PNDIS_EVENT Event);
+
+NDISAPI
+VOID
+NTAPI
+NdisResetEvent(
+  IN PNDIS_EVENT Event);
+
+NDISAPI
+BOOLEAN
+NTAPI
+NdisWaitEvent(
+  IN PNDIS_EVENT Event,
+  IN UINT MsToWait);
+
+/* NDIS intermediate miniport structures */
+
+typedef VOID (NTAPI *W_MINIPORT_CALLBACK)(
+  IN NDIS_HANDLE  MiniportAdapterContext,
+  IN PVOID  CallbackContext);
+
+/* Routines for intermediate miniport
