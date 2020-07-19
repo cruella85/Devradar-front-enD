@@ -4988,4 +4988,346 @@ VOID
 NTAPI
 NdisMCoRequestComplete(
   IN NDIS_STATUS  Status,
-  IN NDIS_HANDLE  MiniportAdapterHa
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN PNDIS_REQUEST  Request);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoSendComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PNDIS_PACKET  Packet);
+
+
+/* NDIS 5.0 extensions for intermediate drivers */
+
+NDISAPI
+VOID
+NTAPI
+NdisIMAssociateMiniport(
+  IN NDIS_HANDLE  DriverHandle,
+  IN NDIS_HANDLE  ProtocolHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisIMCancelInitializeDeviceInstance(
+  IN NDIS_HANDLE  DriverHandle,
+  IN PNDIS_STRING  DeviceInstance);
+
+NDISAPI
+VOID
+NTAPI
+NdisIMCopySendCompletePerPacketInfo(
+  IN PNDIS_PACKET  DstPacket,
+  IN PNDIS_PACKET  SrcPacket);
+
+NDISAPI
+VOID
+NTAPI
+NdisIMCopySendPerPacketInfo(
+  IN PNDIS_PACKET  DstPacket,
+  IN PNDIS_PACKET  SrcPacket);
+
+NDISAPI
+VOID
+NTAPI
+NdisIMDeregisterLayeredMiniport(
+  IN NDIS_HANDLE  DriverHandle);
+
+NDISAPI
+NDIS_HANDLE
+NTAPI
+NdisIMGetBindingContext(
+  IN NDIS_HANDLE  NdisBindingHandle);
+
+NDISAPI
+NDIS_HANDLE
+NTAPI
+NdisIMGetDeviceContext(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisIMInitializeDeviceInstanceEx(
+  IN NDIS_HANDLE  DriverHandle,
+  IN PNDIS_STRING  DriverInstance,
+  IN NDIS_HANDLE  DeviceContext  OPTIONAL);
+
+/*
+NDISAPI
+PSINGLE_LIST_ENTRY
+NTAPI
+NdisInterlockedPopEntrySList(
+  IN PSLIST_HEADER ListHead,
+  IN PKSPIN_LOCK Lock);
+*/
+#define NdisInterlockedPopEntrySList(SListHead, Lock) \
+  ExInterlockedPopEntrySList(SListHead, &(Lock)->SpinLock)
+
+/*
+NDISAPI
+PSINGLE_LIST_ENTRY
+NTAPI
+NdisInterlockedPushEntrySList(
+  IN PSLIST_HEADER ListHead,
+  IN PSINGLE_LIST_ENTRY ListEntry,
+  IN PKSPIN_LOCK Lock);
+*/
+#define NdisInterlockedPushEntrySList(SListHead, SListEntry, Lock) \
+  ExInterlockedPushEntrySList(SListHead, SListEntry, &(Lock)->SpinLock)
+
+#define NdisInterlockedFlushSList(SListHead) ExInterlockedFlushSList(SListHead)
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisQueryBufferSafe(
+  IN PNDIS_BUFFER Buffer,
+  OUT PVOID *VirtualAddress OPTIONAL,
+  OUT PUINT Length,
+  IN UINT Priority);
+*/
+#define NdisQueryBufferSafe(_Buffer, _VirtualAddress, _Length, _Priority) {         \
+  if (ARGUMENT_PRESENT(_VirtualAddress)) {                                          \
+    *(PVOID *)(_VirtualAddress) = MmGetSystemAddressForMdlSafe(_Buffer, _Priority); \
+  }                                                                                 \
+  *(_Length) = MmGetMdlByteCount(_Buffer);                                          \
+}
+
+/* Routines for NDIS miniport drivers */
+
+#if NDIS_SUPPORT_NDIS6
+
+NDISAPI
+PNDIS_GENERIC_OBJECT
+NTAPI
+NdisAllocateGenericObject(
+  PDRIVER_OBJECT DriverObject OPTIONAL,
+  ULONG Tag,
+  USHORT Size);
+
+NDISAPI
+VOID
+NTAPI
+NdisFreeGenericObject(
+  IN PNDIS_GENERIC_OBJECT NdisObject);
+
+#endif /* NDIS_SUPPORT_NDIS6 */
+
+NDISAPI
+VOID
+NTAPI
+NdisInitializeWrapper(
+  OUT PNDIS_HANDLE  NdisWrapperHandle,
+  IN PVOID  SystemSpecific1,
+  IN PVOID  SystemSpecific2,
+  IN PVOID  SystemSpecific3);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMAllocateMapRegisters(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN UINT  DmaChannel,
+  IN NDIS_DMA_SIZE  DmaSize,
+  IN ULONG  PhysicalMapRegistersNeeded,
+  IN ULONG  MaximumPhysicalMapping);
+
+/*
+ * VOID
+ * NdisMArcIndicateReceive(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN PUCHAR  HeaderBuffer,
+ *   IN PUCHAR  DataBuffer,
+ *   IN UINT  Length);
+ */
+#define NdisMArcIndicateReceive(MiniportAdapterHandle, \
+                                HeaderBuffer,          \
+                                DataBuffer,            \
+                                Length)                \
+{                                                      \
+    ArcFilterDprIndicateReceive(                       \
+        (((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->ArcDB), \
+        (HeaderBuffer), \
+        (DataBuffer),   \
+        (Length));      \
+}
+
+/*
+ * VOID
+ * NdisMArcIndicateReceiveComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle);
+ */
+#define NdisMArcIndicateReceiveComplete(MiniportAdapterHandle) \
+{                                                              \
+    if (((PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle)->EthDB)  \
+	    {                                                        \
+	        NdisMEthIndicateReceiveComplete(_H);                 \
+	    }                                                        \
+                                                               \
+    ArcFilterDprIndicateReceiveComplete(                       \
+      ((PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle)->ArcDB);   \
+}
+
+NDISAPI
+VOID
+NTAPI
+NdisMCloseLog(
+  IN NDIS_HANDLE  LogHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCreateLog(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN UINT  Size,
+  OUT PNDIS_HANDLE  LogHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisMDeregisterAdapterShutdownHandler(
+  IN NDIS_HANDLE  MiniportHandle);
+
+#if NDIS_LEGACY_MINIPORT
+
+NDISAPI
+VOID
+NTAPI
+NdisMDeregisterInterrupt(
+  IN PNDIS_MINIPORT_INTERRUPT Interrupt);
+
+NDISAPI
+VOID
+NTAPI
+NdisMRegisterAdapterShutdownHandler(
+  IN NDIS_HANDLE MiniportHandle,
+  IN PVOID ShutdownContext,
+  IN ADAPTER_SHUTDOWN_HANDLER ShutdownHandler);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMRegisterInterrupt(
+  OUT PNDIS_MINIPORT_INTERRUPT Interrupt,
+  IN NDIS_HANDLE MiniportAdapterHandle,
+  IN UINT InterruptVector,
+  IN UINT InterruptLevel,
+  IN BOOLEAN RequestIsr,
+  IN BOOLEAN SharedInterrupt,
+  IN NDIS_INTERRUPT_MODE InterruptMode);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMRegisterMiniport(
+  IN NDIS_HANDLE NdisWrapperHandle,
+  IN PNDIS_MINIPORT_CHARACTERISTICS MiniportCharacteristics,
+  IN UINT CharacteristicsLength);
+
+NDISAPI
+BOOLEAN
+NTAPI
+NdisMSynchronizeWithInterrupt(
+  IN PNDIS_MINIPORT_INTERRUPT Interrupt,
+  IN PVOID SynchronizeFunction,
+  IN PVOID SynchronizeContext);
+#endif /* NDIS_LEGACY_MINIPORT */
+
+NDISAPI
+VOID
+NTAPI
+NdisMDeregisterIoPortRange(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN UINT  InitialPort,
+  IN UINT  NumberOfPorts,
+  IN PVOID  PortOffset);
+
+/*
+ * VOID
+ * NdisMEthIndicateReceive(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN NDIS_HANDLE  MiniportReceiveContext,
+ *   IN PVOID  HeaderBuffer,
+ *   IN UINT  HeaderBufferSize,
+ *   IN PVOID  LookaheadBuffer,
+ *   IN UINT  LookaheadBufferSize,
+ *   IN UINT  PacketSize);
+ */
+#define NdisMEthIndicateReceive(MiniportAdapterHandle,  \
+                                MiniportReceiveContext, \
+                                HeaderBuffer,           \
+                                HeaderBufferSize,       \
+                                LookaheadBuffer,        \
+                                LookaheadBufferSize,    \
+                                PacketSize)             \
+{                                                       \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->EthRxIndicateHandler)( \
+		((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->EthDB,  \
+		(MiniportReceiveContext), \
+		(HeaderBuffer),           \
+		(HeaderBuffer),           \
+		(HeaderBufferSize),       \
+		(LookaheadBuffer),        \
+		(LookaheadBufferSize),    \
+		(PacketSize));            \
+}
+
+/*
+ * VOID
+ * NdisMEthIndicateReceiveComplete(
+ *   IN NDIS_HANDLE MiniportAdapterHandle);
+ */
+#define NdisMEthIndicateReceiveComplete(MiniportAdapterHandle) \
+{                                                              \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->EthRxCompleteHandler)( \
+        ((PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle)->EthDB);    \
+}
+
+/*
+ * VOID
+ * NdisMFddiIndicateReceive(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle,
+ *   IN NDIS_HANDLE  MiniportReceiveContext,
+ *   IN PVOID  HeaderBuffer,
+ *   IN UINT  HeaderBufferSize,
+ *   IN PVOID  LookaheadBuffer,
+ *   IN UINT  LookaheadBufferSize,
+ *   IN UINT  PacketSize);
+ */
+#define NdisMFddiIndicateReceive(MiniportAdapterHandle,  \
+                                 MiniportReceiveContext, \
+                                 HeaderBuffer,           \
+                                 HeaderBufferSize,       \
+                                 LookaheadBuffer,        \
+                                 LookaheadBufferSize,    \
+                                 PacketSize)             \
+{                                                        \
+    (*((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->FddiRxIndicateHandler)( \
+        (((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->FddiDB),   \
+        (MiniportReceiveContext),              \
+        (PUCHAR)(HeaderBuffer) + 1,            \
+        (((*(PUCHAR*)(HeaderBuffer)) & 0x40) ? \
+            FDDI_LENGTH_OF_LONG_ADDRESS :      \
+		    FDDI_LENGTH_OF_SHORT_ADDRESS),     \
+        (HeaderBuffer),                        \
+        (HeaderBufferSize),                    \
+        (LookaheadBuffer),                     \
+        (LookaheadBufferSize),                 \
+        (PacketSize));                         \
+}
+
+
+
+/*
+ * VOID
+ * NdisMFddiIndicateReceiveComplete(
+ *   IN NDIS_HANDLE  MiniportAdapterHandle);
+ */
+#define NdisMFddiIndicateReceiveComplete(MiniportAdapterHandle) \
+{                                                               \
+    (*((PNDIS_MINIPO
