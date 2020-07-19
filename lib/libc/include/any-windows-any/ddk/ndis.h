@@ -5670,4 +5670,323 @@ typedef VOID (NTAPI *W_MINIPORT_CALLBACK)(
   IN NDIS_HANDLE  MiniportAdapterContext,
   IN PVOID  CallbackContext);
 
-/* Routines for intermediate miniport
+/* Routines for intermediate miniport drivers */
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisIMDeInitializeDeviceInstance(
+  IN NDIS_HANDLE NdisMiniportHandle);
+
+/*
+ * NDIS_STATUS
+ * NdisIMInitializeDeviceInstance(
+ *   IN NDIS_HANDLE  DriverHandle,
+ *   IN PNDIS_STRING  DeviceInstance);
+ */
+#define NdisIMInitializeDeviceInstance(DriverHandle, DeviceInstance) \
+  NdisIMInitializeDeviceInstanceEx(DriverHandle, DeviceInstance, NULL)
+
+/* Functions obsoleted by NDIS 5.0 */
+
+NDISAPI
+VOID
+NTAPI
+NdisFreeDmaChannel(
+  IN PNDIS_HANDLE  NdisDmaHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetupDmaTransfer(
+  OUT PNDIS_STATUS  Status,
+  IN PNDIS_HANDLE  NdisDmaHandle,
+  IN PNDIS_BUFFER  Buffer,
+  IN ULONG  Offset,
+  IN ULONG  Length,
+  IN BOOLEAN  WriteToDevice);
+
+/*
+NDISAPI
+NTSTATUS
+NTAPI
+NdisUpcaseUnicodeString(
+  OUT PUNICODE_STRING DestinationString,
+  IN PUNICODE_STRING SourceString);
+*/
+#define NdisUpcaseUnicodeString(_d, _s) RtlUpcaseUnicodeString(_d, _s, FALSE)
+
+
+/* Routines for NDIS protocol drivers */
+
+#if NDIS_LEGACY_PROTOCOL
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisIMRegisterLayeredMiniport(
+  IN NDIS_HANDLE NdisWrapperHandle,
+  IN PNDIS_MINIPORT_CHARACTERISTICS MiniportCharacteristics,
+  IN UINT CharacteristicsLength,
+  OUT PNDIS_HANDLE DriverHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisTransferData(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN NDIS_HANDLE MacReceiveContext,
+  IN UINT ByteOffset,
+  IN UINT BytesToTransfer,
+  IN OUT PNDIS_PACKET Packet,
+  OUT PUINT BytesTransferred);
+
+NDISAPI
+VOID
+NTAPI
+NdisSend(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PNDIS_PACKET Packet);
+
+NDISAPI
+VOID
+NTAPI
+NdisSendPackets(
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PPNDIS_PACKET PacketArray,
+  IN UINT NumberOfPackets);
+
+NDISAPI
+VOID
+NTAPI
+NdisRequest(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PNDIS_REQUEST NdisRequest);
+
+NDISAPI
+VOID
+NTAPI
+NdisReset(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisDeregisterProtocol(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisProtocolHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisOpenAdapter(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_STATUS OpenErrorStatus,
+  OUT PNDIS_HANDLE NdisBindingHandle,
+  OUT PUINT SelectedMediumIndex,
+  IN PNDIS_MEDIUM MediumArray,
+  IN UINT MediumArraySize,
+  IN NDIS_HANDLE NdisProtocolHandle,
+  IN NDIS_HANDLE ProtocolBindingContext,
+  IN PNDIS_STRING AdapterName,
+  IN UINT OpenOptions,
+  IN PSTRING AddressingInformation OPTIONAL);
+
+NDISAPI
+VOID
+NTAPI
+NdisCloseAdapter(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisCompleteBindAdapter(
+  IN NDIS_HANDLE BindAdapterContext,
+  IN NDIS_STATUS Status,
+  IN NDIS_STATUS OpenStatus);
+
+NDISAPI
+VOID
+NTAPI
+NdisCompleteUnbindAdapter(
+  IN NDIS_HANDLE UnbindAdapterContext,
+  IN NDIS_STATUS Status);
+
+NDISAPI
+VOID
+NTAPI
+NdisSetProtocolFilter(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN RECEIVE_HANDLER ReceiveHandler,
+  IN RECEIVE_PACKET_HANDLER ReceivePacketHandler,
+  IN NDIS_MEDIUM Medium,
+  IN UINT Offset,
+  IN UINT Size,
+  IN PUCHAR Pattern);
+
+NDISAPI
+VOID
+NTAPI
+NdisGetDriverHandle(
+  IN PNDIS_HANDLE NdisBindingHandle,
+  OUT PNDIS_HANDLE NdisDriverHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisOpenProtocolConfiguration(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_HANDLE ConfigurationHandle,
+  IN PNDIS_STRING ProtocolSection);
+
+NDISAPI
+VOID
+NTAPI
+NdisCompletePnPEvent(
+  IN NDIS_STATUS Status,
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PNET_PNP_EVENT NetPnPEvent);
+
+/*
+ * VOID
+ * NdisSetSendFlags(
+ *   IN PNDIS_PACKET Packet,
+ *   IN UINT Flags);
+ */
+#define NdisSetSendFlags(_Packet,_Flags)(_Packet)->Private.Flags = (_Flags)
+
+#define NdisQuerySendFlags(_Packet,_Flags) *(_Flags) = (_Packet)->Private.Flags
+
+NDISAPI
+VOID
+NTAPI
+NdisReturnPackets(
+  IN PNDIS_PACKET *PacketsToReturn,
+  IN UINT NumberOfPackets);
+
+NDISAPI
+PNDIS_PACKET
+NTAPI
+NdisGetReceivedPacket(
+  IN PNDIS_HANDLE NdisBindingHandle,
+  IN PNDIS_HANDLE MacContext);
+
+NDISAPI
+VOID
+NTAPI
+NdisCancelSendPackets(
+  IN NDIS_HANDLE NdisBindingHandle,
+  IN PVOID CancelId);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisQueryPendingIOCount(
+  IN PVOID NdisBindingHandle,
+  OUT PULONG IoCount);
+
+NDISAPI
+VOID
+NTAPI
+NdisRegisterProtocol(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_HANDLE NdisProtocolHandle,
+  IN PNDIS_PROTOCOL_CHARACTERISTICS ProtocolCharacteristics,
+  IN UINT CharacteristicsLength);
+
+#endif /* NDIS_LEGACY_PROTOCOL */
+
+NDISAPI
+UCHAR
+NTAPI
+NdisGeneratePartialCancelId(VOID);
+
+NDISAPI
+VOID
+NTAPI
+NdisReEnumerateProtocolBindings(
+  IN NDIS_HANDLE NdisProtocolHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisRegisterTdiCallBack(
+  IN TDI_REGISTER_CALLBACK RegisterCallback,
+  IN TDI_PNP_HANDLER PnPHandler);
+
+NDISAPI
+VOID
+NTAPI
+NdisDeregisterTdiCallBack(VOID);
+
+/* Obsoleted in Windows XP */
+
+/* Prototypes for NDIS_MAC_CHARACTERISTICS */
+
+typedef NDIS_STATUS (*OPEN_ADAPTER_HANDLER)(
+  OUT PNDIS_STATUS  OpenErrorStatus,
+  OUT NDIS_HANDLE  *MacBindingHandle,
+  OUT PUINT  SelectedMediumIndex,
+  IN PNDIS_MEDIUM  MediumArray,
+  IN UINT  MediumArraySize,
+  IN NDIS_HANDLE  NdisBindingContext,
+  IN NDIS_HANDLE  MacAdapterContext,
+  IN UINT  OpenOptions,
+  IN PSTRING  AddressingInformation  OPTIONAL);
+
+typedef NDIS_STATUS (NTAPI *CLOSE_ADAPTER_HANDLER)(
+  IN NDIS_HANDLE  MacBindingHandle);
+
+typedef NDIS_STATUS (NTAPI *WAN_TRANSFER_DATA_HANDLER)(
+  VOID);
+
+typedef NDIS_STATUS (NTAPI *QUERY_GLOBAL_STATISTICS_HANDLER)(
+  IN NDIS_HANDLE  MacAdapterContext,
+  IN PNDIS_REQUEST  NdisRequest);
+
+typedef VOID (NTAPI *UNLOAD_MAC_HANDLER)(
+  IN NDIS_HANDLE  MacMacContext);
+
+typedef NDIS_STATUS (NTAPI *ADD_ADAPTER_HANDLER)(
+  IN NDIS_HANDLE  MacMacContext,
+  IN NDIS_HANDLE  WrapperConfigurationContext,
+  IN PNDIS_STRING  AdapterName);
+
+typedef VOID (*REMOVE_ADAPTER_HANDLER)(
+  IN NDIS_HANDLE  MacAdapterContext);
+
+typedef struct _NDIS_MAC_CHARACTERISTICS {
+  UCHAR  MajorNdisVersion;
+  UCHAR  MinorNdisVersion;
+  USHORT  Filler;
+  UINT  Reserved;
+  OPEN_ADAPTER_HANDLER  OpenAdapterHandler;
+  CLOSE_ADAPTER_HANDLER  CloseAdapterHandler;
+  SEND_HANDLER  SendHandler;
+  TRANSFER_DATA_HANDLER  TransferDataHandler;
+  RESET_HANDLER  ResetHandler;
+  REQUEST_HANDLER  RequestHandler;
+  QUERY_GLOBAL_STATISTICS_HANDLER  QueryGlobalStatisticsHandler;
+  UNLOAD_MAC_HANDLER  UnloadMacHandler;
+  ADD_ADAPTER_HANDLER  AddAdapterHandler;
+  REMOVE_ADAPTER_HANDLER  RemoveAdapterHandler;
+  NDIS_STRING  Name;
+} NDIS_MAC_CHARACTERISTICS, *PNDIS_MAC_CHARACTERISTICS;
+
+typedef	NDIS_MAC_CHARACTERISTICS        NDIS_WAN_MAC_CHARACTERISTICS;
+typedef	NDIS_WAN_MAC_CHARACTERISTICS    *PNDIS_WAN_MAC_CHARACTERISTICS;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _NDIS_ */
+
+/* EOF */
