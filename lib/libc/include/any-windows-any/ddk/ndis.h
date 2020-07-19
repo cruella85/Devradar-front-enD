@@ -4527,4 +4527,465 @@ VOID
 NTAPI
 NdisMGetDeviceProperty(
   IN NDIS_HANDLE  MiniportAdapterHandle,
-  IN OUT PDEVICE_OBJECT  *PhysicalDevice
+  IN OUT PDEVICE_OBJECT  *PhysicalDeviceObject  OPTIONAL,
+  IN OUT PDEVICE_OBJECT  *FunctionalDeviceObject  OPTIONAL,
+  IN OUT PDEVICE_OBJECT  *NextDeviceObject  OPTIONAL,
+  IN OUT PCM_RESOURCE_LIST  *AllocatedResources  OPTIONAL,
+  IN OUT PCM_RESOURCE_LIST  *AllocatedResourcesTranslated  OPTIONAL);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMInitializeScatterGatherDma(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN BOOLEAN  Dma64BitAddresses,
+  IN ULONG  MaximumPhysicalMapping);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMPromoteMiniport(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMQueryAdapterInstanceName(
+  OUT PNDIS_STRING  AdapterInstanceName,
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMRegisterDevice(
+  IN NDIS_HANDLE  NdisWrapperHandle,
+  IN PNDIS_STRING  DeviceName,
+  IN PNDIS_STRING  SymbolicName,
+  IN PDRIVER_DISPATCH  MajorFunctions[],
+  OUT PDEVICE_OBJECT  *pDeviceObject,
+  OUT NDIS_HANDLE  *NdisDeviceHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisMRegisterUnloadHandler(
+  IN NDIS_HANDLE  NdisWrapperHandle,
+  IN PDRIVER_UNLOAD  UnloadHandler);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMRemoveMiniport(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMSetMiniportSecondary(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_HANDLE  PrimaryMiniportAdapterHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisOpenConfigurationKeyByIndex(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE ConfigurationHandle,
+  IN ULONG Index,
+  OUT PNDIS_STRING KeyName,
+  OUT PNDIS_HANDLE KeyHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisOpenConfigurationKeyByName(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE ConfigurationHandle,
+  IN PNDIS_STRING SubKeyName,
+  OUT PNDIS_HANDLE SubKeyHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisQueryAdapterInstanceName(
+  OUT PNDIS_STRING AdapterInstanceName,
+  IN NDIS_HANDLE NdisBindingHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisQueryBindInstanceName(
+  OUT PNDIS_STRING pAdapterInstanceName,
+  IN NDIS_HANDLE BindingContext);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisWriteEventLogEntry(
+  IN PVOID LogHandle,
+  IN NDIS_STATUS EventCode,
+  IN ULONG UniqueEventValue,
+  IN USHORT NumStrings,
+  IN PVOID StringsList OPTIONAL,
+  IN ULONG DataSize,
+  IN PVOID Data OPTIONAL);
+
+/* Connectionless services */
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClAddParty(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN NDIS_HANDLE  ProtocolPartyContext,
+  IN OUT PCO_CALL_PARAMETERS  CallParameters,
+  OUT PNDIS_HANDLE  NdisPartyHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClCloseAddressFamily(
+  IN NDIS_HANDLE  NdisAfHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClCloseCall(
+  IN NDIS_HANDLE NdisVcHandle,
+  IN NDIS_HANDLE NdisPartyHandle  OPTIONAL,
+  IN PVOID  Buffer  OPTIONAL,
+  IN UINT  Size);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClDeregisterSap(
+  IN NDIS_HANDLE  NdisSapHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClDropParty(
+  IN NDIS_HANDLE  NdisPartyHandle,
+  IN PVOID  Buffer  OPTIONAL,
+  IN UINT  Size);
+
+NDISAPI
+VOID
+NTAPI
+NdisClIncomingCallComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClMakeCall(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN OUT PCO_CALL_PARAMETERS  CallParameters,
+  IN NDIS_HANDLE  ProtocolPartyContext  OPTIONAL,
+  OUT PNDIS_HANDLE  NdisPartyHandle  OPTIONAL);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClModifyCallQoS(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClOpenAddressFamily(
+  IN NDIS_HANDLE  NdisBindingHandle,
+  IN PCO_ADDRESS_FAMILY  AddressFamily,
+  IN NDIS_HANDLE  ProtocolAfContext,
+  IN PNDIS_CLIENT_CHARACTERISTICS  ClCharacteristics,
+  IN UINT  SizeOfClCharacteristics,
+  OUT PNDIS_HANDLE  NdisAfHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisClRegisterSap(
+  IN NDIS_HANDLE  NdisAfHandle,
+  IN NDIS_HANDLE  ProtocolSapContext,
+  IN PCO_SAP  Sap,
+  OUT PNDIS_HANDLE  NdisSapHandle);
+
+
+/* Call Manager services */
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCmActivateVc(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN OUT PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmAddPartyComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisPartyHandle,
+  IN NDIS_HANDLE  CallMgrPartyContext  OPTIONAL,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmCloseAddressFamilyComplete(
+  IN NDIS_STATUS Status,
+  IN NDIS_HANDLE NdisAfHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmCloseCallComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN NDIS_HANDLE  NdisPartyHandle  OPTIONAL);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCmDeactivateVc(
+  IN NDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmDeregisterSapComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisSapHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmDispatchCallConnected(
+  IN NDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCmDispatchIncomingCall(
+  IN NDIS_HANDLE  NdisSapHandle,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmDispatchIncomingCallQoSChange(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmDispatchIncomingCloseCall(
+  IN NDIS_STATUS  CloseStatus,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PVOID  Buffer  OPTIONAL,
+  IN UINT  Size);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmDispatchIncomingDropParty(
+  IN NDIS_STATUS  DropStatus,
+  IN NDIS_HANDLE  NdisPartyHandle,
+  IN PVOID  Buffer  OPTIONAL,
+  IN UINT  Size);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmDropPartyComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisPartyHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmMakeCallComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN NDIS_HANDLE  NdisPartyHandle  OPTIONAL,
+  IN NDIS_HANDLE  CallMgrPartyContext  OPTIONAL,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmModifyCallQoSComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmOpenAddressFamilyComplete(
+  IN NDIS_STATUS Status,
+  IN NDIS_HANDLE NdisAfHandle,
+  IN NDIS_HANDLE CallMgrAfContext);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCmRegisterAddressFamily(
+  IN NDIS_HANDLE  NdisBindingHandle,
+  IN PCO_ADDRESS_FAMILY  AddressFamily,
+  IN PNDIS_CALL_MANAGER_CHARACTERISTICS  CmCharacteristics,
+  IN UINT  SizeOfCmCharacteristics);
+
+NDISAPI
+VOID
+NTAPI
+NdisCmRegisterSapComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisSapHandle,
+  IN NDIS_HANDLE  CallMgrSapContext);
+
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCmActivateVc(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCmCreateVc(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_HANDLE  NdisAfHandle,
+  IN NDIS_HANDLE  MiniportVcContext,
+  OUT  PNDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCmDeactivateVc(
+  IN NDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCmDeleteVc(
+  IN NDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCmRegisterAddressFamily(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN PCO_ADDRESS_FAMILY  AddressFamily,
+  IN PNDIS_CALL_MANAGER_CHARACTERISTICS  CmCharacteristics,
+  IN UINT  SizeOfCmCharacteristics);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMCmRequest(
+  IN NDIS_HANDLE  NdisAfHandle,
+  IN NDIS_HANDLE  NdisVcHandle  OPTIONAL,
+  IN NDIS_HANDLE  NdisPartyHandle  OPTIONAL,
+  IN OUT  PNDIS_REQUEST  NdisRequest);
+
+
+/* Connection-oriented services */
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCoCreateVc(
+  IN NDIS_HANDLE  NdisBindingHandle,
+  IN NDIS_HANDLE  NdisAfHandle  OPTIONAL,
+  IN NDIS_HANDLE  ProtocolVcContext,
+  IN OUT PNDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCoDeleteVc(
+  IN NDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisCoRequest(
+  IN NDIS_HANDLE  NdisBindingHandle,
+  IN NDIS_HANDLE  NdisAfHandle  OPTIONAL,
+  IN NDIS_HANDLE  NdisVcHandle  OPTIONAL,
+  IN NDIS_HANDLE  NdisPartyHandle  OPTIONAL,
+  IN OUT  PNDIS_REQUEST  NdisRequest);
+
+NDISAPI
+VOID
+NTAPI
+NdisCoRequestComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisAfHandle,
+  IN NDIS_HANDLE  NdisVcHandle  OPTIONAL,
+  IN NDIS_HANDLE  NdisPartyHandle  OPTIONAL,
+  IN PNDIS_REQUEST  NdisRequest);
+
+NDISAPI
+VOID
+NTAPI
+NdisCoSendPackets(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PPNDIS_PACKET  PacketArray,
+  IN UINT  NumberOfPackets);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoActivateVcComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PCO_CALL_PARAMETERS  CallParameters);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoDeactivateVcComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  NdisVcHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoIndicateReceivePacket(
+  IN NDIS_HANDLE  NdisVcHandle,
+  IN PPNDIS_PACKET  PacketArray,
+  IN UINT  NumberOfPackets);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoIndicateStatus(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN NDIS_HANDLE  NdisVcHandle  OPTIONAL,
+  IN NDIS_STATUS  GeneralStatus,
+  IN PVOID  StatusBuffer  OPTIONAL,
+  IN ULONG  StatusBufferSize);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoReceiveComplete(
+  IN NDIS_HANDLE  MiniportAdapterHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisMCoRequestComplete(
+  IN NDIS_STATUS  Status,
+  IN NDIS_HANDLE  MiniportAdapterHa
