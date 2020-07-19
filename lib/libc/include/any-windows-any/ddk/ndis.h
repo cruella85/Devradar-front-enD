@@ -4094,4 +4094,437 @@ NdisDprReleaseSpinLock(
 #define NdisRawReadPortUlong(Port, Data) \
   *(Data) = READ_PORT_ULONG((PULONG)(Port))
 
-/
+/*
+ * VOID
+ * NdisRawReadPortUshort(
+ *   IN ULONG Port,
+ *   OUT PUSHORT Data);
+ */
+#define NdisRawReadPortUshort(Port, Data) \
+  *(Data) = READ_PORT_USHORT((PUSHORT)(Port))
+
+/*
+ * VOID
+ * NdisRawWritePortBufferUchar(
+ *   IN ULONG Port,
+ *   IN PUCHAR Buffer,
+ *   IN ULONG Length);
+ */
+#define NdisRawWritePortBufferUchar(Port, Buffer, Length) \
+  WRITE_PORT_BUFFER_UCHAR((PUCHAR)(Port), (PUCHAR)(Buffer), (Length))
+
+/*
+ * VOID
+ * NdisRawWritePortBufferUlong(
+ *   IN ULONG Port,
+ *   IN PULONG Buffer,
+ *   IN ULONG Length);
+ */
+#define NdisRawWritePortBufferUlong(Port, Buffer, Length) \
+  WRITE_PORT_BUFFER_ULONG((PULONG)(Port), (PULONG)(Buffer), (Length))
+
+/*
+ * VOID
+ * NdisRawWritePortBufferUshort(
+ *   IN ULONG Port,
+ *   IN PUSHORT Buffer,
+ *   IN ULONG Length);
+ */
+#define NdisRawWritePortBufferUshort(Port, Buffer, Length) \
+  WRITE_PORT_BUFFER_USHORT((PUSHORT)(Port), (PUSHORT)(Buffer), (Length))
+
+/*
+ * VOID
+ * NdisRawWritePortUchar(
+ *   IN ULONG Port,
+ *   IN UCHAR Data);
+ */
+#define NdisRawWritePortUchar(Port, Data) \
+  WRITE_PORT_UCHAR((PUCHAR)(Port), (UCHAR)(Data))
+
+/*
+ * VOID
+ * NdisRawWritePortUlong(
+ *   IN ULONG Port,
+ *   IN ULONG Data);
+ */
+#define NdisRawWritePortUlong(Port, Data) \
+  WRITE_PORT_ULONG((PULONG)(Port), (ULONG)(Data))
+
+/*
+ * VOID
+ * NdisRawWritePortUshort(
+ *   IN ULONG Port,
+ *   IN USHORT Data);
+ */
+#define NdisRawWritePortUshort(Port, Data) \
+  WRITE_PORT_USHORT((PUSHORT)(Port), (USHORT)(Data))
+
+
+/*
+ * VOID
+ * NdisReadRegisterUchar(
+ *   IN PUCHAR Register,
+ *   OUT PUCHAR Data);
+ */
+#define NdisReadRegisterUchar(Register, Data) \
+  *(Data) = *(Register)
+
+/*
+ * VOID
+ * NdisReadRegisterUlong(
+ *   IN PULONG  Register,
+ *   OUT PULONG  Data);
+ */
+#define NdisReadRegisterUlong(Register, Data)   \
+  *(Data) = *(Register)
+
+/*
+ * VOID
+ * NdisReadRegisterUshort(
+ *   IN PUSHORT Register,
+ *   OUT PUSHORT Data);
+ */
+#define NdisReadRegisterUshort(Register, Data) \
+    *(Data) = *(Register)
+
+/*
+ * VOID
+ * NdisReadRegisterUchar(
+ *   IN PUCHAR Register,
+ *   IN UCHAR Data);
+ */
+#define NdisWriteRegisterUchar(Register, Data) \
+  WRITE_REGISTER_UCHAR((Register), (Data))
+
+/*
+ * VOID
+ * NdisReadRegisterUlong(
+ *   IN PULONG Register,
+ *   IN ULONG Data);
+ */
+#define NdisWriteRegisterUlong(Register, Data) \
+  WRITE_REGISTER_ULONG((Register), (Data))
+
+/*
+ * VOID
+ * NdisReadRegisterUshort(
+ *   IN PUSHORT Register,
+ *   IN USHORT Data);
+ */
+#define NdisWriteRegisterUshort(Register, Data) \
+  WRITE_REGISTER_USHORT((Register), (Data))
+
+
+/* Linked lists */
+
+/*
+ * VOID
+ * NdisInitializeListHead(
+ *   IN PLIST_ENTRY ListHead);
+ */
+#define NdisInitializeListHead InitializeListHead
+
+/*
+ * PLIST_ENTRY
+ * NdisInterlockedInsertHeadList(
+ *   IN PLIST_ENTRY  ListHead,
+ *   IN PLIST_ENTRY  ListEntry,
+ *   IN PNDIS_SPIN_LOCK  SpinLock);
+ */
+#define NdisInterlockedInsertHeadList(_ListHead, _ListEntry, _SpinLock) \
+  ExInterlockedInsertHeadList(_ListHead, _ListEntry, &(_SpinLock)->SpinLock)
+
+/*
+ * PLIST_ENTRY
+ * NdisInterlockedInsertTailList(
+ *   IN PLIST_ENTRY  ListHead,
+ *   IN PLIST_ENTRY  ListEntry,
+ *   IN PNDIS_SPIN_LOCK  SpinLock);
+ */
+#define NdisInterlockedInsertTailList(_ListHead, _ListEntry, _SpinLock) \
+  ExInterlockedInsertTailList(_ListHead, _ListEntry, &(_SpinLock)->SpinLock)
+
+/*
+ * PLIST_ENTRY
+ * NdisInterlockedRemoveHeadList(
+ *   IN PLIST_ENTRY  ListHead,
+ *   IN PNDIS_SPIN_LOCK  SpinLock);
+*/
+#define NdisInterlockedRemoveHeadList(_ListHead, _SpinLock) \
+  ExInterlockedRemoveHeadList(_ListHead, &(_SpinLock)->SpinLock)
+
+/*
+ * VOID
+ * NdisInitializeSListHead(
+ *   IN PSLIST_HEADER SListHead);
+ */
+#define NdisInitializeSListHead(SListHead) ExInitializeSListHead(SListHead)
+
+/*
+ * USHORT NdisQueryDepthSList(
+ *   IN PSLIST_HEADER SListHead);
+ */
+#define NdisQueryDepthSList(SListHead) ExQueryDepthSList(SListHead)
+
+#define NdisInterlockedPushEntryList(ListHead, ListEntry, Lock) \
+  ExInterlockedPushEntryList(ListHead, ListEntry, &(Lock)->SpinLock)
+
+#define NdisInterlockedPopEntryList(ListHead, Lock) \
+  ExInterlockedPopEntryList(ListHead, &(Lock)->SpinLock)
+
+/* Non-paged lookaside lists */
+
+#define NdisInitializeNPagedLookasideList(_L, _AR, _FR, _Fl, _S, _T, _D) \
+  ExInitializeNPagedLookasideList(_L, _AR, _FR, _Fl, _S, _T, _D)
+#define NdisDeleteNPagedLookasideList(_L) ExDeleteNPagedLookasideList(_L)
+#define NdisAllocateFromNPagedLookasideList(_L) ExAllocateFromNPagedLookasideList(_L)
+#define NdisFreeToNPagedLookasideList(_L, _E) ExFreeToNPagedLookasideList(_L, _E)
+
+/* Interlocked routines */
+
+/*
+ * LONG
+ * NdisInterlockedDecrement(
+ *   IN PLONG  Addend);
+ */
+#define NdisInterlockedDecrement(Addend) InterlockedDecrement(Addend)
+
+/*
+ * LONG
+ * NdisInterlockedIncrement(
+ *   IN PLONG  Addend);
+ */
+#define NdisInterlockedIncrement(Addend) InterlockedIncrement(Addend)
+
+/*
+ * VOID
+ * NdisInterlockedAddUlong(
+ *   IN PULONG  Addend,
+ *   IN ULONG  Increment,
+ *   IN PNDIS_SPIN_LOCK  SpinLock);
+ */
+#define NdisInterlockedAddUlong(_Addend, _Increment, _SpinLock) \
+  ExInterlockedAddUlong(_Addend, _Increment, &(_SpinLock)->SpinLock)
+
+/* Miscellaneous routines */
+
+NDISAPI
+VOID
+NTAPI
+NdisCloseConfiguration(
+  IN NDIS_HANDLE ConfigurationHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisReadConfiguration(
+  OUT PNDIS_STATUS Status,
+  OUT PNDIS_CONFIGURATION_PARAMETER *ParameterValue,
+  IN NDIS_HANDLE ConfigurationHandle,
+  IN PNDIS_STRING Keyword,
+  IN NDIS_PARAMETER_TYPE ParameterType);
+
+NDISAPI
+VOID
+NTAPI
+NdisWriteConfiguration(
+  OUT PNDIS_STATUS Status,
+  IN NDIS_HANDLE WrapperConfigurationContext,
+  IN PNDIS_STRING Keyword,
+  IN PNDIS_CONFIGURATION_PARAMETER ParameterValue);
+
+NDISAPI
+VOID
+__cdecl
+NdisWriteErrorLogEntry(
+  IN NDIS_HANDLE NdisAdapterHandle,
+  IN NDIS_ERROR_CODE ErrorCode,
+  IN ULONG NumberOfErrorValues,
+  IN ...);
+
+NDISAPI
+VOID
+NTAPI
+NdisInitializeString(
+  OUT PNDIS_STRING Destination,
+  IN PUCHAR Source);
+
+/*
+ * VOID
+ * NdisStallExecution(
+ *   IN UINT MicrosecondsToStall)
+ */
+#define NdisStallExecution KeStallExecutionProcessor
+
+/*
+NDISAPI
+VOID
+NTAPI
+NdisGetCurrentSystemTime(
+  IN PLARGE_INTEGER  pSystemTime);
+*/
+#define NdisGetCurrentSystemTime KeQuerySystemTime
+
+#if NDIS_SUPPORT_60_COMPATIBLE_API
+NDISAPI
+CCHAR
+NTAPI
+NdisSystemProcessorCount(VOID);
+#endif
+
+NDISAPI
+VOID
+NTAPI
+NdisGetCurrentProcessorCpuUsage(
+  OUT PULONG pCpuUsage);
+
+/* NDIS helper macros */
+
+/*
+ * VOID
+ * NDIS_INIT_FUNCTION(FunctionName)
+ */
+#define NDIS_INIT_FUNCTION(FunctionName)    \
+  alloc_text(init, FunctionName)
+
+/*
+ * VOID
+ * NDIS_PAGABLE_FUNCTION(FunctionName)
+ */
+#define NDIS_PAGEABLE_FUNCTION(FunctionName) \
+  alloc_text(page, FunctionName)
+
+#define NDIS_PAGABLE_FUNCTION NDIS_PAGEABLE_FUNCTION
+
+
+/* NDIS 4.0 extensions */
+
+NDISAPI
+VOID
+NTAPI
+NdisMFreeSharedMemory(
+	IN NDIS_HANDLE  MiniportAdapterHandle,
+	IN ULONG  Length,
+	IN BOOLEAN  Cached,
+	IN PVOID  VirtualAddress,
+	IN NDIS_PHYSICAL_ADDRESS  PhysicalAddress);
+
+NDISAPI
+VOID
+NTAPI
+NdisMWanIndicateReceive(
+	OUT PNDIS_STATUS  Status,
+	IN NDIS_HANDLE  MiniportAdapterHandle,
+	IN NDIS_HANDLE  NdisLinkContext,
+	IN PUCHAR  PacketBuffer,
+	IN UINT  PacketSize);
+
+NDISAPI
+VOID
+NTAPI
+NdisMWanIndicateReceiveComplete(
+	IN NDIS_HANDLE  MiniportAdapterHandle
+	IN NDIS_HANDLE  NdisLinkContext);
+
+NDISAPI
+VOID
+NTAPI
+NdisMWanSendComplete(
+	IN NDIS_HANDLE  MiniportAdapterHandle,
+	IN PNDIS_WAN_PACKET  Packet,
+	IN NDIS_STATUS  Status);
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisPciAssignResources(
+	IN NDIS_HANDLE  NdisMacHandle,
+	IN NDIS_HANDLE  NdisWrapperHandle,
+	IN NDIS_HANDLE  WrapperConfigurationContext,
+	IN ULONG  SlotNumber,
+	OUT PNDIS_RESOURCE_LIST  *AssignedResources);
+
+
+/* NDIS 5.0 extensions */
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisAllocateMemoryWithTag(
+  OUT PVOID *VirtualAddress,
+  IN UINT Length,
+  IN ULONG Tag);
+
+NDISAPI
+VOID
+NTAPI
+NdisGetCurrentProcessorCounts(
+  OUT PULONG pIdleCount,
+  OUT PULONG pKernelAndUser,
+  OUT PULONG pIndex);
+
+#if NDIS_LEGACY_DRIVER
+NDISAPI
+VOID
+NTAPI
+NdisGetSystemUpTime(
+  OUT PULONG pSystemUpTime);
+#endif
+
+#if NDIS_SUPPORT_60_COMPATIBLE_API
+
+NDISAPI
+VOID
+NTAPI
+NdisAcquireReadWriteLock(
+  IN OUT PNDIS_RW_LOCK Lock,
+  IN BOOLEAN fWrite,
+  OUT PLOCK_STATE LockState);
+
+NDISAPI
+VOID
+NTAPI
+NdisInitializeReadWriteLock(
+  OUT PNDIS_RW_LOCK Lock);
+
+NDISAPI
+VOID
+NTAPI
+NdisReleaseReadWriteLock(
+  IN OUT PNDIS_RW_LOCK Lock,
+  IN PLOCK_STATE LockState);
+
+#if NDIS_SUPPORT_NDIS6
+
+NDISAPI
+VOID
+NTAPI
+NdisDprAcquireReadWriteLock(
+  IN PNDIS_RW_LOCK Lock,
+  IN BOOLEAN fWrite,
+  IN PLOCK_STATE LockState);
+
+NDISAPI
+VOID
+NTAPI
+NdisDprReleaseReadWriteLock(
+  IN PNDIS_RW_LOCK Lock,
+  IN PLOCK_STATE LockState);
+
+#endif /* NDIS_SUPPORT_NDIS6 */
+
+#endif /* NDIS_SUPPORT_60_COMPATIBLE_API */
+
+NDISAPI
+NDIS_STATUS
+NTAPI
+NdisMDeregisterDevice(
+  IN NDIS_HANDLE  NdisDeviceHandle);
+
+NDISAPI
+VOID
+NTAPI
+NdisMGetDeviceProperty(
+  IN NDIS_HANDLE  MiniportAdapterHandle,
+  IN OUT PDEVICE_OBJECT  *PhysicalDevice
