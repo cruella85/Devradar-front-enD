@@ -895,4 +895,654 @@ test "n_number_0e+" {
 
 test "n_number_1_000" {
     try err(
-        \\[1 000.0
+        \\[1 000.0]
+    );
+}
+
+test "n_number_1.0e-" {
+    try err(
+        \\[1.0e-]
+    );
+}
+
+test "n_number_1.0e" {
+    try err(
+        \\[1.0e]
+    );
+}
+
+test "n_number_1.0e+" {
+    try err(
+        \\[1.0e+]
+    );
+}
+
+test "n_number_-1.0." {
+    try err(
+        \\[-1.0.]
+    );
+}
+
+test "n_number_1eE2" {
+    try err(
+        \\[1eE2]
+    );
+}
+
+test "n_number_.-1" {
+    try err(
+        \\[.-1]
+    );
+}
+
+test "n_number_+1" {
+    try err(
+        \\[+1]
+    );
+}
+
+test "n_number_.2e-3" {
+    try err(
+        \\[.2e-3]
+    );
+}
+
+test "n_number_2.e-3" {
+    try err(
+        \\[2.e-3]
+    );
+}
+
+test "n_number_2.e+3" {
+    try err(
+        \\[2.e+3]
+    );
+}
+
+test "n_number_2.e3" {
+    try err(
+        \\[2.e3]
+    );
+}
+
+test "n_number_-2." {
+    try err(
+        \\[-2.]
+    );
+}
+
+test "n_number_9.e+" {
+    try err(
+        \\[9.e+]
+    );
+}
+
+test "n_number_expression" {
+    try err(
+        \\[1+2]
+    );
+}
+
+test "n_number_hex_1_digit" {
+    try err(
+        \\[0x1]
+    );
+}
+
+test "n_number_hex_2_digits" {
+    try err(
+        \\[0x42]
+    );
+}
+
+test "n_number_infinity" {
+    try err(
+        \\[Infinity]
+    );
+}
+
+test "n_number_+Inf" {
+    try err(
+        \\[+Inf]
+    );
+}
+
+test "n_number_Inf" {
+    try err(
+        \\[Inf]
+    );
+}
+
+test "n_number_invalid+-" {
+    try err(
+        \\[0e+-1]
+    );
+}
+
+test "n_number_invalid-negative-real" {
+    try err(
+        \\[-123.123foo]
+    );
+}
+
+test "n_number_invalid-utf-8-in-bigger-int" {
+    try err(
+        \\[123å]
+    );
+}
+
+test "n_number_invalid-utf-8-in-exponent" {
+    try err(
+        \\[1e1å]
+    );
+}
+
+test "n_number_invalid-utf-8-in-int" {
+    try err(
+        \\[0å]
+    );
+}
+
+test "n_number_++" {
+    try err(
+        \\[++1234]
+    );
+}
+
+test "n_number_minus_infinity" {
+    try err(
+        \\[-Infinity]
+    );
+}
+
+test "n_number_minus_sign_with_trailing_garbage" {
+    try err(
+        \\[-foo]
+    );
+}
+
+test "n_number_minus_space_1" {
+    try err(
+        \\[- 1]
+    );
+}
+
+test "n_number_-NaN" {
+    try err(
+        \\[-NaN]
+    );
+}
+
+test "n_number_NaN" {
+    try err(
+        \\[NaN]
+    );
+}
+
+test "n_number_neg_int_starting_with_zero" {
+    try err(
+        \\[-012]
+    );
+}
+
+test "n_number_neg_real_without_int_part" {
+    try err(
+        \\[-.123]
+    );
+}
+
+test "n_number_neg_with_garbage_at_end" {
+    try err(
+        \\[-1x]
+    );
+}
+
+test "n_number_real_garbage_after_e" {
+    try err(
+        \\[1ea]
+    );
+}
+
+test "n_number_real_with_invalid_utf8_after_e" {
+    try err(
+        \\[1eå]
+    );
+}
+
+test "n_number_real_without_fractional_part" {
+    try err(
+        \\[1.]
+    );
+}
+
+test "n_number_starting_with_dot" {
+    try err(
+        \\[.123]
+    );
+}
+
+test "n_number_U+FF11_fullwidth_digit_one" {
+    try err(
+        \\[ï¼]
+    );
+}
+
+test "n_number_with_alpha_char" {
+    try err(
+        \\[1.8011670033376514H-308]
+    );
+}
+
+test "n_number_with_alpha" {
+    try err(
+        \\[1.2a-3]
+    );
+}
+
+test "n_number_with_leading_zero" {
+    try err(
+        \\[012]
+    );
+}
+
+test "n_object_bad_value" {
+    try err(
+        \\["x", truth]
+    );
+}
+
+test "n_object_bracket_key" {
+    try err(
+        \\{[: "x"}
+    );
+}
+
+test "n_object_comma_instead_of_colon" {
+    try err(
+        \\{"x", null}
+    );
+}
+
+test "n_object_double_colon" {
+    try err(
+        \\{"x"::"b"}
+    );
+}
+
+test "n_object_emoji" {
+    try err(
+        \\{ð¨ð­}
+    );
+}
+
+test "n_object_garbage_at_end" {
+    try err(
+        \\{"a":"a" 123}
+    );
+}
+
+test "n_object_key_with_single_quotes" {
+    try err(
+        \\{key: 'value'}
+    );
+}
+
+test "n_object_lone_continuation_byte_in_key_and_trailing_comma" {
+    try err(
+        \\{"¹":"0",}
+    );
+}
+
+test "n_object_missing_colon" {
+    try err(
+        \\{"a" b}
+    );
+}
+
+test "n_object_missing_key" {
+    try err(
+        \\{:"b"}
+    );
+}
+
+test "n_object_missing_semicolon" {
+    try err(
+        \\{"a" "b"}
+    );
+}
+
+test "n_object_missing_value" {
+    try err(
+        \\{"a":
+    );
+}
+
+test "n_object_no-colon" {
+    try err(
+        \\{"a"
+    );
+}
+
+test "n_object_non_string_key_but_huge_number_instead" {
+    try err(
+        \\{9999E9999:1}
+    );
+}
+
+test "n_object_non_string_key" {
+    try err(
+        \\{1:1}
+    );
+}
+
+test "n_object_repeated_null_null" {
+    try err(
+        \\{null:null,null:null}
+    );
+}
+
+test "n_object_several_trailing_commas" {
+    try err(
+        \\{"id":0,,,,,}
+    );
+}
+
+test "n_object_single_quote" {
+    try err(
+        \\{'a':0}
+    );
+}
+
+test "n_object_trailing_comma" {
+    try err(
+        \\{"id":0,}
+    );
+}
+
+test "n_object_trailing_comment" {
+    try err(
+        \\{"a":"b"}/**/
+    );
+}
+
+test "n_object_trailing_comment_open" {
+    try err(
+        \\{"a":"b"}/**//
+    );
+}
+
+test "n_object_trailing_comment_slash_open_incomplete" {
+    try err(
+        \\{"a":"b"}/
+    );
+}
+
+test "n_object_trailing_comment_slash_open" {
+    try err(
+        \\{"a":"b"}//
+    );
+}
+
+test "n_object_two_commas_in_a_row" {
+    try err(
+        \\{"a":"b",,"c":"d"}
+    );
+}
+
+test "n_object_unquoted_key" {
+    try err(
+        \\{a: "b"}
+    );
+}
+
+test "n_object_unterminated-value" {
+    try err(
+        \\{"a":"a
+    );
+}
+
+test "n_object_with_single_string" {
+    try err(
+        \\{ "foo" : "bar", "a" }
+    );
+}
+
+test "n_object_with_trailing_garbage" {
+    try err(
+        \\{"a":"b"}#
+    );
+}
+
+test "n_single_space" {
+    try err(" ");
+}
+
+test "n_string_1_surrogate_then_escape" {
+    try err(
+        \\["\uD800\"]
+    );
+}
+
+test "n_string_1_surrogate_then_escape_u1" {
+    try err(
+        \\["\uD800\u1"]
+    );
+}
+
+test "n_string_1_surrogate_then_escape_u1x" {
+    try err(
+        \\["\uD800\u1x"]
+    );
+}
+
+test "n_string_1_surrogate_then_escape_u" {
+    try err(
+        \\["\uD800\u"]
+    );
+}
+
+test "n_string_accentuated_char_no_quotes" {
+    try err(
+        \\[Ã©]
+    );
+}
+
+test "n_string_backslash_00" {
+    try err("[\"\x00\"]");
+}
+
+test "n_string_escaped_backslash_bad" {
+    try err(
+        \\["\\\"]
+    );
+}
+
+test "n_string_escaped_ctrl_char_tab" {
+    try err("\x5b\x22\x5c\x09\x22\x5d");
+}
+
+test "n_string_escaped_emoji" {
+    try err("[\"\x5c\xc3\xb0\xc2\x9f\xc2\x8c\xc2\x80\"]");
+}
+
+test "n_string_escape_x" {
+    try err(
+        \\["\x00"]
+    );
+}
+
+test "n_string_incomplete_escaped_character" {
+    try err(
+        \\["\u00A"]
+    );
+}
+
+test "n_string_incomplete_escape" {
+    try err(
+        \\["\"]
+    );
+}
+
+test "n_string_incomplete_surrogate_escape_invalid" {
+    try err(
+        \\["\uD800\uD800\x"]
+    );
+}
+
+test "n_string_incomplete_surrogate" {
+    try err(
+        \\["\uD834\uDd"]
+    );
+}
+
+test "n_string_invalid_backslash_esc" {
+    try err(
+        \\["\a"]
+    );
+}
+
+test "n_string_invalid_unicode_escape" {
+    try err(
+        \\["\uqqqq"]
+    );
+}
+
+test "n_string_invalid_utf8_after_escape" {
+    try err("[\"\\\x75\xc3\xa5\"]");
+}
+
+test "n_string_invalid-utf-8-in-escape" {
+    try err(
+        \\["\uå"]
+    );
+}
+
+test "n_string_leading_uescaped_thinspace" {
+    try err(
+        \\[\u0020"asd"]
+    );
+}
+
+test "n_string_no_quotes_with_bad_escape" {
+    try err(
+        \\[\n]
+    );
+}
+
+test "n_string_single_doublequote" {
+    try err(
+        \\"
+    );
+}
+
+test "n_string_single_quote" {
+    try err(
+        \\['single quote']
+    );
+}
+
+test "n_string_single_string_no_double_quotes" {
+    try err(
+        \\abc
+    );
+}
+
+test "n_string_start_escape_unclosed" {
+    try err(
+        \\["\
+    );
+}
+
+test "n_string_unescaped_crtl_char" {
+    try err("[\"a\x00a\"]");
+}
+
+test "n_string_unescaped_newline" {
+    try err(
+        \\["new
+        \\line"]
+    );
+}
+
+test "n_string_unescaped_tab" {
+    try err("[\"\t\"]");
+}
+
+test "n_string_unicode_CapitalU" {
+    try err(
+        \\"\UA66D"
+    );
+}
+
+test "n_string_with_trailing_garbage" {
+    try err(
+        \\""x
+    );
+}
+
+test "n_structure_100000_opening_arrays" {
+    try err("[" ** 100000);
+}
+
+test "n_structure_angle_bracket_." {
+    try err(
+        \\<.>
+    );
+}
+
+test "n_structure_angle_bracket_null" {
+    try err(
+        \\[<null>]
+    );
+}
+
+test "n_structure_array_trailing_garbage" {
+    try err(
+        \\[1]x
+    );
+}
+
+test "n_structure_array_with_extra_array_close" {
+    try err(
+        \\[1]]
+    );
+}
+
+test "n_structure_array_with_unclosed_string" {
+    try err(
+        \\["asd]
+    );
+}
+
+test "n_structure_ascii-unicode-identifier" {
+    try err(
+        \\aÃ¥
+    );
+}
+
+test "n_structure_capitalized_True" {
+    try err(
+        \\[True]
+    );
+}
+
+test "n_structure_close_unopened_array" {
+    try err(
+        \\1]
+    );
+}
+
+test "n_structure_comma_instead_of_closing_brace" {
+    try err(
+        \\{"x": true,
+    );
+}
+
+test "n_structure_double_array" {
+    try err(
+        \\[][]
+    );
+}
+
+test "n_structure_end_array" {
+  
