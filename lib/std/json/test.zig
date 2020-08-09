@@ -1545,4 +1545,489 @@ test "n_structure_double_array" {
 }
 
 test "n_structure_end_array" {
-  
+    try err(
+        \\]
+    );
+}
+
+test "n_structure_incomplete_UTF8_BOM" {
+    try err(
+        \\ï»{}
+    );
+}
+
+test "n_structure_lone-invalid-utf-8" {
+    try err(
+        \\å
+    );
+}
+
+test "n_structure_lone-open-bracket" {
+    try err(
+        \\[
+    );
+}
+
+test "n_structure_no_data" {
+    try err(
+        \\
+    );
+}
+
+test "n_structure_null-byte-outside-string" {
+    try err("[\x00]");
+}
+
+test "n_structure_number_with_trailing_garbage" {
+    try err(
+        \\2@
+    );
+}
+
+test "n_structure_object_followed_by_closing_object" {
+    try err(
+        \\{}}
+    );
+}
+
+test "n_structure_object_unclosed_no_value" {
+    try err(
+        \\{"":
+    );
+}
+
+test "n_structure_object_with_comment" {
+    try err(
+        \\{"a":/*comment*/"b"}
+    );
+}
+
+test "n_structure_object_with_trailing_garbage" {
+    try err(
+        \\{"a": true} "x"
+    );
+}
+
+test "n_structure_open_array_apostrophe" {
+    try err(
+        \\['
+    );
+}
+
+test "n_structure_open_array_comma" {
+    try err(
+        \\[,
+    );
+}
+
+test "n_structure_open_array_object" {
+    try err("[{\"\":" ** 50000);
+}
+
+test "n_structure_open_array_open_object" {
+    try err(
+        \\[{
+    );
+}
+
+test "n_structure_open_array_open_string" {
+    try err(
+        \\["a
+    );
+}
+
+test "n_structure_open_array_string" {
+    try err(
+        \\["a"
+    );
+}
+
+test "n_structure_open_object_close_array" {
+    try err(
+        \\{]
+    );
+}
+
+test "n_structure_open_object_comma" {
+    try err(
+        \\{,
+    );
+}
+
+test "n_structure_open_object" {
+    try err(
+        \\{
+    );
+}
+
+test "n_structure_open_object_open_array" {
+    try err(
+        \\{[
+    );
+}
+
+test "n_structure_open_object_open_string" {
+    try err(
+        \\{"a
+    );
+}
+
+test "n_structure_open_object_string_with_apostrophes" {
+    try err(
+        \\{'a'
+    );
+}
+
+test "n_structure_open_open" {
+    try err(
+        \\["\{["\{["\{["\{
+    );
+}
+
+test "n_structure_single_eacute" {
+    try err(
+        \\é
+    );
+}
+
+test "n_structure_single_star" {
+    try err(
+        \\*
+    );
+}
+
+test "n_structure_trailing_#" {
+    try err(
+        \\{"a":"b"}#{}
+    );
+}
+
+test "n_structure_U+2060_word_joined" {
+    try err(
+        \\[â ]
+    );
+}
+
+test "n_structure_uescaped_LF_before_string" {
+    try err(
+        \\[\u000A""]
+    );
+}
+
+test "n_structure_unclosed_array" {
+    try err(
+        \\[1
+    );
+}
+
+test "n_structure_unclosed_array_partial_null" {
+    try err(
+        \\[ false, nul
+    );
+}
+
+test "n_structure_unclosed_array_unfinished_false" {
+    try err(
+        \\[ true, fals
+    );
+}
+
+test "n_structure_unclosed_array_unfinished_true" {
+    try err(
+        \\[ false, tru
+    );
+}
+
+test "n_structure_unclosed_object" {
+    try err(
+        \\{"asd":"asd"
+    );
+}
+
+test "n_structure_unicode-identifier" {
+    try err(
+        \\Ã¥
+    );
+}
+
+test "n_structure_UTF8_BOM_no_data" {
+    try err(
+        \\ï»¿
+    );
+}
+
+test "n_structure_whitespace_formfeed" {
+    try err("[\x0c]");
+}
+
+test "n_structure_whitespace_U+2060_word_joiner" {
+    try err(
+        \\[â ]
+    );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+test "i_number_double_huge_neg_exp" {
+    try any(
+        \\[123.456e-789]
+    );
+}
+
+test "i_number_huge_exp" {
+    try any(
+        \\[0.4e00669999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999969999999006]
+    );
+}
+
+test "i_number_neg_int_huge_exp" {
+    try any(
+        \\[-1e+9999]
+    );
+}
+
+test "i_number_pos_double_huge_exp" {
+    try any(
+        \\[1.5e+9999]
+    );
+}
+
+test "i_number_real_neg_overflow" {
+    try any(
+        \\[-123123e100000]
+    );
+}
+
+test "i_number_real_pos_overflow" {
+    try any(
+        \\[123123e100000]
+    );
+}
+
+test "i_number_real_underflow" {
+    try any(
+        \\[123e-10000000]
+    );
+}
+
+test "i_number_too_big_neg_int" {
+    try any(
+        \\[-123123123123123123123123123123]
+    );
+}
+
+test "i_number_too_big_pos_int" {
+    try any(
+        \\[100000000000000000000]
+    );
+}
+
+test "i_number_very_big_negative_int" {
+    try any(
+        \\[-237462374673276894279832749832423479823246327846]
+    );
+}
+
+test "i_object_key_lone_2nd_surrogate" {
+    try anyStreamingErrNonStreaming(
+        \\{"\uDFAA":0}
+    );
+}
+
+test "i_string_1st_surrogate_but_2nd_missing" {
+    try anyStreamingErrNonStreaming(
+        \\["\uDADA"]
+    );
+}
+
+test "i_string_1st_valid_surrogate_2nd_invalid" {
+    try anyStreamingErrNonStreaming(
+        \\["\uD888\u1234"]
+    );
+}
+
+test "i_string_incomplete_surrogate_and_escape_valid" {
+    try anyStreamingErrNonStreaming(
+        \\["\uD800\n"]
+    );
+}
+
+test "i_string_incomplete_surrogate_pair" {
+    try anyStreamingErrNonStreaming(
+        \\["\uDd1ea"]
+    );
+}
+
+test "i_string_incomplete_surrogates_escape_valid" {
+    try anyStreamingErrNonStreaming(
+        \\["\uD800\uD800\n"]
+    );
+}
+
+test "i_string_invalid_lonely_surrogate" {
+    try anyStreamingErrNonStreaming(
+        \\["\ud800"]
+    );
+}
+
+test "i_string_invalid_surrogate" {
+    try anyStreamingErrNonStreaming(
+        \\["\ud800abc"]
+    );
+}
+
+test "i_string_invalid_utf-8" {
+    try any(
+        \\["ÿ"]
+    );
+}
+
+test "i_string_inverted_surrogates_U+1D11E" {
+    try anyStreamingErrNonStreaming(
+        \\["\uDd1e\uD834"]
+    );
+}
+
+test "i_string_iso_latin_1" {
+    try any(
+        \\["é"]
+    );
+}
+
+test "i_string_lone_second_surrogate" {
+    try anyStreamingErrNonStreaming(
+        \\["\uDFAA"]
+    );
+}
+
+test "i_string_lone_utf8_continuation_byte" {
+    try any(
+        \\[""]
+    );
+}
+
+test "i_string_not_in_unicode_range" {
+    try any(
+        \\["ô¿¿¿"]
+    );
+}
+
+test "i_string_overlong_sequence_2_bytes" {
+    try any(
+        \\["À¯"]
+    );
+}
+
+test "i_string_overlong_sequence_6_bytes" {
+    try any(
+        \\["ü¿¿¿¿"]
+    );
+}
+
+test "i_string_overlong_sequence_6_bytes_null" {
+    try any(
+        \\["ü"]
+    );
+}
+
+test "i_string_truncated-utf-8" {
+    try any(
+        \\["àÿ"]
+    );
+}
+
+test "i_string_utf16BE_no_BOM" {
+    try any("\x00\x5b\x00\x22\x00\xc3\xa9\x00\x22\x00\x5d");
+}
+
+test "i_string_utf16LE_no_BOM" {
+    try any("\x5b\x00\x22\x00\xc3\xa9\x00\x22\x00\x5d\x00");
+}
+
+test "i_string_UTF-16LE_with_BOM" {
+    try any("\xc3\xbf\xc3\xbe\x5b\x00\x22\x00\xc3\xa9\x00\x22\x00\x5d\x00");
+}
+
+test "i_string_UTF-8_invalid_sequence" {
+    try any(
+        \\["æ¥Ñú"]
+    );
+}
+
+test "i_string_UTF8_surrogate_U+D800" {
+    try any(
+        \\["í "]
+    );
+}
+
+test "i_structure_500_nested_arrays" {
+    try any(("[" ** 500) ++ ("]" ** 500));
+}
+
+test "i_structure_UTF-8_BOM_empty_object" {
+    try any(
+        \\ï»¿{}
+    );
+}
+
+test "truncated UTF-8 sequence" {
+    try utf8Error("\"\xc2\"");
+    try utf8Error("\"\xdf\"");
+    try utf8Error("\"\xed\xa0\"");
+    try utf8Error("\"\xf0\x80\"");
+    try utf8Error("\"\xf0\x80\x80\"");
+}
+
+test "invalid continuation byte" {
+    try utf8Error("\"\xc2\x00\"");
+    try utf8Error("\"\xc2\x7f\"");
+    try utf8Error("\"\xc2\xc0\"");
+    try utf8Error("\"\xc3\xc1\"");
+    try utf8Error("\"\xc4\xf5\"");
+    try utf8Error("\"\xc5\xff\"");
+    try utf8Error("\"\xe4\x80\x00\"");
+    try utf8Error("\"\xe5\x80\x10\"");
+    try utf8Error("\"\xe6\x80\xc0\"");
+    try utf8Error("\"\xe7\x80\xf5\"");
+    try utf8Error("\"\xe8\x00\x80\"");
+    try utf8Error("\"\xf2\x00\x80\x80\"");
+    try utf8Error("\"\xf0\x80\x00\x80\"");
+    try utf8Error("\"\xf1\x80\xc0\x80\"");
+    try utf8Error("\"\xf2\x80\x80\x00\"");
+    try utf8Error("\"\xf3\x80\x80\xc0\"");
+    try utf8Error("\"\xf4\x80\x80\xf5\"");
+}
+
+test "disallowed overlong form" {
+    try utf8Error("\"\xc0\x80\"");
+    try utf8Error("\"\xc0\x90\"");
+    try utf8Error("\"\xc1\x80\"");
+    try utf8Error("\"\xc1\x90\"");
+    try utf8Error("\"\xe0\x80\x80\"");
+    try utf8Error("\"\xf0\x80\x80\x80\"");
+}
+
+test "out of UTF-16 range" {
+    try utf8Error("\"\xf4\x90\x80\x80\"");
+    try utf8Error("\"\xf5\x80\x80\x80\"");
+    try utf8Error("\"\xf6\x80\x80\x80\"");
+    try utf8Error("\"\xf7\x80\x80\x80\"");
+    try utf8Error("\"\xf8\x80\x80\x80\"");
+    try utf8Error("\"\xf9\x80\x80\x80\"");
+    try utf8Error("\"\xfa\x80\x80\x80\"");
+    try utf8Error("\"\xfb\x80\x80\x80\"");
+    try utf8Error("\"\xfc\x80\x80\x80\"");
+    try utf8Error("\"\xfd\x80\x80\x80\"");
+    try utf8Error("\"\xfe\x80\x80\x80\"");
+    try utf8Error("\"\xff\x80\x80\x80\"");
+}
+
+test "parse" {
+    var ts = TokenStream.init("false");
+    try testing.expectEqual(false, try parse(bool, &ts, ParseOptions{}));
+    ts = TokenStream.init("true");
+    try testing.expectEqual(true, try parse(bool, &ts, ParseOptions{}));
+    ts = TokenStream.init("1");
+    try testing.expectEqual(@as(u1, 1), try parse(u1, &ts, ParseOptions{}));
+    ts = TokenStream.init("50");
+    try testing.exp
