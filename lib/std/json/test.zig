@@ -2272,4 +2272,275 @@ test "freeing parsed structs with pointers to default values" {
 }
 
 test "parse into struct where destination and source lengths mismatch" {
-    const T = struct { a: [2]u8 
+    const T = struct { a: [2]u8 };
+    var ts = TokenStream.init("{\"a\": \"bbb\"}");
+    try testing.expectError(error.LengthMismatch, parse(T, &ts, ParseOptions{}));
+}
+
+test "parse into struct with misc fields" {
+    @setEvalBranchQuota(10000);
+    const options = ParseOptions{ .allocator = testing.allocator };
+    const T = struct {
+        int: i64,
+        float: f64,
+        @"with\\escape": bool,
+        @"withąunicode😂": bool,
+        language: []const u8,
+        optional: ?bool,
+        default_field: i32 = 42,
+        static_array: [3]f64,
+        dynamic_array: []f64,
+
+        complex: struct {
+            nested: []const u8,
+        },
+
+        veryComplex: []struct {
+            foo: []const u8,
+        },
+
+        a_union: Union,
+        const Union = union(enum) {
+            x: u8,
+            float: f64,
+            string: []const u8,
+        };
+    };
+    var ts = TokenStream.init(
+        \\{
+        \\  "int": 420,
+        \\  "float": 3.14,
+        \\  "with\\escape": true,
+        \\  "with\u0105unicode\ud83d\ude02": false,
+        \\  "language": "zig",
+        \\  "optional": null,
+        \\  "static_array": [66.6, 420.420, 69.69],
+        \\  "dynamic_array": [66.6, 420.420, 69.69],
+        \\  "complex": {
+        \\    "nested": "zig"
+        \\  },
+        \\  "veryComplex": [
+        \\    {
+        \\      "foo": "zig"
+        \\    }, {
+        \\      "foo": "rocks"
+        \\    }
+        \\  ],
+        \\  "a_union": 100000
+        \\}
+    );
+    const r = try parse(T, &ts, options);
+    defer parseFree(T, r, options);
+    try testing.expectEqual(@as(i64, 420), r.int);
+    try testing.expectEqual(@as(f64, 3.14), r.float);
+    try testing.expectEqual(true, r.@"with\\escape");
+    try testing.expectEqual(false, r.@"withąunicode😂");
+    try testing.expectEqualSlices(u8, "zig", r.language);
+    try testing.expectEqual(@as(?bool, null), r.optional);
+    try testing.expectEqual(@as(i32, 42), r.default_field);
+    try testing.expectEqual(@as(f64, 66.6), r.static_array[0]);
+    try testing.expectEqual(@as(f64, 420.420), r.static_array[1]);
+    try testing.expectEqual(@as(f64, 69.69), r.static_array[2]);
+    try testing.expectEqual(@as(usize, 3), r.dynamic_array.len);
+    try testing.expectEqual(@as(f64, 66.6), r.dynamic_array[0]);
+    try testing.expectEqual(@as(f64, 420.420), r.dynamic_array[1]);
+    try testing.expectEqual(@as(f64, 69.69), r.dynamic_array[2]);
+    try testing.expectEqualSlices(u8, r.complex.nested, "zig");
+    try testing.expectEqualSlices(u8, "zig", r.veryComplex[0].foo);
+    try testing.expectEqualSlices(u8, "rocks", r.veryComplex[1].foo);
+    try testing.expectEqual(T.Union{ .float = 100000 }, r.a_union);
+}
+
+test "parse into struct with strings and arrays with sentinels" {
+    @setEvalBranchQuota(10000);
+    const options = ParseOptions{ .allocator = testing.allocator };
+    const T = struct {
+        language: [:0]const u8,
+        language_without_sentinel: []const u8,
+        data: [:99]const i32,
+        simple_data: []const i32,
+    };
+    var ts = TokenStream.init(
+        \\{
+        \\  "language": "zig",
+        \\  "language_without_sentinel": "zig again!",
+        \\  "data": [1, 2, 3],
+        \\  "simple_data": [4, 5, 6]
+        \\}
+    );
+    const r = try parse(T, &ts, options);
+    defer parseFree(T, r, options);
+
+    try testing.expectEqualSentinel(u8, 0, "zig", r.language);
+
+    const data = [_:99]i32{ 1, 2, 3 };
+    try testing.expectEqualSentinel(i32, 99, data[0..data.len], r.data);
+
+    // Make sure that arrays who aren't supposed to have a sentinel still parse without one.
+    try testing.expectEqual(@as(?i32, null), std.meta.sentinel(@TypeOf(r.simple_data)));
+    try testing.expectEqual(@as(?u8, null), std.meta.sentinel(@TypeOf(r.language_without_sentinel)));
+}
+
+test "parse into struct with duplicate field" {
+    // allow allocator to detect double frees by keeping bucket in use
+    const ballast = try testing.allocator.alloc(u64, 1);
+    defer testing.allocator.free(ballast);
+
+    const options_first = ParseOptions{ .allocator = testing.allocator, .duplicate_field_behavior = .UseFirst };
+
+    const options_last = ParseOptions{
+        .allocator = testing.allocator,
+        .duplicate_field_behavior = .UseLast,
+    };
+
+    const str = "{ \"a\": 1, \"a\": 0.25 }";
+
+    const T1 = struct { a: *u64 };
+    // both .UseFirst and .UseLast should fail because second "a" value isn't a u64
+    var ts = TokenStream.init(str);
+    try testing.expectError(error.InvalidNumber, parse(T1, &ts, options_first));
+    ts = TokenStream.init(str);
+    try testing.expectError(error.InvalidNumber, parse(T1, &ts, options_last));
+
+    const T2 = struct { a: f64 };
+    ts = TokenStream.init(str);
+    try testing.expectEqual(T2{ .a = 1.0 }, try parse(T2, &ts, options_first));
+    ts = TokenStream.init(str);
+    try testing.expectEqual(T2{ .a = 0.25 }, try parse(T2, &ts, options_last));
+
+    const T3 = struct { comptime a: f64 = 1.0 };
+    // .UseFirst should succeed because second "a" value is unconditionally ignored (even though != 1.0)
+    const t3 = T3{ .a = 1.0 };
+    ts = TokenStream.init(str);
+    try testing.expectEqual(t3, try parse(T3, &ts, options_first));
+    // .UseLast should fail because second "a" value is 0.25 which is not equal to default value of 1.0
+    ts = TokenStream.init(str);
+    try testing.expectError(error.UnexpectedValue, parse(T3, &ts, options_last));
+}
+
+test "parse into struct ignoring unknown fields" {
+    const T = struct {
+        int: i64,
+        language: []const u8,
+    };
+
+    const ops = ParseOptions{
+        .allocator = testing.allocator,
+        .ignore_unknown_fields = true,
+    };
+
+    var ts = TokenStream.init(
+        \\{
+        \\  "int": 420,
+        \\  "float": 3.14,
+        \\  "with\\escape": true,
+        \\  "with\u0105unicode\ud83d\ude02": false,
+        \\  "optional": null,
+        \\  "static_array": [66.6, 420.420, 69.69],
+        \\  "dynamic_array": [66.6, 420.420, 69.69],
+        \\  "complex": {
+        \\    "nested": "zig"
+        \\  },
+        \\  "veryComplex": [
+        \\    {
+        \\      "foo": "zig"
+        \\    }, {
+        \\      "foo": "rocks"
+        \\    }
+        \\  ],
+        \\  "a_union": 100000,
+        \\  "language": "zig"
+        \\}
+    );
+    const r = try parse(T, &ts, ops);
+    defer parseFree(T, r, ops);
+
+    try testing.expectEqual(@as(i64, 420), r.int);
+    try testing.expectEqualSlices(u8, "zig", r.language);
+}
+
+const ParseIntoRecursiveUnionDefinitionValue = union(enum) {
+    integer: i64,
+    array: []const ParseIntoRecursiveUnionDefinitionValue,
+};
+
+test "parse into recursive union definition" {
+    const T = struct {
+        values: ParseIntoRecursiveUnionDefinitionValue,
+    };
+    const ops = ParseOptions{ .allocator = testing.allocator };
+
+    var ts = TokenStream.init("{\"values\":[58]}");
+    const r = try parse(T, &ts, ops);
+    defer parseFree(T, r, ops);
+
+    try testing.expectEqual(@as(i64, 58), r.values.array[0].integer);
+}
+
+const ParseIntoDoubleRecursiveUnionValueFirst = union(enum) {
+    integer: i64,
+    array: []const ParseIntoDoubleRecursiveUnionValueSecond,
+};
+
+const ParseIntoDoubleRecursiveUnionValueSecond = union(enum) {
+    boolean: bool,
+    array: []const ParseIntoDoubleRecursiveUnionValueFirst,
+};
+
+test "parse into double recursive union definition" {
+    const T = struct {
+        values: ParseIntoDoubleRecursiveUnionValueFirst,
+    };
+    const ops = ParseOptions{ .allocator = testing.allocator };
+
+    var ts = TokenStream.init("{\"values\":[[58]]}");
+    const r = try parse(T, &ts, ops);
+    defer parseFree(T, r, ops);
+
+    try testing.expectEqual(@as(i64, 58), r.values.array[0].array[0].integer);
+}
+
+test "json.parser.dynamic" {
+    var p = Parser.init(testing.allocator, false);
+    defer p.deinit();
+
+    const s =
+        \\{
+        \\  "Image": {
+        \\      "Width":  800,
+        \\      "Height": 600,
+        \\      "Title":  "View from 15th Floor",
+        \\      "Thumbnail": {
+        \\          "Url":    "http://www.example.com/image/481989943",
+        \\          "Height": 125,
+        \\          "Width":  100
+        \\      },
+        \\      "Animated" : false,
+        \\      "IDs": [116, 943, 234, 38793],
+        \\      "ArrayOfObject": [{"n": "m"}],
+        \\      "double": 1.3412,
+        \\      "LargeInt": 18446744073709551615
+        \\    }
+        \\}
+    ;
+
+    var tree = try p.parse(s);
+    defer tree.deinit();
+
+    var root = tree.root;
+
+    var image = root.Object.get("Image").?;
+
+    const width = image.Object.get("Width").?;
+    try testing.expect(width.Integer == 800);
+
+    const height = image.Object.get("Height").?;
+    try testing.expect(height.Integer == 600);
+
+    const title = image.Object.get("Title").?;
+    try testing.expect(mem.eql(u8, title.String, "View from 15th Floor"));
+
+    const animated = image.Object.get("Animated").?;
+    try testing.expect(animated.Bool == false);
+
+    con
