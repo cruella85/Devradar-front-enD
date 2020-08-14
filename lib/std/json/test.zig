@@ -2799,4 +2799,93 @@ test "json.token" {
     try checkNext(&p, .Number);
     try checkNext(&p, .ArrayEnd);
     try checkNext(&p, .ObjectEnd);
-   
+    try checkNext(&p, .ObjectEnd);
+
+    try testing.expect((try p.next()) == null);
+}
+
+test "json.token mismatched close" {
+    var p = TokenStream.init("[102, 111, 111 }");
+    try checkNext(&p, .ArrayBegin);
+    try checkNext(&p, .Number);
+    try checkNext(&p, .Number);
+    try checkNext(&p, .Number);
+    try testing.expectError(error.UnexpectedClosingBrace, p.next());
+}
+
+test "json.token premature object close" {
+    var p = TokenStream.init("{ \"key\": }");
+    try checkNext(&p, .ObjectBegin);
+    try checkNext(&p, .String);
+    try testing.expectError(error.InvalidValueBegin, p.next());
+}
+
+test "json.validate" {
+    try testing.expectEqual(true, validate("{}"));
+    try testing.expectEqual(true, validate("[]"));
+    try testing.expectEqual(true, validate("[{[[[[{}]]]]}]"));
+    try testing.expectEqual(false, validate("{]"));
+    try testing.expectEqual(false, validate("[}"));
+    try testing.expectEqual(false, validate("{{{{[]}}}]"));
+}
+
+test "Value.jsonStringify" {
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        try @as(Value, .Null).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "null");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        try (Value{ .Bool = true }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "true");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        try (Value{ .Integer = 42 }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "42");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        try (Value{ .NumberString = "43" }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "43");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        try (Value{ .Float = 42 }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "4.2e+01");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        try (Value{ .String = "weeee" }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "\"weeee\"");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        var vals = [_]Value{
+            .{ .Integer = 1 },
+            .{ .Integer = 2 },
+            .{ .NumberString = "3" },
+        };
+        try (Value{
+            .Array = Array.fromOwnedSlice(undefined, &vals),
+        }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "[1,2,3]");
+    }
+    {
+        var buffer: [10]u8 = undefined;
+        var fbs = std.io.fixedBufferStream(&buffer);
+        var obj = ObjectMap.init(testing.allocator);
+        defer obj.deinit();
+        try obj.putNoClobber("a", .{ .String = "b" });
+        try (Value{ .Object = obj }).jsonStringify(.{}, fbs.writer());
+        try testing.expectEqualSlices(u8, fbs.getWritten(), "{\"a\":\"b\"}");
+    }
+}
