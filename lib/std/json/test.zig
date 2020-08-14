@@ -2543,4 +2543,260 @@ test "json.parser.dynamic" {
     const animated = image.Object.get("Animated").?;
     try testing.expect(animated.Bool == false);
 
-    con
+    const array_of_object = image.Object.get("ArrayOfObject").?;
+    try testing.expect(array_of_object.Array.items.len == 1);
+
+    const obj0 = array_of_object.Array.items[0].Object.get("n").?;
+    try testing.expect(mem.eql(u8, obj0.String, "m"));
+
+    const double = image.Object.get("double").?;
+    try testing.expect(double.Float == 1.3412);
+
+    const large_int = image.Object.get("LargeInt").?;
+    try testing.expect(mem.eql(u8, large_int.NumberString, "18446744073709551615"));
+}
+
+test "write json then parse it" {
+    var out_buffer: [1000]u8 = undefined;
+
+    var fixed_buffer_stream = std.io.fixedBufferStream(&out_buffer);
+    const out_stream = fixed_buffer_stream.writer();
+    var jw = writeStream(out_stream, 4);
+
+    try jw.beginObject();
+
+    try jw.objectField("f");
+    try jw.emitBool(false);
+
+    try jw.objectField("t");
+    try jw.emitBool(true);
+
+    try jw.objectField("int");
+    try jw.emitNumber(1234);
+
+    try jw.objectField("array");
+    try jw.beginArray();
+
+    try jw.arrayElem();
+    try jw.emitNull();
+
+    try jw.arrayElem();
+    try jw.emitNumber(12.34);
+
+    try jw.endArray();
+
+    try jw.objectField("str");
+    try jw.emitString("hello");
+
+    try jw.endObject();
+
+    var parser = Parser.init(testing.allocator, false);
+    defer parser.deinit();
+    var tree = try parser.parse(fixed_buffer_stream.getWritten());
+    defer tree.deinit();
+
+    try testing.expect(tree.root.Object.get("f").?.Bool == false);
+    try testing.expect(tree.root.Object.get("t").?.Bool == true);
+    try testing.expect(tree.root.Object.get("int").?.Integer == 1234);
+    try testing.expect(tree.root.Object.get("array").?.Array.items[0].Null == {});
+    try testing.expect(tree.root.Object.get("array").?.Array.items[1].Float == 12.34);
+    try testing.expect(mem.eql(u8, tree.root.Object.get("str").?.String, "hello"));
+}
+
+fn testParse(arena_allocator: std.mem.Allocator, json_str: []const u8) !Value {
+    var p = Parser.init(arena_allocator, false);
+    return (try p.parse(json_str)).root;
+}
+
+test "parsing empty string gives appropriate error" {
+    var arena_allocator = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena_allocator.deinit();
+    try testing.expectError(error.UnexpectedEndOfJson, testParse(arena_allocator.allocator(), ""));
+}
+
+test "parse tree should not contain dangling pointers" {
+    var arena_allocator = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena_allocator.deinit();
+
+    var p = json.Parser.init(arena_allocator.allocator(), false);
+    defer p.deinit();
+
+    var tree = try p.parse("[]");
+    defer tree.deinit();
+
+    // Allocation should succeed
+    var i: usize = 0;
+    while (i < 100) : (i += 1) {
+        try tree.root.Array.append(std.json.Value{ .Integer = 100 });
+    }
+    try testing.expectEqual(tree.root.Array.items.len, 100);
+}
+
+test "integer after float has proper type" {
+    var arena_allocator = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena_allocator.deinit();
+    const parsed = try testParse(arena_allocator.allocator(),
+        \\{
+        \\  "float": 3.14,
+        \\  "ints": [1, 2, 3]
+        \\}
+    );
+    try std.testing.expect(parsed.Object.get("ints").?.Array.items[0] == .Integer);
+}
+
+test "parse exponential into int" {
+    const T = struct { int: i64 };
+    var ts = TokenStream.init("{ \"int\": 4.2e2 }");
+    const r = try parse(T, &ts, ParseOptions{});
+    try testing.expectEqual(@as(i64, 420), r.int);
+    ts = TokenStream.init("{ \"int\": 0.042e2 }");
+    try testing.expectError(error.InvalidNumber, parse(T, &ts, ParseOptions{}));
+    ts = TokenStream.init("{ \"int\": 18446744073709551616.0 }");
+    try testing.expectError(error.Overflow, parse(T, &ts, ParseOptions{}));
+}
+
+test "escaped characters" {
+    var arena_allocator = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena_allocator.deinit();
+    const input =
+        \\{
+        \\  "backslash": "\\",
+        \\  "forwardslash": "\/",
+        \\  "newline": "\n",
+        \\  "carriagereturn": "\r",
+        \\  "tab": "\t",
+        \\  "formfeed": "\f",
+        \\  "backspace": "\b",
+        \\  "doublequote": "\"",
+        \\  "unicode": "\u0105",
+        \\  "surrogatepair": "\ud83d\ude02"
+        \\}
+    ;
+
+    const obj = (try testParse(arena_allocator.allocator(), input)).Object;
+
+    try testing.expectEqualSlices(u8, obj.get("backslash").?.String, "\\");
+    try testing.expectEqualSlices(u8, obj.get("forwardslash").?.String, "/");
+    try testing.expectEqualSlices(u8, obj.get("newline").?.String, "\n");
+    try testing.expectEqualSlices(u8, obj.get("carriagereturn").?.String, "\r");
+    try testing.expectEqualSlices(u8, obj.get("tab").?.String, "\t");
+    try testing.expectEqualSlices(u8, obj.get("formfeed").?.String, "\x0C");
+    try testing.expectEqualSlices(u8, obj.get("backspace").?.String, "\x08");
+    try testing.expectEqualSlices(u8, obj.get("doublequote").?.String, "\"");
+    try testing.expectEqualSlices(u8, obj.get("unicode").?.String, "ą");
+    try testing.expectEqualSlices(u8, obj.get("surrogatepair").?.String, "😂");
+}
+
+test "string copy option" {
+    const input =
+        \\{
+        \\  "noescape": "aą😂",
+        \\  "simple": "\\\/\n\r\t\f\b\"",
+        \\  "unicode": "\u0105",
+        \\  "surrogatepair": "\ud83d\ude02"
+        \\}
+    ;
+
+    var arena_allocator = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena_allocator.deinit();
+    const allocator = arena_allocator.allocator();
+
+    var parser = Parser.init(allocator, false);
+    const tree_nocopy = try parser.parse(input);
+    const obj_nocopy = tree_nocopy.root.Object;
+
+    parser = Parser.init(allocator, true);
+    const tree_copy = try parser.parse(input);
+    const obj_copy = tree_copy.root.Object;
+
+    for ([_][]const u8{ "noescape", "simple", "unicode", "surrogatepair" }) |field_name| {
+        try testing.expectEqualSlices(u8, obj_nocopy.get(field_name).?.String, obj_copy.get(field_name).?.String);
+    }
+
+    const nocopy_addr = &obj_nocopy.get("noescape").?.String[0];
+    const copy_addr = &obj_copy.get("noescape").?.String[0];
+
+    var found_nocopy = false;
+    for (input, 0..) |_, index| {
+        try testing.expect(copy_addr != &input[index]);
+        if (nocopy_addr == &input[index]) {
+            found_nocopy = true;
+        }
+    }
+    try testing.expect(found_nocopy);
+}
+
+test "stringify alloc" {
+    const allocator = std.testing.allocator;
+    const expected =
+        \\{"foo":"bar","answer":42,"my_friend":"sammy"}
+    ;
+    const actual = try stringifyAlloc(allocator, .{ .foo = "bar", .answer = 42, .my_friend = "sammy" }, .{});
+    defer allocator.free(actual);
+
+    try std.testing.expectEqualStrings(expected, actual);
+}
+
+test "json.serialize issue #5959" {
+    var parser: StreamingParser = undefined;
+    // StreamingParser has multiple internal fields set to undefined. This causes issues when using
+    // expectEqual so these are zeroed. We are testing for equality here only because this is a
+    // known small test reproduction which hits the relevant LLVM issue.
+    std.mem.set(u8, @ptrCast([*]u8, &parser)[0..@sizeOf(StreamingParser)], 0);
+    try std.testing.expectEqual(parser, parser);
+}
+
+fn checkNext(p: *TokenStream, id: std.meta.Tag(Token)) !void {
+    const token = (p.next() catch unreachable).?;
+    try testing.expect(std.meta.activeTag(token) == id);
+}
+
+test "json.token" {
+    const s =
+        \\{
+        \\  "Image": {
+        \\      "Width":  800,
+        \\      "Height": 600,
+        \\      "Title":  "View from 15th Floor",
+        \\      "Thumbnail": {
+        \\          "Url":    "http://www.example.com/image/481989943",
+        \\          "Height": 125,
+        \\          "Width":  100
+        \\      },
+        \\      "Animated" : false,
+        \\      "IDs": [116, 943, 234, 38793]
+        \\    }
+        \\}
+    ;
+
+    var p = TokenStream.init(s);
+
+    try checkNext(&p, .ObjectBegin);
+    try checkNext(&p, .String); // Image
+    try checkNext(&p, .ObjectBegin);
+    try checkNext(&p, .String); // Width
+    try checkNext(&p, .Number);
+    try checkNext(&p, .String); // Height
+    try checkNext(&p, .Number);
+    try checkNext(&p, .String); // Title
+    try checkNext(&p, .String);
+    try checkNext(&p, .String); // Thumbnail
+    try checkNext(&p, .ObjectBegin);
+    try checkNext(&p, .String); // Url
+    try checkNext(&p, .String);
+    try checkNext(&p, .String); // Height
+    try checkNext(&p, .Number);
+    try checkNext(&p, .String); // Width
+    try checkNext(&p, .Number);
+    try checkNext(&p, .ObjectEnd);
+    try checkNext(&p, .String); // Animated
+    try checkNext(&p, .False);
+    try checkNext(&p, .String); // IDs
+    try checkNext(&p, .ArrayBegin);
+    try checkNext(&p, .Number);
+    try checkNext(&p, .Number);
+    try checkNext(&p, .Number);
+    try checkNext(&p, .Number);
+    try checkNext(&p, .ArrayEnd);
+    try checkNext(&p, .ObjectEnd);
+   
