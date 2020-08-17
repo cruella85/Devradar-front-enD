@@ -105,4 +105,70 @@ public:
   template<class _D2 = _Derived>
   _LIBCPP_HIDE_FROM_ABI
   constexpr auto size() const
-    requires forward_range<const _D2> && sized_sentin
+    requires forward_range<const _D2> && sized_sentinel_for<sentinel_t<const _D2>, iterator_t<const _D2>>
+  {
+    return ranges::end(__derived()) - ranges::begin(__derived());
+  }
+
+  template<class _D2 = _Derived>
+  _LIBCPP_HIDE_FROM_ABI
+  constexpr decltype(auto) front()
+    requires forward_range<_D2>
+  {
+    _LIBCPP_ASSERT(!empty(),
+        "Precondition `!empty()` not satisfied. `.front()` called on an empty view.");
+    return *ranges::begin(__derived());
+  }
+
+  template<class _D2 = _Derived>
+  _LIBCPP_HIDE_FROM_ABI
+  constexpr decltype(auto) front() const
+    requires forward_range<const _D2>
+  {
+    _LIBCPP_ASSERT(!empty(),
+        "Precondition `!empty()` not satisfied. `.front()` called on an empty view.");
+    return *ranges::begin(__derived());
+  }
+
+  template<class _D2 = _Derived>
+  _LIBCPP_HIDE_FROM_ABI
+  constexpr decltype(auto) back()
+    requires bidirectional_range<_D2> && common_range<_D2>
+  {
+    _LIBCPP_ASSERT(!empty(),
+        "Precondition `!empty()` not satisfied. `.back()` called on an empty view.");
+    return *ranges::prev(ranges::end(__derived()));
+  }
+
+  template<class _D2 = _Derived>
+  _LIBCPP_HIDE_FROM_ABI
+  constexpr decltype(auto) back() const
+    requires bidirectional_range<const _D2> && common_range<const _D2>
+  {
+    _LIBCPP_ASSERT(!empty(),
+        "Precondition `!empty()` not satisfied. `.back()` called on an empty view.");
+    return *ranges::prev(ranges::end(__derived()));
+  }
+
+  template<random_access_range _RARange = _Derived>
+  _LIBCPP_HIDE_FROM_ABI
+  constexpr decltype(auto) operator[](range_difference_t<_RARange> __index)
+  {
+    return ranges::begin(__derived())[__index];
+  }
+
+  template<random_access_range _RARange = const _Derived>
+  _LIBCPP_HIDE_FROM_ABI
+  constexpr decltype(auto) operator[](range_difference_t<_RARange> __index) const
+  {
+    return ranges::begin(__derived())[__index];
+  }
+};
+
+} // namespace ranges
+
+#endif // _LIBCPP_STD_VER > 17 && !defined(_LIBCPP_HAS_NO_INCOMPLETE_RANGES)
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP___RANGES_VIEW_INTERFACE_H
