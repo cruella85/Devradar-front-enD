@@ -12,4 +12,21 @@
 #include <__config>
 #include <__type_traits/integral_constant.h>
 
-#if !defined(_LIBCPP_HAS_NO
+#if !defined(_LIBCPP_HAS_NO_PRAGMA_SYSTEM_HEADER)
+#  pragma GCC system_header
+#endif
+
+_LIBCPP_BEGIN_NAMESPACE_STD
+
+template <class _Bp, class _Dp>
+struct _LIBCPP_TEMPLATE_VIS is_base_of
+    : public integral_constant<bool, __is_base_of(_Bp, _Dp)> {};
+
+#if _LIBCPP_STD_VER > 14
+template <class _Bp, class _Dp>
+inline constexpr bool is_base_of_v = __is_base_of(_Bp, _Dp);
+#endif
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP___TYPE_TRAITS_IS_BASE_OF_H
