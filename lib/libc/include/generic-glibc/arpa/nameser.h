@@ -362,4 +362,97 @@ typedef enum __ns_cert_types {
 #define NS_GET16(s, cp) do { \
 	const unsigned char *t_cp = (const unsigned char *)(cp); \
 	(s) = ((uint16_t)t_cp[0] << 8) \
-	    | ((uint
+	    | ((uint16_t)t_cp[1]) \
+	    ; \
+	(cp) += NS_INT16SZ; \
+} while (0)
+
+#define NS_GET32(l, cp) do { \
+	const unsigned char *t_cp = (const unsigned char *)(cp); \
+	(l) = ((uint32_t)t_cp[0] << 24) \
+	    | ((uint32_t)t_cp[1] << 16) \
+	    | ((uint32_t)t_cp[2] << 8) \
+	    | ((uint32_t)t_cp[3]) \
+	    ; \
+	(cp) += NS_INT32SZ; \
+} while (0)
+
+#define NS_PUT16(s, cp) do { \
+	uint16_t t_s = (uint16_t)(s); \
+	unsigned char *t_cp = (unsigned char *)(cp); \
+	*t_cp++ = t_s >> 8; \
+	*t_cp   = t_s; \
+	(cp) += NS_INT16SZ; \
+} while (0)
+
+#define NS_PUT32(l, cp) do { \
+	uint32_t t_l = (uint32_t)(l); \
+	unsigned char *t_cp = (unsigned char *)(cp); \
+	*t_cp++ = t_l >> 24; \
+	*t_cp++ = t_l >> 16; \
+	*t_cp++ = t_l >> 8; \
+	*t_cp   = t_l; \
+	(cp) += NS_INT32SZ; \
+} while (0)
+
+__BEGIN_DECLS
+int		ns_msg_getflag (ns_msg, int) __THROW;
+unsigned int	ns_get16 (const unsigned char *) __THROW;
+unsigned long	ns_get32 (const unsigned char *) __THROW;
+void		ns_put16 (unsigned int, unsigned char *) __THROW;
+void		ns_put32 (unsigned long, unsigned char *) __THROW;
+int		ns_initparse (const unsigned char *, int, ns_msg *) __THROW;
+int		ns_skiprr (const unsigned char *, const unsigned char *,
+			   ns_sect, int) __THROW;
+int		ns_parserr (ns_msg *, ns_sect, int, ns_rr *) __THROW;
+int		ns_sprintrr (const ns_msg *, const ns_rr *,
+			     const char *, const char *, char *, size_t)
+  __THROW __NAMESER_DEPRECATED;
+int		ns_sprintrrf (const unsigned char *, size_t, const char *,
+			      ns_class, ns_type, unsigned long,
+			      const unsigned char *, size_t, const char *,
+			      const char *, char *, size_t)
+  __THROW __NAMESER_DEPRECATED;
+int		ns_format_ttl (unsigned long, char *, size_t)
+  __THROW __NAMESER_DEPRECATED;
+int		ns_parse_ttl (const char *, unsigned long *)
+  __THROW __NAMESER_DEPRECATED;
+uint32_t	ns_datetosecs (const char *, int *)
+  __THROW __NAMESER_DEPRECATED;
+int		ns_name_ntol (const unsigned char *, unsigned char *, size_t)
+     __THROW;
+int		ns_name_ntop (const unsigned char *, char *, size_t) __THROW;
+int		ns_name_pton (const char *, unsigned char *, size_t) __THROW;
+int		ns_name_unpack (const unsigned char *, const unsigned char *,
+				const unsigned char *, unsigned char *, size_t)
+     __THROW;
+int		ns_name_pack (const unsigned char *, unsigned char *, int,
+			      const unsigned char **, const unsigned char **)
+     __THROW;
+int		ns_name_uncompress (const unsigned char *,
+				    const unsigned char *,
+				    const unsigned char *,
+				    char *, size_t) __THROW;
+int		ns_name_compress (const char *, unsigned char *, size_t,
+				  const unsigned char **,
+				  const unsigned char **) __THROW;
+int		ns_name_skip (const unsigned char **, const unsigned char *)
+     __THROW;
+void		ns_name_rollback (const unsigned char *,
+				  const unsigned char **,
+				  const unsigned char **) __THROW;
+
+int		ns_samedomain (const char *, const char *) __THROW
+  __NAMESER_DEPRECATED;
+int		ns_subdomain (const char *, const char *) __THROW
+  __NAMESER_DEPRECATED;
+int		ns_makecanon (const char *, char *, size_t) __THROW
+  __NAMESER_DEPRECATED;
+int		ns_samename (const char *, const char *) __THROW
+  __NAMESER_DEPRECATED;
+__END_DECLS
+
+#include <arpa/nameser_compat.h>
+
+#endif /* !_ARPA_NAMESER_H_ */
+/*! \file */
