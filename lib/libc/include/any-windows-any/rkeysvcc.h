@@ -24,4 +24,16 @@ extern "C" {
 
   typedef struct _KEYSVC_BLOB {
     ULONG cb;
-    BYTE
+    BYTE *pb;
+  } KEYSVC_BLOB,*PKEYSVC_BLOB;
+
+#define RKEYSVC_CONNECT_SECURE_ONLY 0x00000001
+
+  ULONG RKeyOpenKeyService(LPSTR pszMachineName,KEYSVC_TYPE OwnerType,LPWSTR pwszOwnerName,void *pAuthentication,void *pReserved,KEYSVCC_HANDLE *phKeySvcCli);
+  ULONG RKeyCloseKeyService(KEYSVCC_HANDLE hKeySvcCli,void *pReserved);
+  ULONG RKeyPFXInstall(KEYSVCC_HANDLE hKeySvcCli,PKEYSVC_BLOB pPFX,PKEYSVC_UNICODE_STRING pPassword,ULONG ulFlags);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
