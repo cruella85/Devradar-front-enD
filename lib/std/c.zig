@@ -201,4 +201,213 @@ pub extern "c" fn accept(sockfd: c.fd_t, noalias addr: ?*c.sockaddr, noalias add
 pub extern "c" fn accept4(sockfd: c.fd_t, noalias addr: ?*c.sockaddr, noalias addrlen: ?*c.socklen_t, flags: c_uint) c_int;
 pub extern "c" fn getsockopt(sockfd: c.fd_t, level: u32, optname: u32, noalias optval: ?*anyopaque, noalias optlen: *c.socklen_t) c_int;
 pub extern "c" fn setsockopt(sockfd: c.fd_t, level: u32, optname: u32, optval: ?*const anyopaque, optlen: c.socklen_t) c_int;
-pub extern "c" fn send(sockfd: c.fd_t, buf: *const anyopaque, 
+pub extern "c" fn send(sockfd: c.fd_t, buf: *const anyopaque, len: usize, flags: u32) isize;
+pub extern "c" fn sendto(
+    sockfd: c.fd_t,
+    buf: *const anyopaque,
+    len: usize,
+    flags: u32,
+    dest_addr: ?*const c.sockaddr,
+    addrlen: c.socklen_t,
+) isize;
+pub extern "c" fn sendmsg(sockfd: c.fd_t, msg: *const c.msghdr_const, flags: u32) isize;
+
+pub extern "c" fn recv(sockfd: c.fd_t, arg1: ?*anyopaque, arg2: usize, arg3: c_int) isize;
+pub extern "c" fn recvfrom(
+    sockfd: c.fd_t,
+    noalias buf: *anyopaque,
+    len: usize,
+    flags: u32,
+    noalias src_addr: ?*c.sockaddr,
+    noalias addrlen: ?*c.socklen_t,
+) isize;
+pub extern "c" fn recvmsg(sockfd: c.fd_t, msg: *c.msghdr, flags: u32) isize;
+
+pub extern "c" fn kill(pid: c.pid_t, sig: c_int) c_int;
+pub extern "c" fn getdirentries(fd: c.fd_t, buf_ptr: [*]u8, nbytes: usize, basep: *i64) isize;
+
+pub extern "c" fn setuid(uid: c.uid_t) c_int;
+pub extern "c" fn setgid(gid: c.gid_t) c_int;
+pub extern "c" fn seteuid(euid: c.uid_t) c_int;
+pub extern "c" fn setegid(egid: c.gid_t) c_int;
+pub extern "c" fn setreuid(ruid: c.uid_t, euid: c.uid_t) c_int;
+pub extern "c" fn setregid(rgid: c.gid_t, egid: c.gid_t) c_int;
+pub extern "c" fn setresuid(ruid: c.uid_t, euid: c.uid_t, suid: c.uid_t) c_int;
+pub extern "c" fn setresgid(rgid: c.gid_t, egid: c.gid_t, sgid: c.gid_t) c_int;
+
+pub extern "c" fn malloc(usize) ?*anyopaque;
+pub extern "c" fn realloc(?*anyopaque, usize) ?*anyopaque;
+pub extern "c" fn free(?*anyopaque) void;
+
+pub extern "c" fn futimes(fd: c.fd_t, times: *[2]c.timeval) c_int;
+pub extern "c" fn utimes(path: [*:0]const u8, times: *[2]c.timeval) c_int;
+
+pub extern "c" fn utimensat(dirfd: c.fd_t, pathname: [*:0]const u8, times: *[2]c.timespec, flags: u32) c_int;
+pub extern "c" fn futimens(fd: c.fd_t, times: *const [2]c.timespec) c_int;
+
+pub extern "c" fn pthread_create(
+    noalias newthread: *pthread_t,
+    noalias attr: ?*const c.pthread_attr_t,
+    start_routine: *const fn (?*anyopaque) callconv(.C) ?*anyopaque,
+    noalias arg: ?*anyopaque,
+) c.E;
+pub extern "c" fn pthread_attr_init(attr: *c.pthread_attr_t) c.E;
+pub extern "c" fn pthread_attr_setstack(attr: *c.pthread_attr_t, stackaddr: *anyopaque, stacksize: usize) c.E;
+pub extern "c" fn pthread_attr_setstacksize(attr: *c.pthread_attr_t, stacksize: usize) c.E;
+pub extern "c" fn pthread_attr_setguardsize(attr: *c.pthread_attr_t, guardsize: usize) c.E;
+pub extern "c" fn pthread_attr_destroy(attr: *c.pthread_attr_t) c.E;
+pub extern "c" fn pthread_self() pthread_t;
+pub extern "c" fn pthread_join(thread: pthread_t, arg_return: ?*?*anyopaque) c.E;
+pub extern "c" fn pthread_detach(thread: pthread_t) c.E;
+pub extern "c" fn pthread_atfork(
+    prepare: ?*const fn () callconv(.C) void,
+    parent: ?*const fn () callconv(.C) void,
+    child: ?*const fn () callconv(.C) void,
+) c_int;
+pub extern "c" fn pthread_key_create(
+    key: *c.pthread_key_t,
+    destructor: ?*const fn (value: *anyopaque) callconv(.C) void,
+) c.E;
+pub extern "c" fn pthread_key_delete(key: c.pthread_key_t) c.E;
+pub extern "c" fn pthread_getspecific(key: c.pthread_key_t) ?*anyopaque;
+pub extern "c" fn pthread_setspecific(key: c.pthread_key_t, value: ?*anyopaque) c_int;
+pub extern "c" fn pthread_sigmask(how: c_int, set: *const c.sigset_t, oldset: *c.sigset_t) c_int;
+pub extern "c" fn sem_init(sem: *c.sem_t, pshared: c_int, value: c_uint) c_int;
+pub extern "c" fn sem_destroy(sem: *c.sem_t) c_int;
+pub extern "c" fn sem_open(name: [*:0]const u8, flag: c_int, mode: c.mode_t, value: c_uint) *c.sem_t;
+pub extern "c" fn sem_close(sem: *c.sem_t) c_int;
+pub extern "c" fn sem_post(sem: *c.sem_t) c_int;
+pub extern "c" fn sem_wait(sem: *c.sem_t) c_int;
+pub extern "c" fn sem_trywait(sem: *c.sem_t) c_int;
+pub extern "c" fn sem_timedwait(sem: *c.sem_t, abs_timeout: *const c.timespec) c_int;
+pub extern "c" fn sem_getvalue(sem: *c.sem_t, sval: *c_int) c_int;
+
+pub extern "c" fn shm_open(name: [*:0]const u8, flag: c_int, mode: c.mode_t) c_int;
+pub extern "c" fn shm_unlink(name: [*:0]const u8) c_int;
+
+pub extern "c" fn kqueue() c_int;
+pub extern "c" fn kevent(
+    kq: c_int,
+    changelist: [*]const c.Kevent,
+    nchanges: c_int,
+    eventlist: [*]c.Kevent,
+    nevents: c_int,
+    timeout: ?*const c.timespec,
+) c_int;
+
+pub extern "c" fn port_create() c.port_t;
+pub extern "c" fn port_associate(
+    port: c.port_t,
+    source: u32,
+    object: usize,
+    events: u32,
+    user_var: ?*anyopaque,
+) c_int;
+pub extern "c" fn port_dissociate(port: c.port_t, source: u32, object: usize) c_int;
+pub extern "c" fn port_send(port: c.port_t, events: u32, user_var: ?*anyopaque) c_int;
+pub extern "c" fn port_sendn(
+    ports: [*]c.port_t,
+    errors: []u32,
+    num_ports: u32,
+    events: u32,
+    user_var: ?*anyopaque,
+) c_int;
+pub extern "c" fn port_get(port: c.port_t, event: *c.port_event, timeout: ?*c.timespec) c_int;
+pub extern "c" fn port_getn(
+    port: c.port_t,
+    event_list: []c.port_event,
+    max_events: u32,
+    events_retrieved: *u32,
+    timeout: ?*c.timespec,
+) c_int;
+pub extern "c" fn port_alert(port: c.port_t, flags: u32, events: u32, user_var: ?*anyopaque) c_int;
+
+pub extern "c" fn getaddrinfo(
+    noalias node: ?[*:0]const u8,
+    noalias service: ?[*:0]const u8,
+    noalias hints: ?*const c.addrinfo,
+    /// On Linux, `res` will not be modified on error and `freeaddrinfo` will
+    /// potentially crash if you pass it an undefined pointer
+    noalias res: *?*c.addrinfo,
+) c.EAI;
+
+pub extern "c" fn freeaddrinfo(res: *c.addrinfo) void;
+
+pub extern "c" fn getnameinfo(
+    noalias addr: *const c.sockaddr,
+    addrlen: c.socklen_t,
+    noalias host: [*]u8,
+    hostlen: c.socklen_t,
+    noalias serv: [*]u8,
+    servlen: c.socklen_t,
+    flags: u32,
+) c.EAI;
+
+pub extern "c" fn gai_strerror(errcode: c.EAI) [*:0]const u8;
+
+pub extern "c" fn poll(fds: [*]c.pollfd, nfds: c.nfds_t, timeout: c_int) c_int;
+pub extern "c" fn ppoll(fds: [*]c.pollfd, nfds: c.nfds_t, timeout: ?*const c.timespec, sigmask: ?*const c.sigset_t) c_int;
+
+pub extern "c" fn dn_expand(
+    msg: [*:0]const u8,
+    eomorig: [*:0]const u8,
+    comp_dn: [*:0]const u8,
+    exp_dn: [*:0]u8,
+    length: c_int,
+) c_int;
+
+pub const PTHREAD_MUTEX_INITIALIZER = c.pthread_mutex_t{};
+pub extern "c" fn pthread_mutex_lock(mutex: *c.pthread_mutex_t) c.E;
+pub extern "c" fn pthread_mutex_unlock(mutex: *c.pthread_mutex_t) c.E;
+pub extern "c" fn pthread_mutex_trylock(mutex: *c.pthread_mutex_t) c.E;
+pub extern "c" fn pthread_mutex_destroy(mutex: *c.pthread_mutex_t) c.E;
+
+pub const PTHREAD_COND_INITIALIZER = c.pthread_cond_t{};
+pub extern "c" fn pthread_cond_wait(noalias cond: *c.pthread_cond_t, noalias mutex: *c.pthread_mutex_t) c.E;
+pub extern "c" fn pthread_cond_timedwait(noalias cond: *c.pthread_cond_t, noalias mutex: *c.pthread_mutex_t, noalias abstime: *const c.timespec) c.E;
+pub extern "c" fn pthread_cond_signal(cond: *c.pthread_cond_t) c.E;
+pub extern "c" fn pthread_cond_broadcast(cond: *c.pthread_cond_t) c.E;
+pub extern "c" fn pthread_cond_destroy(cond: *c.pthread_cond_t) c.E;
+
+pub extern "c" fn pthread_rwlock_destroy(rwl: *c.pthread_rwlock_t) callconv(.C) c.E;
+pub extern "c" fn pthread_rwlock_rdlock(rwl: *c.pthread_rwlock_t) callconv(.C) c.E;
+pub extern "c" fn pthread_rwlock_wrlock(rwl: *c.pthread_rwlock_t) callconv(.C) c.E;
+pub extern "c" fn pthread_rwlock_tryrdlock(rwl: *c.pthread_rwlock_t) callconv(.C) c.E;
+pub extern "c" fn pthread_rwlock_trywrlock(rwl: *c.pthread_rwlock_t) callconv(.C) c.E;
+pub extern "c" fn pthread_rwlock_unlock(rwl: *c.pthread_rwlock_t) callconv(.C) c.E;
+
+pub const pthread_t = *opaque {};
+pub const FILE = opaque {};
+
+pub extern "c" fn dlopen(path: [*:0]const u8, mode: c_int) ?*anyopaque;
+pub extern "c" fn dlclose(handle: *anyopaque) c_int;
+pub extern "c" fn dlsym(handle: ?*anyopaque, symbol: [*:0]const u8) ?*anyopaque;
+
+pub extern "c" fn sync() void;
+pub extern "c" fn syncfs(fd: c_int) c_int;
+pub extern "c" fn fsync(fd: c_int) c_int;
+pub extern "c" fn fdatasync(fd: c_int) c_int;
+
+pub extern "c" fn prctl(option: c_int, ...) c_int;
+
+pub extern "c" fn getrlimit(resource: c.rlimit_resource, rlim: *c.rlimit) c_int;
+pub extern "c" fn setrlimit(resource: c.rlimit_resource, rlim: *const c.rlimit) c_int;
+
+pub extern "c" fn fmemopen(noalias buf: ?*anyopaque, size: usize, noalias mode: [*:0]const u8) ?*FILE;
+
+pub extern "c" fn syslog(priority: c_int, message: [*:0]const u8, ...) void;
+pub extern "c" fn openlog(ident: [*:0]const u8, logopt: c_int, facility: c_int) void;
+pub extern "c" fn closelog() void;
+pub extern "c" fn setlogmask(maskpri: c_int) c_int;
+
+pub extern "c" fn if_nametoindex([*:0]const u8) c_int;
+
+pub const max_align_t = if (builtin.abi == .msvc)
+    f64
+else if (builtin.target.isDarwin())
+    c_longdouble
+else
+    extern struct {
+        a: c_longlong,
+        b: c_longdouble,
+    };
