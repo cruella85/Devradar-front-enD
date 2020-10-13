@@ -677,4 +677,221 @@ pub const DynamicBitSetUnmanaged = struct {
     /// If bit_length is not zero, deinit must eventually be called.
     pub fn initEmpty(allocator: Allocator, bit_length: usize) !Self {
         var self = Self{};
-      
+        try self.resize(allocator, bit_length, false);
+        return self;
+    }
+
+    /// Creates a bit set with all elements present.
+    /// If bit_length is not zero, deinit must eventually be called.
+    pub fn initFull(allocator: Allocator, bit_length: usize) !Self {
+        var self = Self{};
+        try self.resize(allocator, bit_length, true);
+        return self;
+    }
+
+    /// Resizes to a new bit_length.  If the new length is larger
+    /// than the old length, fills any added bits with `fill`.
+    /// If new_len is not zero, deinit must eventually be called.
+    pub fn resize(self: *@This(), allocator: Allocator, new_len: usize, fill: bool) !void {
+        const old_len = self.bit_length;
+
+        const old_masks = numMasks(old_len);
+        const new_masks = numMasks(new_len);
+
+        const old_allocation = (self.masks - 1)[0..(self.masks - 1)[0]];
+
+        if (new_masks == 0) {
+            assert(new_len == 0);
+            allocator.free(old_allocation);
+            self.masks = empty_masks_ptr;
+            self.bit_length = 0;
+            return;
+        }
+
+        if (old_allocation.len != new_masks + 1) realloc: {
+            // If realloc fails, it may mean one of two things.
+            // If we are growing, it means we are out of memory.
+            // If we are shrinking, it means the allocator doesn't
+            // want to move the allocation.  This means we need to
+            // hold on to the extra 8 bytes required to be able to free
+            // this allocation properly.
+            const new_allocation = allocator.realloc(old_allocation, new_masks + 1) catch |err| {
+                if (new_masks + 1 > old_allocation.len) return err;
+                break :realloc;
+            };
+
+            new_allocation[0] = new_allocation.len;
+            self.masks = new_allocation.ptr + 1;
+        }
+
+        // If we increased in size, we need to set any new bits
+        // to the fill value.
+        if (new_len > old_len) {
+            // set the padding bits in the old last item to 1
+            if (fill and old_masks > 0) {
+                const old_padding_bits = old_masks * @bitSizeOf(MaskInt) - old_len;
+                const old_mask = (~@as(MaskInt, 0)) >> @intCast(ShiftInt, old_padding_bits);
+                self.masks[old_masks - 1] |= ~old_mask;
+            }
+
+            // fill in any new masks
+            if (new_masks > old_masks) {
+                const fill_value = std.math.boolMask(MaskInt, fill);
+                std.mem.set(MaskInt, self.masks[old_masks..new_masks], fill_value);
+            }
+        }
+
+        // Zero out the padding bits
+        if (new_len > 0) {
+            const padding_bits = new_masks * @bitSizeOf(MaskInt) - new_len;
+            const last_item_mask = (~@as(MaskInt, 0)) >> @intCast(ShiftInt, padding_bits);
+            self.masks[new_masks - 1] &= last_item_mask;
+        }
+
+        // And finally, save the new length.
+        self.bit_length = new_len;
+    }
+
+    /// deinitializes the array and releases its memory.
+    /// The passed allocator must be the same one used for
+    /// init* or resize in the past.
+    pub fn deinit(self: *Self, allocator: Allocator) void {
+        self.resize(allocator, 0, false) catch unreachable;
+    }
+
+    /// Creates a duplicate of this bit set, using the new allocator.
+    pub fn clone(self: *const Self, new_allocator: Allocator) !Self {
+        const num_masks = numMasks(self.bit_length);
+        var copy = Self{};
+        try copy.resize(new_allocator, self.bit_length, false);
+        std.mem.copy(MaskInt, copy.masks[0..num_masks], self.masks[0..num_masks]);
+        return copy;
+    }
+
+    /// Returns the number of bits in this bit set
+    pub inline fn capacity(self: Self) usize {
+        return self.bit_length;
+    }
+
+    /// Returns true if the bit at the specified index
+    /// is present in the set, false otherwise.
+    pub fn isSet(self: Self, index: usize) bool {
+        assert(index < self.bit_length);
+        return (self.masks[maskIndex(index)] & maskBit(index)) != 0;
+    }
+
+    /// Returns the total number of set bits in this bit set.
+    pub fn count(self: Self) usize {
+        const num_masks = (self.bit_length + (@bitSizeOf(MaskInt) - 1)) / @bitSizeOf(MaskInt);
+        var total: usize = 0;
+        for (self.masks[0..num_masks]) |mask| {
+            // Note: This is where we depend on padding bits being zero
+            total += @popCount(mask);
+        }
+        return total;
+    }
+
+    /// Changes the value of the specified bit of the bit
+    /// set to match the passed boolean.
+    pub fn setValue(self: *Self, index: usize, value: bool) void {
+        assert(index < self.bit_length);
+        const bit = maskBit(index);
+        const mask_index = maskIndex(index);
+        const new_bit = bit & std.math.boolMask(MaskInt, value);
+        self.masks[mask_index] = (self.masks[mask_index] & ~bit) | new_bit;
+    }
+
+    /// Adds a specific bit to the bit set
+    pub fn set(self: *Self, index: usize) void {
+        assert(index < self.bit_length);
+        self.masks[maskIndex(index)] |= maskBit(index);
+    }
+
+    /// Changes the value of all bits in the specified range to
+    /// match the passed boolean.
+    pub fn setRangeValue(self: *Self, range: Range, value: bool) void {
+        assert(range.end <= self.bit_length);
+        assert(range.start <= range.end);
+        if (range.start == range.end) return;
+
+        const start_mask_index = maskIndex(range.start);
+        const start_bit = @truncate(ShiftInt, range.start);
+
+        const end_mask_index = maskIndex(range.end);
+        const end_bit = @truncate(ShiftInt, range.end);
+
+        if (start_mask_index == end_mask_index) {
+            var mask1 = std.math.boolMask(MaskInt, true) << start_bit;
+            var mask2 = std.math.boolMask(MaskInt, true) >> (@bitSizeOf(MaskInt) - 1) - (end_bit - 1);
+            self.masks[start_mask_index] &= ~(mask1 & mask2);
+
+            mask1 = std.math.boolMask(MaskInt, value) << start_bit;
+            mask2 = std.math.boolMask(MaskInt, value) >> (@bitSizeOf(MaskInt) - 1) - (end_bit - 1);
+            self.masks[start_mask_index] |= mask1 & mask2;
+        } else {
+            var bulk_mask_index: usize = undefined;
+            if (start_bit > 0) {
+                self.masks[start_mask_index] =
+                    (self.masks[start_mask_index] & ~(std.math.boolMask(MaskInt, true) << start_bit)) |
+                    (std.math.boolMask(MaskInt, value) << start_bit);
+                bulk_mask_index = start_mask_index + 1;
+            } else {
+                bulk_mask_index = start_mask_index;
+            }
+
+            while (bulk_mask_index < end_mask_index) : (bulk_mask_index += 1) {
+                self.masks[bulk_mask_index] = std.math.boolMask(MaskInt, value);
+            }
+
+            if (end_bit > 0) {
+                self.masks[end_mask_index] =
+                    (self.masks[end_mask_index] & (std.math.boolMask(MaskInt, true) << end_bit)) |
+                    (std.math.boolMask(MaskInt, value) >> ((@bitSizeOf(MaskInt) - 1) - (end_bit - 1)));
+            }
+        }
+    }
+
+    /// Removes a specific bit from the bit set
+    pub fn unset(self: *Self, index: usize) void {
+        assert(index < self.bit_length);
+        self.masks[maskIndex(index)] &= ~maskBit(index);
+    }
+
+    /// Flips a specific bit in the bit set
+    pub fn toggle(self: *Self, index: usize) void {
+        assert(index < self.bit_length);
+        self.masks[maskIndex(index)] ^= maskBit(index);
+    }
+
+    /// Flips all bits in this bit set which are present
+    /// in the toggles bit set.  Both sets must have the
+    /// same bit_length.
+    pub fn toggleSet(self: *Self, toggles: Self) void {
+        assert(toggles.bit_length == self.bit_length);
+        const num_masks = numMasks(self.bit_length);
+        for (self.masks[0..num_masks], 0..) |*mask, i| {
+            mask.* ^= toggles.masks[i];
+        }
+    }
+
+    /// Flips every bit in the bit set.
+    pub fn toggleAll(self: *Self) void {
+        const bit_length = self.bit_length;
+        // avoid underflow if bit_length is zero
+        if (bit_length == 0) return;
+
+        const num_masks = numMasks(self.bit_length);
+        for (self.masks[0..num_masks]) |*mask| {
+            mask.* = ~mask.*;
+        }
+
+        const padding_bits = num_masks * @bitSizeOf(MaskInt) - bit_length;
+        const last_item_mask = (~@as(MaskInt, 0)) >> @intCast(ShiftInt, padding_bits);
+        self.masks[num_masks - 1] &= last_item_mask;
+    }
+
+    /// Performs a union of two bit sets, and stores the
+    /// result in the first one.  Bits in the result are
+    /// set if the corresponding bits were set in either input.
+    /// The two sets must both be the same bit_length.
+    pub fn setUn
