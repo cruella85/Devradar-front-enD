@@ -1140,4 +1140,256 @@ pub const DynamicBitSet = struct {
     /// set if the corresponding bits were set in both inputs.
     /// The two sets must both be the same bit_length.
     pub fn setIntersection(self: *Self, other: Self) void {
-        se
+        self.unmanaged.setIntersection(other.unmanaged);
+    }
+
+    /// Finds the index of the first set bit.
+    /// If no bits are set, returns null.
+    pub fn findFirstSet(self: Self) ?usize {
+        return self.unmanaged.findFirstSet();
+    }
+
+    /// Finds the index of the first set bit, and unsets it.
+    /// If no bits are set, returns null.
+    pub fn toggleFirstSet(self: *Self) ?usize {
+        return self.unmanaged.toggleFirstSet();
+    }
+
+    /// Returns true iff every corresponding bit in both
+    /// bit sets are the same.
+    pub fn eql(self: Self, other: Self) bool {
+        return self.unmanaged.eql(other.unmanaged);
+    }
+
+    /// Iterates through the items in the set, according to the options.
+    /// The default options (.{}) will iterate indices of set bits in
+    /// ascending order.  Modifications to the underlying bit set may
+    /// or may not be observed by the iterator.  Resizing the underlying
+    /// bit set invalidates the iterator.
+    pub fn iterator(self: *const Self, comptime options: IteratorOptions) Iterator(options) {
+        return self.unmanaged.iterator(options);
+    }
+
+    pub const Iterator = DynamicBitSetUnmanaged.Iterator;
+};
+
+/// Options for configuring an iterator over a bit set
+pub const IteratorOptions = struct {
+    /// determines which bits should be visited
+    kind: Type = .set,
+    /// determines the order in which bit indices should be visited
+    direction: Direction = .forward,
+
+    pub const Type = enum {
+        /// visit indexes of set bits
+        set,
+        /// visit indexes of unset bits
+        unset,
+    };
+
+    pub const Direction = enum {
+        /// visit indices in ascending order
+        forward,
+        /// visit indices in descending order.
+        /// Note that this may be slightly more expensive than forward iteration.
+        reverse,
+    };
+};
+
+// The iterator is reusable between several bit set types
+fn BitSetIterator(comptime MaskInt: type, comptime options: IteratorOptions) type {
+    const ShiftInt = std.math.Log2Int(MaskInt);
+    const kind = options.kind;
+    const direction = options.direction;
+    return struct {
+        const Self = @This();
+
+        // all bits which have not yet been iterated over
+        bits_remain: MaskInt,
+        // all words which have not yet been iterated over
+        words_remain: []const MaskInt,
+        // the offset of the current word
+        bit_offset: usize,
+        // the mask of the last word
+        last_word_mask: MaskInt,
+
+        fn init(masks: []const MaskInt, last_word_mask: MaskInt) Self {
+            if (masks.len == 0) {
+                return Self{
+                    .bits_remain = 0,
+                    .words_remain = &[_]MaskInt{},
+                    .last_word_mask = last_word_mask,
+                    .bit_offset = 0,
+                };
+            } else {
+                var result = Self{
+                    .bits_remain = 0,
+                    .words_remain = masks,
+                    .last_word_mask = last_word_mask,
+                    .bit_offset = if (direction == .forward) 0 else (masks.len - 1) * @bitSizeOf(MaskInt),
+                };
+                result.nextWord(true);
+                return result;
+            }
+        }
+
+        /// Returns the index of the next unvisited set bit
+        /// in the bit set, in ascending order.
+        pub fn next(self: *Self) ?usize {
+            while (self.bits_remain == 0) {
+                if (self.words_remain.len == 0) return null;
+                self.nextWord(false);
+                switch (direction) {
+                    .forward => self.bit_offset += @bitSizeOf(MaskInt),
+                    .reverse => self.bit_offset -= @bitSizeOf(MaskInt),
+                }
+            }
+
+            switch (direction) {
+                .forward => {
+                    const next_index = @ctz(self.bits_remain) + self.bit_offset;
+                    self.bits_remain &= self.bits_remain - 1;
+                    return next_index;
+                },
+                .reverse => {
+                    const leading_zeroes = @clz(self.bits_remain);
+                    const top_bit = (@bitSizeOf(MaskInt) - 1) - leading_zeroes;
+                    const no_top_bit_mask = (@as(MaskInt, 1) << @intCast(ShiftInt, top_bit)) - 1;
+                    self.bits_remain &= no_top_bit_mask;
+                    return top_bit + self.bit_offset;
+                },
+            }
+        }
+
+        // Load the next word.  Don't call this if there
+        // isn't a next word.  If the next word is the
+        // last word, mask off the padding bits so we
+        // don't visit them.
+        inline fn nextWord(self: *Self, comptime is_first_word: bool) void {
+            var word = switch (direction) {
+                .forward => self.words_remain[0],
+                .reverse => self.words_remain[self.words_remain.len - 1],
+            };
+            switch (kind) {
+                .set => {},
+                .unset => {
+                    word = ~word;
+                    if ((direction == .reverse and is_first_word) or
+                        (direction == .forward and self.words_remain.len == 1))
+                    {
+                        word &= self.last_word_mask;
+                    }
+                },
+            }
+            switch (direction) {
+                .forward => self.words_remain = self.words_remain[1..],
+                .reverse => self.words_remain.len -= 1,
+            }
+            self.bits_remain = word;
+        }
+    };
+}
+
+/// A range of indices within a bitset.
+pub const Range = struct {
+    /// The index of the first bit of interest.
+    start: usize,
+    /// The index immediately after the last bit of interest.
+    end: usize,
+};
+
+// ---------------- Tests -----------------
+
+const testing = std.testing;
+
+fn testEql(empty: anytype, full: anytype, len: usize) !void {
+    try testing.expect(empty.eql(empty));
+    try testing.expect(full.eql(full));
+    switch (len) {
+        0 => {
+            try testing.expect(empty.eql(full));
+            try testing.expect(full.eql(empty));
+        },
+        else => {
+            try testing.expect(!empty.eql(full));
+            try testing.expect(!full.eql(empty));
+        },
+    }
+}
+
+fn testSubsetOf(empty: anytype, full: anytype, even: anytype, odd: anytype, len: usize) !void {
+    try testing.expect(empty.subsetOf(empty));
+    try testing.expect(empty.subsetOf(full));
+    try testing.expect(full.subsetOf(full));
+    switch (len) {
+        0 => {
+            try testing.expect(even.subsetOf(odd));
+            try testing.expect(odd.subsetOf(even));
+        },
+        1 => {
+            try testing.expect(!even.subsetOf(odd));
+            try testing.expect(odd.subsetOf(even));
+        },
+        else => {
+            try testing.expect(!even.subsetOf(odd));
+            try testing.expect(!odd.subsetOf(even));
+        },
+    }
+}
+
+fn testSupersetOf(empty: anytype, full: anytype, even: anytype, odd: anytype, len: usize) !void {
+    try testing.expect(full.supersetOf(full));
+    try testing.expect(full.supersetOf(empty));
+    try testing.expect(empty.supersetOf(empty));
+    switch (len) {
+        0 => {
+            try testing.expect(even.supersetOf(odd));
+            try testing.expect(odd.supersetOf(even));
+        },
+        1 => {
+            try testing.expect(even.supersetOf(odd));
+            try testing.expect(!odd.supersetOf(even));
+        },
+        else => {
+            try testing.expect(!even.supersetOf(odd));
+            try testing.expect(!odd.supersetOf(even));
+        },
+    }
+}
+
+fn testBitSet(a: anytype, b: anytype, len: usize) !void {
+    try testing.expectEqual(len, a.capacity());
+    try testing.expectEqual(len, b.capacity());
+
+    {
+        var i: usize = 0;
+        while (i < len) : (i += 1) {
+            a.setValue(i, i & 1 == 0);
+            b.setValue(i, i & 2 == 0);
+        }
+    }
+
+    try testing.expectEqual((len + 1) / 2, a.count());
+    try testing.expectEqual((len + 3) / 4 + (len + 2) / 4, b.count());
+
+    {
+        var iter = a.iterator(.{});
+        var i: usize = 0;
+        while (i < len) : (i += 2) {
+            try testing.expectEqual(@as(?usize, i), iter.next());
+        }
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+    }
+    a.toggleAll();
+    {
+        var iter = a.iterator(.{});
+        var i: usize = 1;
+        while (i < len) : (i += 2) {
+            try testing.expectEqual(@as(?usize, i), iter.next());
+        }
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+  
