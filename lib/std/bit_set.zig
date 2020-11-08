@@ -1392,4 +1392,251 @@ fn testBitSet(a: anytype, b: anytype, len: usize) !void {
         try testing.expectEqual(@as(?usize, null), iter.next());
         try testing.expectEqual(@as(?usize, null), iter.next());
         try testing.expectEqual(@as(?usize, null), iter.next());
-  
+    }
+
+    {
+        var iter = b.iterator(.{ .kind = .unset });
+        var i: usize = 2;
+        while (i < len) : (i += 4) {
+            try testing.expectEqual(@as(?usize, i), iter.next());
+            if (i + 1 < len) {
+                try testing.expectEqual(@as(?usize, i + 1), iter.next());
+            }
+        }
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+    }
+
+    {
+        var i: usize = 0;
+        while (i < len) : (i += 1) {
+            try testing.expectEqual(i & 1 != 0, a.isSet(i));
+            try testing.expectEqual(i & 2 == 0, b.isSet(i));
+        }
+    }
+
+    a.setUnion(b.*);
+    {
+        var i: usize = 0;
+        while (i < len) : (i += 1) {
+            try testing.expectEqual(i & 1 != 0 or i & 2 == 0, a.isSet(i));
+            try testing.expectEqual(i & 2 == 0, b.isSet(i));
+        }
+
+        i = len;
+        var set = a.iterator(.{ .direction = .reverse });
+        var unset = a.iterator(.{ .kind = .unset, .direction = .reverse });
+        while (i > 0) {
+            i -= 1;
+            if (i & 1 != 0 or i & 2 == 0) {
+                try testing.expectEqual(@as(?usize, i), set.next());
+            } else {
+                try testing.expectEqual(@as(?usize, i), unset.next());
+            }
+        }
+        try testing.expectEqual(@as(?usize, null), set.next());
+        try testing.expectEqual(@as(?usize, null), set.next());
+        try testing.expectEqual(@as(?usize, null), set.next());
+        try testing.expectEqual(@as(?usize, null), unset.next());
+        try testing.expectEqual(@as(?usize, null), unset.next());
+        try testing.expectEqual(@as(?usize, null), unset.next());
+    }
+
+    a.toggleSet(b.*);
+    {
+        try testing.expectEqual(len / 4, a.count());
+
+        var i: usize = 0;
+        while (i < len) : (i += 1) {
+            try testing.expectEqual(i & 1 != 0 and i & 2 != 0, a.isSet(i));
+            try testing.expectEqual(i & 2 == 0, b.isSet(i));
+            if (i & 1 == 0) {
+                a.set(i);
+            } else {
+                a.unset(i);
+            }
+        }
+    }
+
+    a.setIntersection(b.*);
+    {
+        try testing.expectEqual((len + 3) / 4, a.count());
+
+        var i: usize = 0;
+        while (i < len) : (i += 1) {
+            try testing.expectEqual(i & 1 == 0 and i & 2 == 0, a.isSet(i));
+            try testing.expectEqual(i & 2 == 0, b.isSet(i));
+        }
+    }
+
+    a.toggleSet(a.*);
+    {
+        var iter = a.iterator(.{});
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(usize, 0), a.count());
+    }
+    {
+        var iter = a.iterator(.{ .direction = .reverse });
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(?usize, null), iter.next());
+        try testing.expectEqual(@as(usize, 0), a.count());
+    }
+
+    const test_bits = [_]usize{
+        0,  1,  2,   3,   4,   5,    6, 7, 9, 10, 11, 22, 31, 32, 63, 64,
+        66, 95, 127, 160, 192, 1000,
+    };
+    for (test_bits) |i| {
+        if (i < a.capacity()) {
+            a.set(i);
+        }
+    }
+
+    for (test_bits) |i| {
+        if (i < a.capacity()) {
+            try testing.expectEqual(@as(?usize, i), a.findFirstSet());
+            try testing.expectEqual(@as(?usize, i), a.toggleFirstSet());
+        }
+    }
+    try testing.expectEqual(@as(?usize, null), a.findFirstSet());
+    try testing.expectEqual(@as(?usize, null), a.toggleFirstSet());
+    try testing.expectEqual(@as(?usize, null), a.findFirstSet());
+    try testing.expectEqual(@as(?usize, null), a.toggleFirstSet());
+    try testing.expectEqual(@as(usize, 0), a.count());
+
+    a.setRangeValue(.{ .start = 0, .end = len }, false);
+    try testing.expectEqual(@as(usize, 0), a.count());
+
+    a.setRangeValue(.{ .start = 0, .end = len }, true);
+    try testing.expectEqual(len, a.count());
+
+    a.setRangeValue(.{ .start = 0, .end = len }, false);
+    a.setRangeValue(.{ .start = 0, .end = 0 }, true);
+    try testing.expectEqual(@as(usize, 0), a.count());
+
+    a.setRangeValue(.{ .start = len, .end = len }, true);
+    try testing.expectEqual(@as(usize, 0), a.count());
+
+    if (len >= 1) {
+        a.setRangeValue(.{ .start = 0, .end = len }, false);
+        a.setRangeValue(.{ .start = 0, .end = 1 }, true);
+        try testing.expectEqual(@as(usize, 1), a.count());
+        try testing.expect(a.isSet(0));
+
+        a.setRangeValue(.{ .start = 0, .end = len }, false);
+        a.setRangeValue(.{ .start = 0, .end = len - 1 }, true);
+        try testing.expectEqual(len - 1, a.count());
+        try testing.expect(!a.isSet(len - 1));
+
+        a.setRangeValue(.{ .start = 0, .end = len }, false);
+        a.setRangeValue(.{ .start = 1, .end = len }, true);
+        try testing.expectEqual(@as(usize, len - 1), a.count());
+        try testing.expect(!a.isSet(0));
+
+        a.setRangeValue(.{ .start = 0, .end = len }, false);
+        a.setRangeValue(.{ .start = len - 1, .end = len }, true);
+        try testing.expectEqual(@as(usize, 1), a.count());
+        try testing.expect(a.isSet(len - 1));
+
+        if (len >= 4) {
+            a.setRangeValue(.{ .start = 0, .end = len }, false);
+            a.setRangeValue(.{ .start = 1, .end = len - 2 }, true);
+            try testing.expectEqual(@as(usize, len - 3), a.count());
+            try testing.expect(!a.isSet(0));
+            try testing.expect(a.isSet(1));
+            try testing.expect(a.isSet(len - 3));
+            try testing.expect(!a.isSet(len - 2));
+            try testing.expect(!a.isSet(len - 1));
+        }
+    }
+}
+
+fn fillEven(set: anytype, len: usize) void {
+    var i: usize = 0;
+    while (i < len) : (i += 1) {
+        set.setValue(i, i & 1 == 0);
+    }
+}
+
+fn fillOdd(set: anytype, len: usize) void {
+    var i: usize = 0;
+    while (i < len) : (i += 1) {
+        set.setValue(i, i & 1 == 1);
+    }
+}
+
+fn testPureBitSet(comptime Set: type) !void {
+    const empty = Set.initEmpty();
+    const full = Set.initFull();
+
+    const even = even: {
+        var bit_set = Set.initEmpty();
+        fillEven(&bit_set, Set.bit_length);
+        break :even bit_set;
+    };
+
+    const odd = odd: {
+        var bit_set = Set.initEmpty();
+        fillOdd(&bit_set, Set.bit_length);
+        break :odd bit_set;
+    };
+
+    try testSubsetOf(empty, full, even, odd, Set.bit_length);
+    try testSupersetOf(empty, full, even, odd, Set.bit_length);
+
+    try testing.expect(empty.complement().eql(full));
+    try testing.expect(full.complement().eql(empty));
+    try testing.expect(even.complement().eql(odd));
+    try testing.expect(odd.complement().eql(even));
+
+    try testing.expect(empty.unionWith(empty).eql(empty));
+    try testing.expect(empty.unionWith(full).eql(full));
+    try testing.expect(full.unionWith(full).eql(full));
+    try testing.expect(full.unionWith(empty).eql(full));
+    try testing.expect(even.unionWith(odd).eql(full));
+    try testing.expect(odd.unionWith(even).eql(full));
+
+    try testing.expect(empty.intersectWith(empty).eql(empty));
+    try testing.expect(empty.intersectWith(full).eql(empty));
+    try testing.expect(full.intersectWith(full).eql(full));
+    try testing.expect(full.intersectWith(empty).eql(empty));
+    try testing.expect(even.intersectWith(odd).eql(empty));
+    try testing.expect(odd.intersectWith(even).eql(empty));
+
+    try testing.expect(empty.xorWith(empty).eql(empty));
+    try testing.expect(empty.xorWith(full).eql(full));
+    try testing.expect(full.xorWith(full).eql(empty));
+    try testing.expect(full.xorWith(empty).eql(full));
+    try testing.expect(even.xorWith(odd).eql(full));
+    try testing.expect(odd.xorWith(even).eql(full));
+
+    try testing.expect(empty.differenceWith(empty).eql(empty));
+    try testing.expect(empty.differenceWith(full).eql(empty));
+    try testing.expect(full.differenceWith(full).eql(empty));
+    try testing.expect(full.differenceWith(empty).eql(full));
+    try testing.expect(full.differenceWith(odd).eql(even));
+    try testing.expect(full.differenceWith(even).eql(odd));
+}
+
+fn testStaticBitSet(comptime Set: type) !void {
+    var a = Set.initEmpty();
+    var b = Set.initFull();
+    try testing.expectEqual(@as(usize, 0), a.count());
+    try testing.expectEqual(@as(usize, Set.bit_length), b.count());
+
+    try testEql(a, b, Set.bit_length);
+    try testBitSet(&a, &b, Set.bit_length);
+
+    try testPureBitSet(Set);
+}
+
+test "IntegerBitSet" {
+    try testStaticBitSet(IntegerBitSet(0));
+    try testStaticBitSet(IntegerBitSet(1));
+    try testStaticBitSet(IntegerBitSet(2));
+    try testStaticBitSet(IntegerBitSet(5));
+   
