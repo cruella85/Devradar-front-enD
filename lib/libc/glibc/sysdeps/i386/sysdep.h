@@ -102,4 +102,14 @@ GET_PC_THUNK(reg):							      \
   ".p2align 4\n"							\
   ".type " GET_PC_THUNK_STR (reg) ",@function\n"			\
 GET_PC_THUNK_STR (reg) ":"						\
-  "movl (%%esp), %%e" #reg "\n
+  "movl (%%esp), %%e" #reg "\n"						\
+  "ret\n"								\
+  ".size " GET_PC_THUNK_STR (reg) ", . - " GET_PC_THUNK_STR (reg) "\n"	\
+  ".previous\n"								\
+  ".endif\n"								\
+  "call " GET_PC_THUNK_STR (reg)
+
+# define LOAD_PIC_REG_STR(reg) \
+  SETUP_PIC_REG_STR (reg) "\naddl $_GLOBAL_OFFSET_TABLE_, %%e" #reg
+
+#endif	/* __ASSEMBLER__ */
