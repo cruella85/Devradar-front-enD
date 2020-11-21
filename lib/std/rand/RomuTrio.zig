@@ -124,4 +124,9 @@ test "RomuTrio fill" {
 test "RomuTrio buf seeding test" {
     const buf0 = @bitCast([24]u8, [3]u64{ 16294208416658607535, 13964609475759908645, 4703697494102998476 });
     const resulting_state = .{ .x = 16294208416658607535, .y = 13964609475759908645, .z = 4703697494102998476 };
-    var r = Rom
+    var r = RomuTrio.init(0);
+    r.seedWithBuf(buf0);
+    try std.testing.expect(r.x_state == resulting_state.x);
+    try std.testing.expect(r.y_state == resulting_state.y);
+    try std.testing.expect(r.z_state == resulting_state.z);
+}
