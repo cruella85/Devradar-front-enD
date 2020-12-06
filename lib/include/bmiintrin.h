@@ -366,4 +366,66 @@ _bextr_u64(unsigned long long __X, unsigned int __Y, unsigned int __Z)
 ///    extracted bits.
 /// \see __bextr_u64
 static __inline__ unsigned long long __DEFAULT_FN_ATTRS
-_bextr2_u64(unsigned long long __X, unsigne
+_bextr2_u64(unsigned long long __X, unsigned long long __Y) {
+  return __builtin_ia32_bextr_u64(__X, __Y);
+}
+
+/// Clears all bits in the source except for the least significant bit
+///    containing a value of 1 and returns the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BLSI </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer whose bits are to be cleared.
+/// \returns An unsigned 64-bit integer containing the result of clearing the
+///    bits from the source operand.
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+__blsi_u64(unsigned long long __X)
+{
+  return __X & -__X;
+}
+
+/// Creates a mask whose bits are set to 1, using bit 0 up to and
+///    including the least significant bit that is set to 1 in the source
+///    operand and returns the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BLSMSK </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer used to create the mask.
+/// \returns An unsigned 64-bit integer containing the newly created mask.
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+__blsmsk_u64(unsigned long long __X)
+{
+  return __X ^ (__X - 1);
+}
+
+/// Clears the least significant bit that is set to 1 in the source
+///    operand and returns the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BLSR </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer containing the operand to be cleared.
+/// \returns An unsigned 64-bit integer containing the result of clearing the
+///    source operand.
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+__blsr_u64(unsigned long long __X)
+{
+  return __X & (__X - 1);
+}
+
+#endif /* __x86_64__ */
+
+#undef __DEFAULT_FN_ATTRS
+
+#endif /* !(defined(_MSC_VER) || defined(__SCE__)) || __has_feature(modules)   \
+          || defined(__BMI__) */
+
+#endif /* __BMIINTRIN_H */
