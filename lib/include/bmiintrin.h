@@ -115,4 +115,255 @@ _mm_tzcnt_64(unsigned long long __X)
 
 #undef __RELAXED_FN_ATTRS
 
-#if !(defined(_MSC_V
+#if !(defined(_MSC_VER) || defined(__SCE__)) || __has_feature(modules) ||      \
+    defined(__BMI__)
+
+/* Define the default attributes for the functions in this file. */
+#define __DEFAULT_FN_ATTRS __attribute__((__always_inline__, __nodebug__, __target__("bmi")))
+
+#define _andn_u32(a, b)   (__andn_u32((a), (b)))
+
+/* _bextr_u32 != __bextr_u32 */
+#define _blsi_u32(a)      (__blsi_u32((a)))
+
+#define _blsmsk_u32(a)    (__blsmsk_u32((a)))
+
+#define _blsr_u32(a)      (__blsr_u32((a)))
+
+/// Performs a bitwise AND of the second operand with the one's
+///    complement of the first operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> ANDN </c> instruction.
+///
+/// \param __X
+///    An unsigned integer containing one of the operands.
+/// \param __Y
+///    An unsigned integer containing one of the operands.
+/// \returns An unsigned integer containing the bitwise AND of the second
+///    operand with the one's complement of the first operand.
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+__andn_u32(unsigned int __X, unsigned int __Y)
+{
+  return ~__X & __Y;
+}
+
+/* AMD-specified, double-leading-underscore version of BEXTR */
+/// Extracts the specified bits from the first operand and returns them
+///    in the least significant bits of the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BEXTR </c> instruction.
+///
+/// \param __X
+///    An unsigned integer whose bits are to be extracted.
+/// \param __Y
+///    An unsigned integer used to specify which bits are extracted. Bits [7:0]
+///    specify the index of the least significant bit. Bits [15:8] specify the
+///    number of bits to be extracted.
+/// \returns An unsigned integer whose least significant bits contain the
+///    extracted bits.
+/// \see _bextr_u32
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+__bextr_u32(unsigned int __X, unsigned int __Y)
+{
+  return __builtin_ia32_bextr_u32(__X, __Y);
+}
+
+/* Intel-specified, single-leading-underscore version of BEXTR */
+/// Extracts the specified bits from the first operand and returns them
+///    in the least significant bits of the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BEXTR </c> instruction.
+///
+/// \param __X
+///    An unsigned integer whose bits are to be extracted.
+/// \param __Y
+///    An unsigned integer used to specify the index of the least significant
+///    bit for the bits to be extracted. Bits [7:0] specify the index.
+/// \param __Z
+///    An unsigned integer used to specify the number of bits to be extracted.
+///    Bits [7:0] specify the number of bits.
+/// \returns An unsigned integer whose least significant bits contain the
+///    extracted bits.
+/// \see __bextr_u32
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+_bextr_u32(unsigned int __X, unsigned int __Y, unsigned int __Z)
+{
+  return __builtin_ia32_bextr_u32 (__X, ((__Y & 0xff) | ((__Z & 0xff) << 8)));
+}
+
+/* Intel-specified, single-leading-underscore version of BEXTR2 */
+/// Extracts the specified bits from the first operand and returns them
+///    in the least significant bits of the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BEXTR </c> instruction.
+///
+/// \param __X
+///    An unsigned integer whose bits are to be extracted.
+/// \param __Y
+///    An unsigned integer used to specify which bits are extracted. Bits [7:0]
+///    specify the index of the least significant bit. Bits [15:8] specify the
+///    number of bits to be extracted.
+/// \returns An unsigned integer whose least significant bits contain the
+///    extracted bits.
+/// \see __bextr_u32
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+_bextr2_u32(unsigned int __X, unsigned int __Y) {
+  return __builtin_ia32_bextr_u32(__X, __Y);
+}
+
+/// Clears all bits in the source except for the least significant bit
+///    containing a value of 1 and returns the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BLSI </c> instruction.
+///
+/// \param __X
+///    An unsigned integer whose bits are to be cleared.
+/// \returns An unsigned integer containing the result of clearing the bits from
+///    the source operand.
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+__blsi_u32(unsigned int __X)
+{
+  return __X & -__X;
+}
+
+/// Creates a mask whose bits are set to 1, using bit 0 up to and
+///    including the least significant bit that is set to 1 in the source
+///    operand and returns the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BLSMSK </c> instruction.
+///
+/// \param __X
+///    An unsigned integer used to create the mask.
+/// \returns An unsigned integer containing the newly created mask.
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+__blsmsk_u32(unsigned int __X)
+{
+  return __X ^ (__X - 1);
+}
+
+/// Clears the least significant bit that is set to 1 in the source
+///    operand and returns the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BLSR </c> instruction.
+///
+/// \param __X
+///    An unsigned integer containing the operand to be cleared.
+/// \returns An unsigned integer containing the result of clearing the source
+///    operand.
+static __inline__ unsigned int __DEFAULT_FN_ATTRS
+__blsr_u32(unsigned int __X)
+{
+  return __X & (__X - 1);
+}
+
+#ifdef __x86_64__
+
+#define _andn_u64(a, b)   (__andn_u64((a), (b)))
+
+/* _bextr_u64 != __bextr_u64 */
+#define _blsi_u64(a)      (__blsi_u64((a)))
+
+#define _blsmsk_u64(a)    (__blsmsk_u64((a)))
+
+#define _blsr_u64(a)      (__blsr_u64((a)))
+
+/// Performs a bitwise AND of the second operand with the one's
+///    complement of the first operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> ANDN </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer containing one of the operands.
+/// \param __Y
+///    An unsigned 64-bit integer containing one of the operands.
+/// \returns An unsigned 64-bit integer containing the bitwise AND of the second
+///    operand with the one's complement of the first operand.
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+__andn_u64 (unsigned long long __X, unsigned long long __Y)
+{
+  return ~__X & __Y;
+}
+
+/* AMD-specified, double-leading-underscore version of BEXTR */
+/// Extracts the specified bits from the first operand and returns them
+///    in the least significant bits of the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BEXTR </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer whose bits are to be extracted.
+/// \param __Y
+///    An unsigned 64-bit integer used to specify which bits are extracted. Bits
+///    [7:0] specify the index of the least significant bit. Bits [15:8] specify
+///    the number of bits to be extracted.
+/// \returns An unsigned 64-bit integer whose least significant bits contain the
+///    extracted bits.
+/// \see _bextr_u64
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+__bextr_u64(unsigned long long __X, unsigned long long __Y)
+{
+  return __builtin_ia32_bextr_u64(__X, __Y);
+}
+
+/* Intel-specified, single-leading-underscore version of BEXTR */
+/// Extracts the specified bits from the first operand and returns them
+///     in the least significant bits of the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BEXTR </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer whose bits are to be extracted.
+/// \param __Y
+///    An unsigned integer used to specify the index of the least significant
+///    bit for the bits to be extracted. Bits [7:0] specify the index.
+/// \param __Z
+///    An unsigned integer used to specify the number of bits to be extracted.
+///    Bits [7:0] specify the number of bits.
+/// \returns An unsigned 64-bit integer whose least significant bits contain the
+///    extracted bits.
+/// \see __bextr_u64
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+_bextr_u64(unsigned long long __X, unsigned int __Y, unsigned int __Z)
+{
+  return __builtin_ia32_bextr_u64 (__X, ((__Y & 0xff) | ((__Z & 0xff) << 8)));
+}
+
+/* Intel-specified, single-leading-underscore version of BEXTR2 */
+/// Extracts the specified bits from the first operand and returns them
+///    in the least significant bits of the result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> BEXTR </c> instruction.
+///
+/// \param __X
+///    An unsigned 64-bit integer whose bits are to be extracted.
+/// \param __Y
+///    An unsigned 64-bit integer used to specify which bits are extracted. Bits
+///    [7:0] specify the index of the least significant bit. Bits [15:8] specify
+///    the number of bits to be extracted.
+/// \returns An unsigned 64-bit integer whose least significant bits contain the
+///    extracted bits.
+/// \see __bextr_u64
+static __inline__ unsigned long long __DEFAULT_FN_ATTRS
+_bextr2_u64(unsigned long long __X, unsigne
