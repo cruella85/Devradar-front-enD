@@ -914,4 +914,228 @@ pub const LVM_GETITEMPOSITION = 0x1010;
 pub const LVM_GETSTRINGWIDTHA = 0x1011;
 pub const LVM_HITTEST = 0x1012;
 pub const LVM_ENSUREVISIBLE = 0x1013;
-p
+pub const LVM_SCROLL = 0x1014;
+pub const LVM_REDRAWITEMS = 0x1015;
+pub const LVM_ARRANGE = 0x1016;
+pub const LVM_EDITLABELA = 0x1017;
+pub const LVM_GETEDITCONTROL = 0x1018;
+pub const LVM_GETCOLUMNA = 0x1019;
+pub const LVM_SETCOLUMNA = 0x101A;
+pub const LVM_INSERTCOLUMNA = 0x101B;
+pub const LVM_DELETECOLUMN = 0x101C;
+pub const LVM_GETCOLUMNWIDTH = 0x101D;
+pub const LVM_SETCOLUMNWIDTH = 0x101E;
+pub const LVM_GETHEADER = 0x101F;
+pub const LVM_CREATEDRAGIMAGE = 0x1021;
+pub const LVM_GETVIEWRECT = 0x1022;
+pub const LVM_GETTEXTCOLOR = 0x1023;
+pub const LVM_SETTEXTCOLOR = 0x1024;
+pub const LVM_GETTEXTBKCOLOR = 0x1025;
+pub const LVM_SETTEXTBKCOLOR = 0x1026;
+pub const LVM_GETTOPINDEX = 0x1027;
+pub const LVM_GETCOUNTPERPAGE = 0x1028;
+pub const LVM_GETORIGIN = 0x1029;
+pub const LVM_UPDATE = 0x102A;
+pub const LVM_SETITEMSTATE = 0x102B;
+pub const LVM_GETITEMSTATE = 0x102C;
+pub const LVM_GETITEMTEXTA = 0x102D;
+pub const LVM_SETITEMTEXTA = 0x102E;
+pub const LVM_SETITEMCOUNT = 0x102F;
+pub const LVM_SORTITEMS = 0x1030;
+pub const LVM_SETITEMPOSITION32 = 0x1031;
+pub const LVM_GETSELECTEDCOUNT = 0x1032;
+pub const LVM_GETITEMSPACING = 0x1033;
+pub const LVM_GETISEARCHSTRINGA = 0x1034;
+pub const LVM_SETICONSPACING = 0x1035;
+pub const LVM_SETEXTENDEDLISTVIEWSTYLE = 0x1036;
+pub const LVM_GETEXTENDEDLISTVIEWSTYLE = 0x1037;
+pub const LVM_GETSUBITEMRECT = 0x1038;
+pub const LVM_SUBITEMHITTEST = 0x1039;
+pub const LVM_SETCOLUMNORDERARRAY = 0x103A;
+pub const LVM_GETCOLUMNORDERARRAY = 0x103B;
+pub const LVM_SETHOTITEM = 0x103C;
+pub const LVM_GETHOTITEM = 0x103D;
+pub const LVM_SETHOTCURSOR = 0x103E;
+pub const LVM_GETHOTCURSOR = 0x103F;
+pub const LVM_APPROXIMATEVIEWRECT = 0x1040;
+pub const LVM_SETWORKAREAS = 0x1041;
+pub const LVM_GETSELECTIONMARK = 0x1042;
+pub const LVM_SETSELECTIONMARK = 0x1043;
+pub const LVM_SETBKIMAGEA = 0x1044;
+pub const LVM_GETBKIMAGEA = 0x1045;
+pub const LVM_GETWORKAREAS = 0x1046;
+pub const LVM_SETHOVERTIME = 0x1047;
+pub const LVM_GETHOVERTIME = 0x1048;
+pub const LVM_GETNUMBEROFWORKAREAS = 0x1049;
+pub const LVM_SETTOOLTIPS = 0x104A;
+pub const LVM_GETITEMW = 0x104B;
+pub const LVM_SETITEMW = 0x104C;
+pub const LVM_INSERTITEMW = 0x104D;
+pub const LVM_GETTOOLTIPS = 0x104E;
+pub const LVM_FINDITEMW = 0x1053;
+pub const LVM_GETSTRINGWIDTHW = 0x1057;
+pub const LVM_GETCOLUMNW = 0x105F;
+pub const LVM_SETCOLUMNW = 0x1060;
+pub const LVM_INSERTCOLUMNW = 0x1061;
+pub const LVM_GETITEMTEXTW = 0x1073;
+pub const LVM_SETITEMTEXTW = 0x1074;
+pub const LVM_GETISEARCHSTRINGW = 0x1075;
+pub const LVM_EDITLABELW = 0x1076;
+pub const LVM_GETBKIMAGEW = 0x108B;
+pub const LVM_SETSELECTEDCOLUMN = 0x108C;
+pub const LVM_SETTILEWIDTH = 0x108D;
+pub const LVM_SETVIEW = 0x108E;
+pub const LVM_GETVIEW = 0x108F;
+pub const LVM_INSERTGROUP = 0x1091;
+pub const LVM_SETGROUPINFO = 0x1093;
+pub const LVM_GETGROUPINFO = 0x1095;
+pub const LVM_REMOVEGROUP = 0x1096;
+pub const LVM_MOVEGROUP = 0x1097;
+pub const LVM_MOVEITEMTOGROUP = 0x109A;
+pub const LVM_SETGROUPMETRICS = 0x109B;
+pub const LVM_GETGROUPMETRICS = 0x109C;
+pub const LVM_ENABLEGROUPVIEW = 0x109D;
+pub const LVM_SORTGROUPS = 0x109E;
+pub const LVM_INSERTGROUPSORTED = 0x109F;
+pub const LVM_REMOVEALLGROUPS = 0x10A0;
+pub const LVM_HASGROUP = 0x10A1;
+pub const LVM_SETTILEVIEWINFO = 0x10A2;
+pub const LVM_GETTILEVIEWINFO = 0x10A3;
+pub const LVM_SETTILEINFO = 0x10A4;
+pub const LVM_GETTILEINFO = 0x10A5;
+pub const LVM_SETINSERTMARK = 0x10A6;
+pub const LVM_GETINSERTMARK = 0x10A7;
+pub const LVM_INSERTMARKHITTEST = 0x10A8;
+pub const LVM_GETINSERTMARKRECT = 0x10A9;
+pub const LVM_SETINSERTMARKCOLOR = 0x10AA;
+pub const LVM_GETINSERTMARKCOLOR = 0x10AB;
+pub const LVM_SETINFOTIP = 0x10AD;
+pub const LVM_GETSELECTEDCOLUMN = 0x10AE;
+pub const LVM_ISGROUPVIEWENABLED = 0x10AF;
+pub const LVM_GETOUTLINECOLOR = 0x10B0;
+pub const LVM_SETOUTLINECOLOR = 0x10B1;
+pub const LVM_CANCELEDITLABEL = 0x10B3;
+pub const LVM_MAPINDEXTOID = 0x10B4;
+pub const LVM_MAPIDTOINDEX = 0x10B5;
+pub const LVM_ISITEMVISIBLE = 0x10B6;
+pub const OCM__BASE = 0x2000;
+pub const LVM_SETUNICODEFORMAT = 0x2005;
+pub const LVM_GETUNICODEFORMAT = 0x2006;
+pub const OCM_CTLCOLOR = 0x2019;
+pub const OCM_DRAWITEM = 0x202B;
+pub const OCM_MEASUREITEM = 0x202C;
+pub const OCM_DELETEITEM = 0x202D;
+pub const OCM_VKEYTOITEM = 0x202E;
+pub const OCM_CHARTOITEM = 0x202F;
+pub const OCM_COMPAREITEM = 0x2039;
+pub const OCM_NOTIFY = 0x204E;
+pub const OCM_COMMAND = 0x2111;
+pub const OCM_HSCROLL = 0x2114;
+pub const OCM_VSCROLL = 0x2115;
+pub const OCM_CTLCOLORMSGBOX = 0x2132;
+pub const OCM_CTLCOLOREDIT = 0x2133;
+pub const OCM_CTLCOLORLISTBOX = 0x2134;
+pub const OCM_CTLCOLORBTN = 0x2135;
+pub const OCM_CTLCOLORDLG = 0x2136;
+pub const OCM_CTLCOLORSCROLLBAR = 0x2137;
+pub const OCM_CTLCOLORSTATIC = 0x2138;
+pub const OCM_PARENTNOTIFY = 0x2210;
+pub const WM_APP = 0x8000;
+pub const WM_RASDIALEVENT = 0xCCCD;
+
+pub extern "user32" fn GetMessageA(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: UINT, wMsgFilterMax: UINT) callconv(WINAPI) BOOL;
+pub fn getMessageA(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: u32, wMsgFilterMax: u32) !void {
+    const r = GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+    if (r == 0) return error.Quit;
+    if (r != -1) return;
+    switch (GetLastError()) {
+        .INVALID_WINDOW_HANDLE => unreachable,
+        .INVALID_PARAMETER => unreachable,
+        else => |err| return windows.unexpectedError(err),
+    }
+}
+
+pub extern "user32" fn GetMessageW(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: UINT, wMsgFilterMax: UINT) callconv(WINAPI) BOOL;
+pub var pfnGetMessageW: *const @TypeOf(GetMessageW) = undefined;
+pub fn getMessageW(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: u32, wMsgFilterMax: u32) !void {
+    const function = selectSymbol(GetMessageW, pfnGetMessageW, .win2k);
+
+    const r = function(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+    if (r == 0) return error.Quit;
+    if (r != -1) return;
+    switch (GetLastError()) {
+        .INVALID_WINDOW_HANDLE => unreachable,
+        .INVALID_PARAMETER => unreachable,
+        else => |err| return windows.unexpectedError(err),
+    }
+}
+
+pub const PM_NOREMOVE = 0x0000;
+pub const PM_REMOVE = 0x0001;
+pub const PM_NOYIELD = 0x0002;
+
+pub extern "user32" fn PeekMessageA(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: UINT, wMsgFilterMax: UINT, wRemoveMsg: UINT) callconv(WINAPI) BOOL;
+pub fn peekMessageA(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: u32, wMsgFilterMax: u32, wRemoveMsg: u32) !bool {
+    const r = PeekMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+    if (r == 0) return false;
+    if (r != -1) return true;
+    switch (GetLastError()) {
+        .INVALID_WINDOW_HANDLE => unreachable,
+        .INVALID_PARAMETER => unreachable,
+        else => |err| return windows.unexpectedError(err),
+    }
+}
+
+pub extern "user32" fn PeekMessageW(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: UINT, wMsgFilterMax: UINT, wRemoveMsg: UINT) callconv(WINAPI) BOOL;
+pub var pfnPeekMessageW: *const @TypeOf(PeekMessageW) = undefined;
+pub fn peekMessageW(lpMsg: *MSG, hWnd: ?HWND, wMsgFilterMin: u32, wMsgFilterMax: u32, wRemoveMsg: u32) !bool {
+    const function = selectSymbol(PeekMessageW, pfnPeekMessageW, .win2k);
+
+    const r = function(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+    if (r == 0) return false;
+    if (r != -1) return true;
+    switch (GetLastError()) {
+        .INVALID_WINDOW_HANDLE => unreachable,
+        .INVALID_PARAMETER => unreachable,
+        else => |err| return windows.unexpectedError(err),
+    }
+}
+
+pub extern "user32" fn TranslateMessage(lpMsg: *const MSG) callconv(WINAPI) BOOL;
+pub fn translateMessage(lpMsg: *const MSG) bool {
+    return if (TranslateMessage(lpMsg) == 0) false else true;
+}
+
+pub extern "user32" fn DispatchMessageA(lpMsg: *const MSG) callconv(WINAPI) LRESULT;
+pub fn dispatchMessageA(lpMsg: *const MSG) LRESULT {
+    return DispatchMessageA(lpMsg);
+}
+
+pub extern "user32" fn DispatchMessageW(lpMsg: *const MSG) callconv(WINAPI) LRESULT;
+pub var pfnDispatchMessageW: *const @TypeOf(DispatchMessageW) = undefined;
+pub fn dispatchMessageW(lpMsg: *const MSG) LRESULT {
+    const function = selectSymbol(DispatchMessageW, pfnDispatchMessageW, .win2k);
+    return function(lpMsg);
+}
+
+pub extern "user32" fn PostQuitMessage(nExitCode: i32) callconv(WINAPI) void;
+pub fn postQuitMessage(nExitCode: i32) void {
+    PostQuitMessage(nExitCode);
+}
+
+pub extern "user32" fn DefWindowProcA(hWnd: HWND, Msg: UINT, wParam: WPARAM, lParam: LPARAM) callconv(WINAPI) LRESULT;
+pub fn defWindowProcA(hWnd: HWND, Msg: UINT, wParam: WPARAM, lParam: LPARAM) LRESULT {
+    return DefWindowProcA(hWnd, Msg, wParam, lParam);
+}
+
+pub extern "user32" fn DefWindowProcW(hWnd: HWND, Msg: UINT, wParam: WPARAM, lParam: LPARAM) callconv(WINAPI) LRESULT;
+pub var pfnDefWindowProcW: *const @TypeOf(DefWindowProcW) = undefined;
+pub fn defWindowProcW(hWnd: HWND, Msg: UINT, wParam: WPARAM, lParam: LPARAM) LRESULT {
+    const function = selectSymbol(DefWindowProcW, pfnDefWindowProcW, .win2k);
+    return function(hWnd, Msg, wParam, lParam);
+}
+
+// === Windows ===
+
+pub const CS_VREDRAW = 0x0001;
+pub
