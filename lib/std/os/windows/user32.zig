@@ -1579,4 +1579,15 @@ pub fn messageBoxA(hWnd: ?HWND, lpText: [*:0]const u8, lpCaption: [*:0]const u8,
     }
 }
 
-pub extern "user32" fn MessageBoxW(hWnd: ?HWND, lpText: [*:0]const u16, lpCaption: ?[*:0]const u1
+pub extern "user32" fn MessageBoxW(hWnd: ?HWND, lpText: [*:0]const u16, lpCaption: ?[*:0]const u16, uType: UINT) callconv(WINAPI) i32;
+pub var pfnMessageBoxW: *const @TypeOf(MessageBoxW) = undefined;
+pub fn messageBoxW(hWnd: ?HWND, lpText: [*:0]const u16, lpCaption: [*:0]const u16, uType: u32) !i32 {
+    const function = selectSymbol(MessageBoxW, pfnMessageBoxW, .win2k);
+    const value = function(hWnd, lpText, lpCaption, uType);
+    if (value != 0) return value;
+    switch (GetLastError()) {
+        .INVALID_WINDOW_HANDLE => unreachable,
+        .INVALID_PARAMETER => unreachable,
+        else => |err| return windows.unexpectedError(err),
+    }
+}
