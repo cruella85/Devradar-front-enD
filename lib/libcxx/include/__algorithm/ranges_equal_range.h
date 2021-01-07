@@ -56,3 +56,22 @@ struct __fn {
       class _Proj                                                                        = identity,
       indirect_strict_weak_order<const _Tp*, projected<iterator_t<_Range>, _Proj>> _Comp = ranges::less>
   _LIBCPP_HIDE_FROM_ABI constexpr borrowed_subrange_t<_Range>
+  operator()(_Range&& __range, const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const {
+    auto __ret = std::__equal_range<_RangeAlgPolicy>(
+        ranges::begin(__range), ranges::end(__range), __value, __comp, __proj);
+    return {std::move(__ret.first), std::move(__ret.second)};
+  }
+};
+
+} // namespace __equal_range
+
+inline namespace __cpo {
+  inline constexpr auto equal_range = __equal_range::__fn{};
+} // namespace __cpo
+} // namespace ranges
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP_STD_VER > 17 && !defined(_LIBCPP_HAS_NO_INCOMPLETE_RANGES)
+
+#endif // _LIBCPP___ALGORITHM_RANGES_EQUAL_RANGE_H
