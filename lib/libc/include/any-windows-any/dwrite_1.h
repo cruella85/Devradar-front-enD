@@ -487,4 +487,291 @@ typedef struct DWRITE_CARET_METRICS {
     INT16 slopeRise;
     INT16 slopeRun;
     INT16 offset;
-} DWRITE_CARET_METRIC
+} DWRITE_CARET_METRICS;
+typedef union DWRITE_PANOSE {
+    UINT8 values[10];
+    UINT8 familyKind;
+    struct {
+        UINT8 familyKind;
+        UINT8 serifStyle;
+        UINT8 weight;
+        UINT8 proportion;
+        UINT8 contrast;
+        UINT8 strokeVariation;
+        UINT8 armStyle;
+        UINT8 letterform;
+        UINT8 midline;
+        UINT8 xHeight;
+    } text;
+    struct {
+        UINT8 familyKind;
+        UINT8 toolKind;
+        UINT8 weight;
+        UINT8 spacing;
+        UINT8 aspectRatio;
+        UINT8 contrast;
+        UINT8 scriptTopology;
+        UINT8 scriptForm;
+        UINT8 finials;
+        UINT8 xAscent;
+    } script;
+    struct {
+        UINT8 familyKind;
+        UINT8 decorativeClass;
+        UINT8 weight;
+        UINT8 aspect;
+        UINT8 contrast;
+        UINT8 serifVariant;
+        UINT8 fill;
+        UINT8 lining;
+        UINT8 decorativeTopology;
+        UINT8 characterRange;
+    } decorative;
+    struct {
+        UINT8 familyKind;
+        UINT8 symbolKind;
+        UINT8 weight;
+        UINT8 spacing;
+        UINT8 aspectRatioAndContrast;
+        UINT8 aspectRatio94;
+        UINT8 aspectRatio119;
+        UINT8 aspectRatio157;
+        UINT8 aspectRatio163;
+        UINT8 aspectRatio211;
+    } symbol;
+} DWRITE_PANOSE;
+typedef struct DWRITE_UNICODE_RANGE {
+    UINT32 first;
+    UINT32 last;
+} DWRITE_UNICODE_RANGE;
+typedef struct DWRITE_SCRIPT_PROPERTIES {
+    UINT32 isoScriptCode;
+    UINT32 isoScriptNumber;
+    UINT32 clusterLookahead;
+    UINT32 justificationCharacter;
+    UINT32 restrictCaretToClusters : 1;
+    UINT32 usesWordDividers : 1;
+    UINT32 isDiscreteWriting : 1;
+    UINT32 isBlockWriting : 1;
+    UINT32 isDistributedWithinCluster : 1;
+    UINT32 isConnectedWriting : 1;
+    UINT32 isCursiveWriting : 1;
+    UINT32 reserved : 25;
+} DWRITE_SCRIPT_PROPERTIES;
+typedef struct DWRITE_JUSTIFICATION_OPPORTUNITY {
+    FLOAT expansionMinimum;
+    FLOAT expansionMaximum;
+    FLOAT compressionMaximum;
+    UINT32 expansionPriority : 8;
+    UINT32 compressionPriority : 8;
+    UINT32 allowResidualExpansion : 1;
+    UINT32 allowResidualCompression : 1;
+    UINT32 applyToLeadingEdge : 1;
+    UINT32 applyToTrailingEdge : 1;
+    UINT32 reserved : 12;
+} DWRITE_JUSTIFICATION_OPPORTUNITY;
+#ifndef __IDWriteTextAnalysisSource1_FWD_DEFINED__
+#define __IDWriteTextAnalysisSource1_FWD_DEFINED__
+typedef interface IDWriteTextAnalysisSource1 IDWriteTextAnalysisSource1;
+#ifdef __cplusplus
+interface IDWriteTextAnalysisSource1;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IDWriteTextAnalysisSink1_FWD_DEFINED__
+#define __IDWriteTextAnalysisSink1_FWD_DEFINED__
+typedef interface IDWriteTextAnalysisSink1 IDWriteTextAnalysisSink1;
+#ifdef __cplusplus
+interface IDWriteTextAnalysisSink1;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IDWriteRenderingParams1_FWD_DEFINED__
+#define __IDWriteRenderingParams1_FWD_DEFINED__
+typedef interface IDWriteRenderingParams1 IDWriteRenderingParams1;
+#ifdef __cplusplus
+interface IDWriteRenderingParams1;
+#endif /* __cplusplus */
+#endif
+
+/*****************************************************************************
+ * IDWriteFactory1 interface
+ */
+#ifndef __IDWriteFactory1_INTERFACE_DEFINED__
+#define __IDWriteFactory1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteFactory1, 0x30572f99, 0xdac6, 0x41db, 0xa1,0x6e, 0x04,0x86,0x30,0x7e,0x60,0x6a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("30572f99-dac6-41db-a16e-0486307e606a")
+IDWriteFactory1 : public IDWriteFactory
+{
+    virtual HRESULT STDMETHODCALLTYPE GetEudcFontCollection(
+        IDWriteFontCollection **collection,
+        WINBOOL check_for_updates = FALSE) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateCustomRenderingParams(
+        FLOAT gamma,
+        FLOAT enhcontrast,
+        FLOAT enhcontrast_grayscale,
+        FLOAT cleartype_level,
+        DWRITE_PIXEL_GEOMETRY geometry,
+        DWRITE_RENDERING_MODE mode,
+        IDWriteRenderingParams1 **params) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteFactory1, 0x30572f99, 0xdac6, 0x41db, 0xa1,0x6e, 0x04,0x86,0x30,0x7e,0x60,0x6a)
+#endif
+#else
+typedef struct IDWriteFactory1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteFactory1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteFactory1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteFactory1 *This);
+
+    /*** IDWriteFactory methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetSystemFontCollection)(
+        IDWriteFactory1 *This,
+        IDWriteFontCollection **collection,
+        WINBOOL check_for_updates);
+
+    HRESULT (STDMETHODCALLTYPE *CreateCustomFontCollection)(
+        IDWriteFactory1 *This,
+        IDWriteFontCollectionLoader *loader,
+        const void *key,
+        UINT32 key_size,
+        IDWriteFontCollection **collection);
+
+    HRESULT (STDMETHODCALLTYPE *RegisterFontCollectionLoader)(
+        IDWriteFactory1 *This,
+        IDWriteFontCollectionLoader *loader);
+
+    HRESULT (STDMETHODCALLTYPE *UnregisterFontCollectionLoader)(
+        IDWriteFactory1 *This,
+        IDWriteFontCollectionLoader *loader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateFontFileReference)(
+        IDWriteFactory1 *This,
+        const WCHAR *path,
+        const FILETIME *writetime,
+        IDWriteFontFile **font_file);
+
+    HRESULT (STDMETHODCALLTYPE *CreateCustomFontFileReference)(
+        IDWriteFactory1 *This,
+        const void *reference_key,
+        UINT32 key_size,
+        IDWriteFontFileLoader *loader,
+        IDWriteFontFile **font_file);
+
+    HRESULT (STDMETHODCALLTYPE *CreateFontFace)(
+        IDWriteFactory1 *This,
+        DWRITE_FONT_FACE_TYPE facetype,
+        UINT32 files_number,
+        IDWriteFontFile *const *font_files,
+        UINT32 index,
+        DWRITE_FONT_SIMULATIONS sim_flags,
+        IDWriteFontFace **font_face);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRenderingParams)(
+        IDWriteFactory1 *This,
+        IDWriteRenderingParams **params);
+
+    HRESULT (STDMETHODCALLTYPE *CreateMonitorRenderingParams)(
+        IDWriteFactory1 *This,
+        HMONITOR monitor,
+        IDWriteRenderingParams **params);
+
+    HRESULT (STDMETHODCALLTYPE *CreateCustomRenderingParams)(
+        IDWriteFactory1 *This,
+        FLOAT gamma,
+        FLOAT enhancedContrast,
+        FLOAT cleartype_level,
+        DWRITE_PIXEL_GEOMETRY geometry,
+        DWRITE_RENDERING_MODE mode,
+        IDWriteRenderingParams **params);
+
+    HRESULT (STDMETHODCALLTYPE *RegisterFontFileLoader)(
+        IDWriteFactory1 *This,
+        IDWriteFontFileLoader *loader);
+
+    HRESULT (STDMETHODCALLTYPE *UnregisterFontFileLoader)(
+        IDWriteFactory1 *This,
+        IDWriteFontFileLoader *loader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTextFormat)(
+        IDWriteFactory1 *This,
+        const WCHAR *family_name,
+        IDWriteFontCollection *collection,
+        DWRITE_FONT_WEIGHT weight,
+        DWRITE_FONT_STYLE style,
+        DWRITE_FONT_STRETCH stretch,
+        FLOAT size,
+        const WCHAR *locale,
+        IDWriteTextFormat **format);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTypography)(
+        IDWriteFactory1 *This,
+        IDWriteTypography **typography);
+
+    HRESULT (STDMETHODCALLTYPE *GetGdiInterop)(
+        IDWriteFactory1 *This,
+        IDWriteGdiInterop **gdi_interop);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTextLayout)(
+        IDWriteFactory1 *This,
+        const WCHAR *string,
+        UINT32 len,
+        IDWriteTextFormat *format,
+        FLOAT max_width,
+        FLOAT max_height,
+        IDWriteTextLayout **layout);
+
+    HRESULT (STDMETHODCALLTYPE *CreateGdiCompatibleTextLayout)(
+        IDWriteFactory1 *This,
+        const WCHAR *string,
+        UINT32 len,
+        IDWriteTextFormat *format,
+        FLOAT layout_width,
+        FLOAT layout_height,
+        FLOAT pixels_per_dip,
+        const DWRITE_MATRIX *transform,
+        WINBOOL use_gdi_natural,
+        IDWriteTextLayout **layout);
+
+    HRESULT (STDMETHODCALLTYPE *CreateEllipsisTrimmingSign)(
+        IDWriteFactory1 *This,
+        IDWriteTextFormat *format,
+        IDWriteInlineObject **trimming_sign);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTextAnalyzer)(
+        IDWriteFactory1 *This,
+        IDWriteTextAnalyzer **analyzer);
+
+    HRESULT (STDMETHODCALLTYPE *CreateNumberSubstitution)(
+        IDWriteFactory1 *This,
+        DWRITE_NUMBER_SUBSTITUTION_METHOD method,
+        const WCHAR *locale,
+        WINBOOL ignore_user_override,
+        IDWriteNumberSubstitution **substitution);
+
+    HRESULT (STDMETHODCALLTYPE *CreateGlyphRunAnalysis)(
+        IDWriteFactory1 *This,
+        const DWRITE_GLYPH_RUN *glyph_run,
+        FLOAT pixels_per_dip,
+        const DWRITE_MATRIX *transform,
+        DWRITE_RENDERING_MODE rendering_mode,
+        DWRITE_MEASURING_MODE measuring_mode,
+        FLOAT baseline_x,
+        FLOAT baseline_y,
+        IDWriteGlyphRunAnalysis **analysis);
+
+    /*** IDWriteFactory1
