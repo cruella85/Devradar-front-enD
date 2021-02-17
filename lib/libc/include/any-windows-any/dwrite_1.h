@@ -1251,4 +1251,207 @@ static FORCEINLINE HRESULT IDWriteFontFace1_GetGlyphRunOutline(IDWriteFontFace1*
     return This->lpVtbl->GetGlyphRunOutline(This,emSize,glyph_indices,glyph_advances,glyph_offsets,glyph_count,is_sideways,is_rtl,geometrysink);
 }
 static FORCEINLINE HRESULT IDWriteFontFace1_GetGdiCompatibleGlyphMetrics(IDWriteFontFace1* This,FLOAT emSize,FLOAT pixels_per_dip,const DWRITE_MATRIX *transform,WINBOOL use_gdi_natural,const UINT16 *glyph_indices,UINT32 glyph_count,DWRITE_GLYPH_METRICS *metrics,WINBOOL is_sideways) {
-    return This->lpVtbl->GetGdiCompatib
+    return This->lpVtbl->GetGdiCompatibleGlyphMetrics(This,emSize,pixels_per_dip,transform,use_gdi_natural,glyph_indices,glyph_count,metrics,is_sideways);
+}
+/*** IDWriteFontFace1 methods ***/
+static FORCEINLINE void IDWriteFontFace1_GetMetrics(IDWriteFontFace1* This,DWRITE_FONT_METRICS1 *metrics) {
+    This->lpVtbl->IDWriteFontFace1_GetMetrics(This,metrics);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetGdiCompatibleMetrics(IDWriteFontFace1* This,FLOAT em_size,FLOAT pixels_per_dip,const DWRITE_MATRIX *transform,DWRITE_FONT_METRICS1 *metrics) {
+    return This->lpVtbl->IDWriteFontFace1_GetGdiCompatibleMetrics(This,em_size,pixels_per_dip,transform,metrics);
+}
+static FORCEINLINE void IDWriteFontFace1_GetCaretMetrics(IDWriteFontFace1* This,DWRITE_CARET_METRICS *metrics) {
+    This->lpVtbl->GetCaretMetrics(This,metrics);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetUnicodeRanges(IDWriteFontFace1* This,UINT32 max_count,DWRITE_UNICODE_RANGE *ranges,UINT32 *count) {
+    return This->lpVtbl->GetUnicodeRanges(This,max_count,ranges,count);
+}
+static FORCEINLINE WINBOOL IDWriteFontFace1_IsMonospacedFont(IDWriteFontFace1* This) {
+    return This->lpVtbl->IsMonospacedFont(This);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetDesignGlyphAdvances(IDWriteFontFace1* This,UINT32 glyph_count,const UINT16 *indices,INT32 *advances,WINBOOL is_sideways) {
+    return This->lpVtbl->GetDesignGlyphAdvances(This,glyph_count,indices,advances,is_sideways);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetGdiCompatibleGlyphAdvances(IDWriteFontFace1* This,FLOAT em_size,FLOAT pixels_per_dip,const DWRITE_MATRIX *transform,WINBOOL use_gdi_natural,WINBOOL is_sideways,UINT32 glyph_count,const UINT16 *indices,INT32 *advances) {
+    return This->lpVtbl->GetGdiCompatibleGlyphAdvances(This,em_size,pixels_per_dip,transform,use_gdi_natural,is_sideways,glyph_count,indices,advances);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetKerningPairAdjustments(IDWriteFontFace1* This,UINT32 glyph_count,const UINT16 *indices,INT32 *adjustments) {
+    return This->lpVtbl->GetKerningPairAdjustments(This,glyph_count,indices,adjustments);
+}
+static FORCEINLINE WINBOOL IDWriteFontFace1_HasKerningPairs(IDWriteFontFace1* This) {
+    return This->lpVtbl->HasKerningPairs(This);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetRecommendedRenderingMode(IDWriteFontFace1* This,FLOAT font_emsize,FLOAT dpiX,FLOAT dpiY,const DWRITE_MATRIX *transform,WINBOOL is_sideways,DWRITE_OUTLINE_THRESHOLD threshold,DWRITE_MEASURING_MODE measuring_mode,DWRITE_RENDERING_MODE *rendering_mode) {
+    return This->lpVtbl->IDWriteFontFace1_GetRecommendedRenderingMode(This,font_emsize,dpiX,dpiY,transform,is_sideways,threshold,measuring_mode,rendering_mode);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetVerticalGlyphVariants(IDWriteFontFace1* This,UINT32 glyph_count,const UINT16 *nominal_indices,UINT16 *vertical_indices) {
+    return This->lpVtbl->GetVerticalGlyphVariants(This,glyph_count,nominal_indices,vertical_indices);
+}
+static FORCEINLINE WINBOOL IDWriteFontFace1_HasVerticalGlyphVariants(IDWriteFontFace1* This) {
+    return This->lpVtbl->HasVerticalGlyphVariants(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteFontFace1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDWriteFont1 interface
+ */
+#ifndef __IDWriteFont1_INTERFACE_DEFINED__
+#define __IDWriteFont1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteFont1, 0xacd16696, 0x8c14, 0x4f5d, 0x87,0x7e, 0xfe,0x3f,0xc1,0xd3,0x27,0x38);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("acd16696-8c14-4f5d-877e-fe3fc1d32738")
+IDWriteFont1 : public IDWriteFont
+{
+    virtual void STDMETHODCALLTYPE GetMetrics(
+        DWRITE_FONT_METRICS1 *metrics) = 0;
+
+    virtual void STDMETHODCALLTYPE GetPanose(
+        DWRITE_PANOSE *panose) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetUnicodeRanges(
+        UINT32 max_count,
+        DWRITE_UNICODE_RANGE *ranges,
+        UINT32 *count) = 0;
+
+    virtual WINBOOL STDMETHODCALLTYPE IsMonospacedFont(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteFont1, 0xacd16696, 0x8c14, 0x4f5d, 0x87,0x7e, 0xfe,0x3f,0xc1,0xd3,0x27,0x38)
+#endif
+#else
+typedef struct IDWriteFont1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteFont1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteFont1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteFont1 *This);
+
+    /*** IDWriteFont methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetFontFamily)(
+        IDWriteFont1 *This,
+        IDWriteFontFamily **family);
+
+    DWRITE_FONT_WEIGHT (STDMETHODCALLTYPE *GetWeight)(
+        IDWriteFont1 *This);
+
+    DWRITE_FONT_STRETCH (STDMETHODCALLTYPE *GetStretch)(
+        IDWriteFont1 *This);
+
+    DWRITE_FONT_STYLE (STDMETHODCALLTYPE *GetStyle)(
+        IDWriteFont1 *This);
+
+    WINBOOL (STDMETHODCALLTYPE *IsSymbolFont)(
+        IDWriteFont1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetFaceNames)(
+        IDWriteFont1 *This,
+        IDWriteLocalizedStrings **names);
+
+    HRESULT (STDMETHODCALLTYPE *GetInformationalStrings)(
+        IDWriteFont1 *This,
+        DWRITE_INFORMATIONAL_STRING_ID stringid,
+        IDWriteLocalizedStrings **strings,
+        WINBOOL *exists);
+
+    DWRITE_FONT_SIMULATIONS (STDMETHODCALLTYPE *GetSimulations)(
+        IDWriteFont1 *This);
+
+    void (STDMETHODCALLTYPE *GetMetrics)(
+        IDWriteFont1 *This,
+        DWRITE_FONT_METRICS *metrics);
+
+    HRESULT (STDMETHODCALLTYPE *HasCharacter)(
+        IDWriteFont1 *This,
+        UINT32 value,
+        WINBOOL *exists);
+
+    HRESULT (STDMETHODCALLTYPE *CreateFontFace)(
+        IDWriteFont1 *This,
+        IDWriteFontFace **face);
+
+    /*** IDWriteFont1 methods ***/
+    void (STDMETHODCALLTYPE *IDWriteFont1_GetMetrics)(
+        IDWriteFont1 *This,
+        DWRITE_FONT_METRICS1 *metrics);
+
+    void (STDMETHODCALLTYPE *GetPanose)(
+        IDWriteFont1 *This,
+        DWRITE_PANOSE *panose);
+
+    HRESULT (STDMETHODCALLTYPE *GetUnicodeRanges)(
+        IDWriteFont1 *This,
+        UINT32 max_count,
+        DWRITE_UNICODE_RANGE *ranges,
+        UINT32 *count);
+
+    WINBOOL (STDMETHODCALLTYPE *IsMonospacedFont)(
+        IDWriteFont1 *This);
+
+    END_INTERFACE
+} IDWriteFont1Vtbl;
+
+interface IDWriteFont1 {
+    CONST_VTBL IDWriteFont1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteFont1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteFont1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteFont1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteFont methods ***/
+#define IDWriteFont1_GetFontFamily(This,family) (This)->lpVtbl->GetFontFamily(This,family)
+#define IDWriteFont1_GetWeight(This) (This)->lpVtbl->GetWeight(This)
+#define IDWriteFont1_GetStretch(This) (This)->lpVtbl->GetStretch(This)
+#define IDWriteFont1_GetStyle(This) (This)->lpVtbl->GetStyle(This)
+#define IDWriteFont1_IsSymbolFont(This) (This)->lpVtbl->IsSymbolFont(This)
+#define IDWriteFont1_GetFaceNames(This,names) (This)->lpVtbl->GetFaceNames(This,names)
+#define IDWriteFont1_GetInformationalStrings(This,stringid,strings,exists) (This)->lpVtbl->GetInformationalStrings(This,stringid,strings,exists)
+#define IDWriteFont1_GetSimulations(This) (This)->lpVtbl->GetSimulations(This)
+#define IDWriteFont1_HasCharacter(This,value,exists) (This)->lpVtbl->HasCharacter(This,value,exists)
+#define IDWriteFont1_CreateFontFace(This,face) (This)->lpVtbl->CreateFontFace(This,face)
+/*** IDWriteFont1 methods ***/
+#define IDWriteFont1_GetMetrics(This,metrics) (This)->lpVtbl->IDWriteFont1_GetMetrics(This,metrics)
+#define IDWriteFont1_GetPanose(This,panose) (This)->lpVtbl->GetPanose(This,panose)
+#define IDWriteFont1_GetUnicodeRanges(This,max_count,ranges,count) (This)->lpVtbl->GetUnicodeRanges(This,max_count,ranges,count)
+#define IDWriteFont1_IsMonospacedFont(This) (This)->lpVtbl->IsMonospacedFont(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteFont1_QueryInterface(IDWriteFont1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteFont1_AddRef(IDWriteFont1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteFont1_Release(IDWriteFont1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteFont methods ***/
+static FORCEINLINE HRESULT IDWriteFont1_GetFontFamily(IDWriteFont1* This,IDWriteFontFamily **family) {
+    return This->lpVtbl->GetFontFamily(This,family);
+}
+static FORCEINLINE DWRITE_FONT_WEIGHT IDWriteFont1_GetWeight(IDWriteFont1* This) {
+    return This->lpVtbl->GetWeight(This);
+}
+static FORCEINLINE DWRITE_FONT_STRETCH IDWriteFont1_GetStretch(IDWriteFont1* This) {
+    return This->lpVtbl->GetStretch(This);
+}
+static FOR
