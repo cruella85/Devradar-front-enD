@@ -774,4 +774,112 @@ typedef struct IDWriteFactory1Vtbl {
         FLOAT baseline_y,
         IDWriteGlyphRunAnalysis **analysis);
 
-    /*** IDWriteFactory1
+    /*** IDWriteFactory1 methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetEudcFontCollection)(
+        IDWriteFactory1 *This,
+        IDWriteFontCollection **collection,
+        WINBOOL check_for_updates);
+
+    HRESULT (STDMETHODCALLTYPE *IDWriteFactory1_CreateCustomRenderingParams)(
+        IDWriteFactory1 *This,
+        FLOAT gamma,
+        FLOAT enhcontrast,
+        FLOAT enhcontrast_grayscale,
+        FLOAT cleartype_level,
+        DWRITE_PIXEL_GEOMETRY geometry,
+        DWRITE_RENDERING_MODE mode,
+        IDWriteRenderingParams1 **params);
+
+    END_INTERFACE
+} IDWriteFactory1Vtbl;
+
+interface IDWriteFactory1 {
+    CONST_VTBL IDWriteFactory1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteFactory1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteFactory1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteFactory1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteFactory methods ***/
+#define IDWriteFactory1_GetSystemFontCollection(This,collection,check_for_updates) (This)->lpVtbl->GetSystemFontCollection(This,collection,check_for_updates)
+#define IDWriteFactory1_CreateCustomFontCollection(This,loader,key,key_size,collection) (This)->lpVtbl->CreateCustomFontCollection(This,loader,key,key_size,collection)
+#define IDWriteFactory1_RegisterFontCollectionLoader(This,loader) (This)->lpVtbl->RegisterFontCollectionLoader(This,loader)
+#define IDWriteFactory1_UnregisterFontCollectionLoader(This,loader) (This)->lpVtbl->UnregisterFontCollectionLoader(This,loader)
+#define IDWriteFactory1_CreateFontFileReference(This,path,writetime,font_file) (This)->lpVtbl->CreateFontFileReference(This,path,writetime,font_file)
+#define IDWriteFactory1_CreateCustomFontFileReference(This,reference_key,key_size,loader,font_file) (This)->lpVtbl->CreateCustomFontFileReference(This,reference_key,key_size,loader,font_file)
+#define IDWriteFactory1_CreateFontFace(This,facetype,files_number,font_files,index,sim_flags,font_face) (This)->lpVtbl->CreateFontFace(This,facetype,files_number,font_files,index,sim_flags,font_face)
+#define IDWriteFactory1_CreateRenderingParams(This,params) (This)->lpVtbl->CreateRenderingParams(This,params)
+#define IDWriteFactory1_CreateMonitorRenderingParams(This,monitor,params) (This)->lpVtbl->CreateMonitorRenderingParams(This,monitor,params)
+#define IDWriteFactory1_RegisterFontFileLoader(This,loader) (This)->lpVtbl->RegisterFontFileLoader(This,loader)
+#define IDWriteFactory1_UnregisterFontFileLoader(This,loader) (This)->lpVtbl->UnregisterFontFileLoader(This,loader)
+#define IDWriteFactory1_CreateTextFormat(This,family_name,collection,weight,style,stretch,size,locale,format) (This)->lpVtbl->CreateTextFormat(This,family_name,collection,weight,style,stretch,size,locale,format)
+#define IDWriteFactory1_CreateTypography(This,typography) (This)->lpVtbl->CreateTypography(This,typography)
+#define IDWriteFactory1_GetGdiInterop(This,gdi_interop) (This)->lpVtbl->GetGdiInterop(This,gdi_interop)
+#define IDWriteFactory1_CreateTextLayout(This,string,len,format,max_width,max_height,layout) (This)->lpVtbl->CreateTextLayout(This,string,len,format,max_width,max_height,layout)
+#define IDWriteFactory1_CreateGdiCompatibleTextLayout(This,string,len,format,layout_width,layout_height,pixels_per_dip,transform,use_gdi_natural,layout) (This)->lpVtbl->CreateGdiCompatibleTextLayout(This,string,len,format,layout_width,layout_height,pixels_per_dip,transform,use_gdi_natural,layout)
+#define IDWriteFactory1_CreateEllipsisTrimmingSign(This,format,trimming_sign) (This)->lpVtbl->CreateEllipsisTrimmingSign(This,format,trimming_sign)
+#define IDWriteFactory1_CreateTextAnalyzer(This,analyzer) (This)->lpVtbl->CreateTextAnalyzer(This,analyzer)
+#define IDWriteFactory1_CreateNumberSubstitution(This,method,locale,ignore_user_override,substitution) (This)->lpVtbl->CreateNumberSubstitution(This,method,locale,ignore_user_override,substitution)
+#define IDWriteFactory1_CreateGlyphRunAnalysis(This,glyph_run,pixels_per_dip,transform,rendering_mode,measuring_mode,baseline_x,baseline_y,analysis) (This)->lpVtbl->CreateGlyphRunAnalysis(This,glyph_run,pixels_per_dip,transform,rendering_mode,measuring_mode,baseline_x,baseline_y,analysis)
+/*** IDWriteFactory1 methods ***/
+#define IDWriteFactory1_GetEudcFontCollection(This,collection,check_for_updates) (This)->lpVtbl->GetEudcFontCollection(This,collection,check_for_updates)
+#define IDWriteFactory1_CreateCustomRenderingParams(This,gamma,enhcontrast,enhcontrast_grayscale,cleartype_level,geometry,mode,params) (This)->lpVtbl->IDWriteFactory1_CreateCustomRenderingParams(This,gamma,enhcontrast,enhcontrast_grayscale,cleartype_level,geometry,mode,params)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteFactory1_QueryInterface(IDWriteFactory1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteFactory1_AddRef(IDWriteFactory1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteFactory1_Release(IDWriteFactory1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteFactory methods ***/
+static FORCEINLINE HRESULT IDWriteFactory1_GetSystemFontCollection(IDWriteFactory1* This,IDWriteFontCollection **collection,WINBOOL check_for_updates) {
+    return This->lpVtbl->GetSystemFontCollection(This,collection,check_for_updates);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateCustomFontCollection(IDWriteFactory1* This,IDWriteFontCollectionLoader *loader,const void *key,UINT32 key_size,IDWriteFontCollection **collection) {
+    return This->lpVtbl->CreateCustomFontCollection(This,loader,key,key_size,collection);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_RegisterFontCollectionLoader(IDWriteFactory1* This,IDWriteFontCollectionLoader *loader) {
+    return This->lpVtbl->RegisterFontCollectionLoader(This,loader);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_UnregisterFontCollectionLoader(IDWriteFactory1* This,IDWriteFontCollectionLoader *loader) {
+    return This->lpVtbl->UnregisterFontCollectionLoader(This,loader);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateFontFileReference(IDWriteFactory1* This,const WCHAR *path,const FILETIME *writetime,IDWriteFontFile **font_file) {
+    return This->lpVtbl->CreateFontFileReference(This,path,writetime,font_file);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateCustomFontFileReference(IDWriteFactory1* This,const void *reference_key,UINT32 key_size,IDWriteFontFileLoader *loader,IDWriteFontFile **font_file) {
+    return This->lpVtbl->CreateCustomFontFileReference(This,reference_key,key_size,loader,font_file);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateFontFace(IDWriteFactory1* This,DWRITE_FONT_FACE_TYPE facetype,UINT32 files_number,IDWriteFontFile *const *font_files,UINT32 index,DWRITE_FONT_SIMULATIONS sim_flags,IDWriteFontFace **font_face) {
+    return This->lpVtbl->CreateFontFace(This,facetype,files_number,font_files,index,sim_flags,font_face);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateRenderingParams(IDWriteFactory1* This,IDWriteRenderingParams **params) {
+    return This->lpVtbl->CreateRenderingParams(This,params);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateMonitorRenderingParams(IDWriteFactory1* This,HMONITOR monitor,IDWriteRenderingParams **params) {
+    return This->lpVtbl->CreateMonitorRenderingParams(This,monitor,params);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_RegisterFontFileLoader(IDWriteFactory1* This,IDWriteFontFileLoader *loader) {
+    return This->lpVtbl->RegisterFontFileLoader(This,loader);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_UnregisterFontFileLoader(IDWriteFactory1* This,IDWriteFontFileLoader *loader) {
+    return This->lpVtbl->UnregisterFontFileLoader(This,loader);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateTextFormat(IDWriteFactory1* This,const WCHAR *family_name,IDWriteFontCollection *collection,DWRITE_FONT_WEIGHT weight,DWRITE_FONT_STYLE style,DWRITE_FONT_STRETCH stretch,FLOAT size,const WCHAR *locale,IDWriteTextFormat **format) {
+    return This->lpVtbl->CreateTextFormat(This,family_name,collection,weight,style,stretch,size,locale,format);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateTypography(IDWriteFactory1* This,IDWriteTypography **typography) {
+    return This->lpVtbl->CreateTypography(This,typography);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_GetGdiInterop(IDWriteFactory1* This,IDWriteGdiInterop **gdi_interop) {
+    return This->lpVtbl->GetGdiInterop(This,gdi_interop);
+}
+static FORCEINLINE HRESULT IDWriteFactory1_CreateTextLayout(IDWriteFactory1* This,const WCHAR *string,UINT32 len,IDWriteTextFormat *format,FLOAT max_width,FLOAT max_height,IDWriteTextLayout **layout) {
+    return This->lpVtbl->CreateTextLayout(This,str
