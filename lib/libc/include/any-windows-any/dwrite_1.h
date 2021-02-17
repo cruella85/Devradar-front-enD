@@ -1113,4 +1113,142 @@ typedef struct IDWriteFontFace1Vtbl {
     HRESULT (STDMETHODCALLTYPE *GetUnicodeRanges)(
         IDWriteFontFace1 *This,
         UINT32 max_count,
-        D
+        DWRITE_UNICODE_RANGE *ranges,
+        UINT32 *count);
+
+    WINBOOL (STDMETHODCALLTYPE *IsMonospacedFont)(
+        IDWriteFontFace1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetDesignGlyphAdvances)(
+        IDWriteFontFace1 *This,
+        UINT32 glyph_count,
+        const UINT16 *indices,
+        INT32 *advances,
+        WINBOOL is_sideways);
+
+    HRESULT (STDMETHODCALLTYPE *GetGdiCompatibleGlyphAdvances)(
+        IDWriteFontFace1 *This,
+        FLOAT em_size,
+        FLOAT pixels_per_dip,
+        const DWRITE_MATRIX *transform,
+        WINBOOL use_gdi_natural,
+        WINBOOL is_sideways,
+        UINT32 glyph_count,
+        const UINT16 *indices,
+        INT32 *advances);
+
+    HRESULT (STDMETHODCALLTYPE *GetKerningPairAdjustments)(
+        IDWriteFontFace1 *This,
+        UINT32 glyph_count,
+        const UINT16 *indices,
+        INT32 *adjustments);
+
+    WINBOOL (STDMETHODCALLTYPE *HasKerningPairs)(
+        IDWriteFontFace1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *IDWriteFontFace1_GetRecommendedRenderingMode)(
+        IDWriteFontFace1 *This,
+        FLOAT font_emsize,
+        FLOAT dpiX,
+        FLOAT dpiY,
+        const DWRITE_MATRIX *transform,
+        WINBOOL is_sideways,
+        DWRITE_OUTLINE_THRESHOLD threshold,
+        DWRITE_MEASURING_MODE measuring_mode,
+        DWRITE_RENDERING_MODE *rendering_mode);
+
+    HRESULT (STDMETHODCALLTYPE *GetVerticalGlyphVariants)(
+        IDWriteFontFace1 *This,
+        UINT32 glyph_count,
+        const UINT16 *nominal_indices,
+        UINT16 *vertical_indices);
+
+    WINBOOL (STDMETHODCALLTYPE *HasVerticalGlyphVariants)(
+        IDWriteFontFace1 *This);
+
+    END_INTERFACE
+} IDWriteFontFace1Vtbl;
+
+interface IDWriteFontFace1 {
+    CONST_VTBL IDWriteFontFace1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteFontFace1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteFontFace1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteFontFace1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteFontFace methods ***/
+#define IDWriteFontFace1_GetType(This) (This)->lpVtbl->GetType(This)
+#define IDWriteFontFace1_GetFiles(This,number_of_files,fontfiles) (This)->lpVtbl->GetFiles(This,number_of_files,fontfiles)
+#define IDWriteFontFace1_GetIndex(This) (This)->lpVtbl->GetIndex(This)
+#define IDWriteFontFace1_GetSimulations(This) (This)->lpVtbl->GetSimulations(This)
+#define IDWriteFontFace1_IsSymbolFont(This) (This)->lpVtbl->IsSymbolFont(This)
+#define IDWriteFontFace1_GetGlyphCount(This) (This)->lpVtbl->GetGlyphCount(This)
+#define IDWriteFontFace1_GetDesignGlyphMetrics(This,glyph_indices,glyph_count,metrics,is_sideways) (This)->lpVtbl->GetDesignGlyphMetrics(This,glyph_indices,glyph_count,metrics,is_sideways)
+#define IDWriteFontFace1_GetGlyphIndices(This,codepoints,count,glyph_indices) (This)->lpVtbl->GetGlyphIndices(This,codepoints,count,glyph_indices)
+#define IDWriteFontFace1_TryGetFontTable(This,table_tag,table_data,table_size,context,exists) (This)->lpVtbl->TryGetFontTable(This,table_tag,table_data,table_size,context,exists)
+#define IDWriteFontFace1_ReleaseFontTable(This,table_context) (This)->lpVtbl->ReleaseFontTable(This,table_context)
+#define IDWriteFontFace1_GetGlyphRunOutline(This,emSize,glyph_indices,glyph_advances,glyph_offsets,glyph_count,is_sideways,is_rtl,geometrysink) (This)->lpVtbl->GetGlyphRunOutline(This,emSize,glyph_indices,glyph_advances,glyph_offsets,glyph_count,is_sideways,is_rtl,geometrysink)
+#define IDWriteFontFace1_GetGdiCompatibleGlyphMetrics(This,emSize,pixels_per_dip,transform,use_gdi_natural,glyph_indices,glyph_count,metrics,is_sideways) (This)->lpVtbl->GetGdiCompatibleGlyphMetrics(This,emSize,pixels_per_dip,transform,use_gdi_natural,glyph_indices,glyph_count,metrics,is_sideways)
+/*** IDWriteFontFace1 methods ***/
+#define IDWriteFontFace1_GetMetrics(This,metrics) (This)->lpVtbl->IDWriteFontFace1_GetMetrics(This,metrics)
+#define IDWriteFontFace1_GetGdiCompatibleMetrics(This,em_size,pixels_per_dip,transform,metrics) (This)->lpVtbl->IDWriteFontFace1_GetGdiCompatibleMetrics(This,em_size,pixels_per_dip,transform,metrics)
+#define IDWriteFontFace1_GetCaretMetrics(This,metrics) (This)->lpVtbl->GetCaretMetrics(This,metrics)
+#define IDWriteFontFace1_GetUnicodeRanges(This,max_count,ranges,count) (This)->lpVtbl->GetUnicodeRanges(This,max_count,ranges,count)
+#define IDWriteFontFace1_IsMonospacedFont(This) (This)->lpVtbl->IsMonospacedFont(This)
+#define IDWriteFontFace1_GetDesignGlyphAdvances(This,glyph_count,indices,advances,is_sideways) (This)->lpVtbl->GetDesignGlyphAdvances(This,glyph_count,indices,advances,is_sideways)
+#define IDWriteFontFace1_GetGdiCompatibleGlyphAdvances(This,em_size,pixels_per_dip,transform,use_gdi_natural,is_sideways,glyph_count,indices,advances) (This)->lpVtbl->GetGdiCompatibleGlyphAdvances(This,em_size,pixels_per_dip,transform,use_gdi_natural,is_sideways,glyph_count,indices,advances)
+#define IDWriteFontFace1_GetKerningPairAdjustments(This,glyph_count,indices,adjustments) (This)->lpVtbl->GetKerningPairAdjustments(This,glyph_count,indices,adjustments)
+#define IDWriteFontFace1_HasKerningPairs(This) (This)->lpVtbl->HasKerningPairs(This)
+#define IDWriteFontFace1_GetRecommendedRenderingMode(This,font_emsize,dpiX,dpiY,transform,is_sideways,threshold,measuring_mode,rendering_mode) (This)->lpVtbl->IDWriteFontFace1_GetRecommendedRenderingMode(This,font_emsize,dpiX,dpiY,transform,is_sideways,threshold,measuring_mode,rendering_mode)
+#define IDWriteFontFace1_GetVerticalGlyphVariants(This,glyph_count,nominal_indices,vertical_indices) (This)->lpVtbl->GetVerticalGlyphVariants(This,glyph_count,nominal_indices,vertical_indices)
+#define IDWriteFontFace1_HasVerticalGlyphVariants(This) (This)->lpVtbl->HasVerticalGlyphVariants(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteFontFace1_QueryInterface(IDWriteFontFace1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteFontFace1_AddRef(IDWriteFontFace1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteFontFace1_Release(IDWriteFontFace1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteFontFace methods ***/
+static FORCEINLINE DWRITE_FONT_FACE_TYPE IDWriteFontFace1_GetType(IDWriteFontFace1* This) {
+    return This->lpVtbl->GetType(This);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetFiles(IDWriteFontFace1* This,UINT32 *number_of_files,IDWriteFontFile **fontfiles) {
+    return This->lpVtbl->GetFiles(This,number_of_files,fontfiles);
+}
+static FORCEINLINE UINT32 IDWriteFontFace1_GetIndex(IDWriteFontFace1* This) {
+    return This->lpVtbl->GetIndex(This);
+}
+static FORCEINLINE DWRITE_FONT_SIMULATIONS IDWriteFontFace1_GetSimulations(IDWriteFontFace1* This) {
+    return This->lpVtbl->GetSimulations(This);
+}
+static FORCEINLINE WINBOOL IDWriteFontFace1_IsSymbolFont(IDWriteFontFace1* This) {
+    return This->lpVtbl->IsSymbolFont(This);
+}
+static FORCEINLINE UINT16 IDWriteFontFace1_GetGlyphCount(IDWriteFontFace1* This) {
+    return This->lpVtbl->GetGlyphCount(This);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetDesignGlyphMetrics(IDWriteFontFace1* This,const UINT16 *glyph_indices,UINT32 glyph_count,DWRITE_GLYPH_METRICS *metrics,WINBOOL is_sideways) {
+    return This->lpVtbl->GetDesignGlyphMetrics(This,glyph_indices,glyph_count,metrics,is_sideways);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetGlyphIndices(IDWriteFontFace1* This,const UINT32 *codepoints,UINT32 count,UINT16 *glyph_indices) {
+    return This->lpVtbl->GetGlyphIndices(This,codepoints,count,glyph_indices);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_TryGetFontTable(IDWriteFontFace1* This,UINT32 table_tag,const void **table_data,UINT32 *table_size,void **context,WINBOOL *exists) {
+    return This->lpVtbl->TryGetFontTable(This,table_tag,table_data,table_size,context,exists);
+}
+static FORCEINLINE void IDWriteFontFace1_ReleaseFontTable(IDWriteFontFace1* This,void *table_context) {
+    This->lpVtbl->ReleaseFontTable(This,table_context);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetGlyphRunOutline(IDWriteFontFace1* This,FLOAT emSize,const UINT16 *glyph_indices,const FLOAT *glyph_advances,const DWRITE_GLYPH_OFFSET *glyph_offsets,UINT32 glyph_count,WINBOOL is_sideways,WINBOOL is_rtl,IDWriteGeometrySink *geometrysink) {
+    return This->lpVtbl->GetGlyphRunOutline(This,emSize,glyph_indices,glyph_advances,glyph_offsets,glyph_count,is_sideways,is_rtl,geometrysink);
+}
+static FORCEINLINE HRESULT IDWriteFontFace1_GetGdiCompatibleGlyphMetrics(IDWriteFontFace1* This,FLOAT emSize,FLOAT pixels_per_dip,const DWRITE_MATRIX *transform,WINBOOL use_gdi_natural,const UINT16 *glyph_indices,UINT32 glyph_count,DWRITE_GLYPH_METRICS *metrics,WINBOOL is_sideways) {
+    return This->lpVtbl->GetGdiCompatib
