@@ -1454,4 +1454,231 @@ static FORCEINLINE DWRITE_FONT_WEIGHT IDWriteFont1_GetWeight(IDWriteFont1* This)
 static FORCEINLINE DWRITE_FONT_STRETCH IDWriteFont1_GetStretch(IDWriteFont1* This) {
     return This->lpVtbl->GetStretch(This);
 }
-static FOR
+static FORCEINLINE DWRITE_FONT_STYLE IDWriteFont1_GetStyle(IDWriteFont1* This) {
+    return This->lpVtbl->GetStyle(This);
+}
+static FORCEINLINE WINBOOL IDWriteFont1_IsSymbolFont(IDWriteFont1* This) {
+    return This->lpVtbl->IsSymbolFont(This);
+}
+static FORCEINLINE HRESULT IDWriteFont1_GetFaceNames(IDWriteFont1* This,IDWriteLocalizedStrings **names) {
+    return This->lpVtbl->GetFaceNames(This,names);
+}
+static FORCEINLINE HRESULT IDWriteFont1_GetInformationalStrings(IDWriteFont1* This,DWRITE_INFORMATIONAL_STRING_ID stringid,IDWriteLocalizedStrings **strings,WINBOOL *exists) {
+    return This->lpVtbl->GetInformationalStrings(This,stringid,strings,exists);
+}
+static FORCEINLINE DWRITE_FONT_SIMULATIONS IDWriteFont1_GetSimulations(IDWriteFont1* This) {
+    return This->lpVtbl->GetSimulations(This);
+}
+static FORCEINLINE HRESULT IDWriteFont1_HasCharacter(IDWriteFont1* This,UINT32 value,WINBOOL *exists) {
+    return This->lpVtbl->HasCharacter(This,value,exists);
+}
+static FORCEINLINE HRESULT IDWriteFont1_CreateFontFace(IDWriteFont1* This,IDWriteFontFace **face) {
+    return This->lpVtbl->CreateFontFace(This,face);
+}
+/*** IDWriteFont1 methods ***/
+static FORCEINLINE void IDWriteFont1_GetMetrics(IDWriteFont1* This,DWRITE_FONT_METRICS1 *metrics) {
+    This->lpVtbl->IDWriteFont1_GetMetrics(This,metrics);
+}
+static FORCEINLINE void IDWriteFont1_GetPanose(IDWriteFont1* This,DWRITE_PANOSE *panose) {
+    This->lpVtbl->GetPanose(This,panose);
+}
+static FORCEINLINE HRESULT IDWriteFont1_GetUnicodeRanges(IDWriteFont1* This,UINT32 max_count,DWRITE_UNICODE_RANGE *ranges,UINT32 *count) {
+    return This->lpVtbl->GetUnicodeRanges(This,max_count,ranges,count);
+}
+static FORCEINLINE WINBOOL IDWriteFont1_IsMonospacedFont(IDWriteFont1* This) {
+    return This->lpVtbl->IsMonospacedFont(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteFont1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDWriteRenderingParams1 interface
+ */
+#ifndef __IDWriteRenderingParams1_INTERFACE_DEFINED__
+#define __IDWriteRenderingParams1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteRenderingParams1, 0x94413cf4, 0xa6fc, 0x4248, 0x8b,0x50, 0x66,0x74,0x34,0x8f,0xca,0xd3);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("94413cf4-a6fc-4248-8b50-6674348fcad3")
+IDWriteRenderingParams1 : public IDWriteRenderingParams
+{
+    virtual FLOAT STDMETHODCALLTYPE GetGrayscaleEnhancedContrast(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteRenderingParams1, 0x94413cf4, 0xa6fc, 0x4248, 0x8b,0x50, 0x66,0x74,0x34,0x8f,0xca,0xd3)
+#endif
+#else
+typedef struct IDWriteRenderingParams1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteRenderingParams1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteRenderingParams1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteRenderingParams1 *This);
+
+    /*** IDWriteRenderingParams methods ***/
+    FLOAT (STDMETHODCALLTYPE *GetGamma)(
+        IDWriteRenderingParams1 *This);
+
+    FLOAT (STDMETHODCALLTYPE *GetEnhancedContrast)(
+        IDWriteRenderingParams1 *This);
+
+    FLOAT (STDMETHODCALLTYPE *GetClearTypeLevel)(
+        IDWriteRenderingParams1 *This);
+
+    DWRITE_PIXEL_GEOMETRY (STDMETHODCALLTYPE *GetPixelGeometry)(
+        IDWriteRenderingParams1 *This);
+
+    DWRITE_RENDERING_MODE (STDMETHODCALLTYPE *GetRenderingMode)(
+        IDWriteRenderingParams1 *This);
+
+    /*** IDWriteRenderingParams1 methods ***/
+    FLOAT (STDMETHODCALLTYPE *GetGrayscaleEnhancedContrast)(
+        IDWriteRenderingParams1 *This);
+
+    END_INTERFACE
+} IDWriteRenderingParams1Vtbl;
+
+interface IDWriteRenderingParams1 {
+    CONST_VTBL IDWriteRenderingParams1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteRenderingParams1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteRenderingParams1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteRenderingParams1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteRenderingParams methods ***/
+#define IDWriteRenderingParams1_GetGamma(This) (This)->lpVtbl->GetGamma(This)
+#define IDWriteRenderingParams1_GetEnhancedContrast(This) (This)->lpVtbl->GetEnhancedContrast(This)
+#define IDWriteRenderingParams1_GetClearTypeLevel(This) (This)->lpVtbl->GetClearTypeLevel(This)
+#define IDWriteRenderingParams1_GetPixelGeometry(This) (This)->lpVtbl->GetPixelGeometry(This)
+#define IDWriteRenderingParams1_GetRenderingMode(This) (This)->lpVtbl->GetRenderingMode(This)
+/*** IDWriteRenderingParams1 methods ***/
+#define IDWriteRenderingParams1_GetGrayscaleEnhancedContrast(This) (This)->lpVtbl->GetGrayscaleEnhancedContrast(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteRenderingParams1_QueryInterface(IDWriteRenderingParams1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteRenderingParams1_AddRef(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteRenderingParams1_Release(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteRenderingParams methods ***/
+static FORCEINLINE FLOAT IDWriteRenderingParams1_GetGamma(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->GetGamma(This);
+}
+static FORCEINLINE FLOAT IDWriteRenderingParams1_GetEnhancedContrast(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->GetEnhancedContrast(This);
+}
+static FORCEINLINE FLOAT IDWriteRenderingParams1_GetClearTypeLevel(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->GetClearTypeLevel(This);
+}
+static FORCEINLINE DWRITE_PIXEL_GEOMETRY IDWriteRenderingParams1_GetPixelGeometry(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->GetPixelGeometry(This);
+}
+static FORCEINLINE DWRITE_RENDERING_MODE IDWriteRenderingParams1_GetRenderingMode(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->GetRenderingMode(This);
+}
+/*** IDWriteRenderingParams1 methods ***/
+static FORCEINLINE FLOAT IDWriteRenderingParams1_GetGrayscaleEnhancedContrast(IDWriteRenderingParams1* This) {
+    return This->lpVtbl->GetGrayscaleEnhancedContrast(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteRenderingParams1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDWriteTextAnalyzer1 interface
+ */
+#ifndef __IDWriteTextAnalyzer1_INTERFACE_DEFINED__
+#define __IDWriteTextAnalyzer1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteTextAnalyzer1, 0x80dad800, 0xe21f, 0x4e83, 0x96,0xce, 0xbf,0xcc,0xe5,0x00,0xdb,0x7c);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("80dad800-e21f-4e83-96ce-bfcce500db7c")
+IDWriteTextAnalyzer1 : public IDWriteTextAnalyzer
+{
+    virtual HRESULT STDMETHODCALLTYPE ApplyCharacterSpacing(
+        FLOAT leading_spacing,
+        FLOAT trailing_spacing,
+        FLOAT min_advance_width,
+        UINT32 len,
+        UINT32 glyph_count,
+        const UINT16 *clustermap,
+        const FLOAT *advances,
+        const DWRITE_GLYPH_OFFSET *offsets,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *props,
+        FLOAT *modified_advances,
+        DWRITE_GLYPH_OFFSET *modified_offsets) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetBaseline(
+        IDWriteFontFace *face,
+        DWRITE_BASELINE baseline,
+        WINBOOL vertical,
+        WINBOOL is_simulation_allowed,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        const WCHAR *localeName,
+        INT32 *baseline_coord,
+        WINBOOL *exists) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AnalyzeVerticalGlyphOrientation(
+        IDWriteTextAnalysisSource1 *source,
+        UINT32 text_pos,
+        UINT32 len,
+        IDWriteTextAnalysisSink1 *sink) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetGlyphOrientationTransform(
+        DWRITE_GLYPH_ORIENTATION_ANGLE angle,
+        WINBOOL is_sideways,
+        DWRITE_MATRIX *transform) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetScriptProperties(
+        DWRITE_SCRIPT_ANALYSIS sa,
+        DWRITE_SCRIPT_PROPERTIES *props) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetTextComplexity(
+        const WCHAR *text,
+        UINT32 len,
+        IDWriteFontFace *face,
+        WINBOOL *is_simple,
+        UINT32 *len_read,
+        UINT16 *indices) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetJustificationOpportunities(
+        IDWriteFontFace *face,
+        FLOAT font_em_size,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        UINT32 length,
+        UINT32 glyph_count,
+        const WCHAR *text,
+        const UINT16 *clustermap,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *prop,
+        DWRITE_JUSTIFICATION_OPPORTUNITY *jo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE JustifyGlyphAdvances(
+        FLOAT width,
+        UINT32 glyph_count,
+        const DWRITE_JUST
