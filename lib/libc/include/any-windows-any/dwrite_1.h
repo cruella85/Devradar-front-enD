@@ -2137,4 +2137,220 @@ static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_GetNumberSubstitution(IDWr
     return This->lpVtbl->GetNumberSubstitution(This,position,text_len,substitution);
 }
 /*** IDWriteTextAnalysisSource1 methods ***/
-static FORC
+static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_GetVerticalGlyphOrientation(IDWriteTextAnalysisSource1* This,UINT32 pos,UINT32 *length,DWRITE_VERTICAL_GLYPH_ORIENTATION *orientation,UINT8 *bidi_level) {
+    return This->lpVtbl->GetVerticalGlyphOrientation(This,pos,length,orientation,bidi_level);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteTextAnalysisSource1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDWriteTextAnalysisSink1 interface
+ */
+#ifndef __IDWriteTextAnalysisSink1_INTERFACE_DEFINED__
+#define __IDWriteTextAnalysisSink1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteTextAnalysisSink1, 0xb0d941a0, 0x85e7, 0x4d8b, 0x9f,0xd3, 0x5c,0xed,0x99,0x34,0x48,0x2a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b0d941a0-85e7-4d8b-9fd3-5ced9934482a")
+IDWriteTextAnalysisSink1 : public IDWriteTextAnalysisSink
+{
+    virtual HRESULT STDMETHODCALLTYPE SetGlyphOrientation(
+        UINT32 pos,
+        UINT32 length,
+        DWRITE_GLYPH_ORIENTATION_ANGLE angle,
+        UINT8 adjusted_bidilevel,
+        WINBOOL is_sideways,
+        WINBOOL is_rtl) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteTextAnalysisSink1, 0xb0d941a0, 0x85e7, 0x4d8b, 0x9f,0xd3, 0x5c,0xed,0x99,0x34,0x48,0x2a)
+#endif
+#else
+typedef struct IDWriteTextAnalysisSink1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteTextAnalysisSink1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteTextAnalysisSink1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteTextAnalysisSink1 *This);
+
+    /*** IDWriteTextAnalysisSink methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetScriptAnalysis)(
+        IDWriteTextAnalysisSink1 *This,
+        UINT32 position,
+        UINT32 length,
+        const DWRITE_SCRIPT_ANALYSIS *scriptanalysis);
+
+    HRESULT (STDMETHODCALLTYPE *SetLineBreakpoints)(
+        IDWriteTextAnalysisSink1 *This,
+        UINT32 position,
+        UINT32 length,
+        const DWRITE_LINE_BREAKPOINT *breakpoints);
+
+    HRESULT (STDMETHODCALLTYPE *SetBidiLevel)(
+        IDWriteTextAnalysisSink1 *This,
+        UINT32 position,
+        UINT32 length,
+        UINT8 explicitLevel,
+        UINT8 resolvedLevel);
+
+    HRESULT (STDMETHODCALLTYPE *SetNumberSubstitution)(
+        IDWriteTextAnalysisSink1 *This,
+        UINT32 position,
+        UINT32 length,
+        IDWriteNumberSubstitution *substitution);
+
+    /*** IDWriteTextAnalysisSink1 methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetGlyphOrientation)(
+        IDWriteTextAnalysisSink1 *This,
+        UINT32 pos,
+        UINT32 length,
+        DWRITE_GLYPH_ORIENTATION_ANGLE angle,
+        UINT8 adjusted_bidilevel,
+        WINBOOL is_sideways,
+        WINBOOL is_rtl);
+
+    END_INTERFACE
+} IDWriteTextAnalysisSink1Vtbl;
+
+interface IDWriteTextAnalysisSink1 {
+    CONST_VTBL IDWriteTextAnalysisSink1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteTextAnalysisSink1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteTextAnalysisSink1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteTextAnalysisSink1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteTextAnalysisSink methods ***/
+#define IDWriteTextAnalysisSink1_SetScriptAnalysis(This,position,length,scriptanalysis) (This)->lpVtbl->SetScriptAnalysis(This,position,length,scriptanalysis)
+#define IDWriteTextAnalysisSink1_SetLineBreakpoints(This,position,length,breakpoints) (This)->lpVtbl->SetLineBreakpoints(This,position,length,breakpoints)
+#define IDWriteTextAnalysisSink1_SetBidiLevel(This,position,length,explicitLevel,resolvedLevel) (This)->lpVtbl->SetBidiLevel(This,position,length,explicitLevel,resolvedLevel)
+#define IDWriteTextAnalysisSink1_SetNumberSubstitution(This,position,length,substitution) (This)->lpVtbl->SetNumberSubstitution(This,position,length,substitution)
+/*** IDWriteTextAnalysisSink1 methods ***/
+#define IDWriteTextAnalysisSink1_SetGlyphOrientation(This,pos,length,angle,adjusted_bidilevel,is_sideways,is_rtl) (This)->lpVtbl->SetGlyphOrientation(This,pos,length,angle,adjusted_bidilevel,is_sideways,is_rtl)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalysisSink1_QueryInterface(IDWriteTextAnalysisSink1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteTextAnalysisSink1_AddRef(IDWriteTextAnalysisSink1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteTextAnalysisSink1_Release(IDWriteTextAnalysisSink1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteTextAnalysisSink methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalysisSink1_SetScriptAnalysis(IDWriteTextAnalysisSink1* This,UINT32 position,UINT32 length,const DWRITE_SCRIPT_ANALYSIS *scriptanalysis) {
+    return This->lpVtbl->SetScriptAnalysis(This,position,length,scriptanalysis);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalysisSink1_SetLineBreakpoints(IDWriteTextAnalysisSink1* This,UINT32 position,UINT32 length,const DWRITE_LINE_BREAKPOINT *breakpoints) {
+    return This->lpVtbl->SetLineBreakpoints(This,position,length,breakpoints);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalysisSink1_SetBidiLevel(IDWriteTextAnalysisSink1* This,UINT32 position,UINT32 length,UINT8 explicitLevel,UINT8 resolvedLevel) {
+    return This->lpVtbl->SetBidiLevel(This,position,length,explicitLevel,resolvedLevel);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalysisSink1_SetNumberSubstitution(IDWriteTextAnalysisSink1* This,UINT32 position,UINT32 length,IDWriteNumberSubstitution *substitution) {
+    return This->lpVtbl->SetNumberSubstitution(This,position,length,substitution);
+}
+/*** IDWriteTextAnalysisSink1 methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalysisSink1_SetGlyphOrientation(IDWriteTextAnalysisSink1* This,UINT32 pos,UINT32 length,DWRITE_GLYPH_ORIENTATION_ANGLE angle,UINT8 adjusted_bidilevel,WINBOOL is_sideways,WINBOOL is_rtl) {
+    return This->lpVtbl->SetGlyphOrientation(This,pos,length,angle,adjusted_bidilevel,is_sideways,is_rtl);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteTextAnalysisSink1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDWriteTextLayout1 interface
+ */
+#ifndef __IDWriteTextLayout1_INTERFACE_DEFINED__
+#define __IDWriteTextLayout1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteTextLayout1, 0x9064d822, 0x80a7, 0x465c, 0xa9,0x86, 0xdf,0x65,0xf7,0x8b,0x8f,0xeb);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9064d822-80a7-465c-a986-df65f78b8feb")
+IDWriteTextLayout1 : public IDWriteTextLayout
+{
+    virtual HRESULT STDMETHODCALLTYPE SetPairKerning(
+        WINBOOL is_pairkerning_enabled,
+        DWRITE_TEXT_RANGE range) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPairKerning(
+        UINT32 position,
+        WINBOOL *is_pairkerning_enabled,
+        DWRITE_TEXT_RANGE *range) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetCharacterSpacing(
+        FLOAT leading_spacing,
+        FLOAT trailing_spacing,
+        FLOAT minimum_advance_width,
+        DWRITE_TEXT_RANGE range) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCharacterSpacing(
+        UINT32 position,
+        FLOAT *leading_spacing,
+        FLOAT *trailing_spacing,
+        FLOAT *minimum_advance_width,
+        DWRITE_TEXT_RANGE *range = 0) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteTextLayout1, 0x9064d822, 0x80a7, 0x465c, 0xa9,0x86, 0xdf,0x65,0xf7,0x8b,0x8f,0xeb)
+#endif
+#else
+typedef struct IDWriteTextLayout1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteTextLayout1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteTextLayout1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteTextLayout1 *This);
+
+    /*** IDWriteTextFormat methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetTextAlignment)(
+        IDWriteTextLayout1 *This,
+        DWRITE_TEXT_ALIGNMENT alignment);
+
+    HRESULT (STDMETHODCALLTYPE *SetParagraphAlignment)(
+        IDWriteTextLayout1 *This,
+        DWRITE_PARAGRAPH_ALIGNMENT alignment);
+
+    HRESULT (STDMETHODCALLTYPE *SetWordWrapping)(
+        IDWriteTextLayout1 *This,
+        DWRITE_WORD_WRAPPING wrapping);
+
+    HRESULT (STDMETHODCALLTYPE *SetReadingDirection)(
+        IDWriteTextLayout1 *This,
+        DWRITE_READING_DIRECTION direction);
+
+    HRESULT (STDMETHODCALLTYPE *SetFlowDirection)(
+        IDWriteTextLayout1 *This,
+        DWRITE_FLOW_DIRECTION direction);
+
+    HRESULT (STDMETHODCALLTYPE
