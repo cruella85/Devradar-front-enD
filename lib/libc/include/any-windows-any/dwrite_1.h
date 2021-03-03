@@ -1933,4 +1933,54 @@ interface IDWriteTextAnalyzer1 {
 #define IDWriteTextAnalyzer1_AnalyzeBidi(This,source,position,length,sink) (This)->lpVtbl->AnalyzeBidi(This,source,position,length,sink)
 #define IDWriteTextAnalyzer1_AnalyzeNumberSubstitution(This,source,position,length,sink) (This)->lpVtbl->AnalyzeNumberSubstitution(This,source,position,length,sink)
 #define IDWriteTextAnalyzer1_AnalyzeLineBreakpoints(This,source,position,length,sink) (This)->lpVtbl->AnalyzeLineBreakpoints(This,source,position,length,sink)
-#define IDWriteTextAnalyzer1_GetGlyphs(This,text,length,font_face,is_sideways,is_rtl,analysis,locale,substitution,features,feature_range_len,feature_ranges
+#define IDWriteTextAnalyzer1_GetGlyphs(This,text,length,font_face,is_sideways,is_rtl,analysis,locale,substitution,features,feature_range_len,feature_ranges,max_glyph_count,clustermap,text_props,glyph_indices,glyph_props,actual_glyph_count) (This)->lpVtbl->GetGlyphs(This,text,length,font_face,is_sideways,is_rtl,analysis,locale,substitution,features,feature_range_len,feature_ranges,max_glyph_count,clustermap,text_props,glyph_indices,glyph_props,actual_glyph_count)
+#define IDWriteTextAnalyzer1_GetGlyphPlacements(This,text,clustermap,props,text_len,glyph_indices,glyph_props,glyph_count,font_face,fontEmSize,is_sideways,is_rtl,analysis,locale,features,feature_range_len,feature_ranges,glyph_advances,glyph_offsets) (This)->lpVtbl->GetGlyphPlacements(This,text,clustermap,props,text_len,glyph_indices,glyph_props,glyph_count,font_face,fontEmSize,is_sideways,is_rtl,analysis,locale,features,feature_range_len,feature_ranges,glyph_advances,glyph_offsets)
+#define IDWriteTextAnalyzer1_GetGdiCompatibleGlyphPlacements(This,text,clustermap,props,text_len,glyph_indices,glyph_props,glyph_count,font_face,fontEmSize,pixels_per_dip,transform,use_gdi_natural,is_sideways,is_rtl,analysis,locale,features,feature_range_lengths,feature_ranges,glyph_advances,glyph_offsets) (This)->lpVtbl->GetGdiCompatibleGlyphPlacements(This,text,clustermap,props,text_len,glyph_indices,glyph_props,glyph_count,font_face,fontEmSize,pixels_per_dip,transform,use_gdi_natural,is_sideways,is_rtl,analysis,locale,features,feature_range_lengths,feature_ranges,glyph_advances,glyph_offsets)
+/*** IDWriteTextAnalyzer1 methods ***/
+#define IDWriteTextAnalyzer1_ApplyCharacterSpacing(This,leading_spacing,trailing_spacing,min_advance_width,len,glyph_count,clustermap,advances,offsets,props,modified_advances,modified_offsets) (This)->lpVtbl->ApplyCharacterSpacing(This,leading_spacing,trailing_spacing,min_advance_width,len,glyph_count,clustermap,advances,offsets,props,modified_advances,modified_offsets)
+#define IDWriteTextAnalyzer1_GetBaseline(This,face,baseline,vertical,is_simulation_allowed,sa,localeName,baseline_coord,exists) (This)->lpVtbl->GetBaseline(This,face,baseline,vertical,is_simulation_allowed,sa,localeName,baseline_coord,exists)
+#define IDWriteTextAnalyzer1_AnalyzeVerticalGlyphOrientation(This,source,text_pos,len,sink) (This)->lpVtbl->AnalyzeVerticalGlyphOrientation(This,source,text_pos,len,sink)
+#define IDWriteTextAnalyzer1_GetGlyphOrientationTransform(This,angle,is_sideways,transform) (This)->lpVtbl->GetGlyphOrientationTransform(This,angle,is_sideways,transform)
+#define IDWriteTextAnalyzer1_GetScriptProperties(This,sa,props) (This)->lpVtbl->GetScriptProperties(This,sa,props)
+#define IDWriteTextAnalyzer1_GetTextComplexity(This,text,len,face,is_simple,len_read,indices) (This)->lpVtbl->GetTextComplexity(This,text,len,face,is_simple,len_read,indices)
+#define IDWriteTextAnalyzer1_GetJustificationOpportunities(This,face,font_em_size,sa,length,glyph_count,text,clustermap,prop,jo) (This)->lpVtbl->GetJustificationOpportunities(This,face,font_em_size,sa,length,glyph_count,text,clustermap,prop,jo)
+#define IDWriteTextAnalyzer1_JustifyGlyphAdvances(This,width,glyph_count,jo,advances,offsets,justifiedadvances,justifiedoffsets) (This)->lpVtbl->JustifyGlyphAdvances(This,width,glyph_count,jo,advances,offsets,justifiedadvances,justifiedoffsets)
+#define IDWriteTextAnalyzer1_GetJustifiedGlyphs(This,face,font_em_size,sa,length,glyph_count,max_glyphcount,clustermap,indices,advances,justifiedadvances,justifiedoffsets,prop,actual_count,modified_clustermap,modified_indices,modified_advances,modified_offsets) (This)->lpVtbl->GetJustifiedGlyphs(This,face,font_em_size,sa,length,glyph_count,max_glyphcount,clustermap,indices,advances,justifiedadvances,justifiedoffsets,prop,actual_count,modified_clustermap,modified_indices,modified_advances,modified_offsets)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_QueryInterface(IDWriteTextAnalyzer1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteTextAnalyzer1_AddRef(IDWriteTextAnalyzer1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteTextAnalyzer1_Release(IDWriteTextAnalyzer1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteTextAnalyzer methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_AnalyzeScript(IDWriteTextAnalyzer1* This,IDWriteTextAnalysisSource *source,UINT32 position,UINT32 length,IDWriteTextAnalysisSink *sink) {
+    return This->lpVtbl->AnalyzeScript(This,source,position,length,sink);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_AnalyzeBidi(IDWriteTextAnalyzer1* This,IDWriteTextAnalysisSource *source,UINT32 position,UINT32 length,IDWriteTextAnalysisSink *sink) {
+    return This->lpVtbl->AnalyzeBidi(This,source,position,length,sink);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_AnalyzeNumberSubstitution(IDWriteTextAnalyzer1* This,IDWriteTextAnalysisSource *source,UINT32 position,UINT32 length,IDWriteTextAnalysisSink *sink) {
+    return This->lpVtbl->AnalyzeNumberSubstitution(This,source,position,length,sink);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_AnalyzeLineBreakpoints(IDWriteTextAnalyzer1* This,IDWriteTextAnalysisSource *source,UINT32 position,UINT32 length,IDWriteTextAnalysisSink *sink) {
+    return This->lpVtbl->AnalyzeLineBreakpoints(This,source,position,length,sink);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetGlyphs(IDWriteTextAnalyzer1* This,const WCHAR *text,UINT32 length,IDWriteFontFace *font_face,WINBOOL is_sideways,WINBOOL is_rtl,const DWRITE_SCRIPT_ANALYSIS *analysis,const WCHAR *locale,IDWriteNumberSubstitution *substitution,const DWRITE_TYPOGRAPHIC_FEATURES **features,const UINT32 *feature_range_len,UINT32 feature_ranges,UINT32 max_glyph_count,UINT16 *clustermap,DWRITE_SHAPING_TEXT_PROPERTIES *text_props,UINT16 *glyph_indices,DWRITE_SHAPING_GLYPH_PROPERTIES *glyph_props,UINT32 *actual_glyph_count) {
+    return This->lpVtbl->GetGlyphs(This,text,length,font_face,is_sideways,is_rtl,analysis,locale,substitution,features,feature_range_len,feature_ranges,max_glyph_count,clustermap,text_props,glyph_indices,glyph_props,actual_glyph_count);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetGlyphPlacements(IDWriteTextAnalyzer1* This,const WCHAR *text,const UINT16 *clustermap,DWRITE_SHAPING_TEXT_PROPERTIES *props,UINT32 text_len,const UINT16 *glyph_indices,const DWRITE_SHAPING_GLYPH_PROPERTIES *glyph_props,UINT32 glyph_count,IDWriteFontFace *font_face,FLOAT fontEmSize,WINBOOL is_sideways,WINBOOL is_rtl,const DWRITE_SCRIPT_ANALYSIS *analysis,const WCHAR *locale,const DWRITE_TYPOGRAPHIC_FEATURES **features,const UINT32 *feature_range_len,UINT32 feature_ranges,FLOAT *glyph_advances,DWRITE_GLYPH_OFFSET *glyph_offsets) {
+    return This->lpVtbl->GetGlyphPlacements(This,text,clustermap,props,text_len,glyph_indices,glyph_props,glyph_count,font_face,fontEmSize,is_sideways,is_rtl,analysis,locale,features,feature_range_len,feature_ranges,glyph_advances,glyph_offsets);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetGdiCompatibleGlyphPlacements(IDWriteTextAnalyzer1* This,const WCHAR *text,const UINT16 *clustermap,DWRITE_SHAPING_TEXT_PROPERTIES *props,UINT32 text_len,const UINT16 *glyph_indices,const DWRITE_SHAPING_GLYPH_PROPERTIES *glyph_props,UINT32 glyph_count,IDWriteFontFace *font_face,FLOAT fontEmSize,FLOAT pixels_per_dip,const DWRITE_MATRIX *transform,WINBOOL use_gdi_natural,WINBOOL is_sideways,WINBOOL is_rtl,const DWRITE_SCRIPT_ANALYSIS *analysis,const WCHAR *locale,const DWRITE_TYPOGRAPHIC_FEATURES **features,const UINT32 *feature_range_lengths,UINT32 feature_ranges,FLOAT *glyph_advances,DWRITE_GLYPH_OFFSET *glyph_offsets) {
+    return This->lpVtbl->GetGdiCompatibleGlyphPlacements(This,text,clustermap,props,text_len,glyph_indices,glyph_props,glyph_count,font_face,fontEmSize,pixels_per_dip,transform,use_gdi_natural,is_sideways,is_rtl,analysis,locale,features,feature_range_lengths,feature_ranges,glyph_advances,glyph_offsets);
+}
+/*** IDWriteTextAnalyzer1 methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_ApplyCharacterSpacing(IDWriteTextAnalyzer1* This,FLOAT leading_spacing,FLOAT trailing_spacing,FLOAT min_advance_width,UINT32 len,UINT32 glyph_count,const UINT16 *clustermap,const FLOAT *advances,const DWRITE_GLYPH_OFFSET *offsets,const DWRITE_SHAPING_GLYPH_PROPERTIES *props,FLOAT *modified_advances,DWRITE_GLYPH_OFFSET *modified_offsets) {
+    return This->lpVtbl->ApplyCharacterSpacing(This,leading_spacing,trailing_spacing,min_advance_width,len,glyph_count,clustermap,advances,offsets,props,modified_advances,modified_offsets);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetBaseline(IDWriteTextAnalyzer1* This,IDWriteFontFace *face,DWRITE_BASELINE baseline,WINBOOL vertical,WINBOOL is_simulation_allowed,DWRITE_SCRIPT_ANALYSIS sa,const WCHAR *loca
