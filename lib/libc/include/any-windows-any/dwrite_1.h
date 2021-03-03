@@ -2640,4 +2640,110 @@ typedef struct IDWriteTextLayout1Vtbl {
     HRESULT (STDMETHODCALLTYPE *HitTestTextRange)(
         IDWriteTextLayout1 *This,
         UINT32 textPosition,
-    
+        UINT32 textLength,
+        FLOAT originX,
+        FLOAT originY,
+        DWRITE_HIT_TEST_METRICS *metrics,
+        UINT32 max_metricscount,
+        UINT32 *actual_metricscount);
+
+    /*** IDWriteTextLayout1 methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetPairKerning)(
+        IDWriteTextLayout1 *This,
+        WINBOOL is_pairkerning_enabled,
+        DWRITE_TEXT_RANGE range);
+
+    HRESULT (STDMETHODCALLTYPE *GetPairKerning)(
+        IDWriteTextLayout1 *This,
+        UINT32 position,
+        WINBOOL *is_pairkerning_enabled,
+        DWRITE_TEXT_RANGE *range);
+
+    HRESULT (STDMETHODCALLTYPE *SetCharacterSpacing)(
+        IDWriteTextLayout1 *This,
+        FLOAT leading_spacing,
+        FLOAT trailing_spacing,
+        FLOAT minimum_advance_width,
+        DWRITE_TEXT_RANGE range);
+
+    HRESULT (STDMETHODCALLTYPE *GetCharacterSpacing)(
+        IDWriteTextLayout1 *This,
+        UINT32 position,
+        FLOAT *leading_spacing,
+        FLOAT *trailing_spacing,
+        FLOAT *minimum_advance_width,
+        DWRITE_TEXT_RANGE *range);
+
+    END_INTERFACE
+} IDWriteTextLayout1Vtbl;
+
+interface IDWriteTextLayout1 {
+    CONST_VTBL IDWriteTextLayout1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteTextLayout1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteTextLayout1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteTextLayout1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteTextFormat methods ***/
+#define IDWriteTextLayout1_SetTextAlignment(This,alignment) (This)->lpVtbl->SetTextAlignment(This,alignment)
+#define IDWriteTextLayout1_SetParagraphAlignment(This,alignment) (This)->lpVtbl->SetParagraphAlignment(This,alignment)
+#define IDWriteTextLayout1_SetWordWrapping(This,wrapping) (This)->lpVtbl->SetWordWrapping(This,wrapping)
+#define IDWriteTextLayout1_SetReadingDirection(This,direction) (This)->lpVtbl->SetReadingDirection(This,direction)
+#define IDWriteTextLayout1_SetFlowDirection(This,direction) (This)->lpVtbl->SetFlowDirection(This,direction)
+#define IDWriteTextLayout1_SetIncrementalTabStop(This,tabstop) (This)->lpVtbl->SetIncrementalTabStop(This,tabstop)
+#define IDWriteTextLayout1_SetTrimming(This,trimming,trimming_sign) (This)->lpVtbl->SetTrimming(This,trimming,trimming_sign)
+#define IDWriteTextLayout1_SetLineSpacing(This,spacing,line_spacing,baseline) (This)->lpVtbl->SetLineSpacing(This,spacing,line_spacing,baseline)
+#define IDWriteTextLayout1_GetTextAlignment(This) (This)->lpVtbl->GetTextAlignment(This)
+#define IDWriteTextLayout1_GetParagraphAlignment(This) (This)->lpVtbl->GetParagraphAlignment(This)
+#define IDWriteTextLayout1_GetWordWrapping(This) (This)->lpVtbl->GetWordWrapping(This)
+#define IDWriteTextLayout1_GetReadingDirection(This) (This)->lpVtbl->GetReadingDirection(This)
+#define IDWriteTextLayout1_GetFlowDirection(This) (This)->lpVtbl->GetFlowDirection(This)
+#define IDWriteTextLayout1_GetIncrementalTabStop(This) (This)->lpVtbl->GetIncrementalTabStop(This)
+#define IDWriteTextLayout1_GetTrimming(This,options,trimming_sign) (This)->lpVtbl->GetTrimming(This,options,trimming_sign)
+#define IDWriteTextLayout1_GetLineSpacing(This,method,spacing,baseline) (This)->lpVtbl->GetLineSpacing(This,method,spacing,baseline)
+/*** IDWriteTextLayout methods ***/
+#define IDWriteTextLayout1_SetMaxWidth(This,maxWidth) (This)->lpVtbl->SetMaxWidth(This,maxWidth)
+#define IDWriteTextLayout1_SetMaxHeight(This,maxHeight) (This)->lpVtbl->SetMaxHeight(This,maxHeight)
+#define IDWriteTextLayout1_SetFontCollection(This,collection,range) (This)->lpVtbl->SetFontCollection(This,collection,range)
+#define IDWriteTextLayout1_SetFontFamilyName(This,name,range) (This)->lpVtbl->SetFontFamilyName(This,name,range)
+#define IDWriteTextLayout1_SetFontWeight(This,weight,range) (This)->lpVtbl->SetFontWeight(This,weight,range)
+#define IDWriteTextLayout1_SetFontStyle(This,style,range) (This)->lpVtbl->SetFontStyle(This,style,range)
+#define IDWriteTextLayout1_SetFontStretch(This,stretch,range) (This)->lpVtbl->SetFontStretch(This,stretch,range)
+#define IDWriteTextLayout1_SetFontSize(This,size,range) (This)->lpVtbl->SetFontSize(This,size,range)
+#define IDWriteTextLayout1_SetUnderline(This,underline,range) (This)->lpVtbl->SetUnderline(This,underline,range)
+#define IDWriteTextLayout1_SetStrikethrough(This,strikethrough,range) (This)->lpVtbl->SetStrikethrough(This,strikethrough,range)
+#define IDWriteTextLayout1_SetDrawingEffect(This,effect,range) (This)->lpVtbl->SetDrawingEffect(This,effect,range)
+#define IDWriteTextLayout1_SetInlineObject(This,object,range) (This)->lpVtbl->SetInlineObject(This,object,range)
+#define IDWriteTextLayout1_SetTypography(This,typography,range) (This)->lpVtbl->SetTypography(This,typography,range)
+#define IDWriteTextLayout1_SetLocaleName(This,locale,range) (This)->lpVtbl->SetLocaleName(This,locale,range)
+#define IDWriteTextLayout1_GetMaxWidth(This) (This)->lpVtbl->GetMaxWidth(This)
+#define IDWriteTextLayout1_GetMaxHeight(This) (This)->lpVtbl->GetMaxHeight(This)
+#define IDWriteTextLayout1_GetFontCollection(This,pos,collection,range) (This)->lpVtbl->IDWriteTextLayout_GetFontCollection(This,pos,collection,range)
+#define IDWriteTextLayout1_GetFontFamilyNameLength(This,pos,len,range) (This)->lpVtbl->IDWriteTextLayout_GetFontFamilyNameLength(This,pos,len,range)
+#define IDWriteTextLayout1_GetFontFamilyName(This,position,name,name_size,range) (This)->lpVtbl->IDWriteTextLayout_GetFontFamilyName(This,position,name,name_size,range)
+#define IDWriteTextLayout1_GetFontWeight(This,position,weight,range) (This)->lpVtbl->IDWriteTextLayout_GetFontWeight(This,position,weight,range)
+#define IDWriteTextLayout1_GetFontStyle(This,currentPosition,style,range) (This)->lpVtbl->IDWriteTextLayout_GetFontStyle(This,currentPosition,style,range)
+#define IDWriteTextLayout1_GetFontStretch(This,position,stretch,range) (This)->lpVtbl->IDWriteTextLayout_GetFontStretch(This,position,stretch,range)
+#define IDWriteTextLayout1_GetFontSize(This,position,size,range) (This)->lpVtbl->IDWriteTextLayout_GetFontSize(This,position,size,range)
+#define IDWriteTextLayout1_GetUnderline(This,position,has_underline,range) (This)->lpVtbl->GetUnderline(This,position,has_underline,range)
+#define IDWriteTextLayout1_GetStrikethrough(This,position,has_strikethrough,range) (This)->lpVtbl->GetStrikethrough(This,position,has_strikethrough,range)
+#define IDWriteTextLayout1_GetDrawingEffect(This,position,effect,range) (This)->lpVtbl->GetDrawingEffect(This,position,effect,range)
+#define IDWriteTextLayout1_GetInlineObject(This,position,object,range) (This)->lpVtbl->GetInlineObject(This,position,object,range)
+#define IDWriteTextLayout1_GetTypography(This,position,typography,range) (This)->lpVtbl->GetTypography(This,position,typography,range)
+#define IDWriteTextLayout1_GetLocaleNameLength(This,position,length,range) (This)->lpVtbl->IDWriteTextLayout_GetLocaleNameLength(This,position,length,range)
+#define IDWriteTextLayout1_GetLocaleName(This,position,name,name_size,range) (This)->lpVtbl->IDWriteTextLayout_GetLocaleName(This,position,name,name_size,range)
+#define IDWriteTextLayout1_Draw(This,context,renderer,originX,originY) (This)->lpVtbl->Draw(This,context,renderer,originX,originY)
+#define IDWriteTextLayout1_GetLineMetrics(This,metrics,max_count,actual_count) (This)->lpVtbl->GetLineMetrics(This,metrics,max_count,actual_count)
+#define IDWriteTextLayout1_GetMetrics(This,metrics) (This)->lpVtbl->GetMetrics(This,metrics)
+#define IDWriteTextLayout1_GetOverhangMetrics(This,overhangs) (This)->lpVtbl->GetOverhangMetrics(This,overhangs)
+#define IDWriteTextLayout1_GetClusterMetrics(This,metrics,max_count,act_count) (This)->lpVtbl->GetClusterMetrics(This,metrics,max_count,act_count)
+#define IDWriteTextLayout1_DetermineMinWidth(This,min_width) (This)->lpVtbl->DetermineMinWidth(This,min_width)
+#define IDWriteTextLayout1_HitTestPoint(This,pointX,pointY,is_trailinghit,is_inside,metrics) (This)->lpVtbl->HitTestPoint(This,pointX,pointY,is_trailinghit,is_inside,metrics)
+#define IDWriteTextLayout1_HitTestTextPosition(This,textPosition,is_trailinghit,pointX,pointY,metrics) (This)->lpVtbl->HitTestTextPosition(This,textPosition,is_trailinghit,pointX,pointY,metrics)
+#define IDWriteTextLayout1_HitTestTextRange(This,textPosition,textLength,originX,originY,metrics,max_metricscount,actual_metricscount) (This)->lpVtbl->HitTestTextRange(This,textPosition,textLength,originX,originY,metrics,max_metricscount,actual_metricscount)
+/*** IDWriteTextLayout1 methods ***/
+#define IDWriteTextLayout1_SetPairKerning(This,is_pairkerning_enabled,range) (This)->lpVtbl->SetPairKerning(This,is_pairkerning_enabled,range)
+#define IDWriteTextLayout1_GetPairKerning(This,position,is_pairkerning_enab
