@@ -1983,4 +1983,158 @@ static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetGdiCompatibleGlyphPlacements(
 static FORCEINLINE HRESULT IDWriteTextAnalyzer1_ApplyCharacterSpacing(IDWriteTextAnalyzer1* This,FLOAT leading_spacing,FLOAT trailing_spacing,FLOAT min_advance_width,UINT32 len,UINT32 glyph_count,const UINT16 *clustermap,const FLOAT *advances,const DWRITE_GLYPH_OFFSET *offsets,const DWRITE_SHAPING_GLYPH_PROPERTIES *props,FLOAT *modified_advances,DWRITE_GLYPH_OFFSET *modified_offsets) {
     return This->lpVtbl->ApplyCharacterSpacing(This,leading_spacing,trailing_spacing,min_advance_width,len,glyph_count,clustermap,advances,offsets,props,modified_advances,modified_offsets);
 }
-static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetBaseline(IDWriteTextAnalyzer1* This,IDWriteFontFace *face,DWRITE_BASELINE baseline,WINBOOL vertical,WINBOOL is_simulation_allowed,DWRITE_SCRIPT_ANALYSIS sa,const WCHAR *loca
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetBaseline(IDWriteTextAnalyzer1* This,IDWriteFontFace *face,DWRITE_BASELINE baseline,WINBOOL vertical,WINBOOL is_simulation_allowed,DWRITE_SCRIPT_ANALYSIS sa,const WCHAR *localeName,INT32 *baseline_coord,WINBOOL *exists) {
+    return This->lpVtbl->GetBaseline(This,face,baseline,vertical,is_simulation_allowed,sa,localeName,baseline_coord,exists);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_AnalyzeVerticalGlyphOrientation(IDWriteTextAnalyzer1* This,IDWriteTextAnalysisSource1 *source,UINT32 text_pos,UINT32 len,IDWriteTextAnalysisSink1 *sink) {
+    return This->lpVtbl->AnalyzeVerticalGlyphOrientation(This,source,text_pos,len,sink);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetGlyphOrientationTransform(IDWriteTextAnalyzer1* This,DWRITE_GLYPH_ORIENTATION_ANGLE angle,WINBOOL is_sideways,DWRITE_MATRIX *transform) {
+    return This->lpVtbl->GetGlyphOrientationTransform(This,angle,is_sideways,transform);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetScriptProperties(IDWriteTextAnalyzer1* This,DWRITE_SCRIPT_ANALYSIS sa,DWRITE_SCRIPT_PROPERTIES *props) {
+    return This->lpVtbl->GetScriptProperties(This,sa,props);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetTextComplexity(IDWriteTextAnalyzer1* This,const WCHAR *text,UINT32 len,IDWriteFontFace *face,WINBOOL *is_simple,UINT32 *len_read,UINT16 *indices) {
+    return This->lpVtbl->GetTextComplexity(This,text,len,face,is_simple,len_read,indices);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetJustificationOpportunities(IDWriteTextAnalyzer1* This,IDWriteFontFace *face,FLOAT font_em_size,DWRITE_SCRIPT_ANALYSIS sa,UINT32 length,UINT32 glyph_count,const WCHAR *text,const UINT16 *clustermap,const DWRITE_SHAPING_GLYPH_PROPERTIES *prop,DWRITE_JUSTIFICATION_OPPORTUNITY *jo) {
+    return This->lpVtbl->GetJustificationOpportunities(This,face,font_em_size,sa,length,glyph_count,text,clustermap,prop,jo);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_JustifyGlyphAdvances(IDWriteTextAnalyzer1* This,FLOAT width,UINT32 glyph_count,const DWRITE_JUSTIFICATION_OPPORTUNITY *jo,const FLOAT *advances,const DWRITE_GLYPH_OFFSET *offsets,FLOAT *justifiedadvances,DWRITE_GLYPH_OFFSET *justifiedoffsets) {
+    return This->lpVtbl->JustifyGlyphAdvances(This,width,glyph_count,jo,advances,offsets,justifiedadvances,justifiedoffsets);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalyzer1_GetJustifiedGlyphs(IDWriteTextAnalyzer1* This,IDWriteFontFace *face,FLOAT font_em_size,DWRITE_SCRIPT_ANALYSIS sa,UINT32 length,UINT32 glyph_count,UINT32 max_glyphcount,const UINT16 *clustermap,const UINT16 *indices,const FLOAT *advances,const FLOAT *justifiedadvances,const DWRITE_GLYPH_OFFSET *justifiedoffsets,const DWRITE_SHAPING_GLYPH_PROPERTIES *prop,UINT32 *actual_count,UINT16 *modified_clustermap,UINT16 *modified_indices,FLOAT *modified_advances,DWRITE_GLYPH_OFFSET *modified_offsets) {
+    return This->lpVtbl->GetJustifiedGlyphs(This,face,font_em_size,sa,length,glyph_count,max_glyphcount,clustermap,indices,advances,justifiedadvances,justifiedoffsets,prop,actual_count,modified_clustermap,modified_indices,modified_advances,modified_offsets);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteTextAnalyzer1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDWriteTextAnalysisSource1 interface
+ */
+#ifndef __IDWriteTextAnalysisSource1_INTERFACE_DEFINED__
+#define __IDWriteTextAnalysisSource1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteTextAnalysisSource1, 0x639cfad8, 0x0fb4, 0x4b21, 0xa5,0x8a, 0x06,0x79,0x20,0x12,0x00,0x09);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("639cfad8-0fb4-4b21-a58a-067920120009")
+IDWriteTextAnalysisSource1 : public IDWriteTextAnalysisSource
+{
+    virtual HRESULT STDMETHODCALLTYPE GetVerticalGlyphOrientation(
+        UINT32 pos,
+        UINT32 *length,
+        DWRITE_VERTICAL_GLYPH_ORIENTATION *orientation,
+        UINT8 *bidi_level) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteTextAnalysisSource1, 0x639cfad8, 0x0fb4, 0x4b21, 0xa5,0x8a, 0x06,0x79,0x20,0x12,0x00,0x09)
+#endif
+#else
+typedef struct IDWriteTextAnalysisSource1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteTextAnalysisSource1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteTextAnalysisSource1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteTextAnalysisSource1 *This);
+
+    /*** IDWriteTextAnalysisSource methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTextAtPosition)(
+        IDWriteTextAnalysisSource1 *This,
+        UINT32 position,
+        const WCHAR **text,
+        UINT32 *text_len);
+
+    HRESULT (STDMETHODCALLTYPE *GetTextBeforePosition)(
+        IDWriteTextAnalysisSource1 *This,
+        UINT32 position,
+        const WCHAR **text,
+        UINT32 *text_len);
+
+    DWRITE_READING_DIRECTION (STDMETHODCALLTYPE *GetParagraphReadingDirection)(
+        IDWriteTextAnalysisSource1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetLocaleName)(
+        IDWriteTextAnalysisSource1 *This,
+        UINT32 position,
+        UINT32 *text_len,
+        const WCHAR **locale);
+
+    HRESULT (STDMETHODCALLTYPE *GetNumberSubstitution)(
+        IDWriteTextAnalysisSource1 *This,
+        UINT32 position,
+        UINT32 *text_len,
+        IDWriteNumberSubstitution **substitution);
+
+    /*** IDWriteTextAnalysisSource1 methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetVerticalGlyphOrientation)(
+        IDWriteTextAnalysisSource1 *This,
+        UINT32 pos,
+        UINT32 *length,
+        DWRITE_VERTICAL_GLYPH_ORIENTATION *orientation,
+        UINT8 *bidi_level);
+
+    END_INTERFACE
+} IDWriteTextAnalysisSource1Vtbl;
+
+interface IDWriteTextAnalysisSource1 {
+    CONST_VTBL IDWriteTextAnalysisSource1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteTextAnalysisSource1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteTextAnalysisSource1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteTextAnalysisSource1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteTextAnalysisSource methods ***/
+#define IDWriteTextAnalysisSource1_GetTextAtPosition(This,position,text,text_len) (This)->lpVtbl->GetTextAtPosition(This,position,text,text_len)
+#define IDWriteTextAnalysisSource1_GetTextBeforePosition(This,position,text,text_len) (This)->lpVtbl->GetTextBeforePosition(This,position,text,text_len)
+#define IDWriteTextAnalysisSource1_GetParagraphReadingDirection(This) (This)->lpVtbl->GetParagraphReadingDirection(This)
+#define IDWriteTextAnalysisSource1_GetLocaleName(This,position,text_len,locale) (This)->lpVtbl->GetLocaleName(This,position,text_len,locale)
+#define IDWriteTextAnalysisSource1_GetNumberSubstitution(This,position,text_len,substitution) (This)->lpVtbl->GetNumberSubstitution(This,position,text_len,substitution)
+/*** IDWriteTextAnalysisSource1 methods ***/
+#define IDWriteTextAnalysisSource1_GetVerticalGlyphOrientation(This,pos,length,orientation,bidi_level) (This)->lpVtbl->GetVerticalGlyphOrientation(This,pos,length,orientation,bidi_level)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_QueryInterface(IDWriteTextAnalysisSource1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteTextAnalysisSource1_AddRef(IDWriteTextAnalysisSource1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteTextAnalysisSource1_Release(IDWriteTextAnalysisSource1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteTextAnalysisSource methods ***/
+static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_GetTextAtPosition(IDWriteTextAnalysisSource1* This,UINT32 position,const WCHAR **text,UINT32 *text_len) {
+    return This->lpVtbl->GetTextAtPosition(This,position,text,text_len);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_GetTextBeforePosition(IDWriteTextAnalysisSource1* This,UINT32 position,const WCHAR **text,UINT32 *text_len) {
+    return This->lpVtbl->GetTextBeforePosition(This,position,text,text_len);
+}
+static FORCEINLINE DWRITE_READING_DIRECTION IDWriteTextAnalysisSource1_GetParagraphReadingDirection(IDWriteTextAnalysisSource1* This) {
+    return This->lpVtbl->GetParagraphReadingDirection(This);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_GetLocaleName(IDWriteTextAnalysisSource1* This,UINT32 position,UINT32 *text_len,const WCHAR **locale) {
+    return This->lpVtbl->GetLocaleName(This,position,text_len,locale);
+}
+static FORCEINLINE HRESULT IDWriteTextAnalysisSource1_GetNumberSubstitution(IDWriteTextAnalysisSource1* This,UINT32 position,UINT32 *text_len,IDWriteNumberSubstitution **substitution) {
+    return This->lpVtbl->GetNumberSubstitution(This,position,text_len,substitution);
+}
+/*** IDWriteTextAnalysisSource1 methods ***/
+static FORC
