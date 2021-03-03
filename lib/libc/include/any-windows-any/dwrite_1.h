@@ -2879,4 +2879,174 @@ static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontStretch(IDWriteTextLayout1*
 static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontSize(IDWriteTextLayout1* This,UINT32 position,FLOAT *size,DWRITE_TEXT_RANGE *range) {
     return This->lpVtbl->IDWriteTextLayout_GetFontSize(This,position,size,range);
 }
-static FORCEINLINE HRESULT IDWriteTextLayout1_GetUnde
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetUnderline(IDWriteTextLayout1* This,UINT32 position,WINBOOL *has_underline,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetUnderline(This,position,has_underline,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetStrikethrough(IDWriteTextLayout1* This,UINT32 position,WINBOOL *has_strikethrough,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetStrikethrough(This,position,has_strikethrough,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetDrawingEffect(IDWriteTextLayout1* This,UINT32 position,IUnknown **effect,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetDrawingEffect(This,position,effect,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetInlineObject(IDWriteTextLayout1* This,UINT32 position,IDWriteInlineObject **object,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetInlineObject(This,position,object,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetTypography(IDWriteTextLayout1* This,UINT32 position,IDWriteTypography **typography,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetTypography(This,position,typography,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetLocaleNameLength(IDWriteTextLayout1* This,UINT32 position,UINT32 *length,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetLocaleNameLength(This,position,length,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetLocaleName(IDWriteTextLayout1* This,UINT32 position,WCHAR *name,UINT32 name_size,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetLocaleName(This,position,name,name_size,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_Draw(IDWriteTextLayout1* This,void *context,IDWriteTextRenderer *renderer,FLOAT originX,FLOAT originY) {
+    return This->lpVtbl->Draw(This,context,renderer,originX,originY);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetLineMetrics(IDWriteTextLayout1* This,DWRITE_LINE_METRICS *metrics,UINT32 max_count,UINT32 *actual_count) {
+    return This->lpVtbl->GetLineMetrics(This,metrics,max_count,actual_count);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetMetrics(IDWriteTextLayout1* This,DWRITE_TEXT_METRICS *metrics) {
+    return This->lpVtbl->GetMetrics(This,metrics);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetOverhangMetrics(IDWriteTextLayout1* This,DWRITE_OVERHANG_METRICS *overhangs) {
+    return This->lpVtbl->GetOverhangMetrics(This,overhangs);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetClusterMetrics(IDWriteTextLayout1* This,DWRITE_CLUSTER_METRICS *metrics,UINT32 max_count,UINT32 *act_count) {
+    return This->lpVtbl->GetClusterMetrics(This,metrics,max_count,act_count);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_DetermineMinWidth(IDWriteTextLayout1* This,FLOAT *min_width) {
+    return This->lpVtbl->DetermineMinWidth(This,min_width);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_HitTestPoint(IDWriteTextLayout1* This,FLOAT pointX,FLOAT pointY,WINBOOL *is_trailinghit,WINBOOL *is_inside,DWRITE_HIT_TEST_METRICS *metrics) {
+    return This->lpVtbl->HitTestPoint(This,pointX,pointY,is_trailinghit,is_inside,metrics);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_HitTestTextPosition(IDWriteTextLayout1* This,UINT32 textPosition,WINBOOL is_trailinghit,FLOAT *pointX,FLOAT *pointY,DWRITE_HIT_TEST_METRICS *metrics) {
+    return This->lpVtbl->HitTestTextPosition(This,textPosition,is_trailinghit,pointX,pointY,metrics);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_HitTestTextRange(IDWriteTextLayout1* This,UINT32 textPosition,UINT32 textLength,FLOAT originX,FLOAT originY,DWRITE_HIT_TEST_METRICS *metrics,UINT32 max_metricscount,UINT32 *actual_metricscount) {
+    return This->lpVtbl->HitTestTextRange(This,textPosition,textLength,originX,originY,metrics,max_metricscount,actual_metricscount);
+}
+/*** IDWriteTextLayout1 methods ***/
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetPairKerning(IDWriteTextLayout1* This,WINBOOL is_pairkerning_enabled,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetPairKerning(This,is_pairkerning_enabled,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetPairKerning(IDWriteTextLayout1* This,UINT32 position,WINBOOL *is_pairkerning_enabled,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetPairKerning(This,position,is_pairkerning_enabled,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetCharacterSpacing(IDWriteTextLayout1* This,FLOAT leading_spacing,FLOAT trailing_spacing,FLOAT minimum_advance_width,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetCharacterSpacing(This,leading_spacing,trailing_spacing,minimum_advance_width,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetCharacterSpacing(IDWriteTextLayout1* This,UINT32 position,FLOAT *leading_spacing,FLOAT *trailing_spacing,FLOAT *minimum_advance_width,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->GetCharacterSpacing(This,position,leading_spacing,trailing_spacing,minimum_advance_width,range);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteTextLayout1_INTERFACE_DEFINED__ */
+
+typedef enum DWRITE_TEXT_ANTIALIAS_MODE {
+    DWRITE_TEXT_ANTIALIAS_MODE_CLEARTYPE = 0,
+    DWRITE_TEXT_ANTIALIAS_MODE_GRAYSCALE = 1
+} DWRITE_TEXT_ANTIALIAS_MODE;
+/*****************************************************************************
+ * IDWriteBitmapRenderTarget1 interface
+ */
+#ifndef __IDWriteBitmapRenderTarget1_INTERFACE_DEFINED__
+#define __IDWriteBitmapRenderTarget1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDWriteBitmapRenderTarget1, 0x791e8298, 0x3ef3, 0x4230, 0x98,0x80, 0xc9,0xbd,0xec,0xc4,0x20,0x64);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("791e8298-3ef3-4230-9880-c9bdecc42064")
+IDWriteBitmapRenderTarget1 : public IDWriteBitmapRenderTarget
+{
+    virtual DWRITE_TEXT_ANTIALIAS_MODE STDMETHODCALLTYPE GetTextAntialiasMode(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetTextAntialiasMode(
+        DWRITE_TEXT_ANTIALIAS_MODE mode) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteBitmapRenderTarget1, 0x791e8298, 0x3ef3, 0x4230, 0x98,0x80, 0xc9,0xbd,0xec,0xc4,0x20,0x64)
+#endif
+#else
+typedef struct IDWriteBitmapRenderTarget1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteBitmapRenderTarget1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteBitmapRenderTarget1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteBitmapRenderTarget1 *This);
+
+    /*** IDWriteBitmapRenderTarget methods ***/
+    HRESULT (STDMETHODCALLTYPE *DrawGlyphRun)(
+        IDWriteBitmapRenderTarget1 *This,
+        FLOAT baselineOriginX,
+        FLOAT baselineOriginY,
+        DWRITE_MEASURING_MODE measuring_mode,
+        const DWRITE_GLYPH_RUN *glyph_run,
+        IDWriteRenderingParams *params,
+        COLORREF textColor,
+        RECT *blackbox_rect);
+
+    HDC (STDMETHODCALLTYPE *GetMemoryDC)(
+        IDWriteBitmapRenderTarget1 *This);
+
+    FLOAT (STDMETHODCALLTYPE *GetPixelsPerDip)(
+        IDWriteBitmapRenderTarget1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *SetPixelsPerDip)(
+        IDWriteBitmapRenderTarget1 *This,
+        FLOAT pixels_per_dip);
+
+    HRESULT (STDMETHODCALLTYPE *GetCurrentTransform)(
+        IDWriteBitmapRenderTarget1 *This,
+        DWRITE_MATRIX *transform);
+
+    HRESULT (STDMETHODCALLTYPE *SetCurrentTransform)(
+        IDWriteBitmapRenderTarget1 *This,
+        const DWRITE_MATRIX *transform);
+
+    HRESULT (STDMETHODCALLTYPE *GetSize)(
+        IDWriteBitmapRenderTarget1 *This,
+        SIZE *size);
+
+    HRESULT (STDMETHODCALLTYPE *Resize)(
+        IDWriteBitmapRenderTarget1 *This,
+        UINT32 width,
+        UINT32 height);
+
+    /*** IDWriteBitmapRenderTarget1 methods ***/
+    DWRITE_TEXT_ANTIALIAS_MODE (STDMETHODCALLTYPE *GetTextAntialiasMode)(
+        IDWriteBitmapRenderTarget1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *SetTextAntialiasMode)(
+        IDWriteBitmapRenderTarget1 *This,
+        DWRITE_TEXT_ANTIALIAS_MODE mode);
+
+    END_INTERFACE
+} IDWriteBitmapRenderTarget1Vtbl;
+
+interface IDWriteBitmapRenderTarget1 {
+    CONST_VTBL IDWriteBitmapRenderTarget1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteBitmapRenderTarget1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteBitmapRenderTarget1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteBitmapRenderTarget1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteBitmapRenderTarget methods ***/
+#define IDWriteBitmapRenderTarget1_DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textColor,blackbox_rect) (This)->lpVtbl->DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textCo
