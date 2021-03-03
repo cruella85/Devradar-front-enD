@@ -3049,4 +3049,75 @@ interface IDWriteBitmapRenderTarget1 {
 #define IDWriteBitmapRenderTarget1_AddRef(This) (This)->lpVtbl->AddRef(This)
 #define IDWriteBitmapRenderTarget1_Release(This) (This)->lpVtbl->Release(This)
 /*** IDWriteBitmapRenderTarget methods ***/
-#define IDWriteBitmapRenderTarget1_DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textColor,blackbox_rect) (This)->lpVtbl->DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textCo
+#define IDWriteBitmapRenderTarget1_DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textColor,blackbox_rect) (This)->lpVtbl->DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textColor,blackbox_rect)
+#define IDWriteBitmapRenderTarget1_GetMemoryDC(This) (This)->lpVtbl->GetMemoryDC(This)
+#define IDWriteBitmapRenderTarget1_GetPixelsPerDip(This) (This)->lpVtbl->GetPixelsPerDip(This)
+#define IDWriteBitmapRenderTarget1_SetPixelsPerDip(This,pixels_per_dip) (This)->lpVtbl->SetPixelsPerDip(This,pixels_per_dip)
+#define IDWriteBitmapRenderTarget1_GetCurrentTransform(This,transform) (This)->lpVtbl->GetCurrentTransform(This,transform)
+#define IDWriteBitmapRenderTarget1_SetCurrentTransform(This,transform) (This)->lpVtbl->SetCurrentTransform(This,transform)
+#define IDWriteBitmapRenderTarget1_GetSize(This,size) (This)->lpVtbl->GetSize(This,size)
+#define IDWriteBitmapRenderTarget1_Resize(This,width,height) (This)->lpVtbl->Resize(This,width,height)
+/*** IDWriteBitmapRenderTarget1 methods ***/
+#define IDWriteBitmapRenderTarget1_GetTextAntialiasMode(This) (This)->lpVtbl->GetTextAntialiasMode(This)
+#define IDWriteBitmapRenderTarget1_SetTextAntialiasMode(This,mode) (This)->lpVtbl->SetTextAntialiasMode(This,mode)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_QueryInterface(IDWriteBitmapRenderTarget1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteBitmapRenderTarget1_AddRef(IDWriteBitmapRenderTarget1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteBitmapRenderTarget1_Release(IDWriteBitmapRenderTarget1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteBitmapRenderTarget methods ***/
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_DrawGlyphRun(IDWriteBitmapRenderTarget1* This,FLOAT baselineOriginX,FLOAT baselineOriginY,DWRITE_MEASURING_MODE measuring_mode,const DWRITE_GLYPH_RUN *glyph_run,IDWriteRenderingParams *params,COLORREF textColor,RECT *blackbox_rect) {
+    return This->lpVtbl->DrawGlyphRun(This,baselineOriginX,baselineOriginY,measuring_mode,glyph_run,params,textColor,blackbox_rect);
+}
+static FORCEINLINE HDC IDWriteBitmapRenderTarget1_GetMemoryDC(IDWriteBitmapRenderTarget1* This) {
+    return This->lpVtbl->GetMemoryDC(This);
+}
+static FORCEINLINE FLOAT IDWriteBitmapRenderTarget1_GetPixelsPerDip(IDWriteBitmapRenderTarget1* This) {
+    return This->lpVtbl->GetPixelsPerDip(This);
+}
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_SetPixelsPerDip(IDWriteBitmapRenderTarget1* This,FLOAT pixels_per_dip) {
+    return This->lpVtbl->SetPixelsPerDip(This,pixels_per_dip);
+}
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_GetCurrentTransform(IDWriteBitmapRenderTarget1* This,DWRITE_MATRIX *transform) {
+    return This->lpVtbl->GetCurrentTransform(This,transform);
+}
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_SetCurrentTransform(IDWriteBitmapRenderTarget1* This,const DWRITE_MATRIX *transform) {
+    return This->lpVtbl->SetCurrentTransform(This,transform);
+}
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_GetSize(IDWriteBitmapRenderTarget1* This,SIZE *size) {
+    return This->lpVtbl->GetSize(This,size);
+}
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_Resize(IDWriteBitmapRenderTarget1* This,UINT32 width,UINT32 height) {
+    return This->lpVtbl->Resize(This,width,height);
+}
+/*** IDWriteBitmapRenderTarget1 methods ***/
+static FORCEINLINE DWRITE_TEXT_ANTIALIAS_MODE IDWriteBitmapRenderTarget1_GetTextAntialiasMode(IDWriteBitmapRenderTarget1* This) {
+    return This->lpVtbl->GetTextAntialiasMode(This);
+}
+static FORCEINLINE HRESULT IDWriteBitmapRenderTarget1_SetTextAntialiasMode(IDWriteBitmapRenderTarget1* This,DWRITE_TEXT_ANTIALIAS_MODE mode) {
+    return This->lpVtbl->SetTextAntialiasMode(This,mode);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDWriteBitmapRenderTarget1_INTERFACE_DEFINED__ */
+
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __dwrite_1_h__ */
