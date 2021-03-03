@@ -2746,4 +2746,137 @@ interface IDWriteTextLayout1 {
 #define IDWriteTextLayout1_HitTestTextRange(This,textPosition,textLength,originX,originY,metrics,max_metricscount,actual_metricscount) (This)->lpVtbl->HitTestTextRange(This,textPosition,textLength,originX,originY,metrics,max_metricscount,actual_metricscount)
 /*** IDWriteTextLayout1 methods ***/
 #define IDWriteTextLayout1_SetPairKerning(This,is_pairkerning_enabled,range) (This)->lpVtbl->SetPairKerning(This,is_pairkerning_enabled,range)
-#define IDWriteTextLayout1_GetPairKerning(This,position,is_pairkerning_enab
+#define IDWriteTextLayout1_GetPairKerning(This,position,is_pairkerning_enabled,range) (This)->lpVtbl->GetPairKerning(This,position,is_pairkerning_enabled,range)
+#define IDWriteTextLayout1_SetCharacterSpacing(This,leading_spacing,trailing_spacing,minimum_advance_width,range) (This)->lpVtbl->SetCharacterSpacing(This,leading_spacing,trailing_spacing,minimum_advance_width,range)
+#define IDWriteTextLayout1_GetCharacterSpacing(This,position,leading_spacing,trailing_spacing,minimum_advance_width,range) (This)->lpVtbl->GetCharacterSpacing(This,position,leading_spacing,trailing_spacing,minimum_advance_width,range)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDWriteTextLayout1_QueryInterface(IDWriteTextLayout1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDWriteTextLayout1_AddRef(IDWriteTextLayout1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDWriteTextLayout1_Release(IDWriteTextLayout1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDWriteTextFormat methods ***/
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetTextAlignment(IDWriteTextLayout1* This,DWRITE_TEXT_ALIGNMENT alignment) {
+    return This->lpVtbl->SetTextAlignment(This,alignment);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetParagraphAlignment(IDWriteTextLayout1* This,DWRITE_PARAGRAPH_ALIGNMENT alignment) {
+    return This->lpVtbl->SetParagraphAlignment(This,alignment);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetWordWrapping(IDWriteTextLayout1* This,DWRITE_WORD_WRAPPING wrapping) {
+    return This->lpVtbl->SetWordWrapping(This,wrapping);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetReadingDirection(IDWriteTextLayout1* This,DWRITE_READING_DIRECTION direction) {
+    return This->lpVtbl->SetReadingDirection(This,direction);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFlowDirection(IDWriteTextLayout1* This,DWRITE_FLOW_DIRECTION direction) {
+    return This->lpVtbl->SetFlowDirection(This,direction);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetIncrementalTabStop(IDWriteTextLayout1* This,FLOAT tabstop) {
+    return This->lpVtbl->SetIncrementalTabStop(This,tabstop);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetTrimming(IDWriteTextLayout1* This,const DWRITE_TRIMMING *trimming,IDWriteInlineObject *trimming_sign) {
+    return This->lpVtbl->SetTrimming(This,trimming,trimming_sign);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetLineSpacing(IDWriteTextLayout1* This,DWRITE_LINE_SPACING_METHOD spacing,FLOAT line_spacing,FLOAT baseline) {
+    return This->lpVtbl->SetLineSpacing(This,spacing,line_spacing,baseline);
+}
+static FORCEINLINE DWRITE_TEXT_ALIGNMENT IDWriteTextLayout1_GetTextAlignment(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetTextAlignment(This);
+}
+static FORCEINLINE DWRITE_PARAGRAPH_ALIGNMENT IDWriteTextLayout1_GetParagraphAlignment(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetParagraphAlignment(This);
+}
+static FORCEINLINE DWRITE_WORD_WRAPPING IDWriteTextLayout1_GetWordWrapping(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetWordWrapping(This);
+}
+static FORCEINLINE DWRITE_READING_DIRECTION IDWriteTextLayout1_GetReadingDirection(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetReadingDirection(This);
+}
+static FORCEINLINE DWRITE_FLOW_DIRECTION IDWriteTextLayout1_GetFlowDirection(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetFlowDirection(This);
+}
+static FORCEINLINE FLOAT IDWriteTextLayout1_GetIncrementalTabStop(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetIncrementalTabStop(This);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetTrimming(IDWriteTextLayout1* This,DWRITE_TRIMMING *options,IDWriteInlineObject **trimming_sign) {
+    return This->lpVtbl->GetTrimming(This,options,trimming_sign);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetLineSpacing(IDWriteTextLayout1* This,DWRITE_LINE_SPACING_METHOD *method,FLOAT *spacing,FLOAT *baseline) {
+    return This->lpVtbl->GetLineSpacing(This,method,spacing,baseline);
+}
+/*** IDWriteTextLayout methods ***/
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetMaxWidth(IDWriteTextLayout1* This,FLOAT maxWidth) {
+    return This->lpVtbl->SetMaxWidth(This,maxWidth);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetMaxHeight(IDWriteTextLayout1* This,FLOAT maxHeight) {
+    return This->lpVtbl->SetMaxHeight(This,maxHeight);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFontCollection(IDWriteTextLayout1* This,IDWriteFontCollection *collection,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetFontCollection(This,collection,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFontFamilyName(IDWriteTextLayout1* This,const WCHAR *name,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetFontFamilyName(This,name,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFontWeight(IDWriteTextLayout1* This,DWRITE_FONT_WEIGHT weight,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetFontWeight(This,weight,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFontStyle(IDWriteTextLayout1* This,DWRITE_FONT_STYLE style,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetFontStyle(This,style,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFontStretch(IDWriteTextLayout1* This,DWRITE_FONT_STRETCH stretch,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetFontStretch(This,stretch,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetFontSize(IDWriteTextLayout1* This,FLOAT size,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetFontSize(This,size,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetUnderline(IDWriteTextLayout1* This,WINBOOL underline,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetUnderline(This,underline,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetStrikethrough(IDWriteTextLayout1* This,WINBOOL strikethrough,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetStrikethrough(This,strikethrough,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetDrawingEffect(IDWriteTextLayout1* This,IUnknown *effect,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetDrawingEffect(This,effect,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetInlineObject(IDWriteTextLayout1* This,IDWriteInlineObject *object,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetInlineObject(This,object,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetTypography(IDWriteTextLayout1* This,IDWriteTypography *typography,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetTypography(This,typography,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_SetLocaleName(IDWriteTextLayout1* This,const WCHAR *locale,DWRITE_TEXT_RANGE range) {
+    return This->lpVtbl->SetLocaleName(This,locale,range);
+}
+static FORCEINLINE FLOAT IDWriteTextLayout1_GetMaxWidth(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetMaxWidth(This);
+}
+static FORCEINLINE FLOAT IDWriteTextLayout1_GetMaxHeight(IDWriteTextLayout1* This) {
+    return This->lpVtbl->GetMaxHeight(This);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontCollection(IDWriteTextLayout1* This,UINT32 pos,IDWriteFontCollection **collection,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontCollection(This,pos,collection,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontFamilyNameLength(IDWriteTextLayout1* This,UINT32 pos,UINT32 *len,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontFamilyNameLength(This,pos,len,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontFamilyName(IDWriteTextLayout1* This,UINT32 position,WCHAR *name,UINT32 name_size,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontFamilyName(This,position,name,name_size,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontWeight(IDWriteTextLayout1* This,UINT32 position,DWRITE_FONT_WEIGHT *weight,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontWeight(This,position,weight,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontStyle(IDWriteTextLayout1* This,UINT32 currentPosition,DWRITE_FONT_STYLE *style,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontStyle(This,currentPosition,style,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontStretch(IDWriteTextLayout1* This,UINT32 position,DWRITE_FONT_STRETCH *stretch,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontStretch(This,position,stretch,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetFontSize(IDWriteTextLayout1* This,UINT32 position,FLOAT *size,DWRITE_TEXT_RANGE *range) {
+    return This->lpVtbl->IDWriteTextLayout_GetFontSize(This,position,size,range);
+}
+static FORCEINLINE HRESULT IDWriteTextLayout1_GetUnde
