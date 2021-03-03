@@ -1681,4 +1681,256 @@ IDWriteTextAnalyzer1 : public IDWriteTextAnalyzer
     virtual HRESULT STDMETHODCALLTYPE JustifyGlyphAdvances(
         FLOAT width,
         UINT32 glyph_count,
-        const DWRITE_JUST
+        const DWRITE_JUSTIFICATION_OPPORTUNITY *jo,
+        const FLOAT *advances,
+        const DWRITE_GLYPH_OFFSET *offsets,
+        FLOAT *justifiedadvances,
+        DWRITE_GLYPH_OFFSET *justifiedoffsets) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetJustifiedGlyphs(
+        IDWriteFontFace *face,
+        FLOAT font_em_size,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        UINT32 length,
+        UINT32 glyph_count,
+        UINT32 max_glyphcount,
+        const UINT16 *clustermap,
+        const UINT16 *indices,
+        const FLOAT *advances,
+        const FLOAT *justifiedadvances,
+        const DWRITE_GLYPH_OFFSET *justifiedoffsets,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *prop,
+        UINT32 *actual_count,
+        UINT16 *modified_clustermap,
+        UINT16 *modified_indices,
+        FLOAT *modified_advances,
+        DWRITE_GLYPH_OFFSET *modified_offsets) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDWriteTextAnalyzer1, 0x80dad800, 0xe21f, 0x4e83, 0x96,0xce, 0xbf,0xcc,0xe5,0x00,0xdb,0x7c)
+#endif
+#else
+typedef struct IDWriteTextAnalyzer1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDWriteTextAnalyzer1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDWriteTextAnalyzer1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDWriteTextAnalyzer1 *This);
+
+    /*** IDWriteTextAnalyzer methods ***/
+    HRESULT (STDMETHODCALLTYPE *AnalyzeScript)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteTextAnalysisSource *source,
+        UINT32 position,
+        UINT32 length,
+        IDWriteTextAnalysisSink *sink);
+
+    HRESULT (STDMETHODCALLTYPE *AnalyzeBidi)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteTextAnalysisSource *source,
+        UINT32 position,
+        UINT32 length,
+        IDWriteTextAnalysisSink *sink);
+
+    HRESULT (STDMETHODCALLTYPE *AnalyzeNumberSubstitution)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteTextAnalysisSource *source,
+        UINT32 position,
+        UINT32 length,
+        IDWriteTextAnalysisSink *sink);
+
+    HRESULT (STDMETHODCALLTYPE *AnalyzeLineBreakpoints)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteTextAnalysisSource *source,
+        UINT32 position,
+        UINT32 length,
+        IDWriteTextAnalysisSink *sink);
+
+    HRESULT (STDMETHODCALLTYPE *GetGlyphs)(
+        IDWriteTextAnalyzer1 *This,
+        const WCHAR *text,
+        UINT32 length,
+        IDWriteFontFace *font_face,
+        WINBOOL is_sideways,
+        WINBOOL is_rtl,
+        const DWRITE_SCRIPT_ANALYSIS *analysis,
+        const WCHAR *locale,
+        IDWriteNumberSubstitution *substitution,
+        const DWRITE_TYPOGRAPHIC_FEATURES **features,
+        const UINT32 *feature_range_len,
+        UINT32 feature_ranges,
+        UINT32 max_glyph_count,
+        UINT16 *clustermap,
+        DWRITE_SHAPING_TEXT_PROPERTIES *text_props,
+        UINT16 *glyph_indices,
+        DWRITE_SHAPING_GLYPH_PROPERTIES *glyph_props,
+        UINT32 *actual_glyph_count);
+
+    HRESULT (STDMETHODCALLTYPE *GetGlyphPlacements)(
+        IDWriteTextAnalyzer1 *This,
+        const WCHAR *text,
+        const UINT16 *clustermap,
+        DWRITE_SHAPING_TEXT_PROPERTIES *props,
+        UINT32 text_len,
+        const UINT16 *glyph_indices,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *glyph_props,
+        UINT32 glyph_count,
+        IDWriteFontFace *font_face,
+        FLOAT fontEmSize,
+        WINBOOL is_sideways,
+        WINBOOL is_rtl,
+        const DWRITE_SCRIPT_ANALYSIS *analysis,
+        const WCHAR *locale,
+        const DWRITE_TYPOGRAPHIC_FEATURES **features,
+        const UINT32 *feature_range_len,
+        UINT32 feature_ranges,
+        FLOAT *glyph_advances,
+        DWRITE_GLYPH_OFFSET *glyph_offsets);
+
+    HRESULT (STDMETHODCALLTYPE *GetGdiCompatibleGlyphPlacements)(
+        IDWriteTextAnalyzer1 *This,
+        const WCHAR *text,
+        const UINT16 *clustermap,
+        DWRITE_SHAPING_TEXT_PROPERTIES *props,
+        UINT32 text_len,
+        const UINT16 *glyph_indices,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *glyph_props,
+        UINT32 glyph_count,
+        IDWriteFontFace *font_face,
+        FLOAT fontEmSize,
+        FLOAT pixels_per_dip,
+        const DWRITE_MATRIX *transform,
+        WINBOOL use_gdi_natural,
+        WINBOOL is_sideways,
+        WINBOOL is_rtl,
+        const DWRITE_SCRIPT_ANALYSIS *analysis,
+        const WCHAR *locale,
+        const DWRITE_TYPOGRAPHIC_FEATURES **features,
+        const UINT32 *feature_range_lengths,
+        UINT32 feature_ranges,
+        FLOAT *glyph_advances,
+        DWRITE_GLYPH_OFFSET *glyph_offsets);
+
+    /*** IDWriteTextAnalyzer1 methods ***/
+    HRESULT (STDMETHODCALLTYPE *ApplyCharacterSpacing)(
+        IDWriteTextAnalyzer1 *This,
+        FLOAT leading_spacing,
+        FLOAT trailing_spacing,
+        FLOAT min_advance_width,
+        UINT32 len,
+        UINT32 glyph_count,
+        const UINT16 *clustermap,
+        const FLOAT *advances,
+        const DWRITE_GLYPH_OFFSET *offsets,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *props,
+        FLOAT *modified_advances,
+        DWRITE_GLYPH_OFFSET *modified_offsets);
+
+    HRESULT (STDMETHODCALLTYPE *GetBaseline)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteFontFace *face,
+        DWRITE_BASELINE baseline,
+        WINBOOL vertical,
+        WINBOOL is_simulation_allowed,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        const WCHAR *localeName,
+        INT32 *baseline_coord,
+        WINBOOL *exists);
+
+    HRESULT (STDMETHODCALLTYPE *AnalyzeVerticalGlyphOrientation)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteTextAnalysisSource1 *source,
+        UINT32 text_pos,
+        UINT32 len,
+        IDWriteTextAnalysisSink1 *sink);
+
+    HRESULT (STDMETHODCALLTYPE *GetGlyphOrientationTransform)(
+        IDWriteTextAnalyzer1 *This,
+        DWRITE_GLYPH_ORIENTATION_ANGLE angle,
+        WINBOOL is_sideways,
+        DWRITE_MATRIX *transform);
+
+    HRESULT (STDMETHODCALLTYPE *GetScriptProperties)(
+        IDWriteTextAnalyzer1 *This,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        DWRITE_SCRIPT_PROPERTIES *props);
+
+    HRESULT (STDMETHODCALLTYPE *GetTextComplexity)(
+        IDWriteTextAnalyzer1 *This,
+        const WCHAR *text,
+        UINT32 len,
+        IDWriteFontFace *face,
+        WINBOOL *is_simple,
+        UINT32 *len_read,
+        UINT16 *indices);
+
+    HRESULT (STDMETHODCALLTYPE *GetJustificationOpportunities)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteFontFace *face,
+        FLOAT font_em_size,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        UINT32 length,
+        UINT32 glyph_count,
+        const WCHAR *text,
+        const UINT16 *clustermap,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *prop,
+        DWRITE_JUSTIFICATION_OPPORTUNITY *jo);
+
+    HRESULT (STDMETHODCALLTYPE *JustifyGlyphAdvances)(
+        IDWriteTextAnalyzer1 *This,
+        FLOAT width,
+        UINT32 glyph_count,
+        const DWRITE_JUSTIFICATION_OPPORTUNITY *jo,
+        const FLOAT *advances,
+        const DWRITE_GLYPH_OFFSET *offsets,
+        FLOAT *justifiedadvances,
+        DWRITE_GLYPH_OFFSET *justifiedoffsets);
+
+    HRESULT (STDMETHODCALLTYPE *GetJustifiedGlyphs)(
+        IDWriteTextAnalyzer1 *This,
+        IDWriteFontFace *face,
+        FLOAT font_em_size,
+        DWRITE_SCRIPT_ANALYSIS sa,
+        UINT32 length,
+        UINT32 glyph_count,
+        UINT32 max_glyphcount,
+        const UINT16 *clustermap,
+        const UINT16 *indices,
+        const FLOAT *advances,
+        const FLOAT *justifiedadvances,
+        const DWRITE_GLYPH_OFFSET *justifiedoffsets,
+        const DWRITE_SHAPING_GLYPH_PROPERTIES *prop,
+        UINT32 *actual_count,
+        UINT16 *modified_clustermap,
+        UINT16 *modified_indices,
+        FLOAT *modified_advances,
+        DWRITE_GLYPH_OFFSET *modified_offsets);
+
+    END_INTERFACE
+} IDWriteTextAnalyzer1Vtbl;
+
+interface IDWriteTextAnalyzer1 {
+    CONST_VTBL IDWriteTextAnalyzer1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDWriteTextAnalyzer1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDWriteTextAnalyzer1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDWriteTextAnalyzer1_Release(This) (This)->lpVtbl->Release(This)
+/*** IDWriteTextAnalyzer methods ***/
+#define IDWriteTextAnalyzer1_AnalyzeScript(This,source,position,length,sink) (This)->lpVtbl->AnalyzeScript(This,source,position,length,sink)
+#define IDWriteTextAnalyzer1_AnalyzeBidi(This,source,position,length,sink) (This)->lpVtbl->AnalyzeBidi(This,source,position,length,sink)
+#define IDWriteTextAnalyzer1_AnalyzeNumberSubstitution(This,source,position,length,sink) (This)->lpVtbl->AnalyzeNumberSubstitution(This,source,position,length,sink)
+#define IDWriteTextAnalyzer1_AnalyzeLineBreakpoints(This,source,position,length,sink) (This)->lpVtbl->AnalyzeLineBreakpoints(This,source,position,length,sink)
+#define IDWriteTextAnalyzer1_GetGlyphs(This,text,length,font_face,is_sideways,is_rtl,analysis,locale,substitution,features,feature_range_len,feature_ranges
