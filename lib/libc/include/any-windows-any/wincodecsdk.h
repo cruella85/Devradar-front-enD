@@ -540,4 +540,243 @@ typedef struct IWICMetadataReaderVtbl {
         GUID *pguidMetadataFormat);
 
     HRESULT (STDMETHODCALLTYPE *GetMetadataHandlerInfo)(
-     
+        IWICMetadataReader *This,
+        IWICMetadataHandlerInfo **ppIHandler);
+
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IWICMetadataReader *This,
+        UINT *pcCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetValueByIndex)(
+        IWICMetadataReader *This,
+        UINT nIndex,
+        PROPVARIANT *pvarSchema,
+        PROPVARIANT *pvarId,
+        PROPVARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *GetValue)(
+        IWICMetadataReader *This,
+        const PROPVARIANT *pvarSchema,
+        const PROPVARIANT *pvarId,
+        PROPVARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *GetEnumerator)(
+        IWICMetadataReader *This,
+        IWICEnumMetadataItem **ppIEnumMetadata);
+
+    END_INTERFACE
+} IWICMetadataReaderVtbl;
+
+interface IWICMetadataReader {
+    CONST_VTBL IWICMetadataReaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICMetadataReader_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICMetadataReader_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICMetadataReader_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICMetadataReader methods ***/
+#define IWICMetadataReader_GetMetadataFormat(This,pguidMetadataFormat) (This)->lpVtbl->GetMetadataFormat(This,pguidMetadataFormat)
+#define IWICMetadataReader_GetMetadataHandlerInfo(This,ppIHandler) (This)->lpVtbl->GetMetadataHandlerInfo(This,ppIHandler)
+#define IWICMetadataReader_GetCount(This,pcCount) (This)->lpVtbl->GetCount(This,pcCount)
+#define IWICMetadataReader_GetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue) (This)->lpVtbl->GetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue)
+#define IWICMetadataReader_GetValue(This,pvarSchema,pvarId,pvarValue) (This)->lpVtbl->GetValue(This,pvarSchema,pvarId,pvarValue)
+#define IWICMetadataReader_GetEnumerator(This,ppIEnumMetadata) (This)->lpVtbl->GetEnumerator(This,ppIEnumMetadata)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICMetadataReader_QueryInterface(IWICMetadataReader* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICMetadataReader_AddRef(IWICMetadataReader* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICMetadataReader_Release(IWICMetadataReader* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWICMetadataReader methods ***/
+static FORCEINLINE HRESULT IWICMetadataReader_GetMetadataFormat(IWICMetadataReader* This,GUID *pguidMetadataFormat) {
+    return This->lpVtbl->GetMetadataFormat(This,pguidMetadataFormat);
+}
+static FORCEINLINE HRESULT IWICMetadataReader_GetMetadataHandlerInfo(IWICMetadataReader* This,IWICMetadataHandlerInfo **ppIHandler) {
+    return This->lpVtbl->GetMetadataHandlerInfo(This,ppIHandler);
+}
+static FORCEINLINE HRESULT IWICMetadataReader_GetCount(IWICMetadataReader* This,UINT *pcCount) {
+    return This->lpVtbl->GetCount(This,pcCount);
+}
+static FORCEINLINE HRESULT IWICMetadataReader_GetValueByIndex(IWICMetadataReader* This,UINT nIndex,PROPVARIANT *pvarSchema,PROPVARIANT *pvarId,PROPVARIANT *pvarValue) {
+    return This->lpVtbl->GetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue);
+}
+static FORCEINLINE HRESULT IWICMetadataReader_GetValue(IWICMetadataReader* This,const PROPVARIANT *pvarSchema,const PROPVARIANT *pvarId,PROPVARIANT *pvarValue) {
+    return This->lpVtbl->GetValue(This,pvarSchema,pvarId,pvarValue);
+}
+static FORCEINLINE HRESULT IWICMetadataReader_GetEnumerator(IWICMetadataReader* This,IWICEnumMetadataItem **ppIEnumMetadata) {
+    return This->lpVtbl->GetEnumerator(This,ppIEnumMetadata);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICMetadataReader_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWICMetadataReaderInfo interface
+ */
+#ifndef __IWICMetadataReaderInfo_INTERFACE_DEFINED__
+#define __IWICMetadataReaderInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWICMetadataReaderInfo, 0xeebf1f5b, 0x07c1, 0x4447, 0xa3,0xab, 0x22,0xac,0xaf,0x78,0xa8,0x04);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("eebf1f5b-07c1-4447-a3ab-22acaf78a804")
+IWICMetadataReaderInfo : public IWICMetadataHandlerInfo
+{
+    virtual HRESULT STDMETHODCALLTYPE GetPatterns(
+        REFGUID guidContainerFormat,
+        UINT cbSize,
+        WICMetadataPattern *pPattern,
+        UINT *pcCount,
+        UINT *pcbActual) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE MatchesPattern(
+        REFGUID guidContainerFormat,
+        IStream *pIStream,
+        WINBOOL *pfMatches) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateInstance(
+        IWICMetadataReader **ppIReader) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWICMetadataReaderInfo, 0xeebf1f5b, 0x07c1, 0x4447, 0xa3,0xab, 0x22,0xac,0xaf,0x78,0xa8,0x04)
+#endif
+#else
+typedef struct IWICMetadataReaderInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWICMetadataReaderInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWICMetadataReaderInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWICMetadataReaderInfo *This);
+
+    /*** IWICComponentInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetComponentType)(
+        IWICMetadataReaderInfo *This,
+        WICComponentType *pType);
+
+    HRESULT (STDMETHODCALLTYPE *GetCLSID)(
+        IWICMetadataReaderInfo *This,
+        CLSID *pclsid);
+
+    HRESULT (STDMETHODCALLTYPE *GetSigningStatus)(
+        IWICMetadataReaderInfo *This,
+        DWORD *pStatus);
+
+    HRESULT (STDMETHODCALLTYPE *GetAuthor)(
+        IWICMetadataReaderInfo *This,
+        UINT cchAuthor,
+        WCHAR *wzAuthor,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetVendorGUID)(
+        IWICMetadataReaderInfo *This,
+        GUID *pguidVendor);
+
+    HRESULT (STDMETHODCALLTYPE *GetVersion)(
+        IWICMetadataReaderInfo *This,
+        UINT cchVersion,
+        WCHAR *wzVersion,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetSpecVersion)(
+        IWICMetadataReaderInfo *This,
+        UINT cchSpecVersion,
+        WCHAR *wzSpecVersion,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetFriendlyName)(
+        IWICMetadataReaderInfo *This,
+        UINT cchFriendlyName,
+        WCHAR *wzFriendlyName,
+        UINT *pcchActual);
+
+    /*** IWICMetadataHandlerInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetMetadataFormat)(
+        IWICMetadataReaderInfo *This,
+        GUID *pguidMetadataFormat);
+
+    HRESULT (STDMETHODCALLTYPE *GetContainerFormats)(
+        IWICMetadataReaderInfo *This,
+        UINT cContainerFormats,
+        GUID *pguidContainerFormats,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetDeviceManufacturer)(
+        IWICMetadataReaderInfo *This,
+        UINT cchDeviceManufacturer,
+        WCHAR *wzDeviceManufacturer,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetDeviceModels)(
+        IWICMetadataReaderInfo *This,
+        UINT cchDeviceModels,
+        WCHAR *wzDeviceModels,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *DoesRequireFullStream)(
+        IWICMetadataReaderInfo *This,
+        WINBOOL *pfRequiresFullStream);
+
+    HRESULT (STDMETHODCALLTYPE *DoesSupportPadding)(
+        IWICMetadataReaderInfo *This,
+        WINBOOL *pfSupportsPadding);
+
+    HRESULT (STDMETHODCALLTYPE *DoesRequireFixedSize)(
+        IWICMetadataReaderInfo *This,
+        WINBOOL *pfFixedSize);
+
+    /*** IWICMetadataReaderInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetPatterns)(
+        IWICMetadataReaderInfo *This,
+        REFGUID guidContainerFormat,
+        UINT cbSize,
+        WICMetadataPattern *pPattern,
+        UINT *pcCount,
+        UINT *pcbActual);
+
+    HRESULT (STDMETHODCALLTYPE *MatchesPattern)(
+        IWICMetadataReaderInfo *This,
+        REFGUID guidContainerFormat,
+        IStream *pIStream,
+        WINBOOL *pfMatches);
+
+    HRESULT (STDMETHODCALLTYPE *CreateInstance)(
+        IWICMetadataReaderInfo *This,
+        IWICMetadataReader **ppIReader);
+
+    END_INTERFACE
+} IWICMetadataReaderInfoVtbl;
+
+interface IWICMetadataReaderInfo {
+    CONST_VTBL IWICMetadataReaderInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICMetadataReaderInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICMetadataReaderInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICMetadataReaderInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICComponentInfo methods ***/
+#define IWICMetadataReaderInfo_GetComponentType(This,pType) (This)->lpVtbl->GetComponentType(This,pType)
+#define IWICMetadataReaderInfo_GetCLSID(This,pclsid) (This)->lpVtbl->GetCLSID(This,pclsid)
+#define IWICMetadataReaderInfo_G
