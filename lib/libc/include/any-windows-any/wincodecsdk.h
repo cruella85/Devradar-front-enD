@@ -923,4 +923,220 @@ typedef struct IWICMetadataWriterVtbl {
         IWICMetadataWriter *This);
 
     /*** IWICMetadataReader methods ***/
-    H
+    HRESULT (STDMETHODCALLTYPE *GetMetadataFormat)(
+        IWICMetadataWriter *This,
+        GUID *pguidMetadataFormat);
+
+    HRESULT (STDMETHODCALLTYPE *GetMetadataHandlerInfo)(
+        IWICMetadataWriter *This,
+        IWICMetadataHandlerInfo **ppIHandler);
+
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IWICMetadataWriter *This,
+        UINT *pcCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetValueByIndex)(
+        IWICMetadataWriter *This,
+        UINT nIndex,
+        PROPVARIANT *pvarSchema,
+        PROPVARIANT *pvarId,
+        PROPVARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *GetValue)(
+        IWICMetadataWriter *This,
+        const PROPVARIANT *pvarSchema,
+        const PROPVARIANT *pvarId,
+        PROPVARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *GetEnumerator)(
+        IWICMetadataWriter *This,
+        IWICEnumMetadataItem **ppIEnumMetadata);
+
+    /*** IWICMetadataWriter methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetValue)(
+        IWICMetadataWriter *This,
+        const PROPVARIANT *pvarSchema,
+        const PROPVARIANT *pvarId,
+        const PROPVARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *SetValueByIndex)(
+        IWICMetadataWriter *This,
+        UINT nIndex,
+        const PROPVARIANT *pvarSchema,
+        const PROPVARIANT *pvarId,
+        const PROPVARIANT *pvarValue);
+
+    HRESULT (STDMETHODCALLTYPE *RemoveValue)(
+        IWICMetadataWriter *This,
+        const PROPVARIANT *pvarSchema,
+        const PROPVARIANT *pvarId);
+
+    HRESULT (STDMETHODCALLTYPE *RemoveValueByIndex)(
+        IWICMetadataWriter *This,
+        UINT nIndex);
+
+    END_INTERFACE
+} IWICMetadataWriterVtbl;
+
+interface IWICMetadataWriter {
+    CONST_VTBL IWICMetadataWriterVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICMetadataWriter_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICMetadataWriter_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICMetadataWriter_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICMetadataReader methods ***/
+#define IWICMetadataWriter_GetMetadataFormat(This,pguidMetadataFormat) (This)->lpVtbl->GetMetadataFormat(This,pguidMetadataFormat)
+#define IWICMetadataWriter_GetMetadataHandlerInfo(This,ppIHandler) (This)->lpVtbl->GetMetadataHandlerInfo(This,ppIHandler)
+#define IWICMetadataWriter_GetCount(This,pcCount) (This)->lpVtbl->GetCount(This,pcCount)
+#define IWICMetadataWriter_GetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue) (This)->lpVtbl->GetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue)
+#define IWICMetadataWriter_GetValue(This,pvarSchema,pvarId,pvarValue) (This)->lpVtbl->GetValue(This,pvarSchema,pvarId,pvarValue)
+#define IWICMetadataWriter_GetEnumerator(This,ppIEnumMetadata) (This)->lpVtbl->GetEnumerator(This,ppIEnumMetadata)
+/*** IWICMetadataWriter methods ***/
+#define IWICMetadataWriter_SetValue(This,pvarSchema,pvarId,pvarValue) (This)->lpVtbl->SetValue(This,pvarSchema,pvarId,pvarValue)
+#define IWICMetadataWriter_SetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue) (This)->lpVtbl->SetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue)
+#define IWICMetadataWriter_RemoveValue(This,pvarSchema,pvarId) (This)->lpVtbl->RemoveValue(This,pvarSchema,pvarId)
+#define IWICMetadataWriter_RemoveValueByIndex(This,nIndex) (This)->lpVtbl->RemoveValueByIndex(This,nIndex)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriter_QueryInterface(IWICMetadataWriter* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICMetadataWriter_AddRef(IWICMetadataWriter* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICMetadataWriter_Release(IWICMetadataWriter* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWICMetadataReader methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriter_GetMetadataFormat(IWICMetadataWriter* This,GUID *pguidMetadataFormat) {
+    return This->lpVtbl->GetMetadataFormat(This,pguidMetadataFormat);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_GetMetadataHandlerInfo(IWICMetadataWriter* This,IWICMetadataHandlerInfo **ppIHandler) {
+    return This->lpVtbl->GetMetadataHandlerInfo(This,ppIHandler);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_GetCount(IWICMetadataWriter* This,UINT *pcCount) {
+    return This->lpVtbl->GetCount(This,pcCount);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_GetValueByIndex(IWICMetadataWriter* This,UINT nIndex,PROPVARIANT *pvarSchema,PROPVARIANT *pvarId,PROPVARIANT *pvarValue) {
+    return This->lpVtbl->GetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_GetValue(IWICMetadataWriter* This,const PROPVARIANT *pvarSchema,const PROPVARIANT *pvarId,PROPVARIANT *pvarValue) {
+    return This->lpVtbl->GetValue(This,pvarSchema,pvarId,pvarValue);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_GetEnumerator(IWICMetadataWriter* This,IWICEnumMetadataItem **ppIEnumMetadata) {
+    return This->lpVtbl->GetEnumerator(This,ppIEnumMetadata);
+}
+/*** IWICMetadataWriter methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriter_SetValue(IWICMetadataWriter* This,const PROPVARIANT *pvarSchema,const PROPVARIANT *pvarId,const PROPVARIANT *pvarValue) {
+    return This->lpVtbl->SetValue(This,pvarSchema,pvarId,pvarValue);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_SetValueByIndex(IWICMetadataWriter* This,UINT nIndex,const PROPVARIANT *pvarSchema,const PROPVARIANT *pvarId,const PROPVARIANT *pvarValue) {
+    return This->lpVtbl->SetValueByIndex(This,nIndex,pvarSchema,pvarId,pvarValue);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_RemoveValue(IWICMetadataWriter* This,const PROPVARIANT *pvarSchema,const PROPVARIANT *pvarId) {
+    return This->lpVtbl->RemoveValue(This,pvarSchema,pvarId);
+}
+static FORCEINLINE HRESULT IWICMetadataWriter_RemoveValueByIndex(IWICMetadataWriter* This,UINT nIndex) {
+    return This->lpVtbl->RemoveValueByIndex(This,nIndex);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICMetadataWriter_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWICMetadataWriterInfo interface
+ */
+#ifndef __IWICMetadataWriterInfo_INTERFACE_DEFINED__
+#define __IWICMetadataWriterInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWICMetadataWriterInfo, 0xb22e3fba, 0x3925, 0x4323, 0xb5,0xc1, 0x9e,0xbf,0xc4,0x30,0xf2,0x36);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b22e3fba-3925-4323-b5c1-9ebfc430f236")
+IWICMetadataWriterInfo : public IWICMetadataHandlerInfo
+{
+    virtual HRESULT STDMETHODCALLTYPE GetHeader(
+        REFGUID guidContainerFormat,
+        UINT cbSize,
+        WICMetadataHeader *pHeader,
+        UINT *pcbActual) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateInstance(
+        IWICMetadataWriter **ppIWriter) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWICMetadataWriterInfo, 0xb22e3fba, 0x3925, 0x4323, 0xb5,0xc1, 0x9e,0xbf,0xc4,0x30,0xf2,0x36)
+#endif
+#else
+typedef struct IWICMetadataWriterInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWICMetadataWriterInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWICMetadataWriterInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWICMetadataWriterInfo *This);
+
+    /*** IWICComponentInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetComponentType)(
+        IWICMetadataWriterInfo *This,
+        WICComponentType *pType);
+
+    HRESULT (STDMETHODCALLTYPE *GetCLSID)(
+        IWICMetadataWriterInfo *This,
+        CLSID *pclsid);
+
+    HRESULT (STDMETHODCALLTYPE *GetSigningStatus)(
+        IWICMetadataWriterInfo *This,
+        DWORD *pStatus);
+
+    HRESULT (STDMETHODCALLTYPE *GetAuthor)(
+        IWICMetadataWriterInfo *This,
+        UINT cchAuthor,
+        WCHAR *wzAuthor,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetVendorGUID)(
+        IWICMetadataWriterInfo *This,
+        GUID *pguidVendor);
+
+    HRESULT (STDMETHODCALLTYPE *GetVersion)(
+        IWICMetadataWriterInfo *This,
+        UINT cchVersion,
+        WCHAR *wzVersion,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetSpecVersion)(
+        IWICMetadataWriterInfo *This,
+        UINT cchSpecVersion,
+        WCHAR *wzSpecVersion,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetFriendlyName)(
+        IWICMetadataWriterInfo *This,
+        UINT cchFriendlyName,
+        WCHAR *wzFriendlyName,
+        UINT *pcchActual);
+
+    /*** IWICMetadataHandlerInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetMetadataFormat)(
+        IWICMetadataWriterInfo *This,
+        GUID *pguidMetadataFormat);
+
+    HRESULT (STDMETHODCALLTYPE *GetContainerFormats)(
+        IWICMetadataWriterInfo *This,
+        UINT cCont
