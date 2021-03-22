@@ -2055,4 +2055,94 @@ static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFlipRotator(IWICComp
 static FORCEINLINE HRESULT IWICComponentFactory_CreateStream(IWICComponentFactory* This,IWICStream **ppIWICStream) {
     return This->lpVtbl->CreateStream(This,ppIWICStream);
 }
-static FORCEINLINE HRESULT IWICComponentFactory_
+static FORCEINLINE HRESULT IWICComponentFactory_CreateColorContext(IWICComponentFactory* This,IWICColorContext **ppIWICColorContext) {
+    return This->lpVtbl->CreateColorContext(This,ppIWICColorContext);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateColorTransformer(IWICComponentFactory* This,IWICColorTransform **ppIWICColorTransform) {
+    return This->lpVtbl->CreateColorTransformer(This,ppIWICColorTransform);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmap(IWICComponentFactory* This,UINT uiWidth,UINT uiHeight,REFWICPixelFormatGUID pixelFormat,WICBitmapCreateCacheOption option,IWICBitmap **ppIBitmap) {
+    return This->lpVtbl->CreateBitmap(This,uiWidth,uiHeight,pixelFormat,option,ppIBitmap);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFromSource(IWICComponentFactory* This,IWICBitmapSource *piBitmapSource,WICBitmapCreateCacheOption option,IWICBitmap **ppIBitmap) {
+    return This->lpVtbl->CreateBitmapFromSource(This,piBitmapSource,option,ppIBitmap);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFromSourceRect(IWICComponentFactory* This,IWICBitmapSource *piBitmapSource,UINT x,UINT y,UINT width,UINT height,IWICBitmap **ppIBitmap) {
+    return This->lpVtbl->CreateBitmapFromSourceRect(This,piBitmapSource,x,y,width,height,ppIBitmap);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFromMemory(IWICComponentFactory* This,UINT uiWidth,UINT uiHeight,REFWICPixelFormatGUID pixelFormat,UINT cbStride,UINT cbBufferSize,BYTE *pbBuffer,IWICBitmap **ppIBitmap) {
+    return This->lpVtbl->CreateBitmapFromMemory(This,uiWidth,uiHeight,pixelFormat,cbStride,cbBufferSize,pbBuffer,ppIBitmap);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFromHBITMAP(IWICComponentFactory* This,HBITMAP hBitmap,HPALETTE hPalette,WICBitmapAlphaChannelOption options,IWICBitmap **ppIBitmap) {
+    return This->lpVtbl->CreateBitmapFromHBITMAP(This,hBitmap,hPalette,options,ppIBitmap);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFromHICON(IWICComponentFactory* This,HICON hIcon,IWICBitmap **ppIBitmap) {
+    return This->lpVtbl->CreateBitmapFromHICON(This,hIcon,ppIBitmap);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateComponentEnumerator(IWICComponentFactory* This,DWORD componentTypes,DWORD options,IEnumUnknown **ppIEnumUnknown) {
+    return This->lpVtbl->CreateComponentEnumerator(This,componentTypes,options,ppIEnumUnknown);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateFastMetadataEncoderFromDecoder(IWICComponentFactory* This,IWICBitmapDecoder *pIDecoder,IWICFastMetadataEncoder **ppIFastEncoder) {
+    return This->lpVtbl->CreateFastMetadataEncoderFromDecoder(This,pIDecoder,ppIFastEncoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateFastMetadataEncoderFromFrameDecode(IWICComponentFactory* This,IWICBitmapFrameDecode *pIFrameDecoder,IWICFastMetadataEncoder **ppIFastEncoder) {
+    return This->lpVtbl->CreateFastMetadataEncoderFromFrameDecode(This,pIFrameDecoder,ppIFastEncoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateQueryWriter(IWICComponentFactory* This,REFGUID guidMetadataFormat,const GUID *pguidVendor,IWICMetadataQueryWriter **ppIQueryWriter) {
+    return This->lpVtbl->CreateQueryWriter(This,guidMetadataFormat,pguidVendor,ppIQueryWriter);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateQueryWriterFromReader(IWICComponentFactory* This,IWICMetadataQueryReader *pIQueryReader,const GUID *pguidVendor,IWICMetadataQueryWriter **ppIQueryWriter) {
+    return This->lpVtbl->CreateQueryWriterFromReader(This,pIQueryReader,pguidVendor,ppIQueryWriter);
+}
+/*** IWICComponentFactory methods ***/
+static FORCEINLINE HRESULT IWICComponentFactory_CreateMetadataReader(IWICComponentFactory* This,REFGUID guidMetadataFormat,const GUID *pguidVendor,DWORD dwOptions,IStream *pIStream,IWICMetadataReader **ppIReader) {
+    return This->lpVtbl->CreateMetadataReader(This,guidMetadataFormat,pguidVendor,dwOptions,pIStream,ppIReader);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateMetadataReaderFromContainer(IWICComponentFactory* This,REFGUID guidMetadataFormat,const GUID *pguidVendor,DWORD dwOptions,IStream *pIStream,IWICMetadataReader **ppIReader) {
+    return This->lpVtbl->CreateMetadataReaderFromContainer(This,guidMetadataFormat,pguidVendor,dwOptions,pIStream,ppIReader);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateMetadataWriter(IWICComponentFactory* This,REFGUID guidMetadataFormat,const GUID *pguidVendor,DWORD dwMetadataOptions,IWICMetadataWriter **ppIWriter) {
+    return This->lpVtbl->CreateMetadataWriter(This,guidMetadataFormat,pguidVendor,dwMetadataOptions,ppIWriter);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateMetadataWriterFromReader(IWICComponentFactory* This,IWICMetadataReader *pIReader,const GUID *pguidVendor,IWICMetadataWriter **ppIWriter) {
+    return This->lpVtbl->CreateMetadataWriterFromReader(This,pIReader,pguidVendor,ppIWriter);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateQueryReaderFromBlockReader(IWICComponentFactory* This,IWICMetadataBlockReader *pIBlockReader,IWICMetadataQueryReader **ppIQueryReader) {
+    return This->lpVtbl->CreateQueryReaderFromBlockReader(This,pIBlockReader,ppIQueryReader);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateQueryWriterFromBlockWriter(IWICComponentFactory* This,IWICMetadataBlockWriter *pIBlockWriter,IWICMetadataQueryWriter **ppIQueryWriter) {
+    return This->lpVtbl->CreateQueryWriterFromBlockWriter(This,pIBlockWriter,ppIQueryWriter);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateEncoderPropertyBag(IWICComponentFactory* This,PROPBAG2 *ppropOptions,UINT cCount,IPropertyBag2 **ppIPropertyBag) {
+    return This->lpVtbl->CreateEncoderPropertyBag(This,ppropOptions,cCount,ppIPropertyBag);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICComponentFactory_INTERFACE_DEFINED__ */
+
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER LPSAFEARRAY_UserSize     (ULONG *, ULONG, LPSAFEARRAY *);
+unsigned char * __RPC_USER LPSAFEARRAY_UserMarshal  (ULONG *, unsigned char *, LPSAFEARRAY *);
+unsigned char * __RPC_USER LPSAFEARRAY_UserUnmarshal(ULONG *, unsigned char *, LPSAFEARRAY *);
+void            __RPC_USER LPSAFEARRAY_UserFree     (ULONG *, LPSAFEARRAY *);
+ULONG           __RPC_USER CLIPFORMAT_UserSize     (ULONG *, ULONG, CLIPFORMAT *);
+unsigned char * __RPC_USER CLIPFORMAT_UserMarshal  (ULONG *, unsigned char *, CLIPFORMAT *);
+unsigned char * __RPC_USER CLIPFORMAT_UserUnmarshal(ULONG *, unsigned char *, CLIPFORMAT *);
+void            __RPC_USER CLIPFORMAT_UserFree     (ULONG *, CLIPFORMAT *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __wincodecsdk_h__ */
