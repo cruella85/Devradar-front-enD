@@ -1289,4 +1289,224 @@ static FORCEINLINE HRESULT IWICMetadataWriterInfo_CreateInstance(IWICMetadataWri
  * IWICMetadataBlockReader interface
  */
 #ifndef __IWICMetadataBlockReader_INTERFACE_DEFINED__
-#define __IWICMe
+#define __IWICMetadataBlockReader_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWICMetadataBlockReader, 0xfeaa2a8d, 0xb3f3, 0x43e4, 0xb2,0x5c, 0xd1,0xde,0x99,0x0a,0x1a,0xe1);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("feaa2a8d-b3f3-43e4-b25c-d1de990a1ae1")
+IWICMetadataBlockReader : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetContainerFormat(
+        GUID *pguidContainerFormat) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCount(
+        UINT *pcCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetReaderByIndex(
+        UINT nIndex,
+        IWICMetadataReader **ppIMetadataReader) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetEnumerator(
+        IEnumUnknown **ppIEnumMetadata) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWICMetadataBlockReader, 0xfeaa2a8d, 0xb3f3, 0x43e4, 0xb2,0x5c, 0xd1,0xde,0x99,0x0a,0x1a,0xe1)
+#endif
+#else
+typedef struct IWICMetadataBlockReaderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWICMetadataBlockReader *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWICMetadataBlockReader *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWICMetadataBlockReader *This);
+
+    /*** IWICMetadataBlockReader methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetContainerFormat)(
+        IWICMetadataBlockReader *This,
+        GUID *pguidContainerFormat);
+
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IWICMetadataBlockReader *This,
+        UINT *pcCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetReaderByIndex)(
+        IWICMetadataBlockReader *This,
+        UINT nIndex,
+        IWICMetadataReader **ppIMetadataReader);
+
+    HRESULT (STDMETHODCALLTYPE *GetEnumerator)(
+        IWICMetadataBlockReader *This,
+        IEnumUnknown **ppIEnumMetadata);
+
+    END_INTERFACE
+} IWICMetadataBlockReaderVtbl;
+
+interface IWICMetadataBlockReader {
+    CONST_VTBL IWICMetadataBlockReaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICMetadataBlockReader_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICMetadataBlockReader_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICMetadataBlockReader_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICMetadataBlockReader methods ***/
+#define IWICMetadataBlockReader_GetContainerFormat(This,pguidContainerFormat) (This)->lpVtbl->GetContainerFormat(This,pguidContainerFormat)
+#define IWICMetadataBlockReader_GetCount(This,pcCount) (This)->lpVtbl->GetCount(This,pcCount)
+#define IWICMetadataBlockReader_GetReaderByIndex(This,nIndex,ppIMetadataReader) (This)->lpVtbl->GetReaderByIndex(This,nIndex,ppIMetadataReader)
+#define IWICMetadataBlockReader_GetEnumerator(This,ppIEnumMetadata) (This)->lpVtbl->GetEnumerator(This,ppIEnumMetadata)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICMetadataBlockReader_QueryInterface(IWICMetadataBlockReader* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICMetadataBlockReader_AddRef(IWICMetadataBlockReader* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICMetadataBlockReader_Release(IWICMetadataBlockReader* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWICMetadataBlockReader methods ***/
+static FORCEINLINE HRESULT IWICMetadataBlockReader_GetContainerFormat(IWICMetadataBlockReader* This,GUID *pguidContainerFormat) {
+    return This->lpVtbl->GetContainerFormat(This,pguidContainerFormat);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockReader_GetCount(IWICMetadataBlockReader* This,UINT *pcCount) {
+    return This->lpVtbl->GetCount(This,pcCount);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockReader_GetReaderByIndex(IWICMetadataBlockReader* This,UINT nIndex,IWICMetadataReader **ppIMetadataReader) {
+    return This->lpVtbl->GetReaderByIndex(This,nIndex,ppIMetadataReader);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockReader_GetEnumerator(IWICMetadataBlockReader* This,IEnumUnknown **ppIEnumMetadata) {
+    return This->lpVtbl->GetEnumerator(This,ppIEnumMetadata);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICMetadataBlockReader_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWICMetadataBlockWriter interface
+ */
+#ifndef __IWICMetadataBlockWriter_INTERFACE_DEFINED__
+#define __IWICMetadataBlockWriter_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWICMetadataBlockWriter, 0x08fb9676, 0xb444, 0x41e8, 0x8d,0xbe, 0x6a,0x53,0xa5,0x42,0xbf,0xf1);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("08fb9676-b444-41e8-8dbe-6a53a542bff1")
+IWICMetadataBlockWriter : public IWICMetadataBlockReader
+{
+    virtual HRESULT STDMETHODCALLTYPE InitializeFromBlockReader(
+        IWICMetadataBlockReader *pIMDBlockReader) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetWriterByIndex(
+        UINT nIndex,
+        IWICMetadataWriter **ppIMetadataWriter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AddWriter(
+        IWICMetadataWriter *pIMetadataWriter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetWriterByIndex(
+        UINT nIndex,
+        IWICMetadataWriter *pIMetadataWriter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE RemoveWriterByIndex(
+        UINT nIndex) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWICMetadataBlockWriter, 0x08fb9676, 0xb444, 0x41e8, 0x8d,0xbe, 0x6a,0x53,0xa5,0x42,0xbf,0xf1)
+#endif
+#else
+typedef struct IWICMetadataBlockWriterVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWICMetadataBlockWriter *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWICMetadataBlockWriter *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWICMetadataBlockWriter *This);
+
+    /*** IWICMetadataBlockReader methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetContainerFormat)(
+        IWICMetadataBlockWriter *This,
+        GUID *pguidContainerFormat);
+
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IWICMetadataBlockWriter *This,
+        UINT *pcCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetReaderByIndex)(
+        IWICMetadataBlockWriter *This,
+        UINT nIndex,
+        IWICMetadataReader **ppIMetadataReader);
+
+    HRESULT (STDMETHODCALLTYPE *GetEnumerator)(
+        IWICMetadataBlockWriter *This,
+        IEnumUnknown **ppIEnumMetadata);
+
+    /*** IWICMetadataBlockWriter methods ***/
+    HRESULT (STDMETHODCALLTYPE *InitializeFromBlockReader)(
+        IWICMetadataBlockWriter *This,
+        IWICMetadataBlockReader *pIMDBlockReader);
+
+    HRESULT (STDMETHODCALLTYPE *GetWriterByIndex)(
+        IWICMetadataBlockWriter *This,
+        UINT nIndex,
+        IWICMetadataWriter **ppIMetadataWriter);
+
+    HRESULT (STDMETHODCALLTYPE *AddWriter)(
+        IWICMetadataBlockWriter *This,
+        IWICMetadataWriter *pIMetadataWriter);
+
+    HRESULT (STDMETHODCALLTYPE *SetWriterByIndex)(
+        IWICMetadataBlockWriter *This,
+        UINT nIndex,
+        IWICMetadataWriter *pIMetadataWriter);
+
+    HRESULT (STDMETHODCALLTYPE *RemoveWriterByIndex)(
+        IWICMetadataBlockWriter *This,
+        UINT nIndex);
+
+    END_INTERFACE
+} IWICMetadataBlockWriterVtbl;
+
+interface IWICMetadataBlockWriter {
+    CONST_VTBL IWICMetadataBlockWriterVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICMetadataBlockWriter_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICMetadataBlockWriter_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICMetadataBlockWriter_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICMetadataBlockReader methods ***/
+#define IWICMetadataBlockWriter_GetContainerFormat(This,pguidContainerFormat) (This)->lpVtbl->GetContainerFormat(This,pguidContainerFormat)
+#define IWICMetadataBlockWriter_GetCount(This,pcCount) (This)->lpVtbl->GetCount(This,pcCount)
+#define IWICMetadataBlockWriter_GetReaderByIndex(This,nIndex,ppIMetadataReader) (This)->lpVtbl->GetReaderByIndex(This,nIndex,ppIMetadataReader)
+#define IWICMetadataBlockWriter_GetEnumerator(This,ppIEnumMetadata) (This)->lpVtbl->GetEnumerator(This,ppIEnumMetadata)
+/*** IWICMetadataBlockWriter methods ***/
+#define IWICMetadataBlockWriter_InitializeFromBlockReader(This,pIMDBlockReader) (This)->lpVtbl->InitializeFromBlockReader(This,pIMDBlockReader)
+#define IWICMetadataBlockWriter_GetWriterByIndex(This,nIndex,ppIMetadataWriter) (This)->lpVtbl->GetWriterByIndex(This,nIndex,ppIMetadataWriter)
+#define IWICMetadataBlockWriter_AddWriter(This,pIMetadataWriter) (This)->lpVtbl->AddWriter(This,pIMetadataWriter)
+#define IWICMetadataBlockWriter_SetWriterByIndex(This,nIndex,pIMetadataWriter) (This)->lpVtbl->SetWriterByIndex(This,nIndex,pIMetadataWriter)
+#define IWICMetadataBlockWriter_RemoveWriterByIndex(This,nIndex) (Th
