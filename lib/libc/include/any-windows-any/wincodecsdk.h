@@ -1509,4 +1509,214 @@ interface IWICMetadataBlockWriter {
 #define IWICMetadataBlockWriter_GetWriterByIndex(This,nIndex,ppIMetadataWriter) (This)->lpVtbl->GetWriterByIndex(This,nIndex,ppIMetadataWriter)
 #define IWICMetadataBlockWriter_AddWriter(This,pIMetadataWriter) (This)->lpVtbl->AddWriter(This,pIMetadataWriter)
 #define IWICMetadataBlockWriter_SetWriterByIndex(This,nIndex,pIMetadataWriter) (This)->lpVtbl->SetWriterByIndex(This,nIndex,pIMetadataWriter)
-#define IWICMetadataBlockWriter_RemoveWriterByIndex(This,nIndex) (Th
+#define IWICMetadataBlockWriter_RemoveWriterByIndex(This,nIndex) (This)->lpVtbl->RemoveWriterByIndex(This,nIndex)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_QueryInterface(IWICMetadataBlockWriter* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICMetadataBlockWriter_AddRef(IWICMetadataBlockWriter* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICMetadataBlockWriter_Release(IWICMetadataBlockWriter* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWICMetadataBlockReader methods ***/
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_GetContainerFormat(IWICMetadataBlockWriter* This,GUID *pguidContainerFormat) {
+    return This->lpVtbl->GetContainerFormat(This,pguidContainerFormat);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_GetCount(IWICMetadataBlockWriter* This,UINT *pcCount) {
+    return This->lpVtbl->GetCount(This,pcCount);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_GetReaderByIndex(IWICMetadataBlockWriter* This,UINT nIndex,IWICMetadataReader **ppIMetadataReader) {
+    return This->lpVtbl->GetReaderByIndex(This,nIndex,ppIMetadataReader);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_GetEnumerator(IWICMetadataBlockWriter* This,IEnumUnknown **ppIEnumMetadata) {
+    return This->lpVtbl->GetEnumerator(This,ppIEnumMetadata);
+}
+/*** IWICMetadataBlockWriter methods ***/
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_InitializeFromBlockReader(IWICMetadataBlockWriter* This,IWICMetadataBlockReader *pIMDBlockReader) {
+    return This->lpVtbl->InitializeFromBlockReader(This,pIMDBlockReader);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_GetWriterByIndex(IWICMetadataBlockWriter* This,UINT nIndex,IWICMetadataWriter **ppIMetadataWriter) {
+    return This->lpVtbl->GetWriterByIndex(This,nIndex,ppIMetadataWriter);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_AddWriter(IWICMetadataBlockWriter* This,IWICMetadataWriter *pIMetadataWriter) {
+    return This->lpVtbl->AddWriter(This,pIMetadataWriter);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_SetWriterByIndex(IWICMetadataBlockWriter* This,UINT nIndex,IWICMetadataWriter *pIMetadataWriter) {
+    return This->lpVtbl->SetWriterByIndex(This,nIndex,pIMetadataWriter);
+}
+static FORCEINLINE HRESULT IWICMetadataBlockWriter_RemoveWriterByIndex(IWICMetadataBlockWriter* This,UINT nIndex) {
+    return This->lpVtbl->RemoveWriterByIndex(This,nIndex);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICMetadataBlockWriter_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWICPersistStream interface
+ */
+#ifndef __IWICPersistStream_INTERFACE_DEFINED__
+#define __IWICPersistStream_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWICPersistStream, 0x00675040, 0x6908, 0x45f8, 0x86,0xa3, 0x49,0xc7,0xdf,0xd6,0xd9,0xad);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("00675040-6908-45f8-86a3-49c7dfd6d9ad")
+IWICPersistStream : public IPersistStream
+{
+    virtual HRESULT STDMETHODCALLTYPE LoadEx(
+        IStream *pIStream,
+        const GUID *pguidPreferredVendor,
+        DWORD dwPersistOptions) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SaveEx(
+        IStream *pIStream,
+        DWORD dwPersistOptions,
+        WINBOOL fClearDirty) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWICPersistStream, 0x00675040, 0x6908, 0x45f8, 0x86,0xa3, 0x49,0xc7,0xdf,0xd6,0xd9,0xad)
+#endif
+#else
+typedef struct IWICPersistStreamVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWICPersistStream *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWICPersistStream *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWICPersistStream *This);
+
+    /*** IPersist methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetClassID)(
+        IWICPersistStream *This,
+        CLSID *pClassID);
+
+    /*** IPersistStream methods ***/
+    HRESULT (STDMETHODCALLTYPE *IsDirty)(
+        IWICPersistStream *This);
+
+    HRESULT (STDMETHODCALLTYPE *Load)(
+        IWICPersistStream *This,
+        IStream *pStm);
+
+    HRESULT (STDMETHODCALLTYPE *Save)(
+        IWICPersistStream *This,
+        IStream *pStm,
+        WINBOOL fClearDirty);
+
+    HRESULT (STDMETHODCALLTYPE *GetSizeMax)(
+        IWICPersistStream *This,
+        ULARGE_INTEGER *pcbSize);
+
+    /*** IWICPersistStream methods ***/
+    HRESULT (STDMETHODCALLTYPE *LoadEx)(
+        IWICPersistStream *This,
+        IStream *pIStream,
+        const GUID *pguidPreferredVendor,
+        DWORD dwPersistOptions);
+
+    HRESULT (STDMETHODCALLTYPE *SaveEx)(
+        IWICPersistStream *This,
+        IStream *pIStream,
+        DWORD dwPersistOptions,
+        WINBOOL fClearDirty);
+
+    END_INTERFACE
+} IWICPersistStreamVtbl;
+
+interface IWICPersistStream {
+    CONST_VTBL IWICPersistStreamVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICPersistStream_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICPersistStream_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICPersistStream_Release(This) (This)->lpVtbl->Release(This)
+/*** IPersist methods ***/
+#define IWICPersistStream_GetClassID(This,pClassID) (This)->lpVtbl->GetClassID(This,pClassID)
+/*** IPersistStream methods ***/
+#define IWICPersistStream_IsDirty(This) (This)->lpVtbl->IsDirty(This)
+#define IWICPersistStream_Load(This,pStm) (This)->lpVtbl->Load(This,pStm)
+#define IWICPersistStream_Save(This,pStm,fClearDirty) (This)->lpVtbl->Save(This,pStm,fClearDirty)
+#define IWICPersistStream_GetSizeMax(This,pcbSize) (This)->lpVtbl->GetSizeMax(This,pcbSize)
+/*** IWICPersistStream methods ***/
+#define IWICPersistStream_LoadEx(This,pIStream,pguidPreferredVendor,dwPersistOptions) (This)->lpVtbl->LoadEx(This,pIStream,pguidPreferredVendor,dwPersistOptions)
+#define IWICPersistStream_SaveEx(This,pIStream,dwPersistOptions,fClearDirty) (This)->lpVtbl->SaveEx(This,pIStream,dwPersistOptions,fClearDirty)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICPersistStream_QueryInterface(IWICPersistStream* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICPersistStream_AddRef(IWICPersistStream* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICPersistStream_Release(IWICPersistStream* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPersist methods ***/
+static FORCEINLINE HRESULT IWICPersistStream_GetClassID(IWICPersistStream* This,CLSID *pClassID) {
+    return This->lpVtbl->GetClassID(This,pClassID);
+}
+/*** IPersistStream methods ***/
+static FORCEINLINE HRESULT IWICPersistStream_IsDirty(IWICPersistStream* This) {
+    return This->lpVtbl->IsDirty(This);
+}
+static FORCEINLINE HRESULT IWICPersistStream_Load(IWICPersistStream* This,IStream *pStm) {
+    return This->lpVtbl->Load(This,pStm);
+}
+static FORCEINLINE HRESULT IWICPersistStream_Save(IWICPersistStream* This,IStream *pStm,WINBOOL fClearDirty) {
+    return This->lpVtbl->Save(This,pStm,fClearDirty);
+}
+static FORCEINLINE HRESULT IWICPersistStream_GetSizeMax(IWICPersistStream* This,ULARGE_INTEGER *pcbSize) {
+    return This->lpVtbl->GetSizeMax(This,pcbSize);
+}
+/*** IWICPersistStream methods ***/
+static FORCEINLINE HRESULT IWICPersistStream_LoadEx(IWICPersistStream* This,IStream *pIStream,const GUID *pguidPreferredVendor,DWORD dwPersistOptions) {
+    return This->lpVtbl->LoadEx(This,pIStream,pguidPreferredVendor,dwPersistOptions);
+}
+static FORCEINLINE HRESULT IWICPersistStream_SaveEx(IWICPersistStream* This,IStream *pIStream,DWORD dwPersistOptions,WINBOOL fClearDirty) {
+    return This->lpVtbl->SaveEx(This,pIStream,dwPersistOptions,fClearDirty);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICPersistStream_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWICComponentFactory interface
+ */
+#ifndef __IWICComponentFactory_INTERFACE_DEFINED__
+#define __IWICComponentFactory_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWICComponentFactory, 0x412d0c3a, 0x9650, 0x44fa, 0xaf,0x5b, 0xdd,0x2a,0x06,0xc8,0xe8,0xfb);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("412d0c3a-9650-44fa-af5b-dd2a06c8e8fb")
+IWICComponentFactory : public IWICImagingFactory
+{
+    virtual HRESULT STDMETHODCALLTYPE CreateMetadataReader(
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        DWORD dwOptions,
+        IStream *pIStream,
+        IWICMetadataReader **ppIReader) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateMetadataReaderFromContainer(
+        REFGUID guidMetadataF
