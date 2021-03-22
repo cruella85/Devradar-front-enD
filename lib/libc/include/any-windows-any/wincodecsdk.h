@@ -1975,4 +1975,84 @@ interface IWICComponentFactory {
 #define IWICComponentFactory_Release(This) (This)->lpVtbl->Release(This)
 /*** IWICImagingFactory methods ***/
 #define IWICComponentFactory_CreateDecoderFromFilename(This,wzFilename,pguidVendor,dwDesiredAccess,metadataOptions,ppIDecoder) (This)->lpVtbl->CreateDecoderFromFilename(This,wzFilename,pguidVendor,dwDesiredAccess,metadataOptions,ppIDecoder)
-#define IWICComponentFactory_CreateDecoderFromStream(This,pIStream,pguidVendor,metadataOpti
+#define IWICComponentFactory_CreateDecoderFromStream(This,pIStream,pguidVendor,metadataOptions,ppIDecoder) (This)->lpVtbl->CreateDecoderFromStream(This,pIStream,pguidVendor,metadataOptions,ppIDecoder)
+#define IWICComponentFactory_CreateDecoderFromFileHandle(This,hFile,pguidVendor,metadataOptions,ppIDecoder) (This)->lpVtbl->CreateDecoderFromFileHandle(This,hFile,pguidVendor,metadataOptions,ppIDecoder)
+#define IWICComponentFactory_CreateComponentInfo(This,clsidComponent,ppIInfo) (This)->lpVtbl->CreateComponentInfo(This,clsidComponent,ppIInfo)
+#define IWICComponentFactory_CreateDecoder(This,guidContainerFormat,pguidVendor,ppIDecoder) (This)->lpVtbl->CreateDecoder(This,guidContainerFormat,pguidVendor,ppIDecoder)
+#define IWICComponentFactory_CreateEncoder(This,guidContainerFormat,pguidVendor,ppIEncoder) (This)->lpVtbl->CreateEncoder(This,guidContainerFormat,pguidVendor,ppIEncoder)
+#define IWICComponentFactory_CreatePalette(This,ppIPalette) (This)->lpVtbl->CreatePalette(This,ppIPalette)
+#define IWICComponentFactory_CreateFormatConverter(This,ppIFormatConverter) (This)->lpVtbl->CreateFormatConverter(This,ppIFormatConverter)
+#define IWICComponentFactory_CreateBitmapScaler(This,ppIBitmapScaler) (This)->lpVtbl->CreateBitmapScaler(This,ppIBitmapScaler)
+#define IWICComponentFactory_CreateBitmapClipper(This,ppIBitmapClipper) (This)->lpVtbl->CreateBitmapClipper(This,ppIBitmapClipper)
+#define IWICComponentFactory_CreateBitmapFlipRotator(This,ppIBitmapFlipRotator) (This)->lpVtbl->CreateBitmapFlipRotator(This,ppIBitmapFlipRotator)
+#define IWICComponentFactory_CreateStream(This,ppIWICStream) (This)->lpVtbl->CreateStream(This,ppIWICStream)
+#define IWICComponentFactory_CreateColorContext(This,ppIWICColorContext) (This)->lpVtbl->CreateColorContext(This,ppIWICColorContext)
+#define IWICComponentFactory_CreateColorTransformer(This,ppIWICColorTransform) (This)->lpVtbl->CreateColorTransformer(This,ppIWICColorTransform)
+#define IWICComponentFactory_CreateBitmap(This,uiWidth,uiHeight,pixelFormat,option,ppIBitmap) (This)->lpVtbl->CreateBitmap(This,uiWidth,uiHeight,pixelFormat,option,ppIBitmap)
+#define IWICComponentFactory_CreateBitmapFromSource(This,piBitmapSource,option,ppIBitmap) (This)->lpVtbl->CreateBitmapFromSource(This,piBitmapSource,option,ppIBitmap)
+#define IWICComponentFactory_CreateBitmapFromSourceRect(This,piBitmapSource,x,y,width,height,ppIBitmap) (This)->lpVtbl->CreateBitmapFromSourceRect(This,piBitmapSource,x,y,width,height,ppIBitmap)
+#define IWICComponentFactory_CreateBitmapFromMemory(This,uiWidth,uiHeight,pixelFormat,cbStride,cbBufferSize,pbBuffer,ppIBitmap) (This)->lpVtbl->CreateBitmapFromMemory(This,uiWidth,uiHeight,pixelFormat,cbStride,cbBufferSize,pbBuffer,ppIBitmap)
+#define IWICComponentFactory_CreateBitmapFromHBITMAP(This,hBitmap,hPalette,options,ppIBitmap) (This)->lpVtbl->CreateBitmapFromHBITMAP(This,hBitmap,hPalette,options,ppIBitmap)
+#define IWICComponentFactory_CreateBitmapFromHICON(This,hIcon,ppIBitmap) (This)->lpVtbl->CreateBitmapFromHICON(This,hIcon,ppIBitmap)
+#define IWICComponentFactory_CreateComponentEnumerator(This,componentTypes,options,ppIEnumUnknown) (This)->lpVtbl->CreateComponentEnumerator(This,componentTypes,options,ppIEnumUnknown)
+#define IWICComponentFactory_CreateFastMetadataEncoderFromDecoder(This,pIDecoder,ppIFastEncoder) (This)->lpVtbl->CreateFastMetadataEncoderFromDecoder(This,pIDecoder,ppIFastEncoder)
+#define IWICComponentFactory_CreateFastMetadataEncoderFromFrameDecode(This,pIFrameDecoder,ppIFastEncoder) (This)->lpVtbl->CreateFastMetadataEncoderFromFrameDecode(This,pIFrameDecoder,ppIFastEncoder)
+#define IWICComponentFactory_CreateQueryWriter(This,guidMetadataFormat,pguidVendor,ppIQueryWriter) (This)->lpVtbl->CreateQueryWriter(This,guidMetadataFormat,pguidVendor,ppIQueryWriter)
+#define IWICComponentFactory_CreateQueryWriterFromReader(This,pIQueryReader,pguidVendor,ppIQueryWriter) (This)->lpVtbl->CreateQueryWriterFromReader(This,pIQueryReader,pguidVendor,ppIQueryWriter)
+/*** IWICComponentFactory methods ***/
+#define IWICComponentFactory_CreateMetadataReader(This,guidMetadataFormat,pguidVendor,dwOptions,pIStream,ppIReader) (This)->lpVtbl->CreateMetadataReader(This,guidMetadataFormat,pguidVendor,dwOptions,pIStream,ppIReader)
+#define IWICComponentFactory_CreateMetadataReaderFromContainer(This,guidMetadataFormat,pguidVendor,dwOptions,pIStream,ppIReader) (This)->lpVtbl->CreateMetadataReaderFromContainer(This,guidMetadataFormat,pguidVendor,dwOptions,pIStream,ppIReader)
+#define IWICComponentFactory_CreateMetadataWriter(This,guidMetadataFormat,pguidVendor,dwMetadataOptions,ppIWriter) (This)->lpVtbl->CreateMetadataWriter(This,guidMetadataFormat,pguidVendor,dwMetadataOptions,ppIWriter)
+#define IWICComponentFactory_CreateMetadataWriterFromReader(This,pIReader,pguidVendor,ppIWriter) (This)->lpVtbl->CreateMetadataWriterFromReader(This,pIReader,pguidVendor,ppIWriter)
+#define IWICComponentFactory_CreateQueryReaderFromBlockReader(This,pIBlockReader,ppIQueryReader) (This)->lpVtbl->CreateQueryReaderFromBlockReader(This,pIBlockReader,ppIQueryReader)
+#define IWICComponentFactory_CreateQueryWriterFromBlockWriter(This,pIBlockWriter,ppIQueryWriter) (This)->lpVtbl->CreateQueryWriterFromBlockWriter(This,pIBlockWriter,ppIQueryWriter)
+#define IWICComponentFactory_CreateEncoderPropertyBag(This,ppropOptions,cCount,ppIPropertyBag) (This)->lpVtbl->CreateEncoderPropertyBag(This,ppropOptions,cCount,ppIPropertyBag)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICComponentFactory_QueryInterface(IWICComponentFactory* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICComponentFactory_AddRef(IWICComponentFactory* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICComponentFactory_Release(IWICComponentFactory* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWICImagingFactory methods ***/
+static FORCEINLINE HRESULT IWICComponentFactory_CreateDecoderFromFilename(IWICComponentFactory* This,LPCWSTR wzFilename,const GUID *pguidVendor,DWORD dwDesiredAccess,WICDecodeOptions metadataOptions,IWICBitmapDecoder **ppIDecoder) {
+    return This->lpVtbl->CreateDecoderFromFilename(This,wzFilename,pguidVendor,dwDesiredAccess,metadataOptions,ppIDecoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateDecoderFromStream(IWICComponentFactory* This,IStream *pIStream,const GUID *pguidVendor,WICDecodeOptions metadataOptions,IWICBitmapDecoder **ppIDecoder) {
+    return This->lpVtbl->CreateDecoderFromStream(This,pIStream,pguidVendor,metadataOptions,ppIDecoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateDecoderFromFileHandle(IWICComponentFactory* This,ULONG_PTR hFile,const GUID *pguidVendor,WICDecodeOptions metadataOptions,IWICBitmapDecoder **ppIDecoder) {
+    return This->lpVtbl->CreateDecoderFromFileHandle(This,hFile,pguidVendor,metadataOptions,ppIDecoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateComponentInfo(IWICComponentFactory* This,REFCLSID clsidComponent,IWICComponentInfo **ppIInfo) {
+    return This->lpVtbl->CreateComponentInfo(This,clsidComponent,ppIInfo);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateDecoder(IWICComponentFactory* This,REFGUID guidContainerFormat,const GUID *pguidVendor,IWICBitmapDecoder **ppIDecoder) {
+    return This->lpVtbl->CreateDecoder(This,guidContainerFormat,pguidVendor,ppIDecoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateEncoder(IWICComponentFactory* This,REFGUID guidContainerFormat,const GUID *pguidVendor,IWICBitmapEncoder **ppIEncoder) {
+    return This->lpVtbl->CreateEncoder(This,guidContainerFormat,pguidVendor,ppIEncoder);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreatePalette(IWICComponentFactory* This,IWICPalette **ppIPalette) {
+    return This->lpVtbl->CreatePalette(This,ppIPalette);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateFormatConverter(IWICComponentFactory* This,IWICFormatConverter **ppIFormatConverter) {
+    return This->lpVtbl->CreateFormatConverter(This,ppIFormatConverter);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapScaler(IWICComponentFactory* This,IWICBitmapScaler **ppIBitmapScaler) {
+    return This->lpVtbl->CreateBitmapScaler(This,ppIBitmapScaler);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapClipper(IWICComponentFactory* This,IWICBitmapClipper **ppIBitmapClipper) {
+    return This->lpVtbl->CreateBitmapClipper(This,ppIBitmapClipper);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateBitmapFlipRotator(IWICComponentFactory* This,IWICBitmapFlipRotator **ppIBitmapFlipRotator) {
+    return This->lpVtbl->CreateBitmapFlipRotator(This,ppIBitmapFlipRotator);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_CreateStream(IWICComponentFactory* This,IWICStream **ppIWICStream) {
+    return This->lpVtbl->CreateStream(This,ppIWICStream);
+}
+static FORCEINLINE HRESULT IWICComponentFactory_
