@@ -1139,4 +1139,154 @@ typedef struct IWICMetadataWriterInfoVtbl {
 
     HRESULT (STDMETHODCALLTYPE *GetContainerFormats)(
         IWICMetadataWriterInfo *This,
-        UINT cCont
+        UINT cContainerFormats,
+        GUID *pguidContainerFormats,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetDeviceManufacturer)(
+        IWICMetadataWriterInfo *This,
+        UINT cchDeviceManufacturer,
+        WCHAR *wzDeviceManufacturer,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *GetDeviceModels)(
+        IWICMetadataWriterInfo *This,
+        UINT cchDeviceModels,
+        WCHAR *wzDeviceModels,
+        UINT *pcchActual);
+
+    HRESULT (STDMETHODCALLTYPE *DoesRequireFullStream)(
+        IWICMetadataWriterInfo *This,
+        WINBOOL *pfRequiresFullStream);
+
+    HRESULT (STDMETHODCALLTYPE *DoesSupportPadding)(
+        IWICMetadataWriterInfo *This,
+        WINBOOL *pfSupportsPadding);
+
+    HRESULT (STDMETHODCALLTYPE *DoesRequireFixedSize)(
+        IWICMetadataWriterInfo *This,
+        WINBOOL *pfFixedSize);
+
+    /*** IWICMetadataWriterInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetHeader)(
+        IWICMetadataWriterInfo *This,
+        REFGUID guidContainerFormat,
+        UINT cbSize,
+        WICMetadataHeader *pHeader,
+        UINT *pcbActual);
+
+    HRESULT (STDMETHODCALLTYPE *CreateInstance)(
+        IWICMetadataWriterInfo *This,
+        IWICMetadataWriter **ppIWriter);
+
+    END_INTERFACE
+} IWICMetadataWriterInfoVtbl;
+
+interface IWICMetadataWriterInfo {
+    CONST_VTBL IWICMetadataWriterInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICMetadataWriterInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICMetadataWriterInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICMetadataWriterInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICComponentInfo methods ***/
+#define IWICMetadataWriterInfo_GetComponentType(This,pType) (This)->lpVtbl->GetComponentType(This,pType)
+#define IWICMetadataWriterInfo_GetCLSID(This,pclsid) (This)->lpVtbl->GetCLSID(This,pclsid)
+#define IWICMetadataWriterInfo_GetSigningStatus(This,pStatus) (This)->lpVtbl->GetSigningStatus(This,pStatus)
+#define IWICMetadataWriterInfo_GetAuthor(This,cchAuthor,wzAuthor,pcchActual) (This)->lpVtbl->GetAuthor(This,cchAuthor,wzAuthor,pcchActual)
+#define IWICMetadataWriterInfo_GetVendorGUID(This,pguidVendor) (This)->lpVtbl->GetVendorGUID(This,pguidVendor)
+#define IWICMetadataWriterInfo_GetVersion(This,cchVersion,wzVersion,pcchActual) (This)->lpVtbl->GetVersion(This,cchVersion,wzVersion,pcchActual)
+#define IWICMetadataWriterInfo_GetSpecVersion(This,cchSpecVersion,wzSpecVersion,pcchActual) (This)->lpVtbl->GetSpecVersion(This,cchSpecVersion,wzSpecVersion,pcchActual)
+#define IWICMetadataWriterInfo_GetFriendlyName(This,cchFriendlyName,wzFriendlyName,pcchActual) (This)->lpVtbl->GetFriendlyName(This,cchFriendlyName,wzFriendlyName,pcchActual)
+/*** IWICMetadataHandlerInfo methods ***/
+#define IWICMetadataWriterInfo_GetMetadataFormat(This,pguidMetadataFormat) (This)->lpVtbl->GetMetadataFormat(This,pguidMetadataFormat)
+#define IWICMetadataWriterInfo_GetContainerFormats(This,cContainerFormats,pguidContainerFormats,pcchActual) (This)->lpVtbl->GetContainerFormats(This,cContainerFormats,pguidContainerFormats,pcchActual)
+#define IWICMetadataWriterInfo_GetDeviceManufacturer(This,cchDeviceManufacturer,wzDeviceManufacturer,pcchActual) (This)->lpVtbl->GetDeviceManufacturer(This,cchDeviceManufacturer,wzDeviceManufacturer,pcchActual)
+#define IWICMetadataWriterInfo_GetDeviceModels(This,cchDeviceModels,wzDeviceModels,pcchActual) (This)->lpVtbl->GetDeviceModels(This,cchDeviceModels,wzDeviceModels,pcchActual)
+#define IWICMetadataWriterInfo_DoesRequireFullStream(This,pfRequiresFullStream) (This)->lpVtbl->DoesRequireFullStream(This,pfRequiresFullStream)
+#define IWICMetadataWriterInfo_DoesSupportPadding(This,pfSupportsPadding) (This)->lpVtbl->DoesSupportPadding(This,pfSupportsPadding)
+#define IWICMetadataWriterInfo_DoesRequireFixedSize(This,pfFixedSize) (This)->lpVtbl->DoesRequireFixedSize(This,pfFixedSize)
+/*** IWICMetadataWriterInfo methods ***/
+#define IWICMetadataWriterInfo_GetHeader(This,guidContainerFormat,cbSize,pHeader,pcbActual) (This)->lpVtbl->GetHeader(This,guidContainerFormat,cbSize,pHeader,pcbActual)
+#define IWICMetadataWriterInfo_CreateInstance(This,ppIWriter) (This)->lpVtbl->CreateInstance(This,ppIWriter)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_QueryInterface(IWICMetadataWriterInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWICMetadataWriterInfo_AddRef(IWICMetadataWriterInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWICMetadataWriterInfo_Release(IWICMetadataWriterInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWICComponentInfo methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetComponentType(IWICMetadataWriterInfo* This,WICComponentType *pType) {
+    return This->lpVtbl->GetComponentType(This,pType);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetCLSID(IWICMetadataWriterInfo* This,CLSID *pclsid) {
+    return This->lpVtbl->GetCLSID(This,pclsid);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetSigningStatus(IWICMetadataWriterInfo* This,DWORD *pStatus) {
+    return This->lpVtbl->GetSigningStatus(This,pStatus);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetAuthor(IWICMetadataWriterInfo* This,UINT cchAuthor,WCHAR *wzAuthor,UINT *pcchActual) {
+    return This->lpVtbl->GetAuthor(This,cchAuthor,wzAuthor,pcchActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetVendorGUID(IWICMetadataWriterInfo* This,GUID *pguidVendor) {
+    return This->lpVtbl->GetVendorGUID(This,pguidVendor);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetVersion(IWICMetadataWriterInfo* This,UINT cchVersion,WCHAR *wzVersion,UINT *pcchActual) {
+    return This->lpVtbl->GetVersion(This,cchVersion,wzVersion,pcchActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetSpecVersion(IWICMetadataWriterInfo* This,UINT cchSpecVersion,WCHAR *wzSpecVersion,UINT *pcchActual) {
+    return This->lpVtbl->GetSpecVersion(This,cchSpecVersion,wzSpecVersion,pcchActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetFriendlyName(IWICMetadataWriterInfo* This,UINT cchFriendlyName,WCHAR *wzFriendlyName,UINT *pcchActual) {
+    return This->lpVtbl->GetFriendlyName(This,cchFriendlyName,wzFriendlyName,pcchActual);
+}
+/*** IWICMetadataHandlerInfo methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetMetadataFormat(IWICMetadataWriterInfo* This,GUID *pguidMetadataFormat) {
+    return This->lpVtbl->GetMetadataFormat(This,pguidMetadataFormat);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetContainerFormats(IWICMetadataWriterInfo* This,UINT cContainerFormats,GUID *pguidContainerFormats,UINT *pcchActual) {
+    return This->lpVtbl->GetContainerFormats(This,cContainerFormats,pguidContainerFormats,pcchActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetDeviceManufacturer(IWICMetadataWriterInfo* This,UINT cchDeviceManufacturer,WCHAR *wzDeviceManufacturer,UINT *pcchActual) {
+    return This->lpVtbl->GetDeviceManufacturer(This,cchDeviceManufacturer,wzDeviceManufacturer,pcchActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetDeviceModels(IWICMetadataWriterInfo* This,UINT cchDeviceModels,WCHAR *wzDeviceModels,UINT *pcchActual) {
+    return This->lpVtbl->GetDeviceModels(This,cchDeviceModels,wzDeviceModels,pcchActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_DoesRequireFullStream(IWICMetadataWriterInfo* This,WINBOOL *pfRequiresFullStream) {
+    return This->lpVtbl->DoesRequireFullStream(This,pfRequiresFullStream);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_DoesSupportPadding(IWICMetadataWriterInfo* This,WINBOOL *pfSupportsPadding) {
+    return This->lpVtbl->DoesSupportPadding(This,pfSupportsPadding);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_DoesRequireFixedSize(IWICMetadataWriterInfo* This,WINBOOL *pfFixedSize) {
+    return This->lpVtbl->DoesRequireFixedSize(This,pfFixedSize);
+}
+/*** IWICMetadataWriterInfo methods ***/
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_GetHeader(IWICMetadataWriterInfo* This,REFGUID guidContainerFormat,UINT cbSize,WICMetadataHeader *pHeader,UINT *pcbActual) {
+    return This->lpVtbl->GetHeader(This,guidContainerFormat,cbSize,pHeader,pcbActual);
+}
+static FORCEINLINE HRESULT IWICMetadataWriterInfo_CreateInstance(IWICMetadataWriterInfo* This,IWICMetadataWriter **ppIWriter) {
+    return This->lpVtbl->CreateInstance(This,ppIWriter);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWICMetadataWriterInfo_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWICMetadataBlockReader interface
+ */
+#ifndef __IWICMetadataBlockReader_INTERFACE_DEFINED__
+#define __IWICMe
