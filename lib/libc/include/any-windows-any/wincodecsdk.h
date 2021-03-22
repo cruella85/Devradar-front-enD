@@ -1719,4 +1719,260 @@ IWICComponentFactory : public IWICImagingFactory
         IWICMetadataReader **ppIReader) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE CreateMetadataReaderFromContainer(
-        REFGUID guidMetadataF
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        DWORD dwOptions,
+        IStream *pIStream,
+        IWICMetadataReader **ppIReader) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateMetadataWriter(
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        DWORD dwMetadataOptions,
+        IWICMetadataWriter **ppIWriter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateMetadataWriterFromReader(
+        IWICMetadataReader *pIReader,
+        const GUID *pguidVendor,
+        IWICMetadataWriter **ppIWriter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateQueryReaderFromBlockReader(
+        IWICMetadataBlockReader *pIBlockReader,
+        IWICMetadataQueryReader **ppIQueryReader) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateQueryWriterFromBlockWriter(
+        IWICMetadataBlockWriter *pIBlockWriter,
+        IWICMetadataQueryWriter **ppIQueryWriter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateEncoderPropertyBag(
+        PROPBAG2 *ppropOptions,
+        UINT cCount,
+        IPropertyBag2 **ppIPropertyBag) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWICComponentFactory, 0x412d0c3a, 0x9650, 0x44fa, 0xaf,0x5b, 0xdd,0x2a,0x06,0xc8,0xe8,0xfb)
+#endif
+#else
+typedef struct IWICComponentFactoryVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWICComponentFactory *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWICComponentFactory *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWICComponentFactory *This);
+
+    /*** IWICImagingFactory methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateDecoderFromFilename)(
+        IWICComponentFactory *This,
+        LPCWSTR wzFilename,
+        const GUID *pguidVendor,
+        DWORD dwDesiredAccess,
+        WICDecodeOptions metadataOptions,
+        IWICBitmapDecoder **ppIDecoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDecoderFromStream)(
+        IWICComponentFactory *This,
+        IStream *pIStream,
+        const GUID *pguidVendor,
+        WICDecodeOptions metadataOptions,
+        IWICBitmapDecoder **ppIDecoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDecoderFromFileHandle)(
+        IWICComponentFactory *This,
+        ULONG_PTR hFile,
+        const GUID *pguidVendor,
+        WICDecodeOptions metadataOptions,
+        IWICBitmapDecoder **ppIDecoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateComponentInfo)(
+        IWICComponentFactory *This,
+        REFCLSID clsidComponent,
+        IWICComponentInfo **ppIInfo);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDecoder)(
+        IWICComponentFactory *This,
+        REFGUID guidContainerFormat,
+        const GUID *pguidVendor,
+        IWICBitmapDecoder **ppIDecoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateEncoder)(
+        IWICComponentFactory *This,
+        REFGUID guidContainerFormat,
+        const GUID *pguidVendor,
+        IWICBitmapEncoder **ppIEncoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreatePalette)(
+        IWICComponentFactory *This,
+        IWICPalette **ppIPalette);
+
+    HRESULT (STDMETHODCALLTYPE *CreateFormatConverter)(
+        IWICComponentFactory *This,
+        IWICFormatConverter **ppIFormatConverter);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapScaler)(
+        IWICComponentFactory *This,
+        IWICBitmapScaler **ppIBitmapScaler);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapClipper)(
+        IWICComponentFactory *This,
+        IWICBitmapClipper **ppIBitmapClipper);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapFlipRotator)(
+        IWICComponentFactory *This,
+        IWICBitmapFlipRotator **ppIBitmapFlipRotator);
+
+    HRESULT (STDMETHODCALLTYPE *CreateStream)(
+        IWICComponentFactory *This,
+        IWICStream **ppIWICStream);
+
+    HRESULT (STDMETHODCALLTYPE *CreateColorContext)(
+        IWICComponentFactory *This,
+        IWICColorContext **ppIWICColorContext);
+
+    HRESULT (STDMETHODCALLTYPE *CreateColorTransformer)(
+        IWICComponentFactory *This,
+        IWICColorTransform **ppIWICColorTransform);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmap)(
+        IWICComponentFactory *This,
+        UINT uiWidth,
+        UINT uiHeight,
+        REFWICPixelFormatGUID pixelFormat,
+        WICBitmapCreateCacheOption option,
+        IWICBitmap **ppIBitmap);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapFromSource)(
+        IWICComponentFactory *This,
+        IWICBitmapSource *piBitmapSource,
+        WICBitmapCreateCacheOption option,
+        IWICBitmap **ppIBitmap);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapFromSourceRect)(
+        IWICComponentFactory *This,
+        IWICBitmapSource *piBitmapSource,
+        UINT x,
+        UINT y,
+        UINT width,
+        UINT height,
+        IWICBitmap **ppIBitmap);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapFromMemory)(
+        IWICComponentFactory *This,
+        UINT uiWidth,
+        UINT uiHeight,
+        REFWICPixelFormatGUID pixelFormat,
+        UINT cbStride,
+        UINT cbBufferSize,
+        BYTE *pbBuffer,
+        IWICBitmap **ppIBitmap);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapFromHBITMAP)(
+        IWICComponentFactory *This,
+        HBITMAP hBitmap,
+        HPALETTE hPalette,
+        WICBitmapAlphaChannelOption options,
+        IWICBitmap **ppIBitmap);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBitmapFromHICON)(
+        IWICComponentFactory *This,
+        HICON hIcon,
+        IWICBitmap **ppIBitmap);
+
+    HRESULT (STDMETHODCALLTYPE *CreateComponentEnumerator)(
+        IWICComponentFactory *This,
+        DWORD componentTypes,
+        DWORD options,
+        IEnumUnknown **ppIEnumUnknown);
+
+    HRESULT (STDMETHODCALLTYPE *CreateFastMetadataEncoderFromDecoder)(
+        IWICComponentFactory *This,
+        IWICBitmapDecoder *pIDecoder,
+        IWICFastMetadataEncoder **ppIFastEncoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateFastMetadataEncoderFromFrameDecode)(
+        IWICComponentFactory *This,
+        IWICBitmapFrameDecode *pIFrameDecoder,
+        IWICFastMetadataEncoder **ppIFastEncoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateQueryWriter)(
+        IWICComponentFactory *This,
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        IWICMetadataQueryWriter **ppIQueryWriter);
+
+    HRESULT (STDMETHODCALLTYPE *CreateQueryWriterFromReader)(
+        IWICComponentFactory *This,
+        IWICMetadataQueryReader *pIQueryReader,
+        const GUID *pguidVendor,
+        IWICMetadataQueryWriter **ppIQueryWriter);
+
+    /*** IWICComponentFactory methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateMetadataReader)(
+        IWICComponentFactory *This,
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        DWORD dwOptions,
+        IStream *pIStream,
+        IWICMetadataReader **ppIReader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateMetadataReaderFromContainer)(
+        IWICComponentFactory *This,
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        DWORD dwOptions,
+        IStream *pIStream,
+        IWICMetadataReader **ppIReader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateMetadataWriter)(
+        IWICComponentFactory *This,
+        REFGUID guidMetadataFormat,
+        const GUID *pguidVendor,
+        DWORD dwMetadataOptions,
+        IWICMetadataWriter **ppIWriter);
+
+    HRESULT (STDMETHODCALLTYPE *CreateMetadataWriterFromReader)(
+        IWICComponentFactory *This,
+        IWICMetadataReader *pIReader,
+        const GUID *pguidVendor,
+        IWICMetadataWriter **ppIWriter);
+
+    HRESULT (STDMETHODCALLTYPE *CreateQueryReaderFromBlockReader)(
+        IWICComponentFactory *This,
+        IWICMetadataBlockReader *pIBlockReader,
+        IWICMetadataQueryReader **ppIQueryReader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateQueryWriterFromBlockWriter)(
+        IWICComponentFactory *This,
+        IWICMetadataBlockWriter *pIBlockWriter,
+        IWICMetadataQueryWriter **ppIQueryWriter);
+
+    HRESULT (STDMETHODCALLTYPE *CreateEncoderPropertyBag)(
+        IWICComponentFactory *This,
+        PROPBAG2 *ppropOptions,
+        UINT cCount,
+        IPropertyBag2 **ppIPropertyBag);
+
+    END_INTERFACE
+} IWICComponentFactoryVtbl;
+
+interface IWICComponentFactory {
+    CONST_VTBL IWICComponentFactoryVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWICComponentFactory_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWICComponentFactory_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWICComponentFactory_Release(This) (This)->lpVtbl->Release(This)
+/*** IWICImagingFactory methods ***/
+#define IWICComponentFactory_CreateDecoderFromFilename(This,wzFilename,pguidVendor,dwDesiredAccess,metadataOptions,ppIDecoder) (This)->lpVtbl->CreateDecoderFromFilename(This,wzFilename,pguidVendor,dwDesiredAccess,metadataOptions,ppIDecoder)
+#define IWICComponentFactory_CreateDecoderFromStream(This,pIStream,pguidVendor,metadataOpti
