@@ -61,4 +61,18 @@ static inline long __syscall5(long n, long a, long b, long c, long d, long e)
 static inline long __syscall6(long n, long a, long b, long c, long d, long e, long f)
 {
 	register long a7 __asm__("a7") = n;
-	register lo
+	register long a0 __asm__("a0") = a;
+	register long a1 __asm__("a1") = b;
+	register long a2 __asm__("a2") = c;
+	register long a3 __asm__("a3") = d;
+	register long a4 __asm__("a4") = e;
+	register long a5 __asm__("a5") = f;
+	__asm_syscall("r"(a7), "0"(a0), "r"(a1), "r"(a2), "r"(a3), "r"(a4), "r"(a5))
+}
+
+#define VDSO_USEFUL
+/* We don't have a clock_gettime function.
+#define VDSO_CGT_SYM "__vdso_clock_gettime"
+#define VDSO_CGT_VER "LINUX_2.6" */
+
+#define IPC_64 0
