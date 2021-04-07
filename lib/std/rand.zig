@@ -206,4 +206,194 @@ pub const Random = struct {
             // Two's complement makes this math pretty easy.
             const UnsignedT = std.meta.Int(.unsigned, info.bits);
             const lo = @bitCast(UnsignedT, at_least);
-            const hi = @bit
+            const hi = @bitCast(UnsignedT, less_than);
+            const result = lo +% r.uintLessThanBiased(UnsignedT, hi -% lo);
+            return @bitCast(T, result);
+        } else {
+            // The signed implementation would work fine, but we can use stricter arithmetic operators here.
+            return at_least + r.uintLessThanBiased(T, less_than - at_least);
+        }
+    }
+
+    /// Returns an evenly distributed random integer `at_least <= i < less_than`.
+    /// See `uintLessThan`, which this function uses in most cases,
+    /// for commentary on the runtime of this function.
+    pub fn intRangeLessThan(r: Random, comptime T: type, at_least: T, less_than: T) T {
+        assert(at_least < less_than);
+        const info = @typeInfo(T).Int;
+        if (info.signedness == .signed) {
+            // Two's complement makes this math pretty easy.
+            const UnsignedT = std.meta.Int(.unsigned, info.bits);
+            const lo = @bitCast(UnsignedT, at_least);
+            const hi = @bitCast(UnsignedT, less_than);
+            const result = lo +% r.uintLessThan(UnsignedT, hi -% lo);
+            return @bitCast(T, result);
+        } else {
+            // The signed implementation would work fine, but we can use stricter arithmetic operators here.
+            return at_least + r.uintLessThan(T, less_than - at_least);
+        }
+    }
+
+    /// Constant-time implementation off `intRangeAtMostBiased`.
+    /// The results of this function may be biased.
+    pub fn intRangeAtMostBiased(r: Random, comptime T: type, at_least: T, at_most: T) T {
+        assert(at_least <= at_most);
+        const info = @typeInfo(T).Int;
+        if (info.signedness == .signed) {
+            // Two's complement makes this math pretty easy.
+            const UnsignedT = std.meta.Int(.unsigned, info.bits);
+            const lo = @bitCast(UnsignedT, at_least);
+            const hi = @bitCast(UnsignedT, at_most);
+            const result = lo +% r.uintAtMostBiased(UnsignedT, hi -% lo);
+            return @bitCast(T, result);
+        } else {
+            // The signed implementation would work fine, but we can use stricter arithmetic operators here.
+            return at_least + r.uintAtMostBiased(T, at_most - at_least);
+        }
+    }
+
+    /// Returns an evenly distributed random integer `at_least <= i <= at_most`.
+    /// See `uintLessThan`, which this function uses in most cases,
+    /// for commentary on the runtime of this function.
+    pub fn intRangeAtMost(r: Random, comptime T: type, at_least: T, at_most: T) T {
+        assert(at_least <= at_most);
+        const info = @typeInfo(T).Int;
+        if (info.signedness == .signed) {
+            // Two's complement makes this math pretty easy.
+            const UnsignedT = std.meta.Int(.unsigned, info.bits);
+            const lo = @bitCast(UnsignedT, at_least);
+            const hi = @bitCast(UnsignedT, at_most);
+            const result = lo +% r.uintAtMost(UnsignedT, hi -% lo);
+            return @bitCast(T, result);
+        } else {
+            // The signed implementation would work fine, but we can use stricter arithmetic operators here.
+            return at_least + r.uintAtMost(T, at_most - at_least);
+        }
+    }
+
+    /// Return a floating point value evenly distributed in the range [0, 1).
+    pub fn float(r: Random, comptime T: type) T {
+        // Generate a uniformly random value for the mantissa.
+        // Then generate an exponentially biased random value for the exponent.
+        // This covers every possible value in the range.
+        switch (T) {
+            f32 => {
+                // Use 23 random bits for the mantissa, and the rest for the exponent.
+                // If all 41 bits are zero, generate additional random bits, until a
+                // set bit is found, or 126 bits have been generated.
+                const rand = r.int(u64);
+                var rand_lz = @clz(rand);
+                if (rand_lz >= 41) {
+                    // TODO: when #5177 or #489 is implemented,
+                    // tell the compiler it is unlikely (1/2^41) to reach this point.
+                    // (Same for the if branch and the f64 calculations below.)
+                    rand_lz = 41 + @clz(r.int(u64));
+                    if (rand_lz == 41 + 64) {
+                        // It is astronomically unlikely to reach this point.
+                        rand_lz += @clz(r.int(u32) | 0x7FF);
+                    }
+                }
+                const mantissa = @truncate(u23, rand);
+                const exponent = @as(u32, 126 - rand_lz) << 23;
+                return @bitCast(f32, exponent | mantissa);
+            },
+            f64 => {
+                // Use 52 random bits for the mantissa, and the rest for the exponent.
+                // If all 12 bits are zero, generate additional random bits, until a
+                // set bit is found, or 1022 bits have been generated.
+                const rand = r.int(u64);
+                var rand_lz: u64 = @clz(rand);
+                if (rand_lz >= 12) {
+                    rand_lz = 12;
+                    while (true) {
+                        // It is astronomically unlikely for this loop to execute more than once.
+                        const addl_rand_lz = @clz(r.int(u64));
+                        rand_lz += addl_rand_lz;
+                        if (addl_rand_lz != 64) {
+                            break;
+                        }
+                        if (rand_lz >= 1022) {
+                            rand_lz = 1022;
+                            break;
+                        }
+                    }
+                }
+                const mantissa = rand & 0xFFFFFFFFFFFFF;
+                const exponent = (1022 - rand_lz) << 52;
+                return @bitCast(f64, exponent | mantissa);
+            },
+            else => @compileError("unknown floating point type"),
+        }
+    }
+
+    /// Return a floating point value normally distributed with mean = 0, stddev = 1.
+    ///
+    /// To use different parameters, use: floatNorm(...) * desiredStddev + desiredMean.
+    pub fn floatNorm(r: Random, comptime T: type) T {
+        const value = ziggurat.next_f64(r, ziggurat.NormDist);
+        switch (T) {
+            f32 => return @floatCast(f32, value),
+            f64 => return value,
+            else => @compileError("unknown floating point type"),
+        }
+    }
+
+    /// Return an exponentially distributed float with a rate parameter of 1.
+    ///
+    /// To use a different rate parameter, use: floatExp(...) / desiredRate.
+    pub fn floatExp(r: Random, comptime T: type) T {
+        const value = ziggurat.next_f64(r, ziggurat.ExpDist);
+        switch (T) {
+            f32 => return @floatCast(f32, value),
+            f64 => return value,
+            else => @compileError("unknown floating point type"),
+        }
+    }
+
+    /// Shuffle a slice into a random order.
+    ///
+    /// Note that this will not yield consistent results across all targets
+    /// due to dependence on the representation of `usize` as an index.
+    /// See `shuffleWithIndex` for further commentary.
+    pub inline fn shuffle(r: Random, comptime T: type, buf: []T) void {
+        r.shuffleWithIndex(T, buf, usize);
+    }
+
+    /// Shuffle a slice into a random order, using an index of a
+    /// specified type to maintain distribution across targets.
+    /// Asserts the index type can represent `buf.len`.
+    ///
+    /// Indexes into the slice are generated using the specified `Index`
+    /// type, which determines distribution properties. This allows for
+    /// results to be independent of `usize` representation.
+    ///
+    /// Prefer `shuffle` if this isn't important.
+    ///
+    /// See `intRangeLessThan`, which this function uses,
+    /// for commentary on the runtime of this function.
+    pub fn shuffleWithIndex(r: Random, comptime T: type, buf: []T, comptime Index: type) void {
+        const MinInt = MinArrayIndex(Index);
+        if (buf.len < 2) {
+            return;
+        }
+
+        // `i <= j < max <= maxInt(MinInt)`
+        const max = @intCast(MinInt, buf.len);
+        var i: MinInt = 0;
+        while (i < max - 1) : (i += 1) {
+            const j = @intCast(MinInt, r.intRangeLessThan(Index, i, max));
+            mem.swap(T, &buf[i], &buf[j]);
+        }
+    }
+
+    /// Randomly selects an index into `proportions`, where the likelihood of each
+    /// index is weighted by that proportion.
+    ///
+    /// This is useful for selecting an item from a slice where weights are not equal.
+    /// `T` must be a numeric type capable of holding the sum of `proportions`.
+    pub fn weightedIndex(r: std.rand.Random, comptime T: type, proportions: []const T) usize {
+        // This implementation works by summing the proportions and picking a random
+        //  point in [0, sum).  We then loop over the proportions, accumulating
+        //  until our accumulator is greater than the random point.
+
+        var sum: T = 0
