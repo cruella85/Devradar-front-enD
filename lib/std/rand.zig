@@ -396,4 +396,77 @@ pub const Random = struct {
         //  point in [0, sum).  We then loop over the proportions, accumulating
         //  until our accumulator is greater than the random point.
 
-        var sum: T = 0
+        var sum: T = 0;
+        for (proportions) |v| {
+            sum += v;
+        }
+
+        const point = if (comptime std.meta.trait.isSignedInt(T))
+            r.intRangeLessThan(T, 0, sum)
+        else if (comptime std.meta.trait.isUnsignedInt(T))
+            r.uintLessThan(T, sum)
+        else if (comptime std.meta.trait.isFloat(T))
+            // take care that imprecision doesn't lead to a value slightly greater than sum
+            std.math.min(r.float(T) * sum, sum - std.math.epsilon(T))
+        else
+            @compileError("weightedIndex does not support proportions of type " ++ @typeName(T));
+
+        std.debug.assert(point < sum);
+
+        var accumulator: T = 0;
+        for (proportions, 0..) |p, index| {
+            accumulator += p;
+            if (point < accumulator) return index;
+        }
+
+        unreachable;
+    }
+
+    /// Returns the smallest of `Index` and `usize`.
+    fn MinArrayIndex(comptime Index: type) type {
+        const index_info = @typeInfo(Index).Int;
+        assert(index_info.signedness == .unsigned);
+        return if (index_info.bits >= @typeInfo(usize).Int.bits) usize else Index;
+    }
+};
+
+/// Convert a random integer 0 <= random_int <= maxValue(T),
+/// into an integer 0 <= result < less_than.
+/// This function introduces a minor bias.
+pub fn limitRangeBiased(comptime T: type, random_int: T, less_than: T) T {
+    comptime assert(@typeInfo(T).Int.signedness == .unsigned);
+    const bits = @typeInfo(T).Int.bits;
+    const T2 = std.meta.Int(.unsigned, bits * 2);
+
+    // adapted from:
+    //   http://www.pcg-random.org/posts/bounded-rands.html
+    //   "Integer Multiplication (Biased)"
+    var m: T2 = @as(T2, random_int) * @as(T2, less_than);
+    return @intCast(T, m >> bits);
+}
+
+// Generator to extend 64-bit seed values into longer sequences.
+//
+// The number of cycles is thus limited to 64-bits regardless of the engine, but this
+// is still plenty for practical purposes.
+pub const SplitMix64 = struct {
+    s: u64,
+
+    pub fn init(seed: u64) SplitMix64 {
+        return SplitMix64{ .s = seed };
+    }
+
+    pub fn next(self: *SplitMix64) u64 {
+        self.s +%= 0x9e3779b97f4a7c15;
+
+        var z = self.s;
+        z = (z ^ (z >> 30)) *% 0xbf58476d1ce4e5b9;
+        z = (z ^ (z >> 27)) *% 0x94d049bb133111eb;
+        return z ^ (z >> 31);
+    }
+};
+
+test {
+    std.testing.refAllDecls(@This());
+    _ = @import("rand/test.zig");
+}
