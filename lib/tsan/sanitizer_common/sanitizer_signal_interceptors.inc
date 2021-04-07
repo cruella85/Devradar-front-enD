@@ -75,4 +75,15 @@ namespace __sanitizer {
 struct __sanitizer_sigaction;
 }
 DEFINE_REAL(int, sigaction, int signum, const __sanitizer_sigaction *act,
-          
+            __sanitizer_sigaction *oldact)
+#endif  // SANITIZER_INTERCEPT_SIGNAL_AND_SIGACTION
+
+static void InitializeSignalInterceptors() {
+  static bool was_called_once;
+  CHECK(!was_called_once);
+  was_called_once = true;
+
+  INIT_BSD_SIGNAL;
+  INIT_SIGNAL;
+  INIT_SIGACTION;
+}
