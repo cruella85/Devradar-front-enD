@@ -1351,4 +1351,8 @@ private:
                    __count_bool_false(__bit_iterator<_Dp, _IC>, typename _Dp::size_type);
 };
 
-_LIBCPP_END_NA
+_LIBCPP_END_NAMESPACE_STD
+
+_LIBCPP_POP_MACROS
+
+#endif // _LIBCPP___BIT_REFERENCE
