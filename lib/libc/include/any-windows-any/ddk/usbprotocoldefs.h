@@ -329,4 +329,325 @@ C_ASSERT((sizeof(USBENDPOINTADDRESS) == sizeof(BYTE)));
 #define USB_SYNC_TYPE_NONE			0
 #define USB_SYNC_TYPE_ASYNC			1
 #define USB_SYNC_TYPE_ADAPTIVE			2
-#define USB_SYNC_TYPE
+#define USB_SYNC_TYPE_SYNC			3
+
+#define USB_USAGE_TYPE_DATA			0
+#define USB_USAGE_TYPE_FEEDBACK			1
+#define USB_USAGE_TYPE_IMPLICIT			2
+#define USB_USAGE_TYPE_RESERVED			3
+
+typedef union _USBENDPOINTATTRIBS {
+  BYTE Byte;
+  struct Bits {
+    BYTE TransferType:2;
+    BYTE SyncType:2;
+    BYTE UsageType:2;
+    BYTE Reserved:2;
+  } Bits;
+} USBENDPOINTATTRIBS;
+
+C_ASSERT((sizeof(USBENDPOINTATTRIBS) == sizeof(BYTE)));
+
+typedef union _USBMAXPACKET {
+  WORD Word;
+  struct Bits {
+    WORD Size:11;
+    WORD AdditionalXactions:2;
+    WORD Reserved:3;
+  } Bits;
+} USBMAXPACKET;
+
+C_ASSERT((sizeof(USBMAXPACKET) == sizeof(WORD)));
+
+typedef struct _USBENDPOINTDESC {
+  BYTE bLength;
+  BYTE bDescriptorType;
+  USBENDPOINTADDRESS Address;
+  USBENDPOINTATTRIBS Attributes;
+  USBMAXPACKET MaxPacket;
+  BYTE bInterval;
+} USBENDPOINTDESC;
+
+typedef struct _USBQUALIFIERDESC {
+  BYTE bLength;
+  BYTE bDescriptorType;
+  USHORT usUSB;
+  BYTE bDeviceClass;
+  BYTE bDeviceSubClass;
+  BYTE bProtocol;
+  BYTE bMaxPacket;
+  BYTE bNumConfigs;
+  BYTE bReserved;
+} USBQUALIFIERDESC;
+
+typedef struct _USBSTRINGDESC {
+  BYTE bLength;
+  BYTE bDescriptorType;
+  WCHAR wchData[1];
+} USBSTRINGDESC;
+
+typedef struct _USBSTRINGLANGIDS {
+  BYTE bLength;
+  BYTE bDescriptorType;
+  WORD wLANGIDs[1];
+} USBSTRINGLANGIDS;
+
+typedef struct _USBHIDSTANDARDDESC {
+  BYTE bLength;
+  BYTE bDescriptorType;
+  USHORT bcdHID;
+  BYTE bCountryCode;
+  BYTE bNumDescriptors;
+} USBHIDSTANDARDDESC;
+
+typedef struct _USBHIDOPTIONALDESC {
+  BYTE bClassDescriptorType;
+  USHORT usDescriptorLength;
+} USBHIDOPTIONALDESC;
+
+typedef struct _USBPHYSICALDESCSET0 {
+  BYTE bNumber;
+  BYTE bLength;
+} USBPHYSICALDESCSET0;
+
+typedef union _USBPHYSICALDESCSET {
+  BYTE bPhysicalInfo;
+  struct Bits {
+    BYTE bPreference:5;
+    BYTE bBias:3;
+    } Bits;
+} USBPHYSICALDESCSET;
+
+typedef struct _USBPHYSICALDESCITEM {
+  BYTE bDesignator;
+  union Flags {
+    BYTE bFlags;
+    struct Bits {
+        BYTE bEffort:5;
+        BYTE bQualifier:3;
+    } Bits;
+  } Flags;
+} USBPHYSICALDESCITEM;
+
+typedef union _USBHUBCHARACTERISTICS {
+  WORD wHubCharacteristics;
+  struct Bits {
+    BYTE bLogicalPowerSwitchingMode:2;
+    BYTE fCompoundDevice:1;
+    BYTE bOverCurrentMode:2;
+    BYTE bTTThinkTime:2;
+    BYTE fPortIndicatorSupport:1;
+    BYTE bReserved:8;
+  } Bits;
+} USBHUBCHARACTERISTICS;
+
+#if !defined(MIDL_PASS)
+C_ASSERT((sizeof(USBHUBCHARACTERISTICS) == sizeof(WORD)));
+#endif
+
+typedef struct _USBHUBDESC {
+  BYTE bLength;
+  BYTE bDescriptorType;
+  BYTE bNumberOfPorts;
+  USBHUBCHARACTERISTICS Characteristics;
+  BYTE bPwrOn2PwrGood;
+  BYTE bHubContrCurrent;
+  BYTE bDeviceRemovable[32];
+  BYTE bPortPwrCtrlMask[32];
+} USBHUBDESC;
+
+#if !defined(MIDL_PASS)
+C_ASSERT((sizeof(USBHUBDESC) == 71));
+#endif
+
+typedef union _USBHUBPORTSTATUS {
+  WORD wPortStatus;
+  struct Bits {
+    BYTE fCurrentConnectionStatus:1;
+    BYTE fEnabled:1;
+    BYTE fSuspend:1;
+    BYTE fOverCurrent:1;
+    BYTE fReset:1;
+    BYTE bReserved1:3;
+    BYTE fPortPower:1;
+    BYTE fLowSpeedDevice:1;
+    BYTE fHighSpeedDevice:1;
+    BYTE fTestMode:1;
+    BYTE fPortIndicatorControl:1;
+    BYTE bReserved2:3;
+  } Bits;
+} USBHUBPORTSTATUS;
+
+#if !defined(MIDL_PASS)
+C_ASSERT((sizeof(USBHUBPORTSTATUS) == sizeof(WORD)));
+#endif
+
+typedef union _USBHUBPORTSTATUSCHANGE {
+  WORD wPortStatusChange;
+  struct Bits {
+    BYTE fConnectionStatusChange:1;
+    BYTE fEnabledChange:1;
+    BYTE fSuspendChange:1;
+    BYTE fOverCurrentChange:1;
+    BYTE fResetChange:1;
+    BYTE bReserved1:3;
+    BYTE bReserved2:8;
+  } Bits;
+} USBHUBPORTSTATUSCHANGE;
+
+#if !defined(MIDL_PASS)
+C_ASSERT((sizeof(USBHUBPORTSTATUSCHANGE) == sizeof(WORD)));
+#endif
+
+typedef struct _USBHUBPORTDATA {
+  USBHUBPORTSTATUS PortStatus;
+  USBHUBPORTSTATUSCHANGE PortStatusChange;
+} USBHUBPORTDATA;
+
+#define USB_MAKE_LANGID(lang, sublang)					\
+		((((USHORT)(sublang)) << 10) | (USHORT)(lang))
+
+#define USB_LANG_RESERVED			0x00
+#define USB_LANG_ARABIC				0x01
+#define USB_LANG_BULGARIAN			0x02
+#define USB_LANG_CATALAN			0x03
+#define USB_LANG_CHINESE			0x04
+#define USB_LANG_CZECH				0x05
+#define USB_LANG_DANISH				0x06
+#define USB_LANG_GERMAN				0x07
+#define USB_LANG_GREEK				0x08
+#define USB_LANG_ENGLISH			0x09
+#define USB_LANG_SPANISH			0x0a
+#define USB_LANG_FINNISH			0x0b
+#define USB_LANG_FRENCH				0x0c
+#define USB_LANG_HEBREW				0x0d
+#define USB_LANG_HUNGARIAN			0x0e
+#define USB_LANG_ICELANDIC			0x0f
+#define USB_LANG_ITALIAN			0x10
+#define USB_LANG_JAPANESE			0x11
+#define USB_LANG_KOREAN				0x12
+#define USB_LANG_DUTCH				0x13
+#define USB_LANG_NORWEGIAN			0x14
+#define USB_LANG_POLISH				0x15
+#define USB_LANG_PORTUGUESE			0x16
+#define USB_LANG_ROMANIAN			0x18
+#define USB_LANG_RUSSIAN			0x19
+#define USB_LANG_CROATIAN			0x1a
+#define USB_LANG_SERBIAN			0x1a
+#define USB_LANG_SLOVAK				0x1b
+#define USB_LANG_ALBANIAN			0x1c
+#define USB_LANG_SWEDISH			0x1d
+#define USB_LANG_THAI				0x1e
+#define USB_LANG_TURKISH			0x1f
+#define USB_LANG_URDU				0x20
+#define USB_LANG_INDONESIAN			0x21
+#define USB_LANG_UKRANIAN			0x22
+#define USB_LANG_BELARUSIAN			0x23
+#define USB_LANG_SLOVENIAN			0x24
+#define USB_LANG_ESTONIAN			0x25
+#define USB_LANG_LATVIAN			0x26
+#define USB_LANG_LITHUANIAN			0x27
+#define USB_LANG_FARSI				0x29
+#define USB_LANG_VIETNAMESE			0x2a
+#define USB_LANG_ARMENIAN			0x2b
+#define USB_LANG_AZERI				0x2c
+#define USB_LANG_BASQUE				0x2d
+#define USB_LANG_MACEDONIAN			0x2f
+#define USB_LANG_AFRIKAANS			0x36
+#define USB_LANG_GEORGIAN			0x37
+#define USB_LANG_FAEROESE			0x38
+#define USB_LANG_HINDI				0x39
+#define USB_LANG_MALAY				0x3e
+#define USB_LANG_KAZAK				0x3f
+#define USB_LANG_SWAHILI			0x41
+#define USB_LANG_UZBEK				0x43
+#define USB_LANG_TATAR				0x44
+#define USB_LANG_BENGALI			0x45
+#define USB_LANG_PUNJABI			0x46
+#define USB_LANG_GUJARATI			0x47
+#define USB_LANG_ORIYA				0x48
+#define USB_LANG_TAMIL				0x49
+#define USB_LANG_TELUGU				0x4a
+#define USB_LANG_KANNADA			0x4b
+#define USB_LANG_MALAYALAM			0x4c
+#define USB_LANG_ASSAMESE			0x4d
+#define USB_LANG_MARATHI			0x4e
+#define USB_LANG_SANSKRIT			0x4f
+#define USB_LANG_KONKANI			0x57
+#define USB_LANG_MANIPURI			0x58
+#define USB_LANG_SINDHI				0x59
+#define USB_LANG_KASHMIRI			0x60
+#define USB_LANG_NEPALI				0x61
+#define USB_LANG_HID				0xff
+
+#define USB_SUBLANG_ARABIC_SAUDI_ARABIA		0x01
+#define USB_SUBLANG_ARABIC_SAUDI_ARABIA		0x01
+#define USB_SUBLANG_ARABIC_IRAQ			0x02
+#define USB_SUBLANG_ARABIC_EGYPT		0x03
+#define USB_SUBLANG_ARABIC_LIBYA		0x04
+#define USB_SUBLANG_ARABIC_ALGERIA		0x05
+#define USB_SUBLANG_ARABIC_MOROCCO		0x06
+#define USB_SUBLANG_ARABIC_TUNISIA		0x07
+#define USB_SUBLANG_ARABIC_OMAN			0x08
+#define USB_SUBLANG_ARABIC_YEMEN		0x09
+#define USB_SUBLANG_ARABIC_SYRIA		0x10
+#define USB_SUBLANG_ARABIC_JORDAN		0x11
+#define USB_SUBLANG_ARABIC_LEBANON		0x12
+#define USB_SUBLANG_ARABIC_KUWAIT		0x13
+#define USB_SUBLANG_ARABIC_UAE			0x14
+#define USB_SUBLANG_ARABIC_BAHRAIN		0x15
+#define USB_SUBLANG_ARABIC_QATAR		0x16
+#define USB_SUBLANG_AZERI_CYRILLIC		0x01
+#define USB_SUBLANG_AZERI_LATIN			0x02
+#define USB_SUBLANG_CHINESE_TRADITIONAL		0x01
+#define USB_SUBLANG_CHINESE_SIMPLIFIED		0x02
+#define USB_SUBLANG_CHINESE_HONGKONG		0x03
+#define USB_SUBLANG_CHINESE_SINGAPORE		0x04
+#define USB_SUBLANG_CHINESE_MACAU		0x05
+#define USB_SUBLANG_DUTCH			0x01
+#define USB_SUBLANG_DUTCH_BELGIAN		0x02
+#define USB_SUBLANG_ENGLISH_US			0x01
+#define USB_SUBLANG_ENGLISH_UK			0x02
+#define USB_SUBLANG_ENGLISH_AUS			0x03
+#define USB_SUBLANG_ENGLISH_CAN			0x04
+#define USB_SUBLANG_ENGLISH_NZ			0x05
+#define USB_SUBLANG_ENGLISH_EIRE		0x06
+#define USB_SUBLANG_ENGLISH_SOUTH_AFRICA	0x07
+#define USB_SUBLANG_ENGLISH_JAMAICA		0x08
+#define USB_SUBLANG_ENGLISH_CARIBBEAN		0x09
+#define USB_SUBLANG_ENGLISH_BELIZE		0x0a
+#define USB_SUBLANG_ENGLISH_TRINIDAD		0x0b
+#define USB_SUBLANG_ENGLISH_PHILIPPINES		0x0c
+#define USB_SUBLANG_ENGLISH_ZIMBABWE		0x0d
+#define USB_SUBLANG_FRENCH			0x01
+#define USB_SUBLANG_FRENCH_BELGIAN		0x02
+#define USB_SUBLANG_FRENCH_CANADIAN		0x03
+#define USB_SUBLANG_FRENCH_SWISS		0x04
+#define USB_SUBLANG_FRENCH_LUXEMBOURG		0x05
+#define USB_SUBLANG_FRENCH_MONACO		0x06
+#define USB_SUBLANG_GERMAN			0x01
+#define USB_SUBLANG_GERMAN_SWISS		0x02
+#define USB_SUBLANG_GERMAN_AUSTRIAN		0x03
+#define USB_SUBLANG_GERMAN_LUXEMBOURG		0x04
+#define USB_SUBLANG_GERMAN_LIECHTENSTEIN	0x05
+#define USB_SUBLANG_ITALIAN			0x01
+#define USB_SUBLANG_ITALIAN_SWISS		0x02
+#define USB_SUBLANG_KASHMIRI_INDIA		0x02
+#define USB_SUBLANG_KOREAN			0x01
+#define USB_SUBLANG_LITHUANIAN			0x01
+#define USB_SUBLANG_MALAY_MALAYSIA		0x01
+#define USB_SUBLANG_MALAY_BRUNEI_DARUSSALAM	0x02
+#define USB_SUBLANG_NEPALI_INDIA		0x02
+#define USB_SUBLANG_NORWEGIAN_BOKMAL		0x01
+#define USB_SUBLANG_NORWEGIAN_NYNORSK		0x02
+#define USB_SUBLANG_PORTUGUESE			0x01
+#define USB_SUBLANG_PORTUGUESE_BRAZILIAN	0x02
+#define USB_SUBLANG_SERBIAN_LATIN		0x02
+#define USB_SUBLANG_SERBIAN_CYRILLIC		0x03
+#define USB_SUBLANG_SPANISH			0x01
+#define USB_SUBLANG_SPANISH_MEXICAN		0x02
+#define USB_SUBLANG_SPANISH_MODERN		0x03
+#define USB_SUBLANG_SPANISH_GUATEMALA		0x04
+#define USB_SUBLANG_SPANISH_COSTA_RICA		0x05
+#define USB_SUBLANG_SPANISH_PANAMA		0x06
+#define USB_SUBLANG_SPANISH_D
