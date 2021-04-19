@@ -50,4 +50,13 @@ extern void verr (int __status, const char *__format, __gnuc_va_list)
 extern void errx (int __status, const char *__format, ...)
      __attribute__ ((__noreturn__, __format__ (__printf__, 2, 3)));
 extern void verrx (int __status, const char *, __gnuc_va_list)
-   
+     __attribute__ ((__noreturn__, __format__ (__printf__, 2, 0)));
+
+#include <bits/floatn.h>
+#if defined __LDBL_COMPAT || __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI == 1
+# include <bits/err-ldbl.h>
+#endif
+
+__END_DECLS
+
+#endif	/* err.h */
