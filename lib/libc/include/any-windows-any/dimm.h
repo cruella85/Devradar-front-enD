@@ -4010,3 +4010,17 @@ __CRT_UUID_DECL(CActiveIMM, 0x4955dd33, 0xb159, 0x11d0, 0x8f,0xcf, 0x00,0xaa,0x0
 
 ULONG           __RPC_USER HWND_UserSize     (ULONG *, ULONG, HWND *);
 unsigned char * __RPC_USER HWND_UserMarshal  (ULONG *, unsigned char *, HWND *);
+unsigned char * __RPC_USER HWND_UserUnmarshal(ULONG *, unsigned char *, HWND *);
+void            __RPC_USER HWND_UserFree     (ULONG *, HWND *);
+ULONG           __RPC_USER HBITMAP_UserSize     (ULONG *, ULONG, HBITMAP *);
+unsigned char * __RPC_USER HBITMAP_UserMarshal  (ULONG *, unsigned char *, HBITMAP *);
+unsigned char * __RPC_USER HBITMAP_UserUnmarshal(ULONG *, unsigned char *, HBITMAP *);
+void            __RPC_USER HBITMAP_UserFree     (ULONG *, HBITMAP *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __dimm_h__ */
