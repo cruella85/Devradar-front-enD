@@ -247,4 +247,37 @@ notrans:
 	}
 
 	const char *trans = __mo_lookup(p->map, p->map_size, msgid1);
-	if (!trans) goto no
+	if (!trans) goto notrans;
+
+	/* Non-plural-processing gettext forms pass a null pointer as
+	 * msgid2 to request that dcngettext suppress plural processing. */
+
+	if (msgid2 && p->nplurals) {
+		unsigned long plural = __pleval(p->plural_rule, n);
+		if (plural > p->nplurals) goto notrans;
+		while (plural--) {
+			size_t rem = p->map_size - (trans - (char *)p->map);
+			size_t l = strnlen(trans, rem);
+			if (l+1 >= rem)
+				goto notrans;
+			trans += l+1;
+		}
+	}
+	errno = old_errno;
+	return (char *)trans;
+}
+
+char *dcgettext(const char *domainname, const char *msgid, int category)
+{
+	return dcngettext(domainname, msgid, 0, 1, category);
+}
+
+char *dngettext(const char *domainname, const char *msgid1, const char *msgid2, unsigned long int n)
+{
+	return dcngettext(domainname, msgid1, msgid2, n, LC_MESSAGES);
+}
+
+char *dgettext(const char *domainname, const char *msgid)
+{
+	return dcngettext(domainname, msgid, 0, 1, LC_MESSAGES);
+}
