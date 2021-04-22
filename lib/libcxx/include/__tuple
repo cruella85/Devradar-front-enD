@@ -49,4 +49,228 @@ struct _LIBCPP_TEMPLATE_VIS tuple_size<__enable_if_tuple_size_imp<
 
 #else
 template <class _Tp> struct _LIBCPP_TEMPLATE_VIS tuple_size<const _Tp> : public tuple_size<_Tp> {};
-template <class _Tp> struct
+template <class _Tp> struct _LIBCPP_TEMPLATE_VIS tuple_size<volatile _Tp> : public tuple_size<_Tp> {};
+template <class _Tp> struct _LIBCPP_TEMPLATE_VIS tuple_size<const volatile _Tp> : public tuple_size<_Tp> {};
+#endif
+
+template <size_t _Ip, class _Tp> struct _LIBCPP_TEMPLATE_VIS tuple_element;
+
+template <size_t _Ip, class _Tp>
+struct _LIBCPP_TEMPLATE_VIS tuple_element<_Ip, const _Tp>
+{
+    typedef _LIBCPP_NODEBUG typename add_const<typename tuple_element<_Ip, _Tp>::type>::type type;
+};
+
+template <size_t _Ip, class _Tp>
+struct _LIBCPP_TEMPLATE_VIS tuple_element<_Ip, volatile _Tp>
+{
+    typedef _LIBCPP_NODEBUG typename add_volatile<typename tuple_element<_Ip, _Tp>::type>::type type;
+};
+
+template <size_t _Ip, class _Tp>
+struct _LIBCPP_TEMPLATE_VIS tuple_element<_Ip, const volatile _Tp>
+{
+    typedef _LIBCPP_NODEBUG typename add_cv<typename tuple_element<_Ip, _Tp>::type>::type type;
+};
+
+template <class _Tp> struct __tuple_like : false_type {};
+
+template <class _Tp> struct __tuple_like<const _Tp> : public __tuple_like<_Tp> {};
+template <class _Tp> struct __tuple_like<volatile _Tp> : public __tuple_like<_Tp> {};
+template <class _Tp> struct __tuple_like<const volatile _Tp> : public __tuple_like<_Tp> {};
+
+// tuple specializations
+
+#ifndef _LIBCPP_CXX03_LANG
+
+template <size_t...> struct __tuple_indices {};
+
+template <class _IdxType, _IdxType... _Values>
+struct __integer_sequence {
+  template <template <class _OIdxType, _OIdxType...> class _ToIndexSeq, class _ToIndexType>
+  using __convert = _ToIndexSeq<_ToIndexType, _Values...>;
+
+  template <size_t _Sp>
+  using __to_tuple_indices = __tuple_indices<(_Values + _Sp)...>;
+};
+
+#if !__has_builtin(__make_integer_seq) || defined(_LIBCPP_TESTING_FALLBACK_MAKE_INTEGER_SEQUENCE)
+namespace __detail {
+
+template<typename _Tp, size_t ..._Extra> struct __repeat;
+template<typename _Tp, _Tp ..._Np, size_t ..._Extra> struct __repeat<__integer_sequence<_Tp, _Np...>, _Extra...> {
+  typedef _LIBCPP_NODEBUG __integer_sequence<_Tp,
+                           _Np...,
+                           sizeof...(_Np) + _Np...,
+                           2 * sizeof...(_Np) + _Np...,
+                           3 * sizeof...(_Np) + _Np...,
+                           4 * sizeof...(_Np) + _Np...,
+                           5 * sizeof...(_Np) + _Np...,
+                           6 * sizeof...(_Np) + _Np...,
+                           7 * sizeof...(_Np) + _Np...,
+                           _Extra...> type;
+};
+
+template<size_t _Np> struct __parity;
+template<size_t _Np> struct __make : __parity<_Np % 8>::template __pmake<_Np> {};
+
+template<> struct __make<0> { typedef __integer_sequence<size_t> type; };
+template<> struct __make<1> { typedef __integer_sequence<size_t, 0> type; };
+template<> struct __make<2> { typedef __integer_sequence<size_t, 0, 1> type; };
+template<> struct __make<3> { typedef __integer_sequence<size_t, 0, 1, 2> type; };
+template<> struct __make<4> { typedef __integer_sequence<size_t, 0, 1, 2, 3> type; };
+template<> struct __make<5> { typedef __integer_sequence<size_t, 0, 1, 2, 3, 4> type; };
+template<> struct __make<6> { typedef __integer_sequence<size_t, 0, 1, 2, 3, 4, 5> type; };
+template<> struct __make<7> { typedef __integer_sequence<size_t, 0, 1, 2, 3, 4, 5, 6> type; };
+
+template<> struct __parity<0> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type> {}; };
+template<> struct __parity<1> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 1> {}; };
+template<> struct __parity<2> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 2, _Np - 1> {}; };
+template<> struct __parity<3> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 3, _Np - 2, _Np - 1> {}; };
+template<> struct __parity<4> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 4, _Np - 3, _Np - 2, _Np - 1> {}; };
+template<> struct __parity<5> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 5, _Np - 4, _Np - 3, _Np - 2, _Np - 1> {}; };
+template<> struct __parity<6> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 6, _Np - 5, _Np - 4, _Np - 3, _Np - 2, _Np - 1> {}; };
+template<> struct __parity<7> { template<size_t _Np> struct __pmake : __repeat<typename __make<_Np / 8>::type, _Np - 7, _Np - 6, _Np - 5, _Np - 4, _Np - 3, _Np - 2, _Np - 1> {}; };
+
+} // namespace detail
+
+#endif // !__has_builtin(__make_integer_seq) || defined(_LIBCPP_TESTING_FALLBACK_MAKE_INTEGER_SEQUENCE)
+
+#if __has_builtin(__make_integer_seq)
+template <size_t _Ep, size_t _Sp>
+using __make_indices_imp =
+    typename __make_integer_seq<__integer_sequence, size_t, _Ep - _Sp>::template
+    __to_tuple_indices<_Sp>;
+#else
+template <size_t _Ep, size_t _Sp>
+using __make_indices_imp =
+    typename __detail::__make<_Ep - _Sp>::type::template __to_tuple_indices<_Sp>;
+
+#endif
+
+template <size_t _Ep, size_t _Sp = 0>
+struct __make_tuple_indices
+{
+    static_assert(_Sp <= _Ep, "__make_tuple_indices input error");
+    typedef __make_indices_imp<_Ep, _Sp> type;
+};
+
+
+template <class ..._Tp> class _LIBCPP_TEMPLATE_VIS tuple;
+
+template <class... _Tp> struct __tuple_like<tuple<_Tp...> > : true_type {};
+
+template <class ..._Tp>
+struct _LIBCPP_TEMPLATE_VIS tuple_size<tuple<_Tp...> >
+    : public integral_constant<size_t, sizeof...(_Tp)>
+{
+};
+
+template <size_t _Ip, class ..._Tp>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+typename tuple_element<_Ip, tuple<_Tp...> >::type&
+get(tuple<_Tp...>&) _NOEXCEPT;
+
+template <size_t _Ip, class ..._Tp>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+const typename tuple_element<_Ip, tuple<_Tp...> >::type&
+get(const tuple<_Tp...>&) _NOEXCEPT;
+
+template <size_t _Ip, class ..._Tp>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+typename tuple_element<_Ip, tuple<_Tp...> >::type&&
+get(tuple<_Tp...>&&) _NOEXCEPT;
+
+template <size_t _Ip, class ..._Tp>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+const typename tuple_element<_Ip, tuple<_Tp...> >::type&&
+get(const tuple<_Tp...>&&) _NOEXCEPT;
+
+#endif // !defined(_LIBCPP_CXX03_LANG)
+
+// pair specializations
+
+template <class _T1, class _T2> struct __tuple_like<pair<_T1, _T2> > : true_type {};
+
+template <size_t _Ip, class _T1, class _T2>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+typename tuple_element<_Ip, pair<_T1, _T2> >::type&
+get(pair<_T1, _T2>&) _NOEXCEPT;
+
+template <size_t _Ip, class _T1, class _T2>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+const typename tuple_element<_Ip, pair<_T1, _T2> >::type&
+get(const pair<_T1, _T2>&) _NOEXCEPT;
+
+#ifndef _LIBCPP_CXX03_LANG
+template <size_t _Ip, class _T1, class _T2>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+typename tuple_element<_Ip, pair<_T1, _T2> >::type&&
+get(pair<_T1, _T2>&&) _NOEXCEPT;
+
+template <size_t _Ip, class _T1, class _T2>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+const typename tuple_element<_Ip, pair<_T1, _T2> >::type&&
+get(const pair<_T1, _T2>&&) _NOEXCEPT;
+#endif
+
+// array specializations
+
+template <class _Tp, size_t _Size> struct _LIBCPP_TEMPLATE_VIS array;
+
+template <class _Tp, size_t _Size> struct __tuple_like<array<_Tp, _Size> > : true_type {};
+
+template <size_t _Ip, class _Tp, size_t _Size>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+_Tp&
+get(array<_Tp, _Size>&) _NOEXCEPT;
+
+template <size_t _Ip, class _Tp, size_t _Size>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+const _Tp&
+get(const array<_Tp, _Size>&) _NOEXCEPT;
+
+#ifndef _LIBCPP_CXX03_LANG
+template <size_t _Ip, class _Tp, size_t _Size>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+_Tp&&
+get(array<_Tp, _Size>&&) _NOEXCEPT;
+
+template <size_t _Ip, class _Tp, size_t _Size>
+_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11
+const _Tp&&
+get(const array<_Tp, _Size>&&) _NOEXCEPT;
+#endif
+
+#ifndef _LIBCPP_CXX03_LANG
+
+// __tuple_types
+
+template <class ..._Tp> struct __tuple_types {};
+
+#if !__has_builtin(__type_pack_element)
+
+namespace __indexer_detail {
+
+template <size_t _Idx, class _Tp>
+struct __indexed { using type _LIBCPP_NODEBUG = _Tp; };
+
+template <class _Types, class _Indexes> struct __indexer;
+
+template <class ..._Types, size_t ..._Idx>
+struct __indexer<__tuple_types<_Types...>, __tuple_indices<_Idx...>>
+    : __indexed<_Idx, _Types>...
+{};
+
+template <size_t _Idx, class _Tp>
+__indexed<_Idx, _Tp> __at_index(__indexed<_Idx, _Tp> const&);
+
+} // namespace __indexer_detail
+
+template <size_t _Idx, class ..._Types>
+using __type_pack_element _LIBCPP_NODEBUG = typename decltype(
+    __indexer_detail::__at_index<_Idx>(
+        __indexer_detail::__indexer<
+            __tuple_types<_Types...>,
+            typename __make_tuple_indices<sizeof...(_Types)>::type
+        >{})
