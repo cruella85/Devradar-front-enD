@@ -78,4 +78,132 @@ WINBOOL WINAPI _CRT_INIT (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
       void *lock_free = NULL;
       void *fiberid = ((PNT_TIB)NtCurrentTeb ())->StackBase;
       int nested = FALSE;
-    
+      
+      while ((lock_free = InterlockedCompareExchangePointer ((volatile PVOID *) &__native_startup_lock,
+							     fiberid, 0)) != 0)
+	{
+	  if (lock_free == fiberid)
+	    {
+	      nested = TRUE;
+	      break;
+	    }
+	  Sleep(1000);
+	}
+      if (__native_startup_state == __initializing)
+	{
+	  _amsg_exit (31);
+	}
+      else if (__native_startup_state == __uninitialized)
+	{
+	  __native_startup_state = __initializing;
+	  
+	  _initterm ((_PVFV *) (void *) __xi_a, (_PVFV *) (void *) __xi_z);
+	}
+      if (__native_startup_state == __initializing)
+	{
+	  _initterm (__xc_a, __xc_z);
+	  __native_startup_state = __initialized;
+	}
+      if (! nested)
+	{
+	  (void) InterlockedExchangePointer ((volatile PVOID *) &__native_startup_lock, 0);
+	}
+      if (__dyn_tls_init_callback != NULL)
+	{
+	  __dyn_tls_init_callback (hDllHandle, DLL_THREAD_ATTACH, lpreserved);
+	}
+      __proc_attached++;
+    }
+  else if (dwReason == DLL_PROCESS_DETACH)
+    {
+      void *lock_free = NULL;
+      while ((lock_free = InterlockedCompareExchangePointer ((volatile PVOID *) &__native_startup_lock,(PVOID) 1, 0)) != 0)
+	{
+	  Sleep(1000);
+	}
+      if (__native_startup_state != __initialized)
+	{
+	  _amsg_exit (31);
+	}
+      else
+	{
+          _execute_onexit_table(&atexit_table);
+	  __native_startup_state = __uninitialized;
+	  (void) InterlockedExchangePointer ((volatile PVOID *) &__native_startup_lock, 0);
+	}
+    }
+  return TRUE;
+}
+
+static WINBOOL __DllMainCRTStartup (HANDLE, DWORD, LPVOID);
+
+WINBOOL WINAPI DllMainCRTStartup (HANDLE, DWORD, LPVOID);
+#if defined(__x86_64__) && !defined(__SEH__)
+int __mingw_init_ehandler (void);
+#endif
+
+WINBOOL WINAPI
+DllMainCRTStartup (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
+{
+  __mingw_app_type = 0;
+  if (dwReason == DLL_PROCESS_ATTACH)
+    {
+#if defined(__x86_64__) && !defined(__SEH__)
+      __mingw_init_ehandler ();
+#endif
+    }
+  return __DllMainCRTStartup (hDllHandle, dwReason, lpreserved);
+}
+
+__declspec(noinline) WINBOOL
+__DllMainCRTStartup (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
+{
+  WINBOOL retcode = TRUE;
+
+  __native_dllmain_reason = dwReason;
+  if (dwReason == DLL_PROCESS_DETACH && __proc_attached == 0)
+    {
+	retcode = FALSE;
+	goto i__leave;
+    }
+  _pei386_runtime_relocator ();
+  if (dwReason == DLL_PROCESS_ATTACH || dwReason == DLL_THREAD_ATTACH)
+    {
+        retcode = _CRT_INIT (hDllHandle, dwReason, lpreserved);
+        if (!retcode)
+          goto i__leave;
+        retcode = DllEntryPoint (hDllHandle, dwReason, lpreserved);
+	if (! retcode)
+	  {
+	    if (dwReason == DLL_PROCESS_ATTACH)
+	      _CRT_INIT (hDllHandle, DLL_PROCESS_DETACH, lpreserved);
+	    goto i__leave;
+	  }
+    }
+  if (dwReason == DLL_PROCESS_ATTACH)
+    __main ();
+  retcode = DllMain(hDllHandle,dwReason,lpreserved);
+  if (dwReason == DLL_PROCESS_ATTACH && ! retcode)
+    {
+	DllMain (hDllHandle, DLL_PROCESS_DETACH, lpreserved);
+	DllEntryPoint (hDllHandle, DLL_PROCESS_DETACH, lpreserved);
+	_CRT_INIT (hDllHandle, DLL_PROCESS_DETACH, lpreserved);
+    }
+  if (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH)
+    {
+        retcode = DllEntryPoint (hDllHandle, dwReason, lpreserved);
+	if (_CRT_INIT (hDllHandle, dwReason, lpreserved) == FALSE)
+	  retcode = FALSE;
+    }
+i__leave:
+  __native_dllmain_reason = UINT_MAX;
+  return retcode ;
+}
+#endif
+
+int __cdecl atexit (_PVFV func)
+{
+    return _register_onexit_function(&atexit_table, (_onexit_t)func);
+}
+
+char __mingw_module_is_dll = 1;
