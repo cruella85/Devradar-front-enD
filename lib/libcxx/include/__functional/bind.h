@@ -206,3 +206,185 @@ struct __mu_return
 template <class _Fp, class _BoundArgs, class _TupleUj>
 struct __is_valid_bind_return
 {
+    static const bool value = false;
+};
+
+template <class _Fp, class ..._BoundArgs, class _TupleUj>
+struct __is_valid_bind_return<_Fp, tuple<_BoundArgs...>, _TupleUj>
+{
+    static const bool value = __invokable<_Fp,
+                    typename __mu_return<_BoundArgs, _TupleUj>::type...>::value;
+};
+
+template <class _Fp, class ..._BoundArgs, class _TupleUj>
+struct __is_valid_bind_return<_Fp, const tuple<_BoundArgs...>, _TupleUj>
+{
+    static const bool value = __invokable<_Fp,
+                    typename __mu_return<const _BoundArgs, _TupleUj>::type...>::value;
+};
+
+template <class _Fp, class _BoundArgs, class _TupleUj,
+          bool = __is_valid_bind_return<_Fp, _BoundArgs, _TupleUj>::value>
+struct __bind_return;
+
+template <class _Fp, class ..._BoundArgs, class _TupleUj>
+struct __bind_return<_Fp, tuple<_BoundArgs...>, _TupleUj, true>
+{
+    typedef typename __invoke_of
+    <
+        _Fp&,
+        typename __mu_return
+        <
+            _BoundArgs,
+            _TupleUj
+        >::type...
+    >::type type;
+};
+
+template <class _Fp, class ..._BoundArgs, class _TupleUj>
+struct __bind_return<_Fp, const tuple<_BoundArgs...>, _TupleUj, true>
+{
+    typedef typename __invoke_of
+    <
+        _Fp&,
+        typename __mu_return
+        <
+            const _BoundArgs,
+            _TupleUj
+        >::type...
+    >::type type;
+};
+
+template <class _Fp, class _BoundArgs, size_t ..._Indx, class _Args>
+inline _LIBCPP_INLINE_VISIBILITY
+typename __bind_return<_Fp, _BoundArgs, _Args>::type
+__apply_functor(_Fp& __f, _BoundArgs& __bound_args, __tuple_indices<_Indx...>,
+                _Args&& __args)
+{
+    return _VSTD::__invoke(__f, _VSTD::__mu(_VSTD::get<_Indx>(__bound_args), __args)...);
+}
+
+template<class _Fp, class ..._BoundArgs>
+class __bind : public __weak_result_type<typename decay<_Fp>::type>
+{
+protected:
+    typedef typename decay<_Fp>::type _Fd;
+    typedef tuple<typename decay<_BoundArgs>::type...> _Td;
+private:
+    _Fd __f_;
+    _Td __bound_args_;
+
+    typedef typename __make_tuple_indices<sizeof...(_BoundArgs)>::type __indices;
+public:
+    template <class _Gp, class ..._BA,
+              class = typename enable_if
+                               <
+                                  is_constructible<_Fd, _Gp>::value &&
+                                  !is_same<typename remove_reference<_Gp>::type,
+                                           __bind>::value
+                               >::type>
+      _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+      explicit __bind(_Gp&& __f, _BA&& ...__bound_args)
+        : __f_(_VSTD::forward<_Gp>(__f)),
+          __bound_args_(_VSTD::forward<_BA>(__bound_args)...) {}
+
+    template <class ..._Args>
+        _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+        typename __bind_return<_Fd, _Td, tuple<_Args&&...> >::type
+        operator()(_Args&& ...__args)
+        {
+            return _VSTD::__apply_functor(__f_, __bound_args_, __indices(),
+                                  tuple<_Args&&...>(_VSTD::forward<_Args>(__args)...));
+        }
+
+    template <class ..._Args>
+        _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+        typename __bind_return<const _Fd, const _Td, tuple<_Args&&...> >::type
+        operator()(_Args&& ...__args) const
+        {
+            return _VSTD::__apply_functor(__f_, __bound_args_, __indices(),
+                                   tuple<_Args&&...>(_VSTD::forward<_Args>(__args)...));
+        }
+};
+
+template<class _Fp, class ..._BoundArgs>
+struct is_bind_expression<__bind<_Fp, _BoundArgs...> > : public true_type {};
+
+template<class _Rp, class _Fp, class ..._BoundArgs>
+class __bind_r
+    : public __bind<_Fp, _BoundArgs...>
+{
+    typedef __bind<_Fp, _BoundArgs...> base;
+    typedef typename base::_Fd _Fd;
+    typedef typename base::_Td _Td;
+public:
+    typedef _Rp result_type;
+
+
+    template <class _Gp, class ..._BA,
+              class = typename enable_if
+                               <
+                                  is_constructible<_Fd, _Gp>::value &&
+                                  !is_same<typename remove_reference<_Gp>::type,
+                                           __bind_r>::value
+                               >::type>
+      _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+      explicit __bind_r(_Gp&& __f, _BA&& ...__bound_args)
+        : base(_VSTD::forward<_Gp>(__f),
+               _VSTD::forward<_BA>(__bound_args)...) {}
+
+    template <class ..._Args>
+        _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+        typename enable_if
+        <
+            is_convertible<typename __bind_return<_Fd, _Td, tuple<_Args&&...> >::type,
+                           result_type>::value || is_void<_Rp>::value,
+            result_type
+        >::type
+        operator()(_Args&& ...__args)
+        {
+            typedef __invoke_void_return_wrapper<_Rp> _Invoker;
+            return _Invoker::__call(static_cast<base&>(*this), _VSTD::forward<_Args>(__args)...);
+        }
+
+    template <class ..._Args>
+        _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+        typename enable_if
+        <
+            is_convertible<typename __bind_return<const _Fd, const _Td, tuple<_Args&&...> >::type,
+                           result_type>::value || is_void<_Rp>::value,
+            result_type
+        >::type
+        operator()(_Args&& ...__args) const
+        {
+            typedef __invoke_void_return_wrapper<_Rp> _Invoker;
+            return _Invoker::__call(static_cast<base const&>(*this), _VSTD::forward<_Args>(__args)...);
+        }
+};
+
+template<class _Rp, class _Fp, class ..._BoundArgs>
+struct is_bind_expression<__bind_r<_Rp, _Fp, _BoundArgs...> > : public true_type {};
+
+template<class _Fp, class ..._BoundArgs>
+inline _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+__bind<_Fp, _BoundArgs...>
+bind(_Fp&& __f, _BoundArgs&&... __bound_args)
+{
+    typedef __bind<_Fp, _BoundArgs...> type;
+    return type(_VSTD::forward<_Fp>(__f), _VSTD::forward<_BoundArgs>(__bound_args)...);
+}
+
+template<class _Rp, class _Fp, class ..._BoundArgs>
+inline _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+__bind_r<_Rp, _Fp, _BoundArgs...>
+bind(_Fp&& __f, _BoundArgs&&... __bound_args)
+{
+    typedef __bind_r<_Rp, _Fp, _BoundArgs...> type;
+    return type(_VSTD::forward<_Fp>(__f), _VSTD::forward<_BoundArgs>(__bound_args)...);
+}
+
+#endif // _LIBCPP_CXX03_LANG
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP___FUNCTIONAL_BIND_H
