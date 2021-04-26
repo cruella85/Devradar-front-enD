@@ -42,4 +42,21 @@ pub inline fn divc3(comptime T: type, a: T, b: T, c_in: T, d_in: T) Complex(T) {
                 .imag = copysign(std.math.inf(T), c) * b,
             };
         } else if ((isInf(a) or isInf(b)) and isFinite(c) and isFinite(d)) {
-            const boxed_a = copysign(if 
+            const boxed_a = copysign(if (isInf(a)) one else zero, a);
+            const boxed_b = copysign(if (isInf(b)) one else zero, b);
+            return .{
+                .real = std.math.inf(T) * (boxed_a * c - boxed_b * d),
+                .imag = std.math.inf(T) * (boxed_b * c - boxed_a * d),
+            };
+        } else if (logbw == maxInt(i32) and isFinite(a) and isFinite(b)) {
+            const boxed_c = copysign(if (isInf(c)) one else zero, c);
+            const boxed_d = copysign(if (isInf(d)) one else zero, d);
+            return .{
+                .real = 0.0 * (a * boxed_c + b * boxed_d),
+                .imag = 0.0 * (b * boxed_c - a * boxed_d),
+            };
+        }
+    }
+
+    return result;
+}
