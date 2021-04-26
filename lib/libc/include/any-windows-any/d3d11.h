@@ -75,4 +75,311 @@ interface ID3D11Buffer;
 #endif
 
 #ifndef __ID3D11ClassInstance_FWD_DEFINED__
-#define __ID3D11ClassInstance_F
+#define __ID3D11ClassInstance_FWD_DEFINED__
+typedef interface ID3D11ClassInstance ID3D11ClassInstance;
+#ifdef __cplusplus
+interface ID3D11ClassInstance;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11ClassLinkage_FWD_DEFINED__
+#define __ID3D11ClassLinkage_FWD_DEFINED__
+typedef interface ID3D11ClassLinkage ID3D11ClassLinkage;
+#ifdef __cplusplus
+interface ID3D11ClassLinkage;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11CommandList_FWD_DEFINED__
+#define __ID3D11CommandList_FWD_DEFINED__
+typedef interface ID3D11CommandList ID3D11CommandList;
+#ifdef __cplusplus
+interface ID3D11CommandList;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11ComputeShader_FWD_DEFINED__
+#define __ID3D11ComputeShader_FWD_DEFINED__
+typedef interface ID3D11ComputeShader ID3D11ComputeShader;
+#ifdef __cplusplus
+interface ID3D11ComputeShader;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Counter_FWD_DEFINED__
+#define __ID3D11Counter_FWD_DEFINED__
+typedef interface ID3D11Counter ID3D11Counter;
+#ifdef __cplusplus
+interface ID3D11Counter;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11DepthStencilState_FWD_DEFINED__
+#define __ID3D11DepthStencilState_FWD_DEFINED__
+typedef interface ID3D11DepthStencilState ID3D11DepthStencilState;
+#ifdef __cplusplus
+interface ID3D11DepthStencilState;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11DepthStencilView_FWD_DEFINED__
+#define __ID3D11DepthStencilView_FWD_DEFINED__
+typedef interface ID3D11DepthStencilView ID3D11DepthStencilView;
+#ifdef __cplusplus
+interface ID3D11DepthStencilView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11DomainShader_FWD_DEFINED__
+#define __ID3D11DomainShader_FWD_DEFINED__
+typedef interface ID3D11DomainShader ID3D11DomainShader;
+#ifdef __cplusplus
+interface ID3D11DomainShader;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11GeometryShader_FWD_DEFINED__
+#define __ID3D11GeometryShader_FWD_DEFINED__
+typedef interface ID3D11GeometryShader ID3D11GeometryShader;
+#ifdef __cplusplus
+interface ID3D11GeometryShader;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11HullShader_FWD_DEFINED__
+#define __ID3D11HullShader_FWD_DEFINED__
+typedef interface ID3D11HullShader ID3D11HullShader;
+#ifdef __cplusplus
+interface ID3D11HullShader;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11InputLayout_FWD_DEFINED__
+#define __ID3D11InputLayout_FWD_DEFINED__
+typedef interface ID3D11InputLayout ID3D11InputLayout;
+#ifdef __cplusplus
+interface ID3D11InputLayout;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11PixelShader_FWD_DEFINED__
+#define __ID3D11PixelShader_FWD_DEFINED__
+typedef interface ID3D11PixelShader ID3D11PixelShader;
+#ifdef __cplusplus
+interface ID3D11PixelShader;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Predicate_FWD_DEFINED__
+#define __ID3D11Predicate_FWD_DEFINED__
+typedef interface ID3D11Predicate ID3D11Predicate;
+#ifdef __cplusplus
+interface ID3D11Predicate;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11RasterizerState_FWD_DEFINED__
+#define __ID3D11RasterizerState_FWD_DEFINED__
+typedef interface ID3D11RasterizerState ID3D11RasterizerState;
+#ifdef __cplusplus
+interface ID3D11RasterizerState;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11RenderTargetView_FWD_DEFINED__
+#define __ID3D11RenderTargetView_FWD_DEFINED__
+typedef interface ID3D11RenderTargetView ID3D11RenderTargetView;
+#ifdef __cplusplus
+interface ID3D11RenderTargetView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11SamplerState_FWD_DEFINED__
+#define __ID3D11SamplerState_FWD_DEFINED__
+typedef interface ID3D11SamplerState ID3D11SamplerState;
+#ifdef __cplusplus
+interface ID3D11SamplerState;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11ShaderResourceView_FWD_DEFINED__
+#define __ID3D11ShaderResourceView_FWD_DEFINED__
+typedef interface ID3D11ShaderResourceView ID3D11ShaderResourceView;
+#ifdef __cplusplus
+interface ID3D11ShaderResourceView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Texture1D_FWD_DEFINED__
+#define __ID3D11Texture1D_FWD_DEFINED__
+typedef interface ID3D11Texture1D ID3D11Texture1D;
+#ifdef __cplusplus
+interface ID3D11Texture1D;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Texture2D_FWD_DEFINED__
+#define __ID3D11Texture2D_FWD_DEFINED__
+typedef interface ID3D11Texture2D ID3D11Texture2D;
+#ifdef __cplusplus
+interface ID3D11Texture2D;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Texture3D_FWD_DEFINED__
+#define __ID3D11Texture3D_FWD_DEFINED__
+typedef interface ID3D11Texture3D ID3D11Texture3D;
+#ifdef __cplusplus
+interface ID3D11Texture3D;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11UnorderedAccessView_FWD_DEFINED__
+#define __ID3D11UnorderedAccessView_FWD_DEFINED__
+typedef interface ID3D11UnorderedAccessView ID3D11UnorderedAccessView;
+#ifdef __cplusplus
+interface ID3D11UnorderedAccessView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VertexShader_FWD_DEFINED__
+#define __ID3D11VertexShader_FWD_DEFINED__
+typedef interface ID3D11VertexShader ID3D11VertexShader;
+#ifdef __cplusplus
+interface ID3D11VertexShader;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11DeviceContext_FWD_DEFINED__
+#define __ID3D11DeviceContext_FWD_DEFINED__
+typedef interface ID3D11DeviceContext ID3D11DeviceContext;
+#ifdef __cplusplus
+interface ID3D11DeviceContext;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11AuthenticatedChannel_FWD_DEFINED__
+#define __ID3D11AuthenticatedChannel_FWD_DEFINED__
+typedef interface ID3D11AuthenticatedChannel ID3D11AuthenticatedChannel;
+#ifdef __cplusplus
+interface ID3D11AuthenticatedChannel;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11CryptoSession_FWD_DEFINED__
+#define __ID3D11CryptoSession_FWD_DEFINED__
+typedef interface ID3D11CryptoSession ID3D11CryptoSession;
+#ifdef __cplusplus
+interface ID3D11CryptoSession;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoDecoder_FWD_DEFINED__
+#define __ID3D11VideoDecoder_FWD_DEFINED__
+typedef interface ID3D11VideoDecoder ID3D11VideoDecoder;
+#ifdef __cplusplus
+interface ID3D11VideoDecoder;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoProcessorEnumerator_FWD_DEFINED__
+#define __ID3D11VideoProcessorEnumerator_FWD_DEFINED__
+typedef interface ID3D11VideoProcessorEnumerator ID3D11VideoProcessorEnumerator;
+#ifdef __cplusplus
+interface ID3D11VideoProcessorEnumerator;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoProcessor_FWD_DEFINED__
+#define __ID3D11VideoProcessor_FWD_DEFINED__
+typedef interface ID3D11VideoProcessor ID3D11VideoProcessor;
+#ifdef __cplusplus
+interface ID3D11VideoProcessor;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoDecoderOutputView_FWD_DEFINED__
+#define __ID3D11VideoDecoderOutputView_FWD_DEFINED__
+typedef interface ID3D11VideoDecoderOutputView ID3D11VideoDecoderOutputView;
+#ifdef __cplusplus
+interface ID3D11VideoDecoderOutputView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoProcessorInputView_FWD_DEFINED__
+#define __ID3D11VideoProcessorInputView_FWD_DEFINED__
+typedef interface ID3D11VideoProcessorInputView ID3D11VideoProcessorInputView;
+#ifdef __cplusplus
+interface ID3D11VideoProcessorInputView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoProcessorOutputView_FWD_DEFINED__
+#define __ID3D11VideoProcessorOutputView_FWD_DEFINED__
+typedef interface ID3D11VideoProcessorOutputView ID3D11VideoProcessorOutputView;
+#ifdef __cplusplus
+interface ID3D11VideoProcessorOutputView;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoDevice_FWD_DEFINED__
+#define __ID3D11VideoDevice_FWD_DEFINED__
+typedef interface ID3D11VideoDevice ID3D11VideoDevice;
+#ifdef __cplusplus
+interface ID3D11VideoDevice;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11VideoContext_FWD_DEFINED__
+#define __ID3D11VideoContext_FWD_DEFINED__
+typedef interface ID3D11VideoContext ID3D11VideoContext;
+#ifdef __cplusplus
+interface ID3D11VideoContext;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Device_FWD_DEFINED__
+#define __ID3D11Device_FWD_DEFINED__
+typedef interface ID3D11Device ID3D11Device;
+#ifdef __cplusplus
+interface ID3D11Device;
+#endif /* __cplusplus */
+#endif
+
+/* Headers for imported files */
+
+#include <oaidl.h>
+#include <ocidl.h>
+#include <dxgi.h>
+#include <d3dcommon.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef D3D_PRIMITIVE D3D11_PRIMITIVE;
+typedef D3D_PRIMITIVE_TOPOLOGY D3D11_PRIMITIVE_TOPOLOGY;
+typedef D3D_SRV_DIMENSION D3D11_SRV_DIMENSION;
+typedef RECT D3D11_RECT;
+#ifndef __ID3D11Device_FWD_DEFINED__
+#define __ID3D11Device_FWD_DEFINED__
+typedef interface ID3D11Device ID3D11Device;
+#ifdef __cplusplus
+interface ID3D11Device;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11ClassLinkage_FWD_DEFINED__
+#define __ID3D11ClassLinkage_FWD_DEFINED__
+typedef interface ID3D11ClassLinkage ID3D11ClassLinkage;
+#ifdef __cplusplus
+interface ID3D11ClassLinkage;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ID3D11Resource_FWD_DEFINED__
+#define __ID3D11Resource_FWD_DEFINED__
+typedef interface ID3D11Resource ID3D11Resource;
+#ifdef __cplusplus
+interface ID3D11Resource;
+#endif /* __cpluspl
