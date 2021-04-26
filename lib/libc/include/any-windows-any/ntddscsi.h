@@ -151,4 +151,99 @@ extern "C" {
     UCHAR CurrentTaskFile[8];
   } ATA_PASS_THROUGH_EX32,*PATA_PASS_THROUGH_EX32;
 
-  
+  typedef struct _ATA_PASS_THROUGH_DIRECT32 {
+    USHORT Length;
+    USHORT AtaFlags;
+    UCHAR PathId;
+    UCHAR TargetId;
+    UCHAR Lun;
+    UCHAR ReservedAsUchar;
+    ULONG DataTransferLength;
+    ULONG TimeOutValue;
+    ULONG ReservedAsUlong;
+    VOID *DataBuffer;
+    UCHAR PreviousTaskFile[8];
+    UCHAR CurrentTaskFile[8];
+  } ATA_PASS_THROUGH_DIRECT32,*PATA_PASS_THROUGH_DIRECT32;
+#endif /* _WIN64 */
+
+#define ATA_FLAGS_DRDY_REQUIRED (1 << 0)
+#define ATA_FLAGS_DATA_IN (1 << 1)
+#define ATA_FLAGS_DATA_OUT (1 << 2)
+#define ATA_FLAGS_48BIT_COMMAND (1 << 3)
+#define ATA_FLAGS_USE_DMA (1 << 4)
+
+  typedef struct _SCSI_BUS_DATA {
+    UCHAR NumberOfLogicalUnits;
+    UCHAR InitiatorBusId;
+    ULONG InquiryDataOffset;
+  }SCSI_BUS_DATA,*PSCSI_BUS_DATA;
+
+  typedef struct _SCSI_ADAPTER_BUS_INFO {
+    UCHAR NumberOfBuses;
+    SCSI_BUS_DATA BusData[1];
+  } SCSI_ADAPTER_BUS_INFO,*PSCSI_ADAPTER_BUS_INFO;
+
+  typedef struct _SCSI_INQUIRY_DATA {
+    UCHAR PathId;
+    UCHAR TargetId;
+    UCHAR Lun;
+    BOOLEAN DeviceClaimed;
+    ULONG InquiryDataLength;
+    ULONG NextInquiryDataOffset;
+    UCHAR InquiryData[1];
+  }SCSI_INQUIRY_DATA,*PSCSI_INQUIRY_DATA;
+
+  typedef struct _SRB_IO_CONTROL {
+    ULONG HeaderLength;
+    UCHAR Signature[8];
+    ULONG Timeout;
+    ULONG ControlCode;
+    ULONG ReturnCode;
+    ULONG Length;
+  } SRB_IO_CONTROL,*PSRB_IO_CONTROL;
+
+  typedef struct _IO_SCSI_CAPABILITIES {
+    ULONG Length;
+    ULONG MaximumTransferLength;
+    ULONG MaximumPhysicalPages;
+    ULONG SupportedAsynchronousEvents;
+    ULONG AlignmentMask;
+    BOOLEAN TaggedQueuing;
+    BOOLEAN AdapterScansDown;
+    BOOLEAN AdapterUsesPio;
+  } IO_SCSI_CAPABILITIES,*PIO_SCSI_CAPABILITIES;
+
+  typedef struct _SCSI_ADDRESS {
+    ULONG Length;
+    UCHAR PortNumber;
+    UCHAR PathId;
+    UCHAR TargetId;
+    UCHAR Lun;
+  } SCSI_ADDRESS,*PSCSI_ADDRESS;
+
+  struct _ADAPTER_OBJECT;
+
+  typedef struct _DUMP_POINTERS {
+    struct _ADAPTER_OBJECT *AdapterObject;
+    PVOID MappedRegisterBase;
+    PVOID DumpData;
+    PVOID CommonBufferVa;
+    LARGE_INTEGER CommonBufferPa;
+    ULONG CommonBufferSize;
+    BOOLEAN AllocateCommonBuffers;
+    BOOLEAN UseDiskDump;
+    UCHAR Spare1[2];
+    PVOID DeviceObject;
+  } DUMP_POINTERS,*PDUMP_POINTERS;
+
+#define SCSI_IOCTL_DATA_OUT 0
+#define SCSI_IOCTL_DATA_IN 1
+#define SCSI_IOCTL_DATA_UNSPECIFIED 2
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _NTDDSCSIH_ */
+
