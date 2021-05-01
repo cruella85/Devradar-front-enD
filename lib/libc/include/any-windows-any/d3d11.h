@@ -1318,4 +1318,267 @@ typedef enum D3D11_INPUT_CLASSIFICATION {
     D3D11_INPUT_PER_VERTEX_DATA = 0,
     D3D11_INPUT_PER_INSTANCE_DATA = 1
 } D3D11_INPUT_CLASSIFICATION;
-#defin
+#define D3D11_APPEND_ALIGNED_ELEMENT (0xffffffff)
+
+typedef struct D3D11_INPUT_ELEMENT_DESC {
+    LPCSTR SemanticName;
+    UINT SemanticIndex;
+    DXGI_FORMAT Format;
+    UINT InputSlot;
+    UINT AlignedByteOffset;
+    D3D11_INPUT_CLASSIFICATION InputSlotClass;
+    UINT InstanceDataStepRate;
+} D3D11_INPUT_ELEMENT_DESC;
+typedef enum D3D11_MAP {
+    D3D11_MAP_READ = 1,
+    D3D11_MAP_WRITE = 2,
+    D3D11_MAP_READ_WRITE = 3,
+    D3D11_MAP_WRITE_DISCARD = 4,
+    D3D11_MAP_WRITE_NO_OVERWRITE = 5
+} D3D11_MAP;
+typedef enum D3D11_MAP_FLAG {
+    D3D11_MAP_FLAG_DO_NOT_WAIT = 0x100000
+} D3D11_MAP_FLAG;
+typedef enum D3D11_RAISE_FLAG {
+    D3D11_RAISE_FLAG_DRIVER_INTERNAL_ERROR = 0x1
+} D3D11_RAISE_FLAG;
+typedef struct D3D11_QUERY_DATA_SO_STATISTICS {
+    UINT64 NumPrimitivesWritten;
+    UINT64 PrimitivesStorageNeeded;
+} D3D11_QUERY_DATA_SO_STATISTICS;
+typedef struct D3D11_MAPPED_SUBRESOURCE {
+    void *pData;
+    UINT RowPitch;
+    UINT DepthPitch;
+} D3D11_MAPPED_SUBRESOURCE;
+typedef enum D3D11_QUERY {
+    D3D11_QUERY_EVENT = 0,
+    D3D11_QUERY_OCCLUSION = 1,
+    D3D11_QUERY_TIMESTAMP = 2,
+    D3D11_QUERY_TIMESTAMP_DISJOINT = 3,
+    D3D11_QUERY_PIPELINE_STATISTICS = 4,
+    D3D11_QUERY_OCCLUSION_PREDICATE = 5,
+    D3D11_QUERY_SO_STATISTICS = 6,
+    D3D11_QUERY_SO_OVERFLOW_PREDICATE = 7,
+    D3D11_QUERY_SO_STATISTICS_STREAM0 = 8,
+    D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM0 = 9,
+    D3D11_QUERY_SO_STATISTICS_STREAM1 = 10,
+    D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM1 = 11,
+    D3D11_QUERY_SO_STATISTICS_STREAM2 = 12,
+    D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM2 = 13,
+    D3D11_QUERY_SO_STATISTICS_STREAM3 = 14,
+    D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM3 = 15
+} D3D11_QUERY;
+typedef enum D3D11_QUERY_MISC_FLAG {
+    D3D11_QUERY_MISC_PREDICATEHINT = 0x1
+} D3D11_QUERY_MISC_FLAG;
+typedef enum D3D11_ASYNC_GETDATA_FLAG {
+    D3D11_ASYNC_GETDATA_DONOTFLUSH = 0x1
+} D3D11_ASYNC_GETDATA_FLAG;
+typedef enum D3D11_RESOURCE_MISC_FLAG {
+    D3D11_RESOURCE_MISC_GENERATE_MIPS = 0x1,
+    D3D11_RESOURCE_MISC_SHARED = 0x2,
+    D3D11_RESOURCE_MISC_TEXTURECUBE = 0x4,
+    D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS = 0x10,
+    D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS = 0x20,
+    D3D11_RESOURCE_MISC_BUFFER_STRUCTURED = 0x40,
+    D3D11_RESOURCE_MISC_RESOURCE_CLAMP = 0x80,
+    D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX = 0x100,
+    D3D11_RESOURCE_MISC_GDI_COMPATIBLE = 0x200,
+    D3D11_RESOURCE_MISC_SHARED_NTHANDLE = 0x800,
+    D3D11_RESOURCE_MISC_RESTRICTED_CONTENT = 0x1000,
+    D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE = 0x2000,
+    D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE_DRIVER = 0x4000,
+    D3D11_RESOURCE_MISC_GUARDED = 0x8000,
+    D3D11_RESOURCE_MISC_TILE_POOL = 0x20000,
+    D3D11_RESOURCE_MISC_TILED = 0x40000,
+    D3D11_RESOURCE_MISC_HW_PROTECTED = 0x80000
+} D3D11_RESOURCE_MISC_FLAG;
+typedef struct D3D11_QUERY_DESC {
+    D3D11_QUERY Query;
+    UINT MiscFlags;
+} D3D11_QUERY_DESC;
+#if !defined(D3D11_NO_HELPERS) && defined(__cplusplus)
+struct CD3D11_QUERY_DESC : public D3D11_QUERY_DESC {
+    CD3D11_QUERY_DESC() {}
+    ~CD3D11_QUERY_DESC() {}
+    explicit CD3D11_QUERY_DESC(const D3D11_QUERY_DESC &other) : D3D11_QUERY_DESC(other) {}
+    explicit CD3D11_QUERY_DESC(D3D11_QUERY query, UINT misc_flags = 0) {
+        Query = query;
+        MiscFlags = misc_flags;
+    }
+    operator const D3D11_QUERY_DESC&() const {
+        return *this;
+    }
+};
+#endif
+typedef struct D3D11_RASTERIZER_DESC {
+    D3D11_FILL_MODE FillMode;
+    D3D11_CULL_MODE CullMode;
+    WINBOOL FrontCounterClockwise;
+    INT DepthBias;
+    FLOAT DepthBiasClamp;
+    FLOAT SlopeScaledDepthBias;
+    WINBOOL DepthClipEnable;
+    WINBOOL ScissorEnable;
+    WINBOOL MultisampleEnable;
+    WINBOOL AntialiasedLineEnable;
+} D3D11_RASTERIZER_DESC;
+#if !defined(D3D11_NO_HELPERS) && defined(__cplusplus)
+struct CD3D11_RASTERIZER_DESC : public D3D11_RASTERIZER_DESC {
+    CD3D11_RASTERIZER_DESC() {}
+    explicit CD3D11_RASTERIZER_DESC(const D3D11_RASTERIZER_DESC &o) : D3D11_RASTERIZER_DESC(o) {}
+    explicit CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT) {
+        FillMode = D3D11_FILL_SOLID;
+        CullMode = D3D11_CULL_BACK;
+        FrontCounterClockwise = FALSE;
+        DepthBias = D3D11_DEFAULT_DEPTH_BIAS;
+        DepthBiasClamp = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
+        SlopeScaledDepthBias = D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
+        DepthClipEnable = TRUE;
+        ScissorEnable = FALSE;
+        MultisampleEnable = FALSE;
+        AntialiasedLineEnable = FALSE;
+    }
+    explicit CD3D11_RASTERIZER_DESC(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode,
+            WINBOOL frontCounterClockwise, INT depthBias, FLOAT depthBiasClamp, FLOAT slopeScaledDepthBias,
+            BOOL depthClipEnable, WINBOOL scissorEnable, WINBOOL multisampleEnable, WINBOOL antialiasedLineEnable) {
+        FillMode = fillMode;
+        CullMode = cullMode;
+        FrontCounterClockwise = frontCounterClockwise;
+        DepthBias = depthBias;
+        DepthBiasClamp = depthBiasClamp;
+        SlopeScaledDepthBias = slopeScaledDepthBias;
+        DepthClipEnable = depthClipEnable;
+        ScissorEnable = scissorEnable;
+        MultisampleEnable = multisampleEnable;
+        AntialiasedLineEnable = antialiasedLineEnable;
+    }
+    ~CD3D11_RASTERIZER_DESC() {}
+    operator const D3D11_RASTERIZER_DESC&() const { return *this; }
+};
+#endif
+typedef enum D3D11_RESOURCE_DIMENSION {
+    D3D11_RESOURCE_DIMENSION_UNKNOWN = 0,
+    D3D11_RESOURCE_DIMENSION_BUFFER = 1,
+    D3D11_RESOURCE_DIMENSION_TEXTURE1D = 2,
+    D3D11_RESOURCE_DIMENSION_TEXTURE2D = 3,
+    D3D11_RESOURCE_DIMENSION_TEXTURE3D = 4
+} D3D11_RESOURCE_DIMENSION;
+typedef enum D3D11_RTV_DIMENSION {
+    D3D11_RTV_DIMENSION_UNKNOWN = 0,
+    D3D11_RTV_DIMENSION_BUFFER = 1,
+    D3D11_RTV_DIMENSION_TEXTURE1D = 2,
+    D3D11_RTV_DIMENSION_TEXTURE1DARRAY = 3,
+    D3D11_RTV_DIMENSION_TEXTURE2D = 4,
+    D3D11_RTV_DIMENSION_TEXTURE2DARRAY = 5,
+    D3D11_RTV_DIMENSION_TEXTURE2DMS = 6,
+    D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY = 7,
+    D3D11_RTV_DIMENSION_TEXTURE3D = 8
+} D3D11_RTV_DIMENSION;
+typedef struct D3D11_SO_DECLARATION_ENTRY {
+    UINT Stream;
+    LPCSTR SemanticName;
+    UINT SemanticIndex;
+    BYTE StartComponent;
+    BYTE ComponentCount;
+    BYTE OutputSlot;
+} D3D11_SO_DECLARATION_ENTRY;
+typedef enum D3D11_STENCIL_OP {
+    D3D11_STENCIL_OP_KEEP = 1,
+    D3D11_STENCIL_OP_ZERO = 2,
+    D3D11_STENCIL_OP_REPLACE = 3,
+    D3D11_STENCIL_OP_INCR_SAT = 4,
+    D3D11_STENCIL_OP_DECR_SAT = 5,
+    D3D11_STENCIL_OP_INVERT = 6,
+    D3D11_STENCIL_OP_INCR = 7,
+    D3D11_STENCIL_OP_DECR = 8
+} D3D11_STENCIL_OP;
+#if !defined(D3D11_NO_HELPERS) && defined(__cplusplus)
+}
+inline UINT D3D11CalcSubresource(UINT MipSlice, UINT ArraySlice, UINT MipLevels) {
+    return MipSlice + ArraySlice * MipLevels;
+}
+extern "C"{
+#endif
+typedef struct D3D11_SUBRESOURCE_DATA {
+    const void *pSysMem;
+    UINT SysMemPitch;
+    UINT SysMemSlicePitch;
+} D3D11_SUBRESOURCE_DATA;
+typedef struct D3D11_TEX1D_ARRAY_DSV {
+    UINT MipSlice;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX1D_ARRAY_DSV;
+typedef struct D3D11_TEX1D_ARRAY_RTV {
+    UINT MipSlice;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX1D_ARRAY_RTV;
+typedef struct D3D11_TEX1D_ARRAY_SRV {
+    UINT MostDetailedMip;
+    UINT MipLevels;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX1D_ARRAY_SRV;
+typedef struct D3D11_TEX1D_ARRAY_UAV {
+    UINT MipSlice;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX1D_ARRAY_UAV;
+typedef struct D3D11_TEX1D_DSV {
+    UINT MipSlice;
+} D3D11_TEX1D_DSV;
+typedef struct D3D11_TEX1D_RTV {
+    UINT MipSlice;
+} D3D11_TEX1D_RTV;
+typedef struct D3D11_TEX1D_SRV {
+    UINT MostDetailedMip;
+    UINT MipLevels;
+} D3D11_TEX1D_SRV;
+typedef struct D3D11_TEX1D_UAV {
+    UINT MipSlice;
+} D3D11_TEX1D_UAV;
+typedef struct D3D11_TEX2D_ARRAY_DSV {
+    UINT MipSlice;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX2D_ARRAY_DSV;
+typedef struct D3D11_TEX2D_ARRAY_RTV {
+    UINT MipSlice;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX2D_ARRAY_RTV;
+typedef struct D3D11_TEX2D_ARRAY_SRV {
+    UINT MostDetailedMip;
+    UINT MipLevels;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX2D_ARRAY_SRV;
+typedef struct D3D11_TEX2D_ARRAY_UAV {
+    UINT MipSlice;
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX2D_ARRAY_UAV;
+typedef struct D3D11_TEX2D_DSV {
+    UINT MipSlice;
+} D3D11_TEX2D_DSV;
+typedef struct D3D11_TEX2D_RTV {
+    UINT MipSlice;
+} D3D11_TEX2D_RTV;
+typedef struct D3D11_TEX2D_SRV {
+    UINT MostDetailedMip;
+    UINT MipLevels;
+} D3D11_TEX2D_SRV;
+typedef struct D3D11_TEX2D_UAV {
+    UINT MipSlice;
+} D3D11_TEX2D_UAV;
+typedef struct D3D11_TEX2DMS_ARRAY_DSV {
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX2DMS_ARRAY_DSV;
+typedef struct D3D11_TEX2DMS_ARRAY_RTV {
+    UINT FirstArraySlice;
+    UINT ArraySize;
+} D3D11_TEX2DMS
