@@ -1815,4 +1815,208 @@ typedef struct D3D11_DEPTH_STENCILOP_DESC {
     D3D11_STENCIL_OP StencilDepthFailOp;
     D3D11_STENCIL_OP StencilPassOp;
     D3D11_COMPARISON_FUNC StencilFunc;
-} D3D11_D
+} D3D11_DEPTH_STENCILOP_DESC;
+typedef struct D3D11_DEPTH_STENCIL_DESC {
+    WINBOOL DepthEnable;
+    D3D11_DEPTH_WRITE_MASK DepthWriteMask;
+    D3D11_COMPARISON_FUNC DepthFunc;
+    WINBOOL StencilEnable;
+    UINT8 StencilReadMask;
+    UINT8 StencilWriteMask;
+    D3D11_DEPTH_STENCILOP_DESC FrontFace;
+    D3D11_DEPTH_STENCILOP_DESC BackFace;
+} D3D11_DEPTH_STENCIL_DESC;
+#if !defined( D3D11_NO_HELPERS ) && defined( __cplusplus )
+struct CD3D11_DEPTH_STENCIL_DESC : public D3D11_DEPTH_STENCIL_DESC {
+    CD3D11_DEPTH_STENCIL_DESC() {}
+    explicit CD3D11_DEPTH_STENCIL_DESC(const D3D11_DEPTH_STENCIL_DESC &other) : D3D11_DEPTH_STENCIL_DESC(other) {}
+    explicit CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT) {
+        const D3D11_DEPTH_STENCILOP_DESC default_op =
+            {D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS};
+        DepthEnable = TRUE;
+        DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+        DepthFunc = D3D11_COMPARISON_LESS;
+        StencilEnable = FALSE;
+        StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+        StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+        FrontFace = default_op;
+        BackFace = default_op;
+    }
+    explicit CD3D11_DEPTH_STENCIL_DESC(
+            WINBOOL depth_enable,
+            D3D11_DEPTH_WRITE_MASK depth_write_mask,
+            D3D11_COMPARISON_FUNC depth_func,
+            WINBOOL stencil_enable,
+            UINT8 stencil_read_mask,
+            UINT8 stencil_write_mask,
+            D3D11_STENCIL_OP front_stencil_fail_op,
+            D3D11_STENCIL_OP front_stencil_depth_fail_op,
+            D3D11_STENCIL_OP front_stencil_pass_op,
+            D3D11_COMPARISON_FUNC front_stencil_func,
+            D3D11_STENCIL_OP back_stencil_fail_op,
+            D3D11_STENCIL_OP back_stencil_depth_fail_op,
+            D3D11_STENCIL_OP back_stencil_pass_op,
+            D3D11_COMPARISON_FUNC back_stencil_func) {
+        DepthEnable = depth_enable;
+        DepthWriteMask = depth_write_mask;
+        DepthFunc = depth_func;
+        StencilEnable = stencil_enable;
+        StencilReadMask = stencil_read_mask;
+        StencilWriteMask = stencil_write_mask;
+        FrontFace.StencilFailOp = front_stencil_fail_op;
+        FrontFace.StencilDepthFailOp = front_stencil_depth_fail_op;
+        FrontFace.StencilPassOp = front_stencil_pass_op;
+        FrontFace.StencilFunc = front_stencil_func;
+        BackFace.StencilFailOp = back_stencil_fail_op;
+        BackFace.StencilDepthFailOp = back_stencil_depth_fail_op;
+        BackFace.StencilPassOp = back_stencil_pass_op;
+        BackFace.StencilFunc = back_stencil_func;
+    }
+    ~CD3D11_DEPTH_STENCIL_DESC() {}
+    operator const D3D11_DEPTH_STENCIL_DESC&() const { return *this; }
+};
+#endif
+typedef struct D3D11_RENDER_TARGET_VIEW_DESC {
+    DXGI_FORMAT Format;
+    D3D11_RTV_DIMENSION ViewDimension;
+    __C89_NAMELESS union {
+        D3D11_BUFFER_RTV Buffer;
+        D3D11_TEX1D_RTV Texture1D;
+        D3D11_TEX1D_ARRAY_RTV Texture1DArray;
+        D3D11_TEX2D_RTV Texture2D;
+        D3D11_TEX2D_ARRAY_RTV Texture2DArray;
+        D3D11_TEX2DMS_RTV Texture2DMS;
+        D3D11_TEX2DMS_ARRAY_RTV Texture2DMSArray;
+        D3D11_TEX3D_RTV Texture3D;
+    } __C89_NAMELESSUNIONNAME;
+} D3D11_RENDER_TARGET_VIEW_DESC;
+#if !defined(D3D11_NO_HELPERS) && defined(__cplusplus)
+struct CD3D11_RENDER_TARGET_VIEW_DESC : public D3D11_RENDER_TARGET_VIEW_DESC {
+    CD3D11_RENDER_TARGET_VIEW_DESC() {}
+    explicit CD3D11_RENDER_TARGET_VIEW_DESC(D3D11_RTV_DIMENSION dim, DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN,
+            UINT mip_slice = 0, UINT first_slice = 0, UINT array_size = -1) {
+        Format = format;
+        ViewDimension = dim;
+        switch(dim) {
+        case D3D11_RTV_DIMENSION_BUFFER:
+            Buffer.FirstElement = mip_slice;
+            Buffer.NumElements = first_slice;
+            break;
+        case D3D11_RTV_DIMENSION_TEXTURE1D:
+            Texture1D.MipSlice = mip_slice;
+            break;
+        case D3D11_RTV_DIMENSION_TEXTURE1DARRAY:
+            Texture1DArray.MipSlice = mip_slice;
+            Texture1DArray.FirstArraySlice = first_slice;
+            Texture1DArray.ArraySize = array_size;
+            break;
+        case D3D11_RTV_DIMENSION_TEXTURE2D:
+            Texture2D.MipSlice = mip_slice;
+            break;
+        case D3D11_RTV_DIMENSION_TEXTURE2DARRAY:
+            Texture2DArray.MipSlice = mip_slice;
+            Texture2DArray.FirstArraySlice = first_slice;
+            Texture2DArray.ArraySize = array_size;
+            break;
+        case D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY:
+            Texture2DMSArray.FirstArraySlice = first_slice;
+            Texture2DMSArray.ArraySize = array_size;
+            break;
+        case D3D11_RTV_DIMENSION_TEXTURE3D:
+            Texture3D.MipSlice = mip_slice;
+            Texture3D.FirstWSlice = first_slice;
+            Texture3D.WSize = array_size;
+            break;
+        default:
+            break;
+        }
+    }
+    explicit CD3D11_RENDER_TARGET_VIEW_DESC(ID3D11Buffer*, DXGI_FORMAT format, UINT first_elem,
+            UINT elem_cnt) {
+        Format = format;
+        ViewDimension = D3D11_RTV_DIMENSION_BUFFER;
+        Buffer.FirstElement = first_elem;
+        Buffer.NumElements = elem_cnt;
+    }
+    explicit CD3D11_RENDER_TARGET_VIEW_DESC(ID3D11Texture1D *texture, D3D11_RTV_DIMENSION dim,
+            DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, UINT mip_slice = 0, UINT first_slice = 0,
+            UINT array_size = -1);
+    explicit CD3D11_RENDER_TARGET_VIEW_DESC(ID3D11Texture2D *texture, D3D11_RTV_DIMENSION dim,
+            DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, UINT mip_slice = 0, UINT first_slice = 0,
+            UINT array_size = -1);
+    explicit CD3D11_RENDER_TARGET_VIEW_DESC(ID3D11Texture3D *texture, DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN,
+            UINT mip_slice = 0, UINT first_w_slice = 0, UINT w_slice = -1 );
+    ~CD3D11_RENDER_TARGET_VIEW_DESC() {}
+    explicit CD3D11_RENDER_TARGET_VIEW_DESC(const D3D11_RENDER_TARGET_VIEW_DESC &other)
+        : D3D11_RENDER_TARGET_VIEW_DESC(other) {}
+    operator const D3D11_RENDER_TARGET_VIEW_DESC&() const {
+        return *this;
+    }
+};
+#endif
+typedef struct D3D11_SAMPLER_DESC {
+    D3D11_FILTER Filter;
+    D3D11_TEXTURE_ADDRESS_MODE AddressU;
+    D3D11_TEXTURE_ADDRESS_MODE AddressV;
+    D3D11_TEXTURE_ADDRESS_MODE AddressW;
+    FLOAT MipLODBias;
+    UINT MaxAnisotropy;
+    D3D11_COMPARISON_FUNC ComparisonFunc;
+    FLOAT BorderColor[4];
+    FLOAT MinLOD;
+    FLOAT MaxLOD;
+} D3D11_SAMPLER_DESC;
+#if !defined(D3D11_NO_HELPERS) && defined(__cplusplus)
+struct CD3D11_SAMPLER_DESC : public D3D11_SAMPLER_DESC {
+    CD3D11_SAMPLER_DESC() {}
+    explicit CD3D11_SAMPLER_DESC(const D3D11_SAMPLER_DESC &o) : D3D11_SAMPLER_DESC(o) {}
+    explicit CD3D11_SAMPLER_DESC(CD3D11_DEFAULT) {
+        Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        MipLODBias = 0;
+        MaxAnisotropy = 1;
+        ComparisonFunc = D3D11_COMPARISON_NEVER;
+        BorderColor[0] = BorderColor[1] = BorderColor[2] = BorderColor[3] = 1.0f;
+        MinLOD = -3.402823466e+38f;
+        MaxLOD = 3.402823466e+38f;
+    }
+    explicit CD3D11_SAMPLER_DESC(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressU,
+            D3D11_TEXTURE_ADDRESS_MODE addressV, D3D11_TEXTURE_ADDRESS_MODE addressW,
+            FLOAT mipLODBias, UINT maxAnisotropy, D3D11_COMPARISON_FUNC comparisonFunc,
+            const FLOAT *borderColor, FLOAT minLOD, FLOAT maxLOD) {
+        Filter = filter;
+        AddressU = addressU;
+        AddressV = addressV;
+        AddressW = addressW;
+        MipLODBias = mipLODBias;
+        MaxAnisotropy = maxAnisotropy;
+        ComparisonFunc = comparisonFunc;
+        if(borderColor) {
+            BorderColor[0] = borderColor[0];
+            BorderColor[1] = borderColor[1];
+            BorderColor[2] = borderColor[2];
+            BorderColor[3] = borderColor[3];
+        }else {
+            BorderColor[0] = BorderColor[1] = BorderColor[2] = BorderColor[3] = 1.0f;
+        }
+        MinLOD = minLOD;
+        MaxLOD = maxLOD;
+    }
+    ~CD3D11_SAMPLER_DESC() {}
+    operator const D3D11_SAMPLER_DESC&() const { return *this; }
+};
+#endif
+typedef struct D3D11_SHADER_RESOURCE_VIEW_DESC {
+    DXGI_FORMAT Format;
+    D3D11_SRV_DIMENSION ViewDimension;
+    __C89_NAMELESS union {
+        D3D11_BUFFER_SRV Buffer;
+        D3D11_TEX1D_SRV Texture1D;
+        D3D11_TEX1D_ARRAY_SRV Texture1DArray;
+        D3D11_TEX2D_SRV Texture2D;
+        D3D11_TEX2D_ARRAY_SRV Texture2DArray;
+        D3D11_TEX2DMS_SRV Texture2DMS;
+        D3D11_TEX2DMS_ARRAY_SRV Texture2DMSArray;
+    
