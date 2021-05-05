@@ -2019,4 +2019,230 @@ typedef struct D3D11_SHADER_RESOURCE_VIEW_DESC {
         D3D11_TEX2D_ARRAY_SRV Texture2DArray;
         D3D11_TEX2DMS_SRV Texture2DMS;
         D3D11_TEX2DMS_ARRAY_SRV Texture2DMSArray;
-    
+        D3D11_TEX3D_SRV Texture3D;
+        D3D11_TEXCUBE_SRV TextureCube;
+        D3D11_TEXCUBE_ARRAY_SRV TextureCubeArray;
+        D3D11_BUFFEREX_SRV BufferEx;
+    } __C89_NAMELESSUNIONNAME;
+} D3D11_SHADER_RESOURCE_VIEW_DESC;
+#if !defined(D3D11_NO_HELPERS) && defined( __cplusplus )
+struct CD3D11_SHADER_RESOURCE_VIEW_DESC : public D3D11_SHADER_RESOURCE_VIEW_DESC {
+    CD3D11_SHADER_RESOURCE_VIEW_DESC() {}
+    explicit CD3D11_SHADER_RESOURCE_VIEW_DESC(D3D11_SRV_DIMENSION dim,
+            DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, UINT most_detailed_mip = 0,
+            UINT mip_levels = -1, UINT first_slice = 0, UINT array_size = -1, UINT flags = 0) {
+        Format = format;
+        ViewDimension = dim;
+        switch(ViewDimension) {
+        case D3D11_SRV_DIMENSION_BUFFER:
+            Buffer.FirstElement = most_detailed_mip;
+            Buffer.NumElements = mip_levels;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE1D:
+            Texture1D.MostDetailedMip = most_detailed_mip;
+            Texture1D.MipLevels = mip_levels;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE1DARRAY:
+            Texture1DArray.MostDetailedMip = most_detailed_mip;
+            Texture1DArray.MipLevels = mip_levels;
+            Texture1DArray.FirstArraySlice = first_slice;
+            Texture1DArray.ArraySize = array_size;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE2D:
+            Texture2D.MostDetailedMip = most_detailed_mip;
+            Texture2D.MipLevels = mip_levels;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE2DARRAY:
+            Texture2DArray.MostDetailedMip = most_detailed_mip;
+            Texture2DArray.MipLevels = mip_levels;
+            Texture2DArray.FirstArraySlice = first_slice;
+            Texture2DArray.ArraySize = array_size;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY:
+            Texture2DMSArray.FirstArraySlice = first_slice;
+            Texture2DMSArray.ArraySize = array_size;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE3D:
+            Texture3D.MostDetailedMip = most_detailed_mip;
+            Texture3D.MipLevels = mip_levels;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURECUBE:
+            TextureCube.MostDetailedMip = most_detailed_mip;
+            TextureCube.MipLevels = mip_levels;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURECUBEARRAY:
+            TextureCubeArray.MostDetailedMip = most_detailed_mip;
+            TextureCubeArray.MipLevels = mip_levels;
+            TextureCubeArray.First2DArrayFace = first_slice;
+            TextureCubeArray.NumCubes = array_size;
+            break;
+        case D3D11_SRV_DIMENSION_BUFFEREX:
+            BufferEx.FirstElement = most_detailed_mip;
+            BufferEx.NumElements = mip_levels;
+            BufferEx.Flags = flags;
+            break;
+        default:
+            break;
+        }
+    }
+    explicit CD3D11_SHADER_RESOURCE_VIEW_DESC(ID3D11Buffer*, DXGI_FORMAT format, UINT first_elem,
+            UINT elem_cnt, UINT flags = 0);
+    explicit CD3D11_SHADER_RESOURCE_VIEW_DESC(ID3D11Texture1D *texture, D3D11_SRV_DIMENSION dim,
+            DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, UINT most_detailed_mip = 0, UINT mip_levels = -1,
+            UINT first_slice = 0, UINT array_size = -1 );
+    explicit CD3D11_SHADER_RESOURCE_VIEW_DESC(ID3D11Texture2D *texture, D3D11_SRV_DIMENSION dim,
+            DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN, UINT most_detailed_mip = 0, UINT mip_levels = -1,
+            UINT first_slice = 0, UINT array_size = -1 );
+    explicit CD3D11_SHADER_RESOURCE_VIEW_DESC(ID3D11Texture3D *texture, DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN,
+            UINT most_detailed_mip = 0, UINT mip_levels = -1 );
+    ~CD3D11_SHADER_RESOURCE_VIEW_DESC() {}
+    explicit CD3D11_SHADER_RESOURCE_VIEW_DESC(const D3D11_SHADER_RESOURCE_VIEW_DESC &other)
+        : D3D11_SHADER_RESOURCE_VIEW_DESC(other) {}
+    operator const D3D11_SHADER_RESOURCE_VIEW_DESC&() const {
+        return *this;
+    }
+};
+#endif
+typedef struct D3D11_TEXTURE1D_DESC {
+    UINT Width;
+    UINT MipLevels;
+    UINT ArraySize;
+    DXGI_FORMAT Format;
+    D3D11_USAGE Usage;
+    UINT BindFlags;
+    UINT CPUAccessFlags;
+    UINT MiscFlags;
+} D3D11_TEXTURE1D_DESC;
+typedef struct D3D11_TEXTURE2D_DESC {
+    UINT Width;
+    UINT Height;
+    UINT MipLevels;
+    UINT ArraySize;
+    DXGI_FORMAT Format;
+    DXGI_SAMPLE_DESC SampleDesc;
+    D3D11_USAGE Usage;
+    UINT BindFlags;
+    UINT CPUAccessFlags;
+    UINT MiscFlags;
+} D3D11_TEXTURE2D_DESC;
+#if !defined(D3D11_NO_HELPERS) && defined(__cplusplus)
+struct CD3D11_TEXTURE2D_DESC : public D3D11_TEXTURE2D_DESC {
+    CD3D11_TEXTURE2D_DESC() {}
+    explicit CD3D11_TEXTURE2D_DESC(const D3D11_TEXTURE2D_DESC &o) : D3D11_TEXTURE2D_DESC(o) {}
+    explicit CD3D11_TEXTURE2D_DESC(DXGI_FORMAT format, UINT width, UINT height, UINT arraySize = 1,
+            UINT mipLevels = 0, UINT bindFlags = D3D11_BIND_SHADER_RESOURCE,
+            D3D11_USAGE usage = D3D11_USAGE_DEFAULT, UINT cpuaccessFlags = 0, UINT sampleCount = 1,
+            UINT sampleQuality = 0, UINT miscFlags = 0) {
+        Width = width;
+        Height = height;
+        MipLevels = mipLevels;
+        ArraySize = arraySize;
+        Format = format;
+        SampleDesc.Count = sampleCount;
+        SampleDesc.Quality = sampleQuality;
+        Usage = usage;
+        BindFlags = bindFlags;
+        CPUAccessFlags = cpuaccessFlags;
+        MiscFlags = miscFlags;
+    }
+    ~CD3D11_TEXTURE2D_DESC() {}
+    operator const D3D11_TEXTURE2D_DESC&() const { return *this; }
+};
+#endif
+typedef struct D3D11_TEXTURE3D_DESC {
+    UINT Width;
+    UINT Height;
+    UINT Depth;
+    UINT MipLevels;
+    DXGI_FORMAT Format;
+    D3D11_USAGE Usage;
+    UINT BindFlags;
+    UINT CPUAccessFlags;
+    UINT MiscFlags;
+} D3D11_TEXTURE3D_DESC;
+typedef struct D3D11_VIDEO_DECODER_DESC {
+    GUID Guid;
+    UINT SampleWidth;
+    UINT SampleHeight;
+    DXGI_FORMAT OutputFormat;
+} D3D11_VIDEO_DECODER_DESC;
+typedef struct D3D11_VIDEO_DECODER_CONFIG {
+    GUID guidConfigBitstreamEncryption;
+    GUID guidConfigMBcontrolEncryption;
+    GUID guidConfigResidDiffEncryption;
+    UINT ConfigBitstreamRaw;
+    UINT ConfigMBcontrolRasterOrder;
+    UINT ConfigResidDiffHost;
+    UINT ConfigSpatialResid8;
+    UINT ConfigResid8Subtraction;
+    UINT ConfigSpatialHost8or9Clipping;
+    UINT ConfigSpatialResidInterleaved;
+    UINT ConfigIntraResidUnsigned;
+    UINT ConfigResidDiffAccelerator;
+    UINT ConfigHostInverseScan;
+    UINT ConfigSpecificIDCT;
+    UINT Config4GroupedCoefs;
+    USHORT ConfigMinRenderTargetBuffCount;
+    USHORT ConfigDecoderSpecific;
+} D3D11_VIDEO_DECODER_CONFIG;
+typedef enum D3D11_VIDEO_FRAME_FORMAT {
+    D3D11_VIDEO_FRAME_FORMAT_PROGRESSIVE = 0,
+    D3D11_VIDEO_FRAME_FORMAT_INTERLACED_TOP_FIELD_FIRST = 1,
+    D3D11_VIDEO_FRAME_FORMAT_INTERLACED_BOTTOM_FIELD_FIRST = 2
+} D3D11_VIDEO_FRAME_FORMAT;
+typedef enum D3D11_VIDEO_USAGE {
+    D3D11_VIDEO_USAGE_PLAYBACK_NORMAL = 0,
+    D3D11_VIDEO_USAGE_OPTIMAL_SPEED = 1,
+    D3D11_VIDEO_USAGE_OPTIMAL_QUALITY = 2
+} D3D11_VIDEO_USAGE;
+typedef struct D3D11_VIDEO_PROCESSOR_CONTENT_DESC {
+    D3D11_VIDEO_FRAME_FORMAT InputFrameFormat;
+    DXGI_RATIONAL InputFrameRate;
+    UINT InputWidth;
+    UINT InputHeight;
+    DXGI_RATIONAL OutputFrameRate;
+    UINT OutputWidth;
+    UINT OutputHeight;
+    D3D11_VIDEO_USAGE Usage;
+} D3D11_VIDEO_PROCESSOR_CONTENT_DESC;
+typedef struct D3D11_VIDEO_PROCESSOR_CAPS {
+    UINT DeviceCaps;
+    UINT FeatureCaps;
+    UINT FilterCaps;
+    UINT InputFormatCaps;
+    UINT AutoStreamCaps;
+    UINT StereoCaps;
+    UINT RateConversionCapsCount;
+    UINT MaxInputStreams;
+    UINT MaxStreamStates;
+} D3D11_VIDEO_PROCESSOR_CAPS;
+typedef struct D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS {
+    UINT PastFrames;
+    UINT FutureFrames;
+    UINT ProcessorCaps;
+    UINT ITelecineCaps;
+    UINT CustomRateCount;
+} D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS;
+typedef struct D3D11_VIDEO_PROCESSOR_CUSTOM_RATE {
+    DXGI_RATIONAL CustomRate;
+    UINT OutputFrames;
+    WINBOOL InputInterlaced;
+    UINT InputFramesOrFields;
+} D3D11_VIDEO_PROCESSOR_CUSTOM_RATE;
+typedef enum D3D11_VIDEO_PROCESSOR_FILTER {
+    D3D11_VIDEO_PROCESSOR_FILTER_BRIGHTNESS = 0,
+    D3D11_VIDEO_PROCESSOR_FILTER_CONTRAST = 1,
+    D3D11_VIDEO_PROCESSOR_FILTER_HUE = 2,
+    D3D11_VIDEO_PROCESSOR_FILTER_SATURATION = 3,
+    D3D11_VIDEO_PROCESSOR_FILTER_NOISE_REDUCTION = 4,
+    D3D11_VIDEO_PROCESSOR_FILTER_EDGE_ENHANCEMENT = 5,
+    D3D11_VIDEO_PROCESSOR_FILTER_ANAMORPHIC_SCALING = 6,
+    D3D11_VIDEO_PROCESSOR_FILTER_STEREO_ADJUSTMENT = 7
+} D3D11_VIDEO_PROCESSOR_FILTER;
+typedef struct D3D11_VIDEO_PROCESSOR_FILTER_RANGE {
+    int Minimum;
+    int Maximum;
+    int Default;
+    float Multiplier;
+} D3D11_VIDEO_PROCESSOR_FILTER_RANGE;
+typedef enum D3D11_AUTHENTICATED_CHANNEL_TYPE
