@@ -3681,4 +3681,225 @@ interface ID3D11ClassLinkage {
 #define ID3D11ClassLinkage_Release(This) (This)->lpVtbl->Release(This)
 /*** ID3D11DeviceChild methods ***/
 #define ID3D11ClassLinkage_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
-#define ID3D11ClassLinkage_GetPri
+#define ID3D11ClassLinkage_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11ClassLinkage_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11ClassLinkage_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11ClassLinkage methods ***/
+#define ID3D11ClassLinkage_GetClassInstance(This,pClassInstanceName,InstanceIndex,ppInstance) (This)->lpVtbl->GetClassInstance(This,pClassInstanceName,InstanceIndex,ppInstance)
+#define ID3D11ClassLinkage_CreateClassInstance(This,pClassTypeName,ConstantBufferOffset,ConstantVectorOffset,TextureOffset,SamplerOffset,ppInstance) (This)->lpVtbl->CreateClassInstance(This,pClassTypeName,ConstantBufferOffset,ConstantVectorOffset,TextureOffset,SamplerOffset,ppInstance)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11ClassLinkage_QueryInterface(ID3D11ClassLinkage* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11ClassLinkage_AddRef(ID3D11ClassLinkage* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11ClassLinkage_Release(ID3D11ClassLinkage* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11ClassLinkage_GetDevice(ID3D11ClassLinkage* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11ClassLinkage_GetPrivateData(ID3D11ClassLinkage* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11ClassLinkage_SetPrivateData(ID3D11ClassLinkage* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11ClassLinkage_SetPrivateDataInterface(ID3D11ClassLinkage* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11ClassLinkage methods ***/
+static FORCEINLINE HRESULT ID3D11ClassLinkage_GetClassInstance(ID3D11ClassLinkage* This,LPCSTR pClassInstanceName,UINT InstanceIndex,ID3D11ClassInstance **ppInstance) {
+    return This->lpVtbl->GetClassInstance(This,pClassInstanceName,InstanceIndex,ppInstance);
+}
+static FORCEINLINE HRESULT ID3D11ClassLinkage_CreateClassInstance(ID3D11ClassLinkage* This,LPCSTR pClassTypeName,UINT ConstantBufferOffset,UINT ConstantVectorOffset,UINT TextureOffset,UINT SamplerOffset,ID3D11ClassInstance **ppInstance) {
+    return This->lpVtbl->CreateClassInstance(This,pClassTypeName,ConstantBufferOffset,ConstantVectorOffset,TextureOffset,SamplerOffset,ppInstance);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11ClassLinkage_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11CommandList interface
+ */
+#ifndef __ID3D11CommandList_INTERFACE_DEFINED__
+#define __ID3D11CommandList_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11CommandList, 0xa24bc4d1, 0x769e, 0x43f7, 0x80,0x13, 0x98,0xff,0x56,0x6c,0x18,0xe2);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a24bc4d1-769e-43f7-8013-98ff566c18e2")
+ID3D11CommandList : public ID3D11DeviceChild
+{
+    virtual UINT STDMETHODCALLTYPE GetContextFlags(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11CommandList, 0xa24bc4d1, 0x769e, 0x43f7, 0x80,0x13, 0x98,0xff,0x56,0x6c,0x18,0xe2)
+#endif
+#else
+typedef struct ID3D11CommandListVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11CommandList *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11CommandList *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11CommandList *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11CommandList *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11CommandList *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11CommandList *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11CommandList *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11CommandList methods ***/
+    UINT (STDMETHODCALLTYPE *GetContextFlags)(
+        ID3D11CommandList *This);
+
+    END_INTERFACE
+} ID3D11CommandListVtbl;
+
+interface ID3D11CommandList {
+    CONST_VTBL ID3D11CommandListVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11CommandList_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11CommandList_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11CommandList_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11CommandList_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11CommandList_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11CommandList_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11CommandList_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11CommandList methods ***/
+#define ID3D11CommandList_GetContextFlags(This) (This)->lpVtbl->GetContextFlags(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11CommandList_QueryInterface(ID3D11CommandList* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11CommandList_AddRef(ID3D11CommandList* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11CommandList_Release(ID3D11CommandList* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11CommandList_GetDevice(ID3D11CommandList* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11CommandList_GetPrivateData(ID3D11CommandList* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11CommandList_SetPrivateData(ID3D11CommandList* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11CommandList_SetPrivateDataInterface(ID3D11CommandList* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11CommandList methods ***/
+static FORCEINLINE UINT ID3D11CommandList_GetContextFlags(ID3D11CommandList* This) {
+    return This->lpVtbl->GetContextFlags(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11CommandList_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11ComputeShader interface
+ */
+#ifndef __ID3D11ComputeShader_INTERFACE_DEFINED__
+#define __ID3D11ComputeShader_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11ComputeShader, 0x4f5b196e, 0xc2bd, 0x495e, 0xbd,0x01, 0x1f,0xde,0xd3,0x8e,0x49,0x69);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("4f5b196e-c2bd-495e-bd01-1fded38e4969")
+ID3D11ComputeShader : public ID3D11DeviceChild
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11ComputeShader, 0x4f5b196e, 0xc2bd, 0x495e, 0xbd,0x01, 0x1f,0xde,0xd3,0x8e,0x49,0x69)
+#endif
+#else
+typedef struct ID3D11ComputeShaderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11ComputeShader *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11ComputeShader *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11ComputeShader *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11ComputeShader *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11ComputeShader *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11ComputeShader *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11ComputeShader *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11ComputeShaderVtbl;
+
+interface ID3D11ComputeShader {
+    CONST_VTBL ID3D11ComputeShaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACRO
