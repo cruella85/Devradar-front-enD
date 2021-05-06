@@ -2494,4 +2494,249 @@ typedef struct D3D11_AUTHENTICATED_QUERY_OUTPUT_ID_COUNT_OUTPUT {
 typedef struct D3D11_AUTHENTICATED_QUERY_OUTPUT_ID_INPUT {
     D3D11_AUTHENTICATED_QUERY_INPUT Input;
     HANDLE DeviceHandle;
-    HANDLE CryptoSessionHandle
+    HANDLE CryptoSessionHandle;
+    UINT OutputIDIndex;
+} D3D11_AUTHENTICATED_QUERY_OUTPUT_ID_INPUT;
+typedef struct D3D11_AUTHENTICATED_QUERY_OUTPUT_ID_OUTPUT {
+    D3D11_AUTHENTICATED_QUERY_OUTPUT Output;
+    HANDLE DeviceHandle;
+    HANDLE CryptoSessionHandle;
+    UINT OutputIDIndex;
+    UINT64 OutputID;
+} D3D11_AUTHENTICATED_QUERY_OUTPUT_ID_OUTPUT;
+typedef struct D3D11_AUTHENTICATED_QUERY_ACESSIBILITY_OUTPUT {
+    D3D11_AUTHENTICATED_QUERY_OUTPUT Output;
+    D3D11_BUS_TYPE BusType;
+    WINBOOL AccessibleInContiguousBlocks;
+    WINBOOL AccessibleInNonContiguousBlocks;
+} D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_OUTPUT;
+typedef struct D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_ENCRYPTION_GUID_COUNT_OUTPUT {
+    D3D11_AUTHENTICATED_QUERY_OUTPUT Output;
+    UINT EncryptionGuidCount;
+} D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_ENCRYPTION_GUID_COUNT_OUTPUT;
+typedef struct D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_ENCRYPTION_GUID_INPUT {
+    D3D11_AUTHENTICATED_QUERY_INPUT Input;
+    UINT EncryptionGuidIndex;
+} D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_ENCRYPTION_GUID_INPUT;
+typedef struct D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_ENCRYPTION_GUID_OUTPUT {
+    D3D11_AUTHENTICATED_QUERY_OUTPUT Output;
+    UINT EncryptionGuidIndex;
+    GUID EncryptionGuid;
+} D3D11_AUTHENTICATED_QUERY_ACCESSIBILITY_ENCRYPTION_GUID_OUTPUT;
+typedef struct D3D11_AUTHENTICATED_QUERY_CURRENT_ACCESSIBILITY_ENCRYPTION_OUTPUT {
+    D3D11_AUTHENTICATED_QUERY_OUTPUT Output;
+    GUID EncryptionGuid;
+} D3D11_AUTHENTICATED_QUERY_CURRENT_ACCESSIBILITY_ENCRYPTION_OUTPUT;
+typedef struct D3D11_AUTHENTICATED_CONFIGURE_INITIALIZE_INPUT {
+    D3D11_AUTHENTICATED_CONFIGURE_INPUT Parameters;
+    UINT StartSequenceQuery;
+    UINT StartSequenceConfigure;
+} D3D11_AUTHENTICATED_CONFIGURE_INITIALIZE_INPUT;
+typedef struct D3D11_AUTHENTICATED_CONFIGURE_PROTECTION_INPUT {
+    D3D11_AUTHENTICATED_CONFIGURE_INPUT Parameters;
+    D3D11_AUTHENTICATED_PROTECTION_FLAGS Protections;
+} D3D11_AUTHENTICATED_CONFIGURE_PROTECTION_INPUT;
+typedef struct D3D11_AUTHENTICATED_CONFIGURE_CRYPTO_SESSION_INPUT {
+    D3D11_AUTHENTICATED_CONFIGURE_INPUT Parameters;
+    HANDLE DecoderHandle;
+    HANDLE CryptoSessionHandle;
+    HANDLE DeviceHandle;
+} D3D11_AUTHENTICATED_CONFIGURE_CRYPTO_SESSION_INPUT;
+typedef struct D3D11_AUTHENTICATED_CONFIGURE_SHARED_RESOURCE_INPUT {
+    D3D11_AUTHENTICATED_CONFIGURE_INPUT Parameters;
+    D3D11_AUTHENTICATED_PROCESS_IDENTIFIER_TYPE ProcessType;
+    HANDLE ProcessHandle;
+    WINBOOL AllowAccess;
+} D3D11_AUTHENTICATED_CONFIGURE_SHARED_RESOURCE_INPUT;
+typedef struct D3D11_AUTHENTICATED_CONFIGURE_ACCESSIBLE_ENCRYPTION_INPUT {
+    D3D11_AUTHENTICATED_CONFIGURE_INPUT Parameters;
+    GUID EncryptionGuid;
+} D3D11_AUTHENTICATED_CONFIGURE_ACCESSIBLE_ENCRYPTION_INPUT;
+/*****************************************************************************
+ * ID3D11DeviceChild interface
+ */
+#ifndef __ID3D11DeviceChild_INTERFACE_DEFINED__
+#define __ID3D11DeviceChild_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11DeviceChild, 0x1841e5c8, 0x16b0, 0x489b, 0xbc,0xc8, 0x44,0xcf,0xb0,0xd5,0xde,0xae);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("1841e5c8-16b0-489b-bcc8-44cfb0d5deae")
+ID3D11DeviceChild : public IUnknown
+{
+    virtual void STDMETHODCALLTYPE GetDevice(
+        ID3D11Device **ppDevice) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPrivateData(
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetPrivateData(
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
+        REFGUID guid,
+        const IUnknown *pData) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11DeviceChild, 0x1841e5c8, 0x16b0, 0x489b, 0xbc,0xc8, 0x44,0xcf,0xb0,0xd5,0xde,0xae)
+#endif
+#else
+typedef struct ID3D11DeviceChildVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11DeviceChild *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11DeviceChild *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11DeviceChild *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11DeviceChild *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11DeviceChild *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11DeviceChild *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11DeviceChild *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11DeviceChildVtbl;
+
+interface ID3D11DeviceChild {
+    CONST_VTBL ID3D11DeviceChildVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11DeviceChild_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11DeviceChild_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11DeviceChild_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11DeviceChild_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11DeviceChild_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11DeviceChild_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11DeviceChild_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11DeviceChild_QueryInterface(ID3D11DeviceChild* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11DeviceChild_AddRef(ID3D11DeviceChild* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11DeviceChild_Release(ID3D11DeviceChild* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11DeviceChild_GetDevice(ID3D11DeviceChild* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11DeviceChild_GetPrivateData(ID3D11DeviceChild* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DeviceChild_SetPrivateData(ID3D11DeviceChild* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DeviceChild_SetPrivateDataInterface(ID3D11DeviceChild* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DeviceChild_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11Asynchronous interface
+ */
+#ifndef __ID3D11Asynchronous_INTERFACE_DEFINED__
+#define __ID3D11Asynchronous_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Asynchronous, 0x4b35d0cd, 0x1e15, 0x4258, 0x9c,0x98, 0x1b,0x13,0x33,0xf6,0xdd,0x3b);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("4b35d0cd-1e15-4258-9c98-1b1333f6dd3b")
+ID3D11Asynchronous : public ID3D11DeviceChild
+{
+    virtual UINT STDMETHODCALLTYPE GetDataSize(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11Asynchronous, 0x4b35d0cd, 0x1e15, 0x4258, 0x9c,0x98, 0x1b,0x13,0x33,0xf6,0xdd,0x3b)
+#endif
+#else
+typedef struct ID3D11AsynchronousVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11Asynchronous *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11Asynchronous *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11Asynchronous *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11Asynchronous *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11Asynchronous *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11Asynchronous *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11Asynchronous *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11Asynchronous methods ***/
+    UINT (STDMETHODCALLTYPE *GetDataSize)(
+        ID3D11Asynchronous *This);
+
+    END_INTERFACE
+} ID3D11AsynchronousVtbl;
+
+interface ID3D11Asynchronous {
+    CONST_VTBL ID3D11AsynchronousVtbl* lpVtbl;
+};
+
+#ifdef COBJMA
