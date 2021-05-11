@@ -4142,4 +4142,213 @@ interface ID3D11DepthStencilState {
 
 #ifdef COBJMACROS
 #ifndef WIDL_C_INLINE_WRAPPERS
-/*** 
+/*** IUnknown methods ***/
+#define ID3D11DepthStencilState_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11DepthStencilState_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11DepthStencilState_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11DepthStencilState_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11DepthStencilState_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11DepthStencilState_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11DepthStencilState_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11DepthStencilState methods ***/
+#define ID3D11DepthStencilState_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11DepthStencilState_QueryInterface(ID3D11DepthStencilState* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11DepthStencilState_AddRef(ID3D11DepthStencilState* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11DepthStencilState_Release(ID3D11DepthStencilState* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11DepthStencilState_GetDevice(ID3D11DepthStencilState* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11DepthStencilState_GetPrivateData(ID3D11DepthStencilState* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DepthStencilState_SetPrivateData(ID3D11DepthStencilState* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DepthStencilState_SetPrivateDataInterface(ID3D11DepthStencilState* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11DepthStencilState methods ***/
+static FORCEINLINE void ID3D11DepthStencilState_GetDesc(ID3D11DepthStencilState* This,D3D11_DEPTH_STENCIL_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DepthStencilState_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11DepthStencilView interface
+ */
+#ifndef __ID3D11DepthStencilView_INTERFACE_DEFINED__
+#define __ID3D11DepthStencilView_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11DepthStencilView, 0x9fdac92a, 0x1876, 0x48c3, 0xaf,0xad, 0x25,0xb9,0x4f,0x84,0xa9,0xb6);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9fdac92a-1876-48c3-afad-25b94f84a9b6")
+ID3D11DepthStencilView : public ID3D11View
+{
+    virtual void STDMETHODCALLTYPE GetDesc(
+        D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11DepthStencilView, 0x9fdac92a, 0x1876, 0x48c3, 0xaf,0xad, 0x25,0xb9,0x4f,0x84,0xa9,0xb6)
+#endif
+#else
+typedef struct ID3D11DepthStencilViewVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11DepthStencilView *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11DepthStencilView *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11DepthStencilView *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11DepthStencilView *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11DepthStencilView *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11DepthStencilView *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11DepthStencilView *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11View methods ***/
+    void (STDMETHODCALLTYPE *GetResource)(
+        ID3D11DepthStencilView *This,
+        ID3D11Resource **ppResource);
+
+    /*** ID3D11DepthStencilView methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11DepthStencilView *This,
+        D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc);
+
+    END_INTERFACE
+} ID3D11DepthStencilViewVtbl;
+
+interface ID3D11DepthStencilView {
+    CONST_VTBL ID3D11DepthStencilViewVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11DepthStencilView_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11DepthStencilView_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11DepthStencilView_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11DepthStencilView_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11DepthStencilView_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11DepthStencilView_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11DepthStencilView_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11View methods ***/
+#define ID3D11DepthStencilView_GetResource(This,ppResource) (This)->lpVtbl->GetResource(This,ppResource)
+/*** ID3D11DepthStencilView methods ***/
+#define ID3D11DepthStencilView_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11DepthStencilView_QueryInterface(ID3D11DepthStencilView* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11DepthStencilView_AddRef(ID3D11DepthStencilView* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11DepthStencilView_Release(ID3D11DepthStencilView* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11DepthStencilView_GetDevice(ID3D11DepthStencilView* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11DepthStencilView_GetPrivateData(ID3D11DepthStencilView* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DepthStencilView_SetPrivateData(ID3D11DepthStencilView* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DepthStencilView_SetPrivateDataInterface(ID3D11DepthStencilView* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11View methods ***/
+static FORCEINLINE void ID3D11DepthStencilView_GetResource(ID3D11DepthStencilView* This,ID3D11Resource **ppResource) {
+    This->lpVtbl->GetResource(This,ppResource);
+}
+/*** ID3D11DepthStencilView methods ***/
+static FORCEINLINE void ID3D11DepthStencilView_GetDesc(ID3D11DepthStencilView* This,D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DepthStencilView_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11DomainShader interface
+ */
+#ifndef __ID3D11DomainShader_INTERFACE_DEFINED__
+#define __ID3D11DomainShader_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11DomainShader, 0xf582c508, 0x0f36, 0x490c, 0x99,0x77, 0x31,0xee,0xce,0x26,0x8c,0xfa);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("f582c508-0f36-490c-9977-31eece268cfa")
+ID3D11DomainShader : public ID3D11DeviceChild
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11DomainShader, 0xf582c508, 0x0f36, 0x490c, 0x99,0x77, 0x31,0xee,0xce,0x26,0x8c,0xfa)
+#endif
+#else
+typedef struct ID3D11DomainShaderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11DomainShader *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11DomainShader *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11DomainShader *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11DomainShader *This,
+        ID3
