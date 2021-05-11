@@ -4351,4 +4351,243 @@ typedef struct ID3D11DomainShaderVtbl {
     /*** ID3D11DeviceChild methods ***/
     void (STDMETHODCALLTYPE *GetDevice)(
         ID3D11DomainShader *This,
-        ID3
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11DomainShader *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11DomainShader *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11DomainShader *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11DomainShaderVtbl;
+
+interface ID3D11DomainShader {
+    CONST_VTBL ID3D11DomainShaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11DomainShader_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11DomainShader_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11DomainShader_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11DomainShader_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11DomainShader_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11DomainShader_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11DomainShader_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11DomainShader_QueryInterface(ID3D11DomainShader* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11DomainShader_AddRef(ID3D11DomainShader* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11DomainShader_Release(ID3D11DomainShader* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11DomainShader_GetDevice(ID3D11DomainShader* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11DomainShader_GetPrivateData(ID3D11DomainShader* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DomainShader_SetPrivateData(ID3D11DomainShader* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DomainShader_SetPrivateDataInterface(ID3D11DomainShader* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DomainShader_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11GeometryShader interface
+ */
+#ifndef __ID3D11GeometryShader_INTERFACE_DEFINED__
+#define __ID3D11GeometryShader_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11GeometryShader, 0x38325b96, 0xeffb, 0x4022, 0xba,0x02, 0x2e,0x79,0x5b,0x70,0x27,0x5c);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("38325b96-effb-4022-ba02-2e795b70275c")
+ID3D11GeometryShader : public ID3D11DeviceChild
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11GeometryShader, 0x38325b96, 0xeffb, 0x4022, 0xba,0x02, 0x2e,0x79,0x5b,0x70,0x27,0x5c)
+#endif
+#else
+typedef struct ID3D11GeometryShaderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11GeometryShader *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11GeometryShader *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11GeometryShader *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11GeometryShader *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11GeometryShader *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11GeometryShader *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11GeometryShader *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11GeometryShaderVtbl;
+
+interface ID3D11GeometryShader {
+    CONST_VTBL ID3D11GeometryShaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11GeometryShader_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11GeometryShader_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11GeometryShader_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11GeometryShader_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11GeometryShader_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11GeometryShader_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11GeometryShader_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11GeometryShader_QueryInterface(ID3D11GeometryShader* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11GeometryShader_AddRef(ID3D11GeometryShader* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11GeometryShader_Release(ID3D11GeometryShader* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11GeometryShader_GetDevice(ID3D11GeometryShader* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11GeometryShader_GetPrivateData(ID3D11GeometryShader* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11GeometryShader_SetPrivateData(ID3D11GeometryShader* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11GeometryShader_SetPrivateDataInterface(ID3D11GeometryShader* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11GeometryShader_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11HullShader interface
+ */
+#ifndef __ID3D11HullShader_INTERFACE_DEFINED__
+#define __ID3D11HullShader_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11HullShader, 0x8e5c6061, 0x628a, 0x4c8e, 0x82,0x64, 0xbb,0xe4,0x5c,0xb3,0xd5,0xdd);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("8e5c6061-628a-4c8e-8264-bbe45cb3d5dd")
+ID3D11HullShader : public ID3D11DeviceChild
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11HullShader, 0x8e5c6061, 0x628a, 0x4c8e, 0x82,0x64, 0xbb,0xe4,0x5c,0xb3,0xd5,0xdd)
+#endif
+#else
+typedef struct ID3D11HullShaderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11HullShader *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11HullShader *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11HullShader *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11HullShader *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11HullShader *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11HullShader *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11HullShader *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11HullShaderVtbl;
+
+interface ID3D11HullShader {
+    CONST_VTBL ID3D11HullShaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11HullShader_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11HullShader_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11HullShader_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11HullShader_GetDevice(
