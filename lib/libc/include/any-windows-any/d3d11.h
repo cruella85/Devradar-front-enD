@@ -4818,4 +4818,238 @@ static FORCEINLINE void ID3D11PixelShader_GetDevice(ID3D11PixelShader* This,ID3D
 static FORCEINLINE HRESULT ID3D11PixelShader_GetPrivateData(ID3D11PixelShader* This,REFGUID guid,UINT *pDataSize,void *pData) {
     return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
 }
-static FORCEINLINE HRESULT I
+static FORCEINLINE HRESULT ID3D11PixelShader_SetPrivateData(ID3D11PixelShader* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11PixelShader_SetPrivateDataInterface(ID3D11PixelShader* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11PixelShader_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11Predicate interface
+ */
+#ifndef __ID3D11Predicate_INTERFACE_DEFINED__
+#define __ID3D11Predicate_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Predicate, 0x9eb576dd, 0x9f77, 0x4d86, 0x81,0xaa, 0x8b,0xab,0x5f,0xe4,0x90,0xe2);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9eb576dd-9f77-4d86-81aa-8bab5fe490e2")
+ID3D11Predicate : public ID3D11Query
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11Predicate, 0x9eb576dd, 0x9f77, 0x4d86, 0x81,0xaa, 0x8b,0xab,0x5f,0xe4,0x90,0xe2)
+#endif
+#else
+typedef struct ID3D11PredicateVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11Predicate *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11Predicate *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11Predicate *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11Predicate *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11Predicate *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11Predicate *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11Predicate *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11Asynchronous methods ***/
+    UINT (STDMETHODCALLTYPE *GetDataSize)(
+        ID3D11Predicate *This);
+
+    /*** ID3D11Query methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11Predicate *This,
+        D3D11_QUERY_DESC *pDesc);
+
+    END_INTERFACE
+} ID3D11PredicateVtbl;
+
+interface ID3D11Predicate {
+    CONST_VTBL ID3D11PredicateVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11Predicate_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11Predicate_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11Predicate_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11Predicate_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11Predicate_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11Predicate_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11Predicate_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11Asynchronous methods ***/
+#define ID3D11Predicate_GetDataSize(This) (This)->lpVtbl->GetDataSize(This)
+/*** ID3D11Query methods ***/
+#define ID3D11Predicate_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11Predicate_QueryInterface(ID3D11Predicate* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11Predicate_AddRef(ID3D11Predicate* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11Predicate_Release(ID3D11Predicate* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11Predicate_GetDevice(ID3D11Predicate* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11Predicate_GetPrivateData(ID3D11Predicate* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Predicate_SetPrivateData(ID3D11Predicate* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Predicate_SetPrivateDataInterface(ID3D11Predicate* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11Asynchronous methods ***/
+static FORCEINLINE UINT ID3D11Predicate_GetDataSize(ID3D11Predicate* This) {
+    return This->lpVtbl->GetDataSize(This);
+}
+/*** ID3D11Query methods ***/
+static FORCEINLINE void ID3D11Predicate_GetDesc(ID3D11Predicate* This,D3D11_QUERY_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11Predicate_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11RasterizerState interface
+ */
+#ifndef __ID3D11RasterizerState_INTERFACE_DEFINED__
+#define __ID3D11RasterizerState_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11RasterizerState, 0x9bb4ab81, 0xab1a, 0x4d8f, 0xb5,0x06, 0xfc,0x04,0x20,0x0b,0x6e,0xe7);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9bb4ab81-ab1a-4d8f-b506-fc04200b6ee7")
+ID3D11RasterizerState : public ID3D11DeviceChild
+{
+    virtual void STDMETHODCALLTYPE GetDesc(
+        D3D11_RASTERIZER_DESC *pDesc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11RasterizerState, 0x9bb4ab81, 0xab1a, 0x4d8f, 0xb5,0x06, 0xfc,0x04,0x20,0x0b,0x6e,0xe7)
+#endif
+#else
+typedef struct ID3D11RasterizerStateVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11RasterizerState *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11RasterizerState *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11RasterizerState *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11RasterizerState *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11RasterizerState *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11RasterizerState *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11RasterizerState *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11RasterizerState methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11RasterizerState *This,
+        D3D11_RASTERIZER_DESC *pDesc);
+
+    END_INTERFACE
+} ID3D11RasterizerStateVtbl;
+
+interface ID3D11RasterizerState {
+    CONST_VTBL ID3D11RasterizerStateVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11RasterizerState_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11RasterizerState_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11RasterizerState_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11RasterizerState_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11RasterizerState_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11RasterizerState_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11RasterizerState_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11RasterizerState methods ***/
+#define ID3D11RasterizerState_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11RasterizerState_QueryInterface(ID3D11RasterizerState* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11RasterizerState_AddRef(ID3D11RasterizerState* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11RasterizerState_Release(ID3D11RasterizerState* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11RasterizerState_GetDevice(ID3D11RasterizerState* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11RasterizerState_GetPrivateData(ID3D11RasterizerState* This,REFGUID guid,UINT *pDataSize,voi
