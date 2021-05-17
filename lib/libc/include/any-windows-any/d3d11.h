@@ -5960,3 +5960,234 @@ interface ID3D11UnorderedAccessView {
 #define ID3D11UnorderedAccessView_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
 #define ID3D11UnorderedAccessView_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
 /*** ID3D11View methods ***/
+#define ID3D11UnorderedAccessView_GetResource(This,ppResource) (This)->lpVtbl->GetResource(This,ppResource)
+/*** ID3D11UnorderedAccessView methods ***/
+#define ID3D11UnorderedAccessView_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11UnorderedAccessView_QueryInterface(ID3D11UnorderedAccessView* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11UnorderedAccessView_AddRef(ID3D11UnorderedAccessView* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11UnorderedAccessView_Release(ID3D11UnorderedAccessView* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11UnorderedAccessView_GetDevice(ID3D11UnorderedAccessView* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11UnorderedAccessView_GetPrivateData(ID3D11UnorderedAccessView* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11UnorderedAccessView_SetPrivateData(ID3D11UnorderedAccessView* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11UnorderedAccessView_SetPrivateDataInterface(ID3D11UnorderedAccessView* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11View methods ***/
+static FORCEINLINE void ID3D11UnorderedAccessView_GetResource(ID3D11UnorderedAccessView* This,ID3D11Resource **ppResource) {
+    This->lpVtbl->GetResource(This,ppResource);
+}
+/*** ID3D11UnorderedAccessView methods ***/
+static FORCEINLINE void ID3D11UnorderedAccessView_GetDesc(ID3D11UnorderedAccessView* This,D3D11_UNORDERED_ACCESS_VIEW_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11UnorderedAccessView_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11VertexShader interface
+ */
+#ifndef __ID3D11VertexShader_INTERFACE_DEFINED__
+#define __ID3D11VertexShader_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11VertexShader, 0x3b301d64, 0xd678, 0x4289, 0x88,0x97, 0x22,0xf8,0x92,0x8b,0x72,0xf3);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3b301d64-d678-4289-8897-22f8928b72f3")
+ID3D11VertexShader : public ID3D11DeviceChild
+{
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11VertexShader, 0x3b301d64, 0xd678, 0x4289, 0x88,0x97, 0x22,0xf8,0x92,0x8b,0x72,0xf3)
+#endif
+#else
+typedef struct ID3D11VertexShaderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11VertexShader *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11VertexShader *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11VertexShader *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11VertexShader *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11VertexShader *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11VertexShader *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11VertexShader *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11VertexShaderVtbl;
+
+interface ID3D11VertexShader {
+    CONST_VTBL ID3D11VertexShaderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11VertexShader_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11VertexShader_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11VertexShader_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11VertexShader_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11VertexShader_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11VertexShader_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11VertexShader_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11VertexShader_QueryInterface(ID3D11VertexShader* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11VertexShader_AddRef(ID3D11VertexShader* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11VertexShader_Release(ID3D11VertexShader* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11VertexShader_GetDevice(ID3D11VertexShader* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11VertexShader_GetPrivateData(ID3D11VertexShader* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VertexShader_SetPrivateData(ID3D11VertexShader* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VertexShader_SetPrivateDataInterface(ID3D11VertexShader* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11VertexShader_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11DeviceContext interface
+ */
+#ifndef __ID3D11DeviceContext_INTERFACE_DEFINED__
+#define __ID3D11DeviceContext_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11DeviceContext, 0xc0bfa96c, 0xe089, 0x44fb, 0x8e,0xaf, 0x26,0xf8,0x79,0x61,0x90,0xda);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c0bfa96c-e089-44fb-8eaf-26f8796190da")
+ID3D11DeviceContext : public ID3D11DeviceChild
+{
+    virtual void STDMETHODCALLTYPE VSSetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE PSSetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE PSSetShader(
+        ID3D11PixelShader *pPixelShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE PSSetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE VSSetShader(
+        ID3D11VertexShader *pVertexShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE DrawIndexed(
+        UINT IndexCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation) = 0;
+
+    virtual void STDMETHODCALLTYPE Draw(
+        UINT VertexCount,
+        UINT StartVertexLocation) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Map(
+        ID3D11Resource *pResource,
+        UINT Subresource,
+        D3D11_MAP MapType,
+        UINT MapFlags,
+        D3D11_MAPPED_SUBRESOURCE *pMappedResource) = 0;
+
+    virtual void STDMETHODCALLTYPE Unmap(
+        ID3D11Resource *pResource,
+        UINT Subresource) = 0;
+
+    virtual void STDMETHODCALLTYPE PSSetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE IASetInputLayout(
+        ID3D11InputLayout *pInputLayout) = 0;
+
+    virtual void STDMETHODCALLTYPE IASetVertexBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppVertexBuffers,
+        const UINT *pStrides,
+        const UINT *pOffsets) = 0;
+
+    virtual void STDMETHODCALLTYPE IASetIndexBuffer(
+        ID3D11Buffer *pIndexBuffer,
+        DXGI_FORMAT Format,
+        UINT Offset) = 0;
+
+    virtual void STDMETHODCALLTYPE DrawIndexedInstanced(
+        UINT IndexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation,
+        UINT StartInstanceLocation) = 0;
+
+    virtual void STDMETHODCALLTYPE DrawInstanced(
+        UINT VertexCountPe
