@@ -6190,4 +6190,270 @@ ID3D11DeviceContext : public ID3D11DeviceChild
         UINT StartInstanceLocation) = 0;
 
     virtual void STDMETHODCALLTYPE DrawInstanced(
-        UINT VertexCountPe
+        UINT VertexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartVertexLocation,
+        UINT StartInstanceLocation) = 0;
+
+    virtual void STDMETHODCALLTYPE GSSetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE GSSetShader(
+        ID3D11GeometryShader *pShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE IASetPrimitiveTopology(
+        D3D11_PRIMITIVE_TOPOLOGY Topology) = 0;
+
+    virtual void STDMETHODCALLTYPE VSSetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE VSSetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE Begin(
+        ID3D11Asynchronous *pAsync) = 0;
+
+    virtual void STDMETHODCALLTYPE End(
+        ID3D11Asynchronous *pAsync) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetData(
+        ID3D11Asynchronous *pAsync,
+        void *pData,
+        UINT DataSize,
+        UINT GetDataFlags) = 0;
+
+    virtual void STDMETHODCALLTYPE SetPredication(
+        ID3D11Predicate *pPredicate,
+        WINBOOL PredicateValue) = 0;
+
+    virtual void STDMETHODCALLTYPE GSSetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE GSSetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE OMSetRenderTargets(
+        UINT NumViews,
+        ID3D11RenderTargetView *const *ppRenderTargetViews,
+        ID3D11DepthStencilView *pDepthStencilView) = 0;
+
+    virtual void STDMETHODCALLTYPE OMSetRenderTargetsAndUnorderedAccessViews(
+        UINT NumRTVs,
+        ID3D11RenderTargetView *const *ppRenderTargetViews,
+        ID3D11DepthStencilView *pDepthStencilView,
+        UINT UAVStartSlot,
+        UINT NumUAVs,
+        ID3D11UnorderedAccessView *const *ppUnorderedAccessViews,
+        const UINT *pUAVInitialCounts) = 0;
+
+    virtual void STDMETHODCALLTYPE OMSetBlendState(
+        ID3D11BlendState *pBlendState,
+        const FLOAT BlendFactor[4],
+        UINT SampleMask) = 0;
+
+    virtual void STDMETHODCALLTYPE OMSetDepthStencilState(
+        ID3D11DepthStencilState *pDepthStencilState,
+        UINT StencilRef) = 0;
+
+    virtual void STDMETHODCALLTYPE SOSetTargets(
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppSOTargets,
+        const UINT *pOffsets) = 0;
+
+    virtual void STDMETHODCALLTYPE DrawAuto(
+        ) = 0;
+
+    virtual void STDMETHODCALLTYPE DrawIndexedInstancedIndirect(
+        ID3D11Buffer *pBufferForArgs,
+        UINT AlignedByteOffsetForArgs) = 0;
+
+    virtual void STDMETHODCALLTYPE DrawInstancedIndirect(
+        ID3D11Buffer *pBufferForArgs,
+        UINT AlignedByteOffsetForArgs) = 0;
+
+    virtual void STDMETHODCALLTYPE Dispatch(
+        UINT ThreadGroupCountX,
+        UINT ThreadGroupCountY,
+        UINT ThreadGroupCountZ) = 0;
+
+    virtual void STDMETHODCALLTYPE DispatchIndirect(
+        ID3D11Buffer *pBufferForArgs,
+        UINT AlignedByteOffsetForArgs) = 0;
+
+    virtual void STDMETHODCALLTYPE RSSetState(
+        ID3D11RasterizerState *pRasterizerState) = 0;
+
+    virtual void STDMETHODCALLTYPE RSSetViewports(
+        UINT NumViewports,
+        const D3D11_VIEWPORT *pViewports) = 0;
+
+    virtual void STDMETHODCALLTYPE RSSetScissorRects(
+        UINT NumRects,
+        const D3D11_RECT *pRects) = 0;
+
+    virtual void STDMETHODCALLTYPE CopySubresourceRegion(
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        UINT DstX,
+        UINT DstY,
+        UINT DstZ,
+        ID3D11Resource *pSrcResource,
+        UINT SrcSubresource,
+        const D3D11_BOX *pSrcBox) = 0;
+
+    virtual void STDMETHODCALLTYPE CopyResource(
+        ID3D11Resource *pDstResource,
+        ID3D11Resource *pSrcResource) = 0;
+
+    virtual void STDMETHODCALLTYPE UpdateSubresource(
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        const D3D11_BOX *pDstBox,
+        const void *pSrcData,
+        UINT SrcRowPitch,
+        UINT SrcDepthPitch) = 0;
+
+    virtual void STDMETHODCALLTYPE CopyStructureCount(
+        ID3D11Buffer *pDstBuffer,
+        UINT DstAlignedByteOffset,
+        ID3D11UnorderedAccessView *pSrcView) = 0;
+
+    virtual void STDMETHODCALLTYPE ClearRenderTargetView(
+        ID3D11RenderTargetView *pRenderTargetView,
+        const FLOAT ColorRGBA[4]) = 0;
+
+    virtual void STDMETHODCALLTYPE ClearUnorderedAccessViewUint(
+        ID3D11UnorderedAccessView *pUnorderedAccessView,
+        const UINT Values[4]) = 0;
+
+    virtual void STDMETHODCALLTYPE ClearUnorderedAccessViewFloat(
+        ID3D11UnorderedAccessView *pUnorderedAccessView,
+        const FLOAT Values[4]) = 0;
+
+    virtual void STDMETHODCALLTYPE ClearDepthStencilView(
+        ID3D11DepthStencilView *pDepthStencilView,
+        UINT ClearFlags,
+        FLOAT Depth,
+        UINT8 Stencil) = 0;
+
+    virtual void STDMETHODCALLTYPE GenerateMips(
+        ID3D11ShaderResourceView *pShaderResourceView) = 0;
+
+    virtual void STDMETHODCALLTYPE SetResourceMinLOD(
+        ID3D11Resource *pResource,
+        FLOAT MinLOD) = 0;
+
+    virtual FLOAT STDMETHODCALLTYPE GetResourceMinLOD(
+        ID3D11Resource *pResource) = 0;
+
+    virtual void STDMETHODCALLTYPE ResolveSubresource(
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        ID3D11Resource *pSrcResource,
+        UINT SrcSubresource,
+        DXGI_FORMAT Format) = 0;
+
+    virtual void STDMETHODCALLTYPE ExecuteCommandList(
+        ID3D11CommandList *pCommandList,
+        WINBOOL RestoreContextState) = 0;
+
+    virtual void STDMETHODCALLTYPE HSSetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE HSSetShader(
+        ID3D11HullShader *pHullShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE HSSetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE HSSetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE DSSetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE DSSetShader(
+        ID3D11DomainShader *pDomainShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE DSSetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE DSSetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE CSSetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE CSSetUnorderedAccessViews(
+        UINT StartSlot,
+        UINT NumUAVs,
+        ID3D11UnorderedAccessView *const *ppUnorderedAccessViews,
+        const UINT *pUAVInitialCounts) = 0;
+
+    virtual void STDMETHODCALLTYPE CSSetShader(
+        ID3D11ComputeShader *pComputeShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE CSSetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE CSSetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE VSGetConstantBuffers(
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers) = 0;
+
+    virtual void STDMETHODCALLTYPE PSGetShaderResources(
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView **ppShaderResourceViews) = 0;
+
+    virtual void STDMETHODCALLTYPE PSGetShader(
+        ID3D11PixelShader **ppPixelShader,
+        ID3D11ClassInstance **ppClassInstances,
+        UINT *pNumClassInstances) = 0;
+
+    virtual void STDMETHODCALLTYPE PSGetSamplers(
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState **ppSamplers) = 0;
+
+    virtual void STDMETHODCALLTYPE VSGetShader(
+   
