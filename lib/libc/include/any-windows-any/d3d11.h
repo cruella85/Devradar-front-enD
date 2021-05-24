@@ -7289,4 +7289,78 @@ typedef struct ID3D11DeviceContextVtbl {
         ID3D11DeviceContext *This);
 
     D3D11_DEVICE_CONTEXT_TYPE (STDMETHODCALLTYPE *GetType)(
-        ID3D11DeviceContext 
+        ID3D11DeviceContext *This);
+
+    UINT (STDMETHODCALLTYPE *GetContextFlags)(
+        ID3D11DeviceContext *This);
+
+    HRESULT (STDMETHODCALLTYPE *FinishCommandList)(
+        ID3D11DeviceContext *This,
+        WINBOOL RestoreDeferredContextState,
+        ID3D11CommandList **ppCommandList);
+
+    END_INTERFACE
+} ID3D11DeviceContextVtbl;
+
+interface ID3D11DeviceContext {
+    CONST_VTBL ID3D11DeviceContextVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11DeviceContext_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11DeviceContext_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11DeviceContext_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11DeviceContext_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11DeviceContext_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11DeviceContext_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11DeviceContext_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11DeviceContext methods ***/
+#define ID3D11DeviceContext_VSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers) (This)->lpVtbl->VSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers)
+#define ID3D11DeviceContext_PSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews) (This)->lpVtbl->PSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews)
+#define ID3D11DeviceContext_PSSetShader(This,pPixelShader,ppClassInstances,NumClassInstances) (This)->lpVtbl->PSSetShader(This,pPixelShader,ppClassInstances,NumClassInstances)
+#define ID3D11DeviceContext_PSSetSamplers(This,StartSlot,NumSamplers,ppSamplers) (This)->lpVtbl->PSSetSamplers(This,StartSlot,NumSamplers,ppSamplers)
+#define ID3D11DeviceContext_VSSetShader(This,pVertexShader,ppClassInstances,NumClassInstances) (This)->lpVtbl->VSSetShader(This,pVertexShader,ppClassInstances,NumClassInstances)
+#define ID3D11DeviceContext_DrawIndexed(This,IndexCount,StartIndexLocation,BaseVertexLocation) (This)->lpVtbl->DrawIndexed(This,IndexCount,StartIndexLocation,BaseVertexLocation)
+#define ID3D11DeviceContext_Draw(This,VertexCount,StartVertexLocation) (This)->lpVtbl->Draw(This,VertexCount,StartVertexLocation)
+#define ID3D11DeviceContext_Map(This,pResource,Subresource,MapType,MapFlags,pMappedResource) (This)->lpVtbl->Map(This,pResource,Subresource,MapType,MapFlags,pMappedResource)
+#define ID3D11DeviceContext_Unmap(This,pResource,Subresource) (This)->lpVtbl->Unmap(This,pResource,Subresource)
+#define ID3D11DeviceContext_PSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers) (This)->lpVtbl->PSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers)
+#define ID3D11DeviceContext_IASetInputLayout(This,pInputLayout) (This)->lpVtbl->IASetInputLayout(This,pInputLayout)
+#define ID3D11DeviceContext_IASetVertexBuffers(This,StartSlot,NumBuffers,ppVertexBuffers,pStrides,pOffsets) (This)->lpVtbl->IASetVertexBuffers(This,StartSlot,NumBuffers,ppVertexBuffers,pStrides,pOffsets)
+#define ID3D11DeviceContext_IASetIndexBuffer(This,pIndexBuffer,Format,Offset) (This)->lpVtbl->IASetIndexBuffer(This,pIndexBuffer,Format,Offset)
+#define ID3D11DeviceContext_DrawIndexedInstanced(This,IndexCountPerInstance,InstanceCount,StartIndexLocation,BaseVertexLocation,StartInstanceLocation) (This)->lpVtbl->DrawIndexedInstanced(This,IndexCountPerInstance,InstanceCount,StartIndexLocation,BaseVertexLocation,StartInstanceLocation)
+#define ID3D11DeviceContext_DrawInstanced(This,VertexCountPerInstance,InstanceCount,StartVertexLocation,StartInstanceLocation) (This)->lpVtbl->DrawInstanced(This,VertexCountPerInstance,InstanceCount,StartVertexLocation,StartInstanceLocation)
+#define ID3D11DeviceContext_GSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers) (This)->lpVtbl->GSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers)
+#define ID3D11DeviceContext_GSSetShader(This,pShader,ppClassInstances,NumClassInstances) (This)->lpVtbl->GSSetShader(This,pShader,ppClassInstances,NumClassInstances)
+#define ID3D11DeviceContext_IASetPrimitiveTopology(This,Topology) (This)->lpVtbl->IASetPrimitiveTopology(This,Topology)
+#define ID3D11DeviceContext_VSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews) (This)->lpVtbl->VSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews)
+#define ID3D11DeviceContext_VSSetSamplers(This,StartSlot,NumSamplers,ppSamplers) (This)->lpVtbl->VSSetSamplers(This,StartSlot,NumSamplers,ppSamplers)
+#define ID3D11DeviceContext_Begin(This,pAsync) (This)->lpVtbl->Begin(This,pAsync)
+#define ID3D11DeviceContext_End(This,pAsync) (This)->lpVtbl->End(This,pAsync)
+#define ID3D11DeviceContext_GetData(This,pAsync,pData,DataSize,GetDataFlags) (This)->lpVtbl->GetData(This,pAsync,pData,DataSize,GetDataFlags)
+#define ID3D11DeviceContext_SetPredication(This,pPredicate,PredicateValue) (This)->lpVtbl->SetPredication(This,pPredicate,PredicateValue)
+#define ID3D11DeviceContext_GSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews) (This)->lpVtbl->GSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews)
+#define ID3D11DeviceContext_GSSetSamplers(This,StartSlot,NumSamplers,ppSamplers) (This)->lpVtbl->GSSetSamplers(This,StartSlot,NumSamplers,ppSamplers)
+#define ID3D11DeviceContext_OMSetRenderTargets(This,NumViews,ppRenderTargetViews,pDepthStencilView) (This)->lpVtbl->OMSetRenderTargets(This,NumViews,ppRenderTargetViews,pDepthStencilView)
+#define ID3D11DeviceContext_OMSetRenderTargetsAndUnorderedAccessViews(This,NumRTVs,ppRenderTargetViews,pDepthStencilView,UAVStartSlot,NumUAVs,ppUnorderedAccessViews,pUAVInitialCounts) (This)->lpVtbl->OMSetRenderTargetsAndUnorderedAccessViews(This,NumRTVs,ppRenderTargetViews,pDepthStencilView,UAVStartSlot,NumUAVs,ppUnorderedAccessViews,pUAVInitialCounts)
+#define ID3D11DeviceContext_OMSetBlendState(This,pBlendState,BlendFactor,SampleMask) (This)->lpVtbl->OMSetBlendState(This,pBlendState,BlendFactor,SampleMask)
+#define ID3D11DeviceContext_OMSetDepthStencilState(This,pDepthStencilState,StencilRef) (This)->lpVtbl->OMSetDepthStencilState(This,pDepthStencilState,StencilRef)
+#define ID3D11DeviceContext_SOSetTargets(This,NumBuffers,ppSOTargets,pOffsets) (This)->lpVtbl->SOSetTargets(This,NumBuffers,ppSOTargets,pOffsets)
+#define ID3D11DeviceContext_DrawAuto(This) (This)->lpVtbl->DrawAuto(This)
+#define ID3D11DeviceContext_DrawIndexedInstancedIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs) (This)->lpVtbl->DrawIndexedInstancedIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs)
+#define ID3D11DeviceContext_DrawInstancedIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs) (This)->lpVtbl->DrawInstancedIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs)
+#define ID3D11DeviceContext_Dispatch(This,ThreadGroupCountX,ThreadGroupCountY,ThreadGroupCountZ) (This)->lpVtbl->Dispatch(This,ThreadGroupCountX,ThreadGroupCountY,ThreadGroupCountZ)
+#define ID3D11DeviceContext_DispatchIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs) (This)->lpVtbl->DispatchIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs)
+#define ID3D11DeviceContext_RSSetState(This,pRasterizerState) (This)->lpVtbl->RSSetState(This,pRasterizerState)
+#define ID3D11DeviceContext_RSSetViewports(This,NumViewports,pViewports) (This)->lpVtbl->RSSetViewports(This,NumViewports,pViewports)
+#define ID3D11DeviceContext_RSSetScissorRects(This,NumRects,pRects) (This)->lpVtbl->RSSetScissorRects(This,NumRects,pRects)
+#define ID3D11DeviceContext_CopySubresourceRegion(This,pDstResource,DstSubresource,DstX,DstY,DstZ,pSrcResource,SrcSubresource,pSrcBox) (This)->lpVtbl->CopySubresourceRegion(This,pDstResource,DstSubresource,DstX,DstY,DstZ,pSrcResource,SrcSubresource,pSrcBox)
+#define ID3D11DeviceContext_CopyResource(This,pDstResource,pSrcResource) (This)->lpVtbl->CopyResource(This,pDstResource,pSrcResource)
+#define ID3D11DeviceContext_UpdateSubresource(This,pDstResource,DstSubresource,pDstBox,pSrcData,SrcRowPitch,SrcDepthPitch) (This)->lpVtbl->UpdateSubresource(This,pDstResource,DstSubresource,pDstBox,pSrcData,SrcRowPitch,SrcDepthPitch)
+#define ID3D11DeviceContext_CopyStructureCount(This,pDstBuffer,DstAlignedByteOffset,pSrcView) (This)->lpVtbl->CopyStructureCount(This,pDstBuffer,DstAlignedByteOffset,pSrcView)
+#define ID3D11DeviceContext_ClearRenderTargetView(This,pRenderTargetView,ColorRGBA) (This)->lpVtbl->ClearRenderTargetView(This,pRenderTargetView,ColorRGBA)
+#define ID3D11DeviceContext_ClearUnorderedAccessViewUint(This,pUnorderedAccessView,Values) (This)->lpVtbl->ClearUnorderedAccessViewUint(This,pUnorderedAccessView,Values)
+#define ID3D11DeviceContext_ClearUnorderedAccessViewFloat(This,pUnorderedAcce
