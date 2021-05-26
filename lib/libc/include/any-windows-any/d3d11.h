@@ -7526,4 +7526,110 @@ static FORCEINLINE void ID3D11DeviceContext_SetPredication(ID3D11DeviceContext* 
 static FORCEINLINE void ID3D11DeviceContext_GSSetShaderResources(ID3D11DeviceContext* This,UINT StartSlot,UINT NumViews,ID3D11ShaderResourceView *const *ppShaderResourceViews) {
     This->lpVtbl->GSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
 }
-static FORCEINLINE void ID3D11DeviceContext_GS
+static FORCEINLINE void ID3D11DeviceContext_GSSetSamplers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState *const *ppSamplers) {
+    This->lpVtbl->GSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D11DeviceContext_OMSetRenderTargets(ID3D11DeviceContext* This,UINT NumViews,ID3D11RenderTargetView *const *ppRenderTargetViews,ID3D11DepthStencilView *pDepthStencilView) {
+    This->lpVtbl->OMSetRenderTargets(This,NumViews,ppRenderTargetViews,pDepthStencilView);
+}
+static FORCEINLINE void ID3D11DeviceContext_OMSetRenderTargetsAndUnorderedAccessViews(ID3D11DeviceContext* This,UINT NumRTVs,ID3D11RenderTargetView *const *ppRenderTargetViews,ID3D11DepthStencilView *pDepthStencilView,UINT UAVStartSlot,UINT NumUAVs,ID3D11UnorderedAccessView *const *ppUnorderedAccessViews,const UINT *pUAVInitialCounts) {
+    This->lpVtbl->OMSetRenderTargetsAndUnorderedAccessViews(This,NumRTVs,ppRenderTargetViews,pDepthStencilView,UAVStartSlot,NumUAVs,ppUnorderedAccessViews,pUAVInitialCounts);
+}
+static FORCEINLINE void ID3D11DeviceContext_OMSetBlendState(ID3D11DeviceContext* This,ID3D11BlendState *pBlendState,const FLOAT BlendFactor[4],UINT SampleMask) {
+    This->lpVtbl->OMSetBlendState(This,pBlendState,BlendFactor,SampleMask);
+}
+static FORCEINLINE void ID3D11DeviceContext_OMSetDepthStencilState(ID3D11DeviceContext* This,ID3D11DepthStencilState *pDepthStencilState,UINT StencilRef) {
+    This->lpVtbl->OMSetDepthStencilState(This,pDepthStencilState,StencilRef);
+}
+static FORCEINLINE void ID3D11DeviceContext_SOSetTargets(ID3D11DeviceContext* This,UINT NumBuffers,ID3D11Buffer *const *ppSOTargets,const UINT *pOffsets) {
+    This->lpVtbl->SOSetTargets(This,NumBuffers,ppSOTargets,pOffsets);
+}
+static FORCEINLINE void ID3D11DeviceContext_DrawAuto(ID3D11DeviceContext* This) {
+    This->lpVtbl->DrawAuto(This);
+}
+static FORCEINLINE void ID3D11DeviceContext_DrawIndexedInstancedIndirect(ID3D11DeviceContext* This,ID3D11Buffer *pBufferForArgs,UINT AlignedByteOffsetForArgs) {
+    This->lpVtbl->DrawIndexedInstancedIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs);
+}
+static FORCEINLINE void ID3D11DeviceContext_DrawInstancedIndirect(ID3D11DeviceContext* This,ID3D11Buffer *pBufferForArgs,UINT AlignedByteOffsetForArgs) {
+    This->lpVtbl->DrawInstancedIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs);
+}
+static FORCEINLINE void ID3D11DeviceContext_Dispatch(ID3D11DeviceContext* This,UINT ThreadGroupCountX,UINT ThreadGroupCountY,UINT ThreadGroupCountZ) {
+    This->lpVtbl->Dispatch(This,ThreadGroupCountX,ThreadGroupCountY,ThreadGroupCountZ);
+}
+static FORCEINLINE void ID3D11DeviceContext_DispatchIndirect(ID3D11DeviceContext* This,ID3D11Buffer *pBufferForArgs,UINT AlignedByteOffsetForArgs) {
+    This->lpVtbl->DispatchIndirect(This,pBufferForArgs,AlignedByteOffsetForArgs);
+}
+static FORCEINLINE void ID3D11DeviceContext_RSSetState(ID3D11DeviceContext* This,ID3D11RasterizerState *pRasterizerState) {
+    This->lpVtbl->RSSetState(This,pRasterizerState);
+}
+static FORCEINLINE void ID3D11DeviceContext_RSSetViewports(ID3D11DeviceContext* This,UINT NumViewports,const D3D11_VIEWPORT *pViewports) {
+    This->lpVtbl->RSSetViewports(This,NumViewports,pViewports);
+}
+static FORCEINLINE void ID3D11DeviceContext_RSSetScissorRects(ID3D11DeviceContext* This,UINT NumRects,const D3D11_RECT *pRects) {
+    This->lpVtbl->RSSetScissorRects(This,NumRects,pRects);
+}
+static FORCEINLINE void ID3D11DeviceContext_CopySubresourceRegion(ID3D11DeviceContext* This,ID3D11Resource *pDstResource,UINT DstSubresource,UINT DstX,UINT DstY,UINT DstZ,ID3D11Resource *pSrcResource,UINT SrcSubresource,const D3D11_BOX *pSrcBox) {
+    This->lpVtbl->CopySubresourceRegion(This,pDstResource,DstSubresource,DstX,DstY,DstZ,pSrcResource,SrcSubresource,pSrcBox);
+}
+static FORCEINLINE void ID3D11DeviceContext_CopyResource(ID3D11DeviceContext* This,ID3D11Resource *pDstResource,ID3D11Resource *pSrcResource) {
+    This->lpVtbl->CopyResource(This,pDstResource,pSrcResource);
+}
+static FORCEINLINE void ID3D11DeviceContext_UpdateSubresource(ID3D11DeviceContext* This,ID3D11Resource *pDstResource,UINT DstSubresource,const D3D11_BOX *pDstBox,const void *pSrcData,UINT SrcRowPitch,UINT SrcDepthPitch) {
+    This->lpVtbl->UpdateSubresource(This,pDstResource,DstSubresource,pDstBox,pSrcData,SrcRowPitch,SrcDepthPitch);
+}
+static FORCEINLINE void ID3D11DeviceContext_CopyStructureCount(ID3D11DeviceContext* This,ID3D11Buffer *pDstBuffer,UINT DstAlignedByteOffset,ID3D11UnorderedAccessView *pSrcView) {
+    This->lpVtbl->CopyStructureCount(This,pDstBuffer,DstAlignedByteOffset,pSrcView);
+}
+static FORCEINLINE void ID3D11DeviceContext_ClearRenderTargetView(ID3D11DeviceContext* This,ID3D11RenderTargetView *pRenderTargetView,const FLOAT ColorRGBA[4]) {
+    This->lpVtbl->ClearRenderTargetView(This,pRenderTargetView,ColorRGBA);
+}
+static FORCEINLINE void ID3D11DeviceContext_ClearUnorderedAccessViewUint(ID3D11DeviceContext* This,ID3D11UnorderedAccessView *pUnorderedAccessView,const UINT Values[4]) {
+    This->lpVtbl->ClearUnorderedAccessViewUint(This,pUnorderedAccessView,Values);
+}
+static FORCEINLINE void ID3D11DeviceContext_ClearUnorderedAccessViewFloat(ID3D11DeviceContext* This,ID3D11UnorderedAccessView *pUnorderedAccessView,const FLOAT Values[4]) {
+    This->lpVtbl->ClearUnorderedAccessViewFloat(This,pUnorderedAccessView,Values);
+}
+static FORCEINLINE void ID3D11DeviceContext_ClearDepthStencilView(ID3D11DeviceContext* This,ID3D11DepthStencilView *pDepthStencilView,UINT ClearFlags,FLOAT Depth,UINT8 Stencil) {
+    This->lpVtbl->ClearDepthStencilView(This,pDepthStencilView,ClearFlags,Depth,Stencil);
+}
+static FORCEINLINE void ID3D11DeviceContext_GenerateMips(ID3D11DeviceContext* This,ID3D11ShaderResourceView *pShaderResourceView) {
+    This->lpVtbl->GenerateMips(This,pShaderResourceView);
+}
+static FORCEINLINE void ID3D11DeviceContext_SetResourceMinLOD(ID3D11DeviceContext* This,ID3D11Resource *pResource,FLOAT MinLOD) {
+    This->lpVtbl->SetResourceMinLOD(This,pResource,MinLOD);
+}
+static FORCEINLINE FLOAT ID3D11DeviceContext_GetResourceMinLOD(ID3D11DeviceContext* This,ID3D11Resource *pResource) {
+    return This->lpVtbl->GetResourceMinLOD(This,pResource);
+}
+static FORCEINLINE void ID3D11DeviceContext_ResolveSubresource(ID3D11DeviceContext* This,ID3D11Resource *pDstResource,UINT DstSubresource,ID3D11Resource *pSrcResource,UINT SrcSubresource,DXGI_FORMAT Format) {
+    This->lpVtbl->ResolveSubresource(This,pDstResource,DstSubresource,pSrcResource,SrcSubresource,Format);
+}
+static FORCEINLINE void ID3D11DeviceContext_ExecuteCommandList(ID3D11DeviceContext* This,ID3D11CommandList *pCommandList,WINBOOL RestoreContextState) {
+    This->lpVtbl->ExecuteCommandList(This,pCommandList,RestoreContextState);
+}
+static FORCEINLINE void ID3D11DeviceContext_HSSetShaderResources(ID3D11DeviceContext* This,UINT StartSlot,UINT NumViews,ID3D11ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->HSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D11DeviceContext_HSSetShader(ID3D11DeviceContext* This,ID3D11HullShader *pHullShader,ID3D11ClassInstance *const *ppClassInstances,UINT NumClassInstances) {
+    This->lpVtbl->HSSetShader(This,pHullShader,ppClassInstances,NumClassInstances);
+}
+static FORCEINLINE void ID3D11DeviceContext_HSSetSamplers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState *const *ppSamplers) {
+    This->lpVtbl->HSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D11DeviceContext_HSSetConstantBuffers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers) {
+    This->lpVtbl->HSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D11DeviceContext_DSSetShaderResources(ID3D11DeviceContext* This,UINT StartSlot,UINT NumViews,ID3D11ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->DSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D11DeviceContext_DSSetShader(ID3D11DeviceContext* This,ID3D11DomainShader *pDomainShader,ID3D11ClassInstance *const *ppClassInstances,UINT NumClassInstances) {
+    This->lpVtbl->DSSetShader(This,pDomainShader,ppClassInstances,NumClassInstances);
+}
+static FORCEINLINE void ID3D11DeviceContext_DSSetSamplers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState *const *ppSamplers) {
+    This->lpVtbl->DSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D11DeviceContext_DSSetConstantBuffers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers) {
+    This->lpVtbl->DSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D11DeviceContext_CSSetShaderResources(ID3D11DeviceContext* This,UINT StartSlot,UINT NumViews,ID3D11ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->CSSe
