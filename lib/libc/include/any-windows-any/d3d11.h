@@ -7739,4 +7739,195 @@ static FORCEINLINE void ID3D11DeviceContext_DSGetShaderResources(ID3D11DeviceCon
 static FORCEINLINE void ID3D11DeviceContext_DSGetShader(ID3D11DeviceContext* This,ID3D11DomainShader **ppDomainShader,ID3D11ClassInstance **ppClassInstances,UINT *pNumClassInstances) {
     This->lpVtbl->DSGetShader(This,ppDomainShader,ppClassInstances,pNumClassInstances);
 }
-static FORCEINLINE void ID3D11DeviceContext_DSGetSamplers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState
+static FORCEINLINE void ID3D11DeviceContext_DSGetSamplers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState **ppSamplers) {
+    This->lpVtbl->DSGetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D11DeviceContext_DSGetConstantBuffers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers) {
+    This->lpVtbl->DSGetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D11DeviceContext_CSGetShaderResources(ID3D11DeviceContext* This,UINT StartSlot,UINT NumViews,ID3D11ShaderResourceView **ppShaderResourceViews) {
+    This->lpVtbl->CSGetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D11DeviceContext_CSGetUnorderedAccessViews(ID3D11DeviceContext* This,UINT StartSlot,UINT NumUAVs,ID3D11UnorderedAccessView **ppUnorderedAccessViews) {
+    This->lpVtbl->CSGetUnorderedAccessViews(This,StartSlot,NumUAVs,ppUnorderedAccessViews);
+}
+static FORCEINLINE void ID3D11DeviceContext_CSGetShader(ID3D11DeviceContext* This,ID3D11ComputeShader **ppComputeShader,ID3D11ClassInstance **ppClassInstances,UINT *pNumClassInstances) {
+    This->lpVtbl->CSGetShader(This,ppComputeShader,ppClassInstances,pNumClassInstances);
+}
+static FORCEINLINE void ID3D11DeviceContext_CSGetSamplers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState **ppSamplers) {
+    This->lpVtbl->CSGetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D11DeviceContext_CSGetConstantBuffers(ID3D11DeviceContext* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers) {
+    This->lpVtbl->CSGetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D11DeviceContext_ClearState(ID3D11DeviceContext* This) {
+    This->lpVtbl->ClearState(This);
+}
+static FORCEINLINE void ID3D11DeviceContext_Flush(ID3D11DeviceContext* This) {
+    This->lpVtbl->Flush(This);
+}
+static FORCEINLINE D3D11_DEVICE_CONTEXT_TYPE ID3D11DeviceContext_GetType(ID3D11DeviceContext* This) {
+    return This->lpVtbl->GetType(This);
+}
+static FORCEINLINE UINT ID3D11DeviceContext_GetContextFlags(ID3D11DeviceContext* This) {
+    return This->lpVtbl->GetContextFlags(This);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext_FinishCommandList(ID3D11DeviceContext* This,WINBOOL RestoreDeferredContextState,ID3D11CommandList **ppCommandList) {
+    return This->lpVtbl->FinishCommandList(This,RestoreDeferredContextState,ppCommandList);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DeviceContext_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11AuthenticatedChannel interface
+ */
+#ifndef __ID3D11AuthenticatedChannel_INTERFACE_DEFINED__
+#define __ID3D11AuthenticatedChannel_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11AuthenticatedChannel, 0x3015a308, 0xdcbd, 0x47aa, 0xa7,0x47, 0x19,0x24,0x86,0xd1,0x4d,0x4a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3015a308-dcbd-47aa-a747-192486d14d4a")
+ID3D11AuthenticatedChannel : public ID3D11DeviceChild
+{
+    virtual HRESULT STDMETHODCALLTYPE GetCertificateSize(
+        UINT *pCertificateSize) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCertificate(
+        UINT CertificateSize,
+        BYTE *pCertificate) = 0;
+
+    virtual void STDMETHODCALLTYPE GetChannelHandle(
+        HANDLE *pChannelHandle) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11AuthenticatedChannel, 0x3015a308, 0xdcbd, 0x47aa, 0xa7,0x47, 0x19,0x24,0x86,0xd1,0x4d,0x4a)
+#endif
+#else
+typedef struct ID3D11AuthenticatedChannelVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11AuthenticatedChannel *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11AuthenticatedChannel *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11AuthenticatedChannel *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11AuthenticatedChannel *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11AuthenticatedChannel *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11AuthenticatedChannel *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11AuthenticatedChannel *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11AuthenticatedChannel methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCertificateSize)(
+        ID3D11AuthenticatedChannel *This,
+        UINT *pCertificateSize);
+
+    HRESULT (STDMETHODCALLTYPE *GetCertificate)(
+        ID3D11AuthenticatedChannel *This,
+        UINT CertificateSize,
+        BYTE *pCertificate);
+
+    void (STDMETHODCALLTYPE *GetChannelHandle)(
+        ID3D11AuthenticatedChannel *This,
+        HANDLE *pChannelHandle);
+
+    END_INTERFACE
+} ID3D11AuthenticatedChannelVtbl;
+
+interface ID3D11AuthenticatedChannel {
+    CONST_VTBL ID3D11AuthenticatedChannelVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11AuthenticatedChannel_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11AuthenticatedChannel_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11AuthenticatedChannel_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11AuthenticatedChannel_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11AuthenticatedChannel_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11AuthenticatedChannel_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11AuthenticatedChannel_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11AuthenticatedChannel methods ***/
+#define ID3D11AuthenticatedChannel_GetCertificateSize(This,pCertificateSize) (This)->lpVtbl->GetCertificateSize(This,pCertificateSize)
+#define ID3D11AuthenticatedChannel_GetCertificate(This,CertificateSize,pCertificate) (This)->lpVtbl->GetCertificate(This,CertificateSize,pCertificate)
+#define ID3D11AuthenticatedChannel_GetChannelHandle(This,pChannelHandle) (This)->lpVtbl->GetChannelHandle(This,pChannelHandle)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11AuthenticatedChannel_QueryInterface(ID3D11AuthenticatedChannel* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11AuthenticatedChannel_AddRef(ID3D11AuthenticatedChannel* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11AuthenticatedChannel_Release(ID3D11AuthenticatedChannel* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11AuthenticatedChannel_GetDevice(ID3D11AuthenticatedChannel* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11AuthenticatedChannel_GetPrivateData(ID3D11AuthenticatedChannel* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11AuthenticatedChannel_SetPrivateData(ID3D11AuthenticatedChannel* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11AuthenticatedChannel_SetPrivateDataInterface(ID3D11AuthenticatedChannel* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11AuthenticatedChannel methods ***/
+static FORCEINLINE HRESULT ID3D11AuthenticatedChannel_GetCertificateSize(ID3D11AuthenticatedChannel* This,UINT *pCertificateSize) {
+    return This->lpVtbl->GetCertificateSize(This,pCertificateSize);
+}
+static FORCEINLINE HRESULT ID3D11AuthenticatedChannel_GetCertificate(ID3D11AuthenticatedChannel* This,UINT CertificateSize,BYTE *pCertificate) {
+    return This->lpVtbl->GetCertificate(This,CertificateSize,pCertificate);
+}
+static FORCEINLINE void ID3D11AuthenticatedChannel_GetChannelHandle(ID3D11AuthenticatedChannel* This,HANDLE *pChannelHandle) {
+    This->lpVtbl->GetChannelHandle(This,pChannelHandle);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11AuthenticatedChannel_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11CryptoSession interface
+ */
+#ifndef __ID3D11CryptoSession_INTERFACE_DEFINED__
+#define __ID3D11CryptoSession_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11CryptoSession, 0x9b32f9ad, 0xbdcc, 0x40a6, 0xa3,0x9
