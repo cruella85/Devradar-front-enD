@@ -8351,4 +8351,192 @@ interface ID3D11VideoProcessorEnumerator {
 #else
 /*** IUnknown methods ***/
 static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_QueryInterface(ID3D11VideoProcessorEnumerator* This,REFIID riid,void **ppvObject) {
-    return This->lpVtb
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessorEnumerator_AddRef(ID3D11VideoProcessorEnumerator* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessorEnumerator_Release(ID3D11VideoProcessorEnumerator* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11VideoProcessorEnumerator_GetDevice(ID3D11VideoProcessorEnumerator* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_GetPrivateData(ID3D11VideoProcessorEnumerator* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_SetPrivateData(ID3D11VideoProcessorEnumerator* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_SetPrivateDataInterface(ID3D11VideoProcessorEnumerator* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11VideoProcessorEnumerator methods ***/
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_GetVideoProcessorContentDesc(ID3D11VideoProcessorEnumerator* This,D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pContentDesc) {
+    return This->lpVtbl->GetVideoProcessorContentDesc(This,pContentDesc);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_CheckVideoProcessorFormat(ID3D11VideoProcessorEnumerator* This,DXGI_FORMAT Format,UINT *pFlags) {
+    return This->lpVtbl->CheckVideoProcessorFormat(This,Format,pFlags);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_GetVideoProcessorCaps(ID3D11VideoProcessorEnumerator* This,D3D11_VIDEO_PROCESSOR_CAPS *pCaps) {
+    return This->lpVtbl->GetVideoProcessorCaps(This,pCaps);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_GetVideoProcessorRateConversionCaps(ID3D11VideoProcessorEnumerator* This,UINT TypeIndex,D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps) {
+    return This->lpVtbl->GetVideoProcessorRateConversionCaps(This,TypeIndex,pCaps);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_GetVideoProcessorCustomRate(ID3D11VideoProcessorEnumerator* This,UINT TypeIndex,UINT CustomRateIndex,D3D11_VIDEO_PROCESSOR_CUSTOM_RATE *pRate) {
+    return This->lpVtbl->GetVideoProcessorCustomRate(This,TypeIndex,CustomRateIndex,pRate);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorEnumerator_GetVideoProcessorFilterRange(ID3D11VideoProcessorEnumerator* This,D3D11_VIDEO_PROCESSOR_FILTER Filter,D3D11_VIDEO_PROCESSOR_FILTER_RANGE *pRange) {
+    return This->lpVtbl->GetVideoProcessorFilterRange(This,Filter,pRange);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11VideoProcessorEnumerator_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11VideoProcessor interface
+ */
+#ifndef __ID3D11VideoProcessor_INTERFACE_DEFINED__
+#define __ID3D11VideoProcessor_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11VideoProcessor, 0x1d7b0652, 0x185f, 0x41c6, 0x85,0xce, 0x0c,0x5b,0xe3,0xd4,0xae,0x6c);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("1d7b0652-185f-41c6-85ce-0c5be3d4ae6c")
+ID3D11VideoProcessor : public ID3D11DeviceChild
+{
+    virtual void STDMETHODCALLTYPE GetContentDesc(
+        D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc) = 0;
+
+    virtual void STDMETHODCALLTYPE GetRateConversionCaps(
+        D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11VideoProcessor, 0x1d7b0652, 0x185f, 0x41c6, 0x85,0xce, 0x0c,0x5b,0xe3,0xd4,0xae,0x6c)
+#endif
+#else
+typedef struct ID3D11VideoProcessorVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11VideoProcessor *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11VideoProcessor *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11VideoProcessor *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11VideoProcessor *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11VideoProcessor *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11VideoProcessor *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11VideoProcessor *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11VideoProcessor methods ***/
+    void (STDMETHODCALLTYPE *GetContentDesc)(
+        ID3D11VideoProcessor *This,
+        D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc);
+
+    void (STDMETHODCALLTYPE *GetRateConversionCaps)(
+        ID3D11VideoProcessor *This,
+        D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps);
+
+    END_INTERFACE
+} ID3D11VideoProcessorVtbl;
+
+interface ID3D11VideoProcessor {
+    CONST_VTBL ID3D11VideoProcessorVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11VideoProcessor_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11VideoProcessor_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11VideoProcessor_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11VideoProcessor_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11VideoProcessor_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11VideoProcessor_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11VideoProcessor_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11VideoProcessor methods ***/
+#define ID3D11VideoProcessor_GetContentDesc(This,pDesc) (This)->lpVtbl->GetContentDesc(This,pDesc)
+#define ID3D11VideoProcessor_GetRateConversionCaps(This,pCaps) (This)->lpVtbl->GetRateConversionCaps(This,pCaps)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11VideoProcessor_QueryInterface(ID3D11VideoProcessor* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessor_AddRef(ID3D11VideoProcessor* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessor_Release(ID3D11VideoProcessor* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11VideoProcessor_GetDevice(ID3D11VideoProcessor* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessor_GetPrivateData(ID3D11VideoProcessor* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessor_SetPrivateData(ID3D11VideoProcessor* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessor_SetPrivateDataInterface(ID3D11VideoProcessor* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11VideoProcessor methods ***/
+static FORCEINLINE void ID3D11VideoProcessor_GetContentDesc(ID3D11VideoProcessor* This,D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc) {
+    This->lpVtbl->GetContentDesc(This,pDesc);
+}
+static FORCEINLINE void ID3D11VideoProcessor_GetRateConversionCaps(ID3D11VideoProcessor* This,D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps) {
+    This->lpVtbl->GetRateConversionCaps(This,pCaps);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11VideoProcessor_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11VideoDecoderOutputView interface
+ */
+#ifndef __ID3D11VideoDecoderOutputView_INTERFACE_DEFINED__
+#define __ID3D11VideoDecoderOutputView_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11VideoDecoderOutputView, 0xc2931aea, 0x2a85, 0x4f20, 0x86,0x0f, 0xfb,0xa1,0xfd,0x25,0x6e,0x18);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c2931aea-2a85-4f20-860f-fba1fd256e18")
+ID3D11VideoDecoderOutputView : public ID3D11View
+{
+    virtual void STDMETHODCALLTYPE GetDesc(
+        D3D11_VIDEO_DECODER_O
