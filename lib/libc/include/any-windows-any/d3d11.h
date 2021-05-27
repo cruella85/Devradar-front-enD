@@ -7930,4 +7930,235 @@ static FORCEINLINE void ID3D11AuthenticatedChannel_GetChannelHandle(ID3D11Authen
 #ifndef __ID3D11CryptoSession_INTERFACE_DEFINED__
 #define __ID3D11CryptoSession_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_ID3D11CryptoSession, 0x9b32f9ad, 0xbdcc, 0x40a6, 0xa3,0x9
+DEFINE_GUID(IID_ID3D11CryptoSession, 0x9b32f9ad, 0xbdcc, 0x40a6, 0xa3,0x9d, 0xd5,0xc8,0x65,0x84,0x57,0x20);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9b32f9ad-bdcc-40a6-a39d-d5c865845720")
+ID3D11CryptoSession : public ID3D11DeviceChild
+{
+    virtual void STDMETHODCALLTYPE GetCryptoType(
+        GUID *pCryptoType) = 0;
+
+    virtual void STDMETHODCALLTYPE GetDecoderProfile(
+        GUID *pDecoderProfile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCertificateSize(
+        UINT *pCertificateSize) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCertificate(
+        UINT CertificateSize,
+        BYTE *pCertificate) = 0;
+
+    virtual void STDMETHODCALLTYPE GetCryptoSessionHandle(
+        HANDLE *pCryptoSessionHandle) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11CryptoSession, 0x9b32f9ad, 0xbdcc, 0x40a6, 0xa3,0x9d, 0xd5,0xc8,0x65,0x84,0x57,0x20)
+#endif
+#else
+typedef struct ID3D11CryptoSessionVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11CryptoSession *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11CryptoSession *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11CryptoSession *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11CryptoSession *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11CryptoSession *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11CryptoSession *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11CryptoSession *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11CryptoSession methods ***/
+    void (STDMETHODCALLTYPE *GetCryptoType)(
+        ID3D11CryptoSession *This,
+        GUID *pCryptoType);
+
+    void (STDMETHODCALLTYPE *GetDecoderProfile)(
+        ID3D11CryptoSession *This,
+        GUID *pDecoderProfile);
+
+    HRESULT (STDMETHODCALLTYPE *GetCertificateSize)(
+        ID3D11CryptoSession *This,
+        UINT *pCertificateSize);
+
+    HRESULT (STDMETHODCALLTYPE *GetCertificate)(
+        ID3D11CryptoSession *This,
+        UINT CertificateSize,
+        BYTE *pCertificate);
+
+    void (STDMETHODCALLTYPE *GetCryptoSessionHandle)(
+        ID3D11CryptoSession *This,
+        HANDLE *pCryptoSessionHandle);
+
+    END_INTERFACE
+} ID3D11CryptoSessionVtbl;
+
+interface ID3D11CryptoSession {
+    CONST_VTBL ID3D11CryptoSessionVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11CryptoSession_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11CryptoSession_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11CryptoSession_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11CryptoSession_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11CryptoSession_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11CryptoSession_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11CryptoSession_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11CryptoSession methods ***/
+#define ID3D11CryptoSession_GetCryptoType(This,pCryptoType) (This)->lpVtbl->GetCryptoType(This,pCryptoType)
+#define ID3D11CryptoSession_GetDecoderProfile(This,pDecoderProfile) (This)->lpVtbl->GetDecoderProfile(This,pDecoderProfile)
+#define ID3D11CryptoSession_GetCertificateSize(This,pCertificateSize) (This)->lpVtbl->GetCertificateSize(This,pCertificateSize)
+#define ID3D11CryptoSession_GetCertificate(This,CertificateSize,pCertificate) (This)->lpVtbl->GetCertificate(This,CertificateSize,pCertificate)
+#define ID3D11CryptoSession_GetCryptoSessionHandle(This,pCryptoSessionHandle) (This)->lpVtbl->GetCryptoSessionHandle(This,pCryptoSessionHandle)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11CryptoSession_QueryInterface(ID3D11CryptoSession* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11CryptoSession_AddRef(ID3D11CryptoSession* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11CryptoSession_Release(ID3D11CryptoSession* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11CryptoSession_GetDevice(ID3D11CryptoSession* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11CryptoSession_GetPrivateData(ID3D11CryptoSession* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11CryptoSession_SetPrivateData(ID3D11CryptoSession* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11CryptoSession_SetPrivateDataInterface(ID3D11CryptoSession* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11CryptoSession methods ***/
+static FORCEINLINE void ID3D11CryptoSession_GetCryptoType(ID3D11CryptoSession* This,GUID *pCryptoType) {
+    This->lpVtbl->GetCryptoType(This,pCryptoType);
+}
+static FORCEINLINE void ID3D11CryptoSession_GetDecoderProfile(ID3D11CryptoSession* This,GUID *pDecoderProfile) {
+    This->lpVtbl->GetDecoderProfile(This,pDecoderProfile);
+}
+static FORCEINLINE HRESULT ID3D11CryptoSession_GetCertificateSize(ID3D11CryptoSession* This,UINT *pCertificateSize) {
+    return This->lpVtbl->GetCertificateSize(This,pCertificateSize);
+}
+static FORCEINLINE HRESULT ID3D11CryptoSession_GetCertificate(ID3D11CryptoSession* This,UINT CertificateSize,BYTE *pCertificate) {
+    return This->lpVtbl->GetCertificate(This,CertificateSize,pCertificate);
+}
+static FORCEINLINE void ID3D11CryptoSession_GetCryptoSessionHandle(ID3D11CryptoSession* This,HANDLE *pCryptoSessionHandle) {
+    This->lpVtbl->GetCryptoSessionHandle(This,pCryptoSessionHandle);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11CryptoSession_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11VideoDecoder interface
+ */
+#ifndef __ID3D11VideoDecoder_INTERFACE_DEFINED__
+#define __ID3D11VideoDecoder_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11VideoDecoder, 0x3c9c5b51, 0x995d, 0x48d1, 0x9b,0x8d, 0xfa,0x5c,0xae,0xde,0xd6,0x5c);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3c9c5b51-995d-48d1-9b8d-fa5caeded65c")
+ID3D11VideoDecoder : public ID3D11DeviceChild
+{
+    virtual HRESULT STDMETHODCALLTYPE GetCreationParameters(
+        D3D11_VIDEO_DECODER_DESC *pVideoDesc,
+        D3D11_VIDEO_DECODER_CONFIG *pConfig) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDriverHandle(
+        HANDLE *pDriverHandle) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11VideoDecoder, 0x3c9c5b51, 0x995d, 0x48d1, 0x9b,0x8d, 0xfa,0x5c,0xae,0xde,0xd6,0x5c)
+#endif
+#else
+typedef struct ID3D11VideoDecoderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11VideoDecoder *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11VideoDecoder *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11VideoDecoder *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11VideoDecoder *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11VideoDecoder *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11VideoDecoder *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11VideoDecoder *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11VideoDecoder methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCreationParameters)(
+        ID3D11VideoDecoder *This,
+        D3D11_VIDEO_DECODER_DESC *pVideoDesc,
+        D3D11_VIDEO_DECODER_CONFIG *pConfig);
+
+    HRESULT (STDMETHODCALLTYPE *GetDriverHandle)(
+        ID3D11VideoDecoder *This,
+        HANDLE *pDriverHandle);
+
+    END_INTERFACE
+} ID3D11VideoDecoderVtbl;
+
+interface ID3D11VideoDecoder {
+    CONST_VTBL ID3D11VideoDecode
