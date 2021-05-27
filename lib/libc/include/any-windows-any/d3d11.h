@@ -8953,4 +8953,203 @@ ID3D11VideoDevice : public IUnknown
         const D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC *pDesc,
         ID3D11VideoProcessorInputView **ppVPIView) = 0;
 
-    virtual HRESULT STDME
+    virtual HRESULT STDMETHODCALLTYPE CreateVideoProcessorOutputView(
+        ID3D11Resource *pResource,
+        ID3D11VideoProcessorEnumerator *pEnum,
+        const D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC *pDesc,
+        ID3D11VideoProcessorOutputView **ppVPOView) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateVideoProcessorEnumerator(
+        const D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc,
+        ID3D11VideoProcessorEnumerator **ppEnum) = 0;
+
+    virtual UINT STDMETHODCALLTYPE GetVideoDecoderProfileCount(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVideoDecoderProfile(
+        UINT Index,
+        GUID *pDecoderProfile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CheckVideoDecoderFormat(
+        const GUID *pDecoderProfile,
+        DXGI_FORMAT Format,
+        WINBOOL *pSupported) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVideoDecoderConfigCount(
+        const D3D11_VIDEO_DECODER_DESC *pDesc,
+        UINT *pCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVideoDecoderConfig(
+        const D3D11_VIDEO_DECODER_DESC *pDesc,
+        UINT Index,
+        D3D11_VIDEO_DECODER_CONFIG *pConfig) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetContentProtectionCaps(
+        const GUID *pCryptoType,
+        const GUID *pDecoderProfile,
+        D3D11_VIDEO_CONTENT_PROTECTION_CAPS *pCaps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CheckCryptoKeyExchange(
+        const GUID *pCryptoType,
+        const GUID *pDecoderProfile,
+        UINT Index,
+        GUID *pKeyExchangeType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetPrivateData(
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
+        REFGUID guid,
+        const IUnknown *pData) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11VideoDevice, 0x10ec4d5b, 0x975a, 0x4689, 0xb9,0xe4, 0xd0,0xaa,0xc3,0x0f,0xe3,0x33)
+#endif
+#else
+typedef struct ID3D11VideoDeviceVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11VideoDevice *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11VideoDevice *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11VideoDevice *This);
+
+    /*** ID3D11VideoDevice methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateVideoDecoder)(
+        ID3D11VideoDevice *This,
+        const D3D11_VIDEO_DECODER_DESC *pVideoDesc,
+        const D3D11_VIDEO_DECODER_CONFIG *pConfig,
+        ID3D11VideoDecoder **ppDecoder);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVideoProcessor)(
+        ID3D11VideoDevice *This,
+        ID3D11VideoProcessorEnumerator *pEnum,
+        UINT RateConversionIndex,
+        ID3D11VideoProcessor **ppVideoProcessor);
+
+    HRESULT (STDMETHODCALLTYPE *CreateAuthenticatedChannel)(
+        ID3D11VideoDevice *This,
+        D3D11_AUTHENTICATED_CHANNEL_TYPE ChannelType,
+        ID3D11AuthenticatedChannel **ppAuthenticatedChannel);
+
+    HRESULT (STDMETHODCALLTYPE *CreateCryptoSession)(
+        ID3D11VideoDevice *This,
+        const GUID *pCryptoType,
+        const GUID *pDecoderProfile,
+        const GUID *pKeyExchangeType,
+        ID3D11CryptoSession **ppCryptoSession);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVideoDecoderOutputView)(
+        ID3D11VideoDevice *This,
+        ID3D11Resource *pResource,
+        const D3D11_VIDEO_DECODER_OUTPUT_VIEW_DESC *pDesc,
+        ID3D11VideoDecoderOutputView **ppVDOVView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVideoProcessorInputView)(
+        ID3D11VideoDevice *This,
+        ID3D11Resource *pResource,
+        ID3D11VideoProcessorEnumerator *pEnum,
+        const D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC *pDesc,
+        ID3D11VideoProcessorInputView **ppVPIView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVideoProcessorOutputView)(
+        ID3D11VideoDevice *This,
+        ID3D11Resource *pResource,
+        ID3D11VideoProcessorEnumerator *pEnum,
+        const D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC *pDesc,
+        ID3D11VideoProcessorOutputView **ppVPOView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVideoProcessorEnumerator)(
+        ID3D11VideoDevice *This,
+        const D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc,
+        ID3D11VideoProcessorEnumerator **ppEnum);
+
+    UINT (STDMETHODCALLTYPE *GetVideoDecoderProfileCount)(
+        ID3D11VideoDevice *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetVideoDecoderProfile)(
+        ID3D11VideoDevice *This,
+        UINT Index,
+        GUID *pDecoderProfile);
+
+    HRESULT (STDMETHODCALLTYPE *CheckVideoDecoderFormat)(
+        ID3D11VideoDevice *This,
+        const GUID *pDecoderProfile,
+        DXGI_FORMAT Format,
+        WINBOOL *pSupported);
+
+    HRESULT (STDMETHODCALLTYPE *GetVideoDecoderConfigCount)(
+        ID3D11VideoDevice *This,
+        const D3D11_VIDEO_DECODER_DESC *pDesc,
+        UINT *pCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetVideoDecoderConfig)(
+        ID3D11VideoDevice *This,
+        const D3D11_VIDEO_DECODER_DESC *pDesc,
+        UINT Index,
+        D3D11_VIDEO_DECODER_CONFIG *pConfig);
+
+    HRESULT (STDMETHODCALLTYPE *GetContentProtectionCaps)(
+        ID3D11VideoDevice *This,
+        const GUID *pCryptoType,
+        const GUID *pDecoderProfile,
+        D3D11_VIDEO_CONTENT_PROTECTION_CAPS *pCaps);
+
+    HRESULT (STDMETHODCALLTYPE *CheckCryptoKeyExchange)(
+        ID3D11VideoDevice *This,
+        const GUID *pCryptoType,
+        const GUID *pDecoderProfile,
+        UINT Index,
+        GUID *pKeyExchangeType);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11VideoDevice *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11VideoDevice *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    END_INTERFACE
+} ID3D11VideoDeviceVtbl;
+
+interface ID3D11VideoDevice {
+    CONST_VTBL ID3D11VideoDeviceVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11VideoDevice_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11VideoDevice_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11VideoDevice_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11VideoDevice methods ***/
+#define ID3D11VideoDevice_CreateVideoDecoder(This,pVideoDesc,pConfig,ppDecoder) (This)->lpVtbl->CreateVideoDecoder(This,pVideoDesc,pConfig,ppDecoder)
+#define ID3D11VideoDevice_CreateVideoProcessor(This,pEnum,RateConversionIndex,ppVideoProcessor) (This)->lpVtbl->CreateVideoProcessor(This,pEnum,RateConversionIndex,ppVideoProcessor)
+#define ID3D11VideoDevice_CreateAuthenticatedChannel(This,ChannelType,ppAuthenticatedChannel) (This)->lpVtbl->CreateAuthenticatedChannel(This,ChannelType,ppAuthenticatedChannel)
+#define ID3D11VideoDevice_CreateCryptoSession(This,pCryptoType,pDecoderProfile,pKeyExchangeType,ppCryptoSession) (This)->lpVtbl->CreateCryptoSession(This,pCryptoType,pDecoderProfile,pKeyExchangeType,ppCryptoSession)
+#define ID3D11VideoDevice_CreateVideoDecoderOutputView(This,pResource,pDesc,ppVDOVView) (This)->lpVtbl->CreateVideoDecoderOutputView(This,pResource,pDesc,ppVDOVView)
+#define ID3D11VideoDevice_CreateVideoProcessorInputView(This,pResource,pEnum,pDesc,ppVPIView) (This)->lpVtbl->CreateVideoProcessorInputView(This,pResource,pEnum,pDesc,ppVPIView)
+#define ID3D11VideoDevice_CreateVideoProcessorOutputView(This,pResource,pEnum,pDesc,ppVPOView) (This)->lpVtbl->CreateVideoProcessorOutputView(This,pResource,pEnum,pDesc,ppVPOView)
+#define ID3D11VideoDevice_CreateVideoProcessorEnumerator(This,pDesc,ppEnum) (This)->lpVtbl->CreateVideoProcessorEnumerator(This,pDesc,ppEnum)
+#define ID3D11VideoDevice_GetVideoDecoderProfileCount(This) (This)->lpVtbl->GetVideoDecoderProfileCount(This)
+#define ID3D11VideoDevice_GetVideoDecoderProfile(This,Index,pDecoderProfile) (This)->lpVtbl->GetVideoDecoderProfile(This,Index,pDecoderProfile)
+#define ID3D11VideoDevice_CheckVideoDecoderFormat(This,pDecoderProfile,Format,pSupported) (This)->lpVtbl->CheckVideoDecoderFormat(This,pDecoderProfile,Format,pSupported)
+#define ID3D11VideoDevice_GetVideoDecoderConfigCount(This,pDesc,pCount) (This)->lpVtbl->GetVideoDecoderConfigCount(This,pDesc,pCount)
+#define ID3D11VideoDevice_GetVideoDecoderConfig(This,pDesc,Index,pConfig) (This)->lpVtbl->GetVideoDecoderConfig(This,pDesc,Index,pConfig)
+#define ID3D11VideoDevice_GetContentProtectionCaps(This,pCryptoType,pDecoderProfile,pCaps) (This)->lpVtbl->GetContentProtectionCaps(This,pCryptoType,pDecoderProfile,pCaps)
+#define ID3D11VideoDevice_CheckCryptoKeyExchange(This,pCryptoType,pDecoderProfile,Index,pKeyExchangeType) (This)->lpVtbl->CheckCryptoKeyExchange(This,pCryptoType,pDecoderProfile,Index,pKeyExchangeType)
+#define ID3D11VideoDevice_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,p
