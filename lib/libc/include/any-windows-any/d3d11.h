@@ -8748,4 +8748,209 @@ interface ID3D11VideoProcessorInputView {
 static FORCEINLINE HRESULT ID3D11VideoProcessorInputView_QueryInterface(ID3D11VideoProcessorInputView* This,REFIID riid,void **ppvObject) {
     return This->lpVtbl->QueryInterface(This,riid,ppvObject);
 }
-static FORCEINLINE ULONG ID3D11VideoProcessorInputView_AddRef(ID3D11VideoProcesso
+static FORCEINLINE ULONG ID3D11VideoProcessorInputView_AddRef(ID3D11VideoProcessorInputView* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessorInputView_Release(ID3D11VideoProcessorInputView* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11VideoProcessorInputView_GetDevice(ID3D11VideoProcessorInputView* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorInputView_GetPrivateData(ID3D11VideoProcessorInputView* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorInputView_SetPrivateData(ID3D11VideoProcessorInputView* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorInputView_SetPrivateDataInterface(ID3D11VideoProcessorInputView* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11View methods ***/
+static FORCEINLINE void ID3D11VideoProcessorInputView_GetResource(ID3D11VideoProcessorInputView* This,ID3D11Resource **ppResource) {
+    This->lpVtbl->GetResource(This,ppResource);
+}
+/*** ID3D11VideoProcessorInputView methods ***/
+static FORCEINLINE void ID3D11VideoProcessorInputView_GetDesc(ID3D11VideoProcessorInputView* This,D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11VideoProcessorInputView_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11VideoProcessorOutputView interface
+ */
+#ifndef __ID3D11VideoProcessorOutputView_INTERFACE_DEFINED__
+#define __ID3D11VideoProcessorOutputView_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11VideoProcessorOutputView, 0xa048285e, 0x25a9, 0x4527, 0xbd,0x93, 0xd6,0x8b,0x68,0xc4,0x42,0x54);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a048285e-25a9-4527-bd93-d68b68c44254")
+ID3D11VideoProcessorOutputView : public ID3D11View
+{
+    virtual void STDMETHODCALLTYPE GetDesc(
+        D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC *pDesc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11VideoProcessorOutputView, 0xa048285e, 0x25a9, 0x4527, 0xbd,0x93, 0xd6,0x8b,0x68,0xc4,0x42,0x54)
+#endif
+#else
+typedef struct ID3D11VideoProcessorOutputViewVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11VideoProcessorOutputView *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11VideoProcessorOutputView *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11VideoProcessorOutputView *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11VideoProcessorOutputView *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11VideoProcessorOutputView *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11VideoProcessorOutputView *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11VideoProcessorOutputView *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11View methods ***/
+    void (STDMETHODCALLTYPE *GetResource)(
+        ID3D11VideoProcessorOutputView *This,
+        ID3D11Resource **ppResource);
+
+    /*** ID3D11VideoProcessorOutputView methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11VideoProcessorOutputView *This,
+        D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC *pDesc);
+
+    END_INTERFACE
+} ID3D11VideoProcessorOutputViewVtbl;
+
+interface ID3D11VideoProcessorOutputView {
+    CONST_VTBL ID3D11VideoProcessorOutputViewVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11VideoProcessorOutputView_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11VideoProcessorOutputView_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11VideoProcessorOutputView_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11VideoProcessorOutputView_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11VideoProcessorOutputView_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11VideoProcessorOutputView_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11VideoProcessorOutputView_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11View methods ***/
+#define ID3D11VideoProcessorOutputView_GetResource(This,ppResource) (This)->lpVtbl->GetResource(This,ppResource)
+/*** ID3D11VideoProcessorOutputView methods ***/
+#define ID3D11VideoProcessorOutputView_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11VideoProcessorOutputView_QueryInterface(ID3D11VideoProcessorOutputView* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessorOutputView_AddRef(ID3D11VideoProcessorOutputView* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11VideoProcessorOutputView_Release(ID3D11VideoProcessorOutputView* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11VideoProcessorOutputView_GetDevice(ID3D11VideoProcessorOutputView* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorOutputView_GetPrivateData(ID3D11VideoProcessorOutputView* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorOutputView_SetPrivateData(ID3D11VideoProcessorOutputView* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoProcessorOutputView_SetPrivateDataInterface(ID3D11VideoProcessorOutputView* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11View methods ***/
+static FORCEINLINE void ID3D11VideoProcessorOutputView_GetResource(ID3D11VideoProcessorOutputView* This,ID3D11Resource **ppResource) {
+    This->lpVtbl->GetResource(This,ppResource);
+}
+/*** ID3D11VideoProcessorOutputView methods ***/
+static FORCEINLINE void ID3D11VideoProcessorOutputView_GetDesc(ID3D11VideoProcessorOutputView* This,D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11VideoProcessorOutputView_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11VideoDevice interface
+ */
+#ifndef __ID3D11VideoDevice_INTERFACE_DEFINED__
+#define __ID3D11VideoDevice_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11VideoDevice, 0x10ec4d5b, 0x975a, 0x4689, 0xb9,0xe4, 0xd0,0xaa,0xc3,0x0f,0xe3,0x33);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("10ec4d5b-975a-4689-b9e4-d0aac30fe333")
+ID3D11VideoDevice : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE CreateVideoDecoder(
+        const D3D11_VIDEO_DECODER_DESC *pVideoDesc,
+        const D3D11_VIDEO_DECODER_CONFIG *pConfig,
+        ID3D11VideoDecoder **ppDecoder) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateVideoProcessor(
+        ID3D11VideoProcessorEnumerator *pEnum,
+        UINT RateConversionIndex,
+        ID3D11VideoProcessor **ppVideoProcessor) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateAuthenticatedChannel(
+        D3D11_AUTHENTICATED_CHANNEL_TYPE ChannelType,
+        ID3D11AuthenticatedChannel **ppAuthenticatedChannel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateCryptoSession(
+        const GUID *pCryptoType,
+        const GUID *pDecoderProfile,
+        const GUID *pKeyExchangeType,
+        ID3D11CryptoSession **ppCryptoSession) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateVideoDecoderOutputView(
+        ID3D11Resource *pResource,
+        const D3D11_VIDEO_DECODER_OUTPUT_VIEW_DESC *pDesc,
+        ID3D11VideoDecoderOutputView **ppVDOVView) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateVideoProcessorInputView(
+        ID3D11Resource *pResource,
+        ID3D11VideoProcessorEnumerator *pEnum,
+        const D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC *pDesc,
+        ID3D11VideoProcessorInputView **ppVPIView) = 0;
+
+    virtual HRESULT STDME
