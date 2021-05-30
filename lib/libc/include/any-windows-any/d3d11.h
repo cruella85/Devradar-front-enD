@@ -10201,4 +10201,107 @@ static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamLumaKey(ID3D11
 static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamStereoFormat(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,D3D11_VIDEO_PROCESSOR_STEREO_FORMAT format,WINBOOL left_view_frame0,WINBOOL base_view_frame0,D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE flip_mode,int mono_offset) {
     This->lpVtbl->VideoProcessorSetStreamStereoFormat(This,processor,stream_idx,enable,format,left_view_frame0,base_view_frame0,flip_mode,mono_offset);
 }
-static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamAutoProcessingMode(ID3D
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamAutoProcessingMode(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable) {
+    This->lpVtbl->VideoProcessorSetStreamAutoProcessingMode(This,processor,stream_idx,enable);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamFilter(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_PROCESSOR_FILTER filter,WINBOOL enable,int level) {
+    This->lpVtbl->VideoProcessorSetStreamFilter(This,processor,stream_idx,filter,enable,level);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_VideoProcessorSetStreamExtension(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,const GUID *guid,UINT data_size,void *data) {
+    return This->lpVtbl->VideoProcessorSetStreamExtension(This,processor,stream_idx,guid,data_size,data);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamFrameFormat(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_FRAME_FORMAT *format) {
+    This->lpVtbl->VideoProcessorGetStreamFrameFormat(This,processor,stream_idx,format);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamColorSpace(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
+    This->lpVtbl->VideoProcessorGetStreamColorSpace(This,processor,stream_idx,color_space);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamOutputRate(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_PROCESSOR_OUTPUT_RATE *rate,WINBOOL *repeat,DXGI_RATIONAL *custom_rate) {
+    This->lpVtbl->VideoProcessorGetStreamOutputRate(This,processor,stream_idx,rate,repeat,custom_rate);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamSourceRect(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled,RECT *rect) {
+    This->lpVtbl->VideoProcessorGetStreamSourceRect(This,processor,stream_idx,enabled,rect);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamDestRect(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled,RECT *rect) {
+    This->lpVtbl->VideoProcessorGetStreamDestRect(This,processor,stream_idx,enabled,rect);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamAlpha(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled,float *alpha) {
+    This->lpVtbl->VideoProcessorGetStreamAlpha(This,processor,stream_idx,enabled,alpha);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamPalette(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,UINT entry_count,UINT *entries) {
+    This->lpVtbl->VideoProcessorGetStreamPalette(This,processor,stream_idx,entry_count,entries);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamPixelAspectRatio(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled,DXGI_RATIONAL *src_aspect_ratio,DXGI_RATIONAL *dst_aspect_ratio) {
+    This->lpVtbl->VideoProcessorGetStreamPixelAspectRatio(This,processor,stream_idx,enabled,src_aspect_ratio,dst_aspect_ratio);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamLumaKey(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled,float *lower,float *upper) {
+    This->lpVtbl->VideoProcessorGetStreamLumaKey(This,processor,stream_idx,enabled,lower,upper);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamStereoFormat(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled,D3D11_VIDEO_PROCESSOR_STEREO_FORMAT *format,WINBOOL *left_view_frame0,WINBOOL *base_view_frame0,D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE *flip_mode,int *mono_offset) {
+    This->lpVtbl->VideoProcessorGetStreamStereoFormat(This,processor,stream_idx,enabled,format,left_view_frame0,base_view_frame0,flip_mode,mono_offset);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamAutoProcessingMode(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enabled) {
+    This->lpVtbl->VideoProcessorGetStreamAutoProcessingMode(This,processor,stream_idx,enabled);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamFilter(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_PROCESSOR_FILTER filter,WINBOOL *enabled,int *level) {
+    This->lpVtbl->VideoProcessorGetStreamFilter(This,processor,stream_idx,filter,enabled,level);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_VideoProcessorGetStreamExtension(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,const GUID *guid,UINT data_size,void *data) {
+    return This->lpVtbl->VideoProcessorGetStreamExtension(This,processor,stream_idx,guid,data_size,data);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_VideoProcessorBlt(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,ID3D11VideoProcessorOutputView *view,UINT frame_idx,UINT stream_count,const D3D11_VIDEO_PROCESSOR_STREAM *streams) {
+    return This->lpVtbl->VideoProcessorBlt(This,processor,view,frame_idx,stream_count,streams);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_NegotiateCryptoSessionKeyExchange(ID3D11VideoContext* This,ID3D11CryptoSession *session,UINT data_size,void *data) {
+    return This->lpVtbl->NegotiateCryptoSessionKeyExchange(This,session,data_size,data);
+}
+static FORCEINLINE void ID3D11VideoContext_EncryptionBlt(ID3D11VideoContext* This,ID3D11CryptoSession *session,ID3D11Texture2D *src_surface,ID3D11Texture2D *dst_surface,UINT iv_size,void *iv) {
+    This->lpVtbl->EncryptionBlt(This,session,src_surface,dst_surface,iv_size,iv);
+}
+static FORCEINLINE void ID3D11VideoContext_DecryptionBlt(ID3D11VideoContext* This,ID3D11CryptoSession *session,ID3D11Texture2D *src_surface,ID3D11Texture2D *dst_surface,D3D11_ENCRYPTED_BLOCK_INFO *block_info,UINT key_size,const void *key,UINT iv_size,void *iv) {
+    This->lpVtbl->DecryptionBlt(This,session,src_surface,dst_surface,block_info,key_size,key,iv_size,iv);
+}
+static FORCEINLINE void ID3D11VideoContext_StartSessionKeyRefresh(ID3D11VideoContext* This,ID3D11CryptoSession *session,UINT random_number_size,void *random_number) {
+    This->lpVtbl->StartSessionKeyRefresh(This,session,random_number_size,random_number);
+}
+static FORCEINLINE void ID3D11VideoContext_FinishSessionKeyRefresh(ID3D11VideoContext* This,ID3D11CryptoSession *session) {
+    This->lpVtbl->FinishSessionKeyRefresh(This,session);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_GetEncryptionBltKey(ID3D11VideoContext* This,ID3D11CryptoSession *session,UINT key_size,void *key) {
+    return This->lpVtbl->GetEncryptionBltKey(This,session,key_size,key);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_NegotiateAuthenticatedChannelKeyExchange(ID3D11VideoContext* This,ID3D11AuthenticatedChannel *channel,UINT data_size,void *data) {
+    return This->lpVtbl->NegotiateAuthenticatedChannelKeyExchange(This,channel,data_size,data);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_QueryAuthenticatedChannel(ID3D11VideoContext* This,ID3D11AuthenticatedChannel *channel,UINT input_size,const void *input,UINT output_size,void *output) {
+    return This->lpVtbl->QueryAuthenticatedChannel(This,channel,input_size,input,output_size,output);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_ConfigureAuthenticatedChannel(ID3D11VideoContext* This,ID3D11AuthenticatedChannel *channel,UINT input_size,const void *input,D3D11_AUTHENTICATED_CONFIGURE_OUTPUT *output) {
+    return This->lpVtbl->ConfigureAuthenticatedChannel(This,channel,input_size,input,output);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamRotation(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,D3D11_VIDEO_PROCESSOR_ROTATION rotation) {
+    This->lpVtbl->VideoProcessorSetStreamRotation(This,processor,stream_idx,enable,rotation);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetStreamRotation(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL *enable,D3D11_VIDEO_PROCESSOR_ROTATION *rotation) {
+    This->lpVtbl->VideoProcessorGetStreamRotation(This,processor,stream_idx,enable,rotation);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11VideoContext_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11Device interface
+ */
+#ifndef __ID3D11Device_INTERFACE_DEFINED__
+#define __ID3D11Device_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Device, 0xdb6f6ddb, 0xac77, 0x4e88, 0x82,0x53, 0x81,0x9d,0xf9,0xbb,0xf1,0x40);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("db6f6ddb-ac77-4e88-8253-819df9bbf140")
+ID3D11Device : public IUnknown
+{
+    vir
