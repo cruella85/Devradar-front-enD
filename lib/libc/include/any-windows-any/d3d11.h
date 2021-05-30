@@ -10104,4 +10104,101 @@ static FORCEINLINE void ID3D11VideoContext_GetDevice(ID3D11VideoContext* This,ID
 static FORCEINLINE HRESULT ID3D11VideoContext_GetPrivateData(ID3D11VideoContext* This,REFGUID guid,UINT *pDataSize,void *pData) {
     return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
 }
-static FORCEINLINE HRESULT ID3D11VideoContext_SetPrivateData(ID3D11VideoContext* This,REF
+static FORCEINLINE HRESULT ID3D11VideoContext_SetPrivateData(ID3D11VideoContext* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_SetPrivateDataInterface(ID3D11VideoContext* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11VideoContext methods ***/
+static FORCEINLINE HRESULT ID3D11VideoContext_GetDecoderBuffer(ID3D11VideoContext* This,ID3D11VideoDecoder *decoder,D3D11_VIDEO_DECODER_BUFFER_TYPE type,UINT *buffer_size,void **buffer) {
+    return This->lpVtbl->GetDecoderBuffer(This,decoder,type,buffer_size,buffer);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_ReleaseDecoderBuffer(ID3D11VideoContext* This,ID3D11VideoDecoder *decoder,D3D11_VIDEO_DECODER_BUFFER_TYPE type) {
+    return This->lpVtbl->ReleaseDecoderBuffer(This,decoder,type);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_DecoderBeginFrame(ID3D11VideoContext* This,ID3D11VideoDecoder *decoder,ID3D11VideoDecoderOutputView *view,UINT key_size,const void *key) {
+    return This->lpVtbl->DecoderBeginFrame(This,decoder,view,key_size,key);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_DecoderEndFrame(ID3D11VideoContext* This,ID3D11VideoDecoder *decoder) {
+    return This->lpVtbl->DecoderEndFrame(This,decoder);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_SubmitDecoderBuffers(ID3D11VideoContext* This,ID3D11VideoDecoder *decoder,UINT buffers_count,const D3D11_VIDEO_DECODER_BUFFER_DESC *buffer_desc) {
+    return This->lpVtbl->SubmitDecoderBuffers(This,decoder,buffers_count,buffer_desc);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_DecoderExtension(ID3D11VideoContext* This,ID3D11VideoDecoder *decoder,const D3D11_VIDEO_DECODER_EXTENSION *extension) {
+    return This->lpVtbl->DecoderExtension(This,decoder,extension);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetOutputTargetRect(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL enable,const RECT *rect) {
+    This->lpVtbl->VideoProcessorSetOutputTargetRect(This,processor,enable,rect);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetOutputBackgroundColor(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL y_cb_cr,const D3D11_VIDEO_COLOR *color) {
+    This->lpVtbl->VideoProcessorSetOutputBackgroundColor(This,processor,y_cb_cr,color);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetOutputColorSpace(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,const D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
+    This->lpVtbl->VideoProcessorSetOutputColorSpace(This,processor,color_space);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetOutputAlphaFillMode(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE alpha_fill_mode,UINT stream_idx) {
+    This->lpVtbl->VideoProcessorSetOutputAlphaFillMode(This,processor,alpha_fill_mode,stream_idx);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetOutputConstriction(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL enable,SIZE size) {
+    This->lpVtbl->VideoProcessorSetOutputConstriction(This,processor,enable,size);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetOutputStereoMode(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL enable) {
+    This->lpVtbl->VideoProcessorSetOutputStereoMode(This,processor,enable);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_VideoProcessorSetOutputExtension(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,const GUID *guid,UINT data_size,void *data) {
+    return This->lpVtbl->VideoProcessorSetOutputExtension(This,processor,guid,data_size,data);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetOutputTargetRect(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL *enabled,RECT *rect) {
+    This->lpVtbl->VideoProcessorGetOutputTargetRect(This,processor,enabled,rect);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetOutputBackgroundColor(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL *y_cb_cr,D3D11_VIDEO_COLOR *color) {
+    This->lpVtbl->VideoProcessorGetOutputBackgroundColor(This,processor,y_cb_cr,color);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetOutputColorSpace(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
+    This->lpVtbl->VideoProcessorGetOutputColorSpace(This,processor,color_space);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetOutputAlphaFillMode(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE *alpha_fill_mode,UINT *stream_idx) {
+    This->lpVtbl->VideoProcessorGetOutputAlphaFillMode(This,processor,alpha_fill_mode,stream_idx);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetOutputConstriction(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL *enabled,SIZE *size) {
+    This->lpVtbl->VideoProcessorGetOutputConstriction(This,processor,enabled,size);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorGetOutputStereoMode(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,WINBOOL *enabled) {
+    This->lpVtbl->VideoProcessorGetOutputStereoMode(This,processor,enabled);
+}
+static FORCEINLINE HRESULT ID3D11VideoContext_VideoProcessorGetOutputExtension(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,const GUID *guid,UINT data_size,void *data) {
+    return This->lpVtbl->VideoProcessorGetOutputExtension(This,processor,guid,data_size,data);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamFrameFormat(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_FRAME_FORMAT format) {
+    This->lpVtbl->VideoProcessorSetStreamFrameFormat(This,processor,stream_idx,format);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamColorSpace(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,const D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
+    This->lpVtbl->VideoProcessorSetStreamColorSpace(This,processor,stream_idx,color_space);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamOutputRate(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,D3D11_VIDEO_PROCESSOR_OUTPUT_RATE rate,WINBOOL repeat,const DXGI_RATIONAL *custom_rate) {
+    This->lpVtbl->VideoProcessorSetStreamOutputRate(This,processor,stream_idx,rate,repeat,custom_rate);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamSourceRect(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,const RECT *rect) {
+    This->lpVtbl->VideoProcessorSetStreamSourceRect(This,processor,stream_idx,enable,rect);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamDestRect(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,const RECT *rect) {
+    This->lpVtbl->VideoProcessorSetStreamDestRect(This,processor,stream_idx,enable,rect);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamAlpha(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,float alpha) {
+    This->lpVtbl->VideoProcessorSetStreamAlpha(This,processor,stream_idx,enable,alpha);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamPalette(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,UINT entry_count,const UINT *entries) {
+    This->lpVtbl->VideoProcessorSetStreamPalette(This,processor,stream_idx,entry_count,entries);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamPixelAspectRatio(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,const DXGI_RATIONAL *src_aspect_ratio,const DXGI_RATIONAL *dst_aspect_ratio) {
+    This->lpVtbl->VideoProcessorSetStreamPixelAspectRatio(This,processor,stream_idx,enable,src_aspect_ratio,dst_aspect_ratio);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamLumaKey(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,float lower,float upper) {
+    This->lpVtbl->VideoProcessorSetStreamLumaKey(This,processor,stream_idx,enable,lower,upper);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamStereoFormat(ID3D11VideoContext* This,ID3D11VideoProcessor *processor,UINT stream_idx,WINBOOL enable,D3D11_VIDEO_PROCESSOR_STEREO_FORMAT format,WINBOOL left_view_frame0,WINBOOL base_view_frame0,D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE flip_mode,int mono_offset) {
+    This->lpVtbl->VideoProcessorSetStreamStereoFormat(This,processor,stream_idx,enable,format,left_view_frame0,base_view_frame0,flip_mode,mono_offset);
+}
+static FORCEINLINE void ID3D11VideoContext_VideoProcessorSetStreamAutoProcessingMode(ID3D
