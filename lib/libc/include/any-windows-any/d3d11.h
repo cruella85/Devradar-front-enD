@@ -10774,4 +10774,87 @@ interface ID3D11Device {
 #define ID3D11Device_CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout) (This)->lpVtbl->CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout)
 #define ID3D11Device_CreateVertexShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppVertexShader) (This)->lpVtbl->CreateVertexShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppVertexShader)
 #define ID3D11Device_CreateGeometryShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppGeometryShader) (This)->lpVtbl->CreateGeometryShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppGeometryShader)
-#define ID3D11Device_CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStrides,RasterizedStream,pClassLinkage,ppGeometryShader) (This)->lpVtbl->CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStride
+#define ID3D11Device_CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStrides,RasterizedStream,pClassLinkage,ppGeometryShader) (This)->lpVtbl->CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStrides,RasterizedStream,pClassLinkage,ppGeometryShader)
+#define ID3D11Device_CreatePixelShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppPixelShader) (This)->lpVtbl->CreatePixelShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppPixelShader)
+#define ID3D11Device_CreateHullShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppHullShader) (This)->lpVtbl->CreateHullShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppHullShader)
+#define ID3D11Device_CreateDomainShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppDomainShader) (This)->lpVtbl->CreateDomainShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppDomainShader)
+#define ID3D11Device_CreateComputeShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppComputeShader) (This)->lpVtbl->CreateComputeShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppComputeShader)
+#define ID3D11Device_CreateClassLinkage(This,ppLinkage) (This)->lpVtbl->CreateClassLinkage(This,ppLinkage)
+#define ID3D11Device_CreateBlendState(This,pBlendStateDesc,ppBlendState) (This)->lpVtbl->CreateBlendState(This,pBlendStateDesc,ppBlendState)
+#define ID3D11Device_CreateDepthStencilState(This,pDepthStencilDesc,ppDepthStencilState) (This)->lpVtbl->CreateDepthStencilState(This,pDepthStencilDesc,ppDepthStencilState)
+#define ID3D11Device_CreateRasterizerState(This,pRasterizerDesc,ppRasterizerState) (This)->lpVtbl->CreateRasterizerState(This,pRasterizerDesc,ppRasterizerState)
+#define ID3D11Device_CreateSamplerState(This,pSamplerDesc,ppSamplerState) (This)->lpVtbl->CreateSamplerState(This,pSamplerDesc,ppSamplerState)
+#define ID3D11Device_CreateQuery(This,pQueryDesc,ppQuery) (This)->lpVtbl->CreateQuery(This,pQueryDesc,ppQuery)
+#define ID3D11Device_CreatePredicate(This,pPredicateDesc,ppPredicate) (This)->lpVtbl->CreatePredicate(This,pPredicateDesc,ppPredicate)
+#define ID3D11Device_CreateCounter(This,pCounterDesc,ppCounter) (This)->lpVtbl->CreateCounter(This,pCounterDesc,ppCounter)
+#define ID3D11Device_CreateDeferredContext(This,ContextFlags,ppDeferredContext) (This)->lpVtbl->CreateDeferredContext(This,ContextFlags,ppDeferredContext)
+#define ID3D11Device_OpenSharedResource(This,hResource,ReturnedInterface,ppResource) (This)->lpVtbl->OpenSharedResource(This,hResource,ReturnedInterface,ppResource)
+#define ID3D11Device_CheckFormatSupport(This,Format,pFormatSupport) (This)->lpVtbl->CheckFormatSupport(This,Format,pFormatSupport)
+#define ID3D11Device_CheckMultisampleQualityLevels(This,Format,SampleCount,pNumQualityLevels) (This)->lpVtbl->CheckMultisampleQualityLevels(This,Format,SampleCount,pNumQualityLevels)
+#define ID3D11Device_CheckCounterInfo(This,pCounterInfo) (This)->lpVtbl->CheckCounterInfo(This,pCounterInfo)
+#define ID3D11Device_CheckCounter(This,pDesc,pType,pActiveCounters,szName,pNameLength,szUnits,pUnitsLength,szDescription,pDescriptionLength) (This)->lpVtbl->CheckCounter(This,pDesc,pType,pActiveCounters,szName,pNameLength,szUnits,pUnitsLength,szDescription,pDescriptionLength)
+#define ID3D11Device_CheckFeatureSupport(This,Feature,pFeatureSupportData,FeatureSupportDataSize) (This)->lpVtbl->CheckFeatureSupport(This,Feature,pFeatureSupportData,FeatureSupportDataSize)
+#define ID3D11Device_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11Device_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11Device_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+#define ID3D11Device_GetFeatureLevel(This) (This)->lpVtbl->GetFeatureLevel(This)
+#define ID3D11Device_GetCreationFlags(This) (This)->lpVtbl->GetCreationFlags(This)
+#define ID3D11Device_GetDeviceRemovedReason(This) (This)->lpVtbl->GetDeviceRemovedReason(This)
+#define ID3D11Device_GetImmediateContext(This,ppImmediateContext) (This)->lpVtbl->GetImmediateContext(This,ppImmediateContext)
+#define ID3D11Device_SetExceptionMode(This,RaiseFlags) (This)->lpVtbl->SetExceptionMode(This,RaiseFlags)
+#define ID3D11Device_GetExceptionMode(This) (This)->lpVtbl->GetExceptionMode(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11Device_QueryInterface(ID3D11Device* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11Device_AddRef(ID3D11Device* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11Device_Release(ID3D11Device* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11Device methods ***/
+static FORCEINLINE HRESULT ID3D11Device_CreateBuffer(ID3D11Device* This,const D3D11_BUFFER_DESC *pDesc,const D3D11_SUBRESOURCE_DATA *pInitialData,ID3D11Buffer **ppBuffer) {
+    return This->lpVtbl->CreateBuffer(This,pDesc,pInitialData,ppBuffer);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateTexture1D(ID3D11Device* This,const D3D11_TEXTURE1D_DESC *pDesc,const D3D11_SUBRESOURCE_DATA *pInitialData,ID3D11Texture1D **ppTexture1D) {
+    return This->lpVtbl->CreateTexture1D(This,pDesc,pInitialData,ppTexture1D);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateTexture2D(ID3D11Device* This,const D3D11_TEXTURE2D_DESC *pDesc,const D3D11_SUBRESOURCE_DATA *pInitialData,ID3D11Texture2D **ppTexture2D) {
+    return This->lpVtbl->CreateTexture2D(This,pDesc,pInitialData,ppTexture2D);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateTexture3D(ID3D11Device* This,const D3D11_TEXTURE3D_DESC *pDesc,const D3D11_SUBRESOURCE_DATA *pInitialData,ID3D11Texture3D **ppTexture3D) {
+    return This->lpVtbl->CreateTexture3D(This,pDesc,pInitialData,ppTexture3D);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateShaderResourceView(ID3D11Device* This,ID3D11Resource *pResource,const D3D11_SHADER_RESOURCE_VIEW_DESC *pDesc,ID3D11ShaderResourceView **ppSRView) {
+    return This->lpVtbl->CreateShaderResourceView(This,pResource,pDesc,ppSRView);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateUnorderedAccessView(ID3D11Device* This,ID3D11Resource *pResource,const D3D11_UNORDERED_ACCESS_VIEW_DESC *pDesc,ID3D11UnorderedAccessView **ppUAView) {
+    return This->lpVtbl->CreateUnorderedAccessView(This,pResource,pDesc,ppUAView);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateRenderTargetView(ID3D11Device* This,ID3D11Resource *pResource,const D3D11_RENDER_TARGET_VIEW_DESC *pDesc,ID3D11RenderTargetView **ppRTView) {
+    return This->lpVtbl->CreateRenderTargetView(This,pResource,pDesc,ppRTView);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateDepthStencilView(ID3D11Device* This,ID3D11Resource *pResource,const D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc,ID3D11DepthStencilView **ppDepthStencilView) {
+    return This->lpVtbl->CreateDepthStencilView(This,pResource,pDesc,ppDepthStencilView);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateInputLayout(ID3D11Device* This,const D3D11_INPUT_ELEMENT_DESC *pInputElementDescs,UINT NumElements,const void *pShaderBytecodeWithInputSignature,SIZE_T BytecodeLength,ID3D11InputLayout **ppInputLayout) {
+    return This->lpVtbl->CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateVertexShader(ID3D11Device* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D11ClassLinkage *pClassLinkage,ID3D11VertexShader **ppVertexShader) {
+    return This->lpVtbl->CreateVertexShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppVertexShader);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateGeometryShader(ID3D11Device* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D11ClassLinkage *pClassLinkage,ID3D11GeometryShader **ppGeometryShader) {
+    return This->lpVtbl->CreateGeometryShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppGeometryShader);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateGeometryShaderWithStreamOutput(ID3D11Device* This,const void *pShaderBytecode,SIZE_T BytecodeLength,const D3D11_SO_DECLARATION_ENTRY *pSODeclaration,UINT NumEntries,const UINT *pBufferStrides,UINT NumStrides,UINT RasterizedStream,ID3D11ClassLinkage *pClassLinkage,ID3D11GeometryShader **ppGeometryShader) {
+    return This->lpVtbl->CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStrides,RasterizedStream,pClassLinkage,ppGeometryShader);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreatePixelShader(ID3D11Device* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D11ClassLinkage *pClassLinkage,ID3D11PixelShader **ppPixelShader) {
+    return This->lpVtbl->CreatePixelShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppPixelShader);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateHullShader(ID3D11Device* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D11ClassLinkage *pClassLinkage,ID3D11HullShader **ppHullShader) {
+    return This->lpVtbl->CreateHullShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppHullShader);
+}
+static FORCEINLINE HRESULT ID3D11Device_CreateDo
