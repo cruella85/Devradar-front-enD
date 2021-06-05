@@ -993,3 +993,167 @@ TdiCopyMdlChainToMdlChain (
   IN PMDL  DestinationMdlChain,
   IN ULONG  DestinationOffset,
   OUT PULONG  BytesCopied);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiCopyMdlToBuffer(
+  IN PMDL  SourceMdlChain,
+  IN ULONG  SourceOffset,
+  IN PVOID  DestinationBuffer,
+  IN ULONG  DestinationOffset,
+  IN ULONG  DestinationBufferSize,
+  OUT PULONG  BytesCopied);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiDeregisterAddressChangeHandler(
+  IN HANDLE  BindingHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiDeregisterDeviceObject(
+  IN HANDLE  DevRegistrationHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiDeregisterNetAddress(
+  IN HANDLE  AddrRegistrationHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiDeregisterPnPHandlers(
+  IN HANDLE  BindingHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiDeregisterProvider(
+  IN HANDLE  ProviderHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiEnumerateAddresses(
+  IN HANDLE  BindingHandle);
+
+TDIKRNLAPI
+VOID
+NTAPI
+TdiInitialize(
+  VOID);
+
+TDIKRNLAPI
+VOID
+NTAPI
+TdiMapBuffer(
+  IN PMDL  MdlChain);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiMapUserRequest(
+  IN PDEVICE_OBJECT  DeviceObject,
+  IN PIRP  Irp,
+  IN PIO_STACK_LOCATION  IrpSp);
+
+TDIKRNLAPI
+BOOLEAN
+NTAPI
+TdiMatchPdoWithChainedReceiveContext(
+  IN PVOID TsduDescriptor,
+  IN PVOID PDO);
+
+TDIKRNLAPI
+VOID
+NTAPI
+TdiPnPPowerComplete(
+  IN HANDLE  BindingHandle,
+  IN PNET_PNP_EVENT  PowerEvent,
+  IN NTSTATUS  Status);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiPnPPowerRequest(
+  IN PUNICODE_STRING  DeviceName,
+  IN PNET_PNP_EVENT  PowerEvent,
+  IN PTDI_PNP_CONTEXT  Context1,
+  IN PTDI_PNP_CONTEXT  Context2,
+  IN ProviderPnPPowerComplete  ProtocolCompletionHandler);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiProviderReady(
+  IN HANDLE  ProviderHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiRegisterAddressChangeHandler(
+  IN TDI_ADD_ADDRESS_HANDLER  AddHandler,
+  IN TDI_DEL_ADDRESS_HANDLER  DeleteHandler,
+  OUT HANDLE  *BindingHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiRegisterDeviceObject(
+  IN PUNICODE_STRING  DeviceName,
+  OUT HANDLE  *DevRegistrationHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiRegisterNetAddress(
+  IN PTA_ADDRESS  Address,
+  IN PUNICODE_STRING  DeviceName,
+  IN PTDI_PNP_CONTEXT  Context,
+  OUT HANDLE  *AddrRegistrationHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiRegisterNotificationHandler(
+  IN TDI_BIND_HANDLER  BindHandler,
+  IN TDI_UNBIND_HANDLER  UnbindHandler,
+  OUT HANDLE  *BindingHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiRegisterPnPHandlers(
+  IN PTDI_CLIENT_INTERFACE_INFO  ClientInterfaceInfo,
+  IN ULONG  InterfaceInfoSize,
+  OUT HANDLE  *BindingHandle);
+
+TDIKRNLAPI
+NTSTATUS
+NTAPI
+TdiRegisterProvider(
+  IN PUNICODE_STRING  ProviderName,
+  OUT HANDLE  *ProviderHandle);
+
+TDIKRNLAPI
+VOID
+NTAPI
+TdiReturnChainedReceives(
+  IN PVOID  *TsduDescriptors,
+  IN ULONG   NumberOfTsdus);
+
+TDIKRNLAPI
+VOID
+NTAPI
+TdiUnmapBuffer(
+  IN PMDL  MdlChain);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __TDIKRNL_H */
