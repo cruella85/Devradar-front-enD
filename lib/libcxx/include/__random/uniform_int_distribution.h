@@ -176,4 +176,118 @@ public:
             : __a_(__a), __b_(__b) {}
 
         result_type a() const {return __a_;}
-      
+        result_type b() const {return __b_;}
+
+        friend bool operator==(const param_type& __x, const param_type& __y)
+            {return __x.__a_ == __y.__a_ && __x.__b_ == __y.__b_;}
+        friend bool operator!=(const param_type& __x, const param_type& __y)
+            {return !(__x == __y);}
+    };
+
+private:
+    param_type __p_;
+
+public:
+    // constructors and reset functions
+#ifndef _LIBCPP_CXX03_LANG
+    uniform_int_distribution() : uniform_int_distribution(0) {}
+    explicit uniform_int_distribution(
+        result_type __a, result_type __b = numeric_limits<result_type>::max())
+        : __p_(param_type(__a, __b)) {}
+#else
+    explicit uniform_int_distribution(
+        result_type __a = 0,
+        result_type __b = numeric_limits<result_type>::max())
+        : __p_(param_type(__a, __b)) {}
+#endif
+    explicit uniform_int_distribution(const param_type& __p) : __p_(__p) {}
+    void reset() {}
+
+    // generating functions
+    template<class _URNG> result_type operator()(_URNG& __g)
+        {return (*this)(__g, __p_);}
+    template<class _URNG> result_type operator()(_URNG& __g, const param_type& __p);
+
+    // property functions
+    result_type a() const {return __p_.a();}
+    result_type b() const {return __p_.b();}
+
+    param_type param() const {return __p_;}
+    void param(const param_type& __p) {__p_ = __p;}
+
+    result_type min() const {return a();}
+    result_type max() const {return b();}
+
+    friend bool operator==(const uniform_int_distribution& __x,
+                           const uniform_int_distribution& __y)
+        {return __x.__p_ == __y.__p_;}
+    friend bool operator!=(const uniform_int_distribution& __x,
+                           const uniform_int_distribution& __y)
+            {return !(__x == __y);}
+};
+
+template<class _IntType>
+template<class _URNG>
+typename uniform_int_distribution<_IntType>::result_type
+uniform_int_distribution<_IntType>::operator()(_URNG& __g, const param_type& __p)
+_LIBCPP_DISABLE_UBSAN_UNSIGNED_INTEGER_CHECK
+{
+    static_assert(__libcpp_random_is_valid_urng<_URNG>::value, "");
+    typedef typename conditional<sizeof(result_type) <= sizeof(uint32_t), uint32_t,
+                                 typename make_unsigned<result_type>::type>::type _UIntType;
+    const _UIntType _Rp = _UIntType(__p.b()) - _UIntType(__p.a()) + _UIntType(1);
+    if (_Rp == 1)
+        return __p.a();
+    const size_t _Dt = numeric_limits<_UIntType>::digits;
+    typedef __independent_bits_engine<_URNG, _UIntType> _Eng;
+    if (_Rp == 0)
+        return static_cast<result_type>(_Eng(__g, _Dt)());
+    size_t __w = _Dt - __countl_zero(_Rp) - 1;
+    if ((_Rp & (numeric_limits<_UIntType>::max() >> (_Dt - __w))) != 0)
+        ++__w;
+    _Eng __e(__g, __w);
+    _UIntType __u;
+    do
+    {
+        __u = __e();
+    } while (__u >= _Rp);
+    return static_cast<result_type>(__u + __p.a());
+}
+
+template <class _CharT, class _Traits, class _IT>
+basic_ostream<_CharT, _Traits>&
+operator<<(basic_ostream<_CharT, _Traits>& __os,
+           const uniform_int_distribution<_IT>& __x)
+{
+    __save_flags<_CharT, _Traits> __lx(__os);
+    typedef basic_ostream<_CharT, _Traits> _Ostream;
+    __os.flags(_Ostream::dec | _Ostream::left);
+    _CharT __sp = __os.widen(' ');
+    __os.fill(__sp);
+    return __os << __x.a() << __sp << __x.b();
+}
+
+template <class _CharT, class _Traits, class _IT>
+basic_istream<_CharT, _Traits>&
+operator>>(basic_istream<_CharT, _Traits>& __is,
+           uniform_int_distribution<_IT>& __x)
+{
+    typedef uniform_int_distribution<_IT> _Eng;
+    typedef typename _Eng::result_type result_type;
+    typedef typename _Eng::param_type param_type;
+    __save_flags<_CharT, _Traits> __lx(__is);
+    typedef basic_istream<_CharT, _Traits> _Istream;
+    __is.flags(_Istream::dec | _Istream::skipws);
+    result_type __a;
+    result_type __b;
+    __is >> __a >> __b;
+    if (!__is.fail())
+        __x.param(param_type(__a, __b));
+    return __is;
+}
+
+_LIBCPP_END_NAMESPACE_STD
+
+_LIBCPP_POP_MACROS
+
+#endif // _LIBCPP___RANDOM_UNIFORM_INT_DISTRIBUTION_H
