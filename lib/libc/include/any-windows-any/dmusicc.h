@@ -223,4 +223,230 @@ typedef ULONGLONG    SAMPLE_POSITION, *LPSAMPLE_POSITION;
 #define DSBUSID_FRONT_LEFT            0x00000000
 #define DSBUSID_LEFT                  0x00000000
 #define DSBUSID_FRONT_RIGHT           0x00000001
-#define DSBUSID_RIGHT                 0x0000000
+#define DSBUSID_RIGHT                 0x00000001
+#define DSBUSID_FRONT_CENTER          0x00000002
+#define DSBUSID_LOW_FREQUENCY         0x00000003
+#define DSBUSID_BACK_LEFT             0x00000004
+#define DSBUSID_BACK_RIGHT            0x00000005
+#define DSBUSID_FRONT_LEFT_OF_CENTER  0x00000006 
+#define DSBUSID_FRONT_RIGHT_OF_CENTER 0x00000007
+#define DSBUSID_BACK_CENTER           0x00000008
+#define DSBUSID_SIDE_LEFT             0x00000009
+#define DSBUSID_SIDE_RIGHT            0x0000000A
+#define DSBUSID_TOP_CENTER            0x0000000B
+#define DSBUSID_TOP_FRONT_LEFT        0x0000000C
+#define DSBUSID_TOP_FRONT_CENTER      0x0000000D
+#define DSBUSID_TOP_FRONT_RIGHT       0x0000000E
+#define DSBUSID_TOP_BACK_LEFT         0x0000000F
+#define DSBUSID_TOP_BACK_CENTER       0x00000010
+#define DSBUSID_TOP_BACK_RIGHT        0x011
+#define DSBUSID_LAST_SPKR_LOC         0x00000011
+#define DSBUSID_IS_SPKR_LOC(id)       (((id) >= DSBUSID_FIRST_SPKR_LOC) && ((id) <= DSBUSID_LAST_SPKR_LOC))
+
+#define DSBUSID_REVERB_SEND           0x00000040
+#define DSBUSID_CHORUS_SEND           0x00000041
+
+#define DSBUSID_DYNAMIC_0             0x00000200 
+
+#define DSBUSID_NULL			      0xFFFFFFFF
+
+/*****************************************************************************
+ * Enumerations
+ */
+typedef enum {
+	DMUS_CLOCK_SYSTEM = 0x0,
+	DMUS_CLOCK_WAVE   = 0x1
+} DMUS_CLOCKTYPE;
+
+
+/*****************************************************************************
+ * Structures
+ */
+/* typedef definitions */
+typedef struct _DMUS_BUFFERDESC          DMUS_BUFFERDESC,          *LPDMUS_BUFFERDESC;
+typedef struct _DMUS_PORTCAPS            DMUS_PORTCAPS,            *LPDMUS_PORTCAPS;
+typedef struct _DMUS_PORTPARAMS          DMUS_PORTPARAMS7,         *LPDMUS_PORTPARAMS7;
+typedef struct _DMUS_PORTPARAMS8         DMUS_PORTPARAMS8,         *LPDMUS_PORTPARAMS8;
+typedef         DMUS_PORTPARAMS8         DMUS_PORTPARAMS,          *LPDMUS_PORTPARAMS;
+typedef struct _DMUS_SYNTHSTATS          DMUS_SYNTHSTATS,          *LPDMUS_SYNTHSTATS;
+typedef struct _DMUS_SYNTHSTATS8         DMUS_SYNTHSTATS8,         *LPDMUS_SYNTHSTATS8;
+typedef struct _DMUS_WAVES_REVERB_PARAMS DMUS_WAVES_REVERB_PARAMS, *LPDMUS_WAVES_REVERB_PARAMS;
+typedef struct _DMUS_CLOCKINFO7          DMUS_CLOCKINFO7,          *LPDMUS_CLOCKINFO7;
+typedef struct _DMUS_CLOCKINFO8          DMUS_CLOCKINFO8,          *LPDMUS_CLOCKINFO8;
+typedef         DMUS_CLOCKINFO8          DMUS_CLOCKINFO,           *LPDMUS_CLOCKINFO;
+
+
+/* actual structures */
+struct _DMUS_BUFFERDESC {
+	DWORD dwSize;
+	DWORD dwFlags;
+	GUID guidBufferFormat;
+	DWORD cbBuffer;
+} ;
+
+struct _DMUS_PORTCAPS {
+	DWORD dwSize;
+	DWORD dwFlags;
+	GUID  guidPort;
+	DWORD dwClass;
+	DWORD dwType;
+	DWORD dwMemorySize;
+	DWORD dwMaxChannelGroups;
+	DWORD dwMaxVoices;    
+	DWORD dwMaxAudioChannels;
+	DWORD dwEffectFlags;
+	WCHAR wszDescription[DMUS_MAX_DESCRIPTION];
+};
+
+struct _DMUS_PORTPARAMS {
+	DWORD dwSize;
+	DWORD dwValidParams;
+	DWORD dwVoices;
+	DWORD dwChannelGroups;
+	DWORD dwAudioChannels;
+	DWORD dwSampleRate;
+	DWORD dwEffectFlags;
+	WINBOOL  fShare;
+};
+
+struct _DMUS_PORTPARAMS8 {
+	DWORD dwSize;
+	DWORD dwValidParams;
+	DWORD dwVoices;
+	DWORD dwChannelGroups;
+	DWORD dwAudioChannels;
+	DWORD dwSampleRate;
+	DWORD dwEffectFlags;
+	WINBOOL  fShare;
+	DWORD dwFeatures;
+};
+
+struct _DMUS_SYNTHSTATS {
+	DWORD dwSize;
+	DWORD dwValidStats;
+	DWORD dwVoices;
+	DWORD dwTotalCPU;
+	DWORD dwCPUPerVoice;
+	DWORD dwLostNotes;
+	DWORD dwFreeMemory;
+	LONG  lPeakVolume;
+};
+
+struct _DMUS_SYNTHSTATS8 {
+	DWORD dwSize;
+	DWORD dwValidStats;
+	DWORD dwVoices;
+	DWORD dwTotalCPU;
+	DWORD dwCPUPerVoice;
+	DWORD dwLostNotes;
+	DWORD dwFreeMemory;
+	LONG  lPeakVolume;
+	DWORD dwSynthMemUse;
+};
+
+struct _DMUS_WAVES_REVERB_PARAMS {
+	float fInGain;
+	float fReverbMix;
+	float fReverbTime;
+	float fHighFreqRTRatio;
+};
+
+struct _DMUS_CLOCKINFO7 {
+	DWORD          dwSize;
+	DMUS_CLOCKTYPE ctType;
+	GUID           guidClock;
+	WCHAR          wszDescription[DMUS_MAX_DESCRIPTION];
+};
+
+struct _DMUS_CLOCKINFO8 {
+    DWORD          dwSize;
+    DMUS_CLOCKTYPE ctType;
+    GUID           guidClock;
+    WCHAR          wszDescription[DMUS_MAX_DESCRIPTION];
+    DWORD          dwFlags;           
+};
+
+
+/*****************************************************************************
+ * IDirectMusic interface
+ */
+#define INTERFACE IDirectMusic
+DECLARE_INTERFACE_(IDirectMusic,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusic methods ***/
+    STDMETHOD(EnumPort)(THIS_ DWORD dwIndex, LPDMUS_PORTCAPS pPortCaps) PURE;
+    STDMETHOD(CreateMusicBuffer)(THIS_ LPDMUS_BUFFERDESC pBufferDesc, LPDIRECTMUSICBUFFER *ppBuffer, LPUNKNOWN pUnkOuter) PURE;
+    STDMETHOD(CreatePort)(THIS_ REFCLSID rclsidPort, LPDMUS_PORTPARAMS pPortParams, LPDIRECTMUSICPORT *ppPort, LPUNKNOWN pUnkOuter) PURE;
+    STDMETHOD(EnumMasterClock)(THIS_ DWORD dwIndex, LPDMUS_CLOCKINFO lpClockInfo) PURE;
+    STDMETHOD(GetMasterClock)(THIS_ LPGUID pguidClock, struct IReferenceClock **ppReferenceClock) PURE;
+    STDMETHOD(SetMasterClock)(THIS_ REFGUID rguidClock) PURE;
+    STDMETHOD(Activate)(THIS_ WINBOOL fEnable) PURE;
+    STDMETHOD(GetDefaultPort)(THIS_ LPGUID pguidPort) PURE;
+    STDMETHOD(SetDirectSound)(THIS_ LPDIRECTSOUND pDirectSound, HWND hWnd) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusic_QueryInterface(p,a,b)      (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusic_AddRef(p)                  (p)->lpVtbl->AddRef(p)
+#define IDirectMusic_Release(p)                 (p)->lpVtbl->Release(p)
+/*** IDirectMusic methods ***/
+#define IDirectMusic_EnumPort(p,a,b)            (p)->lpVtbl->EnumPort(p,a,b)
+#define IDirectMusic_CreateMusicBuffer(p,a,b,c) (p)->lpVtbl->CreateMusicBuffer(p,a,b,c)
+#define IDirectMusic_CreatePort(p,a,b,c,d)      (p)->lpVtbl->CreatePort(p,a,b,c,d)
+#define IDirectMusic_EnumMasterClock(p,a,b)     (p)->lpVtbl->EnumMasterClock(p,a,b)
+#define IDirectMusic_GetMasterClock(p,a,b)      (p)->lpVtbl->GetMasterClock(p,a,b)
+#define IDirectMusic_SetMasterClock(p,a)        (p)->lpVtbl->SetMasterClock(p,a)
+#define IDirectMusic_Activate(p,a)              (p)->lpVtbl->Activate(p,a)
+#define IDirectMusic_GetDefaultPort(p,a)        (p)->lpVtbl->GetDefaultPort(p,a)
+#define IDirectMusic_SetDirectSound(p,a,b)      (p)->lpVtbl->SetDirectSound(p,a,b)
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusic8 interface
+ */
+#define INTERFACE IDirectMusic8
+DECLARE_INTERFACE_(IDirectMusic8,IDirectMusic)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusic methods ***/
+    STDMETHOD(EnumPort)(THIS_ DWORD dwIndex, LPDMUS_PORTCAPS pPortCaps) PURE;
+    STDMETHOD(CreateMusicBuffer)(THIS_ LPDMUS_BUFFERDESC pBufferDesc, LPDIRECTMUSICBUFFER *ppBuffer, LPUNKNOWN pUnkOuter) PURE;
+    STDMETHOD(CreatePort)(THIS_ REFCLSID rclsidPort, LPDMUS_PORTPARAMS pPortParams, LPDIRECTMUSICPORT *ppPort, LPUNKNOWN pUnkOuter) PURE;
+    STDMETHOD(EnumMasterClock)(THIS_ DWORD dwIndex, LPDMUS_CLOCKINFO lpClockInfo) PURE;
+    STDMETHOD(GetMasterClock)(THIS_ LPGUID pguidClock, struct IReferenceClock **ppReferenceClock) PURE;
+    STDMETHOD(SetMasterClock)(THIS_ REFGUID rguidClock) PURE;
+    STDMETHOD(Activate)(THIS_ WINBOOL fEnable) PURE;
+    STDMETHOD(GetDefaultPort)(THIS_ LPGUID pguidPort) PURE;
+    STDMETHOD(SetDirectSound)(THIS_ LPDIRECTSOUND pDirectSound, HWND hWnd) PURE;
+    /*** IDirectMusic8 methods ***/
+    STDMETHOD(SetExternalMasterClock)(THIS_ struct IReferenceClock *pClock) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusic8_QueryInterface(p,a,b)       (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusic8_AddRef(p)                   (p)->lpVtbl->AddRef(p)
+#define IDirectMusic8_Release(p)                  (p)->lpVtbl->Release(p)
+/*** IDirectMusic methods ***/
+#define IDirectMusic8_EnumPort(p,a,b)             (p)->lpVtbl->EnumPort(p,a,b)
+#define IDirectMusic8_CreateMusicBuffer(p,a,b,c)  (p)->lpVtbl->CreateMusicBuffer(p,a,b,c)
+#define IDirectMusic8_CreatePort(p,a,b,c,d)       (p)->lpVtbl->CreatePort(p,a,b,c,d)
+#define IDirectMusic8_EnumMasterClock(p,a,b)      (p)->lpVtbl->EnumMasterClock(p,a,b)
+#define IDirectMusic8_GetMasterClock(p,a,b)       (p)->lpVtbl->GetMasterClock(p,a,b)
+#define IDirectMusic8_SetMasterClock(p,a)         (p)->lpVtbl->SetMasterClock(p,a)
+#define IDirectMusic8_Activate(p,a)               (p)->lpVtbl->Activate(p,a)
+#define IDirectMusic8_GetDefaultPort(p,a)         (p)->lpVtbl->GetDefaultPort(p,a)
+#define IDirectMusic8_SetDirectSound(p,a,b)       (p)->lpVtbl->SetDirectSound(p,a,b)
+/*** IDirectMusic8 methods ***/
+#define IDirectMusic8_SetExternalMasterClock(p,a) (p)->lpVtbl->
