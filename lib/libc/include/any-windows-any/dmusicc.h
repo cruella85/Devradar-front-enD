@@ -449,4 +449,188 @@ DECLARE_INTERFACE_(IDirectMusic8,IDirectMusic)
 #define IDirectMusic8_GetDefaultPort(p,a)         (p)->lpVtbl->GetDefaultPort(p,a)
 #define IDirectMusic8_SetDirectSound(p,a,b)       (p)->lpVtbl->SetDirectSound(p,a,b)
 /*** IDirectMusic8 methods ***/
-#define IDirectMusic8_SetExternalMasterClock(p,a) (p)->lpVtbl->
+#define IDirectMusic8_SetExternalMasterClock(p,a) (p)->lpVtbl->SetExternalMasterClock(p,a)
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusicBuffer interface
+ */
+#define INTERFACE IDirectMusicBuffer
+DECLARE_INTERFACE_(IDirectMusicBuffer,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusicBuffer methods ***/
+    STDMETHOD(Flush)(THIS) PURE;
+    STDMETHOD(TotalTime)(THIS_ LPREFERENCE_TIME prtTime) PURE;
+    STDMETHOD(PackStructured)(THIS_ REFERENCE_TIME rt, DWORD dwChannelGroup, DWORD dwChannelMessage) PURE;
+    STDMETHOD(PackUnstructured)(THIS_ REFERENCE_TIME rt, DWORD dwChannelGroup, DWORD cb, LPBYTE lpb) PURE;
+    STDMETHOD(ResetReadPtr)(THIS) PURE;
+    STDMETHOD(GetNextEvent)(THIS_ LPREFERENCE_TIME prt, LPDWORD pdwChannelGroup, LPDWORD pdwLength, LPBYTE *ppData) PURE;
+    STDMETHOD(GetRawBufferPtr)(THIS_ LPBYTE *ppData) PURE;
+    STDMETHOD(GetStartTime)(THIS_ LPREFERENCE_TIME prt) PURE;
+    STDMETHOD(GetUsedBytes)(THIS_ LPDWORD pcb) PURE;
+    STDMETHOD(GetMaxBytes)(THIS_ LPDWORD pcb) PURE;
+    STDMETHOD(GetBufferFormat)(THIS_ LPGUID pGuidFormat) PURE;
+    STDMETHOD(SetStartTime)(THIS_ REFERENCE_TIME rt) PURE;
+    STDMETHOD(SetUsedBytes)(THIS_ DWORD cb) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusicBuffer_QueryInterface(p,a,b)            (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusicBuffer_AddRef(p)                        (p)->lpVtbl->AddRef(p)
+#define IDirectMusicBuffer_Release(p)                       (p)->lpVtbl->Release(p)
+/*** IDirectMusicBuffer methods ***/
+#define IDirectMusicBuffer_Flush(p)                         (p)->lpVtbl->Flush(p)
+#define IDirectMusicBuffer_TotalTime(p,a)                   (p)->lpVtbl->TotalTime(p,a)
+#define IDirectMusicBuffer_PackStructured(p,a,b,c)          (p)->lpVtbl->PackStructured(p,a,b,c)
+#define IDirectMusicBuffer_PackUnstructured(p,a,b,c,d)      (p)->lpVtbl->PackUnstructured(p,a,b,c,d)
+#define IDirectMusicBuffer_ResetReadPtr(p)                  (p)->lpVtbl->ResetReadPtr(p)
+#define IDirectMusicBuffer_GetNextEvent(p,a,b,c,d)          (p)->lpVtbl->GetNextEvent(p,a,b,c,d)
+#define IDirectMusicBuffer_GetRawBufferPtr(p,a)             (p)->lpVtbl->GetRawBufferPtr(p,a)
+#define IDirectMusicBuffer_GetStartTime(p,a)                (p)->lpVtbl->GetStartTime(p,a)
+#define IDirectMusicBuffer_GetUsedBytes(p,a)                (p)->lpVtbl->GetUsedBytes(p,a)
+#define IDirectMusicBuffer_GetMaxBytes(p,a)                 (p)->lpVtbl->GetMaxBytes(p,a)
+#define IDirectMusicBuffer_GetBufferFormat(p,a)             (p)->lpVtbl->GetBufferFormat(p,a)
+#define IDirectMusicBuffer_SetStartTime(p,a)                (p)->lpVtbl->SetStartTime(p,a)
+#define IDirectMusicBuffer_SetUsedBytes(p,a)                (p)->lpVtbl->SetUsedBytes(p,a)
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusicInstrument interface
+ */
+#define INTERFACE IDirectMusicInstrument
+DECLARE_INTERFACE_(IDirectMusicInstrument,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusicInstrument methods ***/
+    STDMETHOD(GetPatch)(THIS_ DWORD *pdwPatch) PURE;
+    STDMETHOD(SetPatch)(THIS_ DWORD dwPatch) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusicInstrument_QueryInterface(p,a,b) (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusicInstrument_AddRef(p)             (p)->lpVtbl->AddRef(p)
+#define IDirectMusicInstrument_Release(p)            (p)->lpVtbl->Release(p)
+/*** IDirectMusicInstrument methods ***/
+#define IDirectMusicInstrument_GetPatch(p,a)         (p)->lpVtbl->GetPatch(p,a)
+#define IDirectMusicInstrument_SetPatch(p,a)         (p)->lpVtbl->SetPatch(p,a)
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusicDownloadedInstrument interface
+ */
+#define INTERFACE IDirectMusicDownloadedInstrument
+DECLARE_INTERFACE_(IDirectMusicDownloadedInstrument,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /* no IDirectMusicDownloadedInstrument methods at this time */
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusicDownloadedInstrument_QueryInterface(p,a,b) (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusicDownloadedInstrument_AddRef(p)             (p)->lpVtbl->AddRef(p)
+#define IDirectMusicDownloadedInstrument_Release(p)            (p)->lpVtbl->Release(p)
+/*** IDirectMusicDownloadedInstrument methods ***/
+/* none at this time */
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusicCollection interface
+ */
+#define INTERFACE IDirectMusicCollection
+DECLARE_INTERFACE_(IDirectMusicCollection,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusicCollection methods ***/
+    STDMETHOD(GetInstrument)(THIS_ DWORD dwPatch, IDirectMusicInstrument **ppInstrument) PURE;
+    STDMETHOD(EnumInstrument)(THIS_ DWORD dwIndex, DWORD *pdwPatch, LPWSTR pwszName, DWORD dwNameLen) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusicCollection_QueryInterface(p,a,b)            (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusicCollection_AddRef(p)                        (p)->lpVtbl->AddRef(p)
+#define IDirectMusicCollection_Release(p)                       (p)->lpVtbl->Release(p)
+/*** IDirectMusicCollection methods ***/
+#define IDirectMusicCollection_GetInstrument(p,a,b)             (p)->lpVtbl->GetInstrument(p,a,b)
+#define IDirectMusicCollection_EnumInstrument(p,a,b,c,d)        (p)->lpVtbl->EnumInstrument(p,a,b,c,d)
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusicDownload interface
+ */
+#define INTERFACE IDirectMusicDownload
+DECLARE_INTERFACE_(IDirectMusicDownload,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusicDownload methods ***/
+    STDMETHOD(GetBuffer)(THIS_ void **ppvBuffer, DWORD *pdwSize) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusicDownload_QueryInterface(p,a,b)          (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusicDownload_AddRef(p)                      (p)->lpVtbl->AddRef(p)
+#define IDirectMusicDownload_Release(p)                     (p)->lpVtbl->Release(p)
+/*** IDirectMusicDownload methods ***/
+#define IDirectMusicDownload_GetBuffer(p,a,b)               (p)->lpVtbl->GetBuffer(p,a,b)
+#endif
+
+
+/*****************************************************************************
+ * IDirectMusicPortDownload interface
+ */
+#define INTERFACE IDirectMusicPortDownload
+DECLARE_INTERFACE_(IDirectMusicPortDownload,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirectMusicPortDownload methods ***/
+    STDMETHOD(GetBuffer)(THIS_ DWORD dwDLId, IDirectMusicDownload **ppIDMDownload) PURE;
+    STDMETHOD(AllocateBuffer)(THIS_ DWORD dwSize, IDirectMusicDownload **ppIDMDownload) PURE;
+    STDMETHOD(GetDLId)(THIS_ DWORD *pdwStartDLId, DWORD dwCount) PURE;
+    STDMETHOD(GetAppend)(THIS_ DWORD *pdwAppend) PURE;
+    STDMETHOD(Download)(THIS_ IDirectMusicDownload *pIDMDownload) PURE;
+    STDMETHOD(Unload)(THIS_ IDirectMusicDownload *pIDMDownload) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirectMusicPortDownload_QueryInterface(p,a,b) (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirectMusicPortDownload_AddRef(p)             (p)->lpVtbl->AddRef(p)
+#define IDirectMusicPortDownload_Release(p)            (p)->lpVtbl->Release(p)
+/*** IDirectMusicPortDownload methods ***/
+#define IDirectMusicPortDownload_GetBuffer(p,a,b)      (p)->lpVtbl->GetBuffer(p,a,b)
+#define IDirectMusicPortDownload_AllocateBuffer(p,a,b) (p)->lpVtbl->AllocateBuffer(p,a,b)
+#define 
