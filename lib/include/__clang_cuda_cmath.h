@@ -398,4 +398,115 @@ using ::isgreater;
 using ::isgreaterequal;
 using ::isless;
 using ::islessequal;
-using ::isles
+using ::islessgreater;
+using ::isnormal;
+using ::isunordered;
+using ::ldexp;
+using ::lgamma;
+using ::llrint;
+using ::llround;
+using ::log;
+using ::log10;
+using ::log1p;
+using ::log2;
+using ::logb;
+using ::lrint;
+using ::lround;
+using ::nearbyint;
+using ::nextafter;
+using ::pow;
+using ::remainder;
+using ::remquo;
+using ::rint;
+using ::round;
+using ::scalbln;
+using ::scalbn;
+using ::signbit;
+using ::sin;
+using ::sinh;
+using ::sqrt;
+using ::tan;
+using ::tanh;
+using ::tgamma;
+using ::trunc;
+
+// Well this is fun: We need to pull these symbols in for libc++, but we can't
+// pull them in with libstdc++, because its ::isinf and ::isnan are different
+// than its std::isinf and std::isnan.
+#ifndef __GLIBCXX__
+using ::isinf;
+using ::isnan;
+#endif
+
+// Finally, pull the "foobarf" functions that CUDA defines in its headers into
+// namespace std.
+using ::acosf;
+using ::acoshf;
+using ::asinf;
+using ::asinhf;
+using ::atan2f;
+using ::atanf;
+using ::atanhf;
+using ::cbrtf;
+using ::ceilf;
+using ::copysignf;
+using ::cosf;
+using ::coshf;
+using ::erfcf;
+using ::erff;
+using ::exp2f;
+using ::expf;
+using ::expm1f;
+using ::fabsf;
+using ::fdimf;
+using ::floorf;
+using ::fmaf;
+using ::fmaxf;
+using ::fminf;
+using ::fmodf;
+using ::frexpf;
+using ::hypotf;
+using ::ilogbf;
+using ::ldexpf;
+using ::lgammaf;
+using ::llrintf;
+using ::llroundf;
+using ::log10f;
+using ::log1pf;
+using ::log2f;
+using ::logbf;
+using ::logf;
+using ::lrintf;
+using ::lroundf;
+using ::modff;
+using ::nearbyintf;
+using ::nextafterf;
+using ::powf;
+using ::remainderf;
+using ::remquof;
+using ::rintf;
+using ::roundf;
+using ::scalblnf;
+using ::scalbnf;
+using ::sinf;
+using ::sinhf;
+using ::sqrtf;
+using ::tanf;
+using ::tanhf;
+using ::tgammaf;
+using ::truncf;
+
+#ifdef _LIBCPP_END_NAMESPACE_STD
+_LIBCPP_END_NAMESPACE_STD
+#else
+#ifdef _GLIBCXX_BEGIN_NAMESPACE_VERSION
+_GLIBCXX_END_NAMESPACE_VERSION
+#endif
+} // namespace std
+#endif
+
+#endif // __OPENMP_NVPTX__
+
+#undef __DEVICE__
+
+#endif
