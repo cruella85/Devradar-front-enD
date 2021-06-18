@@ -394,4 +394,220 @@ fn start_asm_path(comp: *Compilation, arena: Allocator, basename: []const u8) ![
             }
         }
     } else if (arch.isARM()) {
-        try 
+        try result.appendSlice("arm");
+    } else if (arch.isMIPS()) {
+        if (!mem.eql(u8, basename, "crti.S") and !mem.eql(u8, basename, "crtn.S")) {
+            try result.appendSlice("mips");
+        } else {
+            if (is_64) {
+                const abi_dir = if (comp.getTarget().abi == .gnuabin32)
+                    "n32"
+                else
+                    "n64";
+                try result.appendSlice("mips" ++ s ++ "mips64" ++ s);
+                try result.appendSlice(abi_dir);
+            } else {
+                try result.appendSlice("mips" ++ s ++ "mips32");
+            }
+        }
+    } else if (arch == .x86_64) {
+        try result.appendSlice("x86_64");
+    } else if (arch == .x86) {
+        try result.appendSlice("i386");
+    } else if (is_aarch64) {
+        try result.appendSlice("aarch64");
+    } else if (arch.isRISCV()) {
+        try result.appendSlice("riscv");
+    } else if (is_ppc) {
+        if (is_64) {
+            try result.appendSlice("powerpc" ++ s ++ "powerpc64");
+        } else {
+            try result.appendSlice("powerpc" ++ s ++ "powerpc32");
+        }
+    }
+
+    try result.appendSlice(s);
+    try result.appendSlice(basename);
+    return result.items;
+}
+
+fn add_include_dirs(comp: *Compilation, arena: Allocator, args: *std.ArrayList([]const u8)) error{OutOfMemory}!void {
+    const target = comp.getTarget();
+    const arch = target.cpu.arch;
+    const opt_nptl: ?[]const u8 = if (target.os.tag == .linux) "nptl" else "htl";
+
+    const s = path.sep_str;
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "include"));
+
+    if (target.os.tag == .linux) {
+        try add_include_dirs_arch(arena, args, arch, null, try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++ "unix" ++ s ++ "sysv" ++ s ++ "linux"));
+    }
+
+    if (opt_nptl) |nptl| {
+        try add_include_dirs_arch(arena, args, arch, nptl, try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps"));
+    }
+
+    if (target.os.tag == .linux) {
+        try args.append("-I");
+        try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++
+            "unix" ++ s ++ "sysv" ++ s ++ "linux" ++ s ++ "generic"));
+
+        try args.append("-I");
+        try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++
+            "unix" ++ s ++ "sysv" ++ s ++ "linux" ++ s ++ "include"));
+        try args.append("-I");
+        try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++
+            "unix" ++ s ++ "sysv" ++ s ++ "linux"));
+    }
+    if (opt_nptl) |nptl| {
+        try args.append("-I");
+        try args.append(try path.join(arena, &[_][]const u8{ comp.zig_lib_directory.path.?, lib_libc_glibc ++ "sysdeps", nptl }));
+    }
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++ "pthread"));
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++ "unix" ++ s ++ "sysv"));
+
+    try add_include_dirs_arch(arena, args, arch, null, try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++ "unix"));
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++ "unix"));
+
+    try add_include_dirs_arch(arena, args, arch, null, try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps"));
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc_glibc ++ "sysdeps" ++ s ++ "generic"));
+
+    try args.append("-I");
+    try args.append(try path.join(arena, &[_][]const u8{ comp.zig_lib_directory.path.?, lib_libc ++ "glibc" }));
+
+    try args.append("-I");
+    try args.append(try std.fmt.allocPrint(arena, "{s}" ++ s ++ "libc" ++ s ++ "include" ++ s ++ "{s}-{s}-{s}", .{
+        comp.zig_lib_directory.path.?, @tagName(arch), @tagName(target.os.tag), @tagName(target.abi),
+    }));
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc ++ "include" ++ s ++ "generic-glibc"));
+
+    const arch_name = target_util.osArchName(target);
+    try args.append("-I");
+    try args.append(try std.fmt.allocPrint(arena, "{s}" ++ s ++ "libc" ++ s ++ "include" ++ s ++ "{s}-linux-any", .{
+        comp.zig_lib_directory.path.?, arch_name,
+    }));
+
+    try args.append("-I");
+    try args.append(try lib_path(comp, arena, lib_libc ++ "include" ++ s ++ "any-linux-any"));
+}
+
+fn add_include_dirs_arch(
+    arena: Allocator,
+    args: *std.ArrayList([]const u8),
+    arch: std.Target.Cpu.Arch,
+    opt_nptl: ?[]const u8,
+    dir: []const u8,
+) error{OutOfMemory}!void {
+    const is_x86 = arch == .x86 or arch == .x86_64;
+    const is_aarch64 = arch == .aarch64 or arch == .aarch64_be;
+    const is_ppc = arch == .powerpc or arch == .powerpc64 or arch == .powerpc64le;
+    const is_sparc = arch == .sparc or arch == .sparcel or arch == .sparc64;
+    const is_64 = arch.ptrBitWidth() == 64;
+
+    const s = path.sep_str;
+
+    if (is_x86) {
+        if (arch == .x86_64) {
+            if (opt_nptl) |nptl| {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "x86_64", nptl }));
+            } else {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "x86_64" }));
+            }
+        } else if (arch == .x86) {
+            if (opt_nptl) |nptl| {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "i386", nptl }));
+            } else {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "i386" }));
+            }
+        }
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "x86", nptl }));
+        } else {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "x86" }));
+        }
+    } else if (arch.isARM()) {
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "arm", nptl }));
+        } else {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "arm" }));
+        }
+    } else if (arch.isMIPS()) {
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "mips", nptl }));
+        } else {
+            if (is_64) {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "mips" ++ s ++ "mips64" }));
+            } else {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "mips" ++ s ++ "mips32" }));
+            }
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "mips" }));
+        }
+    } else if (is_sparc) {
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "sparc", nptl }));
+        } else {
+            if (is_64) {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "sparc" ++ s ++ "sparc64" }));
+            } else {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "sparc" ++ s ++ "sparc32" }));
+            }
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "sparc" }));
+        }
+    } else if (is_aarch64) {
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "aarch64", nptl }));
+        } else {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "aarch64" }));
+        }
+    } else if (is_ppc) {
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "powerpc", nptl }));
+        } else {
+            if (is_64) {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "powerpc" ++ s ++ "powerpc64" }));
+            } else {
+                try args.append("-I");
+                try args.append(try path.join(arena, &[_][]const u8{ dir, "powerpc" ++ s ++ "powerpc32" }));
+            }
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "powerpc" }));
+        }
+    } else if (arch.isRISCV()) {
+        if (opt_nptl) |nptl| {
+            try args.append("-I");
+            try args.append(try path.join(arena, &[_][]const u8{ dir, "riscv", nptl }));
+        } else {
+            try args.append("-I");
+       
