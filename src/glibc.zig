@@ -1054,4 +1054,64 @@ fn buildSharedLib(
     const emit_bin = Compilation.EmitLoc{
         .directory = bin_directory,
         .basename = basename,
-    }
+    };
+    const version: Version = .{ .major = lib.sover, .minor = 0, .patch = 0 };
+    const ld_basename = path.basename(comp.getTarget().standardDynamicLinkerPath().get().?);
+    const soname = if (mem.eql(u8, lib.name, "ld")) ld_basename else basename;
+    const map_file_path = try path.join(arena, &[_][]const u8{ bin_directory.path.?, all_map_basename });
+    const c_source_files = [1]Compilation.CSourceFile{
+        .{
+            .src_path = try path.join(arena, &[_][]const u8{ bin_directory.path.?, asm_file_basename }),
+        },
+    };
+    const sub_compilation = try Compilation.create(comp.gpa, .{
+        .local_cache_directory = zig_cache_directory,
+        .global_cache_directory = comp.global_cache_directory,
+        .zig_lib_directory = comp.zig_lib_directory,
+        .cache_mode = .whole,
+        .target = comp.getTarget(),
+        .root_name = lib.name,
+        .main_pkg = null,
+        .output_mode = .Lib,
+        .link_mode = .Dynamic,
+        .thread_pool = comp.thread_pool,
+        .libc_installation = comp.bin_file.options.libc_installation,
+        .emit_bin = emit_bin,
+        .optimize_mode = comp.compilerRtOptMode(),
+        .want_sanitize_c = false,
+        .want_stack_check = false,
+        .want_stack_protector = 0,
+        .want_red_zone = comp.bin_file.options.red_zone,
+        .omit_frame_pointer = comp.bin_file.options.omit_frame_pointer,
+        .want_valgrind = false,
+        .want_tsan = false,
+        .emit_h = null,
+        .strip = comp.compilerRtStrip(),
+        .is_native_os = false,
+        .is_native_abi = false,
+        .self_exe_path = comp.self_exe_path,
+        .verbose_cc = comp.verbose_cc,
+        .verbose_link = comp.bin_file.options.verbose_link,
+        .verbose_air = comp.verbose_air,
+        .verbose_llvm_ir = comp.verbose_llvm_ir,
+        .verbose_cimport = comp.verbose_cimport,
+        .verbose_llvm_cpu_features = comp.verbose_llvm_cpu_features,
+        .clang_passthrough_mode = comp.clang_passthrough_mode,
+        .version = version,
+        .version_script = map_file_path,
+        .soname = soname,
+        .c_source_files = &c_source_files,
+        .skip_linker_dependencies = true,
+    });
+    defer sub_compilation.destroy();
+
+    try sub_compilation.updateSubCompilation();
+}
+
+// Return true if glibc has crti/crtn sources for that architecture.
+pub fn needsCrtiCrtn(target: std.Target) bool {
+    return switch (target.cpu.arch) {
+        .riscv32, .riscv64 => false,
+        else => true,
+    };
+}
