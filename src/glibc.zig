@@ -833,4 +833,225 @@ pub fn buildSharedObjects(comp: *Compilation) !void {
                             );
                         try stubs_asm.writer().print(
                             \\.globl {s}
-                         
+                            \\.type {s}, %function;
+                            \\.symver {s}, {s}{s}GLIBC_{d}.{d}
+                            \\{s}:
+                            \\
+                        , .{
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            sym_name,
+                            at_sign_str,
+                            ver.major,
+                            ver.minor,
+                            sym_plus_ver,
+                        });
+                    } else {
+                        const sym_plus_ver = if (want_default)
+                            sym_name
+                        else
+                            try std.fmt.allocPrint(
+                                arena,
+                                "{s}_GLIBC_{d}_{d}_{d}",
+                                .{ sym_name, ver.major, ver.minor, ver.patch },
+                            );
+                        try stubs_asm.writer().print(
+                            \\.globl {s}
+                            \\.type {s}, %function;
+                            \\.symver {s}, {s}{s}GLIBC_{d}.{d}.{d}
+                            \\{s}:
+                            \\
+                        , .{
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            sym_name,
+                            at_sign_str,
+                            ver.major,
+                            ver.minor,
+                            ver.patch,
+                            sym_plus_ver,
+                        });
+                    }
+                }
+            }
+        }
+
+        try stubs_asm.appendSlice(".data\n");
+
+        const obj_inclusions_len = mem.readIntLittle(u16, metadata.inclusions[inc_i..][0..2]);
+        inc_i += 2;
+
+        sym_i = 0;
+        opt_symbol_name = null;
+        versions_buffer = undefined;
+        versions_len = undefined;
+        while (sym_i < obj_inclusions_len) : (sym_i += 1) {
+            const sym_name = opt_symbol_name orelse n: {
+                const name = mem.sliceTo(metadata.inclusions[inc_i..], 0);
+                inc_i += name.len + 1;
+
+                opt_symbol_name = name;
+                versions_buffer = undefined;
+                versions_len = 0;
+                break :n name;
+            };
+            const targets = mem.readIntLittle(u32, metadata.inclusions[inc_i..][0..4]);
+            inc_i += 4;
+
+            const size = mem.readIntLittle(u16, metadata.inclusions[inc_i..][0..2]);
+            inc_i += 2;
+
+            const lib_index = metadata.inclusions[inc_i];
+            inc_i += 1;
+            const is_terminal = (targets & (1 << 31)) != 0;
+            if (is_terminal) opt_symbol_name = null;
+
+            // Test whether the inclusion applies to our current library and target.
+            const ok_lib_and_target =
+                (lib_index == lib_i) and
+                ((targets & (@as(u32, 1) << @intCast(u5, target_targ_index))) != 0);
+
+            while (true) {
+                const byte = metadata.inclusions[inc_i];
+                inc_i += 1;
+                const last = (byte & 0b1000_0000) != 0;
+                const ver_i = @truncate(u7, byte);
+                if (ok_lib_and_target and ver_i <= target_ver_index) {
+                    versions_buffer[versions_len] = ver_i;
+                    versions_len += 1;
+                }
+                if (last) break;
+            }
+
+            if (!is_terminal) continue;
+
+            // Pick the default symbol version:
+            // - If there are no versions, don't emit it
+            // - Take the greatest one <= than the target one
+            // - If none of them is <= than the
+            //   specified one don't pick any default version
+            if (versions_len == 0) continue;
+            var chosen_def_ver_index: u8 = 255;
+            {
+                var ver_buf_i: u8 = 0;
+                while (ver_buf_i < versions_len) : (ver_buf_i += 1) {
+                    const ver_index = versions_buffer[ver_buf_i];
+                    if (chosen_def_ver_index == 255 or ver_index > chosen_def_ver_index) {
+                        chosen_def_ver_index = ver_index;
+                    }
+                }
+            }
+            {
+                var ver_buf_i: u8 = 0;
+                while (ver_buf_i < versions_len) : (ver_buf_i += 1) {
+                    // Example:
+                    // .globl environ_2_2_5
+                    // .type environ_2_2_5, %object;
+                    // .size environ_2_2_5, 4;
+                    // .symver environ_2_2_5, environ@@GLIBC_2.2.5
+                    // environ_2_2_5:
+                    const ver_index = versions_buffer[ver_buf_i];
+                    const ver = metadata.all_versions[ver_index];
+                    // Default symbol version definition vs normal symbol version definition
+                    const want_default = chosen_def_ver_index != 255 and ver_index == chosen_def_ver_index;
+                    const at_sign_str: []const u8 = if (want_default) "@@" else "@";
+                    if (ver.patch == 0) {
+                        const sym_plus_ver = if (want_default)
+                            sym_name
+                        else
+                            try std.fmt.allocPrint(
+                                arena,
+                                "{s}_GLIBC_{d}_{d}",
+                                .{ sym_name, ver.major, ver.minor },
+                            );
+                        try stubs_asm.writer().print(
+                            \\.globl {s}
+                            \\.type {s}, %object;
+                            \\.size {s}, {d};
+                            \\.symver {s}, {s}{s}GLIBC_{d}.{d}
+                            \\{s}:
+                            \\
+                        , .{
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            size,
+                            sym_plus_ver,
+                            sym_name,
+                            at_sign_str,
+                            ver.major,
+                            ver.minor,
+                            sym_plus_ver,
+                        });
+                    } else {
+                        const sym_plus_ver = if (want_default)
+                            sym_name
+                        else
+                            try std.fmt.allocPrint(
+                                arena,
+                                "{s}_GLIBC_{d}_{d}_{d}",
+                                .{ sym_name, ver.major, ver.minor, ver.patch },
+                            );
+                        try stubs_asm.writer().print(
+                            \\.globl {s}
+                            \\.type {s}, %object;
+                            \\.size {s}, {d};
+                            \\.symver {s}, {s}{s}GLIBC_{d}.{d}.{d}
+                            \\{s}:
+                            \\
+                        , .{
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            sym_plus_ver,
+                            size,
+                            sym_plus_ver,
+                            sym_name,
+                            at_sign_str,
+                            ver.major,
+                            ver.minor,
+                            ver.patch,
+                            sym_plus_ver,
+                        });
+                    }
+                }
+            }
+        }
+
+        var lib_name_buf: [32]u8 = undefined; // Larger than each of the names "c", "pthread", etc.
+        const asm_file_basename = std.fmt.bufPrint(&lib_name_buf, "{s}.s", .{lib.name}) catch unreachable;
+        try o_directory.handle.writeFile(asm_file_basename, stubs_asm.items);
+
+        try buildSharedLib(comp, arena, comp.global_cache_directory, o_directory, asm_file_basename, lib);
+    }
+
+    man.writeManifest() catch |err| {
+        log.warn("failed to write cache manifest for glibc stubs: {s}", .{@errorName(err)});
+    };
+
+    assert(comp.glibc_so_files == null);
+    comp.glibc_so_files = BuiltSharedObjects{
+        .lock = man.toOwnedLock(),
+        .dir_path = try comp.global_cache_directory.join(comp.gpa, &.{ "o", &digest }),
+    };
+}
+
+// zig fmt: on
+
+fn buildSharedLib(
+    comp: *Compilation,
+    arena: Allocator,
+    zig_cache_directory: Compilation.Directory,
+    bin_directory: Compilation.Directory,
+    asm_file_basename: []const u8,
+    lib: Lib,
+) !void {
+    const tracy = trace(@src());
+    defer tracy.end();
+
+    const basename = try std.fmt.allocPrint(arena, "lib{s}.so.{d}", .{ lib.name, lib.sover });
+    const emit_bin = Compilation.EmitLoc{
+        .directory = bin_directory,
+        .basename = basename,
+    }
