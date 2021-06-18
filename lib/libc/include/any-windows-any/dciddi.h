@@ -58,4 +58,108 @@ extern "C" {
 #define DCI_OVERLAY 0x00000002
 #define DCI_VISIBLE 0x00000010
 #define DCI_CHROMAKEY 0x00000020
-#define 
+#define DCI_1632_ACCESS 0x00000040
+#define DCI_DWORDSIZE 0x00000080
+#define DCI_DWORDALIGN 0x00000100
+#define DCI_WRITEONLY 0x00000200
+#define DCI_ASYNC 0x00000400
+
+#define DCI_CAN_STRETCHX 0x00001000
+#define DCI_CAN_STRETCHY 0x00002000
+#define DCI_CAN_STRETCHXY (DCI_CAN_STRETCHX | DCI_CAN_STRETCHY)
+
+#define DCI_CAN_STRETCHXN 0x00004000
+#define DCI_CAN_STRETCHYN 0x00008000
+#define DCI_CAN_STRETCHXYN (DCI_CAN_STRETCHXN | DCI_CAN_STRETCHYN)
+
+#define DCI_CANOVERLAY 0x00010000
+
+  typedef int DCIRVAL;
+
+  typedef struct _DCICMD {
+    DWORD dwCommand;
+    DWORD dwParam1;
+    DWORD dwParam2;
+    DWORD dwVersion;
+    DWORD dwReserved;
+  } DCICMD;
+
+  typedef struct _DCICREATEINPUT {
+    DCICMD cmd;
+    DWORD dwCompression;
+    DWORD dwMask[3];
+    DWORD dwWidth;
+    DWORD dwHeight;
+    DWORD dwDCICaps;
+    DWORD dwBitCount;
+    LPVOID lpSurface;
+  } DCICREATEINPUT,*LPDCICREATEINPUT;
+
+  typedef struct _DCISURFACEINFO {
+    DWORD dwSize;
+    DWORD dwDCICaps;
+    DWORD dwCompression;
+    DWORD dwMask[3];
+    DWORD dwWidth;
+    DWORD dwHeight;
+    LONG lStride;
+    DWORD dwBitCount;
+    ULONG_PTR dwOffSurface;
+    WORD wSelSurface;
+    WORD wReserved;
+    DWORD dwReserved1;
+    DWORD dwReserved2;
+    DWORD dwReserved3;
+    DCIRVAL (CALLBACK *BeginAccess) (LPVOID,LPRECT);
+    void (CALLBACK *EndAccess) (LPVOID);
+    void (CALLBACK *DestroySurface) (LPVOID);
+  } DCISURFACEINFO,*LPDCISURFACEINFO;
+
+  typedef void (*ENUM_CALLBACK)(LPDCISURFACEINFO lpSurfaceInfo,LPVOID lpContext);
+
+  typedef struct _DCIENUMINPUT {
+    DCICMD cmd;
+    RECT rSrc;
+    RECT rDst;
+    void (CALLBACK *EnumCallback)(LPDCISURFACEINFO,LPVOID);
+    LPVOID lpContext;
+  } DCIENUMINPUT,*LPDCIENUMINPUT;
+
+  typedef DCISURFACEINFO DCIPRIMARY,*LPDCIPRIMARY;
+
+  typedef struct _DCIOFFSCREEN {
+    DCISURFACEINFO dciInfo;
+    DCIRVAL (CALLBACK *Draw) (LPVOID);
+    DCIRVAL (CALLBACK *SetClipList) (LPVOID,LPRGNDATA);
+    DCIRVAL (CALLBACK *SetDestination) (LPVOID,LPRECT,LPRECT);
+  } DCIOFFSCREEN,*LPDCIOFFSCREEN;
+
+  typedef struct _DCIOVERLAY {
+    DCISURFACEINFO dciInfo;
+    DWORD dwChromakeyValue;
+    DWORD dwChromakeyMask;
+  } DCIOVERLAY,*LPDCIOVERLAY;
+
+#ifndef YVU9
+#define YVU9 mmioFOURCC('Y','V','U','9')
+#endif
+#ifndef Y411
+#define Y411 mmioFOURCC('Y','4','1','1')
+#endif
+#ifndef YUY2
+#define YUY2 mmioFOURCC('Y','U','Y','2')
+#endif
+#ifndef YVYU
+#define YVYU mmioFOURCC('Y','V','Y','U')
+#endif
+#ifndef UYVY
+#define UYVY mmioFOURCC('U','Y','V','Y')
+#endif
+#ifndef Y211
+#define Y211 mmioFOURCC('Y','2','1','1')
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+#endif
