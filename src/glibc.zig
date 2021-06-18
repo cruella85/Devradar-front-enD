@@ -196,4 +196,202 @@ pub fn buildCRTFile(comp: *Compilation, crt_file: CRTFile) !void {
                 "-DASSEMBLER",
                 "-Wa,--noexecstack",
             });
-            return comp.build_crt_file("crti", .Obj, 
+            return comp.build_crt_file("crti", .Obj, &[1]Compilation.CSourceFile{
+                .{
+                    .src_path = try start_asm_path(comp, arena, "crti.S"),
+                    .cache_exempt_flags = args.items,
+                },
+            });
+        },
+        .crtn_o => {
+            var args = std.ArrayList([]const u8).init(arena);
+            try add_include_dirs(comp, arena, &args);
+            try args.appendSlice(&[_][]const u8{
+                "-D_LIBC_REENTRANT",
+                "-DMODULE_NAME=libc",
+                "-include",
+                try lib_path(comp, arena, lib_libc_glibc ++ "include" ++ path.sep_str ++ "libc-symbols.h"),
+                "-DTOP_NAMESPACE=glibc",
+                "-DASSEMBLER",
+                "-Wa,--noexecstack",
+            });
+            return comp.build_crt_file("crtn", .Obj, &[1]Compilation.CSourceFile{
+                .{
+                    .src_path = try start_asm_path(comp, arena, "crtn.S"),
+                    .cache_exempt_flags = args.items,
+                },
+            });
+        },
+        .scrt1_o => {
+            const start_o: Compilation.CSourceFile = blk: {
+                var args = std.ArrayList([]const u8).init(arena);
+                try add_include_dirs(comp, arena, &args);
+                try args.appendSlice(&[_][]const u8{
+                    "-D_LIBC_REENTRANT",
+                    "-include",
+                    try lib_path(comp, arena, lib_libc_glibc ++ "include" ++ path.sep_str ++ "libc-modules.h"),
+                    "-DMODULE_NAME=libc",
+                    "-Wno-nonportable-include-path",
+                    "-include",
+                    try lib_path(comp, arena, lib_libc_glibc ++ "include" ++ path.sep_str ++ "libc-symbols.h"),
+                    "-DPIC",
+                    "-DSHARED",
+                    "-DTOP_NAMESPACE=glibc",
+                    "-DASSEMBLER",
+                    "-Wa,--noexecstack",
+                });
+                const src_path = if (start_old_init_fini) "start-2.33.S" else "start.S";
+                break :blk .{
+                    .src_path = try start_asm_path(comp, arena, src_path),
+                    .cache_exempt_flags = args.items,
+                };
+            };
+            const abi_note_o: Compilation.CSourceFile = blk: {
+                var args = std.ArrayList([]const u8).init(arena);
+                try args.appendSlice(&[_][]const u8{
+                    "-I",
+                    try lib_path(comp, arena, lib_libc_glibc ++ "csu"),
+                });
+                try add_include_dirs(comp, arena, &args);
+                try args.appendSlice(&[_][]const u8{
+                    "-D_LIBC_REENTRANT",
+                    "-DMODULE_NAME=libc",
+                    "-DTOP_NAMESPACE=glibc",
+                    "-DASSEMBLER",
+                    "-Wa,--noexecstack",
+                });
+                break :blk .{
+                    .src_path = try lib_path(comp, arena, lib_libc_glibc ++ "csu" ++ path.sep_str ++ "abi-note.S"),
+                    .cache_exempt_flags = args.items,
+                };
+            };
+            return comp.build_crt_file("Scrt1", .Obj, &[_]Compilation.CSourceFile{ start_o, abi_note_o });
+        },
+        .libc_nonshared_a => {
+            const s = path.sep_str;
+            const linux_prefix = lib_libc_glibc ++
+                "sysdeps" ++ s ++ "unix" ++ s ++ "sysv" ++ s ++ "linux" ++ s;
+            const Flavor = enum { nonshared, shared };
+            const Dep = struct {
+                path: []const u8,
+                flavor: Flavor = .shared,
+                exclude: bool = false,
+            };
+            const deps = [_]Dep{
+                .{
+                    .path = lib_libc_glibc ++ "stdlib" ++ s ++ "atexit.c",
+                    .flavor = .nonshared,
+                },
+                .{
+                    .path = lib_libc_glibc ++ "stdlib" ++ s ++ "at_quick_exit.c",
+                    .flavor = .nonshared,
+                },
+                .{
+                    .path = lib_libc_glibc ++ "sysdeps" ++ s ++ "pthread" ++ s ++ "pthread_atfork.c",
+                    .flavor = .nonshared,
+                },
+                .{
+                    .path = lib_libc_glibc ++ "debug" ++ s ++ "stack_chk_fail_local.c",
+                    .flavor = .nonshared,
+                },
+                .{ .path = lib_libc_glibc ++ "csu" ++ s ++ "errno.c" },
+                .{
+                    .path = lib_libc_glibc ++ "csu" ++ s ++ "elf-init-2.33.c",
+                    .exclude = !start_old_init_fini,
+                },
+                .{ .path = linux_prefix ++ "stat.c" },
+                .{ .path = linux_prefix ++ "fstat.c" },
+                .{ .path = linux_prefix ++ "lstat.c" },
+                .{ .path = linux_prefix ++ "stat64.c" },
+                .{ .path = linux_prefix ++ "fstat64.c" },
+                .{ .path = linux_prefix ++ "lstat64.c" },
+                .{ .path = linux_prefix ++ "fstatat.c" },
+                .{ .path = linux_prefix ++ "fstatat64.c" },
+                .{ .path = linux_prefix ++ "mknodat.c" },
+                .{ .path = lib_libc_glibc ++ "io" ++ s ++ "mknod.c" },
+                .{ .path = linux_prefix ++ "stat_t64_cp.c" },
+            };
+
+            var files_buf: [deps.len]Compilation.CSourceFile = undefined;
+            var files_index: usize = 0;
+
+            for (deps) |dep| {
+                if (dep.exclude) continue;
+
+                var args = std.ArrayList([]const u8).init(arena);
+                try args.appendSlice(&[_][]const u8{
+                    "-std=gnu11",
+                    "-fgnu89-inline",
+                    "-fmerge-all-constants",
+                    // glibc sets this flag but clang does not support it.
+                    // "-frounding-math",
+                    "-fno-stack-protector",
+                    "-fno-common",
+                    "-fmath-errno",
+                    "-ftls-model=initial-exec",
+                    "-Wno-ignored-attributes",
+                });
+                try add_include_dirs(comp, arena, &args);
+
+                if (target.cpu.arch == .x86) {
+                    // This prevents i386/sysdep.h from trying to do some
+                    // silly and unnecessary inline asm hack that uses weird
+                    // syntax that clang does not support.
+                    try args.append("-DCAN_USE_REGISTER_ASM_EBP");
+                }
+
+                const shared_def = switch (dep.flavor) {
+                    .nonshared => "-DLIBC_NONSHARED=1",
+                    // glibc passes `-DSHARED` for these. However, empirically if
+                    // we do that here we will see undefined symbols such as `__GI_memcpy`.
+                    // So we pass the same thing as for nonshared.
+                    .shared => "-DLIBC_NONSHARED=1",
+                };
+                try args.appendSlice(&[_][]const u8{
+                    "-D_LIBC_REENTRANT",
+                    "-include",
+                    try lib_path(comp, arena, lib_libc_glibc ++ "include" ++ path.sep_str ++ "libc-modules.h"),
+                    "-DMODULE_NAME=libc",
+                    "-Wno-nonportable-include-path",
+                    "-include",
+                    try lib_path(comp, arena, lib_libc_glibc ++ "include" ++ path.sep_str ++ "libc-symbols.h"),
+                    "-DPIC",
+                    shared_def,
+                    "-DTOP_NAMESPACE=glibc",
+                });
+                files_buf[files_index] = .{
+                    .src_path = try lib_path(comp, arena, dep.path),
+                    .cache_exempt_flags = args.items,
+                };
+                files_index += 1;
+            }
+            const files = files_buf[0..files_index];
+            return comp.build_crt_file("c_nonshared", .Lib, files);
+        },
+    }
+}
+
+fn start_asm_path(comp: *Compilation, arena: Allocator, basename: []const u8) ![]const u8 {
+    const arch = comp.getTarget().cpu.arch;
+    const is_ppc = arch == .powerpc or arch == .powerpc64 or arch == .powerpc64le;
+    const is_aarch64 = arch == .aarch64 or arch == .aarch64_be;
+    const is_sparc = arch == .sparc or arch == .sparcel or arch == .sparc64;
+    const is_64 = arch.ptrBitWidth() == 64;
+
+    const s = path.sep_str;
+
+    var result = std.ArrayList(u8).init(arena);
+    try result.appendSlice(comp.zig_lib_directory.path.?);
+    try result.appendSlice(s ++ "libc" ++ s ++ "glibc" ++ s ++ "sysdeps" ++ s);
+    if (is_sparc) {
+        if (mem.eql(u8, basename, "crti.S") or mem.eql(u8, basename, "crtn.S")) {
+            try result.appendSlice("sparc");
+        } else {
+            if (is_64) {
+                try result.appendSlice("sparc" ++ s ++ "sparc64");
+            } else {
+                try result.appendSlice("sparc" ++ s ++ "sparc32");
+            }
+        }
+    } else if (arch.isARM()) {
+        try 
