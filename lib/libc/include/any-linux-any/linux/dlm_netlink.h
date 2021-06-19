@@ -48,4 +48,13 @@ enum {
 
 enum {
 	DLM_TYPE_UNSPEC = 0,
-	DLM_TYP
+	DLM_TYPE_LOCK,
+	__DLM_TYPE_MAX,
+};
+
+#define DLM_TYPE_MAX (__DLM_TYPE_MAX - 1)
+
+#define DLM_GENL_VERSION 0x1
+#define DLM_GENL_NAME "DLM"
+
+#endif /* _DLM_NETLINK_H */
