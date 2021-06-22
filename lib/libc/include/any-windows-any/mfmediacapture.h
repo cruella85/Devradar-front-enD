@@ -222,3 +222,77 @@ IAdvancedMediaCapture : public IUnknown
         IAdvancedMediaCaptureSettings **ppSettings) = 0;
 
 };
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAdvancedMediaCapture, 0xd0751585, 0xd216, 0x4344, 0xb5,0xbf, 0x46,0x3b,0x68,0xf9,0x77,0xbb)
+#endif
+#else
+typedef struct IAdvancedMediaCaptureVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAdvancedMediaCapture *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAdvancedMediaCapture *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAdvancedMediaCapture *This);
+
+    /*** IAdvancedMediaCapture methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetAdvancedMediaCaptureSettings)(
+        IAdvancedMediaCapture *This,
+        IAdvancedMediaCaptureSettings **ppSettings);
+
+    END_INTERFACE
+} IAdvancedMediaCaptureVtbl;
+
+interface IAdvancedMediaCapture {
+    CONST_VTBL IAdvancedMediaCaptureVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAdvancedMediaCapture_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAdvancedMediaCapture_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAdvancedMediaCapture_Release(This) (This)->lpVtbl->Release(This)
+/*** IAdvancedMediaCapture methods ***/
+#define IAdvancedMediaCapture_GetAdvancedMediaCaptureSettings(This,ppSettings) (This)->lpVtbl->GetAdvancedMediaCaptureSettings(This,ppSettings)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAdvancedMediaCapture_QueryInterface(IAdvancedMediaCapture* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAdvancedMediaCapture_AddRef(IAdvancedMediaCapture* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAdvancedMediaCapture_Release(IAdvancedMediaCapture* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAdvancedMediaCapture methods ***/
+static FORCEINLINE HRESULT IAdvancedMediaCapture_GetAdvancedMediaCaptureSettings(IAdvancedMediaCapture* This,IAdvancedMediaCaptureSettings **ppSettings) {
+    return This->lpVtbl->GetAdvancedMediaCaptureSettings(This,ppSettings);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAdvancedMediaCapture_INTERFACE_DEFINED__ */
+
+#endif /* WINAPI_PARTITION_APP */
+#endif /* NTDDI >= NTDDI_WIN8 */
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __mfmediacapture_h__ */
