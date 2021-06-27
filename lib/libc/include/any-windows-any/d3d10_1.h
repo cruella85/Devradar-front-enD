@@ -208,4 +208,222 @@ interface ID3D10BlendState1 {
 #define ID3D10BlendState1_GetDesc1(This,pDesc) (This)->lpVtbl->GetDesc1(This,pDesc)
 #else
 /*** IUnknown methods ***/
-static FORCEINLINE HRESULT ID3D10BlendState1_QueryInterface(ID3D10BlendState1* This,RE
+static FORCEINLINE HRESULT ID3D10BlendState1_QueryInterface(ID3D10BlendState1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D10BlendState1_AddRef(ID3D10BlendState1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D10BlendState1_Release(ID3D10BlendState1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D10DeviceChild methods ***/
+static FORCEINLINE void ID3D10BlendState1_GetDevice(ID3D10BlendState1* This,ID3D10Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D10BlendState1_GetPrivateData(ID3D10BlendState1* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D10BlendState1_SetPrivateData(ID3D10BlendState1* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D10BlendState1_SetPrivateDataInterface(ID3D10BlendState1* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D10BlendState methods ***/
+static FORCEINLINE void ID3D10BlendState1_GetDesc(ID3D10BlendState1* This,D3D10_BLEND_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+/*** ID3D10BlendState1 methods ***/
+static FORCEINLINE void ID3D10BlendState1_GetDesc1(ID3D10BlendState1* This,D3D10_BLEND_DESC1 *pDesc) {
+    This->lpVtbl->GetDesc1(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D10BlendState1_INTERFACE_DEFINED__ */
+
+typedef struct D3D10_TEXCUBE_ARRAY_SRV1 {
+    UINT MostDetailedMip;
+    UINT MipLevels;
+    UINT First2DArrayFace;
+    UINT NumCubes;
+} D3D10_TEXCUBE_ARRAY_SRV1;
+typedef D3D_SRV_DIMENSION D3D10_SRV_DIMENSION1;
+typedef struct D3D10_SHADER_RESOURCE_VIEW_DESC1 {
+    DXGI_FORMAT Format;
+    D3D10_SRV_DIMENSION1 ViewDimension;
+    __C89_NAMELESS union {
+        D3D10_BUFFER_SRV Buffer;
+        D3D10_TEX1D_SRV Texture1D;
+        D3D10_TEX1D_ARRAY_SRV Texture1DArray;
+        D3D10_TEX2D_SRV Texture2D;
+        D3D10_TEX2D_ARRAY_SRV Texture2DArray;
+        D3D10_TEX2DMS_SRV Texture2DMS;
+        D3D10_TEX2DMS_ARRAY_SRV Texture2DMSArray;
+        D3D10_TEX3D_SRV Texture3D;
+        D3D10_TEXCUBE_SRV TextureCube;
+        D3D10_TEXCUBE_ARRAY_SRV1 TextureCubeArray;
+    } __C89_NAMELESSUNIONNAME;
+} D3D10_SHADER_RESOURCE_VIEW_DESC1;
+/*****************************************************************************
+ * ID3D10ShaderResourceView1 interface
+ */
+#ifndef __ID3D10ShaderResourceView1_INTERFACE_DEFINED__
+#define __ID3D10ShaderResourceView1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D10ShaderResourceView1, 0x9b7e4c87, 0x342c, 0x4106, 0xa1,0x9f, 0x4f,0x27,0x04,0xf6,0x89,0xf0);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9b7e4c87-342c-4106-a19f-4f2704f689f0")
+ID3D10ShaderResourceView1 : public ID3D10ShaderResourceView
+{
+    virtual void STDMETHODCALLTYPE GetDesc1(
+        D3D10_SHADER_RESOURCE_VIEW_DESC1 *pDesc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D10ShaderResourceView1, 0x9b7e4c87, 0x342c, 0x4106, 0xa1,0x9f, 0x4f,0x27,0x04,0xf6,0x89,0xf0)
+#endif
+#else
+typedef struct ID3D10ShaderResourceView1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D10ShaderResourceView1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D10ShaderResourceView1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D10ShaderResourceView1 *This);
+
+    /*** ID3D10DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D10ShaderResourceView1 *This,
+        ID3D10Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D10ShaderResourceView1 *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D10ShaderResourceView1 *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D10ShaderResourceView1 *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D10View methods ***/
+    void (STDMETHODCALLTYPE *GetResource)(
+        ID3D10ShaderResourceView1 *This,
+        ID3D10Resource **ppResource);
+
+    /*** ID3D10ShaderResourceView methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D10ShaderResourceView1 *This,
+        D3D10_SHADER_RESOURCE_VIEW_DESC *pDesc);
+
+    /*** ID3D10ShaderResourceView1 methods ***/
+    void (STDMETHODCALLTYPE *GetDesc1)(
+        ID3D10ShaderResourceView1 *This,
+        D3D10_SHADER_RESOURCE_VIEW_DESC1 *pDesc);
+
+    END_INTERFACE
+} ID3D10ShaderResourceView1Vtbl;
+
+interface ID3D10ShaderResourceView1 {
+    CONST_VTBL ID3D10ShaderResourceView1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D10ShaderResourceView1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D10ShaderResourceView1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D10ShaderResourceView1_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D10DeviceChild methods ***/
+#define ID3D10ShaderResourceView1_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D10ShaderResourceView1_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D10ShaderResourceView1_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D10ShaderResourceView1_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D10View methods ***/
+#define ID3D10ShaderResourceView1_GetResource(This,ppResource) (This)->lpVtbl->GetResource(This,ppResource)
+/*** ID3D10ShaderResourceView methods ***/
+#define ID3D10ShaderResourceView1_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+/*** ID3D10ShaderResourceView1 methods ***/
+#define ID3D10ShaderResourceView1_GetDesc1(This,pDesc) (This)->lpVtbl->GetDesc1(This,pDesc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D10ShaderResourceView1_QueryInterface(ID3D10ShaderResourceView1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D10ShaderResourceView1_AddRef(ID3D10ShaderResourceView1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D10ShaderResourceView1_Release(ID3D10ShaderResourceView1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D10DeviceChild methods ***/
+static FORCEINLINE void ID3D10ShaderResourceView1_GetDevice(ID3D10ShaderResourceView1* This,ID3D10Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D10ShaderResourceView1_GetPrivateData(ID3D10ShaderResourceView1* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D10ShaderResourceView1_SetPrivateData(ID3D10ShaderResourceView1* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D10ShaderResourceView1_SetPrivateDataInterface(ID3D10ShaderResourceView1* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D10View methods ***/
+static FORCEINLINE void ID3D10ShaderResourceView1_GetResource(ID3D10ShaderResourceView1* This,ID3D10Resource **ppResource) {
+    This->lpVtbl->GetResource(This,ppResource);
+}
+/*** ID3D10ShaderResourceView methods ***/
+static FORCEINLINE void ID3D10ShaderResourceView1_GetDesc(ID3D10ShaderResourceView1* This,D3D10_SHADER_RESOURCE_VIEW_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+/*** ID3D10ShaderResourceView1 methods ***/
+static FORCEINLINE void ID3D10ShaderResourceView1_GetDesc1(ID3D10ShaderResourceView1* This,D3D10_SHADER_RESOURCE_VIEW_DESC1 *pDesc) {
+    This->lpVtbl->GetDesc1(This,pDesc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D10ShaderResourceView1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D10Device1 interface
+ */
+#ifndef __ID3D10Device1_INTERFACE_DEFINED__
+#define __ID3D10Device1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D10Device1, 0x9b7e4c8f, 0x342c, 0x4106, 0xa1,0x9f, 0x4f,0x27,0x04,0xf6,0x89,0xf0);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9b7e4c8f-342c-4106-a19f-4f2704f689f0")
+ID3D10Device1 : public ID3D10Device
+{
+    virtual HRESULT STDMETHODCALLTYPE CreateShaderResourceView1(
+        ID3D10Resource *pResource,
+        const D3D10_SHADER_RESOURCE_VIEW_DESC1 *pDesc,
+        ID3D10ShaderResourceView1 **ppSRView) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateBlendState1(
+        const D3D10_BLEND_DESC1 *pBlendStateDesc,
+        ID3D10BlendState1 **ppBlendSta
