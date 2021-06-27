@@ -1068,4 +1068,91 @@ interface ID3D10Device1 {
 #define ID3D10Device1_OMGetDepthStencilState(This,ppDepthStencilState,pStencilRef) (This)->lpVtbl->OMGetDepthStencilState(This,ppDepthStencilState,pStencilRef)
 #define ID3D10Device1_SOGetTargets(This,NumBuffers,ppSOTargets,pOffsets) (This)->lpVtbl->SOGetTargets(This,NumBuffers,ppSOTargets,pOffsets)
 #define ID3D10Device1_RSGetState(This,ppRasterizerState) (This)->lpVtbl->RSGetState(This,ppRasterizerState)
-#define ID3D10Device1
+#define ID3D10Device1_RSGetViewports(This,NumViewports,pViewports) (This)->lpVtbl->RSGetViewports(This,NumViewports,pViewports)
+#define ID3D10Device1_RSGetScissorRects(This,NumRects,pRects) (This)->lpVtbl->RSGetScissorRects(This,NumRects,pRects)
+#define ID3D10Device1_GetDeviceRemovedReason(This) (This)->lpVtbl->GetDeviceRemovedReason(This)
+#define ID3D10Device1_SetExceptionMode(This,RaiseFlags) (This)->lpVtbl->SetExceptionMode(This,RaiseFlags)
+#define ID3D10Device1_GetExceptionMode(This) (This)->lpVtbl->GetExceptionMode(This)
+#define ID3D10Device1_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D10Device1_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D10Device1_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+#define ID3D10Device1_ClearState(This) (This)->lpVtbl->ClearState(This)
+#define ID3D10Device1_Flush(This) (This)->lpVtbl->Flush(This)
+#define ID3D10Device1_CreateBuffer(This,pDesc,pInitialData,ppBuffer) (This)->lpVtbl->CreateBuffer(This,pDesc,pInitialData,ppBuffer)
+#define ID3D10Device1_CreateTexture1D(This,pDesc,pInitialData,ppTexture1D) (This)->lpVtbl->CreateTexture1D(This,pDesc,pInitialData,ppTexture1D)
+#define ID3D10Device1_CreateTexture2D(This,pDesc,pInitialData,ppTexture2D) (This)->lpVtbl->CreateTexture2D(This,pDesc,pInitialData,ppTexture2D)
+#define ID3D10Device1_CreateTexture3D(This,pDesc,pInitialData,ppTexture3D) (This)->lpVtbl->CreateTexture3D(This,pDesc,pInitialData,ppTexture3D)
+#define ID3D10Device1_CreateShaderResourceView(This,pResource,pDesc,ppSRView) (This)->lpVtbl->CreateShaderResourceView(This,pResource,pDesc,ppSRView)
+#define ID3D10Device1_CreateRenderTargetView(This,pResource,pDesc,ppRTView) (This)->lpVtbl->CreateRenderTargetView(This,pResource,pDesc,ppRTView)
+#define ID3D10Device1_CreateDepthStencilView(This,pResource,pDesc,ppDepthStencilView) (This)->lpVtbl->CreateDepthStencilView(This,pResource,pDesc,ppDepthStencilView)
+#define ID3D10Device1_CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout) (This)->lpVtbl->CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout)
+#define ID3D10Device1_CreateVertexShader(This,pShaderBytecode,BytecodeLength,ppVertexShader) (This)->lpVtbl->CreateVertexShader(This,pShaderBytecode,BytecodeLength,ppVertexShader)
+#define ID3D10Device1_CreateGeometryShader(This,pShaderBytecode,BytecodeLength,ppGeometryShader) (This)->lpVtbl->CreateGeometryShader(This,pShaderBytecode,BytecodeLength,ppGeometryShader)
+#define ID3D10Device1_CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,OutputStreamStride,ppGeometryShader) (This)->lpVtbl->CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,OutputStreamStride,ppGeometryShader)
+#define ID3D10Device1_CreatePixelShader(This,pShaderBytecode,BytecodeLength,ppPixelShader) (This)->lpVtbl->CreatePixelShader(This,pShaderBytecode,BytecodeLength,ppPixelShader)
+#define ID3D10Device1_CreateBlendState(This,pBlendStateDesc,ppBlendState) (This)->lpVtbl->CreateBlendState(This,pBlendStateDesc,ppBlendState)
+#define ID3D10Device1_CreateDepthStencilState(This,pDepthStencilDesc,ppDepthStencilState) (This)->lpVtbl->CreateDepthStencilState(This,pDepthStencilDesc,ppDepthStencilState)
+#define ID3D10Device1_CreateRasterizerState(This,pRasterizerDesc,ppRasterizerState) (This)->lpVtbl->CreateRasterizerState(This,pRasterizerDesc,ppRasterizerState)
+#define ID3D10Device1_CreateSamplerState(This,pSamplerDesc,ppSamplerState) (This)->lpVtbl->CreateSamplerState(This,pSamplerDesc,ppSamplerState)
+#define ID3D10Device1_CreateQuery(This,pQueryDesc,ppQuery) (This)->lpVtbl->CreateQuery(This,pQueryDesc,ppQuery)
+#define ID3D10Device1_CreatePredicate(This,pPredicateDesc,ppPredicate) (This)->lpVtbl->CreatePredicate(This,pPredicateDesc,ppPredicate)
+#define ID3D10Device1_CreateCounter(This,pCounterDesc,ppCounter) (This)->lpVtbl->CreateCounter(This,pCounterDesc,ppCounter)
+#define ID3D10Device1_CheckFormatSupport(This,Format,pFormatSupport) (This)->lpVtbl->CheckFormatSupport(This,Format,pFormatSupport)
+#define ID3D10Device1_CheckMultisampleQualityLevels(This,Format,SampleCount,pNumQualityLevels) (This)->lpVtbl->CheckMultisampleQualityLevels(This,Format,SampleCount,pNumQualityLevels)
+#define ID3D10Device1_CheckCounterInfo(This,pCounterInfo) (This)->lpVtbl->CheckCounterInfo(This,pCounterInfo)
+#define ID3D10Device1_CheckCounter(This,pDesc,pType,pActiveCounters,name,pNameLength,units,pUnitsLength,description,pDescriptionLength) (This)->lpVtbl->CheckCounter(This,pDesc,pType,pActiveCounters,name,pNameLength,units,pUnitsLength,description,pDescriptionLength)
+#define ID3D10Device1_GetCreationFlags(This) (This)->lpVtbl->GetCreationFlags(This)
+#define ID3D10Device1_OpenSharedResource(This,hResource,ReturnedInterface,ppResource) (This)->lpVtbl->OpenSharedResource(This,hResource,ReturnedInterface,ppResource)
+#define ID3D10Device1_SetTextFilterSize(This,Width,Height) (This)->lpVtbl->SetTextFilterSize(This,Width,Height)
+#define ID3D10Device1_GetTextFilterSize(This,pWidth,pHeight) (This)->lpVtbl->GetTextFilterSize(This,pWidth,pHeight)
+/*** ID3D10Device1 methods ***/
+#define ID3D10Device1_CreateShaderResourceView1(This,pResource,pDesc,ppSRView) (This)->lpVtbl->CreateShaderResourceView1(This,pResource,pDesc,ppSRView)
+#define ID3D10Device1_CreateBlendState1(This,pBlendStateDesc,ppBlendState) (This)->lpVtbl->CreateBlendState1(This,pBlendStateDesc,ppBlendState)
+#define ID3D10Device1_GetFeatureLevel(This) (This)->lpVtbl->GetFeatureLevel(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D10Device1_QueryInterface(ID3D10Device1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D10Device1_AddRef(ID3D10Device1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D10Device1_Release(ID3D10Device1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D10Device methods ***/
+static FORCEINLINE void ID3D10Device1_VSSetConstantBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer *const *ppConstantBuffers) {
+    This->lpVtbl->VSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D10Device1_PSSetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->PSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D10Device1_PSSetShader(ID3D10Device1* This,ID3D10PixelShader *pPixelShader) {
+    This->lpVtbl->PSSetShader(This,pPixelShader);
+}
+static FORCEINLINE void ID3D10Device1_PSSetSamplers(ID3D10Device1* This,UINT StartSlot,UINT NumSamplers,ID3D10SamplerState *const *ppSamplers) {
+    This->lpVtbl->PSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D10Device1_VSSetShader(ID3D10Device1* This,ID3D10VertexShader *pVertexShader) {
+    This->lpVtbl->VSSetShader(This,pVertexShader);
+}
+static FORCEINLINE void ID3D10Device1_DrawIndexed(ID3D10Device1* This,UINT IndexCount,UINT StartIndexLocation,INT BaseVertexLocation) {
+    This->lpVtbl->DrawIndexed(This,IndexCount,StartIndexLocation,BaseVertexLocation);
+}
+static FORCEINLINE void ID3D10Device1_Draw(ID3D10Device1* This,UINT VertexCount,UINT StartVertexLocation) {
+    This->lpVtbl->Draw(This,VertexCount,StartVertexLocation);
+}
+static FORCEINLINE void ID3D10Device1_PSSetConstantBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer *const *ppConstantBuffers) {
+    This->lpVtbl->PSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D10Device1_IASetInputLayout(ID3D10Device1* This,ID3D10InputLayout *pInputLayout) {
+    This->lpVtbl->IASetInputLayout(This,pInputLayout);
+}
+static FORCEINLINE void ID3D10Device1_IASetVertexBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer *const *ppVertexBuffers,const UINT *pStrides,const UINT *pOffsets) {
+    This->lpVtbl->IASetVertexBuffers(This,StartSlot,NumBuffers,ppVertexBuffers,pStrides,pOffsets);
+}
+static FORCEINLINE void ID3D10Device1_IASetIndexBuffer(ID3D10Device1* This,ID3D10Buffer *pIndexBuffer,DXGI_FORMAT Format,UINT Offset) {
+    This->lpVtbl->IASetIndexBuffer(This,pIndexBuffer,Format,Offset);
+}
+static FORCEINLINE void ID3D10Device1_DrawIndexedInstanced(ID3D10Device1* This,UINT IndexCountPerInstance,UINT InstanceCount,UINT StartIndexLocation,INT BaseVertexLocation,UINT StartInstanceLocation) {
+    This->lpVtbl->DrawIndexedInstanced(This,IndexCountPerInstance,InstanceCount,Star
