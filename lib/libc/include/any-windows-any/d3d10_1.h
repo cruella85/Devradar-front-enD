@@ -1274,4 +1274,118 @@ static FORCEINLINE void ID3D10Device1_VSGetSamplers(ID3D10Device1* This,UINT Sta
 static FORCEINLINE void ID3D10Device1_GetPredication(ID3D10Device1* This,ID3D10Predicate **ppPredicate,WINBOOL *pPredicateValue) {
     This->lpVtbl->GetPredication(This,ppPredicate,pPredicateValue);
 }
-static FORCEINLINE void ID3D10Device1_GSGetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView *
+static FORCEINLINE void ID3D10Device1_GSGetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView **ppShaderResourceViews) {
+    This->lpVtbl->GSGetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D10Device1_GSGetSamplers(ID3D10Device1* This,UINT StartSlot,UINT NumSamplers,ID3D10SamplerState **ppSamplers) {
+    This->lpVtbl->GSGetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D10Device1_OMGetRenderTargets(ID3D10Device1* This,UINT NumViews,ID3D10RenderTargetView **ppRenderTargetViews,ID3D10DepthStencilView **ppDepthStencilView) {
+    This->lpVtbl->OMGetRenderTargets(This,NumViews,ppRenderTargetViews,ppDepthStencilView);
+}
+static FORCEINLINE void ID3D10Device1_OMGetBlendState(ID3D10Device1* This,ID3D10BlendState **ppBlendState,FLOAT BlendFactor[4],UINT *pSampleMask) {
+    This->lpVtbl->OMGetBlendState(This,ppBlendState,BlendFactor,pSampleMask);
+}
+static FORCEINLINE void ID3D10Device1_OMGetDepthStencilState(ID3D10Device1* This,ID3D10DepthStencilState **ppDepthStencilState,UINT *pStencilRef) {
+    This->lpVtbl->OMGetDepthStencilState(This,ppDepthStencilState,pStencilRef);
+}
+static FORCEINLINE void ID3D10Device1_SOGetTargets(ID3D10Device1* This,UINT NumBuffers,ID3D10Buffer **ppSOTargets,UINT *pOffsets) {
+    This->lpVtbl->SOGetTargets(This,NumBuffers,ppSOTargets,pOffsets);
+}
+static FORCEINLINE void ID3D10Device1_RSGetState(ID3D10Device1* This,ID3D10RasterizerState **ppRasterizerState) {
+    This->lpVtbl->RSGetState(This,ppRasterizerState);
+}
+static FORCEINLINE void ID3D10Device1_RSGetViewports(ID3D10Device1* This,UINT *NumViewports,D3D10_VIEWPORT *pViewports) {
+    This->lpVtbl->RSGetViewports(This,NumViewports,pViewports);
+}
+static FORCEINLINE void ID3D10Device1_RSGetScissorRects(ID3D10Device1* This,UINT *NumRects,D3D10_RECT *pRects) {
+    This->lpVtbl->RSGetScissorRects(This,NumRects,pRects);
+}
+static FORCEINLINE HRESULT ID3D10Device1_GetDeviceRemovedReason(ID3D10Device1* This) {
+    return This->lpVtbl->GetDeviceRemovedReason(This);
+}
+static FORCEINLINE HRESULT ID3D10Device1_SetExceptionMode(ID3D10Device1* This,UINT RaiseFlags) {
+    return This->lpVtbl->SetExceptionMode(This,RaiseFlags);
+}
+static FORCEINLINE UINT ID3D10Device1_GetExceptionMode(ID3D10Device1* This) {
+    return This->lpVtbl->GetExceptionMode(This);
+}
+static FORCEINLINE HRESULT ID3D10Device1_GetPrivateData(ID3D10Device1* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D10Device1_SetPrivateData(ID3D10Device1* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D10Device1_SetPrivateDataInterface(ID3D10Device1* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+static FORCEINLINE void ID3D10Device1_ClearState(ID3D10Device1* This) {
+    This->lpVtbl->ClearState(This);
+}
+static FORCEINLINE void ID3D10Device1_Flush(ID3D10Device1* This) {
+    This->lpVtbl->Flush(This);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateBuffer(ID3D10Device1* This,const D3D10_BUFFER_DESC *pDesc,const D3D10_SUBRESOURCE_DATA *pInitialData,ID3D10Buffer **ppBuffer) {
+    return This->lpVtbl->CreateBuffer(This,pDesc,pInitialData,ppBuffer);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateTexture1D(ID3D10Device1* This,const D3D10_TEXTURE1D_DESC *pDesc,const D3D10_SUBRESOURCE_DATA *pInitialData,ID3D10Texture1D **ppTexture1D) {
+    return This->lpVtbl->CreateTexture1D(This,pDesc,pInitialData,ppTexture1D);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateTexture2D(ID3D10Device1* This,const D3D10_TEXTURE2D_DESC *pDesc,const D3D10_SUBRESOURCE_DATA *pInitialData,ID3D10Texture2D **ppTexture2D) {
+    return This->lpVtbl->CreateTexture2D(This,pDesc,pInitialData,ppTexture2D);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateTexture3D(ID3D10Device1* This,const D3D10_TEXTURE3D_DESC *pDesc,const D3D10_SUBRESOURCE_DATA *pInitialData,ID3D10Texture3D **ppTexture3D) {
+    return This->lpVtbl->CreateTexture3D(This,pDesc,pInitialData,ppTexture3D);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateShaderResourceView(ID3D10Device1* This,ID3D10Resource *pResource,const D3D10_SHADER_RESOURCE_VIEW_DESC *pDesc,ID3D10ShaderResourceView **ppSRView) {
+    return This->lpVtbl->CreateShaderResourceView(This,pResource,pDesc,ppSRView);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateRenderTargetView(ID3D10Device1* This,ID3D10Resource *pResource,const D3D10_RENDER_TARGET_VIEW_DESC *pDesc,ID3D10RenderTargetView **ppRTView) {
+    return This->lpVtbl->CreateRenderTargetView(This,pResource,pDesc,ppRTView);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateDepthStencilView(ID3D10Device1* This,ID3D10Resource *pResource,const D3D10_DEPTH_STENCIL_VIEW_DESC *pDesc,ID3D10DepthStencilView **ppDepthStencilView) {
+    return This->lpVtbl->CreateDepthStencilView(This,pResource,pDesc,ppDepthStencilView);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateInputLayout(ID3D10Device1* This,const D3D10_INPUT_ELEMENT_DESC *pInputElementDescs,UINT NumElements,const void *pShaderBytecodeWithInputSignature,SIZE_T BytecodeLength,ID3D10InputLayout **ppInputLayout) {
+    return This->lpVtbl->CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateVertexShader(ID3D10Device1* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D10VertexShader **ppVertexShader) {
+    return This->lpVtbl->CreateVertexShader(This,pShaderBytecode,BytecodeLength,ppVertexShader);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateGeometryShader(ID3D10Device1* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D10GeometryShader **ppGeometryShader) {
+    return This->lpVtbl->CreateGeometryShader(This,pShaderBytecode,BytecodeLength,ppGeometryShader);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateGeometryShaderWithStreamOutput(ID3D10Device1* This,const void *pShaderBytecode,SIZE_T BytecodeLength,const D3D10_SO_DECLARATION_ENTRY *pSODeclaration,UINT NumEntries,UINT OutputStreamStride,ID3D10GeometryShader **ppGeometryShader) {
+    return This->lpVtbl->CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,OutputStreamStride,ppGeometryShader);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreatePixelShader(ID3D10Device1* This,const void *pShaderBytecode,SIZE_T BytecodeLength,ID3D10PixelShader **ppPixelShader) {
+    return This->lpVtbl->CreatePixelShader(This,pShaderBytecode,BytecodeLength,ppPixelShader);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateBlendState(ID3D10Device1* This,const D3D10_BLEND_DESC *pBlendStateDesc,ID3D10BlendState **ppBlendState) {
+    return This->lpVtbl->CreateBlendState(This,pBlendStateDesc,ppBlendState);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateDepthStencilState(ID3D10Device1* This,const D3D10_DEPTH_STENCIL_DESC *pDepthStencilDesc,ID3D10DepthStencilState **ppDepthStencilState) {
+    return This->lpVtbl->CreateDepthStencilState(This,pDepthStencilDesc,ppDepthStencilState);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateRasterizerState(ID3D10Device1* This,const D3D10_RASTERIZER_DESC *pRasterizerDesc,ID3D10RasterizerState **ppRasterizerState) {
+    return This->lpVtbl->CreateRasterizerState(This,pRasterizerDesc,ppRasterizerState);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateSamplerState(ID3D10Device1* This,const D3D10_SAMPLER_DESC *pSamplerDesc,ID3D10SamplerState **ppSamplerState) {
+    return This->lpVtbl->CreateSamplerState(This,pSamplerDesc,ppSamplerState);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateQuery(ID3D10Device1* This,const D3D10_QUERY_DESC *pQueryDesc,ID3D10Query **ppQuery) {
+    return This->lpVtbl->CreateQuery(This,pQueryDesc,ppQuery);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreatePredicate(ID3D10Device1* This,const D3D10_QUERY_DESC *pPredicateDesc,ID3D10Predicate **ppPredicate) {
+    return This->lpVtbl->CreatePredicate(This,pPredicateDesc,ppPredicate);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateCounter(ID3D10Device1* This,const D3D10_COUNTER_DESC *pCounterDesc,ID3D10Counter **ppCounter) {
+    return This->lpVtbl->CreateCounter(This,pCounterDesc,ppCounter);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CheckFormatSupport(ID3D10Device1* This,DXGI_FORMAT Format,UINT *pFormatSupport) {
+    return This->lpVtbl->CheckFormatSupport(This,Format,pFormatSupport);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CheckMultisampleQualityLevels(ID3D10Device1* This,DXGI_FORMAT Format,UINT SampleCount,UINT *pNumQualityLevels) {
+    return This->lpVtbl->CheckMultisampleQualityLevels(This,Format,SampleCount,pNumQualityLevels);
+}
+static FORCEINLINE void ID3D10Device1_CheckCounterInfo(ID3D10Device1* This,D3D10_COUNTER_IN
