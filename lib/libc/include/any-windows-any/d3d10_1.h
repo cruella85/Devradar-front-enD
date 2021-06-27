@@ -426,4 +426,302 @@ ID3D10Device1 : public ID3D10Device
 
     virtual HRESULT STDMETHODCALLTYPE CreateBlendState1(
         const D3D10_BLEND_DESC1 *pBlendStateDesc,
-        ID3D10BlendState1 **ppBlendSta
+        ID3D10BlendState1 **ppBlendState) = 0;
+
+    virtual D3D10_FEATURE_LEVEL1 STDMETHODCALLTYPE GetFeatureLevel(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D10Device1, 0x9b7e4c8f, 0x342c, 0x4106, 0xa1,0x9f, 0x4f,0x27,0x04,0xf6,0x89,0xf0)
+#endif
+#else
+typedef struct ID3D10Device1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D10Device1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D10Device1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D10Device1 *This);
+
+    /*** ID3D10Device methods ***/
+    void (STDMETHODCALLTYPE *VSSetConstantBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *PSSetShaderResources)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D10ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *PSSetShader)(
+        ID3D10Device1 *This,
+        ID3D10PixelShader *pPixelShader);
+
+    void (STDMETHODCALLTYPE *PSSetSamplers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D10SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *VSSetShader)(
+        ID3D10Device1 *This,
+        ID3D10VertexShader *pVertexShader);
+
+    void (STDMETHODCALLTYPE *DrawIndexed)(
+        ID3D10Device1 *This,
+        UINT IndexCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation);
+
+    void (STDMETHODCALLTYPE *Draw)(
+        ID3D10Device1 *This,
+        UINT VertexCount,
+        UINT StartVertexLocation);
+
+    void (STDMETHODCALLTYPE *PSSetConstantBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *IASetInputLayout)(
+        ID3D10Device1 *This,
+        ID3D10InputLayout *pInputLayout);
+
+    void (STDMETHODCALLTYPE *IASetVertexBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer *const *ppVertexBuffers,
+        const UINT *pStrides,
+        const UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *IASetIndexBuffer)(
+        ID3D10Device1 *This,
+        ID3D10Buffer *pIndexBuffer,
+        DXGI_FORMAT Format,
+        UINT Offset);
+
+    void (STDMETHODCALLTYPE *DrawIndexedInstanced)(
+        ID3D10Device1 *This,
+        UINT IndexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation,
+        UINT StartInstanceLocation);
+
+    void (STDMETHODCALLTYPE *DrawInstanced)(
+        ID3D10Device1 *This,
+        UINT VertexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartVertexLocation,
+        UINT StartInstanceLocation);
+
+    void (STDMETHODCALLTYPE *GSSetConstantBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *GSSetShader)(
+        ID3D10Device1 *This,
+        ID3D10GeometryShader *pShader);
+
+    void (STDMETHODCALLTYPE *IASetPrimitiveTopology)(
+        ID3D10Device1 *This,
+        D3D10_PRIMITIVE_TOPOLOGY Topology);
+
+    void (STDMETHODCALLTYPE *VSSetShaderResources)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D10ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *VSSetSamplers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D10SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *SetPredication)(
+        ID3D10Device1 *This,
+        ID3D10Predicate *pPredicate,
+        WINBOOL PredicateValue);
+
+    void (STDMETHODCALLTYPE *GSSetShaderResources)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D10ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *GSSetSamplers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D10SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *OMSetRenderTargets)(
+        ID3D10Device1 *This,
+        UINT NumViews,
+        ID3D10RenderTargetView *const *ppRenderTargetViews,
+        ID3D10DepthStencilView *pDepthStencilView);
+
+    void (STDMETHODCALLTYPE *OMSetBlendState)(
+        ID3D10Device1 *This,
+        ID3D10BlendState *pBlendState,
+        const FLOAT BlendFactor[4],
+        UINT SampleMask);
+
+    void (STDMETHODCALLTYPE *OMSetDepthStencilState)(
+        ID3D10Device1 *This,
+        ID3D10DepthStencilState *pDepthStencilState,
+        UINT StencilRef);
+
+    void (STDMETHODCALLTYPE *SOSetTargets)(
+        ID3D10Device1 *This,
+        UINT NumBuffers,
+        ID3D10Buffer *const *ppSOTargets,
+        const UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *DrawAuto)(
+        ID3D10Device1 *This);
+
+    void (STDMETHODCALLTYPE *RSSetState)(
+        ID3D10Device1 *This,
+        ID3D10RasterizerState *pRasterizerState);
+
+    void (STDMETHODCALLTYPE *RSSetViewports)(
+        ID3D10Device1 *This,
+        UINT NumViewports,
+        const D3D10_VIEWPORT *pViewports);
+
+    void (STDMETHODCALLTYPE *RSSetScissorRects)(
+        ID3D10Device1 *This,
+        UINT NumRects,
+        const D3D10_RECT *pRects);
+
+    void (STDMETHODCALLTYPE *CopySubresourceRegion)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pDstResource,
+        UINT DstSubresource,
+        UINT DstX,
+        UINT DstY,
+        UINT DstZ,
+        ID3D10Resource *pSrcResource,
+        UINT SrcSubresource,
+        const D3D10_BOX *pSrcBox);
+
+    void (STDMETHODCALLTYPE *CopyResource)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pDstResource,
+        ID3D10Resource *pSrcResource);
+
+    void (STDMETHODCALLTYPE *UpdateSubresource)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pDstResource,
+        UINT DstSubresource,
+        const D3D10_BOX *pDstBox,
+        const void *pSrcData,
+        UINT SrcRowPitch,
+        UINT SrcDepthPitch);
+
+    void (STDMETHODCALLTYPE *ClearRenderTargetView)(
+        ID3D10Device1 *This,
+        ID3D10RenderTargetView *pRenderTargetView,
+        const FLOAT ColorRGBA[4]);
+
+    void (STDMETHODCALLTYPE *ClearDepthStencilView)(
+        ID3D10Device1 *This,
+        ID3D10DepthStencilView *pDepthStencilView,
+        UINT ClearFlags,
+        FLOAT Depth,
+        UINT8 Stencil);
+
+    void (STDMETHODCALLTYPE *GenerateMips)(
+        ID3D10Device1 *This,
+        ID3D10ShaderResourceView *pShaderResourceView);
+
+    void (STDMETHODCALLTYPE *ResolveSubresource)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pDstResource,
+        UINT DstSubresource,
+        ID3D10Resource *pSrcResource,
+        UINT SrcSubresource,
+        DXGI_FORMAT Format);
+
+    void (STDMETHODCALLTYPE *VSGetConstantBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer **ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *PSGetShaderResources)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D10ShaderResourceView **ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *PSGetShader)(
+        ID3D10Device1 *This,
+        ID3D10PixelShader **ppPixelShader);
+
+    void (STDMETHODCALLTYPE *PSGetSamplers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D10SamplerState **ppSamplers);
+
+    void (STDMETHODCALLTYPE *VSGetShader)(
+        ID3D10Device1 *This,
+        ID3D10VertexShader **ppVertexShader);
+
+    void (STDMETHODCALLTYPE *PSGetConstantBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer **ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *IAGetInputLayout)(
+        ID3D10Device1 *This,
+        ID3D10InputLayout **ppInputLayout);
+
+    void (STDMETHODCALLTYPE *IAGetVertexBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer **ppVertexBuffers,
+        UINT *pStrides,
+        UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *IAGetIndexBuffer)(
+        ID3D10Device1 *This,
+        ID3D10Buffer **pIndexBuffer,
+        DXGI_FORMAT *Format,
+        UINT *Offset);
+
+    void (STDMETHODCALLTYPE *GSGetConstantBuffers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D10Buffer **ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *GSGetShader)(
+        ID3D10Device1 *This,
+        ID3D10GeometryShader **ppGeometryShader);
+
+    void (STDMETHODCALLTYPE *IAGetPrimitiveTopology)(
+        ID3D10Device1 *This,
+        D3D10_PRIMITIVE_TOPOLOGY *pTopology);
+
+ 
