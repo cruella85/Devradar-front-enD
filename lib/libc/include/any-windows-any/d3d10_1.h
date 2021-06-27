@@ -724,4 +724,287 @@ typedef struct ID3D10Device1Vtbl {
         ID3D10Device1 *This,
         D3D10_PRIMITIVE_TOPOLOGY *pTopology);
 
- 
+    void (STDMETHODCALLTYPE *VSGetShaderResources)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D10ShaderResourceView **ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *VSGetSamplers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D10SamplerState **ppSamplers);
+
+    void (STDMETHODCALLTYPE *GetPredication)(
+        ID3D10Device1 *This,
+        ID3D10Predicate **ppPredicate,
+        WINBOOL *pPredicateValue);
+
+    void (STDMETHODCALLTYPE *GSGetShaderResources)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D10ShaderResourceView **ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *GSGetSamplers)(
+        ID3D10Device1 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D10SamplerState **ppSamplers);
+
+    void (STDMETHODCALLTYPE *OMGetRenderTargets)(
+        ID3D10Device1 *This,
+        UINT NumViews,
+        ID3D10RenderTargetView **ppRenderTargetViews,
+        ID3D10DepthStencilView **ppDepthStencilView);
+
+    void (STDMETHODCALLTYPE *OMGetBlendState)(
+        ID3D10Device1 *This,
+        ID3D10BlendState **ppBlendState,
+        FLOAT BlendFactor[4],
+        UINT *pSampleMask);
+
+    void (STDMETHODCALLTYPE *OMGetDepthStencilState)(
+        ID3D10Device1 *This,
+        ID3D10DepthStencilState **ppDepthStencilState,
+        UINT *pStencilRef);
+
+    void (STDMETHODCALLTYPE *SOGetTargets)(
+        ID3D10Device1 *This,
+        UINT NumBuffers,
+        ID3D10Buffer **ppSOTargets,
+        UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *RSGetState)(
+        ID3D10Device1 *This,
+        ID3D10RasterizerState **ppRasterizerState);
+
+    void (STDMETHODCALLTYPE *RSGetViewports)(
+        ID3D10Device1 *This,
+        UINT *NumViewports,
+        D3D10_VIEWPORT *pViewports);
+
+    void (STDMETHODCALLTYPE *RSGetScissorRects)(
+        ID3D10Device1 *This,
+        UINT *NumRects,
+        D3D10_RECT *pRects);
+
+    HRESULT (STDMETHODCALLTYPE *GetDeviceRemovedReason)(
+        ID3D10Device1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *SetExceptionMode)(
+        ID3D10Device1 *This,
+        UINT RaiseFlags);
+
+    UINT (STDMETHODCALLTYPE *GetExceptionMode)(
+        ID3D10Device1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D10Device1 *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D10Device1 *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D10Device1 *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    void (STDMETHODCALLTYPE *ClearState)(
+        ID3D10Device1 *This);
+
+    void (STDMETHODCALLTYPE *Flush)(
+        ID3D10Device1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBuffer)(
+        ID3D10Device1 *This,
+        const D3D10_BUFFER_DESC *pDesc,
+        const D3D10_SUBRESOURCE_DATA *pInitialData,
+        ID3D10Buffer **ppBuffer);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTexture1D)(
+        ID3D10Device1 *This,
+        const D3D10_TEXTURE1D_DESC *pDesc,
+        const D3D10_SUBRESOURCE_DATA *pInitialData,
+        ID3D10Texture1D **ppTexture1D);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTexture2D)(
+        ID3D10Device1 *This,
+        const D3D10_TEXTURE2D_DESC *pDesc,
+        const D3D10_SUBRESOURCE_DATA *pInitialData,
+        ID3D10Texture2D **ppTexture2D);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTexture3D)(
+        ID3D10Device1 *This,
+        const D3D10_TEXTURE3D_DESC *pDesc,
+        const D3D10_SUBRESOURCE_DATA *pInitialData,
+        ID3D10Texture3D **ppTexture3D);
+
+    HRESULT (STDMETHODCALLTYPE *CreateShaderResourceView)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pResource,
+        const D3D10_SHADER_RESOURCE_VIEW_DESC *pDesc,
+        ID3D10ShaderResourceView **ppSRView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRenderTargetView)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pResource,
+        const D3D10_RENDER_TARGET_VIEW_DESC *pDesc,
+        ID3D10RenderTargetView **ppRTView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDepthStencilView)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pResource,
+        const D3D10_DEPTH_STENCIL_VIEW_DESC *pDesc,
+        ID3D10DepthStencilView **ppDepthStencilView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateInputLayout)(
+        ID3D10Device1 *This,
+        const D3D10_INPUT_ELEMENT_DESC *pInputElementDescs,
+        UINT NumElements,
+        const void *pShaderBytecodeWithInputSignature,
+        SIZE_T BytecodeLength,
+        ID3D10InputLayout **ppInputLayout);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVertexShader)(
+        ID3D10Device1 *This,
+        const void *pShaderBytecode,
+        SIZE_T BytecodeLength,
+        ID3D10VertexShader **ppVertexShader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateGeometryShader)(
+        ID3D10Device1 *This,
+        const void *pShaderBytecode,
+        SIZE_T BytecodeLength,
+        ID3D10GeometryShader **ppGeometryShader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateGeometryShaderWithStreamOutput)(
+        ID3D10Device1 *This,
+        const void *pShaderBytecode,
+        SIZE_T BytecodeLength,
+        const D3D10_SO_DECLARATION_ENTRY *pSODeclaration,
+        UINT NumEntries,
+        UINT OutputStreamStride,
+        ID3D10GeometryShader **ppGeometryShader);
+
+    HRESULT (STDMETHODCALLTYPE *CreatePixelShader)(
+        ID3D10Device1 *This,
+        const void *pShaderBytecode,
+        SIZE_T BytecodeLength,
+        ID3D10PixelShader **ppPixelShader);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBlendState)(
+        ID3D10Device1 *This,
+        const D3D10_BLEND_DESC *pBlendStateDesc,
+        ID3D10BlendState **ppBlendState);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDepthStencilState)(
+        ID3D10Device1 *This,
+        const D3D10_DEPTH_STENCIL_DESC *pDepthStencilDesc,
+        ID3D10DepthStencilState **ppDepthStencilState);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRasterizerState)(
+        ID3D10Device1 *This,
+        const D3D10_RASTERIZER_DESC *pRasterizerDesc,
+        ID3D10RasterizerState **ppRasterizerState);
+
+    HRESULT (STDMETHODCALLTYPE *CreateSamplerState)(
+        ID3D10Device1 *This,
+        const D3D10_SAMPLER_DESC *pSamplerDesc,
+        ID3D10SamplerState **ppSamplerState);
+
+    HRESULT (STDMETHODCALLTYPE *CreateQuery)(
+        ID3D10Device1 *This,
+        const D3D10_QUERY_DESC *pQueryDesc,
+        ID3D10Query **ppQuery);
+
+    HRESULT (STDMETHODCALLTYPE *CreatePredicate)(
+        ID3D10Device1 *This,
+        const D3D10_QUERY_DESC *pPredicateDesc,
+        ID3D10Predicate **ppPredicate);
+
+    HRESULT (STDMETHODCALLTYPE *CreateCounter)(
+        ID3D10Device1 *This,
+        const D3D10_COUNTER_DESC *pCounterDesc,
+        ID3D10Counter **ppCounter);
+
+    HRESULT (STDMETHODCALLTYPE *CheckFormatSupport)(
+        ID3D10Device1 *This,
+        DXGI_FORMAT Format,
+        UINT *pFormatSupport);
+
+    HRESULT (STDMETHODCALLTYPE *CheckMultisampleQualityLevels)(
+        ID3D10Device1 *This,
+        DXGI_FORMAT Format,
+        UINT SampleCount,
+        UINT *pNumQualityLevels);
+
+    void (STDMETHODCALLTYPE *CheckCounterInfo)(
+        ID3D10Device1 *This,
+        D3D10_COUNTER_INFO *pCounterInfo);
+
+    HRESULT (STDMETHODCALLTYPE *CheckCounter)(
+        ID3D10Device1 *This,
+        const D3D10_COUNTER_DESC *pDesc,
+        D3D10_COUNTER_TYPE *pType,
+        UINT *pActiveCounters,
+        char *name,
+        UINT *pNameLength,
+        char *units,
+        UINT *pUnitsLength,
+        char *description,
+        UINT *pDescriptionLength);
+
+    UINT (STDMETHODCALLTYPE *GetCreationFlags)(
+        ID3D10Device1 *This);
+
+    HRESULT (STDMETHODCALLTYPE *OpenSharedResource)(
+        ID3D10Device1 *This,
+        HANDLE hResource,
+        REFIID ReturnedInterface,
+        void **ppResource);
+
+    void (STDMETHODCALLTYPE *SetTextFilterSize)(
+        ID3D10Device1 *This,
+        UINT Width,
+        UINT Height);
+
+    void (STDMETHODCALLTYPE *GetTextFilterSize)(
+        ID3D10Device1 *This,
+        UINT *pWidth,
+        UINT *pHeight);
+
+    /*** ID3D10Device1 methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateShaderResourceView1)(
+        ID3D10Device1 *This,
+        ID3D10Resource *pResource,
+        const D3D10_SHADER_RESOURCE_VIEW_DESC1 *pDesc,
+        ID3D10ShaderResourceView1 **ppSRView);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBlendState1)(
+        ID3D10Device1 *This,
+        const D3D10_BLEND_DESC1 *pBlendStateDesc,
+        ID3D10BlendState1 **ppBlendState);
+
+    D3D10_FEATURE_LEVEL1 (STDMETHODCALLTYPE *GetFeatureLevel)(
+        ID3D10Device1 *This);
+
+    END_INTERFACE
+} ID3D10Device1Vtbl;
+
+interface ID3D10Device1 {
+    CONST_VTBL ID3D10Device1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D10Device1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define 
