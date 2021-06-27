@@ -1155,4 +1155,123 @@ static FORCEINLINE void ID3D10Device1_IASetIndexBuffer(ID3D10Device1* This,ID3D1
     This->lpVtbl->IASetIndexBuffer(This,pIndexBuffer,Format,Offset);
 }
 static FORCEINLINE void ID3D10Device1_DrawIndexedInstanced(ID3D10Device1* This,UINT IndexCountPerInstance,UINT InstanceCount,UINT StartIndexLocation,INT BaseVertexLocation,UINT StartInstanceLocation) {
-    This->lpVtbl->DrawIndexedInstanced(This,IndexCountPerInstance,InstanceCount,Star
+    This->lpVtbl->DrawIndexedInstanced(This,IndexCountPerInstance,InstanceCount,StartIndexLocation,BaseVertexLocation,StartInstanceLocation);
+}
+static FORCEINLINE void ID3D10Device1_DrawInstanced(ID3D10Device1* This,UINT VertexCountPerInstance,UINT InstanceCount,UINT StartVertexLocation,UINT StartInstanceLocation) {
+    This->lpVtbl->DrawInstanced(This,VertexCountPerInstance,InstanceCount,StartVertexLocation,StartInstanceLocation);
+}
+static FORCEINLINE void ID3D10Device1_GSSetConstantBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer *const *ppConstantBuffers) {
+    This->lpVtbl->GSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D10Device1_GSSetShader(ID3D10Device1* This,ID3D10GeometryShader *pShader) {
+    This->lpVtbl->GSSetShader(This,pShader);
+}
+static FORCEINLINE void ID3D10Device1_IASetPrimitiveTopology(ID3D10Device1* This,D3D10_PRIMITIVE_TOPOLOGY Topology) {
+    This->lpVtbl->IASetPrimitiveTopology(This,Topology);
+}
+static FORCEINLINE void ID3D10Device1_VSSetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->VSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D10Device1_VSSetSamplers(ID3D10Device1* This,UINT StartSlot,UINT NumSamplers,ID3D10SamplerState *const *ppSamplers) {
+    This->lpVtbl->VSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D10Device1_SetPredication(ID3D10Device1* This,ID3D10Predicate *pPredicate,WINBOOL PredicateValue) {
+    This->lpVtbl->SetPredication(This,pPredicate,PredicateValue);
+}
+static FORCEINLINE void ID3D10Device1_GSSetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->GSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D10Device1_GSSetSamplers(ID3D10Device1* This,UINT StartSlot,UINT NumSamplers,ID3D10SamplerState *const *ppSamplers) {
+    This->lpVtbl->GSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D10Device1_OMSetRenderTargets(ID3D10Device1* This,UINT NumViews,ID3D10RenderTargetView *const *ppRenderTargetViews,ID3D10DepthStencilView *pDepthStencilView) {
+    This->lpVtbl->OMSetRenderTargets(This,NumViews,ppRenderTargetViews,pDepthStencilView);
+}
+static FORCEINLINE void ID3D10Device1_OMSetBlendState(ID3D10Device1* This,ID3D10BlendState *pBlendState,const FLOAT BlendFactor[4],UINT SampleMask) {
+    This->lpVtbl->OMSetBlendState(This,pBlendState,BlendFactor,SampleMask);
+}
+static FORCEINLINE void ID3D10Device1_OMSetDepthStencilState(ID3D10Device1* This,ID3D10DepthStencilState *pDepthStencilState,UINT StencilRef) {
+    This->lpVtbl->OMSetDepthStencilState(This,pDepthStencilState,StencilRef);
+}
+static FORCEINLINE void ID3D10Device1_SOSetTargets(ID3D10Device1* This,UINT NumBuffers,ID3D10Buffer *const *ppSOTargets,const UINT *pOffsets) {
+    This->lpVtbl->SOSetTargets(This,NumBuffers,ppSOTargets,pOffsets);
+}
+static FORCEINLINE void ID3D10Device1_DrawAuto(ID3D10Device1* This) {
+    This->lpVtbl->DrawAuto(This);
+}
+static FORCEINLINE void ID3D10Device1_RSSetState(ID3D10Device1* This,ID3D10RasterizerState *pRasterizerState) {
+    This->lpVtbl->RSSetState(This,pRasterizerState);
+}
+static FORCEINLINE void ID3D10Device1_RSSetViewports(ID3D10Device1* This,UINT NumViewports,const D3D10_VIEWPORT *pViewports) {
+    This->lpVtbl->RSSetViewports(This,NumViewports,pViewports);
+}
+static FORCEINLINE void ID3D10Device1_RSSetScissorRects(ID3D10Device1* This,UINT NumRects,const D3D10_RECT *pRects) {
+    This->lpVtbl->RSSetScissorRects(This,NumRects,pRects);
+}
+static FORCEINLINE void ID3D10Device1_CopySubresourceRegion(ID3D10Device1* This,ID3D10Resource *pDstResource,UINT DstSubresource,UINT DstX,UINT DstY,UINT DstZ,ID3D10Resource *pSrcResource,UINT SrcSubresource,const D3D10_BOX *pSrcBox) {
+    This->lpVtbl->CopySubresourceRegion(This,pDstResource,DstSubresource,DstX,DstY,DstZ,pSrcResource,SrcSubresource,pSrcBox);
+}
+static FORCEINLINE void ID3D10Device1_CopyResource(ID3D10Device1* This,ID3D10Resource *pDstResource,ID3D10Resource *pSrcResource) {
+    This->lpVtbl->CopyResource(This,pDstResource,pSrcResource);
+}
+static FORCEINLINE void ID3D10Device1_UpdateSubresource(ID3D10Device1* This,ID3D10Resource *pDstResource,UINT DstSubresource,const D3D10_BOX *pDstBox,const void *pSrcData,UINT SrcRowPitch,UINT SrcDepthPitch) {
+    This->lpVtbl->UpdateSubresource(This,pDstResource,DstSubresource,pDstBox,pSrcData,SrcRowPitch,SrcDepthPitch);
+}
+static FORCEINLINE void ID3D10Device1_ClearRenderTargetView(ID3D10Device1* This,ID3D10RenderTargetView *pRenderTargetView,const FLOAT ColorRGBA[4]) {
+    This->lpVtbl->ClearRenderTargetView(This,pRenderTargetView,ColorRGBA);
+}
+static FORCEINLINE void ID3D10Device1_ClearDepthStencilView(ID3D10Device1* This,ID3D10DepthStencilView *pDepthStencilView,UINT ClearFlags,FLOAT Depth,UINT8 Stencil) {
+    This->lpVtbl->ClearDepthStencilView(This,pDepthStencilView,ClearFlags,Depth,Stencil);
+}
+static FORCEINLINE void ID3D10Device1_GenerateMips(ID3D10Device1* This,ID3D10ShaderResourceView *pShaderResourceView) {
+    This->lpVtbl->GenerateMips(This,pShaderResourceView);
+}
+static FORCEINLINE void ID3D10Device1_ResolveSubresource(ID3D10Device1* This,ID3D10Resource *pDstResource,UINT DstSubresource,ID3D10Resource *pSrcResource,UINT SrcSubresource,DXGI_FORMAT Format) {
+    This->lpVtbl->ResolveSubresource(This,pDstResource,DstSubresource,pSrcResource,SrcSubresource,Format);
+}
+static FORCEINLINE void ID3D10Device1_VSGetConstantBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer **ppConstantBuffers) {
+    This->lpVtbl->VSGetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D10Device1_PSGetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView **ppShaderResourceViews) {
+    This->lpVtbl->PSGetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D10Device1_PSGetShader(ID3D10Device1* This,ID3D10PixelShader **ppPixelShader) {
+    This->lpVtbl->PSGetShader(This,ppPixelShader);
+}
+static FORCEINLINE void ID3D10Device1_PSGetSamplers(ID3D10Device1* This,UINT StartSlot,UINT NumSamplers,ID3D10SamplerState **ppSamplers) {
+    This->lpVtbl->PSGetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D10Device1_VSGetShader(ID3D10Device1* This,ID3D10VertexShader **ppVertexShader) {
+    This->lpVtbl->VSGetShader(This,ppVertexShader);
+}
+static FORCEINLINE void ID3D10Device1_PSGetConstantBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer **ppConstantBuffers) {
+    This->lpVtbl->PSGetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D10Device1_IAGetInputLayout(ID3D10Device1* This,ID3D10InputLayout **ppInputLayout) {
+    This->lpVtbl->IAGetInputLayout(This,ppInputLayout);
+}
+static FORCEINLINE void ID3D10Device1_IAGetVertexBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer **ppVertexBuffers,UINT *pStrides,UINT *pOffsets) {
+    This->lpVtbl->IAGetVertexBuffers(This,StartSlot,NumBuffers,ppVertexBuffers,pStrides,pOffsets);
+}
+static FORCEINLINE void ID3D10Device1_IAGetIndexBuffer(ID3D10Device1* This,ID3D10Buffer **pIndexBuffer,DXGI_FORMAT *Format,UINT *Offset) {
+    This->lpVtbl->IAGetIndexBuffer(This,pIndexBuffer,Format,Offset);
+}
+static FORCEINLINE void ID3D10Device1_GSGetConstantBuffers(ID3D10Device1* This,UINT StartSlot,UINT NumBuffers,ID3D10Buffer **ppConstantBuffers) {
+    This->lpVtbl->GSGetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D10Device1_GSGetShader(ID3D10Device1* This,ID3D10GeometryShader **ppGeometryShader) {
+    This->lpVtbl->GSGetShader(This,ppGeometryShader);
+}
+static FORCEINLINE void ID3D10Device1_IAGetPrimitiveTopology(ID3D10Device1* This,D3D10_PRIMITIVE_TOPOLOGY *pTopology) {
+    This->lpVtbl->IAGetPrimitiveTopology(This,pTopology);
+}
+static FORCEINLINE void ID3D10Device1_VSGetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView **ppShaderResourceViews) {
+    This->lpVtbl->VSGetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D10Device1_VSGetSamplers(ID3D10Device1* This,UINT StartSlot,UINT NumSamplers,ID3D10SamplerState **ppSamplers) {
+    This->lpVtbl->VSGetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D10Device1_GetPredication(ID3D10Device1* This,ID3D10Predicate **ppPredicate,WINBOOL *pPredicateValue) {
+    This->lpVtbl->GetPredication(This,ppPredicate,pPredicateValue);
+}
+static FORCEINLINE void ID3D10Device1_GSGetShaderResources(ID3D10Device1* This,UINT StartSlot,UINT NumViews,ID3D10ShaderResourceView *
