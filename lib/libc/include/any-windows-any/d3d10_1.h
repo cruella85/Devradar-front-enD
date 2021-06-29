@@ -1388,4 +1388,55 @@ static FORCEINLINE HRESULT ID3D10Device1_CheckFormatSupport(ID3D10Device1* This,
 static FORCEINLINE HRESULT ID3D10Device1_CheckMultisampleQualityLevels(ID3D10Device1* This,DXGI_FORMAT Format,UINT SampleCount,UINT *pNumQualityLevels) {
     return This->lpVtbl->CheckMultisampleQualityLevels(This,Format,SampleCount,pNumQualityLevels);
 }
-static FORCEINLINE void ID3D10Device1_CheckCounterInfo(ID3D10Device1* This,D3D10_COUNTER_IN
+static FORCEINLINE void ID3D10Device1_CheckCounterInfo(ID3D10Device1* This,D3D10_COUNTER_INFO *pCounterInfo) {
+    This->lpVtbl->CheckCounterInfo(This,pCounterInfo);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CheckCounter(ID3D10Device1* This,const D3D10_COUNTER_DESC *pDesc,D3D10_COUNTER_TYPE *pType,UINT *pActiveCounters,char *name,UINT *pNameLength,char *units,UINT *pUnitsLength,char *description,UINT *pDescriptionLength) {
+    return This->lpVtbl->CheckCounter(This,pDesc,pType,pActiveCounters,name,pNameLength,units,pUnitsLength,description,pDescriptionLength);
+}
+static FORCEINLINE UINT ID3D10Device1_GetCreationFlags(ID3D10Device1* This) {
+    return This->lpVtbl->GetCreationFlags(This);
+}
+static FORCEINLINE HRESULT ID3D10Device1_OpenSharedResource(ID3D10Device1* This,HANDLE hResource,REFIID ReturnedInterface,void **ppResource) {
+    return This->lpVtbl->OpenSharedResource(This,hResource,ReturnedInterface,ppResource);
+}
+static FORCEINLINE void ID3D10Device1_SetTextFilterSize(ID3D10Device1* This,UINT Width,UINT Height) {
+    This->lpVtbl->SetTextFilterSize(This,Width,Height);
+}
+static FORCEINLINE void ID3D10Device1_GetTextFilterSize(ID3D10Device1* This,UINT *pWidth,UINT *pHeight) {
+    This->lpVtbl->GetTextFilterSize(This,pWidth,pHeight);
+}
+/*** ID3D10Device1 methods ***/
+static FORCEINLINE HRESULT ID3D10Device1_CreateShaderResourceView1(ID3D10Device1* This,ID3D10Resource *pResource,const D3D10_SHADER_RESOURCE_VIEW_DESC1 *pDesc,ID3D10ShaderResourceView1 **ppSRView) {
+    return This->lpVtbl->CreateShaderResourceView1(This,pResource,pDesc,ppSRView);
+}
+static FORCEINLINE HRESULT ID3D10Device1_CreateBlendState1(ID3D10Device1* This,const D3D10_BLEND_DESC1 *pBlendStateDesc,ID3D10BlendState1 **ppBlendState) {
+    return This->lpVtbl->CreateBlendState1(This,pBlendStateDesc,ppBlendState);
+}
+static FORCEINLINE D3D10_FEATURE_LEVEL1 ID3D10Device1_GetFeatureLevel(ID3D10Device1* This) {
+    return This->lpVtbl->GetFeatureLevel(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D10Device1_INTERFACE_DEFINED__ */
+
+#define D3D10_1_SDK_VERSION (0x20)
+
+HRESULT WINAPI D3D10CreateDevice1(IDXGIAdapter*,D3D10_DRIVER_TYPE,
+    HMODULE,UINT,D3D10_FEATURE_LEVEL1,UINT,ID3D10Device1**);
+HRESULT __stdcall  D3D10CreateDeviceAndSwapChain1(IDXGIAdapter *adapter,enum D3D10_DRIVER_TYPE driver_type,HMODULE swrast,UINT flags,D3D10_FEATURE_LEVEL1 feature_level,UINT sdk_version,DXGI_SWAP_CHAIN_DESC *swapchain_desc,IDXGISwapChain **swapchain,ID3D10Device1 **device);
+
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __d3d10_1_h__ */
