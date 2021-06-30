@@ -25,3 +25,17 @@ using __uncvref_t _LIBCPP_NODEBUG = typename remove_cv<typename remove_reference
 
 template <class _Tp, class _Up>
 struct __is_same_uncvref : _IsSame<__uncvref_t<_Tp>, __uncvref_t<_Up> > {};
+
+#if _LIBCPP_STD_VER > 17
+// remove_cvref - same as __uncvref
+template <class _Tp>
+struct remove_cvref {
+    using type _LIBCPP_NODEBUG = __uncvref_t<_Tp>;
+};
+
+template <class _Tp> using remove_cvref_t = typename remove_cvref<_Tp>::type;
+#endif
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP___TYPE_TRAITS_REMOVE_CVREF_H
