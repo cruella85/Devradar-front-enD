@@ -372,4 +372,125 @@ GpStatus WINGDIPAPI GdipLoadImageFromStreamICM(IStream*,GpImage**);
 GpStatus WINGDIPAPI GdipLoadImageFromFileICM(GDIPCONST WCHAR*,GpImage**);
 GpStatus WINGDIPAPI GdipCloneImage(GpImage*,GpImage**);
 GpStatus WINGDIPAPI GdipDisposeImage(GpImage*);
-GpStatus WINGDIPAPI GdipSaveImageToFile(GpI
+GpStatus WINGDIPAPI GdipSaveImageToFile(GpImage*,GDIPCONST WCHAR*,GDIPCONST CLSID*,GDIPCONST EncoderParameters*);
+GpStatus WINGDIPAPI GdipSaveImageToStream(GpImage*,IStream*,GDIPCONST CLSID*,GDIPCONST EncoderParameters*);
+GpStatus WINGDIPAPI GdipSaveAdd(GpImage*,GDIPCONST EncoderParameters*);
+GpStatus WINGDIPAPI GdipSaveAddImage(GpImage*,GpImage*,GDIPCONST EncoderParameters*);
+GpStatus WINGDIPAPI GdipGetImageGraphicsContext(GpImage*,GpGraphics**);
+GpStatus WINGDIPAPI GdipGetImageBounds(GpImage*,GpRectF*,GpUnit*);
+GpStatus WINGDIPAPI GdipGetImageDimension(GpImage*,REAL*,REAL*);
+GpStatus WINGDIPAPI GdipGetImageType(GpImage*,ImageType*);
+GpStatus WINGDIPAPI GdipGetImageWidth(GpImage*,UINT*);
+GpStatus WINGDIPAPI GdipGetImageHeight(GpImage*,UINT*);
+GpStatus WINGDIPAPI GdipGetImageHorizontalResolution(GpImage*,REAL*);
+GpStatus WINGDIPAPI GdipGetImageVerticalResolution(GpImage*,REAL*);
+GpStatus WINGDIPAPI GdipGetImageFlags(GpImage*,UINT*);
+GpStatus WINGDIPAPI GdipGetImageRawFormat(GpImage*,GUID*);
+GpStatus WINGDIPAPI GdipGetImagePixelFormat(GpImage*,PixelFormat*);
+GpStatus WINGDIPAPI GdipGetImageThumbnail(GpImage*,UINT,UINT,GpImage**,GetThumbnailImageAbort,VOID*);
+GpStatus WINGDIPAPI GdipGetEncoderParameterListSize(GpImage*,GDIPCONST CLSID*,UINT*);
+GpStatus WINGDIPAPI GdipGetEncoderParameterList(GpImage*,GDIPCONST CLSID*,UINT,EncoderParameters*);
+GpStatus WINGDIPAPI GdipImageGetFrameDimensionsCount(GpImage*,UINT*);
+GpStatus WINGDIPAPI GdipImageGetFrameDimensionsList(GpImage*,GUID*,UINT);
+GpStatus WINGDIPAPI GdipImageGetFrameCount(GpImage*,GDIPCONST GUID*,UINT*);
+GpStatus WINGDIPAPI GdipImageSelectActiveFrame(GpImage*,GDIPCONST GUID*,UINT);
+GpStatus WINGDIPAPI GdipImageRotateFlip(GpImage*,RotateFlipType);
+GpStatus WINGDIPAPI GdipGetImagePalette(GpImage*,ColorPalette*,INT);
+GpStatus WINGDIPAPI GdipSetImagePalette(GpImage*,GDIPCONST ColorPalette*);
+GpStatus WINGDIPAPI GdipGetImagePaletteSize(GpImage*,INT*);
+GpStatus WINGDIPAPI GdipGetPropertyCount(GpImage*,UINT*);
+GpStatus WINGDIPAPI GdipGetPropertyIdList(GpImage*,UINT,PROPID*);
+GpStatus WINGDIPAPI GdipGetPropertyItemSize(GpImage*,PROPID,UINT*);
+GpStatus WINGDIPAPI GdipGetPropertyItem(GpImage*,PROPID,UINT,PropertyItem*);
+GpStatus WINGDIPAPI GdipGetPropertySize(GpImage*,UINT*,UINT*);
+GpStatus WINGDIPAPI GdipGetAllPropertyItems(GpImage*,UINT,UINT,PropertyItem*);
+GpStatus WINGDIPAPI GdipRemovePropertyItem(GpImage*,PROPID);
+GpStatus WINGDIPAPI GdipSetPropertyItem(GpImage*,GDIPCONST PropertyItem*);
+GpStatus WINGDIPAPI GdipFindFirstImageItem(GpImage*,ImageItemData*);
+GpStatus WINGDIPAPI GdipFindNextImageItem(GpImage*,ImageItemData*);
+GpStatus WINGDIPAPI GdipGetImageItemData(GpImage*,ImageItemData*);
+GpStatus WINGDIPAPI GdipImageSetAbort(GpImage*,GdiplusAbort*);
+GpStatus WINGDIPAPI GdipImageForceValidation(GpImage*);
+
+/* Image codec functions */
+GpStatus WINGDIPAPI GdipGetImageDecodersSize(UINT*,UINT*);
+GpStatus WINGDIPAPI GdipGetImageDecoders(UINT,UINT,ImageCodecInfo*);
+GpStatus WINGDIPAPI GdipGetImageEncodersSize(UINT*,UINT*);
+GpStatus WINGDIPAPI GdipGetImageEncoders(UINT,UINT,ImageCodecInfo*);
+
+/* ImageAttributes functions */
+GpStatus WINGDIPAPI GdipCreateImageAttributes(GpImageAttributes**);
+GpStatus WINGDIPAPI GdipCloneImageAttributes(GDIPCONST GpImageAttributes*,GpImageAttributes**);
+GpStatus WINGDIPAPI GdipDisposeImageAttributes(GpImageAttributes*);
+GpStatus WINGDIPAPI GdipSetImageAttributesToIdentity(GpImageAttributes*,ColorAdjustType);
+GpStatus WINGDIPAPI GdipResetImageAttributes(GpImageAttributes*,ColorAdjustType);
+GpStatus WINGDIPAPI GdipSetImageAttributesColorMatrix(GpImageAttributes*,ColorAdjustType,BOOL,GDIPCONST ColorMatrix*,GDIPCONST ColorMatrix*,ColorMatrixFlags);
+GpStatus WINGDIPAPI GdipSetImageAttributesThreshold(GpImageAttributes*,ColorAdjustType,BOOL,REAL);
+GpStatus WINGDIPAPI GdipSetImageAttributesGamma(GpImageAttributes*,ColorAdjustType,BOOL,REAL);
+GpStatus WINGDIPAPI GdipSetImageAttributesNoOp(GpImageAttributes*,ColorAdjustType,BOOL);
+GpStatus WINGDIPAPI GdipSetImageAttributesColorKeys(GpImageAttributes*,ColorAdjustType,BOOL,ARGB,ARGB);
+GpStatus WINGDIPAPI GdipSetImageAttributesOutputChannel(GpImageAttributes*,ColorAdjustType,BOOL,ColorChannelFlags);
+GpStatus WINGDIPAPI GdipSetImageAttributesOutputChannelColorProfile(GpImageAttributes*,ColorAdjustType,BOOL,GDIPCONST WCHAR*);
+GpStatus WINGDIPAPI GdipSetImageAttributesRemapTable(GpImageAttributes*,ColorAdjustType,BOOL,UINT,GDIPCONST ColorMap*);
+GpStatus WINGDIPAPI GdipSetImageAttributesWrapMode(GpImageAttributes*,WrapMode,ARGB,BOOL);
+GpStatus WINGDIPAPI GdipSetImageAttributesICMMode(GpImageAttributes*,BOOL);
+GpStatus WINGDIPAPI GdipGetImageAttributesAdjustedPalette(GpImageAttributes*,ColorPalette*,ColorAdjustType);
+GpStatus WINGDIPAPI GdipSetImageAttributesCachedBackground(GpImageAttributes*,BOOL);
+
+/* LinearGradientBrush functions */
+GpStatus WINGDIPAPI GdipCreateLineBrush(GDIPCONST GpPointF*,GDIPCONST GpPointF*,ARGB,ARGB,GpWrapMode,GpLineGradient**);
+GpStatus WINGDIPAPI GdipCreateLineBrushI(GDIPCONST GpPoint*,GDIPCONST GpPoint*,ARGB,ARGB,GpWrapMode,GpLineGradient**);
+GpStatus WINGDIPAPI GdipCreateLineBrushFromRect(GDIPCONST GpRectF*,ARGB,ARGB,LinearGradientMode,GpWrapMode,GpLineGradient**);
+GpStatus WINGDIPAPI GdipCreateLineBrushFromRectI(GDIPCONST GpRect*,ARGB,ARGB,LinearGradientMode,GpWrapMode,GpLineGradient**);
+GpStatus WINGDIPAPI GdipCreateLineBrushFromRectWithAngle(GDIPCONST GpRectF*,ARGB,ARGB,REAL,BOOL,GpWrapMode,GpLineGradient**);
+GpStatus WINGDIPAPI GdipCreateLineBrushFromRectWithAngleI(GDIPCONST GpRect*,ARGB,ARGB,REAL,BOOL,GpWrapMode,GpLineGradient**);
+GpStatus WINGDIPAPI GdipSetLineColors(GpLineGradient*,ARGB,ARGB);
+GpStatus WINGDIPAPI GdipGetLineColors(GpLineGradient*,ARGB*);
+GpStatus WINGDIPAPI GdipGetLineRect(GpLineGradient*,GpRectF*);
+GpStatus WINGDIPAPI GdipGetLineRectI(GpLineGradient*,GpRect*);
+GpStatus WINGDIPAPI GdipSetLineGammaCorrection(GpLineGradient*,BOOL);
+GpStatus WINGDIPAPI GdipGetLineGammaCorrection(GpLineGradient*,BOOL*);
+GpStatus WINGDIPAPI GdipGetLineBlendCount(GpLineGradient*,INT*);
+GpStatus WINGDIPAPI GdipGetLineBlend(GpLineGradient*,REAL*,REAL*,INT);
+GpStatus WINGDIPAPI GdipSetLineBlend(GpLineGradient*,GDIPCONST REAL*,GDIPCONST REAL*,INT);
+GpStatus WINGDIPAPI GdipGetLinePresetBlendCount(GpLineGradient*,INT*);
+GpStatus WINGDIPAPI GdipGetLinePresetBlend(GpLineGradient*,ARGB*,REAL*,INT);
+GpStatus WINGDIPAPI GdipSetLinePresetBlend(GpLineGradient*,GDIPCONST ARGB*,GDIPCONST REAL*,INT);
+GpStatus WINGDIPAPI GdipSetLineSigmaBlend(GpLineGradient*,REAL,REAL);
+GpStatus WINGDIPAPI GdipSetLineLinearBlend(GpLineGradient*,REAL,REAL);
+GpStatus WINGDIPAPI GdipSetLineWrapMode(GpLineGradient*,GpWrapMode);
+GpStatus WINGDIPAPI GdipGetLineWrapMode(GpLineGradient*,GpWrapMode*);
+GpStatus WINGDIPAPI GdipGetLineTransform(GpLineGradient*,GpMatrix*);
+GpStatus WINGDIPAPI GdipSetLineTransform(GpLineGradient*,GDIPCONST GpMatrix*);
+GpStatus WINGDIPAPI GdipResetLineTransform(GpLineGradient*);
+GpStatus WINGDIPAPI GdipMultiplyLineTransform(GpLineGradient*,GDIPCONST GpMatrix*,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipTranslateLineTransform(GpLineGradient*,REAL,REAL,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipScaleLineTransform(GpLineGradient*,REAL,REAL,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipRotateLineTransform(GpLineGradient*,REAL,GpMatrixOrder);
+
+/* Matrix functions */
+GpStatus WINGDIPAPI GdipCreateMatrix(GpMatrix**);
+GpStatus WINGDIPAPI GdipCreateMatrix2(REAL,REAL,REAL,REAL,REAL,REAL,GpMatrix**);
+GpStatus WINGDIPAPI GdipCreateMatrix3(GDIPCONST GpRectF*,GDIPCONST GpPointF*,GpMatrix**);
+GpStatus WINGDIPAPI GdipCreateMatrix3I(GDIPCONST GpRect*,GDIPCONST GpPoint*,GpMatrix**);
+GpStatus WINGDIPAPI GdipCloneMatrix(GpMatrix*,GpMatrix**);
+GpStatus WINGDIPAPI GdipDeleteMatrix(GpMatrix*);
+GpStatus WINGDIPAPI GdipSetMatrixElements(GpMatrix*,REAL,REAL,REAL,REAL,REAL,REAL);
+GpStatus WINGDIPAPI GdipMultiplyMatrix(GpMatrix*,GpMatrix*,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipTranslateMatrix(GpMatrix*,REAL,REAL,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipScaleMatrix(GpMatrix*,REAL,REAL,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipRotateMatrix(GpMatrix*,REAL,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipShearMatrix(GpMatrix*,REAL,REAL,GpMatrixOrder);
+GpStatus WINGDIPAPI GdipInvertMatrix(GpMatrix*);
+GpStatus WINGDIPAPI GdipTransformMatrixPoints(GpMatrix*,GpPointF*,INT);
+GpStatus WINGDIPAPI GdipTransformMatrixPointsI(GpMatrix*,GpPoint*,INT);
+GpStatus WINGDIPAPI GdipVectorTransformMatrixPoints(GpMatrix*,GpPointF*,INT);
+GpStatus WINGDIPAPI GdipVectorTransformMatrixPointsI(GpMatrix*,GpPoint*,INT);
+GpStatus WINGDIPAPI GdipGetMatrixElements(GDIPCONST GpMatrix*,REAL*);
+GpStatus WINGDIPAPI GdipIsMatrixInvertible(GDIPCONST GpMatrix*,BOOL*);
+GpStatus WINGDIPAPI GdipIsMatrixIdentity(GDIPCONST GpMatrix*,BOOL*);
+GpStatus WINGDIPAPI GdipIsMatrixEqual(GDIPCONST GpMatrix*,GDIPCONST GpMatrix*,BOOL*);
+
+/* Metafile functions */
+GpStatus WINGDIPAPI GdipGetMetafileHeaderFromEmf(HENHMETAFILE,MetafileHeader*);
+GpStatus WINGDIPAPI GdipGetMetafileHeaderFromFile(GDIPCONST WCHAR*,MetafileHe
