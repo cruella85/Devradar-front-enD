@@ -23,3 +23,5 @@ void (*sigset(int sig, void (*handler)(int)))(int)
 		if (sigprocmask(SIG_UNBLOCK, &mask, &mask_old) < 0)
 			return SIG_ERR;
 	}
+	return sigismember(&mask_old, sig) ? SIG_HOLD : sa_old.sa_handler;
+}
