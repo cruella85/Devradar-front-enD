@@ -341,4 +341,233 @@ pub const filestat_t = extern struct {
     }
 
     pub fn mtime(self: filestat_t) timespec {
-        return timespec.fromTimestamp(self.m
+        return timespec.fromTimestamp(self.mtim);
+    }
+
+    pub fn ctime(self: filestat_t) timespec {
+        return timespec.fromTimestamp(self.ctim);
+    }
+};
+
+/// Also known as `FILETYPE`.
+pub const filetype_t = enum(u8) {
+    UNKNOWN,
+    BLOCK_DEVICE,
+    CHARACTER_DEVICE,
+    DIRECTORY,
+    REGULAR_FILE,
+    SOCKET_DGRAM,
+    SOCKET_STREAM,
+    SYMBOLIC_LINK,
+    _,
+};
+
+pub const fstflags_t = u16;
+pub const FILESTAT_SET_ATIM: fstflags_t = 0x0001;
+pub const FILESTAT_SET_ATIM_NOW: fstflags_t = 0x0002;
+pub const FILESTAT_SET_MTIM: fstflags_t = 0x0004;
+pub const FILESTAT_SET_MTIM_NOW: fstflags_t = 0x0008;
+
+pub const inode_t = u64;
+pub const ino_t = inode_t;
+
+pub const linkcount_t = u64;
+
+pub const lookupflags_t = u32;
+pub const LOOKUP_SYMLINK_FOLLOW: lookupflags_t = 0x00000001;
+
+pub const oflags_t = u16;
+pub const O = struct {
+    pub const CREAT: oflags_t = 0x0001;
+    pub const DIRECTORY: oflags_t = 0x0002;
+    pub const EXCL: oflags_t = 0x0004;
+    pub const TRUNC: oflags_t = 0x0008;
+};
+
+pub const preopentype_t = u8;
+pub const PREOPENTYPE_DIR: preopentype_t = 0;
+
+pub const prestat_t = extern struct {
+    pr_type: preopentype_t,
+    u: prestat_u_t,
+};
+
+pub const prestat_dir_t = extern struct {
+    pr_name_len: usize,
+};
+
+pub const prestat_u_t = extern union {
+    dir: prestat_dir_t,
+};
+
+pub const riflags_t = u16;
+pub const roflags_t = u16;
+
+pub const SOCK = struct {
+    pub const RECV_PEEK: riflags_t = 0x0001;
+    pub const RECV_WAITALL: riflags_t = 0x0002;
+
+    pub const RECV_DATA_TRUNCATED: roflags_t = 0x0001;
+};
+
+pub const rights_t = u64;
+pub const RIGHT = struct {
+    pub const FD_DATASYNC: rights_t = 0x0000000000000001;
+    pub const FD_READ: rights_t = 0x0000000000000002;
+    pub const FD_SEEK: rights_t = 0x0000000000000004;
+    pub const FD_FDSTAT_SET_FLAGS: rights_t = 0x0000000000000008;
+    pub const FD_SYNC: rights_t = 0x0000000000000010;
+    pub const FD_TELL: rights_t = 0x0000000000000020;
+    pub const FD_WRITE: rights_t = 0x0000000000000040;
+    pub const FD_ADVISE: rights_t = 0x0000000000000080;
+    pub const FD_ALLOCATE: rights_t = 0x0000000000000100;
+    pub const PATH_CREATE_DIRECTORY: rights_t = 0x0000000000000200;
+    pub const PATH_CREATE_FILE: rights_t = 0x0000000000000400;
+    pub const PATH_LINK_SOURCE: rights_t = 0x0000000000000800;
+    pub const PATH_LINK_TARGET: rights_t = 0x0000000000001000;
+    pub const PATH_OPEN: rights_t = 0x0000000000002000;
+    pub const FD_READDIR: rights_t = 0x0000000000004000;
+    pub const PATH_READLINK: rights_t = 0x0000000000008000;
+    pub const PATH_RENAME_SOURCE: rights_t = 0x0000000000010000;
+    pub const PATH_RENAME_TARGET: rights_t = 0x0000000000020000;
+    pub const PATH_FILESTAT_GET: rights_t = 0x0000000000040000;
+    pub const PATH_FILESTAT_SET_SIZE: rights_t = 0x0000000000080000;
+    pub const PATH_FILESTAT_SET_TIMES: rights_t = 0x0000000000100000;
+    pub const FD_FILESTAT_GET: rights_t = 0x0000000000200000;
+    pub const FD_FILESTAT_SET_SIZE: rights_t = 0x0000000000400000;
+    pub const FD_FILESTAT_SET_TIMES: rights_t = 0x0000000000800000;
+    pub const PATH_SYMLINK: rights_t = 0x0000000001000000;
+    pub const PATH_REMOVE_DIRECTORY: rights_t = 0x0000000002000000;
+    pub const PATH_UNLINK_FILE: rights_t = 0x0000000004000000;
+    pub const POLL_FD_READWRITE: rights_t = 0x0000000008000000;
+    pub const SOCK_SHUTDOWN: rights_t = 0x0000000010000000;
+    pub const SOCK_ACCEPT: rights_t = 0x0000000020000000;
+    pub const ALL: rights_t = FD_DATASYNC |
+        FD_READ |
+        FD_SEEK |
+        FD_FDSTAT_SET_FLAGS |
+        FD_SYNC |
+        FD_TELL |
+        FD_WRITE |
+        FD_ADVISE |
+        FD_ALLOCATE |
+        PATH_CREATE_DIRECTORY |
+        PATH_CREATE_FILE |
+        PATH_LINK_SOURCE |
+        PATH_LINK_TARGET |
+        PATH_OPEN |
+        FD_READDIR |
+        PATH_READLINK |
+        PATH_RENAME_SOURCE |
+        PATH_RENAME_TARGET |
+        PATH_FILESTAT_GET |
+        PATH_FILESTAT_SET_SIZE |
+        PATH_FILESTAT_SET_TIMES |
+        FD_FILESTAT_GET |
+        FD_FILESTAT_SET_SIZE |
+        FD_FILESTAT_SET_TIMES |
+        PATH_SYMLINK |
+        PATH_REMOVE_DIRECTORY |
+        PATH_UNLINK_FILE |
+        POLL_FD_READWRITE |
+        SOCK_SHUTDOWN |
+        SOCK_ACCEPT;
+};
+
+pub const sdflags_t = u8;
+pub const SHUT = struct {
+    pub const RD: sdflags_t = 0x01;
+    pub const WR: sdflags_t = 0x02;
+};
+
+pub const siflags_t = u16;
+
+pub const signal_t = u8;
+pub const SIGNONE: signal_t = 0;
+pub const SIGHUP: signal_t = 1;
+pub const SIGINT: signal_t = 2;
+pub const SIGQUIT: signal_t = 3;
+pub const SIGILL: signal_t = 4;
+pub const SIGTRAP: signal_t = 5;
+pub const SIGABRT: signal_t = 6;
+pub const SIGBUS: signal_t = 7;
+pub const SIGFPE: signal_t = 8;
+pub const SIGKILL: signal_t = 9;
+pub const SIGUSR1: signal_t = 10;
+pub const SIGSEGV: signal_t = 11;
+pub const SIGUSR2: signal_t = 12;
+pub const SIGPIPE: signal_t = 13;
+pub const SIGALRM: signal_t = 14;
+pub const SIGTERM: signal_t = 15;
+pub const SIGCHLD: signal_t = 16;
+pub const SIGCONT: signal_t = 17;
+pub const SIGSTOP: signal_t = 18;
+pub const SIGTSTP: signal_t = 19;
+pub const SIGTTIN: signal_t = 20;
+pub const SIGTTOU: signal_t = 21;
+pub const SIGURG: signal_t = 22;
+pub const SIGXCPU: signal_t = 23;
+pub const SIGXFSZ: signal_t = 24;
+pub const SIGVTALRM: signal_t = 25;
+pub const SIGPROF: signal_t = 26;
+pub const SIGWINCH: signal_t = 27;
+pub const SIGPOLL: signal_t = 28;
+pub const SIGPWR: signal_t = 29;
+pub const SIGSYS: signal_t = 30;
+
+pub const subclockflags_t = u16;
+pub const SUBSCRIPTION_CLOCK_ABSTIME: subclockflags_t = 0x0001;
+
+pub const subscription_t = extern struct {
+    userdata: userdata_t,
+    u: subscription_u_t,
+};
+
+pub const subscription_clock_t = extern struct {
+    id: clockid_t,
+    timeout: timestamp_t,
+    precision: timestamp_t,
+    flags: subclockflags_t,
+};
+
+pub const subscription_fd_readwrite_t = extern struct {
+    fd: fd_t,
+};
+
+pub const subscription_u_t = extern struct {
+    tag: eventtype_t,
+    u: subscription_u_u_t,
+};
+
+pub const subscription_u_u_t = extern union {
+    clock: subscription_clock_t,
+    fd_read: subscription_fd_readwrite_t,
+    fd_write: subscription_fd_readwrite_t,
+};
+
+pub const timestamp_t = u64;
+
+pub const userdata_t = u64;
+
+/// Also known as `WHENCE`.
+pub const whence_t = enum(u8) { SET, CUR, END };
+
+pub const S = struct {
+    pub const IEXEC = @compileError("TODO audit this");
+    pub const IFBLK = 0x6000;
+    pub const IFCHR = 0x2000;
+    pub const IFDIR = 0x4000;
+    pub const IFIFO = 0xc000;
+    pub const IFLNK = 0xa000;
+    pub const IFMT = IFBLK | IFCHR | IFDIR | IFIFO | IFLNK | IFREG | IFSOCK;
+    pub const IFREG = 0x8000;
+    // There's no concept of UNIX domain socket but we define this value here in order to line with other OSes.
+    pub const IFSOCK = 0x1;
+};
+
+pub const LOCK = struct {
+    pub const SH = 0x1;
+    pub const EX = 0x2;
+    pub const NB = 0x4;
+    pub const UN = 0x8;
+};
