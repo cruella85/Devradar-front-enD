@@ -99,3 +99,27 @@ long double cbrtl(long double x)
 	t = dt + (0x1.0p32L + 0x1.0p-31L) - 0x1.0p32;
 #elif LDBL_MANT_DIG == 113
 	/*
+	 * Round dt away from zero to 47 bits.  Since we don't trust the 47,
+	 * add 2 47-bit ulps instead of 1 to round up.  Rounding is slow and
+	 * might be avoidable in this case, since on most machines dt will
+	 * have been evaluated in 53-bit precision and the technical reasons
+	 * for rounding up might not apply to either case in cbrtl() since
+	 * dt is much more accurate than needed.
+	 */
+	t = dt + 0x2.0p-46 + 0x1.0p60L - 0x1.0p60;
+#endif
+
+	/*
+	 * Final step Newton iteration to 64 or 113 bits with
+	 * error < 0.667 ulps
+	 */
+	s = t*t;         /* t*t is exact */
+	r = x/s;         /* error <= 0.5 ulps; |r| < |t| */
+	w = t+t;         /* t+t is exact */
+	r = (r-t)/(w+r); /* r-t is exact; w+r ~= 3*t */
+	t = t+t*r;       /* error <= 0.5 + 0.5/3 + epsilon */
+
+	t *= v.f;
+	return t;
+}
+#endif
