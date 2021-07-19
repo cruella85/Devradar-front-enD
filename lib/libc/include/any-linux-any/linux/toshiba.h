@@ -42,4 +42,23 @@ typedef struct {
 	unsigned int edx __attribute__ ((packed));
 	unsigned int esi __attribute__ ((packed));
 	unsigned int edi __attribute__ ((packed));
-} SMM
+} SMMRegisters;
+
+/*
+ * IOCTLs (0x90 - 0x91)
+ */
+
+#define TOSH_SMM		_IOWR('t', 0x90, SMMRegisters)
+/*
+ * Convenience toshiba_acpi command.
+ *
+ * The System Configuration Interface (SCI) is opened/closed internally
+ * to avoid userspace of buggy BIOSes.
+ *
+ * The toshiba_acpi module checks whether the eax register is set with
+ * SCI_GET (0xf300) or SCI_SET (0xf400), returning -EINVAL if not.
+ */
+#define TOSHIBA_ACPI_SCI	_IOWR('t', 0x91, SMMRegisters)
+
+
+#endif /* _LINUX_TOSHIBA_H */
