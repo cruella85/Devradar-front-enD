@@ -181,4 +181,193 @@ WINOLEAPI CoGetApartmentType (APTTYPE *pAptType, APTTYPEQUALIFIER *pAptQualifier
 #endif
 WINOLEAPI CoGetObjectContext (REFIID riid, LPVOID *ppv);
 WINOLEAPI CoRegisterClassObject (REFCLSID rclsid, LPUNKNOWN pUnk, DWORD dwClsContext, DWORD flags, LPDWORD lpdwRegister);
-WINOLEAPI C
+WINOLEAPI CoRevokeClassObject (DWORD dwRegister);
+WINOLEAPI CoResumeClassObjects (void);
+WINOLEAPI CoSuspendClassObjects (void);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+WINOLEAPI CoGetMalloc (DWORD dwMemContext, LPMALLOC *ppMalloc);
+WINOLEAPI_(DWORD) CoGetCurrentProcess (void);
+WINOLEAPI CoGetCallerTID (LPDWORD lpdwTID);
+WINOLEAPI CoGetDefaultContext (APTTYPE aptType, REFIID riid, void **ppv);
+#if NTDDI_VERSION >= 0x06020000
+WINOLEAPI CoDecodeProxy (DWORD dwClientPid, UINT64 ui64ProxyAddress, PServerInformation pServerInformation);
+WINOLEAPI CoWaitForMultipleObjects (DWORD dwFlags, DWORD dwTimeout, ULONG cHandles, const HANDLE *pHandles, LPDWORD lpdwindex);
+WINOLEAPI CoAllowUnmarshalerCLSID (REFCLSID clsid);
+#endif
+WINOLEAPI CoGetClassObject (REFCLSID rclsid, DWORD dwClsContext, LPVOID pvReserved, REFIID riid, LPVOID *ppv);
+WINOLEAPI_(ULONG) CoAddRefServerProcess (void);
+WINOLEAPI_(ULONG) CoReleaseServerProcess (void);
+WINOLEAPI CoGetPSClsid (REFIID riid, CLSID *pClsid);
+WINOLEAPI CoRegisterPSClsid (REFIID riid, REFCLSID rclsid);
+WINOLEAPI CoRegisterSurrogate (LPSURROGATE pSurrogate);
+WINOLEAPI CoMarshalHresult (LPSTREAM pstm, HRESULT hresult);
+WINOLEAPI CoUnmarshalHresult (LPSTREAM pstm, HRESULT *phresult);
+WINOLEAPI CoLockObjectExternal (LPUNKNOWN pUnk, WINBOOL fLock, WINBOOL fLastUnlockReleases);
+WINOLEAPI CoGetStdMarshalEx (LPUNKNOWN pUnkOuter, DWORD smexflags, LPUNKNOWN *ppUnkInner);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+#if NTDDI_VERSION >= 0x06020000
+WINOLEAPI CoIncrementMTAUsage (CO_MTA_USAGE_COOKIE *pCookie);
+WINOLEAPI CoDecrementMTAUsage (CO_MTA_USAGE_COOKIE Cookie);
+#endif
+typedef enum tagSTDMSHLFLAGS {
+  SMEXF_SERVER = 0x01,
+  SMEXF_HANDLER = 0x02
+} STDMSHLFLAGS;
+
+WINOLEAPI CoGetMarshalSizeMax (ULONG *pulSize, REFIID riid, LPUNKNOWN pUnk, DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags);
+WINOLEAPI CoMarshalInterface (LPSTREAM pStm, REFIID riid, LPUNKNOWN pUnk, DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags);
+WINOLEAPI CoUnmarshalInterface (LPSTREAM pStm, REFIID riid, LPVOID *ppv);
+WINOLEAPI CoReleaseMarshalData (LPSTREAM pStm);
+WINOLEAPI CoDisconnectObject (LPUNKNOWN pUnk, DWORD dwReserved);
+WINOLEAPI CoGetStandardMarshal (REFIID riid, LPUNKNOWN pUnk, DWORD dwDestContext, LPVOID pvDestContext, DWORD mshlflags, LPMARSHAL *ppMarshal);
+WINOLEAPI CoMarshalInterThreadInterfaceInStream (REFIID riid, LPUNKNOWN pUnk, LPSTREAM *ppStm);
+WINOLEAPI CoGetInterfaceAndReleaseStream (LPSTREAM pStm, REFIID iid, LPVOID *ppv);
+WINOLEAPI CoCreateFreeThreadedMarshaler (LPUNKNOWN punkOuter, LPUNKNOWN *ppunkMarshal);
+WINOLEAPI_(void) CoFreeUnusedLibraries (void);
+WINOLEAPI_(void) CoFreeUnusedLibrariesEx (DWORD dwUnloadDelay, DWORD dwReserved);
+WINOLEAPI CoInitializeSecurity (PSECURITY_DESCRIPTOR pSecDesc, LONG cAuthSvc, SOLE_AUTHENTICATION_SERVICE *asAuthSvc, void *pReserved1, DWORD dwAuthnLevel, DWORD dwImpLevel, void *pAuthList, DWORD dwCapabilities, void *pReserved3);
+WINOLEAPI CoSwitchCallContext (IUnknown *pNewObject, IUnknown **ppOldObject);
+
+#define COM_RIGHTS_EXECUTE 1
+#define COM_RIGHTS_EXECUTE_LOCAL 2
+#define COM_RIGHTS_EXECUTE_REMOTE 4
+#define COM_RIGHTS_ACTIVATE_LOCAL 8
+#define COM_RIGHTS_ACTIVATE_REMOTE 16
+
+WINOLEAPI CoCreateInstanceFromApp (REFCLSID Clsid, IUnknown *punkOuter, DWORD dwClsCtx, PVOID reserved, DWORD dwCount, MULTI_QI *pResults);
+
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+WINOLEAPI_(WINBOOL) CoIsHandlerConnected (LPUNKNOWN pUnk);
+#if _WIN32_WINNT >= 0x0600
+WINOLEAPI CoDisconnectContext (DWORD dwTimeout);
+#endif
+WINOLEAPI CoGetCallContext (REFIID riid, void **ppInterface);
+WINOLEAPI CoQueryProxyBlanket (IUnknown *pProxy, DWORD *pwAuthnSvc, DWORD *pAuthzSvc, LPOLESTR *pServerPrincName, DWORD *pAuthnLevel, DWORD *pImpLevel, RPC_AUTH_IDENTITY_HANDLE *pAuthInfo, DWORD *pCapabilites);
+WINOLEAPI CoSetProxyBlanket (IUnknown *pProxy, DWORD dwAuthnSvc, DWORD dwAuthzSvc, OLECHAR *pServerPrincName, DWORD dwAuthnLevel, DWORD dwImpLevel, RPC_AUTH_IDENTITY_HANDLE pAuthInfo, DWORD dwCapabilities);
+WINOLEAPI CoCopyProxy (IUnknown *pProxy, IUnknown **ppCopy);
+WINOLEAPI CoQueryClientBlanket (DWORD *pAuthnSvc, DWORD *pAuthzSvc, LPOLESTR *pServerPrincName, DWORD *pAuthnLevel, DWORD *pImpLevel, RPC_AUTHZ_HANDLE *pPrivs, DWORD *pCapabilities);
+WINOLEAPI CoImpersonateClient (void);
+WINOLEAPI CoRevertToSelf (void);
+WINOLEAPI CoQueryAuthenticationServices (DWORD *pcAuthSvc, SOLE_AUTHENTICATION_SERVICE **asAuthSvc);
+WINOLEAPI CoCreateInstance (REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv);
+WINOLEAPI CoCreateInstanceEx (REFCLSID Clsid, IUnknown *punkOuter, DWORD dwClsCtx, COSERVERINFO *pServerInfo, DWORD dwCount, MULTI_QI *pResults);
+#endif
+
+#if WINAPI_FAMILY == WINAPI_FAMILY_APP
+  __forceinline HRESULT CoCreateInstance (REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv) {
+    MULTI_QI OneQI;
+    HRESULT hr;
+
+    OneQI.pItf = NULL;
+#ifdef __cplusplus
+    OneQI.pIID = &riid;
+#else
+    OneQI.pIID = riid;
+#endif
+    hr = CoCreateInstanceFromApp (rclsid, pUnkOuter, dwClsContext, NULL, 1,&OneQI);
+    *ppv = OneQI.pItf;
+    return FAILED (hr) ? hr : OneQI.hr;
+  }
+
+  __forceinline HRESULT CoCreateInstanceEx (REFCLSID Clsid, IUnknown *punkOuter, DWORD dwClsCtx, COSERVERINFO *pServerInfo, DWORD dwCount, MULTI_QI *pResults) {
+    return CoCreateInstanceFromApp (Clsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResults);
+  }
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+WINOLEAPI CoGetCancelObject (DWORD dwThreadId, REFIID iid, void **ppUnk);
+WINOLEAPI CoSetCancelObject (IUnknown *pUnk);
+WINOLEAPI CoCancelCall (DWORD dwThreadId, ULONG ulTimeout);
+WINOLEAPI CoTestCancel (void);
+WINOLEAPI CoEnableCallCancellation (LPVOID pReserved);
+WINOLEAPI CoDisableCallCancellation (LPVOID pReserved);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+WINOLEAPI StringFromCLSID (REFCLSID rclsid, LPOLESTR *lplpsz);
+WINOLEAPI CLSIDFromString (LPCOLESTR lpsz, LPCLSID pclsid);
+WINOLEAPI StringFromIID (REFIID rclsid, LPOLESTR *lplpsz);
+WINOLEAPI IIDFromString (LPCOLESTR lpsz, LPIID lpiid);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+WINOLEAPI ProgIDFromCLSID (REFCLSID clsid, LPOLESTR *lplpszProgID);
+WINOLEAPI CLSIDFromProgID (LPCOLESTR lpszProgID, LPCLSID lpclsid);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+WINOLEAPI_(int) StringFromGUID2 (REFGUID rguid, LPOLESTR lpsz, int cchMax);
+WINOLEAPI CoCreateGuid (GUID *pguid);
+
+typedef struct tagPROPVARIANT PROPVARIANT;
+
+WINOLEAPI PropVariantCopy (PROPVARIANT *pvarDest, const PROPVARIANT *pvarSrc);
+WINOLEAPI PropVariantClear (PROPVARIANT *pvar);
+WINOLEAPI FreePropVariantArray (ULONG cVariants, PROPVARIANT *rgvars);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+WINOLEAPI CoWaitForMultipleHandles (DWORD dwFlags, DWORD dwTimeout, ULONG cHandles, LPHANDLE pHandles, LPDWORD lpdwindex);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+typedef enum tagCOWAIT_FLAGS {
+  COWAIT_DEFAULT = 0,
+  COWAIT_WAITALL = 1,
+  COWAIT_ALERTABLE = 2,
+  COWAIT_INPUTAVAILABLE = 4
+#endif
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+  , COWAIT_DISPATCH_CALLS = 8,
+  COWAIT_DISPATCH_WINDOW_MESSAGES = 0x10
+#endif
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+} COWAIT_FLAGS;
+#endif
+
+#if NTDDI_VERSION >= 0x06020000
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+typedef enum CWMO_FLAGS {
+  CWMO_DEFAULT = 0,
+  CWMO_DISPATCH_CALLS = 1
+#endif
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+  , CWMO_DISPATCH_WINDOW_MESSAGES = 2
+#endif
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+} CWMO_FLAGS;
+#endif
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+#define CWMO_MAX_HANDLES 56
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_DESKTOP)
+WINOLEAPI CoGetTreatAsClass (REFCLSID clsidOld, LPCLSID pClsidNew);
+WINOLEAPI CoInvalidateRemoteMachineBindings (LPOLESTR pszMachineName);
+#endif
+
+#if WINAPI_FAMILY_PARTITION (WINAPI_PARTITION_APP)
+typedef HRESULT (STDAPICALLTYPE *LPFNGETCLASSOBJECT) (REFCLSID, REFIID, LPVOID *);
+typedef HRESULT (STDAPICALLTYPE *LPFNCANUNLOADNOW) (void);
+
+STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, LPVOID *ppv);
+STDAPI DllCanUnloadNow (void);
+WINOLEAPI_ (LPVOID) CoTaskMemAlloc (SIZE_T cb);
+WINOLEAPI_ (LPVOID) CoTaskMemRealloc (LPVOID pv, SIZE_T cb);
+WINOLEAPI_ (void) CoTaskMemFree (LPVOID pv);
+
+#ifndef RC_INVOKED
+#include <poppack.h>
+#endif
+
+#endif
+
+#endif
