@@ -198,4 +198,41 @@ extern "C" {
   typedef HRESULT (WINAPI FNCERTSRVRESTOREREGISTERW)(HCSBC hbc,WCHAR const *pwszCheckPointFilePath,WCHAR const *pwszLogPath,CSEDB_RSTMAPW rgrstmap[],LONG crstmap,WCHAR const *pwszBackupLogPath,ULONG genLow,ULONG genHigh);
 
   HRESULT CERTBCLI_API CertSrvRestoreRegisterW(HCSBC hbc,WCHAR const *pwszCheckPointFilePath,WCHAR const *pwszLogPath,CSEDB_RSTMAPW rgrstmap[],LONG crstmap,WCHAR const *pwszBackupLogPath,ULONG genLow,ULONG genHigh);
-  HRESULT CERTBCLI_API CertSrvRestoreRegisterThroughFile(HCSBC hbc,WCHAR const *pwszCheckPointFilePath,WCHAR const *pwszLogPath,CSEDB_RSTMAPW rgrstmap[],LONG crstmap,WCHAR co
+  HRESULT CERTBCLI_API CertSrvRestoreRegisterThroughFile(HCSBC hbc,WCHAR const *pwszCheckPointFilePath,WCHAR const *pwszLogPath,CSEDB_RSTMAPW rgrstmap[],LONG crstmap,WCHAR const *pwszBackupLogPath,ULONG genLow,ULONG genHigh);
+
+#ifdef _CERTBCLI_TYPECHECK
+  FNCERTSRVRESTOREREGISTERW *pfnCertSrvRestoreRegister = CertSrvRestoreRegister;
+#endif
+
+  typedef HRESULT (WINAPI FNCERTSRVRESTOREREGISTERCOMPLETE)(HCSBC hbc,HRESULT hrRestoreState);
+
+  HRESULT CERTBCLI_API CertSrvRestoreRegisterComplete(HCSBC hbc,HRESULT hrRestoreState);
+
+#ifdef _CERTBCLI_TYPECHECK
+  FNCERTSRVRESTOREREGISTERCOMPLETE *pfnCertSrvRestoreRegisterComplete = CertSrvRestoreRegisterComplete;
+#endif
+
+  typedef HRESULT (WINAPI FNCERTSRVRESTOREEND)(HCSBC hbc);
+
+  HRESULT CERTBCLI_API CertSrvRestoreEnd(HCSBC hbc);
+
+#ifdef _CERTBCLI_TYPECHECK
+  FNCERTSRVRESTOREEND *pfnCertSrvRestoreEnd = CertSrvRestoreEnd;
+#endif
+
+#define CSCONTROL_SHUTDOWN 0x000000001
+#define CSCONTROL_SUSPEND 0x000000002
+#define CSCONTROL_RESTART 0x000000003
+
+  typedef HRESULT (WINAPI FNCERTSRVSERVERCONTROLW)(WCHAR const *pwszServerName,DWORD dwControlFlags,DWORD *pcbOut,BYTE **ppbOut);
+
+  HRESULT CERTBCLI_API CertSrvServerControlW(WCHAR const *pwszServerName,DWORD dwControlFlags,DWORD *pcbOut,BYTE **ppbOut);
+
+#ifdef _CERTBCLI_TYPECHECK
+  FNCERTSRVSERVERCONTROLW *pfnCertSrvServerControl = CertSrvServerControl;
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+#endif
