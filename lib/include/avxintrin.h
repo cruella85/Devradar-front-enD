@@ -403,4 +403,264 @@ _mm256_rcp_ps(__m256 __a)
   ((__m256d)__builtin_ia32_roundpd256((__v4df)(__m256d)(V), (M)))
 
 /// Rounds the values stored in a 256-bit vector of [8 x float] as
-///    specified by the byte operand. The source values are rounded
+///    specified by the byte operand. The source values are rounded to integer
+///    values and returned as floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256 _mm256_round_ps(__m256 V, const int M);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VROUNDPS </c> instruction.
+///
+/// \param V
+///    A 256-bit vector of [8 x float].
+/// \param M
+///    An integer value that specifies the rounding operation. \n
+///    Bits [7:4] are reserved. \n
+///    Bit [3] is a precision exception value: \n
+///      0: A normal PE exception is used. \n
+///      1: The PE field is not updated. \n
+///    Bit [2] is the rounding control source: \n
+///      0: Use bits [1:0] of \a M. \n
+///      1: Use the current MXCSR setting. \n
+///    Bits [1:0] contain the rounding control definition: \n
+///      00: Nearest. \n
+///      01: Downward (toward negative infinity). \n
+///      10: Upward (toward positive infinity). \n
+///      11: Truncated.
+/// \returns A 256-bit vector of [8 x float] containing the rounded values.
+#define _mm256_round_ps(V, M) \
+  ((__m256)__builtin_ia32_roundps256((__v8sf)(__m256)(V), (M)))
+
+/// Rounds up the values stored in a 256-bit vector of [4 x double]. The
+///    source values are rounded up to integer values and returned as 64-bit
+///    double-precision floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256d _mm256_ceil_pd(__m256d V);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VROUNDPD </c> instruction.
+///
+/// \param V
+///    A 256-bit vector of [4 x double].
+/// \returns A 256-bit vector of [4 x double] containing the rounded up values.
+#define _mm256_ceil_pd(V)  _mm256_round_pd((V), _MM_FROUND_CEIL)
+
+/// Rounds down the values stored in a 256-bit vector of [4 x double].
+///    The source values are rounded down to integer values and returned as
+///    64-bit double-precision floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256d _mm256_floor_pd(__m256d V);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VROUNDPD </c> instruction.
+///
+/// \param V
+///    A 256-bit vector of [4 x double].
+/// \returns A 256-bit vector of [4 x double] containing the rounded down
+///    values.
+#define _mm256_floor_pd(V) _mm256_round_pd((V), _MM_FROUND_FLOOR)
+
+/// Rounds up the values stored in a 256-bit vector of [8 x float]. The
+///    source values are rounded up to integer values and returned as
+///    floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256 _mm256_ceil_ps(__m256 V);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VROUNDPS </c> instruction.
+///
+/// \param V
+///    A 256-bit vector of [8 x float].
+/// \returns A 256-bit vector of [8 x float] containing the rounded up values.
+#define _mm256_ceil_ps(V)  _mm256_round_ps((V), _MM_FROUND_CEIL)
+
+/// Rounds down the values stored in a 256-bit vector of [8 x float]. The
+///    source values are rounded down to integer values and returned as
+///    floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256 _mm256_floor_ps(__m256 V);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VROUNDPS </c> instruction.
+///
+/// \param V
+///    A 256-bit vector of [8 x float].
+/// \returns A 256-bit vector of [8 x float] containing the rounded down values.
+#define _mm256_floor_ps(V) _mm256_round_ps((V), _MM_FROUND_FLOOR)
+
+/* Logical */
+/// Performs a bitwise AND of two 256-bit vectors of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VANDPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+/// \param __b
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+/// \returns A 256-bit vector of [4 x double] containing the bitwise AND of the
+///    values between both operands.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_and_pd(__m256d __a, __m256d __b)
+{
+  return (__m256d)((__v4du)__a & (__v4du)__b);
+}
+
+/// Performs a bitwise AND of two 256-bit vectors of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VANDPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+/// \param __b
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+/// \returns A 256-bit vector of [8 x float] containing the bitwise AND of the
+///    values between both operands.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_and_ps(__m256 __a, __m256 __b)
+{
+  return (__m256)((__v8su)__a & (__v8su)__b);
+}
+
+/// Performs a bitwise AND of two 256-bit vectors of [4 x double], using
+///    the one's complement of the values contained in the first source operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VANDNPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double] containing the left source operand. The
+///    one's complement of this value is used in the bitwise AND.
+/// \param __b
+///    A 256-bit vector of [4 x double] containing the right source operand.
+/// \returns A 256-bit vector of [4 x double] containing the bitwise AND of the
+///    values of the second operand and the one's complement of the first
+///    operand.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_andnot_pd(__m256d __a, __m256d __b)
+{
+  return (__m256d)(~(__v4du)__a & (__v4du)__b);
+}
+
+/// Performs a bitwise AND of two 256-bit vectors of [8 x float], using
+///    the one's complement of the values contained in the first source operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VANDNPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing the left source operand. The
+///    one's complement of this value is used in the bitwise AND.
+/// \param __b
+///    A 256-bit vector of [8 x float] containing the right source operand.
+/// \returns A 256-bit vector of [8 x float] containing the bitwise AND of the
+///    values of the second operand and the one's complement of the first
+///    operand.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_andnot_ps(__m256 __a, __m256 __b)
+{
+  return (__m256)(~(__v8su)__a & (__v8su)__b);
+}
+
+/// Performs a bitwise OR of two 256-bit vectors of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VORPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+/// \param __b
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+/// \returns A 256-bit vector of [4 x double] containing the bitwise OR of the
+///    values between both operands.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_or_pd(__m256d __a, __m256d __b)
+{
+  return (__m256d)((__v4du)__a | (__v4du)__b);
+}
+
+/// Performs a bitwise OR of two 256-bit vectors of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VORPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+/// \param __b
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+/// \returns A 256-bit vector of [8 x float] containing the bitwise OR of the
+///    values between both operands.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_or_ps(__m256 __a, __m256 __b)
+{
+  return (__m256)((__v8su)__a | (__v8su)__b);
+}
+
+/// Performs a bitwise XOR of two 256-bit vectors of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VXORPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+/// \param __b
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+/// \returns A 256-bit vector of [4 x double] containing the bitwise XOR of the
+///    values between both operands.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_xor_pd(__m256d __a, __m256d __b)
+{
+  return (__m256d)((__v4du)__a ^ (__v4du)__b);
+}
+
+/// Performs a bitwise XOR of two 256-bit vectors of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VXORPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+/// \param __b
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+/// \returns A 256-bit vector of [8 x float] containing the bitwise XOR of the
+///    values between both operands.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_xor_ps(__m256 __a, __m256 __b)
+{
+  return (__m256)((__v8su)__a ^ (__v8su)__b);
+}
+
+/* Horizontal arithmetic */
+/// Horizontally adds the adjacent pairs of values contained in two
+///    256-bit vectors of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VHADDPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x doubl
