@@ -663,4 +663,221 @@ _mm256_xor_ps(__m256 __a, __m256 __b)
 /// This intrinsic corresponds to the <c> VHADDPD </c> instruction.
 ///
 /// \param __a
-///    A 256-bit vector of [4 x doubl
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+///    The horizontal sums of the values are returned in the even-indexed
+///    elements of a vector of [4 x double].
+/// \param __b
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+///    The horizontal sums of the values are returned in the odd-indexed
+///    elements of a vector of [4 x double].
+/// \returns A 256-bit vector of [4 x double] containing the horizontal sums of
+///    both operands.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_hadd_pd(__m256d __a, __m256d __b)
+{
+  return (__m256d)__builtin_ia32_haddpd256((__v4df)__a, (__v4df)__b);
+}
+
+/// Horizontally adds the adjacent pairs of values contained in two
+///    256-bit vectors of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VHADDPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+///    The horizontal sums of the values are returned in the elements with
+///    index 0, 1, 4, 5 of a vector of [8 x float].
+/// \param __b
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+///    The horizontal sums of the values are returned in the elements with
+///    index 2, 3, 6, 7 of a vector of [8 x float].
+/// \returns A 256-bit vector of [8 x float] containing the horizontal sums of
+///    both operands.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_hadd_ps(__m256 __a, __m256 __b)
+{
+  return (__m256)__builtin_ia32_haddps256((__v8sf)__a, (__v8sf)__b);
+}
+
+/// Horizontally subtracts the adjacent pairs of values contained in two
+///    256-bit vectors of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VHSUBPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+///    The horizontal differences between the values are returned in the
+///    even-indexed elements of a vector of [4 x double].
+/// \param __b
+///    A 256-bit vector of [4 x double] containing one of the source operands.
+///    The horizontal differences between the values are returned in the
+///    odd-indexed elements of a vector of [4 x double].
+/// \returns A 256-bit vector of [4 x double] containing the horizontal
+///    differences of both operands.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_hsub_pd(__m256d __a, __m256d __b)
+{
+  return (__m256d)__builtin_ia32_hsubpd256((__v4df)__a, (__v4df)__b);
+}
+
+/// Horizontally subtracts the adjacent pairs of values contained in two
+///    256-bit vectors of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VHSUBPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+///    The horizontal differences between the values are returned in the
+///    elements with index 0, 1, 4, 5 of a vector of [8 x float].
+/// \param __b
+///    A 256-bit vector of [8 x float] containing one of the source operands.
+///    The horizontal differences between the values are returned in the
+///    elements with index 2, 3, 6, 7 of a vector of [8 x float].
+/// \returns A 256-bit vector of [8 x float] containing the horizontal
+///    differences of both operands.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_hsub_ps(__m256 __a, __m256 __b)
+{
+  return (__m256)__builtin_ia32_hsubps256((__v8sf)__a, (__v8sf)__b);
+}
+
+/* Vector permutations */
+/// Copies the values in a 128-bit vector of [2 x double] as specified
+///    by the 128-bit integer vector operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPERMILPD </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [2 x double].
+/// \param __c
+///    A 128-bit integer vector operand specifying how the values are to be
+///    copied. \n
+///    Bit [1]: \n
+///      0: Bits [63:0] of the source are copied to bits [63:0] of the returned
+///         vector. \n
+///      1: Bits [127:64] of the source are copied to bits [63:0] of the
+///         returned vector. \n
+///    Bit [65]: \n
+///      0: Bits [63:0] of the source are copied to bits [127:64] of the
+///         returned vector. \n
+///      1: Bits [127:64] of the source are copied to bits [127:64] of the
+///         returned vector.
+/// \returns A 128-bit vector of [2 x double] containing the copied values.
+static __inline __m128d __DEFAULT_FN_ATTRS128
+_mm_permutevar_pd(__m128d __a, __m128i __c)
+{
+  return (__m128d)__builtin_ia32_vpermilvarpd((__v2df)__a, (__v2di)__c);
+}
+
+/// Copies the values in a 256-bit vector of [4 x double] as specified
+///    by the 256-bit integer vector operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPERMILPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \param __c
+///    A 256-bit integer vector operand specifying how the values are to be
+///    copied. \n
+///    Bit [1]: \n
+///      0: Bits [63:0] of the source are copied to bits [63:0] of the returned
+///         vector. \n
+///      1: Bits [127:64] of the source are copied to bits [63:0] of the
+///         returned vector. \n
+///    Bit [65]: \n
+///      0: Bits [63:0] of the source are copied to bits [127:64] of the
+///         returned vector. \n
+///      1: Bits [127:64] of the source are copied to bits [127:64] of the
+///         returned vector. \n
+///    Bit [129]: \n
+///      0: Bits [191:128] of the source are copied to bits [191:128] of the
+///         returned vector. \n
+///      1: Bits [255:192] of the source are copied to bits [191:128] of the
+///         returned vector. \n
+///    Bit [193]: \n
+///      0: Bits [191:128] of the source are copied to bits [255:192] of the
+///         returned vector. \n
+///      1: Bits [255:192] of the source are copied to bits [255:192] of the
+///    returned vector.
+/// \returns A 256-bit vector of [4 x double] containing the copied values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_permutevar_pd(__m256d __a, __m256i __c)
+{
+  return (__m256d)__builtin_ia32_vpermilvarpd256((__v4df)__a, (__v4di)__c);
+}
+
+/// Copies the values stored in a 128-bit vector of [4 x float] as
+///    specified by the 128-bit integer vector operand.
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPERMILPS </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [4 x float].
+/// \param __c
+///    A 128-bit integer vector operand specifying how the values are to be
+///    copied. \n
+///    Bits [1:0]: \n
+///      00: Bits [31:0] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///    Bits [33:32]: \n
+///      00: Bits [31:0] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///    Bits [65:64]: \n
+///      00: Bits [31:0] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///    Bits [97:96]: \n
+///      00: Bits [31:0] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [127:96] of the
+///          returned vector.
+/// \returns A 128-bit vector of [4 x float] containing the copied values.
+static __inline __m128 __DEFAULT_FN_ATTRS128
+_mm_permutevar_ps(__m128 __a, __m128i __c)
+{
+  return (__m128)__builtin_ia32_vpermilvarps((__v4sf)__a, (__v4si)__c);
+}
+
+/// Copies the values stored in a 256-bit vector of [8 x float] as
+///    specified by the 256-bit integer vector operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPERMILPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \param __c
+///    A 256-bit integer vector operand specifying how the valu
