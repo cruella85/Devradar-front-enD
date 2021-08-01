@@ -880,4 +880,209 @@ _mm_permutevar_ps(__m128 __a, __m128i __c)
 /// \param __a
 ///    A 256-bit vector of [8 x float].
 /// \param __c
-///    A 256-bit integer vector operand specifying how the valu
+///    A 256-bit integer vector operand specifying how the values are to be
+///    copied. \n
+///    Bits [1:0]: \n
+///      00: Bits [31:0] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///    Bits [33:32]: \n
+///      00: Bits [31:0] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///    Bits [65:64]: \n
+///      00: Bits [31:0] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///    Bits [97:96]: \n
+///      00: Bits [31:0] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///    Bits [129:128]: \n
+///      00: Bits [159:128] of the source are copied to bits [159:128] of the
+///          returned vector. \n
+///      01: Bits [191:160] of the source are copied to bits [159:128] of the
+///          returned vector. \n
+///      10: Bits [223:192] of the source are copied to bits [159:128] of the
+///          returned vector. \n
+///      11: Bits [255:224] of the source are copied to bits [159:128] of the
+///          returned vector. \n
+///    Bits [161:160]: \n
+///      00: Bits [159:128] of the source are copied to bits [191:160] of the
+///          returned vector. \n
+///      01: Bits [191:160] of the source are copied to bits [191:160] of the
+///          returned vector. \n
+///      10: Bits [223:192] of the source are copied to bits [191:160] of the
+///          returned vector. \n
+///      11: Bits [255:224] of the source are copied to bits [191:160] of the
+///          returned vector. \n
+///    Bits [193:192]: \n
+///      00: Bits [159:128] of the source are copied to bits [223:192] of the
+///          returned vector. \n
+///      01: Bits [191:160] of the source are copied to bits [223:192] of the
+///          returned vector. \n
+///      10: Bits [223:192] of the source are copied to bits [223:192] of the
+///          returned vector. \n
+///      11: Bits [255:224] of the source are copied to bits [223:192] of the
+///          returned vector. \n
+///    Bits [225:224]: \n
+///      00: Bits [159:128] of the source are copied to bits [255:224] of the
+///          returned vector. \n
+///      01: Bits [191:160] of the source are copied to bits [255:224] of the
+///          returned vector. \n
+///      10: Bits [223:192] of the source are copied to bits [255:224] of the
+///          returned vector. \n
+///      11: Bits [255:224] of the source are copied to bits [255:224] of the
+///          returned vector.
+/// \returns A 256-bit vector of [8 x float] containing the copied values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_permutevar_ps(__m256 __a, __m256i __c)
+{
+  return (__m256)__builtin_ia32_vpermilvarps256((__v8sf)__a, (__v8si)__c);
+}
+
+/// Copies the values in a 128-bit vector of [2 x double] as specified
+///    by the immediate integer operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m128d _mm_permute_pd(__m128d A, const int C);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VPERMILPD </c> instruction.
+///
+/// \param A
+///    A 128-bit vector of [2 x double].
+/// \param C
+///    An immediate integer operand specifying how the values are to be
+///    copied. \n
+///    Bit [0]: \n
+///      0: Bits [63:0] of the source are copied to bits [63:0] of the returned
+///         vector. \n
+///      1: Bits [127:64] of the source are copied to bits [63:0] of the
+///         returned vector. \n
+///    Bit [1]: \n
+///      0: Bits [63:0] of the source are copied to bits [127:64] of the
+///         returned vector. \n
+///      1: Bits [127:64] of the source are copied to bits [127:64] of the
+///         returned vector.
+/// \returns A 128-bit vector of [2 x double] containing the copied values.
+#define _mm_permute_pd(A, C) \
+  ((__m128d)__builtin_ia32_vpermilpd((__v2df)(__m128d)(A), (int)(C)))
+
+/// Copies the values in a 256-bit vector of [4 x double] as specified by
+///    the immediate integer operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256d _mm256_permute_pd(__m256d A, const int C);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VPERMILPD </c> instruction.
+///
+/// \param A
+///    A 256-bit vector of [4 x double].
+/// \param C
+///    An immediate integer operand specifying how the values are to be
+///    copied. \n
+///    Bit [0]: \n
+///      0: Bits [63:0] of the source are copied to bits [63:0] of the returned
+///         vector. \n
+///      1: Bits [127:64] of the source are copied to bits [63:0] of the
+///         returned vector. \n
+///    Bit [1]: \n
+///      0: Bits [63:0] of the source are copied to bits [127:64] of the
+///         returned vector. \n
+///      1: Bits [127:64] of the source are copied to bits [127:64] of the
+///         returned vector. \n
+///    Bit [2]: \n
+///      0: Bits [191:128] of the source are copied to bits [191:128] of the
+///         returned vector. \n
+///      1: Bits [255:192] of the source are copied to bits [191:128] of the
+///         returned vector. \n
+///    Bit [3]: \n
+///      0: Bits [191:128] of the source are copied to bits [255:192] of the
+///         returned vector. \n
+///      1: Bits [255:192] of the source are copied to bits [255:192] of the
+///         returned vector.
+/// \returns A 256-bit vector of [4 x double] containing the copied values.
+#define _mm256_permute_pd(A, C) \
+  ((__m256d)__builtin_ia32_vpermilpd256((__v4df)(__m256d)(A), (int)(C)))
+
+/// Copies the values in a 128-bit vector of [4 x float] as specified by
+///    the immediate integer operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m128 _mm_permute_ps(__m128 A, const int C);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VPERMILPS </c> instruction.
+///
+/// \param A
+///    A 128-bit vector of [4 x float].
+/// \param C
+///    An immediate integer operand specifying how the values are to be
+///    copied. \n
+///    Bits [1:0]: \n
+///      00: Bits [31:0] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [31:0] of the
+///          returned vector. \n
+///    Bits [3:2]: \n
+///      00: Bits [31:0] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [63:32] of the
+///          returned vector. \n
+///    Bits [5:4]: \n
+///      00: Bits [31:0] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [95:64] of the
+///          returned vector. \n
+///    Bits [7:6]: \n
+///      00: Bits [31:0] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      01: Bits [63:32] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      10: Bits [95:64] of the source are copied to bits [127:96] of the
+///          returned vector. \n
+///      11: Bits [127:96] of the source are copied to bits [127:96] of the
+///          returned vector.
+/// \returns A 128-bit vector of [4 x float] containing the copied values.
+#define _mm_permute_ps(A, C) \
+  ((__m128)__builtin_ia32_vpermilps((__v4sf)(
