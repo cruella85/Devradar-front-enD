@@ -1290,4 +1290,197 @@ _mm256_permutevar_ps(__m256 __a, __m256i __c)
 ///    Bits [5:4]: \n
 ///    00: Bits [127:0] of operand \a V1 are copied to bits [255:128] of the
 ///    destination. \n
-///    01: Bits [255:128] of operand \a V
+///    01: Bits [255:128] of operand \a V1 are copied to bits [255:128] of the
+///    destination. \n
+///    10: Bits [127:0] of operand \a V2 are copied to bits [255:128] of the
+///    destination. \n
+///    11: Bits [255:128] of operand \a V2 are copied to bits [255:128] of the
+///    destination.
+/// \returns A 256-bit integer vector containing the copied values.
+#define _mm256_permute2f128_si256(V1, V2, M) \
+  ((__m256i)__builtin_ia32_vperm2f128_si256((__v8si)(__m256i)(V1), \
+                                            (__v8si)(__m256i)(V2), (int)(M)))
+
+/* Vector Blend */
+/// Merges 64-bit double-precision data values stored in either of the
+///    two 256-bit vectors of [4 x double], as specified by the immediate
+///    integer operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256d _mm256_blend_pd(__m256d V1, __m256d V2, const int M);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VBLENDPD </c> instruction.
+///
+/// \param V1
+///    A 256-bit vector of [4 x double].
+/// \param V2
+///    A 256-bit vector of [4 x double].
+/// \param M
+///    An immediate integer operand, with mask bits [3:0] specifying how the
+///    values are to be copied. The position of the mask bit corresponds to the
+///    index of a copied value. When a mask bit is 0, the corresponding 64-bit
+///    element in operand \a V1 is copied to the same position in the
+///    destination. When a mask bit is 1, the corresponding 64-bit element in
+///    operand \a V2 is copied to the same position in the destination.
+/// \returns A 256-bit vector of [4 x double] containing the copied values.
+#define _mm256_blend_pd(V1, V2, M) \
+  ((__m256d)__builtin_ia32_blendpd256((__v4df)(__m256d)(V1), \
+                                      (__v4df)(__m256d)(V2), (int)(M)))
+
+/// Merges 32-bit single-precision data values stored in either of the
+///    two 256-bit vectors of [8 x float], as specified by the immediate
+///    integer operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256 _mm256_blend_ps(__m256 V1, __m256 V2, const int M);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VBLENDPS </c> instruction.
+///
+/// \param V1
+///    A 256-bit vector of [8 x float].
+/// \param V2
+///    A 256-bit vector of [8 x float].
+/// \param M
+///    An immediate integer operand, with mask bits [7:0] specifying how the
+///    values are to be copied. The position of the mask bit corresponds to the
+///    index of a copied value. When a mask bit is 0, the corresponding 32-bit
+///    element in operand \a V1 is copied to the same position in the
+///    destination. When a mask bit is 1, the corresponding 32-bit element in
+///    operand \a V2 is copied to the same position in the destination.
+/// \returns A 256-bit vector of [8 x float] containing the copied values.
+#define _mm256_blend_ps(V1, V2, M) \
+  ((__m256)__builtin_ia32_blendps256((__v8sf)(__m256)(V1), \
+                                     (__v8sf)(__m256)(V2), (int)(M)))
+
+/// Merges 64-bit double-precision data values stored in either of the
+///    two 256-bit vectors of [4 x double], as specified by the 256-bit vector
+///    operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VBLENDVPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \param __b
+///    A 256-bit vector of [4 x double].
+/// \param __c
+///    A 256-bit vector operand, with mask bits 255, 191, 127, and 63 specifying
+///    how the values are to be copied. The position of the mask bit corresponds
+///    to the most significant bit of a copied value. When a mask bit is 0, the
+///    corresponding 64-bit element in operand \a __a is copied to the same
+///    position in the destination. When a mask bit is 1, the corresponding
+///    64-bit element in operand \a __b is copied to the same position in the
+///    destination.
+/// \returns A 256-bit vector of [4 x double] containing the copied values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_blendv_pd(__m256d __a, __m256d __b, __m256d __c)
+{
+  return (__m256d)__builtin_ia32_blendvpd256(
+    (__v4df)__a, (__v4df)__b, (__v4df)__c);
+}
+
+/// Merges 32-bit single-precision data values stored in either of the
+///    two 256-bit vectors of [8 x float], as specified by the 256-bit vector
+///    operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VBLENDVPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \param __b
+///    A 256-bit vector of [8 x float].
+/// \param __c
+///    A 256-bit vector operand, with mask bits 255, 223, 191, 159, 127, 95, 63,
+///    and 31 specifying how the values are to be copied. The position of the
+///    mask bit corresponds to the most significant bit of a copied value. When
+///    a mask bit is 0, the corresponding 32-bit element in operand \a __a is
+///    copied to the same position in the destination. When a mask bit is 1, the
+///    corresponding 32-bit element in operand \a __b is copied to the same
+///    position in the destination.
+/// \returns A 256-bit vector of [8 x float] containing the copied values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_blendv_ps(__m256 __a, __m256 __b, __m256 __c)
+{
+  return (__m256)__builtin_ia32_blendvps256(
+    (__v8sf)__a, (__v8sf)__b, (__v8sf)__c);
+}
+
+/* Vector Dot Product */
+/// Computes two dot products in parallel, using the lower and upper
+///    halves of two [8 x float] vectors as input to the two computations, and
+///    returning the two dot products in the lower and upper halves of the
+///    [8 x float] result.
+///
+///    The immediate integer operand controls which input elements will
+///    contribute to the dot product, and where the final results are returned.
+///    In general, for each dot product, the four corresponding elements of the
+///    input vectors are multiplied; the first two and second two products are
+///    summed, then the two sums are added to form the final result.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256 _mm256_dp_ps(__m256 V1, __m256 V2, const int M);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VDPPS </c> instruction.
+///
+/// \param V1
+///    A vector of [8 x float] values, treated as two [4 x float] vectors.
+/// \param V2
+///    A vector of [8 x float] values, treated as two [4 x float] vectors.
+/// \param M
+///    An immediate integer argument. Bits [7:4] determine which elements of
+///    the input vectors are used, with bit [4] corresponding to the lowest
+///    element and bit [7] corresponding to the highest element of each [4 x
+///    float] subvector. If a bit is set, the corresponding elements from the
+///    two input vectors are used as an input for dot product; otherwise that
+///    input is treated as zero. Bits [3:0] determine which elements of the
+///    result will receive a copy of the final dot product, with bit [0]
+///    corresponding to the lowest element and bit [3] corresponding to the
+///    highest element of each [4 x float] subvector. If a bit is set, the dot
+///    product is returned in the corresponding element; otherwise that element
+///    is set to zero. The bitmask is applied in the same way to each of the
+///    two parallel dot product computations.
+/// \returns A 256-bit vector of [8 x float] containing the two dot products.
+#define _mm256_dp_ps(V1, V2, M) \
+  ((__m256)__builtin_ia32_dpps256((__v8sf)(__m256)(V1), \
+                                  (__v8sf)(__m256)(V2), (M)))
+
+/* Vector shuffle */
+/// Selects 8 float values from the 256-bit operands of [8 x float], as
+///    specified by the immediate value operand.
+///
+///    The four selected elements in each operand are copied to the destination
+///    according to the bits specified in the immediate operand. The selected
+///    elements from the first 256-bit operand are copied to bits [63:0] and
+///    bits [191:128] of the destination, and the selected elements from the
+///    second 256-bit operand are copied to bits [127:64] and bits [255:192] of
+///    the destination. For example, if bits [7:0] of the immediate operand
+///    contain a value of 0xFF, the 256-bit destination vector would contain the
+///    following values: b[7], b[7], a[7], a[7], b[3], b[3], a[3], a[3].
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256 _mm256_shuffle_ps(__m256 a, __m256 b, const int mask);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VSHUFPS </c> instruction.
+///
+/// \param a
+///    A 256-bit vector of [8 x float]. The four selected elements in this
+///    operand are copied to bits [63:0] and bits [191:128] in the destination,
+///    according to the bits specified in the immediate operand.
+/// \param b
+///    A 256-bit vector of [8 x float]. The four selected elements in this
+///    operand
