@@ -1483,4 +1483,172 @@ _mm256_blendv_ps(__m256 __a, __m256 __b, __m256 __c)
 ///    according to the bits specified in the immediate operand.
 /// \param b
 ///    A 256-bit vector of [8 x float]. The four selected elements in this
-///    operand
+///    operand are copied to bits [127:64] and bits [255:192] in the
+///    destination, according to the bits specified in the immediate operand.
+/// \param mask
+///    An immediate value containing an 8-bit value specifying which elements to
+///    copy from \a a and \a b \n.
+///    Bits [3:0] specify the values copied from operand \a a. \n
+///    Bits [7:4] specify the values copied from operand \a b. \n
+///    The destinations within the 256-bit destination are assigned values as
+///    follows, according to the bit value assignments described below: \n
+///    Bits [1:0] are used to assign values to bits [31:0] and [159:128] in the
+///    destination. \n
+///    Bits [3:2] are used to assign values to bits [63:32] and [191:160] in the
+///    destination. \n
+///    Bits [5:4] are used to assign values to bits [95:64] and [223:192] in the
+///    destination. \n
+///    Bits [7:6] are used to assign values to bits [127:96] and [255:224] in
+///    the destination. \n
+///    Bit value assignments: \n
+///    00: Bits [31:0] and [159:128] are copied from the selected operand. \n
+///    01: Bits [63:32] and [191:160] are copied from the selected operand. \n
+///    10: Bits [95:64] and [223:192] are copied from the selected operand. \n
+///    11: Bits [127:96] and [255:224] are copied from the selected operand. \n
+///    Note: To generate a mask, you can use the \c _MM_SHUFFLE macro.
+///    <c>_MM_SHUFFLE(b6, b4, b2, b0)</c> can create an 8-bit mask of the form
+///    <c>[b6, b4, b2, b0]</c>.
+/// \returns A 256-bit vector of [8 x float] containing the shuffled values.
+#define _mm256_shuffle_ps(a, b, mask) \
+  ((__m256)__builtin_ia32_shufps256((__v8sf)(__m256)(a), \
+                                    (__v8sf)(__m256)(b), (int)(mask)))
+
+/// Selects four double-precision values from the 256-bit operands of
+///    [4 x double], as specified by the immediate value operand.
+///
+///    The selected elements from the first 256-bit operand are copied to bits
+///    [63:0] and bits [191:128] in the destination, and the selected elements
+///    from the second 256-bit operand are copied to bits [127:64] and bits
+///    [255:192] in the destination. For example, if bits [3:0] of the immediate
+///    operand contain a value of 0xF, the 256-bit destination vector would
+///    contain the following values: b[3], a[3], b[1], a[1].
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256d _mm256_shuffle_pd(__m256d a, __m256d b, const int mask);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VSHUFPD </c> instruction.
+///
+/// \param a
+///    A 256-bit vector of [4 x double].
+/// \param b
+///    A 256-bit vector of [4 x double].
+/// \param mask
+///    An immediate value containing 8-bit values specifying which elements to
+///    copy from \a a and \a b: \n
+///    Bit [0]=0: Bits [63:0] are copied from \a a to bits [63:0] of the
+///    destination. \n
+///    Bit [0]=1: Bits [127:64] are copied from \a a to bits [63:0] of the
+///    destination. \n
+///    Bit [1]=0: Bits [63:0] are copied from \a b to bits [127:64] of the
+///    destination. \n
+///    Bit [1]=1: Bits [127:64] are copied from \a b to bits [127:64] of the
+///    destination. \n
+///    Bit [2]=0: Bits [191:128] are copied from \a a to bits [191:128] of the
+///    destination. \n
+///    Bit [2]=1: Bits [255:192] are copied from \a a to bits [191:128] of the
+///    destination. \n
+///    Bit [3]=0: Bits [191:128] are copied from \a b to bits [255:192] of the
+///    destination. \n
+///    Bit [3]=1: Bits [255:192] are copied from \a b to bits [255:192] of the
+///    destination.
+/// \returns A 256-bit vector of [4 x double] containing the shuffled values.
+#define _mm256_shuffle_pd(a, b, mask) \
+  ((__m256d)__builtin_ia32_shufpd256((__v4df)(__m256d)(a), \
+                                     (__v4df)(__m256d)(b), (int)(mask)))
+
+/* Compare */
+#define _CMP_EQ_OQ    0x00 /* Equal (ordered, non-signaling)  */
+#define _CMP_LT_OS    0x01 /* Less-than (ordered, signaling)  */
+#define _CMP_LE_OS    0x02 /* Less-than-or-equal (ordered, signaling)  */
+#define _CMP_UNORD_Q  0x03 /* Unordered (non-signaling)  */
+#define _CMP_NEQ_UQ   0x04 /* Not-equal (unordered, non-signaling)  */
+#define _CMP_NLT_US   0x05 /* Not-less-than (unordered, signaling)  */
+#define _CMP_NLE_US   0x06 /* Not-less-than-or-equal (unordered, signaling)  */
+#define _CMP_ORD_Q    0x07 /* Ordered (non-signaling)   */
+#define _CMP_EQ_UQ    0x08 /* Equal (unordered, non-signaling)  */
+#define _CMP_NGE_US   0x09 /* Not-greater-than-or-equal (unordered, signaling)  */
+#define _CMP_NGT_US   0x0a /* Not-greater-than (unordered, signaling)  */
+#define _CMP_FALSE_OQ 0x0b /* False (ordered, non-signaling)  */
+#define _CMP_NEQ_OQ   0x0c /* Not-equal (ordered, non-signaling)  */
+#define _CMP_GE_OS    0x0d /* Greater-than-or-equal (ordered, signaling)  */
+#define _CMP_GT_OS    0x0e /* Greater-than (ordered, signaling)  */
+#define _CMP_TRUE_UQ  0x0f /* True (unordered, non-signaling)  */
+#define _CMP_EQ_OS    0x10 /* Equal (ordered, signaling)  */
+#define _CMP_LT_OQ    0x11 /* Less-than (ordered, non-signaling)  */
+#define _CMP_LE_OQ    0x12 /* Less-than-or-equal (ordered, non-signaling)  */
+#define _CMP_UNORD_S  0x13 /* Unordered (signaling)  */
+#define _CMP_NEQ_US   0x14 /* Not-equal (unordered, signaling)  */
+#define _CMP_NLT_UQ   0x15 /* Not-less-than (unordered, non-signaling)  */
+#define _CMP_NLE_UQ   0x16 /* Not-less-than-or-equal (unordered, non-signaling)  */
+#define _CMP_ORD_S    0x17 /* Ordered (signaling)  */
+#define _CMP_EQ_US    0x18 /* Equal (unordered, signaling)  */
+#define _CMP_NGE_UQ   0x19 /* Not-greater-than-or-equal (unordered, non-signaling)  */
+#define _CMP_NGT_UQ   0x1a /* Not-greater-than (unordered, non-signaling)  */
+#define _CMP_FALSE_OS 0x1b /* False (ordered, signaling)  */
+#define _CMP_NEQ_OS   0x1c /* Not-equal (ordered, signaling)  */
+#define _CMP_GE_OQ    0x1d /* Greater-than-or-equal (ordered, non-signaling)  */
+#define _CMP_GT_OQ    0x1e /* Greater-than (ordered, non-signaling)  */
+#define _CMP_TRUE_US  0x1f /* True (unordered, signaling)  */
+
+/// Compares each of the corresponding double-precision values of two
+///    128-bit vectors of [2 x double], using the operation specified by the
+///    immediate integer operand.
+///
+///    Returns a [2 x double] vector consisting of two doubles corresponding to
+///    the two comparison results: zero if the comparison is false, and all 1's
+///    if the comparison is true.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m128d _mm_cmp_pd(__m128d a, __m128d b, const int c);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VCMPPD </c> instruction.
+///
+/// \param a
+///    A 128-bit vector of [2 x double].
+/// \param b
+///    A 128-bit vector of [2 x double].
+/// \param c
+///    An immediate integer operand, with bits [4:0] specifying which comparison
+///    operation to use: \n
+///    0x00: Equal (ordered, non-signaling) \n
+///    0x01: Less-than (ordered, signaling) \n
+///    0x02: Less-than-or-equal (ordered, signaling) \n
+///    0x03: Unordered (non-signaling) \n
+///    0x04: Not-equal (unordered, non-signaling) \n
+///    0x05: Not-less-than (unordered, signaling) \n
+///    0x06: Not-less-than-or-equal (unordered, signaling) \n
+///    0x07: Ordered (non-signaling) \n
+///    0x08: Equal (unordered, non-signaling) \n
+///    0x09: Not-greater-than-or-equal (unordered, signaling) \n
+///    0x0A: Not-greater-than (unordered, signaling) \n
+///    0x0B: False (ordered, non-signaling) \n
+///    0x0C: Not-equal (ordered, non-signaling) \n
+///    0x0D: Greater-than-or-equal (ordered, signaling) \n
+///    0x0E: Greater-than (ordered, signaling) \n
+///    0x0F: True (unordered, non-signaling) \n
+///    0x10: Equal (ordered, signaling) \n
+///    0x11: Less-than (ordered, non-signaling) \n
+///    0x12: Less-than-or-equal (ordered, non-signaling) \n
+///    0x13: Unordered (signaling) \n
+///    0x14: Not-equal (unordered, signaling) \n
+///    0x15: Not-less-than (unordered, non-signaling) \n
+///    0x16: Not-less-than-or-equal (unordered, non-signaling) \n
+///    0x17: Ordered (signaling) \n
+///    0x18: Equal (unordered, signaling) \n
+///    0x19: Not-greater-than-or-equal (unordered, non-signaling) \n
+///    0x1A: Not-greater-than (unordered, non-signaling) \n
+///    0x1B: False (ordered, signaling) \n
+///    0x1C: Not-equal (ordered, signaling) \n
+///    0x1D: Greater-than-or-equal (ordered, non-signaling) \n
+///    0x1E: Greater-than (ordered, non-signaling) \n
+///    0x1F: True (unordered, signaling)
+/// \returns A 128-bit vector of [2 x double] containing the comparison results.
+#define _mm_cmp_pd(a, b, c) \
+  ((__m128d)__builtin_ia32_cmppd((__v2df)(__m128d)(a), \
+                                 (__v2df)(__m128d)(b), (c)))
