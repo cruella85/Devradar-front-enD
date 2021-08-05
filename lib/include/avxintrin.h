@@ -1856,4 +1856,234 @@ _mm256_blendv_ps(__m256 __a, __m256 __b, __m256 __c)
 ///    An immediate integer operand, with bits [4:0] specifying which comparison
 ///    operation to use: \n
 ///    0x00: Equal (ordered, non-signaling) \n
-///    0x01: Less-than (ordered, sign
+///    0x01: Less-than (ordered, signaling) \n
+///    0x02: Less-than-or-equal (ordered, signaling) \n
+///    0x03: Unordered (non-signaling) \n
+///    0x04: Not-equal (unordered, non-signaling) \n
+///    0x05: Not-less-than (unordered, signaling) \n
+///    0x06: Not-less-than-or-equal (unordered, signaling) \n
+///    0x07: Ordered (non-signaling) \n
+///    0x08: Equal (unordered, non-signaling) \n
+///    0x09: Not-greater-than-or-equal (unordered, signaling) \n
+///    0x0A: Not-greater-than (unordered, signaling) \n
+///    0x0B: False (ordered, non-signaling) \n
+///    0x0C: Not-equal (ordered, non-signaling) \n
+///    0x0D: Greater-than-or-equal (ordered, signaling) \n
+///    0x0E: Greater-than (ordered, signaling) \n
+///    0x0F: True (unordered, non-signaling) \n
+///    0x10: Equal (ordered, signaling) \n
+///    0x11: Less-than (ordered, non-signaling) \n
+///    0x12: Less-than-or-equal (ordered, non-signaling) \n
+///    0x13: Unordered (signaling) \n
+///    0x14: Not-equal (unordered, signaling) \n
+///    0x15: Not-less-than (unordered, non-signaling) \n
+///    0x16: Not-less-than-or-equal (unordered, non-signaling) \n
+///    0x17: Ordered (signaling) \n
+///    0x18: Equal (unordered, signaling) \n
+///    0x19: Not-greater-than-or-equal (unordered, non-signaling) \n
+///    0x1A: Not-greater-than (unordered, non-signaling) \n
+///    0x1B: False (ordered, signaling) \n
+///    0x1C: Not-equal (ordered, signaling) \n
+///    0x1D: Greater-than-or-equal (ordered, non-signaling) \n
+///    0x1E: Greater-than (ordered, non-signaling) \n
+///    0x1F: True (unordered, signaling)
+/// \returns A 128-bit vector of [2 x double] containing the comparison results.
+#define _mm_cmp_sd(a, b, c) \
+  ((__m128d)__builtin_ia32_cmpsd((__v2df)(__m128d)(a), \
+                                 (__v2df)(__m128d)(b), (c)))
+
+/// Compares each of the corresponding scalar values of two 128-bit
+///    vectors of [4 x float], using the operation specified by the immediate
+///    integer operand.
+///
+///    If the result is true, all 32 bits of the destination vector are set;
+///    otherwise they are cleared.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m128 _mm_cmp_ss(__m128 a, __m128 b, const int c);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VCMPSS </c> instruction.
+///
+/// \param a
+///    A 128-bit vector of [4 x float].
+/// \param b
+///    A 128-bit vector of [4 x float].
+/// \param c
+///    An immediate integer operand, with bits [4:0] specifying which comparison
+///    operation to use: \n
+///    0x00: Equal (ordered, non-signaling) \n
+///    0x01: Less-than (ordered, signaling) \n
+///    0x02: Less-than-or-equal (ordered, signaling) \n
+///    0x03: Unordered (non-signaling) \n
+///    0x04: Not-equal (unordered, non-signaling) \n
+///    0x05: Not-less-than (unordered, signaling) \n
+///    0x06: Not-less-than-or-equal (unordered, signaling) \n
+///    0x07: Ordered (non-signaling) \n
+///    0x08: Equal (unordered, non-signaling) \n
+///    0x09: Not-greater-than-or-equal (unordered, signaling) \n
+///    0x0A: Not-greater-than (unordered, signaling) \n
+///    0x0B: False (ordered, non-signaling) \n
+///    0x0C: Not-equal (ordered, non-signaling) \n
+///    0x0D: Greater-than-or-equal (ordered, signaling) \n
+///    0x0E: Greater-than (ordered, signaling) \n
+///    0x0F: True (unordered, non-signaling) \n
+///    0x10: Equal (ordered, signaling) \n
+///    0x11: Less-than (ordered, non-signaling) \n
+///    0x12: Less-than-or-equal (ordered, non-signaling) \n
+///    0x13: Unordered (signaling) \n
+///    0x14: Not-equal (unordered, signaling) \n
+///    0x15: Not-less-than (unordered, non-signaling) \n
+///    0x16: Not-less-than-or-equal (unordered, non-signaling) \n
+///    0x17: Ordered (signaling) \n
+///    0x18: Equal (unordered, signaling) \n
+///    0x19: Not-greater-than-or-equal (unordered, non-signaling) \n
+///    0x1A: Not-greater-than (unordered, non-signaling) \n
+///    0x1B: False (ordered, signaling) \n
+///    0x1C: Not-equal (ordered, signaling) \n
+///    0x1D: Greater-than-or-equal (ordered, non-signaling) \n
+///    0x1E: Greater-than (ordered, non-signaling) \n
+///    0x1F: True (unordered, signaling)
+/// \returns A 128-bit vector of [4 x float] containing the comparison results.
+#define _mm_cmp_ss(a, b, c) \
+  ((__m128)__builtin_ia32_cmpss((__v4sf)(__m128)(a), \
+                                (__v4sf)(__m128)(b), (c)))
+
+/// Takes a [8 x i32] vector and returns the vector element value
+///    indexed by the immediate constant operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// int _mm256_extract_epi32(__m256i X, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A 256-bit vector of [8 x i32].
+/// \param N
+///    An immediate integer operand with bits [2:0] determining which vector
+///    element is extracted and returned.
+/// \returns A 32-bit integer containing the extracted 32 bits of extended
+///    packed data.
+#define _mm256_extract_epi32(X, N) \
+  ((int)__builtin_ia32_vec_ext_v8si((__v8si)(__m256i)(X), (int)(N)))
+
+/// Takes a [16 x i16] vector and returns the vector element value
+///    indexed by the immediate constant operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// int _mm256_extract_epi16(__m256i X, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A 256-bit integer vector of [16 x i16].
+/// \param N
+///    An immediate integer operand with bits [3:0] determining which vector
+///    element is extracted and returned.
+/// \returns A 32-bit integer containing the extracted 16 bits of zero extended
+///    packed data.
+#define _mm256_extract_epi16(X, N) \
+  ((int)(unsigned short)__builtin_ia32_vec_ext_v16hi((__v16hi)(__m256i)(X), \
+                                                     (int)(N)))
+
+/// Takes a [32 x i8] vector and returns the vector element value
+///    indexed by the immediate constant operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// int _mm256_extract_epi8(__m256i X, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A 256-bit integer vector of [32 x i8].
+/// \param N
+///    An immediate integer operand with bits [4:0] determining which vector
+///    element is extracted and returned.
+/// \returns A 32-bit integer containing the extracted 8 bits of zero extended
+///    packed data.
+#define _mm256_extract_epi8(X, N) \
+  ((int)(unsigned char)__builtin_ia32_vec_ext_v32qi((__v32qi)(__m256i)(X), \
+                                                    (int)(N)))
+
+#ifdef __x86_64__
+/// Takes a [4 x i64] vector and returns the vector element value
+///    indexed by the immediate constant operand.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// long long _mm256_extract_epi64(__m256i X, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A 256-bit integer vector of [4 x i64].
+/// \param N
+///    An immediate integer operand with bits [1:0] determining which vector
+///    element is extracted and returned.
+/// \returns A 64-bit integer containing the extracted 64 bits of extended
+///    packed data.
+#define _mm256_extract_epi64(X, N) \
+  ((long long)__builtin_ia32_vec_ext_v4di((__v4di)(__m256i)(X), (int)(N)))
+#endif
+
+/// Takes a [8 x i32] vector and replaces the vector element value
+///    indexed by the immediate constant operand by a new value. Returns the
+///    modified vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256i _mm256_insert_epi32(__m256i X, int I, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VINSERTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A vector of [8 x i32] to be used by the insert operation.
+/// \param I
+///    An integer value. The replacement value for the insert operation.
+/// \param N
+///    An immediate integer specifying the index of the vector element to be
+///    replaced.
+/// \returns A copy of vector \a X, after replacing its element indexed by
+///    \a N with \a I.
+#define _mm256_insert_epi32(X, I, N) \
+  ((__m256i)__builtin_ia32_vec_set_v8si((__v8si)(__m256i)(X), \
+                                        (int)(I), (int)(N)))
+
+
+/// Takes a [16 x i16] vector and replaces the vector element value
+///    indexed by the immediate constant operand with a new value. Returns the
+///    modified vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256i _mm256_insert_epi16(__m256i X, int I, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VINSERTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A vector of [16 x i16] to be used by the insert operation.
+/// \param I
+///    An i16 integer value. The replacement v
