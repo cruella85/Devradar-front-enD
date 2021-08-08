@@ -2086,4 +2086,276 @@ _mm256_blendv_ps(__m256 __a, __m256 __b, __m256 __c)
 /// \param X
 ///    A vector of [16 x i16] to be used by the insert operation.
 /// \param I
-///    An i16 integer value. The replacement v
+///    An i16 integer value. The replacement value for the insert operation.
+/// \param N
+///    An immediate integer specifying the index of the vector element to be
+///    replaced.
+/// \returns A copy of vector \a X, after replacing its element indexed by
+///    \a N with \a I.
+#define _mm256_insert_epi16(X, I, N) \
+  ((__m256i)__builtin_ia32_vec_set_v16hi((__v16hi)(__m256i)(X), \
+                                         (int)(I), (int)(N)))
+
+/// Takes a [32 x i8] vector and replaces the vector element value
+///    indexed by the immediate constant operand with a new value. Returns the
+///    modified vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256i _mm256_insert_epi8(__m256i X, int I, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VINSERTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A vector of [32 x i8] to be used by the insert operation.
+/// \param I
+///    An i8 integer value. The replacement value for the insert operation.
+/// \param N
+///    An immediate integer specifying the index of the vector element to be
+///    replaced.
+/// \returns A copy of vector \a X, after replacing its element indexed by
+///    \a N with \a I.
+#define _mm256_insert_epi8(X, I, N) \
+  ((__m256i)__builtin_ia32_vec_set_v32qi((__v32qi)(__m256i)(X), \
+                                         (int)(I), (int)(N)))
+
+#ifdef __x86_64__
+/// Takes a [4 x i64] vector and replaces the vector element value
+///    indexed by the immediate constant operand with a new value. Returns the
+///    modified vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// \code
+/// __m256i _mm256_insert_epi64(__m256i X, int I, const int N);
+/// \endcode
+///
+/// This intrinsic corresponds to the <c> VINSERTF128+COMPOSITE </c>
+///   instruction.
+///
+/// \param X
+///    A vector of [4 x i64] to be used by the insert operation.
+/// \param I
+///    A 64-bit integer value. The replacement value for the insert operation.
+/// \param N
+///    An immediate integer specifying the index of the vector element to be
+///    replaced.
+/// \returns A copy of vector \a X, after replacing its element indexed by
+///     \a N with \a I.
+#define _mm256_insert_epi64(X, I, N) \
+  ((__m256i)__builtin_ia32_vec_set_v4di((__v4di)(__m256i)(X), \
+                                        (long long)(I), (int)(N)))
+#endif
+
+/* Conversion */
+/// Converts a vector of [4 x i32] into a vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTDQ2PD </c> instruction.
+///
+/// \param __a
+///    A 128-bit integer vector of [4 x i32].
+/// \returns A 256-bit vector of [4 x double] containing the converted values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_cvtepi32_pd(__m128i __a)
+{
+  return (__m256d)__builtin_convertvector((__v4si)__a, __v4df);
+}
+
+/// Converts a vector of [8 x i32] into a vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTDQ2PS </c> instruction.
+///
+/// \param __a
+///    A 256-bit integer vector.
+/// \returns A 256-bit vector of [8 x float] containing the converted values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_cvtepi32_ps(__m256i __a)
+{
+  return (__m256)__builtin_convertvector((__v8si)__a, __v8sf);
+}
+
+/// Converts a 256-bit vector of [4 x double] into a 128-bit vector of
+///    [4 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTPD2PS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \returns A 128-bit vector of [4 x float] containing the converted values.
+static __inline __m128 __DEFAULT_FN_ATTRS
+_mm256_cvtpd_ps(__m256d __a)
+{
+  return (__m128)__builtin_ia32_cvtpd2ps256((__v4df) __a);
+}
+
+/// Converts a vector of [8 x float] into a vector of [8 x i32].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTPS2DQ </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \returns A 256-bit integer vector containing the converted values.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_cvtps_epi32(__m256 __a)
+{
+  return (__m256i)__builtin_ia32_cvtps2dq256((__v8sf) __a);
+}
+
+/// Converts a 128-bit vector of [4 x float] into a 256-bit vector of [4
+///    x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTPS2PD </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [4 x float].
+/// \returns A 256-bit vector of [4 x double] containing the converted values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_cvtps_pd(__m128 __a)
+{
+  return (__m256d)__builtin_convertvector((__v4sf)__a, __v4df);
+}
+
+/// Converts a 256-bit vector of [4 x double] into a 128-bit vector of [4
+///    x i32], truncating the result by rounding towards zero when it is
+///    inexact.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTTPD2DQ </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \returns A 128-bit integer vector containing the converted values.
+static __inline __m128i __DEFAULT_FN_ATTRS
+_mm256_cvttpd_epi32(__m256d __a)
+{
+  return (__m128i)__builtin_ia32_cvttpd2dq256((__v4df) __a);
+}
+
+/// Converts a 256-bit vector of [4 x double] into a 128-bit vector of [4
+///    x i32]. When a conversion is inexact, the value returned is rounded
+///    according to the rounding control bits in the MXCSR register.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTPD2DQ </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \returns A 128-bit integer vector containing the converted values.
+static __inline __m128i __DEFAULT_FN_ATTRS
+_mm256_cvtpd_epi32(__m256d __a)
+{
+  return (__m128i)__builtin_ia32_cvtpd2dq256((__v4df) __a);
+}
+
+/// Converts a vector of [8 x float] into a vector of [8 x i32],
+///    truncating the result by rounding towards zero when it is inexact.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VCVTTPS2DQ </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \returns A 256-bit integer vector containing the converted values.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_cvttps_epi32(__m256 __a)
+{
+  return (__m256i)__builtin_ia32_cvttps2dq256((__v8sf) __a);
+}
+
+/// Returns the first element of the input vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///    instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \returns A 64 bit double containing the first element of the input vector.
+static __inline double __DEFAULT_FN_ATTRS
+_mm256_cvtsd_f64(__m256d __a)
+{
+ return __a[0];
+}
+
+/// Returns the first element of the input vector of [8 x i32].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///    instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x i32].
+/// \returns A 32 bit integer containing the first element of the input vector.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_cvtsi256_si32(__m256i __a)
+{
+ __v8si __b = (__v8si)__a;
+ return __b[0];
+}
+
+/// Returns the first element of the input vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///    instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \returns A 32 bit float containing the first element of the input vector.
+static __inline float __DEFAULT_FN_ATTRS
+_mm256_cvtss_f32(__m256 __a)
+{
+ return __a[0];
+}
+
+/* Vector replicate */
+/// Moves and duplicates odd-indexed values from a 256-bit vector of
+///    [8 x float] to float values in a 256-bit vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVSHDUP </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float]. \n
+///    Bits [255:224] of \a __a are written to bits [255:224] and [223:192] of
+///    the return value. \n
+///    Bits [191:160] of \a __a are written to bits [191:160] and [159:128] of
+///    the return value. \n
+///    Bits [127:96] of \a __a are written to bits [127:96] and [95:64] of the
+///    return value. \n
+///    Bits [63:32] of \a __a are written to bits [63:32] and [31:0] of the
+///    return value.
+/// \returns A 256-bit vector of [8 x float] containing the moved and duplicated
+///    values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_movehdup_ps(__m256 __a)
+{
+  return __builtin_shufflevector((__v8sf)__a, (__v8sf)__a, 1, 1, 3, 3, 5, 5, 7, 7);
+}
+
+/// Moves and duplicates even-indexed values from a 256-bit vector of
+///    [8 x float] to float values in a 256-bit vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVSLDUP </c> 
