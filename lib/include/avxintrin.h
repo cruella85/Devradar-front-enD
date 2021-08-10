@@ -2358,4 +2358,211 @@ _mm256_movehdup_ps(__m256 __a)
 ///
 /// \headerfile <x86intrin.h>
 ///
-/// This intrinsic corresponds to the <c> VMOVSLDUP </c> 
+/// This intrinsic corresponds to the <c> VMOVSLDUP </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float]. \n
+///    Bits [223:192] of \a __a are written to bits [255:224] and [223:192] of
+///    the return value. \n
+///    Bits [159:128] of \a __a are written to bits [191:160] and [159:128] of
+///    the return value. \n
+///    Bits [95:64] of \a __a are written to bits [127:96] and [95:64] of the
+///    return value. \n
+///    Bits [31:0] of \a __a are written to bits [63:32] and [31:0] of the
+///    return value.
+/// \returns A 256-bit vector of [8 x float] containing the moved and duplicated
+///    values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_moveldup_ps(__m256 __a)
+{
+  return __builtin_shufflevector((__v8sf)__a, (__v8sf)__a, 0, 0, 2, 2, 4, 4, 6, 6);
+}
+
+/// Moves and duplicates double-precision floating point values from a
+///    256-bit vector of [4 x double] to double-precision values in a 256-bit
+///    vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDDUP </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double]. \n
+///    Bits [63:0] of \a __a are written to bits [127:64] and [63:0] of the
+///    return value. \n
+///    Bits [191:128] of \a __a are written to bits [255:192] and [191:128] of
+///    the return value.
+/// \returns A 256-bit vector of [4 x double] containing the moved and
+///    duplicated values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_movedup_pd(__m256d __a)
+{
+  return __builtin_shufflevector((__v4df)__a, (__v4df)__a, 0, 0, 2, 2);
+}
+
+/* Unpack and Interleave */
+/// Unpacks the odd-indexed vector elements from two 256-bit vectors of
+///    [4 x double] and interleaves them into a 256-bit vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VUNPCKHPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit floating-point vector of [4 x double]. \n
+///    Bits [127:64] are written to bits [63:0] of the return value. \n
+///    Bits [255:192] are written to bits [191:128] of the return value. \n
+/// \param __b
+///    A 256-bit floating-point vector of [4 x double]. \n
+///    Bits [127:64] are written to bits [127:64] of the return value. \n
+///    Bits [255:192] are written to bits [255:192] of the return value. \n
+/// \returns A 256-bit vector of [4 x double] containing the interleaved values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_unpackhi_pd(__m256d __a, __m256d __b)
+{
+  return __builtin_shufflevector((__v4df)__a, (__v4df)__b, 1, 5, 1+2, 5+2);
+}
+
+/// Unpacks the even-indexed vector elements from two 256-bit vectors of
+///    [4 x double] and interleaves them into a 256-bit vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VUNPCKLPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit floating-point vector of [4 x double]. \n
+///    Bits [63:0] are written to bits [63:0] of the return value. \n
+///    Bits [191:128] are written to bits [191:128] of the return value.
+/// \param __b
+///    A 256-bit floating-point vector of [4 x double]. \n
+///    Bits [63:0] are written to bits [127:64] of the return value. \n
+///    Bits [191:128] are written to bits [255:192] of the return value. \n
+/// \returns A 256-bit vector of [4 x double] containing the interleaved values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_unpacklo_pd(__m256d __a, __m256d __b)
+{
+  return __builtin_shufflevector((__v4df)__a, (__v4df)__b, 0, 4, 0+2, 4+2);
+}
+
+/// Unpacks the 32-bit vector elements 2, 3, 6 and 7 from each of the
+///    two 256-bit vectors of [8 x float] and interleaves them into a 256-bit
+///    vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VUNPCKHPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float]. \n
+///    Bits [95:64] are written to bits [31:0] of the return value. \n
+///    Bits [127:96] are written to bits [95:64] of the return value. \n
+///    Bits [223:192] are written to bits [159:128] of the return value. \n
+///    Bits [255:224] are written to bits [223:192] of the return value.
+/// \param __b
+///    A 256-bit vector of [8 x float]. \n
+///    Bits [95:64] are written to bits [63:32] of the return value. \n
+///    Bits [127:96] are written to bits [127:96] of the return value. \n
+///    Bits [223:192] are written to bits [191:160] of the return value. \n
+///    Bits [255:224] are written to bits [255:224] of the return value.
+/// \returns A 256-bit vector of [8 x float] containing the interleaved values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_unpackhi_ps(__m256 __a, __m256 __b)
+{
+  return __builtin_shufflevector((__v8sf)__a, (__v8sf)__b, 2, 10, 2+1, 10+1, 6, 14, 6+1, 14+1);
+}
+
+/// Unpacks the 32-bit vector elements 0, 1, 4 and 5 from each of the
+///    two 256-bit vectors of [8 x float] and interleaves them into a 256-bit
+///    vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VUNPCKLPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float]. \n
+///    Bits [31:0] are written to bits [31:0] of the return value. \n
+///    Bits [63:32] are written to bits [95:64] of the return value. \n
+///    Bits [159:128] are written to bits [159:128] of the return value. \n
+///    Bits [191:160] are written to bits [223:192] of the return value.
+/// \param __b
+///    A 256-bit vector of [8 x float]. \n
+///    Bits [31:0] are written to bits [63:32] of the return value. \n
+///    Bits [63:32] are written to bits [127:96] of the return value. \n
+///    Bits [159:128] are written to bits [191:160] of the return value. \n
+///    Bits [191:160] are written to bits [255:224] of the return value.
+/// \returns A 256-bit vector of [8 x float] containing the interleaved values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_unpacklo_ps(__m256 __a, __m256 __b)
+{
+  return __builtin_shufflevector((__v8sf)__a, (__v8sf)__b, 0, 8, 0+1, 8+1, 4, 12, 4+1, 12+1);
+}
+
+/* Bit Test */
+/// Given two 128-bit floating-point vectors of [2 x double], perform an
+///    element-by-element comparison of the double-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the ZF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPD </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [2 x double].
+/// \param __b
+///    A 128-bit vector of [2 x double].
+/// \returns the ZF flag in the EFLAGS register.
+static __inline int __DEFAULT_FN_ATTRS128
+_mm_testz_pd(__m128d __a, __m128d __b)
+{
+  return __builtin_ia32_vtestzpd((__v2df)__a, (__v2df)__b);
+}
+
+/// Given two 128-bit floating-point vectors of [2 x double], perform an
+///    element-by-element comparison of the double-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the CF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPD </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [2 x double].
+/// \param __b
+///    A 128-bit vector of [2 x double].
+/// \returns the CF flag in the EFLAGS register.
+static __inline int __DEFAULT_FN_ATTRS128
+_mm_testc_pd(__m128d __a, __m128d __b)
+{
+  return __builtin_ia32_vtestcpd((__v2df)__a, (__v2df)__b);
+}
+
+/// Given two 128-bit floating-point vectors of [2 x double], perform an
+///    element-by-element comparison of the double-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bits of both elements are 1, the ZF fla
