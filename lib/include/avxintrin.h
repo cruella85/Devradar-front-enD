@@ -2565,4 +2565,215 @@ _mm_testc_pd(__m128d __a, __m128d __b)
 ///
 ///    The EFLAGS register is updated as follows: \n
 ///    If there is at least one pair of double-precision elements where the
-///    sign-bits of both elements are 1, the ZF fla
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns 1 if both the ZF and CF flags are set to 0,
+///    otherwise it returns 0.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPD </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [2 x double].
+/// \param __b
+///    A 128-bit vector of [2 x double].
+/// \returns 1 if both the ZF and CF flags are set to 0, otherwise returns 0.
+static __inline int __DEFAULT_FN_ATTRS128
+_mm_testnzc_pd(__m128d __a, __m128d __b)
+{
+  return __builtin_ia32_vtestnzcpd((__v2df)__a, (__v2df)__b);
+}
+
+/// Given two 128-bit floating-point vectors of [4 x float], perform an
+///    element-by-element comparison of the single-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the ZF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPS </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [4 x float].
+/// \param __b
+///    A 128-bit vector of [4 x float].
+/// \returns the ZF flag.
+static __inline int __DEFAULT_FN_ATTRS128
+_mm_testz_ps(__m128 __a, __m128 __b)
+{
+  return __builtin_ia32_vtestzps((__v4sf)__a, (__v4sf)__b);
+}
+
+/// Given two 128-bit floating-point vectors of [4 x float], perform an
+///    element-by-element comparison of the single-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the CF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPS </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [4 x float].
+/// \param __b
+///    A 128-bit vector of [4 x float].
+/// \returns the CF flag.
+static __inline int __DEFAULT_FN_ATTRS128
+_mm_testc_ps(__m128 __a, __m128 __b)
+{
+  return __builtin_ia32_vtestcps((__v4sf)__a, (__v4sf)__b);
+}
+
+/// Given two 128-bit floating-point vectors of [4 x float], perform an
+///    element-by-element comparison of the single-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns 1 if both the ZF and CF flags are set to 0,
+///    otherwise it returns 0.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPS </c> instruction.
+///
+/// \param __a
+///    A 128-bit vector of [4 x float].
+/// \param __b
+///    A 128-bit vector of [4 x float].
+/// \returns 1 if both the ZF and CF flags are set to 0, otherwise returns 0.
+static __inline int __DEFAULT_FN_ATTRS128
+_mm_testnzc_ps(__m128 __a, __m128 __b)
+{
+  return __builtin_ia32_vtestnzcps((__v4sf)__a, (__v4sf)__b);
+}
+
+/// Given two 256-bit floating-point vectors of [4 x double], perform an
+///    element-by-element comparison of the double-precision elements in the
+///    first source vector and the corresponding elements in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the ZF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \param __b
+///    A 256-bit vector of [4 x double].
+/// \returns the ZF flag.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testz_pd(__m256d __a, __m256d __b)
+{
+  return __builtin_ia32_vtestzpd256((__v4df)__a, (__v4df)__b);
+}
+
+/// Given two 256-bit floating-point vectors of [4 x double], perform an
+///    element-by-element comparison of the double-precision elements in the
+///    first source vector and the corresponding elements in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the CF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \param __b
+///    A 256-bit vector of [4 x double].
+/// \returns the CF flag.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testc_pd(__m256d __a, __m256d __b)
+{
+  return __builtin_ia32_vtestcpd256((__v4df)__a, (__v4df)__b);
+}
+
+/// Given two 256-bit floating-point vectors of [4 x double], perform an
+///    element-by-element comparison of the double-precision elements in the
+///    first source vector and the corresponding elements in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of double-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns 1 if both the ZF and CF flags are set to 0,
+///    otherwise it returns 0.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double].
+/// \param __b
+///    A 256-bit vector of [4 x double].
+/// \returns 1 if both the ZF and CF flags are set to 0, otherwise returns 0.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testnzc_pd(__m256d __a, __m256d __b)
+{
+  return __builtin_ia32_vtestnzcpd256((__v4df)__a, (__v4df)__b);
+}
+
+/// Given two 256-bit floating-point vectors of [8 x float], perform an
+///    element-by-element comparison of the single-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the ZF fla
