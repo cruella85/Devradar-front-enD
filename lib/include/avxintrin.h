@@ -2776,4 +2776,245 @@ _mm256_testnzc_pd(__m256d __a, __m256d __b)
 ///    If there is at least one pair of single-precision elements where the
 ///    sign-bit of the first element is 0 and the sign-bit of the second element
 ///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
-///    This intrinsic returns the value of the ZF fla
+///    This intrinsic returns the value of the ZF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \param __b
+///    A 256-bit vector of [8 x float].
+/// \returns the ZF flag.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testz_ps(__m256 __a, __m256 __b)
+{
+  return __builtin_ia32_vtestzps256((__v8sf)__a, (__v8sf)__b);
+}
+
+/// Given two 256-bit floating-point vectors of [8 x float], perform an
+///    element-by-element comparison of the single-precision element in the
+///    first source vector and the corresponding element in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the CF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \param __b
+///    A 256-bit vector of [8 x float].
+/// \returns the CF flag.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testc_ps(__m256 __a, __m256 __b)
+{
+  return __builtin_ia32_vtestcps256((__v8sf)__a, (__v8sf)__b);
+}
+
+/// Given two 256-bit floating-point vectors of [8 x float], perform an
+///    element-by-element comparison of the single-precision elements in the
+///    first source vector and the corresponding elements in the second source
+///    vector.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bits of both elements are 1, the ZF flag is set to 0. Otherwise the
+///    ZF flag is set to 1. \n
+///    If there is at least one pair of single-precision elements where the
+///    sign-bit of the first element is 0 and the sign-bit of the second element
+///    is 1, the CF flag is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns 1 if both the ZF and CF flags are set to 0,
+///    otherwise it returns 0.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VTESTPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float].
+/// \param __b
+///    A 256-bit vector of [8 x float].
+/// \returns 1 if both the ZF and CF flags are set to 0, otherwise returns 0.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testnzc_ps(__m256 __a, __m256 __b)
+{
+  return __builtin_ia32_vtestnzcps256((__v8sf)__a, (__v8sf)__b);
+}
+
+/// Given two 256-bit integer vectors, perform a bit-by-bit comparison
+///    of the two source vectors.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of bits where both bits are 1, the ZF flag
+///    is set to 0. Otherwise the ZF flag is set to 1. \n
+///    If there is at least one pair of bits where the bit from the first source
+///    vector is 0 and the bit from the second source vector is 1, the CF flag
+///    is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the ZF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPTEST </c> instruction.
+///
+/// \param __a
+///    A 256-bit integer vector.
+/// \param __b
+///    A 256-bit integer vector.
+/// \returns the ZF flag.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testz_si256(__m256i __a, __m256i __b)
+{
+  return __builtin_ia32_ptestz256((__v4di)__a, (__v4di)__b);
+}
+
+/// Given two 256-bit integer vectors, perform a bit-by-bit comparison
+///    of the two source vectors.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of bits where both bits are 1, the ZF flag
+///    is set to 0. Otherwise the ZF flag is set to 1. \n
+///    If there is at least one pair of bits where the bit from the first source
+///    vector is 0 and the bit from the second source vector is 1, the CF flag
+///    is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns the value of the CF flag.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPTEST </c> instruction.
+///
+/// \param __a
+///    A 256-bit integer vector.
+/// \param __b
+///    A 256-bit integer vector.
+/// \returns the CF flag.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testc_si256(__m256i __a, __m256i __b)
+{
+  return __builtin_ia32_ptestc256((__v4di)__a, (__v4di)__b);
+}
+
+/// Given two 256-bit integer vectors, perform a bit-by-bit comparison
+///    of the two source vectors.
+///
+///    The EFLAGS register is updated as follows: \n
+///    If there is at least one pair of bits where both bits are 1, the ZF flag
+///    is set to 0. Otherwise the ZF flag is set to 1. \n
+///    If there is at least one pair of bits where the bit from the first source
+///    vector is 0 and the bit from the second source vector is 1, the CF flag
+///    is set to 0. Otherwise the CF flag is set to 1. \n
+///    This intrinsic returns 1 if both the ZF and CF flags are set to 0,
+///    otherwise it returns 0.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPTEST </c> instruction.
+///
+/// \param __a
+///    A 256-bit integer vector.
+/// \param __b
+///    A 256-bit integer vector.
+/// \returns 1 if both the ZF and CF flags are set to 0, otherwise returns 0.
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_testnzc_si256(__m256i __a, __m256i __b)
+{
+  return __builtin_ia32_ptestnzc256((__v4di)__a, (__v4di)__b);
+}
+
+/* Vector extract sign mask */
+/// Extracts the sign bits of double-precision floating point elements
+///    in a 256-bit vector of [4 x double] and writes them to the lower order
+///    bits of the return value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVMSKPD </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [4 x double] containing the double-precision
+///    floating point values with sign bits to be extracted.
+/// \returns The sign bits from the operand, written to bits [3:0].
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_movemask_pd(__m256d __a)
+{
+  return __builtin_ia32_movmskpd256((__v4df)__a);
+}
+
+/// Extracts the sign bits of single-precision floating point elements
+///    in a 256-bit vector of [8 x float] and writes them to the lower order
+///    bits of the return value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVMSKPS </c> instruction.
+///
+/// \param __a
+///    A 256-bit vector of [8 x float] containing the single-precision floating
+///    point values with sign bits to be extracted.
+/// \returns The sign bits from the operand, written to bits [7:0].
+static __inline int __DEFAULT_FN_ATTRS
+_mm256_movemask_ps(__m256 __a)
+{
+  return __builtin_ia32_movmskps256((__v8sf)__a);
+}
+
+/* Vector __zero */
+/// Zeroes the contents of all XMM or YMM registers.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VZEROALL </c> instruction.
+static __inline void __attribute__((__always_inline__, __nodebug__, __target__("avx")))
+_mm256_zeroall(void)
+{
+  __builtin_ia32_vzeroall();
+}
+
+/// Zeroes the upper 128 bits (bits 255:128) of all YMM registers.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VZEROUPPER </c> instruction.
+static __inline void __attribute__((__always_inline__, __nodebug__, __target__("avx")))
+_mm256_zeroupper(void)
+{
+  __builtin_ia32_vzeroupper();
+}
+
+/* Vector load with broadcast */
+/// Loads a scalar single-precision floating point value from the
+///    specified address pointed to by \a __a and broadcasts it to the elements
+///    of a [4 x float] vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VBROADCASTSS </c> instruction.
+///
+/// \param __a
+///    The single-precision floating point value to be broadcast.
+/// \returns A 128-bit vector of [4 x float] whose 32-bit elements are set
+///    equal to the broadcast value.
+static __inline __m128 __DEFAULT_FN_ATTRS128
+_mm_broadcast_ss(float const *__a)
+{
+  float __f = *__a;
+  return __extension__ (__m128)(__v4sf){ __f, __f, __f, __f };
+}
+
+/// Loads a scalar double-precision floating point value from the
+///    specified address pointed to by \a __a and broadcasts it to the elements
+///    of a [4 x double] vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds 
