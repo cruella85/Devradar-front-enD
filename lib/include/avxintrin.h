@@ -3277,4 +3277,227 @@ _mm256_storeu_pd(double *__p, __m256d __a)
 }
 
 /// Stores single-precision floating point values from a 256-bit vector
-///    of [8 x float] to an unaligned memory lo
+///    of [8 x float] to an unaligned memory location pointed to by \a __p.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVUPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the float values.
+/// \param __a
+///    A 256-bit vector of [8 x float] containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_storeu_ps(float *__p, __m256 __a)
+{
+  struct __storeu_ps {
+    __m256_u __v;
+  } __attribute__((__packed__, __may_alias__));
+  ((struct __storeu_ps*)__p)->__v = __a;
+}
+
+/// Stores integer values from a 256-bit integer vector to a 32-byte
+///    aligned memory location pointed to by \a __p.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDQA </c> instruction.
+///
+/// \param __p
+///    A 32-byte aligned pointer to a memory location that will receive the
+///    integer values.
+/// \param __a
+///    A 256-bit integer vector containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_store_si256(__m256i *__p, __m256i __a)
+{
+  *__p = __a;
+}
+
+/// Stores integer values from a 256-bit integer vector to an unaligned
+///    memory location pointed to by \a __p.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDQU </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the integer values.
+/// \param __a
+///    A 256-bit integer vector containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_storeu_si256(__m256i_u *__p, __m256i __a)
+{
+  struct __storeu_si256 {
+    __m256i_u __v;
+  } __attribute__((__packed__, __may_alias__));
+  ((struct __storeu_si256*)__p)->__v = __a;
+}
+
+/* Conditional load ops */
+/// Conditionally loads double-precision floating point elements from a
+///    memory location pointed to by \a __p into a 128-bit vector of
+///    [2 x double], depending on the mask bits associated with each data
+///    element.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPD </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that contains the double-precision
+///    floating point values.
+/// \param __m
+///    A 128-bit integer vector containing the mask. The most significant bit of
+///    each data element represents the mask bits. If a mask bit is zero, the
+///    corresponding value in the memory location is not loaded and the
+///    corresponding field in the return value is set to zero.
+/// \returns A 128-bit vector of [2 x double] containing the loaded values.
+static __inline __m128d __DEFAULT_FN_ATTRS128
+_mm_maskload_pd(double const *__p, __m128i __m)
+{
+  return (__m128d)__builtin_ia32_maskloadpd((const __v2df *)__p, (__v2di)__m);
+}
+
+/// Conditionally loads double-precision floating point elements from a
+///    memory location pointed to by \a __p into a 256-bit vector of
+///    [4 x double], depending on the mask bits associated with each data
+///    element.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPD </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that contains the double-precision
+///    floating point values.
+/// \param __m
+///    A 256-bit integer vector of [4 x quadword] containing the mask. The most
+///    significant bit of each quadword element represents the mask bits. If a
+///    mask bit is zero, the corresponding value in the memory location is not
+///    loaded and the corresponding field in the return value is set to zero.
+/// \returns A 256-bit vector of [4 x double] containing the loaded values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_maskload_pd(double const *__p, __m256i __m)
+{
+  return (__m256d)__builtin_ia32_maskloadpd256((const __v4df *)__p,
+                                               (__v4di)__m);
+}
+
+/// Conditionally loads single-precision floating point elements from a
+///    memory location pointed to by \a __p into a 128-bit vector of
+///    [4 x float], depending on the mask bits associated with each data
+///    element.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that contains the single-precision
+///    floating point values.
+/// \param __m
+///    A 128-bit integer vector containing the mask. The most significant bit of
+///    each data element represents the mask bits. If a mask bit is zero, the
+///    corresponding value in the memory location is not loaded and the
+///    corresponding field in the return value is set to zero.
+/// \returns A 128-bit vector of [4 x float] containing the loaded values.
+static __inline __m128 __DEFAULT_FN_ATTRS128
+_mm_maskload_ps(float const *__p, __m128i __m)
+{
+  return (__m128)__builtin_ia32_maskloadps((const __v4sf *)__p, (__v4si)__m);
+}
+
+/// Conditionally loads single-precision floating point elements from a
+///    memory location pointed to by \a __p into a 256-bit vector of
+///    [8 x float], depending on the mask bits associated with each data
+///    element.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that contains the single-precision
+///    floating point values.
+/// \param __m
+///    A 256-bit integer vector of [8 x dword] containing the mask. The most
+///    significant bit of each dword element represents the mask bits. If a mask
+///    bit is zero, the corresponding value in the memory location is not loaded
+///    and the corresponding field in the return value is set to zero.
+/// \returns A 256-bit vector of [8 x float] containing the loaded values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_maskload_ps(float const *__p, __m256i __m)
+{
+  return (__m256)__builtin_ia32_maskloadps256((const __v8sf *)__p, (__v8si)__m);
+}
+
+/* Conditional store ops */
+/// Moves single-precision floating point values from a 256-bit vector
+///    of [8 x float] to a memory location pointed to by \a __p, according to
+///    the specified mask.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the float values.
+/// \param __m
+///    A 256-bit integer vector of [8 x dword] containing the mask. The most
+///    significant bit of each dword element in the mask vector represents the
+///    mask bits. If a mask bit is zero, the corresponding value from vector
+///    \a __a is not stored and the corresponding field in the memory location
+///    pointed to by \a __p is not changed.
+/// \param __a
+///    A 256-bit vector of [8 x float] containing the values to be stored.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_maskstore_ps(float *__p, __m256i __m, __m256 __a)
+{
+  __builtin_ia32_maskstoreps256((__v8sf *)__p, (__v8si)__m, (__v8sf)__a);
+}
+
+/// Moves double-precision values from a 128-bit vector of [2 x double]
+///    to a memory location pointed to by \a __p, according to the specified
+///    mask.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPD </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the float values.
+/// \param __m
+///    A 128-bit integer vector containing the mask. The most significant bit of
+///    each field in the mask vector represents the mask bits. If a mask bit is
+///    zero, the corresponding value from vector \a __a is not stored and the
+///    corresponding field in the memory location pointed to by \a __p is not
+///    changed.
+/// \param __a
+///    A 128-bit vector of [2 x double] containing the values to be stored.
+static __inline void __DEFAULT_FN_ATTRS128
+_mm_maskstore_pd(double *__p, __m128i __m, __m128d __a)
+{
+  __builtin_ia32_maskstorepd((__v2df *)__p, (__v2di)__m, (__v2df)__a);
+}
+
+/// Moves double-precision values from a 256-bit vector of [4 x double]
+///    to a memory location pointed to by \a __p, according to the specified
+///    mask.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPD </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the float values.
+/// \param __m
+///    A 256-bit integer vector of [4 x quadword] containing the mask. The most
+///    significant bit of each quadword element in the mask vector represents
+///    the mask bits. If a mask bit is zero, the corresponding value from vector
+///    __a is not stored and the corresponding field in the memory location
+///    pointed to by \a __p is not changed.
+/// \param __a
+///    A 256-bit vector of [4 x double] containing the values to be stored.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_maskstore
