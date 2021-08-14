@@ -3017,4 +3017,264 @@ _mm_broadcast_ss(float const *__a)
 ///
 /// \headerfile <x86intrin.h>
 ///
-/// This intrinsic corresponds 
+/// This intrinsic corresponds to the <c> VBROADCASTSD </c> instruction.
+///
+/// \param __a
+///    The double-precision floating point value to be broadcast.
+/// \returns A 256-bit vector of [4 x double] whose 64-bit elements are set
+///    equal to the broadcast value.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_broadcast_sd(double const *__a)
+{
+  double __d = *__a;
+  return __extension__ (__m256d)(__v4df){ __d, __d, __d, __d };
+}
+
+/// Loads a scalar single-precision floating point value from the
+///    specified address pointed to by \a __a and broadcasts it to the elements
+///    of a [8 x float] vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VBROADCASTSS </c> instruction.
+///
+/// \param __a
+///    The single-precision floating point value to be broadcast.
+/// \returns A 256-bit vector of [8 x float] whose 32-bit elements are set
+///    equal to the broadcast value.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_broadcast_ss(float const *__a)
+{
+  float __f = *__a;
+  return __extension__ (__m256)(__v8sf){ __f, __f, __f, __f, __f, __f, __f, __f };
+}
+
+/// Loads the data from a 128-bit vector of [2 x double] from the
+///    specified address pointed to by \a __a and broadcasts it to 128-bit
+///    elements in a 256-bit vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VBROADCASTF128 </c> instruction.
+///
+/// \param __a
+///    The 128-bit vector of [2 x double] to be broadcast.
+/// \returns A 256-bit vector of [4 x double] whose 128-bit elements are set
+///    equal to the broadcast value.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_broadcast_pd(__m128d const *__a)
+{
+  __m128d __b = _mm_loadu_pd((const double *)__a);
+  return (__m256d)__builtin_shufflevector((__v2df)__b, (__v2df)__b,
+                                          0, 1, 0, 1);
+}
+
+/// Loads the data from a 128-bit vector of [4 x float] from the
+///    specified address pointed to by \a __a and broadcasts it to 128-bit
+///    elements in a 256-bit vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VBROADCASTF128 </c> instruction.
+///
+/// \param __a
+///    The 128-bit vector of [4 x float] to be broadcast.
+/// \returns A 256-bit vector of [8 x float] whose 128-bit elements are set
+///    equal to the broadcast value.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_broadcast_ps(__m128 const *__a)
+{
+  __m128 __b = _mm_loadu_ps((const float *)__a);
+  return (__m256)__builtin_shufflevector((__v4sf)__b, (__v4sf)__b,
+                                         0, 1, 2, 3, 0, 1, 2, 3);
+}
+
+/* SIMD load ops */
+/// Loads 4 double-precision floating point values from a 32-byte aligned
+///    memory location pointed to by \a __p into a vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVAPD </c> instruction.
+///
+/// \param __p
+///    A 32-byte aligned pointer to a memory location containing
+///    double-precision floating point values.
+/// \returns A 256-bit vector of [4 x double] containing the moved values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_load_pd(double const *__p)
+{
+  return *(const __m256d *)__p;
+}
+
+/// Loads 8 single-precision floating point values from a 32-byte aligned
+///    memory location pointed to by \a __p into a vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVAPS </c> instruction.
+///
+/// \param __p
+///    A 32-byte aligned pointer to a memory location containing float values.
+/// \returns A 256-bit vector of [8 x float] containing the moved values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_load_ps(float const *__p)
+{
+  return *(const __m256 *)__p;
+}
+
+/// Loads 4 double-precision floating point values from an unaligned
+///    memory location pointed to by \a __p into a vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVUPD </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location containing double-precision floating
+///    point values.
+/// \returns A 256-bit vector of [4 x double] containing the moved values.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_loadu_pd(double const *__p)
+{
+  struct __loadu_pd {
+    __m256d_u __v;
+  } __attribute__((__packed__, __may_alias__));
+  return ((const struct __loadu_pd*)__p)->__v;
+}
+
+/// Loads 8 single-precision floating point values from an unaligned
+///    memory location pointed to by \a __p into a vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVUPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location containing single-precision floating
+///    point values.
+/// \returns A 256-bit vector of [8 x float] containing the moved values.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_loadu_ps(float const *__p)
+{
+  struct __loadu_ps {
+    __m256_u __v;
+  } __attribute__((__packed__, __may_alias__));
+  return ((const struct __loadu_ps*)__p)->__v;
+}
+
+/// Loads 256 bits of integer data from a 32-byte aligned memory
+///    location pointed to by \a __p into elements of a 256-bit integer vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDQA </c> instruction.
+///
+/// \param __p
+///    A 32-byte aligned pointer to a 256-bit integer vector containing integer
+///    values.
+/// \returns A 256-bit integer vector containing the moved values.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_load_si256(__m256i const *__p)
+{
+  return *__p;
+}
+
+/// Loads 256 bits of integer data from an unaligned memory location
+///    pointed to by \a __p into a 256-bit integer vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDQU </c> instruction.
+///
+/// \param __p
+///    A pointer to a 256-bit integer vector containing integer values.
+/// \returns A 256-bit integer vector containing the moved values.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_loadu_si256(__m256i_u const *__p)
+{
+  struct __loadu_si256 {
+    __m256i_u __v;
+  } __attribute__((__packed__, __may_alias__));
+  return ((const struct __loadu_si256*)__p)->__v;
+}
+
+/// Loads 256 bits of integer data from an unaligned memory location
+///    pointed to by \a __p into a 256-bit integer vector. This intrinsic may
+///    perform better than \c _mm256_loadu_si256 when the data crosses a cache
+///    line boundary.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VLDDQU </c> instruction.
+///
+/// \param __p
+///    A pointer to a 256-bit integer vector containing integer values.
+/// \returns A 256-bit integer vector containing the moved values.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_lddqu_si256(__m256i_u const *__p)
+{
+  return (__m256i)__builtin_ia32_lddqu256((char const *)__p);
+}
+
+/* SIMD store ops */
+/// Stores double-precision floating point values from a 256-bit vector
+///    of [4 x double] to a 32-byte aligned memory location pointed to by
+///    \a __p.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVAPD </c> instruction.
+///
+/// \param __p
+///    A 32-byte aligned pointer to a memory location that will receive the
+///    double-precision floaing point values.
+/// \param __a
+///    A 256-bit vector of [4 x double] containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_store_pd(double *__p, __m256d __a)
+{
+  *(__m256d *)__p = __a;
+}
+
+/// Stores single-precision floating point values from a 256-bit vector
+///    of [8 x float] to a 32-byte aligned memory location pointed to by \a __p.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVAPS </c> instruction.
+///
+/// \param __p
+///    A 32-byte aligned pointer to a memory location that will receive the
+///    float values.
+/// \param __a
+///    A 256-bit vector of [8 x float] containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_store_ps(float *__p, __m256 __a)
+{
+  *(__m256 *)__p = __a;
+}
+
+/// Stores double-precision floating point values from a 256-bit vector
+///    of [4 x double] to an unaligned memory location pointed to by \a __p.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVUPD </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the double-precision
+///    floating point values.
+/// \param __a
+///    A 256-bit vector of [4 x double] containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_storeu_pd(double *__p, __m256d __a)
+{
+  struct __storeu_pd {
+    __m256d_u __v;
+  } __attribute__((__packed__, __may_alias__));
+  ((struct __storeu_pd*)__p)->__v = __a;
+}
+
+/// Stores single-precision floating point values from a 256-bit vector
+///    of [8 x float] to an unaligned memory lo
