@@ -3500,4 +3500,245 @@ _mm_maskstore_pd(double *__p, __m128i __m, __m128d __a)
 /// \param __a
 ///    A 256-bit vector of [4 x double] containing the values to be stored.
 static __inline void __DEFAULT_FN_ATTRS
-_mm256_maskstore
+_mm256_maskstore_pd(double *__p, __m256i __m, __m256d __a)
+{
+  __builtin_ia32_maskstorepd256((__v4df *)__p, (__v4di)__m, (__v4df)__a);
+}
+
+/// Moves single-precision floating point values from a 128-bit vector
+///    of [4 x float] to a memory location pointed to by \a __p, according to
+///    the specified mask.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMASKMOVPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a memory location that will receive the float values.
+/// \param __m
+///    A 128-bit integer vector containing the mask. The most significant bit of
+///    each field in the mask vector represents the mask bits. If a mask bit is
+///    zero, the corresponding value from vector __a is not stored and the
+///    corresponding field in the memory location pointed to by \a __p is not
+///    changed.
+/// \param __a
+///    A 128-bit vector of [4 x float] containing the values to be stored.
+static __inline void __DEFAULT_FN_ATTRS128
+_mm_maskstore_ps(float *__p, __m128i __m, __m128 __a)
+{
+  __builtin_ia32_maskstoreps((__v4sf *)__p, (__v4si)__m, (__v4sf)__a);
+}
+
+/* Cacheability support ops */
+/// Moves integer data from a 256-bit integer vector to a 32-byte
+///    aligned memory location. To minimize caching, the data is flagged as
+///    non-temporal (unlikely to be used again soon).
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVNTDQ </c> instruction.
+///
+/// \param __a
+///    A pointer to a 32-byte aligned memory location that will receive the
+///    integer values.
+/// \param __b
+///    A 256-bit integer vector containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_stream_si256(__m256i *__a, __m256i __b)
+{
+  typedef __v4di __v4di_aligned __attribute__((aligned(32)));
+  __builtin_nontemporal_store((__v4di_aligned)__b, (__v4di_aligned*)__a);
+}
+
+/// Moves double-precision values from a 256-bit vector of [4 x double]
+///    to a 32-byte aligned memory location. To minimize caching, the data is
+///    flagged as non-temporal (unlikely to be used again soon).
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVNTPD </c> instruction.
+///
+/// \param __a
+///    A pointer to a 32-byte aligned memory location that will receive the
+///    double-precision floating-point values.
+/// \param __b
+///    A 256-bit vector of [4 x double] containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_stream_pd(double *__a, __m256d __b)
+{
+  typedef __v4df __v4df_aligned __attribute__((aligned(32)));
+  __builtin_nontemporal_store((__v4df_aligned)__b, (__v4df_aligned*)__a);
+}
+
+/// Moves single-precision floating point values from a 256-bit vector
+///    of [8 x float] to a 32-byte aligned memory location. To minimize
+///    caching, the data is flagged as non-temporal (unlikely to be used again
+///    soon).
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVNTPS </c> instruction.
+///
+/// \param __p
+///    A pointer to a 32-byte aligned memory location that will receive the
+///    single-precision floating point values.
+/// \param __a
+///    A 256-bit vector of [8 x float] containing the values to be moved.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_stream_ps(float *__p, __m256 __a)
+{
+  typedef __v8sf __v8sf_aligned __attribute__((aligned(32)));
+  __builtin_nontemporal_store((__v8sf_aligned)__a, (__v8sf_aligned*)__p);
+}
+
+/* Create vectors */
+/// Create a 256-bit vector of [4 x double] with undefined values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \returns A 256-bit vector of [4 x double] containing undefined values.
+static __inline__ __m256d __DEFAULT_FN_ATTRS
+_mm256_undefined_pd(void)
+{
+  return (__m256d)__builtin_ia32_undef256();
+}
+
+/// Create a 256-bit vector of [8 x float] with undefined values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \returns A 256-bit vector of [8 x float] containing undefined values.
+static __inline__ __m256 __DEFAULT_FN_ATTRS
+_mm256_undefined_ps(void)
+{
+  return (__m256)__builtin_ia32_undef256();
+}
+
+/// Create a 256-bit integer vector with undefined values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \returns A 256-bit integer vector containing undefined values.
+static __inline__ __m256i __DEFAULT_FN_ATTRS
+_mm256_undefined_si256(void)
+{
+  return (__m256i)__builtin_ia32_undef256();
+}
+
+/// Constructs a 256-bit floating-point vector of [4 x double]
+///    initialized with the specified double-precision floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VUNPCKLPD+VINSERTF128 </c>
+///   instruction.
+///
+/// \param __a
+///    A double-precision floating-point value used to initialize bits [255:192]
+///    of the result.
+/// \param __b
+///    A double-precision floating-point value used to initialize bits [191:128]
+///    of the result.
+/// \param __c
+///    A double-precision floating-point value used to initialize bits [127:64]
+///    of the result.
+/// \param __d
+///    A double-precision floating-point value used to initialize bits [63:0]
+///    of the result.
+/// \returns An initialized 256-bit floating-point vector of [4 x double].
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_set_pd(double __a, double __b, double __c, double __d)
+{
+  return __extension__ (__m256d){ __d, __c, __b, __a };
+}
+
+/// Constructs a 256-bit floating-point vector of [8 x float] initialized
+///    with the specified single-precision floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///   instruction.
+///
+/// \param __a
+///    A single-precision floating-point value used to initialize bits [255:224]
+///    of the result.
+/// \param __b
+///    A single-precision floating-point value used to initialize bits [223:192]
+///    of the result.
+/// \param __c
+///    A single-precision floating-point value used to initialize bits [191:160]
+///    of the result.
+/// \param __d
+///    A single-precision floating-point value used to initialize bits [159:128]
+///    of the result.
+/// \param __e
+///    A single-precision floating-point value used to initialize bits [127:96]
+///    of the result.
+/// \param __f
+///    A single-precision floating-point value used to initialize bits [95:64]
+///    of the result.
+/// \param __g
+///    A single-precision floating-point value used to initialize bits [63:32]
+///    of the result.
+/// \param __h
+///    A single-precision floating-point value used to initialize bits [31:0]
+///    of the result.
+/// \returns An initialized 256-bit floating-point vector of [8 x float].
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_set_ps(float __a, float __b, float __c, float __d,
+              float __e, float __f, float __g, float __h)
+{
+  return __extension__ (__m256){ __h, __g, __f, __e, __d, __c, __b, __a };
+}
+
+/// Constructs a 256-bit integer vector initialized with the specified
+///    32-bit integral values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///   instruction.
+///
+/// \param __i0
+///    A 32-bit integral value used to initialize bits [255:224] of the result.
+/// \param __i1
+///    A 32-bit integral value used to initialize bits [223:192] of the result.
+/// \param __i2
+///    A 32-bit integral value used to initialize bits [191:160] of the result.
+/// \param __i3
+///    A 32-bit integral value used to initialize bits [159:128] of the result.
+/// \param __i4
+///    A 32-bit integral value used to initialize bits [127:96] of the result.
+/// \param __i5
+///    A 32-bit integral value used to initialize bits [95:64] of the result.
+/// \param __i6
+///    A 32-bit integral value used to initialize bits [63:32] of the result.
+/// \param __i7
+///    A 32-bit integral value used to initialize bits [31:0] of the result.
+/// \returns An initialized 256-bit integer vector.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set_epi32(int __i0, int __i1, int __i2, int __i3,
+                 int __i4, int __i5, int __i6, int __i7)
+{
+  return __extension__ (__m256i)(__v8si){ __i7, __i6, __i5, __i4, __i3, __i2, __i1, __i0 };
+}
+
+/// Constructs a 256-bit integer vector initialized with the specified
+///    16-bit integral values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///   instruction.
+///
+/// \param __w15
+///    A 16-bit integral value used to initialize bits [255:240] of the result.
+/// \param __w14
+///    A 16-bit integral value used to initialize bits [239:224]
