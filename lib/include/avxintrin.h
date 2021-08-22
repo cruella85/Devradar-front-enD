@@ -3741,4 +3741,210 @@ _mm256_set_epi32(int __i0, int __i1, int __i2, int __i3,
 /// \param __w15
 ///    A 16-bit integral value used to initialize bits [255:240] of the result.
 /// \param __w14
-///    A 16-bit integral value used to initialize bits [239:224]
+///    A 16-bit integral value used to initialize bits [239:224] of the result.
+/// \param __w13
+///    A 16-bit integral value used to initialize bits [223:208] of the result.
+/// \param __w12
+///    A 16-bit integral value used to initialize bits [207:192] of the result.
+/// \param __w11
+///    A 16-bit integral value used to initialize bits [191:176] of the result.
+/// \param __w10
+///    A 16-bit integral value used to initialize bits [175:160] of the result.
+/// \param __w09
+///    A 16-bit integral value used to initialize bits [159:144] of the result.
+/// \param __w08
+///    A 16-bit integral value used to initialize bits [143:128] of the result.
+/// \param __w07
+///    A 16-bit integral value used to initialize bits [127:112] of the result.
+/// \param __w06
+///    A 16-bit integral value used to initialize bits [111:96] of the result.
+/// \param __w05
+///    A 16-bit integral value used to initialize bits [95:80] of the result.
+/// \param __w04
+///    A 16-bit integral value used to initialize bits [79:64] of the result.
+/// \param __w03
+///    A 16-bit integral value used to initialize bits [63:48] of the result.
+/// \param __w02
+///    A 16-bit integral value used to initialize bits [47:32] of the result.
+/// \param __w01
+///    A 16-bit integral value used to initialize bits [31:16] of the result.
+/// \param __w00
+///    A 16-bit integral value used to initialize bits [15:0] of the result.
+/// \returns An initialized 256-bit integer vector.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set_epi16(short __w15, short __w14, short __w13, short __w12,
+                 short __w11, short __w10, short __w09, short __w08,
+                 short __w07, short __w06, short __w05, short __w04,
+                 short __w03, short __w02, short __w01, short __w00)
+{
+  return __extension__ (__m256i)(__v16hi){ __w00, __w01, __w02, __w03, __w04, __w05, __w06,
+    __w07, __w08, __w09, __w10, __w11, __w12, __w13, __w14, __w15 };
+}
+
+/// Constructs a 256-bit integer vector initialized with the specified
+///    8-bit integral values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///   instruction.
+///
+/// \param __b31
+///    An 8-bit integral value used to initialize bits [255:248] of the result.
+/// \param __b30
+///    An 8-bit integral value used to initialize bits [247:240] of the result.
+/// \param __b29
+///    An 8-bit integral value used to initialize bits [239:232] of the result.
+/// \param __b28
+///    An 8-bit integral value used to initialize bits [231:224] of the result.
+/// \param __b27
+///    An 8-bit integral value used to initialize bits [223:216] of the result.
+/// \param __b26
+///    An 8-bit integral value used to initialize bits [215:208] of the result.
+/// \param __b25
+///    An 8-bit integral value used to initialize bits [207:200] of the result.
+/// \param __b24
+///    An 8-bit integral value used to initialize bits [199:192] of the result.
+/// \param __b23
+///    An 8-bit integral value used to initialize bits [191:184] of the result.
+/// \param __b22
+///    An 8-bit integral value used to initialize bits [183:176] of the result.
+/// \param __b21
+///    An 8-bit integral value used to initialize bits [175:168] of the result.
+/// \param __b20
+///    An 8-bit integral value used to initialize bits [167:160] of the result.
+/// \param __b19
+///    An 8-bit integral value used to initialize bits [159:152] of the result.
+/// \param __b18
+///    An 8-bit integral value used to initialize bits [151:144] of the result.
+/// \param __b17
+///    An 8-bit integral value used to initialize bits [143:136] of the result.
+/// \param __b16
+///    An 8-bit integral value used to initialize bits [135:128] of the result.
+/// \param __b15
+///    An 8-bit integral value used to initialize bits [127:120] of the result.
+/// \param __b14
+///    An 8-bit integral value used to initialize bits [119:112] of the result.
+/// \param __b13
+///    An 8-bit integral value used to initialize bits [111:104] of the result.
+/// \param __b12
+///    An 8-bit integral value used to initialize bits [103:96] of the result.
+/// \param __b11
+///    An 8-bit integral value used to initialize bits [95:88] of the result.
+/// \param __b10
+///    An 8-bit integral value used to initialize bits [87:80] of the result.
+/// \param __b09
+///    An 8-bit integral value used to initialize bits [79:72] of the result.
+/// \param __b08
+///    An 8-bit integral value used to initialize bits [71:64] of the result.
+/// \param __b07
+///    An 8-bit integral value used to initialize bits [63:56] of the result.
+/// \param __b06
+///    An 8-bit integral value used to initialize bits [55:48] of the result.
+/// \param __b05
+///    An 8-bit integral value used to initialize bits [47:40] of the result.
+/// \param __b04
+///    An 8-bit integral value used to initialize bits [39:32] of the result.
+/// \param __b03
+///    An 8-bit integral value used to initialize bits [31:24] of the result.
+/// \param __b02
+///    An 8-bit integral value used to initialize bits [23:16] of the result.
+/// \param __b01
+///    An 8-bit integral value used to initialize bits [15:8] of the result.
+/// \param __b00
+///    An 8-bit integral value used to initialize bits [7:0] of the result.
+/// \returns An initialized 256-bit integer vector.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set_epi8(char __b31, char __b30, char __b29, char __b28,
+                char __b27, char __b26, char __b25, char __b24,
+                char __b23, char __b22, char __b21, char __b20,
+                char __b19, char __b18, char __b17, char __b16,
+                char __b15, char __b14, char __b13, char __b12,
+                char __b11, char __b10, char __b09, char __b08,
+                char __b07, char __b06, char __b05, char __b04,
+                char __b03, char __b02, char __b01, char __b00)
+{
+  return __extension__ (__m256i)(__v32qi){
+    __b00, __b01, __b02, __b03, __b04, __b05, __b06, __b07,
+    __b08, __b09, __b10, __b11, __b12, __b13, __b14, __b15,
+    __b16, __b17, __b18, __b19, __b20, __b21, __b22, __b23,
+    __b24, __b25, __b26, __b27, __b28, __b29, __b30, __b31
+  };
+}
+
+/// Constructs a 256-bit integer vector initialized with the specified
+///    64-bit integral values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPUNPCKLQDQ+VINSERTF128 </c>
+///   instruction.
+///
+/// \param __a
+///    A 64-bit integral value used to initialize bits [255:192] of the result.
+/// \param __b
+///    A 64-bit integral value used to initialize bits [191:128] of the result.
+/// \param __c
+///    A 64-bit integral value used to initialize bits [127:64] of the result.
+/// \param __d
+///    A 64-bit integral value used to initialize bits [63:0] of the result.
+/// \returns An initialized 256-bit integer vector.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set_epi64x(long long __a, long long __b, long long __c, long long __d)
+{
+  return __extension__ (__m256i)(__v4di){ __d, __c, __b, __a };
+}
+
+/* Create vectors with elements in reverse order */
+/// Constructs a 256-bit floating-point vector of [4 x double],
+///    initialized in reverse order with the specified double-precision
+///    floating-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VUNPCKLPD+VINSERTF128 </c>
+///   instruction.
+///
+/// \param __a
+///    A double-precision floating-point value used to initialize bits [63:0]
+///    of the result.
+/// \param __b
+///    A double-precision floating-point value used to initialize bits [127:64]
+///    of the result.
+/// \param __c
+///    A double-precision floating-point value used to initialize bits [191:128]
+///    of the result.
+/// \param __d
+///    A double-precision floating-point value used to initialize bits [255:192]
+///    of the result.
+/// \returns An initialized 256-bit floating-point vector of [4 x double].
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_setr_pd(double __a, double __b, double __c, double __d)
+{
+  return _mm256_set_pd(__d, __c, __b, __a);
+}
+
+/// Constructs a 256-bit floating-point vector of [8 x float],
+///    initialized in reverse order with the specified single-precision
+///    float-point values.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic is a utility function and does not correspond to a specific
+///   instruction.
+///
+/// \param __a
+///    A single-precision floating-point value used to initialize bits [31:0]
+///    of the result.
+/// \param __b
+///    A single-precision floating-point value used to initialize bits [63:32]
+///    of the result.
+/// \param __c
+///    A single-precision floating-point value used to initialize bits [95:64]
+///    of the result.
+/// \param __d
+///    A single-precision floating-point value used to initialize bits [127:96]
+///    of the result.
+/// \param __e
+///    A single-precision floating-point value used to initialize bits [159:128]
+///    of t
