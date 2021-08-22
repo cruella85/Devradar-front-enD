@@ -4869,4 +4869,217 @@ _mm256_setr_m128 (__m128 __lo, __m128 __hi)
 }
 
 /// Constructs a 256-bit floating-point vector of [4 x double] by
-///    concatenating two 128-bit flo
+///    concatenating two 128-bit floating-point vectors of [2 x double]. This is
+///    similar to _mm256_set_m128d, but the order of the input parameters is
+///    swapped.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VINSERTF128 </c> instruction.
+///
+/// \param __lo
+///    A 128-bit floating-point vector of [2 x double] to be copied to the lower
+///    128 bits of the result.
+/// \param __hi
+///    A 128-bit floating-point vector of [2 x double] to be copied to the upper
+///    128 bits of the result.
+/// \returns A 256-bit floating-point vector of [4 x double] containing the
+///    concatenated result.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_setr_m128d (__m128d __lo, __m128d __hi)
+{
+  return (__m256d)_mm256_set_m128d(__hi, __lo);
+}
+
+/// Constructs a 256-bit integer vector by concatenating two 128-bit
+///    integer vectors. This is similar to _mm256_set_m128i, but the order of
+///    the input parameters is swapped.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VINSERTF128 </c> instruction.
+///
+/// \param __lo
+///    A 128-bit integer vector to be copied to the lower 128 bits of the
+///    result.
+/// \param __hi
+///    A 128-bit integer vector to be copied to the upper 128 bits of the
+///    result.
+/// \returns A 256-bit integer vector containing the concatenated result.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_setr_m128i (__m128i __lo, __m128i __hi)
+{
+  return (__m256i)_mm256_set_m128i(__hi, __lo);
+}
+
+/* SIMD load ops (unaligned) */
+/// Loads two 128-bit floating-point vectors of [4 x float] from
+///    unaligned memory locations and constructs a 256-bit floating-point vector
+///    of [8 x float] by concatenating the two 128-bit vectors.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to load instructions followed by the
+///   <c> VINSERTF128 </c> instruction.
+///
+/// \param __addr_hi
+///    A pointer to a 128-bit memory location containing 4 consecutive
+///    single-precision floating-point values. These values are to be copied to
+///    bits[255:128] of the result. The address of the memory location does not
+///    have to be aligned.
+/// \param __addr_lo
+///    A pointer to a 128-bit memory location containing 4 consecutive
+///    single-precision floating-point values. These values are to be copied to
+///    bits[127:0] of the result. The address of the memory location does not
+///    have to be aligned.
+/// \returns A 256-bit floating-point vector of [8 x float] containing the
+///    concatenated result.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_loadu2_m128(float const *__addr_hi, float const *__addr_lo)
+{
+  return _mm256_set_m128(_mm_loadu_ps(__addr_hi), _mm_loadu_ps(__addr_lo));
+}
+
+/// Loads two 128-bit floating-point vectors of [2 x double] from
+///    unaligned memory locations and constructs a 256-bit floating-point vector
+///    of [4 x double] by concatenating the two 128-bit vectors.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to load instructions followed by the
+///   <c> VINSERTF128 </c> instruction.
+///
+/// \param __addr_hi
+///    A pointer to a 128-bit memory location containing two consecutive
+///    double-precision floating-point values. These values are to be copied to
+///    bits[255:128] of the result. The address of the memory location does not
+///    have to be aligned.
+/// \param __addr_lo
+///    A pointer to a 128-bit memory location containing two consecutive
+///    double-precision floating-point values. These values are to be copied to
+///    bits[127:0] of the result. The address of the memory location does not
+///    have to be aligned.
+/// \returns A 256-bit floating-point vector of [4 x double] containing the
+///    concatenated result.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_loadu2_m128d(double const *__addr_hi, double const *__addr_lo)
+{
+  return _mm256_set_m128d(_mm_loadu_pd(__addr_hi), _mm_loadu_pd(__addr_lo));
+}
+
+/// Loads two 128-bit integer vectors from unaligned memory locations and
+///    constructs a 256-bit integer vector by concatenating the two 128-bit
+///    vectors.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to load instructions followed by the
+///   <c> VINSERTF128 </c> instruction.
+///
+/// \param __addr_hi
+///    A pointer to a 128-bit memory location containing a 128-bit integer
+///    vector. This vector is to be copied to bits[255:128] of the result. The
+///    address of the memory location does not have to be aligned.
+/// \param __addr_lo
+///    A pointer to a 128-bit memory location containing a 128-bit integer
+///    vector. This vector is to be copied to bits[127:0] of the result. The
+///    address of the memory location does not have to be aligned.
+/// \returns A 256-bit integer vector containing the concatenated result.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_loadu2_m128i(__m128i_u const *__addr_hi, __m128i_u const *__addr_lo)
+{
+   return _mm256_set_m128i(_mm_loadu_si128(__addr_hi), _mm_loadu_si128(__addr_lo));
+}
+
+/* SIMD store ops (unaligned) */
+/// Stores the upper and lower 128 bits of a 256-bit floating-point
+///    vector of [8 x float] into two different unaligned memory locations.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128 </c> instruction and the
+///   store instructions.
+///
+/// \param __addr_hi
+///    A pointer to a 128-bit memory location. Bits[255:128] of \a __a are to be
+///    copied to this memory location. The address of this memory location does
+///    not have to be aligned.
+/// \param __addr_lo
+///    A pointer to a 128-bit memory location. Bits[127:0] of \a __a are to be
+///    copied to this memory location. The address of this memory location does
+///    not have to be aligned.
+/// \param __a
+///    A 256-bit floating-point vector of [8 x float].
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_storeu2_m128(float *__addr_hi, float *__addr_lo, __m256 __a)
+{
+  __m128 __v128;
+
+  __v128 = _mm256_castps256_ps128(__a);
+  _mm_storeu_ps(__addr_lo, __v128);
+  __v128 = _mm256_extractf128_ps(__a, 1);
+  _mm_storeu_ps(__addr_hi, __v128);
+}
+
+/// Stores the upper and lower 128 bits of a 256-bit floating-point
+///    vector of [4 x double] into two different unaligned memory locations.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128 </c> instruction and the
+///   store instructions.
+///
+/// \param __addr_hi
+///    A pointer to a 128-bit memory location. Bits[255:128] of \a __a are to be
+///    copied to this memory location. The address of this memory location does
+///    not have to be aligned.
+/// \param __addr_lo
+///    A pointer to a 128-bit memory location. Bits[127:0] of \a __a are to be
+///    copied to this memory location. The address of this memory location does
+///    not have to be aligned.
+/// \param __a
+///    A 256-bit floating-point vector of [4 x double].
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_storeu2_m128d(double *__addr_hi, double *__addr_lo, __m256d __a)
+{
+  __m128d __v128;
+
+  __v128 = _mm256_castpd256_pd128(__a);
+  _mm_storeu_pd(__addr_lo, __v128);
+  __v128 = _mm256_extractf128_pd(__a, 1);
+  _mm_storeu_pd(__addr_hi, __v128);
+}
+
+/// Stores the upper and lower 128 bits of a 256-bit integer vector into
+///    two different unaligned memory locations.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VEXTRACTF128 </c> instruction and the
+///   store instructions.
+///
+/// \param __addr_hi
+///    A pointer to a 128-bit memory location. Bits[255:128] of \a __a are to be
+///    copied to this memory location. The address of this memory location does
+///    not have to be aligned.
+/// \param __addr_lo
+///    A pointer to a 128-bit memory location. Bits[127:0] of \a __a are to be
+///    copied to this memory location. The address of this memory location does
+///    not have to be aligned.
+/// \param __a
+///    A 256-bit integer vector.
+static __inline void __DEFAULT_FN_ATTRS
+_mm256_storeu2_m128i(__m128i_u *__addr_hi, __m128i_u *__addr_lo, __m256i __a)
+{
+  __m128i __v128;
+
+  __v128 = _mm256_castsi256_si128(__a);
+  _mm_storeu_si128(__addr_lo, __v128);
+  __v128 = _mm256_extractf128_si256(__a, 1);
+  _mm_storeu_si128(__addr_hi, __v128);
+}
+
+#undef __DEFAULT_FN_ATTRS
+#undef __DEFAULT_FN_ATTRS128
+
+#endif /* __AVXINTRIN_H */
