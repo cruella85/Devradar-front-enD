@@ -402,4 +402,127 @@ _Unwind_SjLj_Resume_or_Rethrow(struct _Unwind_Exception *exception_object) {
 }
 
 
-/// Called by personality handler during ph
+/// Called by personality handler during phase 2 to get LSDA for current frame.
+_LIBUNWIND_EXPORT uintptr_t
+_Unwind_GetLanguageSpecificData(struct _Unwind_Context *context) {
+  _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+  _LIBUNWIND_TRACE_API("_Unwind_GetLanguageSpecificData(context=%p) "
+                       "=> 0x%" PRIuPTR,
+                       (void *)context, ufc->lsda);
+  return ufc->lsda;
+}
+
+
+/// Called by personality handler during phase 2 to get register values.
+_LIBUNWIND_EXPORT uintptr_t _Unwind_GetGR(struct _Unwind_Context *context,
+                                          int index) {
+  _LIBUNWIND_TRACE_API("_Unwind_GetGR(context=%p, reg=%d)", (void *)context,
+                       index);
+  _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+  return ufc->resumeParameters[index];
+}
+
+
+/// Called by personality handler during phase 2 to alter register values.
+_LIBUNWIND_EXPORT void _Unwind_SetGR(struct _Unwind_Context *context, int index,
+                                     uintptr_t new_value) {
+  _LIBUNWIND_TRACE_API("_Unwind_SetGR(context=%p, reg=%d, value=0x%" PRIuPTR
+                       ")",
+                       (void *)context, index, new_value);
+  _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+  ufc->resumeParameters[index] = new_value;
+}
+
+
+/// Called by personality handler during phase 2 to get instruction pointer.
+_LIBUNWIND_EXPORT uintptr_t _Unwind_GetIP(struct _Unwind_Context *context) {
+  _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+  _LIBUNWIND_TRACE_API("_Unwind_GetIP(context=%p) => 0x%" PRIu32,
+                       (void *)context, ufc->resumeLocation + 1);
+  return ufc->resumeLocation + 1;
+}
+
+
+/// Called by personality handler during phase 2 to get instruction pointer.
+/// ipBefore is a boolean that says if IP is already adjusted to be the call
+/// site address.  Normally IP is the return address.
+_LIBUNWIND_EXPORT uintptr_t _Unwind_GetIPInfo(struct _Unwind_Context *context,
+                                              int *ipBefore) {
+  _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+  *ipBefore = 0;
+  _LIBUNWIND_TRACE_API("_Unwind_GetIPInfo(context=%p, %p) => 0x%" PRIu32,
+                       (void *)context, (void *)ipBefore,
+                       ufc->resumeLocation + 1);
+  return ufc->resumeLocation + 1;
+}
+
+
+/// Called by personality handler during phase 2 to alter instruction pointer.
+_LIBUNWIND_EXPORT void _Unwind_SetIP(struct _Unwind_Context *context,
+                                     uintptr_t new_value) {
+  _LIBUNWIND_TRACE_API("_Unwind_SetIP(context=%p, value=0x%" PRIuPTR ")",
+                       (void *)context, new_value);
+  _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+  ufc->resumeLocation = new_value - 1;
+}
+
+
+/// Called by personality handler during phase 2 to find the start of the
+/// function.
+_LIBUNWIND_EXPORT uintptr_t
+_Unwind_GetRegionStart(struct _Unwind_Context *context) {
+  // Not supported or needed for sjlj based unwinding
+  (void)context;
+  _LIBUNWIND_TRACE_API("_Unwind_GetRegionStart(context=%p)", (void *)context);
+  return 0;
+}
+
+
+/// Called by personality handler during phase 2 if a foreign exception
+/// is caught.
+_LIBUNWIND_EXPORT void
+_Unwind_DeleteException(struct _Unwind_Exception *exception_object) {
+  _LIBUNWIND_TRACE_API("_Unwind_DeleteException(ex_obj=%p)",
+                       (void *)exception_object);
+  if (exception_object->exception_cleanup != NULL)
+    (*exception_object->exception_cleanup)(_URC_FOREIGN_EXCEPTION_CAUGHT,
+                                           exception_object);
+}
+
+
+
+/// Called by personality handler during phase 2 to get base address for data
+/// relative encodings.
+_LIBUNWIND_EXPORT uintptr_t
+_Unwind_GetDataRelBase(struct _Unwind_Context *context) {
+  // Not supported or needed for sjlj based unwinding
+  (void)context;
+  _LIBUNWIND_TRACE_API("_Unwind_GetDataRelBase(context=%p)", (void *)context);
+  _LIBUNWIND_ABORT("_Unwind_GetDataRelBase() not implemented");
+}
+
+
+/// Called by personality handler during phase 2 to get base address for text
+/// relative encodings.
+_LIBUNWIND_EXPORT uintptr_t
+_Unwind_GetTextRelBase(struct _Unwind_Context *context) {
+  // Not supported or needed for sjlj based unwinding
+  (void)context;
+  _LIBUNWIND_TRACE_API("_Unwind_GetTextRelBase(context=%p)", (void *)context);
+  _LIBUNWIND_ABORT("_Unwind_GetTextRelBase() not implemented");
+}
+
+
+/// Called by personality handler to get "Call Frame Area" for current frame.
+_LIBUNWIND_EXPORT uintptr_t _Unwind_GetCFA(struct _Unwind_Context *context) {
+  _LIBUNWIND_TRACE_API("_Unwind_GetCFA(context=%p)", (void *)context);
+  if (context != NULL) {
+    _Unwind_FunctionContext_t ufc = (_Unwind_FunctionContext_t) context;
+    // Setjmp/longjmp based exceptions don't have a true CFA.
+    // Instead, the SP in the jmpbuf is the closest approximation.
+    return (uintptr_t) ufc->jbuf[2];
+  }
+  return 0;
+}
+
+#endif // defined(_LIBUNWIND_BUILD_SJLJ_APIS)
