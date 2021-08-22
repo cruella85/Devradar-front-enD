@@ -534,3 +534,160 @@ fn renderBitEnum(
 
     try writer.writeAll("};\n};\n");
 }
+
+fn renderOperand(
+    writer: anytype,
+    kind: enum {
+        @"union",
+        instruction,
+        mask,
+    },
+    field_name: []const u8,
+    parameters: []const g.Operand,
+    extended_structs: ExtendedStructSet,
+) !void {
+    if (kind == .instruction) {
+        try writer.writeByte('.');
+    }
+    try writer.print("{}", .{std.zig.fmtId(field_name)});
+    if (parameters.len == 0) {
+        switch (kind) {
+            .@"union" => try writer.writeAll(",\n"),
+            .instruction => try writer.writeAll(" => void,\n"),
+            .mask => try writer.writeAll(": bool = false,\n"),
+        }
+        return;
+    }
+
+    if (kind == .instruction) {
+        try writer.writeAll(" => ");
+    } else {
+        try writer.writeAll(": ");
+    }
+
+    if (kind == .mask) {
+        try writer.writeByte('?');
+    }
+
+    try writer.writeAll("struct{");
+
+    for (parameters, 0..) |param, j| {
+        if (j != 0) {
+            try writer.writeAll(", ");
+        }
+
+        try renderFieldName(writer, parameters, j);
+        try writer.writeAll(": ");
+
+        if (param.quantifier) |q| {
+            switch (q) {
+                .@"?" => try writer.writeByte('?'),
+                .@"*" => try writer.writeAll("[]const "),
+            }
+        }
+
+        try writer.print("{}", .{std.zig.fmtId(param.kind)});
+
+        if (extended_structs.contains(param.kind)) {
+            try writer.writeAll(".Extended");
+        }
+
+        if (param.quantifier) |q| {
+            switch (q) {
+                .@"?" => try writer.writeAll(" = null"),
+                .@"*" => try writer.writeAll(" = &.{}"),
+            }
+        }
+    }
+
+    try writer.writeAll("}");
+
+    if (kind == .mask) {
+        try writer.writeAll(" = null");
+    }
+
+    try writer.writeAll(",\n");
+}
+
+fn renderFieldName(writer: anytype, operands: []const g.Operand, field_index: usize) !void {
+    const operand = operands[field_index];
+
+    // Should be enough for all names - adjust as needed.
+    var name_buffer = std.BoundedArray(u8, 64){
+        .buffer = undefined,
+    };
+
+    derive_from_kind: {
+        // Operand names are often in the json encoded as "'Name'" (with two sets of quotes).
+        // Additionally, some operands have ~ in them at the end (D~ref~).
+        const name = std.mem.trim(u8, operand.name, "'~");
+        if (name.len == 0) {
+            break :derive_from_kind;
+        }
+
+        // Some names have weird characters in them (like newlines) - skip any such ones.
+        // Use the same loop to transform to snake-case.
+        for (name) |c| {
+            switch (c) {
+                'a'...'z', '0'...'9' => try name_buffer.append(c),
+                'A'...'Z' => try name_buffer.append(std.ascii.toLower(c)),
+                ' ', '~' => try name_buffer.append('_'),
+                else => break :derive_from_kind,
+            }
+        }
+
+        // Assume there are no duplicate 'name' fields.
+        try writer.print("{}", .{std.zig.fmtId(name_buffer.slice())});
+        return;
+    }
+
+    // Translate to snake case.
+    name_buffer.len = 0;
+    for (operand.kind, 0..) |c, i| {
+        switch (c) {
+            'a'...'z', '0'...'9' => try name_buffer.append(c),
+            'A'...'Z' => if (i > 0 and std.ascii.isLower(operand.kind[i - 1])) {
+                try name_buffer.appendSlice(&[_]u8{ '_', std.ascii.toLower(c) });
+            } else {
+                try name_buffer.append(std.ascii.toLower(c));
+            },
+            else => unreachable, // Assume that the name is valid C-syntax (and contains no underscores).
+        }
+    }
+
+    try writer.print("{}", .{std.zig.fmtId(name_buffer.slice())});
+
+    // For fields derived from type name, there could be any amount.
+    // Simply check against all other fields, and if another similar one exists, add a number.
+    const need_extra_index = for (operands, 0..) |other_operand, i| {
+        if (i != field_index and std.mem.eql(u8, operand.kind, other_operand.kind)) {
+            break true;
+        }
+    } else false;
+
+    if (need_extra_index) {
+        try writer.print("_{}", .{field_index});
+    }
+}
+
+fn parseHexInt(text: []const u8) !u31 {
+    const prefix = "0x";
+    if (!std.mem.startsWith(u8, text, prefix))
+        return error.InvalidHexInt;
+    return try std.fmt.parseInt(u31, text[prefix.len..], 16);
+}
+
+fn usageAndExit(file: std.fs.File, arg0: []const u8, code: u8) noreturn {
+    file.writer().print(
+        \\Usage: {s} <spirv json spec>
+        \\
+        \\Generates Zig bindings for a SPIR-V specification .json (either core or
+        \\extinst versions). The result, printed to stdout, should be used to update
+        \\files in src/codegen/spirv. Don't forget to format the output.
+        \\
+        \\The relevant specifications can be obtained from the SPIR-V registry:
+        \\https://github.com/KhronosGroup/SPIRV-Headers/blob/master/include/spirv/unified1/
+        \\
+    , .{arg0}) catch std.process.exit(1);
+    std.process.exit(code);
+}
