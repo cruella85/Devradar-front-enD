@@ -4141,4 +4141,278 @@ _mm256_setr_epi8(char __b31, char __b30, char __b29, char __b28,
 
 /// Constructs a 256-bit integer vector, initialized in reverse order
 ///    with the specified 64-bit integral values.
-/
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPUNPCKLQDQ+VINSERTF128 </c>
+///   instruction.
+///
+/// \param __a
+///    A 64-bit integral value used to initialize bits [63:0] of the result.
+/// \param __b
+///    A 64-bit integral value used to initialize bits [127:64] of the result.
+/// \param __c
+///    A 64-bit integral value used to initialize bits [191:128] of the result.
+/// \param __d
+///    A 64-bit integral value used to initialize bits [255:192] of the result.
+/// \returns An initialized 256-bit integer vector.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_setr_epi64x(long long __a, long long __b, long long __c, long long __d)
+{
+  return _mm256_set_epi64x(__d, __c, __b, __a);
+}
+
+/* Create vectors with repeated elements */
+/// Constructs a 256-bit floating-point vector of [4 x double], with each
+///    of the four double-precision floating-point vector elements set to the
+///    specified double-precision floating-point value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDDUP+VINSERTF128 </c> instruction.
+///
+/// \param __w
+///    A double-precision floating-point value used to initialize each vector
+///    element of the result.
+/// \returns An initialized 256-bit floating-point vector of [4 x double].
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_set1_pd(double __w)
+{
+  return _mm256_set_pd(__w, __w, __w, __w);
+}
+
+/// Constructs a 256-bit floating-point vector of [8 x float], with each
+///    of the eight single-precision floating-point vector elements set to the
+///    specified single-precision floating-point value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPERMILPS+VINSERTF128 </c>
+///   instruction.
+///
+/// \param __w
+///    A single-precision floating-point value used to initialize each vector
+///    element of the result.
+/// \returns An initialized 256-bit floating-point vector of [8 x float].
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_set1_ps(float __w)
+{
+  return _mm256_set_ps(__w, __w, __w, __w, __w, __w, __w, __w);
+}
+
+/// Constructs a 256-bit integer vector of [8 x i32], with each of the
+///    32-bit integral vector elements set to the specified 32-bit integral
+///    value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPERMILPS+VINSERTF128 </c>
+///   instruction.
+///
+/// \param __i
+///    A 32-bit integral value used to initialize each vector element of the
+///    result.
+/// \returns An initialized 256-bit integer vector of [8 x i32].
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set1_epi32(int __i)
+{
+  return _mm256_set_epi32(__i, __i, __i, __i, __i, __i, __i, __i);
+}
+
+/// Constructs a 256-bit integer vector of [16 x i16], with each of the
+///    16-bit integral vector elements set to the specified 16-bit integral
+///    value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPSHUFB+VINSERTF128 </c> instruction.
+///
+/// \param __w
+///    A 16-bit integral value used to initialize each vector element of the
+///    result.
+/// \returns An initialized 256-bit integer vector of [16 x i16].
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set1_epi16(short __w)
+{
+  return _mm256_set_epi16(__w, __w, __w, __w, __w, __w, __w, __w,
+                          __w, __w, __w, __w, __w, __w, __w, __w);
+}
+
+/// Constructs a 256-bit integer vector of [32 x i8], with each of the
+///    8-bit integral vector elements set to the specified 8-bit integral value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VPSHUFB+VINSERTF128 </c> instruction.
+///
+/// \param __b
+///    An 8-bit integral value used to initialize each vector element of the
+///    result.
+/// \returns An initialized 256-bit integer vector of [32 x i8].
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set1_epi8(char __b)
+{
+  return _mm256_set_epi8(__b, __b, __b, __b, __b, __b, __b, __b,
+                         __b, __b, __b, __b, __b, __b, __b, __b,
+                         __b, __b, __b, __b, __b, __b, __b, __b,
+                         __b, __b, __b, __b, __b, __b, __b, __b);
+}
+
+/// Constructs a 256-bit integer vector of [4 x i64], with each of the
+///    64-bit integral vector elements set to the specified 64-bit integral
+///    value.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VMOVDDUP+VINSERTF128 </c> instruction.
+///
+/// \param __q
+///    A 64-bit integral value used to initialize each vector element of the
+///    result.
+/// \returns An initialized 256-bit integer vector of [4 x i64].
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_set1_epi64x(long long __q)
+{
+  return _mm256_set_epi64x(__q, __q, __q, __q);
+}
+
+/* Create __zeroed vectors */
+/// Constructs a 256-bit floating-point vector of [4 x double] with all
+///    vector elements initialized to zero.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VXORPS </c> instruction.
+///
+/// \returns A 256-bit vector of [4 x double] with all elements set to zero.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_setzero_pd(void)
+{
+  return __extension__ (__m256d){ 0, 0, 0, 0 };
+}
+
+/// Constructs a 256-bit floating-point vector of [8 x float] with all
+///    vector elements initialized to zero.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VXORPS </c> instruction.
+///
+/// \returns A 256-bit vector of [8 x float] with all elements set to zero.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_setzero_ps(void)
+{
+  return __extension__ (__m256){ 0, 0, 0, 0, 0, 0, 0, 0 };
+}
+
+/// Constructs a 256-bit integer vector initialized to zero.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic corresponds to the <c> VXORPS </c> instruction.
+///
+/// \returns A 256-bit integer vector initialized to zero.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_setzero_si256(void)
+{
+  return __extension__ (__m256i)(__v4di){ 0, 0, 0, 0 };
+}
+
+/* Cast between vector types */
+/// Casts a 256-bit floating-point vector of [4 x double] into a 256-bit
+///    floating-point vector of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \param __a
+///    A 256-bit floating-point vector of [4 x double].
+/// \returns A 256-bit floating-point vector of [8 x float] containing the same
+///    bitwise pattern as the parameter.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_castpd_ps(__m256d __a)
+{
+  return (__m256)__a;
+}
+
+/// Casts a 256-bit floating-point vector of [4 x double] into a 256-bit
+///    integer vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \param __a
+///    A 256-bit floating-point vector of [4 x double].
+/// \returns A 256-bit integer vector containing the same bitwise pattern as the
+///    parameter.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_castpd_si256(__m256d __a)
+{
+  return (__m256i)__a;
+}
+
+/// Casts a 256-bit floating-point vector of [8 x float] into a 256-bit
+///    floating-point vector of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \param __a
+///    A 256-bit floating-point vector of [8 x float].
+/// \returns A 256-bit floating-point vector of [4 x double] containing the same
+///    bitwise pattern as the parameter.
+static __inline __m256d __DEFAULT_FN_ATTRS
+_mm256_castps_pd(__m256 __a)
+{
+  return (__m256d)__a;
+}
+
+/// Casts a 256-bit floating-point vector of [8 x float] into a 256-bit
+///    integer vector.
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \param __a
+///    A 256-bit floating-point vector of [8 x float].
+/// \returns A 256-bit integer vector containing the same bitwise pattern as the
+///    parameter.
+static __inline __m256i __DEFAULT_FN_ATTRS
+_mm256_castps_si256(__m256 __a)
+{
+  return (__m256i)__a;
+}
+
+/// Casts a 256-bit integer vector into a 256-bit floating-point vector
+///    of [8 x float].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \param __a
+///    A 256-bit integer vector.
+/// \returns A 256-bit floating-point vector of [8 x float] containing the same
+///    bitwise pattern as the parameter.
+static __inline __m256 __DEFAULT_FN_ATTRS
+_mm256_castsi256_ps(__m256i __a)
+{
+  return (__m256)__a;
+}
+
+/// Casts a 256-bit integer vector into a 256-bit floating-point vector
+///    of [4 x double].
+///
+/// \headerfile <x86intrin.h>
+///
+/// This intrinsic has no corresponding instruction.
+///
+/// \param __a
+///    A 256-bit integer vector.
+/// \returns A 256-bit floating-point vector of [4 x double] containing the same
+///    bitwise pattern as the parameter.
+static __inline __m2
