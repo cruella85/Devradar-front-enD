@@ -489,4 +489,165 @@ typedef struct IMediaObjectVtbl {
         IMediaObject *This,
         DWORD dwInputStreamIndex,
         const DMO_MEDIA_TYPE *pmt,
-        D
+        DWORD dwFlags);
+
+    HRESULT (STDMETHODCALLTYPE *SetOutputType)(
+        IMediaObject *This,
+        DWORD dwOutputStreamIndex,
+        const DMO_MEDIA_TYPE *pmt,
+        DWORD dwFlags);
+
+    HRESULT (STDMETHODCALLTYPE *GetInputCurrentType)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        DMO_MEDIA_TYPE *pmt);
+
+    HRESULT (STDMETHODCALLTYPE *GetOutputCurrentType)(
+        IMediaObject *This,
+        DWORD dwOutputStreamIndex,
+        DMO_MEDIA_TYPE *pmt);
+
+    HRESULT (STDMETHODCALLTYPE *GetInputSizeInfo)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        DWORD *pcbSize,
+        DWORD *pcbMaxLookahead,
+        DWORD *pcbAlignment);
+
+    HRESULT (STDMETHODCALLTYPE *GetOutputSizeInfo)(
+        IMediaObject *This,
+        DWORD dwOutputStreamIndex,
+        DWORD *pcbSize,
+        DWORD *pcbAlignment);
+
+    HRESULT (STDMETHODCALLTYPE *GetInputMaxLatency)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        REFERENCE_TIME *prtMaxLatency);
+
+    HRESULT (STDMETHODCALLTYPE *SetInputMaxLatency)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        REFERENCE_TIME rtMaxLatency);
+
+    HRESULT (STDMETHODCALLTYPE *Flush)(
+        IMediaObject *This);
+
+    HRESULT (STDMETHODCALLTYPE *Discontinuity)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex);
+
+    HRESULT (STDMETHODCALLTYPE *AllocateStreamingResources)(
+        IMediaObject *This);
+
+    HRESULT (STDMETHODCALLTYPE *FreeStreamingResources)(
+        IMediaObject *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetInputStatus)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        DWORD *dwFlags);
+
+    HRESULT (STDMETHODCALLTYPE *ProcessInput)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        IMediaBuffer *pBuffer,
+        DWORD dwFlags,
+        REFERENCE_TIME rtTimestamp,
+        REFERENCE_TIME rtTimelength);
+
+    HRESULT (STDMETHODCALLTYPE *ProcessOutput)(
+        IMediaObject *This,
+        DWORD dwFlags,
+        DWORD cOutputBufferCount,
+        DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+        DWORD *pdwStatus);
+
+    HRESULT (STDMETHODCALLTYPE *Lock)(
+        IMediaObject *This,
+        LONG bLock);
+
+    END_INTERFACE
+} IMediaObjectVtbl;
+
+interface IMediaObject {
+    CONST_VTBL IMediaObjectVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IMediaObject_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMediaObject_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMediaObject_Release(This) (This)->lpVtbl->Release(This)
+/*** IMediaObject methods ***/
+#define IMediaObject_GetStreamCount(This,pcInputStreams,pcOutputStreams) (This)->lpVtbl->GetStreamCount(This,pcInputStreams,pcOutputStreams)
+#define IMediaObject_GetInputStreamInfo(This,dwInputStreamIndex,pdwFlags) (This)->lpVtbl->GetInputStreamInfo(This,dwInputStreamIndex,pdwFlags)
+#define IMediaObject_GetOutputStreamInfo(This,dwOutputStreamIndex,pdwFlags) (This)->lpVtbl->GetOutputStreamInfo(This,dwOutputStreamIndex,pdwFlags)
+#define IMediaObject_GetInputType(This,dwInputStreamIndex,dwTypeIndex,pmt) (This)->lpVtbl->GetInputType(This,dwInputStreamIndex,dwTypeIndex,pmt)
+#define IMediaObject_GetOutputType(This,dwOutputStreamIndex,dwTypeIndex,pmt) (This)->lpVtbl->GetOutputType(This,dwOutputStreamIndex,dwTypeIndex,pmt)
+#define IMediaObject_SetInputType(This,dwInputStreamIndex,pmt,dwFlags) (This)->lpVtbl->SetInputType(This,dwInputStreamIndex,pmt,dwFlags)
+#define IMediaObject_SetOutputType(This,dwOutputStreamIndex,pmt,dwFlags) (This)->lpVtbl->SetOutputType(This,dwOutputStreamIndex,pmt,dwFlags)
+#define IMediaObject_GetInputCurrentType(This,dwInputStreamIndex,pmt) (This)->lpVtbl->GetInputCurrentType(This,dwInputStreamIndex,pmt)
+#define IMediaObject_GetOutputCurrentType(This,dwOutputStreamIndex,pmt) (This)->lpVtbl->GetOutputCurrentType(This,dwOutputStreamIndex,pmt)
+#define IMediaObject_GetInputSizeInfo(This,dwInputStreamIndex,pcbSize,pcbMaxLookahead,pcbAlignment) (This)->lpVtbl->GetInputSizeInfo(This,dwInputStreamIndex,pcbSize,pcbMaxLookahead,pcbAlignment)
+#define IMediaObject_GetOutputSizeInfo(This,dwOutputStreamIndex,pcbSize,pcbAlignment) (This)->lpVtbl->GetOutputSizeInfo(This,dwOutputStreamIndex,pcbSize,pcbAlignment)
+#define IMediaObject_GetInputMaxLatency(This,dwInputStreamIndex,prtMaxLatency) (This)->lpVtbl->GetInputMaxLatency(This,dwInputStreamIndex,prtMaxLatency)
+#define IMediaObject_SetInputMaxLatency(This,dwInputStreamIndex,rtMaxLatency) (This)->lpVtbl->SetInputMaxLatency(This,dwInputStreamIndex,rtMaxLatency)
+#define IMediaObject_Flush(This) (This)->lpVtbl->Flush(This)
+#define IMediaObject_Discontinuity(This,dwInputStreamIndex) (This)->lpVtbl->Discontinuity(This,dwInputStreamIndex)
+#define IMediaObject_AllocateStreamingResources(This) (This)->lpVtbl->AllocateStreamingResources(This)
+#define IMediaObject_FreeStreamingResources(This) (This)->lpVtbl->FreeStreamingResources(This)
+#define IMediaObject_GetInputStatus(This,dwInputStreamIndex,dwFlags) (This)->lpVtbl->GetInputStatus(This,dwInputStreamIndex,dwFlags)
+#define IMediaObject_ProcessInput(This,dwInputStreamIndex,pBuffer,dwFlags,rtTimestamp,rtTimelength) (This)->lpVtbl->ProcessInput(This,dwInputStreamIndex,pBuffer,dwFlags,rtTimestamp,rtTimelength)
+#define IMediaObject_ProcessOutput(This,dwFlags,cOutputBufferCount,pOutputBuffers,pdwStatus) (This)->lpVtbl->ProcessOutput(This,dwFlags,cOutputBufferCount,pOutputBuffers,pdwStatus)
+#define IMediaObject_Lock(This,bLock) (This)->lpVtbl->Lock(This,bLock)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IMediaObject_QueryInterface(IMediaObject* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IMediaObject_AddRef(IMediaObject* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IMediaObject_Release(IMediaObject* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IMediaObject methods ***/
+static FORCEINLINE HRESULT IMediaObject_GetStreamCount(IMediaObject* This,DWORD *pcInputStreams,DWORD *pcOutputStreams) {
+    return This->lpVtbl->GetStreamCount(This,pcInputStreams,pcOutputStreams);
+}
+static FORCEINLINE HRESULT IMediaObject_GetInputStreamInfo(IMediaObject* This,DWORD dwInputStreamIndex,DWORD *pdwFlags) {
+    return This->lpVtbl->GetInputStreamInfo(This,dwInputStreamIndex,pdwFlags);
+}
+static FORCEINLINE HRESULT IMediaObject_GetOutputStreamInfo(IMediaObject* This,DWORD dwOutputStreamIndex,DWORD *pdwFlags) {
+    return This->lpVtbl->GetOutputStreamInfo(This,dwOutputStreamIndex,pdwFlags);
+}
+static FORCEINLINE HRESULT IMediaObject_GetInputType(IMediaObject* This,DWORD dwInputStreamIndex,DWORD dwTypeIndex,DMO_MEDIA_TYPE *pmt) {
+    return This->lpVtbl->GetInputType(This,dwInputStreamIndex,dwTypeIndex,pmt);
+}
+static FORCEINLINE HRESULT IMediaObject_GetOutputType(IMediaObject* This,DWORD dwOutputStreamIndex,DWORD dwTypeIndex,DMO_MEDIA_TYPE *pmt) {
+    return This->lpVtbl->GetOutputType(This,dwOutputStreamIndex,dwTypeIndex,pmt);
+}
+static FORCEINLINE HRESULT IMediaObject_SetInputType(IMediaObject* This,DWORD dwInputStreamIndex,const DMO_MEDIA_TYPE *pmt,DWORD dwFlags) {
+    return This->lpVtbl->SetInputType(This,dwInputStreamIndex,pmt,dwFlags);
+}
+static FORCEINLINE HRESULT IMediaObject_SetOutputType(IMediaObject* This,DWORD dwOutputStreamIndex,const DMO_MEDIA_TYPE *pmt,DWORD dwFlags) {
+    return This->lpVtbl->SetOutputType(This,dwOutputStreamIndex,pmt,dwFlags);
+}
+static FORCEINLINE HRESULT IMediaObject_GetInputCurrentType(IMediaObject* This,DWORD dwInputStreamIndex,DMO_MEDIA_TYPE *pmt) {
+    return This->lpVtbl->GetInputCurrentType(This,dwInputStreamIndex,pmt);
+}
+static FORCEINLINE HRESULT IMediaObject_GetOutputCurrentType(IMediaObject* This,DWORD dwOutputStreamIndex,DMO_MEDIA_TYPE *pmt) {
+    return This->lpVtbl->GetOutputCurrentType(This,dwOutputStreamIndex,pmt);
+}
+static FORCEINLINE HRESULT IMediaObject_GetInputSizeInfo(IMediaObject* This,DWORD dwInputStreamIndex,DWORD *pcbSize,DWORD *pcbMaxLookahead,DWORD *pcbAlignment) {
+    return This->lpVtbl->GetInputSizeInfo(This,dwInputStreamIndex,pcbSize,pcbMaxLookahead,pcbAlignment);
+}
+static FORCEINLINE HRESULT IMediaObject_GetOutputSizeInfo(IMediaObject* This,DWORD dwOutputStreamIndex,DWORD *pcbSize,DWORD *pcbAlignment) {
+    return This->lpVtbl->GetOutputSizeInfo(This,dwOutputStreamIndex,pcbSize,pcbAlignment);
+}
+static FORCEINLINE HRESULT IMediaObject_GetInputMaxLatency(IMediaObject* This,DWORD dwInputStreamIndex,REFERENCE_TIME *prtMaxLatency) {
+    return This->lpVtbl->GetInputMaxLatency(This,dwInputStreamIndex,prtMaxLatency);
+}
+static FORCEINLINE HRESULT IMediaObject_SetInputMaxLatency(IMediaObject* This,DWORD dwInputStrea
