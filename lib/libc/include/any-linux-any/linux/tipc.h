@@ -177,4 +177,139 @@ struct sockaddr_tipc {
 #define TIPC_DESTNAME	3	/* destination name */
 
 /*
- * TIPC-specific soc
+ * TIPC-specific socket option names
+ */
+
+#define TIPC_IMPORTANCE		127	/* Default: TIPC_LOW_IMPORTANCE */
+#define TIPC_SRC_DROPPABLE	128	/* Default: based on socket type */
+#define TIPC_DEST_DROPPABLE	129	/* Default: based on socket type */
+#define TIPC_CONN_TIMEOUT	130	/* Default: 8000 (ms)  */
+#define TIPC_NODE_RECVQ_DEPTH	131	/* Default: none (read only) */
+#define TIPC_SOCK_RECVQ_DEPTH	132	/* Default: none (read only) */
+#define TIPC_MCAST_BROADCAST    133     /* Default: TIPC selects. No arg */
+#define TIPC_MCAST_REPLICAST    134     /* Default: TIPC selects. No arg */
+#define TIPC_GROUP_JOIN         135     /* Takes struct tipc_group_req* */
+#define TIPC_GROUP_LEAVE        136     /* No argument */
+#define TIPC_SOCK_RECVQ_USED    137     /* Default: none (read only) */
+#define TIPC_NODELAY            138     /* Default: false */
+
+/*
+ * Flag values
+ */
+#define TIPC_GROUP_LOOPBACK     0x1  /* Receive copy of sent msg when match */
+#define TIPC_GROUP_MEMBER_EVTS  0x2  /* Receive membership events in socket */
+
+struct tipc_group_req {
+	__u32 type;      /* group id */
+	__u32 instance;  /* member id */
+	__u32 scope;     /* cluster/node */
+	__u32 flags;
+};
+
+/*
+ * Maximum sizes of TIPC bearer-related names (including terminating NULL)
+ * The string formatting for each name element is:
+ * media: media
+ * interface: media:interface name
+ * link: node:interface-node:interface
+ */
+#define TIPC_NODEID_LEN         16
+#define TIPC_MAX_MEDIA_NAME	16
+#define TIPC_MAX_IF_NAME	16
+#define TIPC_MAX_BEARER_NAME	32
+#define TIPC_MAX_LINK_NAME	68
+
+#define SIOCGETLINKNAME        SIOCPROTOPRIVATE
+#define SIOCGETNODEID          (SIOCPROTOPRIVATE + 1)
+
+struct tipc_sioc_ln_req {
+	__u32 peer;
+	__u32 bearer_id;
+	char linkname[TIPC_MAX_LINK_NAME];
+};
+
+struct tipc_sioc_nodeid_req {
+	__u32 peer;
+	char node_id[TIPC_NODEID_LEN];
+};
+
+/*
+ * TIPC Crypto, AEAD
+ */
+#define TIPC_AEAD_ALG_NAME		(32)
+
+struct tipc_aead_key {
+	char alg_name[TIPC_AEAD_ALG_NAME];
+	unsigned int keylen;	/* in bytes */
+	char key[];
+};
+
+#define TIPC_AEAD_KEYLEN_MIN		(16 + 4)
+#define TIPC_AEAD_KEYLEN_MAX		(32 + 4)
+#define TIPC_AEAD_KEY_SIZE_MAX		(sizeof(struct tipc_aead_key) + \
+							TIPC_AEAD_KEYLEN_MAX)
+
+static __inline__ int tipc_aead_key_size(struct tipc_aead_key *key)
+{
+	return sizeof(*key) + key->keylen;
+}
+
+#define TIPC_REKEYING_NOW		(~0U)
+
+/* The macros and functions below are deprecated:
+ */
+
+#define TIPC_CFG_SRV		0
+#define TIPC_ZONE_SCOPE         1
+
+#define TIPC_ADDR_NAMESEQ	1
+#define TIPC_ADDR_NAME		2
+#define TIPC_ADDR_ID		3
+
+#define TIPC_NODE_BITS          12
+#define TIPC_CLUSTER_BITS       12
+#define TIPC_ZONE_BITS          8
+
+#define TIPC_NODE_OFFSET        0
+#define TIPC_CLUSTER_OFFSET     TIPC_NODE_BITS
+#define TIPC_ZONE_OFFSET        (TIPC_CLUSTER_OFFSET + TIPC_CLUSTER_BITS)
+
+#define TIPC_NODE_SIZE          ((1UL << TIPC_NODE_BITS) - 1)
+#define TIPC_CLUSTER_SIZE       ((1UL << TIPC_CLUSTER_BITS) - 1)
+#define TIPC_ZONE_SIZE          ((1UL << TIPC_ZONE_BITS) - 1)
+
+#define TIPC_NODE_MASK		(TIPC_NODE_SIZE << TIPC_NODE_OFFSET)
+#define TIPC_CLUSTER_MASK	(TIPC_CLUSTER_SIZE << TIPC_CLUSTER_OFFSET)
+#define TIPC_ZONE_MASK		(TIPC_ZONE_SIZE << TIPC_ZONE_OFFSET)
+
+#define TIPC_ZONE_CLUSTER_MASK (TIPC_ZONE_MASK | TIPC_CLUSTER_MASK)
+
+#define tipc_portid tipc_socket_addr
+#define tipc_name tipc_service_addr
+#define tipc_name_seq tipc_service_range
+
+static __inline__ __u32 tipc_addr(unsigned int zone,
+			      unsigned int cluster,
+			      unsigned int node)
+{
+	return (zone << TIPC_ZONE_OFFSET) |
+		(cluster << TIPC_CLUSTER_OFFSET) |
+		node;
+}
+
+static __inline__ unsigned int tipc_zone(__u32 addr)
+{
+	return addr >> TIPC_ZONE_OFFSET;
+}
+
+static __inline__ unsigned int tipc_cluster(__u32 addr)
+{
+	return (addr & TIPC_CLUSTER_MASK) >> TIPC_CLUSTER_OFFSET;
+}
+
+static __inline__ unsigned int tipc_node(__u32 addr)
+{
+	return addr & TIPC_NODE_MASK;
+}
+
+#endif
