@@ -206,4 +206,287 @@ static FORCEINLINE HRESULT IEnumDMO_Clone(IEnumDMO* This,IEnumDMO **ppEnum) {
  * IMediaBuffer interface
  */
 #ifndef __IMediaBuffer_INTERFACE_DEFINED__
-#define __IMediaBuff
+#define __IMediaBuffer_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IMediaBuffer, 0x59eff8b9, 0x938c, 0x4a26, 0x82,0xf2, 0x95,0xcb,0x84,0xcd,0xc8,0x37);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("59eff8b9-938c-4a26-82f2-95cb84cdc837")
+IMediaBuffer : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetLength(
+        DWORD cbLength) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMaxLength(
+        DWORD *pcbMaxLength) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetBufferAndLength(
+        BYTE **ppBuffer,
+        DWORD *pcbLength) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IMediaBuffer, 0x59eff8b9, 0x938c, 0x4a26, 0x82,0xf2, 0x95,0xcb,0x84,0xcd,0xc8,0x37)
+#endif
+#else
+typedef struct IMediaBufferVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IMediaBuffer *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IMediaBuffer *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IMediaBuffer *This);
+
+    /*** IMediaBuffer methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetLength)(
+        IMediaBuffer *This,
+        DWORD cbLength);
+
+    HRESULT (STDMETHODCALLTYPE *GetMaxLength)(
+        IMediaBuffer *This,
+        DWORD *pcbMaxLength);
+
+    HRESULT (STDMETHODCALLTYPE *GetBufferAndLength)(
+        IMediaBuffer *This,
+        BYTE **ppBuffer,
+        DWORD *pcbLength);
+
+    END_INTERFACE
+} IMediaBufferVtbl;
+
+interface IMediaBuffer {
+    CONST_VTBL IMediaBufferVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IMediaBuffer_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMediaBuffer_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMediaBuffer_Release(This) (This)->lpVtbl->Release(This)
+/*** IMediaBuffer methods ***/
+#define IMediaBuffer_SetLength(This,cbLength) (This)->lpVtbl->SetLength(This,cbLength)
+#define IMediaBuffer_GetMaxLength(This,pcbMaxLength) (This)->lpVtbl->GetMaxLength(This,pcbMaxLength)
+#define IMediaBuffer_GetBufferAndLength(This,ppBuffer,pcbLength) (This)->lpVtbl->GetBufferAndLength(This,ppBuffer,pcbLength)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IMediaBuffer_QueryInterface(IMediaBuffer* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IMediaBuffer_AddRef(IMediaBuffer* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IMediaBuffer_Release(IMediaBuffer* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IMediaBuffer methods ***/
+static FORCEINLINE HRESULT IMediaBuffer_SetLength(IMediaBuffer* This,DWORD cbLength) {
+    return This->lpVtbl->SetLength(This,cbLength);
+}
+static FORCEINLINE HRESULT IMediaBuffer_GetMaxLength(IMediaBuffer* This,DWORD *pcbMaxLength) {
+    return This->lpVtbl->GetMaxLength(This,pcbMaxLength);
+}
+static FORCEINLINE HRESULT IMediaBuffer_GetBufferAndLength(IMediaBuffer* This,BYTE **ppBuffer,DWORD *pcbLength) {
+    return This->lpVtbl->GetBufferAndLength(This,ppBuffer,pcbLength);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IMediaBuffer_INTERFACE_DEFINED__ */
+
+enum _DMO_INPUT_STATUS_FLAGS {
+    DMO_INPUT_STATUSF_ACCEPT_DATA = 0x1
+};
+enum _DMO_INPUT_DATA_BUFFER_FLAGS {
+    DMO_INPUT_DATA_BUFFERF_SYNCPOINT = 0x1,
+    DMO_INPUT_DATA_BUFFERF_TIME = 0x2,
+    DMO_INPUT_DATA_BUFFERF_TIMELENGTH = 0x4
+};
+enum _DMO_PROCESS_OUTPUT_FLAGS {
+    DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER = 0x1
+};
+typedef struct _DMO_OUTPUT_DATA_BUFFER {
+    IMediaBuffer *pBuffer;
+    DWORD dwStatus;
+    REFERENCE_TIME rtTimestamp;
+    REFERENCE_TIME rtTimelength;
+} DMO_OUTPUT_DATA_BUFFER;
+typedef struct _DMO_OUTPUT_DATA_BUFFER *PDMO_OUTPUT_DATA_BUFFER;
+enum _DMO_INPLACE_PROCESS_FLAGS {
+    DMO_INPLACE_NORMAL = 0x0,
+    DMO_INPLACE_ZERO = 0x1
+};
+enum _DMO_SET_TYPE_FLAGS {
+    DMO_SET_TYPEF_TEST_ONLY = 0x1,
+    DMO_SET_TYPEF_CLEAR = 0x2
+};
+enum _DMO_OUTPUT_DATA_BUFFERF_FLAGS {
+    DMO_OUTPUT_DATA_BUFFERF_SYNCPOINT = 0x1,
+    DMO_OUTPUT_DATA_BUFFERF_TIME = 0x2,
+    DMO_OUTPUT_DATA_BUFFERF_TIMELENGTH = 0x4,
+    DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE = 0x1000000
+};
+/*****************************************************************************
+ * IMediaObject interface
+ */
+#ifndef __IMediaObject_INTERFACE_DEFINED__
+#define __IMediaObject_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IMediaObject, 0xd8ad0f58, 0x5494, 0x4102, 0x97,0xc5, 0xec,0x79,0x8e,0x59,0xbc,0xf4);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("d8ad0f58-5494-4102-97c5-ec798e59bcf4")
+IMediaObject : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetStreamCount(
+        DWORD *pcInputStreams,
+        DWORD *pcOutputStreams) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInputStreamInfo(
+        DWORD dwInputStreamIndex,
+        DWORD *pdwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOutputStreamInfo(
+        DWORD dwOutputStreamIndex,
+        DWORD *pdwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInputType(
+        DWORD dwInputStreamIndex,
+        DWORD dwTypeIndex,
+        DMO_MEDIA_TYPE *pmt) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOutputType(
+        DWORD dwOutputStreamIndex,
+        DWORD dwTypeIndex,
+        DMO_MEDIA_TYPE *pmt) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetInputType(
+        DWORD dwInputStreamIndex,
+        const DMO_MEDIA_TYPE *pmt,
+        DWORD dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetOutputType(
+        DWORD dwOutputStreamIndex,
+        const DMO_MEDIA_TYPE *pmt,
+        DWORD dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInputCurrentType(
+        DWORD dwInputStreamIndex,
+        DMO_MEDIA_TYPE *pmt) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOutputCurrentType(
+        DWORD dwOutputStreamIndex,
+        DMO_MEDIA_TYPE *pmt) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInputSizeInfo(
+        DWORD dwInputStreamIndex,
+        DWORD *pcbSize,
+        DWORD *pcbMaxLookahead,
+        DWORD *pcbAlignment) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOutputSizeInfo(
+        DWORD dwOutputStreamIndex,
+        DWORD *pcbSize,
+        DWORD *pcbAlignment) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInputMaxLatency(
+        DWORD dwInputStreamIndex,
+        REFERENCE_TIME *prtMaxLatency) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetInputMaxLatency(
+        DWORD dwInputStreamIndex,
+        REFERENCE_TIME rtMaxLatency) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Flush(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Discontinuity(
+        DWORD dwInputStreamIndex) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AllocateStreamingResources(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FreeStreamingResources(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInputStatus(
+        DWORD dwInputStreamIndex,
+        DWORD *dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ProcessInput(
+        DWORD dwInputStreamIndex,
+        IMediaBuffer *pBuffer,
+        DWORD dwFlags,
+        REFERENCE_TIME rtTimestamp,
+        REFERENCE_TIME rtTimelength) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ProcessOutput(
+        DWORD dwFlags,
+        DWORD cOutputBufferCount,
+        DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+        DWORD *pdwStatus) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Lock(
+        LONG bLock) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IMediaObject, 0xd8ad0f58, 0x5494, 0x4102, 0x97,0xc5, 0xec,0x79,0x8e,0x59,0xbc,0xf4)
+#endif
+#else
+typedef struct IMediaObjectVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IMediaObject *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IMediaObject *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IMediaObject *This);
+
+    /*** IMediaObject methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetStreamCount)(
+        IMediaObject *This,
+        DWORD *pcInputStreams,
+        DWORD *pcOutputStreams);
+
+    HRESULT (STDMETHODCALLTYPE *GetInputStreamInfo)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        DWORD *pdwFlags);
+
+    HRESULT (STDMETHODCALLTYPE *GetOutputStreamInfo)(
+        IMediaObject *This,
+        DWORD dwOutputStreamIndex,
+        DWORD *pdwFlags);
+
+    HRESULT (STDMETHODCALLTYPE *GetInputType)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        DWORD dwTypeIndex,
+        DMO_MEDIA_TYPE *pmt);
+
+    HRESULT (STDMETHODCALLTYPE *GetOutputType)(
+        IMediaObject *This,
+        DWORD dwOutputStreamIndex,
+        DWORD dwTypeIndex,
+        DMO_MEDIA_TYPE *pmt);
+
+    HRESULT (STDMETHODCALLTYPE *SetInputType)(
+        IMediaObject *This,
+        DWORD dwInputStreamIndex,
+        const DMO_MEDIA_TYPE *pmt,
+        D
