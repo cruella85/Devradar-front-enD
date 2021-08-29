@@ -650,4 +650,236 @@ static FORCEINLINE HRESULT IMediaObject_GetOutputSizeInfo(IMediaObject* This,DWO
 static FORCEINLINE HRESULT IMediaObject_GetInputMaxLatency(IMediaObject* This,DWORD dwInputStreamIndex,REFERENCE_TIME *prtMaxLatency) {
     return This->lpVtbl->GetInputMaxLatency(This,dwInputStreamIndex,prtMaxLatency);
 }
-static FORCEINLINE HRESULT IMediaObject_SetInputMaxLatency(IMediaObject* This,DWORD dwInputStrea
+static FORCEINLINE HRESULT IMediaObject_SetInputMaxLatency(IMediaObject* This,DWORD dwInputStreamIndex,REFERENCE_TIME rtMaxLatency) {
+    return This->lpVtbl->SetInputMaxLatency(This,dwInputStreamIndex,rtMaxLatency);
+}
+static FORCEINLINE HRESULT IMediaObject_Flush(IMediaObject* This) {
+    return This->lpVtbl->Flush(This);
+}
+static FORCEINLINE HRESULT IMediaObject_Discontinuity(IMediaObject* This,DWORD dwInputStreamIndex) {
+    return This->lpVtbl->Discontinuity(This,dwInputStreamIndex);
+}
+static FORCEINLINE HRESULT IMediaObject_AllocateStreamingResources(IMediaObject* This) {
+    return This->lpVtbl->AllocateStreamingResources(This);
+}
+static FORCEINLINE HRESULT IMediaObject_FreeStreamingResources(IMediaObject* This) {
+    return This->lpVtbl->FreeStreamingResources(This);
+}
+static FORCEINLINE HRESULT IMediaObject_GetInputStatus(IMediaObject* This,DWORD dwInputStreamIndex,DWORD *dwFlags) {
+    return This->lpVtbl->GetInputStatus(This,dwInputStreamIndex,dwFlags);
+}
+static FORCEINLINE HRESULT IMediaObject_ProcessInput(IMediaObject* This,DWORD dwInputStreamIndex,IMediaBuffer *pBuffer,DWORD dwFlags,REFERENCE_TIME rtTimestamp,REFERENCE_TIME rtTimelength) {
+    return This->lpVtbl->ProcessInput(This,dwInputStreamIndex,pBuffer,dwFlags,rtTimestamp,rtTimelength);
+}
+static FORCEINLINE HRESULT IMediaObject_ProcessOutput(IMediaObject* This,DWORD dwFlags,DWORD cOutputBufferCount,DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,DWORD *pdwStatus) {
+    return This->lpVtbl->ProcessOutput(This,dwFlags,cOutputBufferCount,pOutputBuffers,pdwStatus);
+}
+static FORCEINLINE HRESULT IMediaObject_Lock(IMediaObject* This,LONG bLock) {
+    return This->lpVtbl->Lock(This,bLock);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IMediaObject_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IMediaObjectInPlace interface
+ */
+#ifndef __IMediaObjectInPlace_INTERFACE_DEFINED__
+#define __IMediaObjectInPlace_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IMediaObjectInPlace, 0x651b9ad0, 0x0fc7, 0x4aa9, 0x95,0x38, 0xd8,0x99,0x31,0x01,0x07,0x41);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("651b9ad0-0fc7-4aa9-9538-d89931010741")
+IMediaObjectInPlace : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Process(
+        ULONG ulSize,
+        BYTE *pData,
+        REFERENCE_TIME refTimeStart,
+        DWORD dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Clone(
+        IMediaObjectInPlace **ppMediaObject) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetLatency(
+        REFERENCE_TIME *pLatencyTime) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IMediaObjectInPlace, 0x651b9ad0, 0x0fc7, 0x4aa9, 0x95,0x38, 0xd8,0x99,0x31,0x01,0x07,0x41)
+#endif
+#else
+typedef struct IMediaObjectInPlaceVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IMediaObjectInPlace *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IMediaObjectInPlace *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IMediaObjectInPlace *This);
+
+    /*** IMediaObjectInPlace methods ***/
+    HRESULT (STDMETHODCALLTYPE *Process)(
+        IMediaObjectInPlace *This,
+        ULONG ulSize,
+        BYTE *pData,
+        REFERENCE_TIME refTimeStart,
+        DWORD dwFlags);
+
+    HRESULT (STDMETHODCALLTYPE *Clone)(
+        IMediaObjectInPlace *This,
+        IMediaObjectInPlace **ppMediaObject);
+
+    HRESULT (STDMETHODCALLTYPE *GetLatency)(
+        IMediaObjectInPlace *This,
+        REFERENCE_TIME *pLatencyTime);
+
+    END_INTERFACE
+} IMediaObjectInPlaceVtbl;
+
+interface IMediaObjectInPlace {
+    CONST_VTBL IMediaObjectInPlaceVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IMediaObjectInPlace_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMediaObjectInPlace_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMediaObjectInPlace_Release(This) (This)->lpVtbl->Release(This)
+/*** IMediaObjectInPlace methods ***/
+#define IMediaObjectInPlace_Process(This,ulSize,pData,refTimeStart,dwFlags) (This)->lpVtbl->Process(This,ulSize,pData,refTimeStart,dwFlags)
+#define IMediaObjectInPlace_Clone(This,ppMediaObject) (This)->lpVtbl->Clone(This,ppMediaObject)
+#define IMediaObjectInPlace_GetLatency(This,pLatencyTime) (This)->lpVtbl->GetLatency(This,pLatencyTime)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IMediaObjectInPlace_QueryInterface(IMediaObjectInPlace* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IMediaObjectInPlace_AddRef(IMediaObjectInPlace* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IMediaObjectInPlace_Release(IMediaObjectInPlace* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IMediaObjectInPlace methods ***/
+static FORCEINLINE HRESULT IMediaObjectInPlace_Process(IMediaObjectInPlace* This,ULONG ulSize,BYTE *pData,REFERENCE_TIME refTimeStart,DWORD dwFlags) {
+    return This->lpVtbl->Process(This,ulSize,pData,refTimeStart,dwFlags);
+}
+static FORCEINLINE HRESULT IMediaObjectInPlace_Clone(IMediaObjectInPlace* This,IMediaObjectInPlace **ppMediaObject) {
+    return This->lpVtbl->Clone(This,ppMediaObject);
+}
+static FORCEINLINE HRESULT IMediaObjectInPlace_GetLatency(IMediaObjectInPlace* This,REFERENCE_TIME *pLatencyTime) {
+    return This->lpVtbl->GetLatency(This,pLatencyTime);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IMediaObjectInPlace_INTERFACE_DEFINED__ */
+
+enum _DMO_QUALITY_STATUS_FLAGS {
+    DMO_QUALITY_STATUS_ENABLED = 0x1
+};
+/*****************************************************************************
+ * IDMOQualityControl interface
+ */
+#ifndef __IDMOQualityControl_INTERFACE_DEFINED__
+#define __IDMOQualityControl_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDMOQualityControl, 0x65abea96, 0xcf36, 0x453f, 0xaf,0x8a, 0x70,0x5e,0x98,0xf1,0x62,0x60);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("65abea96-cf36-453f-af8a-705e98f16260")
+IDMOQualityControl : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetNow(
+        REFERENCE_TIME now) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetStatus(
+        DWORD flags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetStatus(
+        DWORD *flags) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDMOQualityControl, 0x65abea96, 0xcf36, 0x453f, 0xaf,0x8a, 0x70,0x5e,0x98,0xf1,0x62,0x60)
+#endif
+#else
+typedef struct IDMOQualityControlVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDMOQualityControl *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDMOQualityControl *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDMOQualityControl *This);
+
+    /*** IDMOQualityControl methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetNow)(
+        IDMOQualityControl *This,
+        REFERENCE_TIME now);
+
+    HRESULT (STDMETHODCALLTYPE *SetStatus)(
+        IDMOQualityControl *This,
+        DWORD flags);
+
+    HRESULT (STDMETHODCALLTYPE *GetStatus)(
+        IDMOQualityControl *This,
+        DWORD *flags);
+
+    END_INTERFACE
+} IDMOQualityControlVtbl;
+
+interface IDMOQualityControl {
+    CONST_VTBL IDMOQualityControlVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDMOQualityControl_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDMOQualityControl_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDMOQualityControl_Release(This) (This)->lpVtbl->Release(This)
+/*** IDMOQualityControl methods ***/
+#define IDMOQualityControl_SetNow(This,now) (This)->lpVtbl->SetNow(This,now)
+#define IDMOQualityControl_SetStatus(This,flags) (This)->lpVtbl->SetStatus(This,flags)
+#define IDMOQualityControl_GetStatus(This,flags) (This)->lpVtbl->GetStatus(This,flags)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDMOQualityControl_QueryInterface(IDMOQualityControl* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDMOQualityControl_AddRef(IDMOQualityControl* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDMOQualityControl_Release(IDMOQualityControl* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDMOQualityControl methods ***/
+static FORCEINLINE HRESULT IDMOQualityControl_SetNow(IDMOQualityControl* This,REFERENCE_TIME now) {
+    return This->lpVtbl->SetNow(This,now);
+}
+static FORCEINLINE HRESULT IDMOQualityControl_SetStatus(IDMOQualityControl* This,DWORD flags) {
+    return This->lpVtbl->SetStatus(This,flags);
+}
+static FORCEINLINE HRESULT IDMOQualityControl_GetStatus(IDMOQualityControl* This,DWORD *flags) {
+    return This->lpVtbl->GetStat
