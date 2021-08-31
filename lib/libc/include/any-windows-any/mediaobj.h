@@ -882,4 +882,144 @@ static FORCEINLINE HRESULT IDMOQualityControl_SetStatus(IDMOQualityControl* This
     return This->lpVtbl->SetStatus(This,flags);
 }
 static FORCEINLINE HRESULT IDMOQualityControl_GetStatus(IDMOQualityControl* This,DWORD *flags) {
-    return This->lpVtbl->GetStat
+    return This->lpVtbl->GetStatus(This,flags);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDMOQualityControl_INTERFACE_DEFINED__ */
+
+enum _DMO_VIDEO_OUTPUT_STREAM_FLAGS {
+    DMO_VOSF_NEEDS_PREVIOUS_SAMPLE = 0x1
+};
+/*****************************************************************************
+ * IDMOVideoOutputOptimizations interface
+ */
+#ifndef __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__
+#define __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDMOVideoOutputOptimizations, 0xbe8f4f4e, 0x5b16, 0x4d29, 0xb3,0x50, 0x7f,0x6b,0x5d,0x92,0x98,0xac);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("be8f4f4e-5b16-4d29-b350-7f6b5d9298ac")
+IDMOVideoOutputOptimizations : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE QueryOperationModePreferences(
+        ULONG index,
+        DWORD *flags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetOperationMode(
+        ULONG index,
+        DWORD flags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentOperationMode(
+        ULONG index,
+        DWORD *flags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentSampleRequirements(
+        ULONG index,
+        DWORD *flags) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDMOVideoOutputOptimizations, 0xbe8f4f4e, 0x5b16, 0x4d29, 0xb3,0x50, 0x7f,0x6b,0x5d,0x92,0x98,0xac)
+#endif
+#else
+typedef struct IDMOVideoOutputOptimizationsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDMOVideoOutputOptimizations *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDMOVideoOutputOptimizations *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDMOVideoOutputOptimizations *This);
+
+    /*** IDMOVideoOutputOptimizations methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryOperationModePreferences)(
+        IDMOVideoOutputOptimizations *This,
+        ULONG index,
+        DWORD *flags);
+
+    HRESULT (STDMETHODCALLTYPE *SetOperationMode)(
+        IDMOVideoOutputOptimizations *This,
+        ULONG index,
+        DWORD flags);
+
+    HRESULT (STDMETHODCALLTYPE *GetCurrentOperationMode)(
+        IDMOVideoOutputOptimizations *This,
+        ULONG index,
+        DWORD *flags);
+
+    HRESULT (STDMETHODCALLTYPE *GetCurrentSampleRequirements)(
+        IDMOVideoOutputOptimizations *This,
+        ULONG index,
+        DWORD *flags);
+
+    END_INTERFACE
+} IDMOVideoOutputOptimizationsVtbl;
+
+interface IDMOVideoOutputOptimizations {
+    CONST_VTBL IDMOVideoOutputOptimizationsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDMOVideoOutputOptimizations_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDMOVideoOutputOptimizations_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDMOVideoOutputOptimizations_Release(This) (This)->lpVtbl->Release(This)
+/*** IDMOVideoOutputOptimizations methods ***/
+#define IDMOVideoOutputOptimizations_QueryOperationModePreferences(This,index,flags) (This)->lpVtbl->QueryOperationModePreferences(This,index,flags)
+#define IDMOVideoOutputOptimizations_SetOperationMode(This,index,flags) (This)->lpVtbl->SetOperationMode(This,index,flags)
+#define IDMOVideoOutputOptimizations_GetCurrentOperationMode(This,index,flags) (This)->lpVtbl->GetCurrentOperationMode(This,index,flags)
+#define IDMOVideoOutputOptimizations_GetCurrentSampleRequirements(This,index,flags) (This)->lpVtbl->GetCurrentSampleRequirements(This,index,flags)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDMOVideoOutputOptimizations_QueryInterface(IDMOVideoOutputOptimizations* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDMOVideoOutputOptimizations_AddRef(IDMOVideoOutputOptimizations* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDMOVideoOutputOptimizations_Release(IDMOVideoOutputOptimizations* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDMOVideoOutputOptimizations methods ***/
+static FORCEINLINE HRESULT IDMOVideoOutputOptimizations_QueryOperationModePreferences(IDMOVideoOutputOptimizations* This,ULONG index,DWORD *flags) {
+    return This->lpVtbl->QueryOperationModePreferences(This,index,flags);
+}
+static FORCEINLINE HRESULT IDMOVideoOutputOptimizations_SetOperationMode(IDMOVideoOutputOptimizations* This,ULONG index,DWORD flags) {
+    return This->lpVtbl->SetOperationMode(This,index,flags);
+}
+static FORCEINLINE HRESULT IDMOVideoOutputOptimizations_GetCurrentOperationMode(IDMOVideoOutputOptimizations* This,ULONG index,DWORD *flags) {
+    return This->lpVtbl->GetCurrentOperationMode(This,index,flags);
+}
+static FORCEINLINE HRESULT IDMOVideoOutputOptimizations_GetCurrentSampleRequirements(IDMOVideoOutputOptimizations* This,ULONG index,DWORD *flags) {
+    return This->lpVtbl->GetCurrentSampleRequirements(This,index,flags);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__ */
+
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __mediaobj_h__ */
