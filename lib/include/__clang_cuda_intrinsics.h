@@ -503,4 +503,16 @@ __device__ inline void *__nv_cvta_global_to_generic_impl(size_t __ptr) {
 __device__ inline void *__nv_cvta_shared_to_generic_impl(size_t __ptr) {
   return (void *)(void __attribute__((address_space(3))) *)__ptr;
 }
-__device__ inlin
+__device__ inline void *__nv_cvta_constant_to_generic_impl(size_t __ptr) {
+  return (void *)(void __attribute__((address_space(4))) *)__ptr;
+}
+__device__ inline void *__nv_cvta_local_to_generic_impl(size_t __ptr) {
+  return (void *)(void __attribute__((address_space(5))) *)__ptr;
+}
+__device__ inline cuuint32_t __nvvm_get_smem_pointer(void *__ptr) {
+  return __nv_cvta_generic_to_shared_impl(__ptr);
+}
+} // extern "C"
+#endif // CUDA_VERSION >= 11000
+
+#endif // defined(__CLANG_CUDA_INTRINSICS_H__)
