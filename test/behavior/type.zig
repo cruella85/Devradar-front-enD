@@ -416,3 +416,134 @@ test "Type.Union" {
             },
             .decls = &.{},
         },
+    });
+    var packed_untagged = PackedUntagged{ .signed = -1 };
+    try testing.expectEqual(@as(i32, -1), packed_untagged.signed);
+    try testing.expectEqual(~@as(u32, 0), packed_untagged.unsigned);
+
+    const Tag = @Type(.{
+        .Enum = .{
+            .tag_type = u1,
+            .fields = &.{
+                .{ .name = "signed", .value = 0 },
+                .{ .name = "unsigned", .value = 1 },
+            },
+            .decls = &.{},
+            .is_exhaustive = true,
+        },
+    });
+    const Tagged = @Type(.{
+        .Union = .{
+            .layout = .Auto,
+            .tag_type = Tag,
+            .fields = &.{
+                .{ .name = "signed", .type = i32, .alignment = @alignOf(i32) },
+                .{ .name = "unsigned", .type = u32, .alignment = @alignOf(u32) },
+            },
+            .decls = &.{},
+        },
+    });
+    var tagged = Tagged{ .signed = -1 };
+    try testing.expectEqual(Tag.signed, tagged);
+    tagged = .{ .unsigned = 1 };
+    try testing.expectEqual(Tag.unsigned, tagged);
+}
+
+test "Type.Union from Type.Enum" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+
+    const Tag = @Type(.{
+        .Enum = .{
+            .tag_type = u0,
+            .fields = &.{
+                .{ .name = "working_as_expected", .value = 0 },
+            },
+            .decls = &.{},
+            .is_exhaustive = true,
+        },
+    });
+    const T = @Type(.{
+        .Union = .{
+            .layout = .Auto,
+            .tag_type = Tag,
+            .fields = &.{
+                .{ .name = "working_as_expected", .type = u32, .alignment = @alignOf(u32) },
+            },
+            .decls = &.{},
+        },
+    });
+    _ = @typeInfo(T).Union;
+}
+
+test "Type.Union from regular enum" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+
+    const E = enum { working_as_expected };
+    const T = @Type(.{
+        .Union = .{
+            .layout = .Auto,
+            .tag_type = E,
+            .fields = &.{
+                .{ .name = "working_as_expected", .type = u32, .alignment = @alignOf(u32) },
+            },
+            .decls = &.{},
+        },
+    });
+    _ = @typeInfo(T).Union;
+}
+
+test "Type.Fn" {
+    if (true) {
+        // https://github.com/ziglang/zig/issues/12360
+        return error.SkipZigTest;
+    }
+
+    const some_opaque = opaque {};
+    const some_ptr = *some_opaque;
+    const T = fn (c_int, some_ptr) callconv(.C) void;
+
+    {
+        const fn_info = std.builtin.Type{ .Fn = .{
+            .calling_convention = .C,
+            .alignment = 0,
+            .is_generic = false,
+            .is_var_args = false,
+            .return_type = void,
+            .params = &.{
+                .{ .is_generic = false, .is_noalias = false, .type = c_int },
+                .{ .is_generic = false, .is_noalias = false, .type = some_ptr },
+            },
+        } };
+
+        const fn_type = @Type(fn_info);
+        try std.testing.expectEqual(T, fn_type);
+    }
+
+    {
+        const fn_info = @typeInfo(T);
+        const fn_type = @Type(fn_info);
+        try std.testing.expectEqual(T, fn_type);
+    }
+}
+
+test "reified struct field name from optional payload" {
+    comptime {
+        const m_name: ?[1]u8 = "a".*;
+        if (m_name) |*name| {
+            const T = @Type(.{ .Struct = .{
+                .layout = .Auto,
+                .fields = &.{.{
+                    .name = name,
+                    .type = u8,
+                    .default_value = null,
+                    .is_comptime = false,
+                    .alignment = 1,
+                }},
+                .decls = &.{},
+                .is_tuple = false,
+            } });
+            var t: T = .{ .a = 123 };
+            try std.testing.expect(t.a == 123);
+        }
+    }
+}
