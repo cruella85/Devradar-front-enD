@@ -209,4 +209,163 @@ DECLARE_INTERFACE_(IDirect3DRMObject,IUnknown)
     STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
     STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
     STDMETHOD(SetName)(THIS_ const char *name) PURE;
-    STDMETHOD(G
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMObject_QueryInterface(p,a,b)        (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMObject_AddRef(p)                    (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMObject_Release(p)                   (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMObject_Clone(p,a,b,c)               (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMObject_AddDestroyCallback(p,a,b)    (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMObject_DeleteDestroyCallback(p,a,b) (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMObject_SetAppData(p,a)              (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMObject_GetAppData(p)                (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMObject_SetName(p,a)                 (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMObject_GetName(p,a,b)               (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMObject_GetClassName(p,a,b)          (p)->lpVtbl->GetClassName(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMObject_QueryInterface(p,a,b)        (p)->QueryInterface(a,b)
+#define IDirect3DRMObject_AddRef(p)                    (p)->AddRef()
+#define IDirect3DRMObject_Release(p)                   (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMObject_Clone(p,a,b,c)               (p)->Clone(a,b,c)
+#define IDirect3DRMObject_AddDestroyCallback(p,a,b)    (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMObject_DeleteDestroyCallback(p,a,b) (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMObject_SetAppData(p,a)              (p)->SetAppData(a)
+#define IDirect3DRMObject_GetAppData(p)                (p)->GetAppData()
+#define IDirect3DRMObject_SetName(p,a)                 (p)->SetName(a)
+#define IDirect3DRMObject_GetName(p,a,b)               (p)->GetName(a,b)
+#define IDirect3DRMObject_GetClassName(p,a,b)          (p)->GetClassName(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMObject2 interface
+ */
+#ifdef WINE_NO_UNICODE_MACROS
+#undef GetClassName
+#endif
+#define INTERFACE IDirect3DRMObject2
+DECLARE_INTERFACE_(IDirect3DRMObject2,IUnknown)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject2 methods ***/
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(GetClientData)(THIS_ DWORD id, void **data) PURE;
+    STDMETHOD(GetDirect3DRM)(THIS_ struct IDirect3DRM **d3drm) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(SetClientData)(THIS_ DWORD id, void *data, DWORD flags) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetAge)(THIS_ DWORD flags, DWORD *age) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMObject2_QueryInterface(p,a,b)        (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMObject2_AddRef(p)                    (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMObject2_Release(p)                   (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject2 methods ***/
+#define IDirect3DRMObject2_AddDestroyCallback(p,a,b)    (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMObject2_Clone(p,a,b,c)               (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMObject2_DeleteDestroyCallback(p,a,b) (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMObject2_GetClientData(p,a,b)         (p)->lpVtbl->SetClientData(p,a,b)
+#define IDirect3DRMObject2_GetDirect3DRM(p,a)           (p)->lpVtbl->GetDirect3DRM(p,a)
+#define IDirect3DRMObject2_GetName(p,a,b)               (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMObject2_SetClientData(p,a,b,c)       (p)->lpVtbl->SetClientData(p,a,b,c)
+#define IDirect3DRMObject2_SetName(p,a)                 (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMObject2_GetAge(p,a,b)                (p)->lpVtbl->GetAge(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMObject2_QueryInterface(p,a,b)        (p)->QueryInterface(a,b)
+#define IDirect3DRMObject2_AddRef(p)                    (p)->AddRef()
+#define IDirect3DRMObject2_Release(p)                   (p)->Release()
+/*** IDirect3DRMObject2 methods ***/
+#define IDirect3DRMObject2_AddDestroyCallback(p,a,b)    (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMObject2_Clone(p,a,b,c)               (p)->Clone(a,b,c)
+#define IDirect3DRMObject2_DeleteDestroyCallback(p,a,b) (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMObject2_GetClientData(p,a,b)         (p)->SetClientData(a,b)
+#define IDirect3DRMObject2_GetDirect3DRM(p,a)           (p)->GetDirect3DRM(a)
+#define IDirect3DRMObject2_GetName(p,a,b)               (p)->GetName(a,b)
+#define IDirect3DRMObject2_SetClientData(p,a,b,c)       (p)->SetClientData(a,b,c)
+#define IDirect3DRMObject2_SetName(p,a)                 (p)->SetName(a)
+#define IDirect3DRMObject2_GetAge(p,a,b)                (p)->GetAge(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMVisual interface
+ */
+#define INTERFACE IDirect3DRMVisual
+DECLARE_INTERFACE_(IDirect3DRMVisual,IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMVisual_QueryInterface(p,a,b)        (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMVisual_AddRef(p)                    (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMVisual_Release(p)                   (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMVisual_Clone(p,a,b,c)               (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMVisual_AddDestroyCallback(p,a,b)    (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMVisual_DeleteDestroyCallback(p,a,b) (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMVisual_SetAppData(p,a)              (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMVisual_GetAppData(p)                (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMVisual_SetName(p,a)                 (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMVisual_GetName(p,a,b)               (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMVisual_GetClassName(p,a,b)          (p)->lpVtbl->GetClassName(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMVisual_QueryInterface(p,a,b)        (p)->QueryInterface(a,b)
+#define IDirect3DRMVisual_AddRef(p)                    (p)->AddRef()
+#define IDirect3DRMVisual_Release(p)                   (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMVisual_Clone(p,a,b,c)               (p)->Clone(a,b,c)
+#define IDirect3DRMVisual_AddDestroyCallback(p,a,b)    (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMVisual_DeleteDestroyCallback(p,a,b) (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMVisual_SetAppData(p,a)              (p)->SetAppData(a)
+#define IDirect3DRMVisual_GetAppData(p)                (p)->GetAppData()
+#define IDirect3DRMVisual_SetName(p,a)                 (p)->SetName(a)
+#define IDirect3DRMVisual_GetName(p,a,b)               (p)->GetName(a,b)
+#define IDirect3DRMVisual_GetClassName(p,a,b)          (p)->GetClassName(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMDevice interface
+ */
+#ifdef WINE_NO_UNICODE_MACROS
+#undef GetClassName
+#endif
+#define INTERFACE IDirect3DRMDevice
+DECLARE_INTERFACE_(IDirect3DRMDevice,IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(T
