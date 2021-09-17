@@ -754,4 +754,128 @@ DECLARE_INTERFACE_(IDirect3DRMDevice3,IDirect3DRMObject)
 /*** IDirect3DRMDevice methods ***/
 #define IDirect3DRMDevice3_Init(p,a,b)                         (p)->Init(a,b)
 #define IDirect3DRMDevice3_InitFromD3D(p,a,b)                  (p)->InitFromD3D(a,b)
-#define IDirect3DRMDevice3_InitFromClipper(p,a,b,c,
+#define IDirect3DRMDevice3_InitFromClipper(p,a,b,c,d)          (p)->InitFromClipper(a,b,c,d)
+#define IDirect3DRMDevice3_Update(p)                           (p)->Update()
+#define IDirect3DRMDevice3_AddUpdateCallback(p,a,b)            (p)->AddUpdateCallback(a,b)
+#define IDirect3DRMDevice3_DeleteUpdateCallback(p,a,b)         (p)->DeleteUpdateCallback(a,b)
+#define IDirect3DRMDevice3_SetBufferCount(p,a)                 (p)->SetBufferCount(a)
+#define IDirect3DRMDevice3_GetBufferCount(p)                   (p)->GetBufferCount()
+#define IDirect3DRMDevice3_SetDither(p,a)                      (p)->SetDither(a)
+#define IDirect3DRMDevice3_SetShades(p,a)                      (p)->SetShades(a)
+#define IDirect3DRMDevice3_SetQuality(p,a)                     (p)->SetQuality(a)
+#define IDirect3DRMDevice3_SetTextureQuality(p,a)              (p)->SetTextureQuality(a)
+#define IDirect3DRMDevice3_GetViewports(p,a)                   (p)->GetViewports(a)
+#define IDirect3DRMDevice3_GetDither(p)                        (p)->GetDither()
+#define IDirect3DRMDevice3_GetShades(p)                        (p)->GetShades()
+#define IDirect3DRMDevice3_GetHeight(p)                        (p)->GetHeight()
+#define IDirect3DRMDevice3_GetWidth(p)                         (p)->GetWidth()
+#define IDirect3DRMDevice3_GetTrianglesDrawn(p)                (p)->GetTrianglesDrawn()
+#define IDirect3DRMDevice3_GetWireframeOptions(p)              (p)->GetWireframeOptions()
+#define IDirect3DRMDevice3_GetQuality(p)                       (p)->GetQuality()
+#define IDirect3DRMDevice3_GetColorModel(p)                    (p)->GetColorModel()
+#define IDirect3DRMDevice3_GetTextureQuality(p)                (p)->GetTextureQuality()
+#define IDirect3DRMDevice3_GetDirect3DDevice(p,a)              (p)->GetDirect3DDevice(a)
+/*** IDirect3DRMDevice2 methods ***/
+#define IDirect3DRMDevice3_InitFromD3D2(p,a,b)                 (p)->InitFromD3D2(a,b)
+#define IDirect3DRMDevice3_InitFromSurface(p,a,b,c)            (p)->InitFromSurface(a,b,c)
+#define IDirect3DRMDevice3_SetRenderMode(p,a)                  (p)->SetRenderMode(a)
+#define IDirect3DRMDevice3_GetRenderMode(p)                    (p)->GetRenderMode()
+#define IDirect3DRMDevice3_GetDirect3DDevice2(p,a)             (p)->GetDirect3DDevice2(a)
+/*** IDirect3DRMDevice3 methods ***/
+#define IDirect3DRMDevice3_FindPreferredTextureFormat(p,a,b,c) (p)->FindPreferredTextureFormat(a,b,c)
+#define IDirect3DRMDevice3_RenderStateChange(p,a,b,c)          (p)->RenderStateChange(a,b,c)
+#define IDirect3DRMDevice3_LightStateChange(p,a,b,c)           (p)->LightStateChange(a,b,c)
+#define IDirect3DRMDevice3_GetStateChangeOptions(p,a,b,c)      (p)->GetStateChangeOptions(a,b,c)
+#define IDirect3DRMDevice3_SetStateChangeOptions(p,a,b,c)      (p)->SetStateChangeOptions(a,b,c)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMViewport interface
+ */
+#define INTERFACE IDirect3DRMViewport
+DECLARE_INTERFACE_(IDirect3DRMViewport,IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMViewport methods ***/
+    STDMETHOD(Init) (THIS_ IDirect3DRMDevice *device, struct IDirect3DRMFrame *camera,
+            DWORD x, DWORD y, DWORD width, DWORD height) PURE;
+    STDMETHOD(Clear)(THIS) PURE;
+    STDMETHOD(Render)(THIS_ struct IDirect3DRMFrame *frame) PURE;
+    STDMETHOD(SetFront)(THIS_ D3DVALUE) PURE;
+    STDMETHOD(SetBack)(THIS_ D3DVALUE) PURE;
+    STDMETHOD(SetField)(THIS_ D3DVALUE) PURE;
+    STDMETHOD(SetUniformScaling)(THIS_ WINBOOL) PURE;
+    STDMETHOD(SetCamera)(THIS_ struct IDirect3DRMFrame *camera) PURE;
+    STDMETHOD(SetProjection)(THIS_ D3DRMPROJECTIONTYPE) PURE;
+    STDMETHOD(Transform)(THIS_ D3DRMVECTOR4D *d, D3DVECTOR *s) PURE;
+    STDMETHOD(InverseTransform)(THIS_ D3DVECTOR *d, D3DRMVECTOR4D *s) PURE;
+    STDMETHOD(Configure)(THIS_ LONG x, LONG y, DWORD width, DWORD height) PURE;
+    STDMETHOD(ForceUpdate)(THIS_ DWORD x1, DWORD y1, DWORD x2, DWORD y2) PURE;
+    STDMETHOD(SetPlane)(THIS_ D3DVALUE left, D3DVALUE right, D3DVALUE bottom, D3DVALUE top) PURE;
+    STDMETHOD(GetCamera)(THIS_ struct IDirect3DRMFrame **camera) PURE;
+    STDMETHOD(GetDevice)(THIS_ IDirect3DRMDevice **device) PURE;
+    STDMETHOD(GetPlane)(THIS_ D3DVALUE *left, D3DVALUE *right, D3DVALUE *bottom, D3DVALUE *top) PURE;
+    STDMETHOD(Pick)(THIS_ LONG x, LONG y, struct IDirect3DRMPickedArray **visuals) PURE;
+    STDMETHOD_(WINBOOL, GetUniformScaling)(THIS) PURE;
+    STDMETHOD_(LONG, GetX)(THIS) PURE;
+    STDMETHOD_(LONG, GetY)(THIS) PURE;
+    STDMETHOD_(DWORD, GetWidth)(THIS) PURE;
+    STDMETHOD_(DWORD, GetHeight)(THIS) PURE;
+    STDMETHOD_(D3DVALUE, GetField)(THIS) PURE;
+    STDMETHOD_(D3DVALUE, GetBack)(THIS) PURE;
+    STDMETHOD_(D3DVALUE, GetFront)(THIS) PURE;
+    STDMETHOD_(D3DRMPROJECTIONTYPE, GetProjection)(THIS) PURE;
+    STDMETHOD(GetDirect3DViewport)(THIS_ IDirect3DViewport **viewport) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMViewport_QueryInterface(p,a,b)        (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMViewport_AddRef(p)                    (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMViewport_Release(p)                   (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMViewport_Clone(p,a,b,c)               (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMViewport_AddDestroyCallback(p,a,b)    (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMViewport_DeleteDestroyCallback(p,a,b) (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMViewport_SetAppData(p,a)              (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMViewport_GetAppData(p)                (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMViewport_SetName(p,a)                 (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMViewport_GetName(p,a,b)               (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMViewport_GetClassName(p,a,b)          (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMViewport methods ***/
+#define IDirect3DRMViewport_Init(p,a,b,c,d,e,f)          (p)->lpVtbl->Init(p,a,b,c,d,e,f)
+#define IDirect3DRMViewport_Clear(p)                     (p)->lpVtbl->Clear(p)
+#define IDirect3DRMViewport_Render(p,a)                  (p)->lpVtbl->Render(p,a)
+#define IDirect3DRMViewport_SetFront(p,a)                (p)->lpVtbl->SetFront(p,a)
+#define IDirect3DRMViewport_SetBack(p,a)                 (p)->lpVtbl->SetBack(p,a)
+#define IDirect3DRMViewport_SetField(p,a)                (p)->lpVtbl->SetField(p,a)
+#define IDirect3DRMViewport_SetUniformScaling(p,a)       (p)->lpVtbl->SetUniformScaling(p,a)
+#define IDirect3DRMViewport_SetCamera(p,a)               (p)->lpVtbl->SetCamera(p,a)
+#define IDirect3DRMViewport_SetProjection(p,a)           (p)->lpVtbl->SetProjection(p,a)
+#define IDirect3DRMViewport_Transform(p,a,b)             (p)->lpVtbl->Transform(p,a,b)
+#define IDirect3DRMViewport_InverseTransform(p,a,b)      (p)->lpVtbl->InverseTransform(p,a,b)
+#define IDirect3DRMViewport_Configure(p,a,b,c,d)         (p)->lpVtbl->Configure(p,a,b,c,d)
+#define IDirect3DRMViewport_ForceUpdate(p,a,b,c,d)       (p)->lpVtbl->ForceUpdate(p,a,b,c,d)
+#define IDirect3DRMViewport_SetPlane(p,a,b,c,d)          (p)->lpVtbl->SetPlane(p,a,b,c,d)
+#define IDirect3DRMViewport_GetCamera(p,a)               (p)->lpVtbl->GetCamera(p,a)
+#define IDirect3DRMViewport_GetDevice(p,a)               (p)->lpVtbl->GetDevice(p,a)
+#define IDirect3DRMViewport_GetPlane(p,a,b,c,d)          (p)->lpVtbl->GetPlane(p,a,b,c,d)
+#define IDirect3DRMViewport_Pick(p,a,b,c)                (p)->lpVtbl->Pick(p,a,b,c)
+#define IDirect3DRMViewport_GetUniformScaling(p)         (p)->lpVtbl->GetUniformScaling(p)
+#define IDirect3DRMViewport_GetX(p)                      (p)->lpVtbl->GetX(p)
+#define IDirect3DRMViewport_GetY(p)                      (p)->lpVtbl->GetY(p)
+#define IDirect3DRMViewport_GetWidth(p)                  (p)->lpVtbl->GetWidth(p)
+#define IDirect3DRMViewport_GetHeight(p)                 (p)->lpVtbl->GetH
