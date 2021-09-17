@@ -1012,4 +1012,123 @@ DECLARE_INTERFACE_(IDirect3DRMViewport2,IDirect3DRMObject)
 #define IDirect3DRMViewport2_Transform(p,a,b)                 (p)->lpVtbl->Transform(p,a,b)
 #define IDirect3DRMViewport2_InverseTransform(p,a,b)          (p)->lpVtbl->InverseTransform(p,a,b)
 #define IDirect3DRMViewport2_Configure(p,a,b,c,d)             (p)->lpVtbl->Configure(p,a,b,c,d)
-#define IDirect3DRMVie
+#define IDirect3DRMViewport2_ForceUpdate(p,a,b,c,d)           (p)->lpVtbl->ForceUpdate(p,a,b,c,d)
+#define IDirect3DRMViewport2_SetPlane(p,a,b,c,d)              (p)->lpVtbl->SetPlane(p,a,b,c,d)
+#define IDirect3DRMViewport2_GetCamera(p,a)                   (p)->lpVtbl->GetCamera(p,a)
+#define IDirect3DRMViewport2_GetDevice(p,a)                   (p)->lpVtbl->GetDevice(p,a)
+#define IDirect3DRMViewport2_GetPlane(p,a,b,c,d)              (p)->lpVtbl->GetPlane(p,a,b,c,d)
+#define IDirect3DRMViewport2_Pick(p,a,b,c)                    (p)->lpVtbl->Pick(p,a,b,c)
+#define IDirect3DRMViewport2_GetUniformScaling(p)             (p)->lpVtbl->GetUniformScaling(p)
+#define IDirect3DRMViewport2_GetX(p)                          (p)->lpVtbl->GetX(p)
+#define IDirect3DRMViewport2_GetY(p)                          (p)->lpVtbl->GetY(p)
+#define IDirect3DRMViewport2_GetWidth(p)                      (p)->lpVtbl->GetWidth(p)
+#define IDirect3DRMViewport2_GetHeight(p)                     (p)->lpVtbl->GetHeight(p)
+#define IDirect3DRMViewport2_GetField(p)                      (p)->lpVtbl->GetField(p)
+#define IDirect3DRMViewport2_GetBack(p)                       (p)->lpVtbl->GetBack(p)
+#define IDirect3DRMViewport2_GetFront(p)                      (p)->lpVtbl->GetFront(p)
+#define IDirect3DRMViewport2_GetProjection(p)                 (p)->lpVtbl->GetProjection(p)
+#define IDirect3DRMViewport2_GetDirect3DViewport(p,a)         (p)->lpVtbl->GetDirect3DViewport(p,a)
+#define IDirect3DRMViewport2_TransformVectors(p,a,b,c)        (p)->lpVtbl->TransformVectors(p,a,b,c)
+#define IDirect3DRMViewport2_InverseTransformVectors(p,a,b,c) (p)->lpVtbl->InverseTransformVectors(p,a,b,c)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMViewport2_QueryInterface(p,a,b)            (p)->QueryInterface(a,b)
+#define IDirect3DRMViewport2_AddRef(p)                        (p)->AddRef()
+#define IDirect3DRMViewport2_Release(p)                       (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMViewport2_Clone(p,a,b,c)                   (p)->Clone(a,b,c)
+#define IDirect3DRMViewport2_AddDestroyCallback(p,a,b)        (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMViewport2_DeleteDestroyCallback(p,a,b)     (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMViewport2_SetAppData(p,a)                  (p)->SetAppData(a)
+#define IDirect3DRMViewport2_GetAppData(p)                    (p)->GetAppData()
+#define IDirect3DRMViewport2_SetName(p,a)                     (p)->SetName(a)
+#define IDirect3DRMViewport2_GetName(p,a,b)                   (p)->GetName(a,b)
+#define IDirect3DRMViewport2_GetClassName(p,a,b)              (p)->GetClassName(a,b)
+/*** IDirect3DRMViewport2 methods ***/
+#define IDirect3DRMViewport2_Init(p,a,b,c,d,e,f)              (p)->Init(a,b,c,d,e,f)
+#define IDirect3DRMViewport2_Clear(p)                         (p)->Clear()
+#define IDirect3DRMViewport2_Render(p,a)                      (p)->Render(a)
+#define IDirect3DRMViewport2_SetFront(p,a)                    (p)->SetFront(a)
+#define IDirect3DRMViewport2_SetBack(p,a)                     (p)->SetBack(a)
+#define IDirect3DRMViewport2_SetField(p,a)                    (p)->SetField(a)
+#define IDirect3DRMViewport2_SetUniformScaling(p,a)           (p)->SetUniformScaling(a)
+#define IDirect3DRMViewport2_SetCamera(p,a)                   (p)->SetCamera(a)
+#define IDirect3DRMViewport2_SetProjection(p,a)               (p)->SetProjection(a)
+#define IDirect3DRMViewport2_Transform(p,a,b)                 (p)->Transform(a,b)
+#define IDirect3DRMViewport2_InverseTransform(p,a,b)          (p)->InverseTransform(a,b)
+#define IDirect3DRMViewport2_Configure(p,a,b,c,d)             (p)->Configure(a,b,c,d)
+#define IDirect3DRMViewport2_ForceUpdate(p,a,b,c,d)           (p)->ForceUpdate(a,b,c,d)
+#define IDirect3DRMViewport2_SetPlane(p,a,b,c,d)              (p)->SetPlane(a,b,c,d)
+#define IDirect3DRMViewport2_GetCamera(p,a)                   (p)->GetCamera(a)
+#define IDirect3DRMViewport2_GetDevice(p,a)                   (p)->GetDevice(a)
+#define IDirect3DRMViewport2_GetPlane(p,a,b,c,d)              (p)->GetPlane(a,b,c,d)
+#define IDirect3DRMViewport2_Pick(p,a,b,c)                    (p)->Pick(a,b,c)
+#define IDirect3DRMViewport2_GetUniformScaling(p)             (p)->GetUniformScaling()
+#define IDirect3DRMViewport2_GetX(p)                          (p)->GetX()
+#define IDirect3DRMViewport2_GetY(p)                          (p)->GetY()
+#define IDirect3DRMViewport2_GetWidth(p)                      (p)->GetWidth()
+#define IDirect3DRMViewport2_GetHeight(p)                     (p)->GetHeight()
+#define IDirect3DRMViewport2_GetField(p)                      (p)->GetField()
+#define IDirect3DRMViewport2_GetBack(p)                       (p)->GetBack()
+#define IDirect3DRMViewport2_GetFront(p)                      (p)->GetFront()
+#define IDirect3DRMViewport2_GetProjection(p)                 (p)->GetProjection()
+#define IDirect3DRMViewport2_GetDirect3DViewport(p,a)         (p)->GetDirect3DViewport(a)
+#define IDirect3DRMViewport2_TransformVectors(p,a,b,c)        (p)->TransformVectors(a,b,c)
+#define IDirect3DRMViewport2_InverseTransformVectors(p,a,b,c) (p)->InverseTransformVectors(a,b,c)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMFrame interface
+ */
+#define INTERFACE IDirect3DRMFrame
+DECLARE_INTERFACE_(IDirect3DRMFrame,IDirect3DRMVisual)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMFrame methods ***/
+    STDMETHOD(AddChild)(THIS_ IDirect3DRMFrame *child) PURE;
+    STDMETHOD(AddLight)(THIS_ struct IDirect3DRMLight *light) PURE;
+    STDMETHOD(AddMoveCallback)(THIS_ D3DRMFRAMEMOVECALLBACK cb, void *ctx) PURE;
+    STDMETHOD(AddTransform)(THIS_ D3DRMCOMBINETYPE, D3DRMMATRIX4D) PURE;
+    STDMETHOD(AddTranslation)(THIS_ D3DRMCOMBINETYPE, D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(AddScale)(THIS_ D3DRMCOMBINETYPE, D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
+    STDMETHOD(AddRotation)(THIS_ D3DRMCOMBINETYPE, D3DVALUE x, D3DVALUE y, D3DVALUE z, D3DVALUE theta) PURE;
+    STDMETHOD(AddVisual)(THIS_ IDirect3DRMVisual *visual) PURE;
+    STDMETHOD(GetChildren)(THIS_ struct IDirect3DRMFrameArray **children) PURE;
+    STDMETHOD_(D3DCOLOR, GetColor)(THIS) PURE;
+    STDMETHOD(GetLights)(THIS_ struct IDirect3DRMLightArray **lights) PURE;
+    STDMETHOD_(D3DRMMATERIALMODE, GetMaterialMode)(THIS) PURE;
+    STDMETHOD(GetParent)(THIS_ IDirect3DRMFrame **parent) PURE;
+    STDMETHOD(GetPosition)(THIS_ IDirect3DRMFrame *reference, D3DVECTOR *return_position) PURE;
+    STDMETHOD(GetRotation)(THIS_ IDirect3DRMFrame *reference, D3DVECTOR *axis, D3DVALUE *return_theta) PURE;
+    STDMETHOD(GetScene)(THIS_ IDirect3DRMFrame **scene) PURE;
+    STDMETHOD_(D3DRMSORTMODE, GetSortMode)(THIS) PURE;
+    STDMETHOD(GetTexture)(THIS_ struct IDirect3DRMTexture **texture) PURE;
+    STDMETHOD(GetTransform)(THIS_ D3DRMMATRIX4D return_matrix) PURE;
+    STDMETHOD(GetVelocity)(THIS_ IDirect3DRMFrame *reference, D3DVECTOR *return_velocity, WINBOOL with_rotation) PURE;
+    STDMETHOD(GetOrientation)(THIS_ IDirect3DRMFrame *reference, D3DVECTOR *dir, D3DVECTOR *up) PURE;
+    STDMETHOD(GetVisuals)(THIS_ struct IDirect3DRMVisualArray **visuals) PURE;
+    STDMETHOD(GetTextureTopology)(THIS_ WINBOOL *wrap_u, WINBOOL *wrap_v) PURE;
+    STDMETHOD(InverseTransform)(THIS_ D3DVECTOR *d, D3DVECTOR *s) PURE;
+    STDMETHOD(Load)(THIS_ void *filename, void *name, D3DRMLOADOPTIONS flags,
+            D3DRMLOADTEXTURECALLBACK cb, void *ctx)PURE;
+    STDMETHOD(LookAt)(THIS_ IDirect3DRMFrame *target, IDirect3DRMFrame *reference,
+            D3DRMFRAMECONSTRAINT constraint) PURE;
+    STDMETHOD(Move)(THIS_ D3DVALUE delta) PURE;
+    STDMETHOD(DeleteChild)(THIS_ IDirect3DRMFrame *child) PURE;
+    STDMETHOD(DeleteLight)(THIS_ struct IDirect3DRMLight *light) PURE;
+    STDMETHOD(DeleteMoveCallback)(THIS_ D3DRMFRAMEMOVECALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteVisual)(THIS_ IDirect3DRMVisual *visual) PURE;
+    STDMETHOD_(D3DCOLOR, GetSceneBackground)(THIS) PURE;
+    STDMETHOD(GetSceneBackgroundDepth)(THIS_ IDir
