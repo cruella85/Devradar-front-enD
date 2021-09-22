@@ -2057,4 +2057,133 @@ DECLARE_INTERFACE_(IDirect3DRMProgressiveMesh,IDirect3DRMVisual)
 #define IDirect3DRMProgressiveMesh_AddDestroyCallback(p,a,b)      (p)->lpVtbl->AddDestroyCallback(p,a,b)
 #define IDirect3DRMProgressiveMesh_DeleteDestroyCallback(p,a,b)   (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
 #define IDirect3DRMProgressiveMesh_SetAppData(p,a)                (p)->lpVtbl->SetAppData(p,a)
-#define IDirect3DRMPro
+#define IDirect3DRMProgressiveMesh_GetAppData(p)                  (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMProgressiveMesh_SetName(p,a)                   (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMProgressiveMesh_GetName(p,a,b)                 (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMProgressiveMesh_GetClassName(p,a,b)            (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMProgressiveMesh methods ***/
+#define IDirect3DRMProgressiveMesh_Load(p,a,b,c,d,e)              (p)->lpVtbl->Load(p,a,b,c,d,e)
+#define IDirect3DRMProgressiveMesh_GetLoadStatus(p,a)             (p)->lpVtbl->GetLoadStatus(p,a)
+#define IDirect3DRMProgressiveMesh_SetMinRenderDetail(p,a)        (p)->lpVtbl->SetMinRenderDetail(p,a)
+#define IDirect3DRMProgressiveMesh_Abort(p,a)                     (p)->lpVtbl->Abort(p,a)
+#define IDirect3DRMProgressiveMesh_GetFaceDetail(p,a)             (p)->lpVtbl->GetFaceDetail(p,a)
+#define IDirect3DRMProgressiveMesh_GetVertexDetail(p,a)           (p)->lpVtbl->GetVertexDetail(p,a)
+#define IDirect3DRMProgressiveMesh_SetFaceDetail(p,a)             (p)->lpVtbl->SetFaceDetail(p,a)
+#define IDirect3DRMProgressiveMesh_SetVertexDetail(p,a)           (p)->lpVtbl->SetVertexDetail(p,a)
+#define IDirect3DRMProgressiveMesh_GetFaceDetailRange(p,a,b)      (p)->lpVtbl->GetFaceDetailRange(p,a,b)
+#define IDirect3DRMProgressiveMesh_GetVertexDetailRange(p,a,b)    (p)->lpVtbl->GetVertexDetailRange(p,a,b)
+#define IDirect3DRMProgressiveMesh_GetDetail(p,a)                 (p)->lpVtbl->GetDetail(p,a)
+#define IDirect3DRMProgressiveMesh_SetDetail(p,a)                 (p)->lpVtbl->SetDetail(p,a)
+#define IDirect3DRMProgressiveMesh_RegisterEvents(p,a,b,c)        (p)->lpVtbl->RegisterEvents(p,a,b,c)
+#define IDirect3DRMProgressiveMesh_CreateMesh(p,a)                (p)->lpVtbl->CreateMesh(p,a)
+#define IDirect3DRMProgressiveMesh_Duplicate(p,a)                 (p)->lpVtbl->Duplicate(p,a)
+#define IDirect3DRMProgressiveMesh_GetBox(p,a)                    (p)->lpVtbl->GetBox(p,a)
+#define IDirect3DRMProgressiveMesh_SetQuality(p,a)                (p)->lpVtbl->SetQuality(p,a)
+#define IDirect3DRMProgressiveMesh_GetQuality(p,a)                (p)->lpVtbl->GetQuality(p,a)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMProgressiveMesh_QueryInterface(p,a,b)          (p)->QueryInterface(a,b)
+#define IDirect3DRMProgressiveMesh_AddRef(p)                      (p)->AddRef()
+#define IDirect3DRMProgressiveMesh_Release(p)                     (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMProgressiveMesh_Clone(p,a,b,c)                 (p)->Clone(a,b,c)
+#define IDirect3DRMProgressiveMesh_AddDestroyCallback(p,a,b)      (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMProgressiveMesh_DeleteDestroyCallback(p,a,b)   (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMProgressiveMesh_SetAppData(p,a)                (p)->SetAppData(a)
+#define IDirect3DRMProgressiveMesh_GetAppData(p)                  (p)->GetAppData()
+#define IDirect3DRMProgressiveMesh_SetName(p,a)                   (p)->SetName(a)
+#define IDirect3DRMProgressiveMesh_GetName(p,a,b)                 (p)->GetName(a,b)
+#define IDirect3DRMProgressiveMesh_GetClassName(p,a,b)            (p)->GetClassName(a,b)
+/*** IDirect3DRMProgressiveMesh methods ***/
+#define IDirect3DRMProgressiveMesh_Load(p,a,b,c,d,e)              (p)->Load(a,b,c,d,e)
+#define IDirect3DRMProgressiveMesh_GetLoadStatus(p,a)             (p)->GetLoadStatus(a)
+#define IDirect3DRMProgressiveMesh_SetMinRenderDetail(p,a)        (p)->SetMinRenderDetail(a)
+#define IDirect3DRMProgressiveMesh_Abort(p,a)                     (p)->Abort(a)
+#define IDirect3DRMProgressiveMesh_GetFaceDetail(p,a)             (p)->GetFaceDetail(a)
+#define IDirect3DRMProgressiveMesh_GetVertexDetail(p,a)           (p)->GetVertexDetail(a)
+#define IDirect3DRMProgressiveMesh_SetFaceDetail(p,a)             (p)->SetFaceDetail(a)
+#define IDirect3DRMProgressiveMesh_SetVertexDetail(p,a)           (p)->SetVertexDetail(a)
+#define IDirect3DRMProgressiveMesh_GetFaceDetailRange(p,a,b)      (p)->GetFaceDetailRange(a,b)
+#define IDirect3DRMProgressiveMesh_GetVertexDetailRange(p,a,b)    (p)->GetVertexDetailRange(a,b)
+#define IDirect3DRMProgressiveMesh_GetDetail(p,a)                 (p)->GetDetail(a)
+#define IDirect3DRMProgressiveMesh_SetDetail(p,a)                 (p)->SetDetail(a)
+#define IDirect3DRMProgressiveMesh_RegisterEvents(p,a,b,c)        (p)->RegisterEvents(a,b,c)
+#define IDirect3DRMProgressiveMesh_CreateMesh(p,a)                (p)->CreateMesh(a)
+#define IDirect3DRMProgressiveMesh_Duplicate(p,a)                 (p)->Duplicate(a)
+#define IDirect3DRMProgressiveMesh_GetBox(p,a)                    (p)->GetBox(a)
+#define IDirect3DRMProgressiveMesh_SetQuality(p,a)                (p)->SetQuality(a)
+#define IDirect3DRMProgressiveMesh_GetQuality(p,a)                (p)->GetQuality(a)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMShadow interface
+ */
+#define INTERFACE IDirect3DRMShadow
+DECLARE_INTERFACE_(IDirect3DRMShadow,IDirect3DRMVisual)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMShadow methods ***/
+    STDMETHOD(Init)(THIS_ IDirect3DRMVisual *visual, struct IDirect3DRMLight *light,
+            D3DVALUE px, D3DVALUE py, D3DVALUE pz, D3DVALUE nx, D3DVALUE ny, D3DVALUE nz) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMShadow_QueryInterface(p,a,b)          (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMShadow_AddRef(p)                      (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMShadow_Release(p)                     (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMShadow_Clone(p,a,b,c)                 (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMShadow_AddDestroyCallback(p,a,b)      (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMShadow_DeleteDestroyCallback(p,a,b)   (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMShadow_SetAppData(p,a)                (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMShadow_GetAppData(p)                  (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMShadow_SetName(p,a)                   (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMShadow_GetName(p,a,b)                 (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMShadow_GetClassName(p,a,b)            (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMShadow methods ***/
+#define IDirect3DRMShadow_Init(p,a,b,c,d,e,f,g)          (p)->lpVtbl->Load(p,a,b,c,d,e,f,g)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMShadow_QueryInterface(p,a,b)          (p)->QueryInterface(a,b)
+#define IDirect3DRMShadow_AddRef(p)                      (p)->AddRef()
+#define IDirect3DRMShadow_Release(p)                     (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMShadow_Clone(p,a,b,c)                 (p)->Clone(a,b,c)
+#define IDirect3DRMShadow_AddDestroyCallback(p,a,b)      (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMShadow_DeleteDestroyCallback(p,a,b)   (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMShadow_SetAppData(p,a)                (p)->SetAppData(a)
+#define IDirect3DRMShadow_GetAppData(p)                  (p)->GetAppData()
+#define IDirect3DRMShadow_SetName(p,a)                   (p)->SetName(a)
+#define IDirect3DRMShadow_GetName(p,a,b)                 (p)->GetName(a,b)
+#define IDirect3DRMShadow_GetClassName(p,a,b)            (p)->GetClassName(a,b)
+/*** IDirect3DRMShadow methods ***/
+#define IDirect3DRMShadow_Init(p,a,b,c,d,e,f,g)          (p)->Load(a,b,c,d,e,f,g)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMShadow2 interface
+ */
+#define INTERFACE IDirect3DRMShadow2
+DECLARE_INTERFACE_(IDirect3DRMShadow2,IDirect3DRMVisual)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3D
