@@ -2186,4 +2186,139 @@ DECLARE_INTERFACE_(IDirect3DRMShadow2,IDirect3DRMVisual)
     STDMETHOD_(ULONG,Release)(THIS) PURE;
     /*** IDirect3DRMObject methods ***/
     STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
-    STDMETHOD(AddDestroyCallback)(THIS_ D3D
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMShadow methods ***/
+    STDMETHOD(Init)(THIS_ IUnknown *object, struct IDirect3DRMLight *light,
+            D3DVALUE px, D3DVALUE py, D3DVALUE pz, D3DVALUE nx, D3DVALUE ny, D3DVALUE nz) PURE;
+    /*** IDirect3DRMShadow2 methods ***/
+    STDMETHOD(GetVisual)(THIS_ IDirect3DRMVisual **visual) PURE;
+    STDMETHOD(SetVisual)(THIS_ IUnknown *visual, DWORD flags) PURE;
+    STDMETHOD(GetLight)(THIS_ struct IDirect3DRMLight **light) PURE;
+    STDMETHOD(SetLight)(THIS_ struct IDirect3DRMLight *light, DWORD flags) PURE;
+    STDMETHOD(GetPlane)(THIS_ D3DVALUE *px, D3DVALUE *py, D3DVALUE *pz,
+            D3DVALUE *nx, D3DVALUE *ny, D3DVALUE *nz) PURE;
+    STDMETHOD(SetPlane)(THIS_ D3DVALUE px, D3DVALUE py, D3DVALUE pz,
+        D3DVALUE nx, D3DVALUE ny, D3DVALUE nz, DWORD) PURE;
+    STDMETHOD(GetOptions)(THIS_ DWORD *flags) PURE;
+    STDMETHOD(SetOptions)(THIS_ DWORD) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMShadow2_QueryInterface(p,a,b)          (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMShadow2_AddRef(p)                      (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMShadow2_Release(p)                     (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMShadow2_Clone(p,a,b,c)                 (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMShadow2_AddDestroyCallback(p,a,b)      (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMShadow2_DeleteDestroyCallback(p,a,b)   (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMShadow2_SetAppData(p,a)                (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMShadow2_GetAppData(p)                  (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMShadow2_SetName(p,a)                   (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMShadow2_GetName(p,a,b)                 (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMShadow2_GetClassName(p,a,b)            (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMShadow methods ***/
+#define IDirect3DRMShadow2_Init(p,a,b,c,d,e,f,g)          (p)->lpVtbl->Init(p,a,b,c,d,e,f,g)
+/*** IDirect3DRMShadow2 methods ***/
+#define IDirect3DRMShadow2_GetVisual(p,a)                 (p)->lpVtbl->GetVisual(p,a)
+#define IDirect3DRMShadow2_SetVisual(p,a,b)               (p)->lpVtbl->SetVisual(p,a,b)
+#define IDirect3DRMShadow2_GetLight(p,a)                  (p)->lpVtbl->GetLight(p,a)
+#define IDirect3DRMShadow2_SetLight(p,a,b)                (p)->lpVtbl->SetLight(p,a,b)
+#define IDirect3DRMShadow2_GetPlane(p,a,b,c,d,e,f)        (p)->lpVtbl->GetPlane(p,a,b,c,d,e,f)
+#define IDirect3DRMShadow2_SetPlane(p,a,b,c,d,e,f)        (p)->lpVtbl->SetPlane(p,a,b,c,d,e,f)
+#define IDirect3DRMShadow2_GetOptions(p,a)                (p)->lpVtbl->GetOptions(p,a)
+#define IDirect3DRMShadow2_SetOptions(p,a)                (p)->lpVtbl->SetOptions(p,a)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMShadow2_QueryInterface(p,a,b)          (p)->QueryInterface(a,b)
+#define IDirect3DRMShadow2_AddRef(p)                      (p)->AddRef()
+#define IDirect3DRMShadow2_Release(p)                     (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMShadow2_Clone(p,a,b,c)                 (p)->Clone(a,b,c)
+#define IDirect3DRMShadow2_AddDestroyCallback(p,a,b)      (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMShadow2_DeleteDestroyCallback(p,a,b)   (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMShadow2_SetAppData(p,a)                (p)->SetAppData(a)
+#define IDirect3DRMShadow2_GetAppData(p)                  (p)->GetAppData()
+#define IDirect3DRMShadow2_SetName(p,a)                   (p)->SetName(a)
+#define IDirect3DRMShadow2_GetName(p,a,b)                 (p)->GetName(a,b)
+#define IDirect3DRMShadow2_GetClassName(p,a,b)            (p)->GetClassName(a,b)
+/*** IDirect3DRMShadow methods ***/
+#define IDirect3DRMShadow2_Init(p,a,b,c,d,e,f,g)          (p)->Init(a,b,c,d,e,f,g)
+/*** IDirect3DRMShadow2 methods ***/
+#define IDirect3DRMShadow2_GetVisual(p,a)                 (p)->GetVisual(a)
+#define IDirect3DRMShadow2_SetVisual(p,a,b)               (p)->SetVisual(a,b)
+#define IDirect3DRMShadow2_GetLight(p,a)                  (p)->GetLight(a)
+#define IDirect3DRMShadow2_SetLight(p,a,b)                (p)->SetLight(a,b)
+#define IDirect3DRMShadow2_GetPlane(p,a,b,c,d,e,f)        (p)->GetPlane(a,b,c,d,e,f)
+#define IDirect3DRMShadow2_SetPlane(p,a,b,c,d,e,f)        (p)->SetPlane(a,b,c,d,e,f)
+#define IDirect3DRMShadow2_GetOptions(p,a)                (p)->GetOptions(a)
+#define IDirect3DRMShadow2_SetOptions(p,a)                (p)->SetOptions(a)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMFace interface
+ */
+#define INTERFACE IDirect3DRMFace
+DECLARE_INTERFACE_(IDirect3DRMFace,IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMFace methods ***/
+    STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
+    STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
+    STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
+    STDMETHOD(SetTexture)(THIS_ struct IDirect3DRMTexture *texture) PURE;
+    STDMETHOD(SetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE u, D3DVALUE v) PURE;
+    STDMETHOD(SetMaterial)(THIS_ struct IDirect3DRMMaterial *material) PURE;
+    STDMETHOD(SetTextureTopology)(THIS_ WINBOOL wrap_u, WINBOOL wrap_v) PURE;
+    STDMETHOD(GetVertex)(THIS_ DWORD index, D3DVECTOR *vertex, D3DVECTOR *normal) PURE;
+    STDMETHOD(GetVertices)(THIS_ DWORD *vertex_count, D3DVECTOR *coords, D3DVECTOR *normals);
+    STDMETHOD(GetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE *u, D3DVALUE *v) PURE;
+    STDMETHOD(GetTextureTopology)(THIS_ WINBOOL *wrap_u, WINBOOL *wrap_v) PURE;
+    STDMETHOD(GetNormal)(THIS_ D3DVECTOR *) PURE;
+    STDMETHOD(GetTexture)(THIS_ struct IDirect3DRMTexture **texture) PURE;
+    STDMETHOD(GetMaterial)(THIS_ struct IDirect3DRMMaterial **material) PURE;
+    STDMETHOD_(int, GetVertexCount)(THIS) PURE;
+    STDMETHOD_(int, GetVertexIndex)(THIS_ DWORD which) PURE;
+    STDMETHOD_(int, GetTextureCoordinateIndex)(THIS_ DWORD which) PURE;
+    STDMETHOD_(D3DCOLOR, GetColor)(THIS) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMFace_QueryInterface(p,a,b)             (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMFace_AddRef(p)                         (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMFace_Release(p)                        (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMFace_Clone(p,a,b,c)                    (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMFace_AddDestroyCallback(p,a,b)         (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMFace_DeleteDestroyCallback(p,a,b)      (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMFace_SetAppData(p,a)                   (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMFace_GetAppData(p)                     (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMFace_SetName(p,a)                      (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMFace_GetName(p,a,b)                    (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMFace_GetClassName(p,a,b)               (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMFace methods ***/
+#define IDirect3DRMFace_AddVertex(p,a,b,c)                (p)->lpVtbl->AddVertex(p,a,b,c)
+#define IDirect3DRMFace_AddVertexAndNormalIndexed(p,a,b)  (p)->lpVtbl->AddVertexAndNormalIndexed(p,a,b)
+#define IDirect3DRMFace_SetColorRGB(p,a,b,c)              (p)->lpVtbl->SetC
