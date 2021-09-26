@@ -2794,4 +2794,125 @@ DECLARE_INTERFACE_(IDirect3DRMMeshBuilder2,IDirect3DRMMeshBuilder)
 /*** IDirect3DRMMeshBuilder methods ***/
 #define IDirect3DRMMeshBuilder2_Load(p,a,b,c,d,e)                (p)->Load(a,b,c,d,e)
 #define IDirect3DRMMeshBuilder2_Save(p,a,b,c)                    (p)->Save(a,b,c)
-#define IDirect3DRMMeshBuilder2_Scale(p,a,b,c)              
+#define IDirect3DRMMeshBuilder2_Scale(p,a,b,c)                   (p)->Scale(a,b,c)
+#define IDirect3DRMMeshBuilder2_Translate(p,a,b,c)               (p)->Translate(a)
+#define IDirect3DRMMeshBuilder2_SetColorSource(p,a)              (p)->SetColorSource(a,b,c)
+#define IDirect3DRMMeshBuilder2_GetBox(p,a)                      (p)->GetBox(a)
+#define IDirect3DRMMeshBuilder2_GenerateNormals(p)               (p)->GenerateNormals()
+#define IDirect3DRMMeshBuilder2_GetColorSource(p)                (p)->GetColorSource()
+#define IDirect3DRMMeshBuilder2_AddMesh(p,a)                     (p)-->AddMesh(a)
+#define IDirect3DRMMeshBuilder2_AddMeshBuilder(p,a)              (p)->AddMeshBuilder(a)
+#define IDirect3DRMMeshBuilder2_AddFrame(p,a)                    (p)->AddFrame(a)
+#define IDirect3DRMMeshBuilder2_AddFace(p,a)                     (p)->AddFace(a)
+#define IDirect3DRMMeshBuilder2_AddFaces(p,a,b,c,d,e,f)          (p)->AddFaces(a,b,c,d,e,f)
+#define IDirect3DRMMeshBuilder2_ReserveSpace(p,a,b,c)            (p)->ReserveSpace(a,b,c)
+#define IDirect3DRMMeshBuilder2_SetColorRGB(p,a,b,c)             (p)->SetColorRGB(a,b,c)
+#define IDirect3DRMMeshBuilder2_SetColor(p,a)                    (p)->SetColor(a)
+#define IDirect3DRMMeshBuilder2_SetTexture(p,a)                  (p)->SetTexture(a)
+#define IDirect3DRMMeshBuilder2_SetMaterial(p,a)                 (p)->SetMaterial(a)
+#define IDirect3DRMMeshBuilder2_SetTextureTopology(p,a,b)        (p)->SetTextureTopology(a,b)
+#define IDirect3DRMMeshBuilder2_SetQuality(p,a)                  (p)->SetQuality(a)
+#define IDirect3DRMMeshBuilder2_SetPerspective(p,a)              (p)->SetPerspective(a)
+#define IDirect3DRMMeshBuilder2_SetVertex(p,a,b,c,d)             (p)->SetVertex(a,b,c,d)
+#define IDirect3DRMMeshBuilder2_SetNormal(p,a,b,c,d)             (p)->SetNormal(a,b,c,d)
+#define IDirect3DRMMeshBuilder2_SetTextureCoordinates(p,a,b,c)   (p)->SetTextureCoordinates(a,b,c)
+#define IDirect3DRMMeshBuilder2_SetVertexColor(p,a,b)            (p)->SetVertexColor(a,b)
+#define IDirect3DRMMeshBuilder2_SetVertexColorRGB(p,a,b,c,d)     (p)->SetVertexColorRGB(a,b,c,d)
+#define IDirect3DRMMeshBuilder2_GetFaces(p,a)                    (p)->GetFaces(a)
+#define IDirect3DRMMeshBuilder2_GetVertices(p,a,b,c,d,e,f)       (p)->GetVertices(a,b,c,d,e,f)
+#define IDirect3DRMMeshBuilder2_GetTextureCoordinates(p,a,b,c)   (p)->GetTextureCoordinates(a,b,c)
+#define IDirect3DRMMeshBuilder2_AddVertex(p,a,b,c)               (p)->AddVertex(a,b,c)
+#define IDirect3DRMMeshBuilder2_AddNormal(p,a,b,c)               (p)->AddNormal(a,b,c)
+#define IDirect3DRMMeshBuilder2_CreateFace(p,a)                  (p)->CreateFace(a)
+#define IDirect3DRMMeshBuilder2_GetQuality(p)                    (p)->GetQuality()
+#define IDirect3DRMMeshBuilder2_GetPerspective(p)                (p)->GetPerspective()
+#define IDirect3DRMMeshBuilder2_GetFaceCount(p)                  (p)->GetFaceCount()
+#define IDirect3DRMMeshBuilder2_GetVertexCount(p)                (p)->GetVertexCount()
+#define IDirect3DRMMeshBuilder2_GetVertexColor(p,a)              (p)->GetVertexColor(a)
+#define IDirect3DRMMeshBuilder2_CreateMesh(p,a)                  (p)->CreateMesh(a)
+/*** IDirect3DRMMeshBuilder2 methods ***/
+#define IDirect3DRMMeshBuilder2_GenerateNormals2(p,a,b)          (p)->GenerateNormals2(a,b)
+#define IDirect3DRMMeshBuilder2_GetFace(p,a,b)                   (p)->GetFace(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMMeshBuilder3 interface
+ */
+#define INTERFACE IDirect3DRMMeshBuilder3
+DECLARE_INTERFACE_(IDirect3DRMMeshBuilder3,IDirect3DRMVisual)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMMeshBuilder3 methods ***/
+    STDMETHOD(Load)(THIS_ void *filename, void *name, D3DRMLOADOPTIONS flags,
+            D3DRMLOADTEXTURE3CALLBACK cb, void *ctx) PURE;
+    STDMETHOD(Save)(THIS_ const char *filename, D3DRMXOFFORMAT, D3DRMSAVEOPTIONS save) PURE;
+    STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
+    STDMETHOD(Translate)(THIS_ D3DVALUE tx, D3DVALUE ty, D3DVALUE tz) PURE;
+    STDMETHOD(SetColorSource)(THIS_ D3DRMCOLORSOURCE) PURE;
+    STDMETHOD(GetBox)(THIS_ D3DRMBOX *) PURE;
+    STDMETHOD(GenerateNormals)(THIS_ D3DVALUE crease, DWORD flags) PURE;
+    STDMETHOD_(D3DRMCOLORSOURCE, GetColorSource)(THIS) PURE;
+    STDMETHOD(AddMesh)(THIS_ IDirect3DRMMesh *mesh) PURE;
+    STDMETHOD(AddMeshBuilder)(THIS_ IDirect3DRMMeshBuilder3 *mesh_builder, DWORD flags) PURE;
+    STDMETHOD(AddFrame)(THIS_ IDirect3DRMFrame3 *frame) PURE;
+    STDMETHOD(AddFace)(THIS_ IDirect3DRMFace2 *face) PURE;
+    STDMETHOD(AddFaces)(THIS_ DWORD vertex_count, D3DVECTOR *vertices, DWORD normal_count,
+            D3DVECTOR *normals, DWORD *face_data, struct IDirect3DRMFaceArray **array) PURE;
+    STDMETHOD(ReserveSpace)(THIS_ DWORD vertex_Count, DWORD normal_count, DWORD face_count) PURE;
+    STDMETHOD(SetColorRGB)(THIS_ D3DVALUE red, D3DVALUE green, D3DVALUE blue) PURE;
+    STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
+    STDMETHOD(SetTexture)(THIS_ struct IDirect3DRMTexture3 *texture) PURE;
+    STDMETHOD(SetMaterial)(THIS_ struct IDirect3DRMMaterial2 *material) PURE;
+    STDMETHOD(SetTextureTopology)(THIS_ WINBOOL wrap_u, WINBOOL wrap_v) PURE;
+    STDMETHOD(SetQuality)(THIS_ D3DRMRENDERQUALITY) PURE;
+    STDMETHOD(SetPerspective)(THIS_ WINBOOL) PURE;
+    STDMETHOD(SetVertex)(THIS_ DWORD index, D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(SetNormal)(THIS_ DWORD index, D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(SetTextureCoordinates)(THIS_ DWORD index, D3DVALUE u, D3DVALUE v) PURE;
+    STDMETHOD(SetVertexColor)(THIS_ DWORD index, D3DCOLOR) PURE;
+    STDMETHOD(SetVertexColorRGB)(THIS_ DWORD index, D3DVALUE red, D3DVALUE green, D3DVALUE blue) PURE;
+    STDMETHOD(GetFaces)(THIS_ struct IDirect3DRMFaceArray **array) PURE;
+    STDMETHOD(GetGeometry)(THIS_ DWORD *vcount, D3DVECTOR *vertices, DWORD *ncount, D3DVECTOR *normals,
+        DWORD *face_data_size, DWORD *face_data) PURE;
+    STDMETHOD(GetTextureCoordinates)(THIS_ DWORD index, D3DVALUE *u, D3DVALUE *v) PURE;
+    STDMETHOD_(int, AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD_(int, AddNormal)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(CreateFace)(THIS_ IDirect3DRMFace2 **face) PURE;
+    STDMETHOD_(D3DRMRENDERQUALITY, GetQuality)(THIS) PURE;
+    STDMETHOD_(WINBOOL, GetPerspective)(THIS) PURE;
+    STDMETHOD_(int, GetFaceCount)(THIS) PURE;
+    STDMETHOD_(int, GetVertexCount)(THIS) PURE;
+    STDMETHOD_(D3DCOLOR, GetVertexColor)(THIS_ DWORD index) PURE;
+    STDMETHOD(CreateMesh)(THIS_ IDirect3DRMMesh **mesh) PURE;
+    STDMETHOD(GetFace)(THIS_ DWORD index, IDirect3DRMFace2 **face) PURE;
+    STDMETHOD(GetVertex)(THIS_ DWORD index, D3DVECTOR *vector) PURE;
+    STDMETHOD(GetNormal)(THIS_ DWORD index, D3DVECTOR *vector) PURE;
+    STDMETHOD(DeleteVertices)(THIS_ DWORD IndexFirst, DWORD count) PURE;
+    STDMETHOD(DeleteNormals)(THIS_ DWORD IndexFirst, DWORD count) PURE;
+    STDMETHOD(DeleteFace)(THIS_ IDirect3DRMFace2 *face) PURE;
+    STDMETHOD(Empty)(THIS_ DWORD flags) PURE;
+    STDMETHOD(Optimize)(THIS_ DWORD flags) PURE;
+    STDMETHOD(AddFacesIndexed)(THIS_ DWORD flags, DWORD *pvIndices, DWORD *pIndexFirst, DWORD *pCount) PURE;
+    STDMETHOD(CreateSubMesh)(THIS_ IUnknown **mesh) PURE;
+    STDMETHOD(GetParentMesh)(THIS_ DWORD flags, IUnknown **parent) PURE;
+    STDMETHOD(GetSubMeshes)(THIS_ DWORD *count, IUnknown **meshes) PURE;
+    STDMETHOD(DeleteSubMesh)(THIS_ IUnknown *mesh) PURE;
+    STDMETHOD(Enable)(THIS_ DWORD) PURE;
+    STDMETHOD(GetEnable)(THIS_ DWORD *) PURE;
+    STDMETHOD(AddTriangles)(THIS_ DWORD flags, DWORD format, DWORD vertex_count, void *data) PURE;
+    STDMETHOD(SetVertices)(THIS_ DWORD start_idx, DWORD count, D3DVECTOR *v) PURE;
+    STDMETHOD(GetVertices)(THIS_ DWORD start_idx, DWORD *count, D3DVECTOR *v) PURE;
+    STDMETHOD(SetNormals)(THIS_ DWORD start_idx, DWORD count, D3DVECTOR *v) PURE;
+    STDMETHOD(GetNormals)(THIS_ DWORD start_idx, DWORD *count, D3DVECTOR *v) P
