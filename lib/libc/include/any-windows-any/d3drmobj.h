@@ -4532,4 +4532,140 @@ DECLARE_INTERFACE_(IDirect3DRMPicked2Array, IDirect3DRMArray)
 #define IDirect3DRMPicked2Array_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
 #define IDirect3DRMPicked2Array_AddRef(p)                               (p)->lpVtbl->AddRef(p)
 #define IDirect3DRMPicked2Array_Release(p)                              (p)->lpVtbl->Release(p)
-/*** IDirect3DRMArray methods
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMPicked2Array_GetSize(p)                              (p)->lpVtbl->GetSize(p)
+/*** IDirect3DRMPicked2Array methods ***/
+#define IDirect3DRMPicked2Array_GetPick(p,a,b,c,d)                      (p)->lpVtbl->GetPick(p,a,b,c,d)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMPicked2Array_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMPicked2Array_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMPicked2Array_Release(p)                              (p)->Release()
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMPicked2Array_GetSize(p)                              (p)->GetSize()
+/*** IDirect3DRMPicked2Array methods ***/
+#define IDirect3DRMPicked2Array_GetPick(p,a,b,c,d)                      (p)->GetPick(a,b,c,d)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMInterpolator interface
+ */
+#define INTERFACE IDirect3DRMInterpolator
+DECLARE_INTERFACE_(IDirect3DRMInterpolator, IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMInterpolator methods ***/
+    STDMETHOD(AttachObject)(THIS_ IDirect3DRMObject *object) PURE;
+    STDMETHOD(GetAttachedObjects)(THIS_ IDirect3DRMObjectArray **array) PURE;
+    STDMETHOD(DetachObject)(THIS_ IDirect3DRMObject *object) PURE;
+    STDMETHOD(SetIndex)(THIS_ D3DVALUE) PURE;
+    STDMETHOD_(D3DVALUE, GetIndex)(THIS) PURE;
+    STDMETHOD(Interpolate)(THIS_ D3DVALUE index, IDirect3DRMObject *object, D3DRMINTERPOLATIONOPTIONS flags) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMInterpolator_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMInterpolator_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMInterpolator_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMInterpolator_Clone(p,a,b,c)                          (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMInterpolator_AddDestroyCallback(p,a,b)               (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMInterpolator_DeleteDestroyCallback(p,a,b)            (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMInterpolator_SetAppData(p,a)                         (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMInterpolator_GetAppData(p)                           (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMInterpolator_SetName(p,a)                            (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMInterpolator_GetName(p,a,b)                          (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMInterpolator_GetClassName(p,a,b)                     (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMInterpolator methods ***/
+#define IDirect3DRMInterpolator_AttachObject(p,a)                       (p)->lpVtbl->AttachObject(p,a)
+#define IDirect3DRMInterpolator_GetAttachedObjects(p,a)                 (p)->lpVtbl->GetAttachedObjects(p,a)
+#define IDirect3DRMInterpolator_DetachObject(p,a)                       (p)->lpVtbl->DetachObject(p,a)
+#define IDirect3DRMInterpolator_SetIndex(p,a)                           (p)->lpVtbl->SetIndex(p,a)
+#define IDirect3DRMInterpolator_GetIndex(p)                             (p)->lpVtbl->GetIndex(p)
+#define IDirect3DRMInterpolator_Interpolate(p,a,b,c)                    (p)->lpVtbl->Interpolate(p,a,b,c)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMInterpolator_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMInterpolator_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMInterpolator_Release(p)                              (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMInterpolator_Clone(p,a,b,c)                          (p)->Clone(a,b,c)
+#define IDirect3DRMInterpolator_AddDestroyCallback(p,a,b)               (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMInterpolator_DeleteDestroyCallback(p,a,b)            (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMInterpolator_SetAppData(p,a)                         (p)->SetAppData(a)
+#define IDirect3DRMInterpolator_GetAppData(p)                           (p)->GetAppData()
+#define IDirect3DRMInterpolator_SetName(p,a)                            (p)->SetName(a)
+#define IDirect3DRMInterpolator_GetName(p,a,b)                          (p)->GetName(a,b)
+#define IDirect3DRMInterpolator_GetClassName(p,a,b)                     (p)->GetClassName(a,b)
+/*** IDirect3DRMInterpolator methods ***/
+#define IDirect3DRMInterpolator_AttachObject(p,a)                       (p)->AttachObject(a)
+#define IDirect3DRMInterpolator_GetAttachedObjects(p,a)                 (p)->GetAttachedObjects(a)
+#define IDirect3DRMInterpolator_DetachObject(p,a)                       (p)->DetachObject(a)
+#define IDirect3DRMInterpolator_SetIndex(p,a)                           (p)->SetIndex(a)
+#define IDirect3DRMInterpolator_GetIndex(p)                             (p)->GetIndex()
+#define IDirect3DRMInterpolator_Interpolate(p,a,b,c)                    (p)->Interpolate(a,b,c)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMClippedVisual interface
+ */
+#define INTERFACE IDirect3DRMClippedVisual
+DECLARE_INTERFACE_(IDirect3DRMClippedVisual, IDirect3DRMVisual)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMClippedVisual methods ***/
+    STDMETHOD(Init) (THIS_ IDirect3DRMVisual *visual) PURE;
+    STDMETHOD(AddPlane) (THIS_ IDirect3DRMFrame3 *reference, D3DVECTOR *point,
+            D3DVECTOR *normal, DWORD flags, DWORD *id) PURE;
+    STDMETHOD(DeletePlane)(THIS_ DWORD, DWORD) PURE;
+    STDMETHOD(GetPlaneIDs)(THIS_ DWORD *count, DWORD *id, DWORD flags) PURE;
+    STDMETHOD(GetPlane) (THIS_ DWORD id, IDirect3DRMFrame3 *reference, D3DVECTOR *point,
+            D3DVECTOR *normal, DWORD flags) PURE;
+    STDMETHOD(SetPlane) (THIS_ DWORD id, IDirect3DRMFrame3 *reference, D3DVECTOR *point,
+            D3DVECTOR *normal, DWORD flags) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMClippedVisual_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMClippedVisual_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMClippedVisual_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMClippedVisual_Clone(p,a,b,c)                          (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMClippedVisual_AddDestroyCallback(p,a,b)               (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMClippedVisual_DeleteDestroyCallback(p,a,b)            (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMClippedVisual_SetAppData(p,a)                         (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMClippedVisual_GetAppData(p)                           (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMClippedVisual_SetName(p,a)                            (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMClippedVisual_GetName(p,a,b)                          (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMClippedVisual_GetClassName(p,a,b)                     (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMClippedVisual methods ***/
+#define IDirect3DRMClippedVisual_Init(p,a)                               (p)->lpVtbl->Init(p,a)
+#define IDirect3DRMClippedVisual_Add
