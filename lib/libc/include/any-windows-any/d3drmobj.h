@@ -4185,3 +4185,175 @@ DECLARE_INTERFACE_(IDirect3DRMObjectArray, IDirect3DRMArray)
     STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMArray methods ***/
+    STDMETHOD_(DWORD, GetSize)(THIS) PURE;
+    /*** IDirect3DRMObjectArray methods ***/
+    STDMETHOD(GetElement)(THIS_ DWORD index, IDirect3DRMObject **element) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMObjectArray_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMObjectArray_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMObjectArray_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMObjectArray_GetSize(p)                              (p)->lpVtbl->GetSize(p)
+/*** IDirect3DRMObjectArray methods ***/
+#define IDirect3DRMObjectArray_GetElement(p,a,b)                       (p)->lpVtbl->GetElement(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMObjectArray_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMObjectArray_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMObjectArray_Release(p)                              (p)->Release()
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMObjectArray_GetSize(p)                              (p)->GetSize()
+/*** IDirect3DRMObjectArray methods ***/
+#define IDirect3DRMObjectArray_GetElement(p,a,b)                       (p)->GetElement(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMDeviceArray interface
+ */
+#define INTERFACE IDirect3DRMDeviceArray
+DECLARE_INTERFACE_(IDirect3DRMDeviceArray, IDirect3DRMArray)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMArray methods ***/
+    STDMETHOD_(DWORD, GetSize)(THIS) PURE;
+    /*** IDirect3DRMDeviceArray methods ***/
+    STDMETHOD(GetElement)(THIS_ DWORD index, IDirect3DRMDevice **element) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMDeviceArray_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMDeviceArray_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMDeviceArray_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMDeviceArray_GetSize(p)                              (p)->lpVtbl->GetSize(p)
+/*** IDirect3DRMDeviceArray methods ***/
+#define IDirect3DRMDeviceArray_GetElement(p,a,b)                       (p)->lpVtbl->GetElement(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMDeviceArray_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMDeviceArray_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMDeviceArray_Release(p)                              (p)->Release()
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMDeviceArray_GetSize(p)                              (p)->GetSize()
+/*** IDirect3DRMDeviceArray methods ***/
+#define IDirect3DRMDeviceArray_GetElement(p,a,b)                       (p)->GetElement(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMFrameArray interface
+ */
+#define INTERFACE IDirect3DRMFrameArray
+DECLARE_INTERFACE_(IDirect3DRMFrameArray, IDirect3DRMArray)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMArray methods ***/
+    STDMETHOD_(DWORD, GetSize)(THIS) PURE;
+    /*** IDirect3DRMFrameArray methods ***/
+    STDMETHOD(GetElement)(THIS_ DWORD index, IDirect3DRMFrame **element) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMFrameArray_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMFrameArray_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMFrameArray_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMFrameArray_GetSize(p)                              (p)->lpVtbl->GetSize(p)
+/*** IDirect3DRMFrameArray methods ***/
+#define IDirect3DRMFrameArray_GetElement(p,a,b)                       (p)->lpVtbl->GetElement(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMFrameArray_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMFrameArray_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMFrameArray_Release(p)                              (p)->Release()
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMFrameArray_GetSize(p)                              (p)->GetSize()
+/*** IDirect3DRMFrameArray methods ***/
+#define IDirect3DRMFrameArray_GetElement(p,a,b)                       (p)->GetElement(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMViewportArray interface
+ */
+#define INTERFACE IDirect3DRMViewportArray
+DECLARE_INTERFACE_(IDirect3DRMViewportArray, IDirect3DRMArray)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMArray methods ***/
+    STDMETHOD_(DWORD, GetSize)(THIS) PURE;
+    /*** IDirect3DRMViewportArray methods ***/
+    STDMETHOD(GetElement)(THIS_ DWORD index, IDirect3DRMViewport **element) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMViewportArray_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMViewportArray_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMViewportArray_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMViewportArray_GetSize(p)                              (p)->lpVtbl->GetSize(p)
+/*** IDirect3DRMViewportArray methods ***/
+#define IDirect3DRMViewportArray_GetElement(p,a,b)                       (p)->lpVtbl->GetElement(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMViewportArray_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMViewportArray_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMViewportArray_Release(p)                              (p)->Release()
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMViewportArray_GetSize(p)                              (p)->GetSize()
+/*** IDirect3DRMViewportArray methods ***/
+#define IDirect3DRMviewportArray_GetElement(p,a,b)                       (p)->GetElement(a,b)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMVisualArray interface
+ */
+#define INTERFACE IDirect3DRMVisualArray
+DECLARE_INTERFACE_(IDirect3DRMVisualArray, IDirect3DRMArray)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMArray methods ***/
+    STDMETHOD_(DWORD, GetSize)(THIS) PURE;
+    /*** IDirect3DRMVisualArray methods ***/
+    STDMETHOD(GetElement)(THIS_ DWORD index, IDirect3DRMVisual **element) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMVisualArray_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMVisualArray_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMVisualArray_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMVisualArray_GetSize(p)                              (p)->lpVtbl->GetSize(p)
+/*** IDirect3DRMVisualArray methods ***/
+#define IDirect3DRMVisualArray_GetElement(p,a,b)                       (p)->lpVtbl->GetElement(p,a,b)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMVisualArray_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMVisualArray_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMVisualArray_Release(p)                              (p)->Release()
+/*** IDirect3DRMArray methods ***/
+#define IDirect3DRMVisualArray_GetSize(p)                              (p)->GetSize()
+/*** I
