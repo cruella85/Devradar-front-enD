@@ -4668,4 +4668,36 @@ DECLARE_INTERFACE_(IDirect3DRMClippedVisual, IDirect3DRMVisual)
 #define IDirect3DRMClippedVisual_GetClassName(p,a,b)                     (p)->lpVtbl->GetClassName(p,a,b)
 /*** IDirect3DRMClippedVisual methods ***/
 #define IDirect3DRMClippedVisual_Init(p,a)                               (p)->lpVtbl->Init(p,a)
-#define IDirect3DRMClippedVisual_Add
+#define IDirect3DRMClippedVisual_AddPlane(p,a,b,c,d,e)                   (p)->lpVtbl->AddPlane(p,a,b,c,d,e)
+#define IDirect3DRMClippedVisual_DeletePlane(p,a,b)                      (p)->lpVtbl->DeletePlane(p,a,b)
+#define IDirect3DRMClippedVisual_GetPlaneIDs(p,a,b,c)                    (p)->lpVtbl->GetPlaneIDs(p,a,b,c)
+#define IDirect3DRMClippedVisual_GetPlane(p,a,b,c,d,e)                   (p)->lpVtbl->GetPlane(p,a,b,c,d,e)
+#define IDirect3DRMClippedVisual_SetPlane(p,a,b,c,d,e)                   (p)->lpVtbl->SetPlane(p,a,b,c,d,e)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMClippedVisual_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMClippedVisual_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMClippedVisual_Release(p)                              (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMClippedVisual_Clone(p,a,b,c)                          (p)->Clone(a,b,c)
+#define IDirect3DRMClippedVisual_AddDestroyCallback(p,a,b)               (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMClippedVisual_DeleteDestroyCallback(p,a,b)            (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMClippedVisual_SetAppData(p,a)                         (p)->SetAppData(a)
+#define IDirect3DRMClippedVisual_GetAppData(p)                           (p)->GetAppData()
+#define IDirect3DRMClippedVisual_SetName(p,a)                            (p)->SetName(a)
+#define IDirect3DRMClippedVisual_GetName(p,a,b)                          (p)->GetName(a,b)
+#define IDirect3DRMClippedVisual_GetClassName(p,a,b)                     (p)->GetClassName(a,b)
+/*** IDirect3DRMClippedVisual methods ***/
+#define IDirect3DRMClippedVisual_Init(p,a)                               (p)->Init(a)
+#define IDirect3DRMClippedVisual_AddPlane(p,a,b,c,d,e)                   (p)->AddPlane(a,b,c,d,e)
+#define IDirect3DRMClippedVisual_DeletePlane(p,a,b)                      (p)->DeletePlane(a,b)
+#define IDirect3DRMClippedVisual_GetPlaneIDs(p,a,b,c)                    (p)->GetPlaneIDs(a,b,c)
+#define IDirect3DRMClippedVisual_GetPlane(p,a,b,c,d,e)                   (p)->GetPlane(a,b,c,d,e)
+#define IDirect3DRMClippedVisual_SetPlane(p,a,b,c,d,e)                   (p)->SetPlane(a,b,c,d,e)
+#endif
+
+#ifdef __cplusplus
+};
+#endif
+
+#endif /* __D3DRMOBJ_H__ */
