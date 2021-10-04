@@ -3660,4 +3660,132 @@ DECLARE_INTERFACE_(IDirect3DRMMaterial, IDirect3DRMObject)
 #define IDirect3DRMMaterial_Clone(p,a,b,c)                          (p)->lpVtbl->Clone(p,a,b,c)
 #define IDirect3DRMMaterial_AddDestroyCallback(p,a,b)               (p)->lpVtbl->AddDestroyCallback(p,a,b)
 #define IDirect3DRMMaterial_DeleteDestroyCallback(p,a,b)            (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
-#define IDirect3DRMMaterial_SetAppData(p,a)                         (p)->lpVtb
+#define IDirect3DRMMaterial_SetAppData(p,a)                         (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMMaterial_GetAppData(p)                           (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMMaterial_SetName(p,a)                            (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMMaterial_GetName(p,a,b)                          (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMMaterial_GetClassName(p,a,b)                     (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMMaterial methods ***/
+#define IDirect3DRMMaterial_SetPower(p,a)                           (p)->lpVtbl->SetPower(p,a)
+#define IDirect3DRMMaterial_SetSpecular(p,a,b,c)                    (p)->lpVtbl->SetSpecular(p,a,b,c)
+#define IDirect3DRMMaterial_SetEmissive(p,a,b,c)                    (p)->lpVtbl->SetEmissive(p,a,b,c)
+#define IDirect3DRMMaterial_GetPower(p)                             (p)->lpVtbl->GetPower(p)
+#define IDirect3DRMMaterial_GetSpecular(p,a,b,c)                    (p)->lpVtbl->GetSpecular(p,a,b,c)
+#define IDirect3DRMMaterial_GetEmissive(p,a,b,c)                    (p)->lpVtbl->GetEmissive(p,a,b,c)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMMaterial_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMMaterial_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMMaterial_Release(p)                              (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMMaterial_Clone(p,a,b,c)                          (p)->Clone(a,b,c)
+#define IDirect3DRMMaterial_AddDestroyCallback(p,a,b)               (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMMaterial_DeleteDestroyCallback(p,a,b)            (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMMaterial_SetAppData(p,a)                         (p)->SetAppData(a)
+#define IDirect3DRMMaterial_GetAppData(p)                           (p)->GetAppData()
+#define IDirect3DRMMaterial_SetName(p,a)                            (p)->SetName(a)
+#define IDirect3DRMMaterial_GetName(p,a,b)                          (p)->GetName(a,b)
+#define IDirect3DRMMaterial_GetClassName(p,a,b)                     (p)->GetClassName(a,b)
+/*** IDirect3DRMMaterial methods ***/
+#define IDirect3DRMMaterial_SetPower(p,a)                           (p)->SetPower(a)
+#define IDirect3DRMMaterial_SetSpecular(p,a,b,c)                    (p)->SetSpecular(a,b,c)
+#define IDirect3DRMMaterial_SetEmissive(p,a,b,c)                    (p)->SetEmissive(a,b,c)
+#define IDirect3DRMMaterial_GetPower(p)                             (p)->GetPower()
+#define IDirect3DRMMaterial_GetSpecular(p,a,b,c)                    (p)->GetSpecular(a,b,c)
+#define IDirect3DRMMaterial_GetEmissive(p,a,b,c)                    (p)->GetEmissive(a,b,c)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMMaterial2 interface
+ */
+#define INTERFACE IDirect3DRMMaterial2
+DECLARE_INTERFACE_(IDirect3DRMMaterial2, IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMMaterial2 methods ***/
+    STDMETHOD(SetPower)(THIS_ D3DVALUE power) PURE;
+    STDMETHOD(SetSpecular)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
+    STDMETHOD(SetEmissive)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
+    STDMETHOD_(D3DVALUE, GetPower)(THIS) PURE;
+    STDMETHOD(GetSpecular)(THIS_ D3DVALUE* r, D3DVALUE* g, D3DVALUE* b) PURE;
+    STDMETHOD(GetEmissive)(THIS_ D3DVALUE* r, D3DVALUE* g, D3DVALUE* b) PURE;
+    STDMETHOD(GetAmbient)(THIS_ D3DVALUE* r, D3DVALUE* g, D3DVALUE* b) PURE;
+    STDMETHOD(SetAmbient)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMMaterial2_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMMaterial2_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMMaterial2_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMMaterial2_Clone(p,a,b,c)                          (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMMaterial2_AddDestroyCallback(p,a,b)               (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMMaterial2_DeleteDestroyCallback(p,a,b)            (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMMaterial2_SetAppData(p,a)                         (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMMaterial2_GetAppData(p)                           (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMMaterial2_SetName(p,a)                            (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMMaterial2_GetName(p,a,b)                          (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMMaterial2_GetClassName(p,a,b)                     (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMMaterial2 methods ***/
+#define IDirect3DRMMaterial2_SetPower(p,a)                           (p)->lpVtbl->SetPower(p,a)
+#define IDirect3DRMMaterial2_SetSpecular(p,a,b,c)                    (p)->lpVtbl->SetSpecular(p,a,b,c)
+#define IDirect3DRMMaterial2_SetEmissive(p,a,b,c)                    (p)->lpVtbl->SetEmissive(p,a,b,c)
+#define IDirect3DRMMaterial2_GetPower(p)                             (p)->lpVtbl->GetPower(p)
+#define IDirect3DRMMaterial2_GetSpecular(p,a,b,c)                    (p)->lpVtbl->GetSpecular(p,a,b,c)
+#define IDirect3DRMMaterial2_GetEmissive(p,a,b,c)                    (p)->lpVtbl->GetEmissive(p,a,b,c)
+#define IDirect3DRMMaterial2_SetAmbient(p,a,b,c)                     (p)->lpVtbl->SetAmbient(p,a,b,c)
+#define IDirect3DRMMaterial2_GetAmbient(p,a,b,c)                     (p)->lpVtbl->GetAmbient(p,a,b,c)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMMaterial2_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMMaterial2_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMMaterial2_Release(p)                              (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMMaterial2_Clone(p,a,b,c)                          (p)->Clone(a,b,c)
+#define IDirect3DRMMaterial2_AddDestroyCallback(p,a,b)               (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMMaterial2_DeleteDestroyCallback(p,a,b)            (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMMaterial2_SetAppData(p,a)                         (p)->SetAppData(a)
+#define IDirect3DRMMaterial2_GetAppData(p)                           (p)->GetAppData()
+#define IDirect3DRMMaterial2_SetName(p,a)                            (p)->SetName(a)
+#define IDirect3DRMMaterial2_GetName(p,a,b)                          (p)->GetName(a,b)
+#define IDirect3DRMMaterial2_GetClassName(p,a,b)                     (p)->GetClassName(a,b)
+/*** IDirect3DRMMaterial2 methods ***/
+#define IDirect3DRMMaterial2_SetPower(p,a)                           (p)->SetPower(a)
+#define IDirect3DRMMaterial2_SetSpecular(p,a,b,c)                    (p)->SetSpecular(a,b,c)
+#define IDirect3DRMMaterial2_SetEmissive(p,a,b,c)                    (p)->SetEmissive(a,b,c)
+#define IDirect3DRMMaterial2_GetPower(p)                             (p)->GetPower()
+#define IDirect3DRMMaterial2_GetSpecular(p,a,b,c)                    (p)->GetSpecular(a,b,c)
+#define IDirect3DRMMaterial2_GetEmissive(p,a,b,c)                    (p)->GetEmissive(a,b,c)
+#define IDirect3DRMMaterial2_SetAmbient(p,a,b,c)                     (p)->SetAmbient(a,b,c)
+#define IDirect3DRMMaterial2_GetAmbient(p,a,b,c)                     (p)->GetAmbient(a,b,c)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMAnimation interface
+ */
+#define INTERFACE IDirect3DRMAnimation
+DECLARE_INTERFACE_(IDirect3DRMAnimation, IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(TH
