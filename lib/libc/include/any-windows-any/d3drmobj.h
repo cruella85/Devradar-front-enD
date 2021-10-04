@@ -3913,4 +3913,135 @@ DECLARE_INTERFACE_(IDirect3DRMAnimation2, IDirect3DRMObject)
 #define IDirect3DRMAnimation2_SetTime(p,a)                            (p)->lpVtbl->SetTime(p,a)
 #define IDirect3DRMAnimation2_GetOptions(p)                           (p)->lpVtbl->GetOptions(p)
 #define IDirect3DRMAnimation2_GetFrame(p,a)                           (p)->lpVtbl->GetFrame(p,a)
-#define IDirect3DRMAnimation2_DeleteKeyByID(p,a)                      (p)->l
+#define IDirect3DRMAnimation2_DeleteKeyByID(p,a)                      (p)->lpVtbl->DeleteKeyByID(p,a)
+#define IDirect3DRMAnimation2_AddKey(p,a)                             (p)->lpVtbl->AddKey(p,a)
+#define IDirect3DRMAnimation2_ModifyKey(p,a)                          (p)->lpVtbl->ModifyKey(p,a)
+#define IDirect3DRMAnimation2_GetKeys(p,a,b,c,d)                      (p)->lpVtbl->GetKeys(p,a,b,c,d)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMAnimation2_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMAnimation2_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMAnimation2_Release(p)                              (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMAnimation2_Clone(p,a,b,c)                          (p)->Clone(a,b,c)
+#define IDirect3DRMAnimation2_AddDestroyCallback(p,a,b)               (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMAnimation2_DeleteDestroyCallback(p,a,b)            (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMAnimation2_SetAppData(p,a)                         (p)->SetAppData(a)
+#define IDirect3DRMAnimation2_GetAppData(p)                           (p)->GetAppData()
+#define IDirect3DRMAnimation2_SetName(p,a)                            (p)->SetName(a)
+#define IDirect3DRMAnimation2_GetName(p,a,b)                          (p)->GetName(a,b)
+#define IDirect3DRMAnimation2_GetClassName(p,a,b)                     (p)->GetClassName(a,b)
+/*** IDirect3DRMAnimation2 methods ***/
+#define IDirect3DRMAnimation2_SetOptions(p,a)                         (p)->SetOptions(a)
+#define IDirect3DRMAnimation2_AddRotateKey(p,a,b)                     (p)->AddRotateKey(a,b)
+#define IDirect3DRMAnimation2_AddPositionKey(p,a,b,c,d)               (p)->AddPositionKey(a,b,c,d)
+#define IDirect3DRMAnimation2_AddScaleKey(p,a,b,c,d)                  (p)->AddScaleKey(a,b,c,d)
+#define IDirect3DRMAnimation2_DeleteKey(p,a)                          (p)->DeleteKey(a)
+#define IDirect3DRMAnimation2_SetFrame(p,a)                           (p)->SetFrame(a)
+#define IDirect3DRMAnimation2_SetTime(p,a)                            (p)->SetTime(a)
+#define IDirect3DRMAnimation2_GetOptions(p)                           (p)->GetOptions()
+#define IDirect3DRMAnimation2_GetFrame(p,a)                           (p)->GetFrame(a)
+#define IDirect3DRMAnimation2_DeleteKeyByID(p,a)                      (p)->DeleteKeyByID(a)
+#define IDirect3DRMAnimation2_AddKey(p,a)                             (p)->AddKey(a)
+#define IDirect3DRMAnimation2_ModifyKey(p,a)                          (p)->ModifyKey(a)
+#define IDirect3DRMAnimation2_GetKeys(p,a,b,c,d)                      (p)->GetKeys(a,b,c,d)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMAnimationSet interface
+ */
+#define INTERFACE IDirect3DRMAnimationSet
+DECLARE_INTERFACE_(IDirect3DRMAnimationSet, IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMAnimationSet methods ***/
+    STDMETHOD(AddAnimation)(THIS_ IDirect3DRMAnimation *animation) PURE;
+    STDMETHOD(Load)(THIS_ void *filename, void *name, D3DRMLOADOPTIONS flags,
+            D3DRMLOADTEXTURECALLBACK cb, void *ctx, IDirect3DRMFrame *parent)PURE;
+    STDMETHOD(DeleteAnimation)(THIS_ IDirect3DRMAnimation *animation) PURE;
+    STDMETHOD(SetTime)(THIS_ D3DVALUE time) PURE;
+};
+#undef INTERFACE
+
+#if !defined(__cplusplus) || defined(CINTERFACE)
+/*** IUnknown methods ***/
+#define IDirect3DRMAnimationSet_QueryInterface(p,a,b)                   (p)->lpVtbl->QueryInterface(p,a,b)
+#define IDirect3DRMAnimationSet_AddRef(p)                               (p)->lpVtbl->AddRef(p)
+#define IDirect3DRMAnimationSet_Release(p)                              (p)->lpVtbl->Release(p)
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMAnimationSet_Clone(p,a,b,c)                          (p)->lpVtbl->Clone(p,a,b,c)
+#define IDirect3DRMAnimationSet_AddDestroyCallback(p,a,b)               (p)->lpVtbl->AddDestroyCallback(p,a,b)
+#define IDirect3DRMAnimationSet_DeleteDestroyCallback(p,a,b)            (p)->lpVtbl->DeleteDestroyCallback(p,a,b)
+#define IDirect3DRMAnimationSet_SetAppData(p,a)                         (p)->lpVtbl->SetAppData(p,a)
+#define IDirect3DRMAnimationSet_GetAppData(p)                           (p)->lpVtbl->GetAppData(p)
+#define IDirect3DRMAnimationSet_SetName(p,a)                            (p)->lpVtbl->SetName(p,a)
+#define IDirect3DRMAnimationSet_GetName(p,a,b)                          (p)->lpVtbl->GetName(p,a,b)
+#define IDirect3DRMAnimationSet_GetClassName(p,a,b)                     (p)->lpVtbl->GetClassName(p,a,b)
+/*** IDirect3DRMAnimationSet methods ***/
+#define IDirect3DRMAnimationSet_AddAnimation(p,a)                       (p)->lpVtbl->AddAnimation(p,a)
+#define IDirect3DRMAnimationSet_Load(p,a,b,c,d,e,f)                     (p)->lpVtbl->Load(p,a,b,c,d,e,f)
+#define IDirect3DRMAnimationSet_DeleteAnimation(p,a)                    (p)->lpVtbl->DeleteAnimation(p,a)
+#define IDirect3DRMAnimationSet_SetTime(p,a)                            (p)->lpVtbl->SetTime(p,a)
+#else
+/*** IUnknown methods ***/
+#define IDirect3DRMAnimationSet_QueryInterface(p,a,b)                   (p)->QueryInterface(a,b)
+#define IDirect3DRMAnimationSet_AddRef(p)                               (p)->AddRef()
+#define IDirect3DRMAnimationSet_Release(p)                              (p)->Release()
+/*** IDirect3DRMObject methods ***/
+#define IDirect3DRMAnimationSet_Clone(p,a,b,c)                          (p)->Clone(a,b,c)
+#define IDirect3DRMAnimationSet_AddDestroyCallback(p,a,b)               (p)->AddDestroyCallback(a,b)
+#define IDirect3DRMAnimationSet_DeleteDestroyCallback(p,a,b)            (p)->DeleteDestroyCallback(a,b)
+#define IDirect3DRMAnimationSet_SetAppData(p,a)                         (p)->SetAppData(a)
+#define IDirect3DRMAnimationSet_GetAppData(p)                           (p)->GetAppData()
+#define IDirect3DRMAnimationSet_SetName(p,a)                            (p)->SetName(a)
+#define IDirect3DRMAnimationSet_GetName(p,a,b)                          (p)->GetName(a,b)
+#define IDirect3DRMAnimationSet_GetClassName(p,a,b)                     (p)->GetClassName(a,b)
+/*** IDirect3DRMAnimationSet methods ***/
+#define IDirect3DRMAnimationSet_AddAnimation(p,a)                       (p)->AddAnimation(a)
+#define IDirect3DRMAnimationSet_Load(p,a,b,c,d,e,f)                     (p)->Load(a,b,c,d,e,f)
+#define IDirect3DRMAnimationSet_DeleteAnimation(p,a)                    (p)->DeleteAnimation(a)
+#define IDirect3DRMAnimationSet_SetTime(p,a)                            (p)->SetTime(a)
+#endif
+
+/*****************************************************************************
+ * IDirect3DRMAnimationSet2 interface
+ */
+#define INTERFACE IDirect3DRMAnimationSet2
+DECLARE_INTERFACE_(IDirect3DRMAnimationSet2, IDirect3DRMObject)
+{
+    /*** IUnknown methods ***/
+    STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
+    STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG,Release)(THIS) PURE;
+    /*** IDirect3DRMObject methods ***/
+    STDMETHOD(Clone)(THIS_ IUnknown *outer, REFIID iid, void **out) PURE;
+    STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK cb, void *ctx) PURE;
+    STDMETHOD(SetAppData)(THIS_ DWORD data) PURE;
+    STDMETHOD_(DWORD, GetAppData)(THIS) PURE;
+    STDMETHOD(SetName)(THIS_ const char *name) PURE;
+    STDMETHOD(GetName)(THIS_ DWORD *size, char *name) PURE;
+    STDMETHOD(GetClassName)(THIS_ DWORD *size, char *name) PURE;
+    /*** IDirect3DRMAnimationSet2 methods ***/
+    STDMETHOD(AddAnimation)(THIS_ IDirect3DRMAnimation2 *animation) PURE;
+    STDMETHOD(Load)(THIS_ void *source, void *object_id, D3DRMLOADOPTIONS flags,
+            D3DRMLOADTEXTURE3CALLBACK cb, void *ctx, IDirect3DRMFrame3 *parent_frame)PURE;
+    STDMETHOD(DeleteAnimation)(THIS_ IDirect3DRMAnimation2 *animation) PURE;
+    STDMETHOD(SetTime)(THIS_ D3DVALUE time) PURE;
+    STDMETHOD(GetAnimations)(THIS_ struct IDirect3DRMAnimationArray **array) PURE;
+};
+#undef INTERFACE
+
+#i
