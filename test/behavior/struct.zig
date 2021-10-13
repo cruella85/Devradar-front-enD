@@ -531,4 +531,317 @@ test "implicit cast packed struct field to const ptr" {
 
     var lup: LevelUpMove = undefined;
     lup.level = 12;
-    const res = LevelUpMove.toInt(
+    const res = LevelUpMove.toInt(lup.level);
+    try expect(res == 12);
+}
+
+test "zero-bit field in packed struct" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = packed struct {
+        x: u10,
+        y: void,
+    };
+    var x: S = undefined;
+    _ = x;
+}
+
+test "packed struct with non-ABI-aligned field" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_wasm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_c) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+
+    const S = packed struct {
+        x: u9,
+        y: u183,
+    };
+    var s: S = undefined;
+    s.x = 1;
+    s.y = 42;
+    try expect(s.x == 1);
+    try expect(s.y == 42);
+}
+
+const BitField1 = packed struct {
+    a: u3,
+    b: u3,
+    c: u2,
+};
+
+const bit_field_1 = BitField1{
+    .a = 1,
+    .b = 2,
+    .c = 3,
+};
+
+test "bit field access" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    var data = bit_field_1;
+    try expect(getA(&data) == 1);
+    try expect(getB(&data) == 2);
+    try expect(getC(&data) == 3);
+    comptime try expect(@sizeOf(BitField1) == 1);
+
+    data.b += 1;
+    try expect(data.b == 3);
+
+    data.a += 1;
+    try expect(data.a == 2);
+    try expect(data.b == 3);
+}
+
+fn getA(data: *const BitField1) u3 {
+    return data.a;
+}
+
+fn getB(data: *const BitField1) u3 {
+    return data.b;
+}
+
+fn getC(data: *const BitField1) u2 {
+    return data.c;
+}
+
+test "default struct initialization fields" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        a: i32 = 1234,
+        b: i32,
+    };
+    const x = S{
+        .b = 5,
+    };
+    var five: i32 = 5;
+    const y = S{
+        .b = five,
+    };
+    if (x.a + x.b != 1239) {
+        @compileError("it should be comptime-known");
+    }
+    try expect(y.a == x.a);
+    try expect(y.b == x.b);
+    try expect(1239 == x.a + x.b);
+}
+
+test "packed array 24bits" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    comptime {
+        try expect(@sizeOf([9]Foo32Bits) == 9 * 4);
+        try expect(@sizeOf(FooArray24Bits) == @sizeOf(u96));
+    }
+
+    var bytes = [_]u8{0} ** (@sizeOf(FooArray24Bits) + 1);
+    bytes[bytes.len - 1] = 0xbb;
+    const ptr = &std.mem.bytesAsSlice(FooArray24Bits, bytes[0 .. bytes.len - 1])[0];
+    try expect(ptr.a == 0);
+    try expect(ptr.b0.field == 0);
+    try expect(ptr.b1.field == 0);
+    try expect(ptr.c == 0);
+
+    ptr.a = maxInt(u16);
+    try expect(ptr.a == maxInt(u16));
+    try expect(ptr.b0.field == 0);
+    try expect(ptr.b1.field == 0);
+    try expect(ptr.c == 0);
+
+    ptr.b0.field = maxInt(u24);
+    try expect(ptr.a == maxInt(u16));
+    try expect(ptr.b0.field == maxInt(u24));
+    try expect(ptr.b1.field == 0);
+    try expect(ptr.c == 0);
+
+    ptr.b1.field = maxInt(u24);
+    try expect(ptr.a == maxInt(u16));
+    try expect(ptr.b0.field == maxInt(u24));
+    try expect(ptr.b1.field == maxInt(u24));
+    try expect(ptr.c == 0);
+
+    ptr.c = maxInt(u16);
+    try expect(ptr.a == maxInt(u16));
+    try expect(ptr.b0.field == maxInt(u24));
+    try expect(ptr.b1.field == maxInt(u24));
+    try expect(ptr.c == maxInt(u16));
+
+    try expect(bytes[bytes.len - 1] == 0xbb);
+}
+
+const Foo32Bits = packed struct {
+    field: u24,
+    pad: u8,
+};
+
+const FooArray24Bits = packed struct {
+    a: u16,
+    b0: Foo32Bits,
+    b1: Foo32Bits,
+    c: u16,
+};
+
+const FooStructAligned = packed struct {
+    a: u8,
+    b: u8,
+};
+
+const FooArrayOfAligned = packed struct {
+    a: [2]FooStructAligned,
+};
+
+test "pointer to packed struct member in a stack variable" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = packed struct {
+        a: u2,
+        b: u2,
+    };
+
+    var s = S{ .a = 2, .b = 0 };
+    var b_ptr = &s.b;
+    try expect(s.b == 0);
+    b_ptr.* = 2;
+    try expect(s.b == 2);
+}
+
+test "packed struct with u0 field access" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = packed struct {
+        f0: u0,
+    };
+    var s = S{ .f0 = 0 };
+    comptime try expect(s.f0 == 0);
+}
+
+test "access to global struct fields" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    g_foo.bar.value = 42;
+    try expect(g_foo.bar.value == 42);
+}
+
+const S0 = struct {
+    bar: S1,
+
+    pub const S1 = struct {
+        value: u8,
+    };
+
+    fn init() @This() {
+        return S0{ .bar = S1{ .value = 123 } };
+    }
+};
+
+var g_foo: S0 = S0.init();
+
+test "packed struct with fp fields" {
+    if (builtin.zig_backend == .stage2_wasm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = packed struct {
+        data0: f32,
+        data1: f32,
+        data2: f32,
+
+        pub fn frob(self: *@This()) void {
+            self.data0 += self.data1 + self.data2;
+            self.data1 += self.data0 + self.data2;
+            self.data2 += self.data0 + self.data1;
+        }
+    };
+
+    var s: S = undefined;
+    s.data0 = 1.0;
+    s.data1 = 2.0;
+    s.data2 = 3.0;
+    s.frob();
+    try expect(@as(f32, 6.0) == s.data0);
+    try expect(@as(f32, 11.0) == s.data1);
+    try expect(@as(f32, 20.0) == s.data2);
+}
+
+test "fn with C calling convention returns struct by value" {
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn entry() !void {
+            var x = makeBar(10);
+            try expect(@as(i32, 10) == x.handle);
+        }
+
+        const ExternBar = extern struct {
+            handle: i32,
+        };
+
+        fn makeBar(t: i32) callconv(.C) ExternBar {
+            return ExternBar{
+                .handle = t,
+            };
+        }
+    };
+    try S.entry();
+    comptime try S.entry();
+}
+
+test "non-packed struct with u128 entry in union" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const U = union(enum) {
+        Num: u128,
+        Void,
+    };
+
+    const S = struct {
+        f1: U,
+        f2: U,
+    };
+
+    var sx: S = undefined;
+    var s = &sx;
+    try expect(@ptrToInt(&s.f2) - @ptrToInt(&s.f1) == @offsetOf(S, "f2"));
+    var v2 = U{ .Num = 123 };
+    s.f2 = v2;
+    try expect(s.f2.Num == 123);
+}
+
+test "packed struct field passed to generic function" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const P = packed struct {
+            b: u5,
+            g: u5,
+            r: u5,
+            a: u1,
+        };
+
+        fn genericReadPackedField(ptr: anytype) u5 {
+        
