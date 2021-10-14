@@ -844,4 +844,300 @@ test "packed struct field passed to generic function" {
         };
 
         fn genericReadPackedField(ptr: anytype) u5 {
-        
+            return ptr.*;
+        }
+    };
+
+    var p: S.P = undefined;
+    p.b = 29;
+    var loaded = S.genericReadPackedField(&p.b);
+    try expect(loaded == 29);
+}
+
+test "anonymous struct literal syntax" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const Point = struct {
+            x: i32,
+            y: i32,
+        };
+
+        fn doTheTest() !void {
+            var p: Point = .{
+                .x = 1,
+                .y = 2,
+            };
+            try expect(p.x == 1);
+            try expect(p.y == 2);
+        }
+    };
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "fully anonymous struct" {
+    const S = struct {
+        fn doTheTest() !void {
+            try dump(.{
+                .int = @as(u32, 1234),
+                .float = @as(f64, 12.34),
+                .b = true,
+                .s = "hi",
+            });
+        }
+        fn dump(args: anytype) !void {
+            try expect(args.int == 1234);
+            try expect(args.float == 12.34);
+            try expect(args.b);
+            try expect(args.s[0] == 'h');
+            try expect(args.s[1] == 'i');
+        }
+    };
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "fully anonymous list literal" {
+    const S = struct {
+        fn doTheTest() !void {
+            try dump(.{ @as(u32, 1234), @as(f64, 12.34), true, "hi" });
+        }
+        fn dump(args: anytype) !void {
+            try expect(args.@"0" == 1234);
+            try expect(args.@"1" == 12.34);
+            try expect(args.@"2");
+            try expect(args.@"3"[0] == 'h');
+            try expect(args.@"3"[1] == 'i');
+        }
+    };
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "tuple assigned to variable" {
+    var vec = .{ @as(i32, 22), @as(i32, 55), @as(i32, 99) };
+    try expect(vec.@"0" == 22);
+    try expect(vec.@"1" == 55);
+    try expect(vec.@"2" == 99);
+    try expect(vec[0] == 22);
+    try expect(vec[1] == 55);
+    try expect(vec[2] == 99);
+}
+
+test "comptime struct field" {
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.cpu.arch == .arm) return error.SkipZigTest; // TODO
+
+    const T = struct {
+        a: i32,
+        comptime b: i32 = 1234,
+    };
+
+    comptime std.debug.assert(@sizeOf(T) == 4);
+
+    var foo: T = undefined;
+    comptime try expect(foo.b == 1234);
+}
+
+test "tuple element initialized with fn call" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn doTheTest() !void {
+            var x = .{foo()};
+            try expectEqualSlices(u8, x[0], "hi");
+        }
+        fn foo() []const u8 {
+            return "hi";
+        }
+    };
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "struct with union field" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const Value = struct {
+        ref: u32 = 2,
+        kind: union(enum) {
+            None: usize,
+            Bool: bool,
+        },
+    };
+
+    var True = Value{
+        .kind = .{ .Bool = true },
+    };
+    try expect(@as(u32, 2) == True.ref);
+    try expect(True.kind.Bool);
+}
+
+test "type coercion of anon struct literal to struct" {
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const S2 = struct {
+            A: u32,
+            B: []const u8,
+            C: void,
+            D: Foo = .{},
+        };
+
+        const Foo = struct {
+            field: i32 = 1234,
+        };
+
+        fn doTheTest() !void {
+            var y: u32 = 42;
+            const t0 = .{ .A = 123, .B = "foo", .C = {} };
+            const t1 = .{ .A = y, .B = "foo", .C = {} };
+            const y0: S2 = t0;
+            var y1: S2 = t1;
+            try expect(y0.A == 123);
+            try expect(std.mem.eql(u8, y0.B, "foo"));
+            try expect(y0.C == {});
+            try expect(y0.D.field == 1234);
+            try expect(y1.A == y);
+            try expect(std.mem.eql(u8, y1.B, "foo"));
+            try expect(y1.C == {});
+            try expect(y1.D.field == 1234);
+        }
+    };
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "type coercion of pointer to anon struct literal to pointer to struct" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const S2 = struct {
+            A: u32,
+            B: []const u8,
+            C: void,
+            D: Foo = .{},
+        };
+
+        const Foo = struct {
+            field: i32 = 1234,
+        };
+
+        fn doTheTest() !void {
+            var y: u32 = 42;
+            const t0 = &.{ .A = 123, .B = "foo", .C = {} };
+            const t1 = &.{ .A = y, .B = "foo", .C = {} };
+            const y0: *const S2 = t0;
+            var y1: *const S2 = t1;
+            try expect(y0.A == 123);
+            try expect(std.mem.eql(u8, y0.B, "foo"));
+            try expect(y0.C == {});
+            try expect(y0.D.field == 1234);
+            try expect(y1.A == y);
+            try expect(std.mem.eql(u8, y1.B, "foo"));
+            try expect(y1.C == {});
+            try expect(y1.D.field == 1234);
+        }
+    };
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "packed struct with undefined initializers" {
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest;
+    if (builtin.zig_backend == .stage2_wasm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const P = packed struct {
+            a: u3,
+            _a: u3 = undefined,
+            b: u3,
+            _b: u3 = undefined,
+            c: u3,
+            _c: u3 = undefined,
+        };
+
+        fn doTheTest() !void {
+            var p: P = undefined;
+            p = P{ .a = 2, .b = 4, .c = 6 };
+            // Make sure the compiler doesn't touch the unprefixed fields.
+            // Use expect since x86-linux doesn't like expectEqual
+            try expect(p.a == 2);
+            try expect(p.b == 4);
+            try expect(p.c == 6);
+        }
+    };
+
+    try S.doTheTest();
+    comptime try S.doTheTest();
+}
+
+test "for loop over pointers to struct, getting field from struct pointer" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const Foo = struct {
+            name: []const u8,
+        };
+
+        var ok = true;
+
+        fn eql(a: []const u8) bool {
+            _ = a;
+            return true;
+        }
+
+        const ArrayList = struct {
+            fn toSlice(self: *ArrayList) []*Foo {
+                _ = self;
+                return @as([*]*Foo, undefined)[0..0];
+            }
+        };
+
+        fn doTheTest() !void {
+            var objects: ArrayList = undefined;
+
+            for (objects.toSlice()) |obj| {
+                if (eql(obj.name)) {
+                    ok = false;
+                }
+            }
+
+            try expect(ok);
+        }
+    };
+    try S.doTheTest();
+}
+
+test "anon init through error unions and optionals" {
+    if (builtin.zig_backend == .stage2_x86_64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_aarch64) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_arm) return error.SkipZigTest; // TODO
+    if (builtin.zig_backend == .stage2_sparc64) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        a: u32,
+
+        fn foo() anyerror!?anyerror!@This() {
+            return .{ .a = 1 };
+        }
+        fn bar() ?anyerror![2]u8 {
+            return .{ 1, 2 };
+      
