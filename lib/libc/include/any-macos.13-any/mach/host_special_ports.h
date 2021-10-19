@@ -160,4 +160,136 @@
 	(host_set_special_port((host), HOST_AUDIT_CONTROL_PORT, (port)))
 
 #define host_get_user_notification_port(host, port)     \
-	(host_get_special_port((host)
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_USER_NOTIFICATION_PORT, (port)))
+#define host_set_user_notification_port(host, port)     \
+	(host_set_special_port((host), HOST_USER_NOTIFICATION_PORT, (port)))
+
+#define host_get_automountd_port(host, port)    \
+	(host_get_special_port((host),          \
+	HOST_LOCAL_NODE, HOST_AUTOMOUNTD_PORT, (port)))
+#define host_set_automountd_port(host, port)    \
+	(host_set_special_port((host), HOST_AUTOMOUNTD_PORT, (port)))
+
+#define host_get_lockd_port(host, port) \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_LOCKD_PORT, (port)))
+#define host_set_lockd_port(host, port) \
+	(host_set_special_port((host), HOST_LOCKD_PORT, (port)))
+
+#define host_get_ktrace_background_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_KTRACE_BACKGROUND_PORT, (port)))
+#define host_set_ktrace_background_port(host, port)     \
+	(host_set_special_port((host), HOST_KTRACE_BACKGROUND_PORT, (port)))
+
+#define host_get_kextd_port(host, port) \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_KEXTD_PORT, (port)))
+#define host_set_kextd_port(host, port) \
+	(host_set_special_port((host), HOST_KEXTD_PORT, (port)))
+
+#define host_get_launchctl_port(host, port) \
+	(host_get_special_port((host), HOST_LOCAL_NODE, HOST_LAUNCHCTL_PORT, \
+	(port)))
+#define host_set_launchctl_port(host, port) \
+	(host_set_special_port((host), HOST_LAUNCHCTL_PORT, (port)))
+
+#define host_get_chud_port(host, port) host_get_launchctl_port(host, port)
+#define host_set_chud_port(host, port) host_set_launchctl_port(host, port)
+
+#define host_get_unfreed_port(host, port)       \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_UNFREED_PORT, (port)))
+#define host_set_unfreed_port(host, port)       \
+	(host_set_special_port((host), HOST_UNFREED_PORT, (port)))
+
+#define host_get_amfid_port(host, port) \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_AMFID_PORT, (port)))
+#define host_set_amfid_port(host, port) \
+	(host_set_special_port((host), HOST_AMFID_PORT, (port)))
+
+#define host_get_gssd_port(host, port)  \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_GSSD_PORT, (port)))
+#define host_set_gssd_port(host, port)  \
+	(host_set_special_port((host), HOST_GSSD_PORT, (port)))
+
+#define host_get_telemetry_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_TELEMETRY_PORT, (port)))
+#define host_set_telemetry_port(host, port)     \
+	(host_set_special_port((host), HOST_TELEMETRY_PORT, (port)))
+
+#define host_get_atm_notification_port(host, port)      \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_ATM_NOTIFICATION_PORT, (port)))
+#define host_set_atm_notification_port(host, port)      \
+	(host_set_special_port((host), HOST_ATM_NOTIFICATION_PORT, (port)))
+
+#define host_get_coalition_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_COALITION_PORT, (port)))
+#define host_set_coalition_port(host, port)     \
+	(host_set_special_port((host), HOST_COALITION_PORT, (port)))
+
+#define host_get_sysdiagnose_port(host, port)   \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_SYSDIAGNOSE_PORT, (port)))
+#define host_set_sysdiagnose_port(host, port)   \
+	(host_set_special_port((host), HOST_SYSDIAGNOSE_PORT, (port)))
+
+#define host_get_container_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_CONTAINERD_PORT, (port)))
+#define host_set_container_port(host, port)     \
+	(host_set_special_port((host), HOST_CONTAINERD_PORT, (port)))
+
+#define host_get_node_port(host, port)  \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_NODE_PORT, (port)))
+#define host_set_node_port(host, port)  \
+	(host_set_special_port((host), HOST_NODE_PORT, (port)))
+
+#define host_get_closured_port(host, port)      \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_CLOSURED_PORT, (port)))
+#define host_set_closured_port(host, port)      \
+	(host_set_special_port((host), HOST_CLOSURED_PORT, (port)))
+
+#define host_get_syspolicyd_port(host, port)    \
+	(host_get_special_port((host),                          \
+	HOST_LOCAL_NODE, HOST_SYSPOLICYD_PORT, (port)))
+#define host_set_syspolicyd_port(host, port)    \
+	(host_set_special_port((host), HOST_SYSPOLICYD_PORT, (port)))
+
+#define host_get_filecoordinationd_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_FILECOORDINATIOND_PORT, (port)))
+#define host_set_filecoordinationd_port(host, port)     \
+	(host_set_special_port((host), HOST_FILECOORDINATIOND_PORT, (port)))
+
+#define host_get_fairplayd_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_FAIRPLAYD_PORT, (port)))
+#define host_set_fairplayd_port(host, port)     \
+	(host_set_special_port((host), HOST_FAIRPLAYD_PORT, (port)))
+
+#define host_get_iocompressionstats_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_IOCOMPRESSIONSTATS_PORT, (port)))
+#define host_set_iocompressionstats_port(host, port)     \
+	(host_set_special_port((host), HOST_IOCOMPRESSIONSTATS_PORT, (port)))
+
+#define host_get_memory_error_port(host, port)     \
+	(host_get_special_port((host),                  \
+	HOST_LOCAL_NODE, HOST_MEMORY_ERROR_PORT, (port)))
+#define host_set_memory_error_port(host, port)     \
+	(host_set_special_port((host), HOST_MEMORY_ERROR_PORT, (port)))
+
+/* HOST_RESOURCE_NOTIFY_PORT doesn't #defines these conveniences.
+ *  All lookups go through send_resource_violation()
+ */
+
+#endif  /* _MACH_HOST_SPECIAL_PORTS_H_ */
