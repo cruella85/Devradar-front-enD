@@ -25,4 +25,9 @@ typedef struct {
 	unsigned short __cs_selector;
 	unsigned int __opcode:11;
 	unsigned int __unused4:5;
-	unsigned
+	unsigned int __data_offset;
+	unsigned short __data_selector;
+	unsigned short __unused5;
+} fenv_t;
+
+#define FE_DFL_ENV      ((const fenv_t *) -1)
