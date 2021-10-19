@@ -327,4 +327,190 @@ pub const Ed25519 = struct {
             const nonce = Curve.scalar.reduce64(nonce64);
 
             return Signer.init(scalar_and_prefix.scalar, nonce, key_pair.public_key);
-      
+        }
+    };
+
+    /// A (signature, message, public_key) tuple for batch verification
+    pub const BatchElement = struct {
+        sig: Signature,
+        msg: []const u8,
+        public_key: PublicKey,
+    };
+
+    /// Verify several signatures in a single operation, much faster than verifying signatures one-by-one
+    pub fn verifyBatch(comptime count: usize, signature_batch: [count]BatchElement) (SignatureVerificationError || IdentityElementError || WeakPublicKeyError || EncodingError || NonCanonicalError)!void {
+        var r_batch: [count]CompressedScalar = undefined;
+        var s_batch: [count]CompressedScalar = undefined;
+        var a_batch: [count]Curve = undefined;
+        var expected_r_batch: [count]Curve = undefined;
+
+        for (signature_batch, 0..) |signature, i| {
+            const r = signature.sig.r;
+            const s = signature.sig.s;
+            try Curve.scalar.rejectNonCanonical(s);
+            const a = try Curve.fromBytes(signature.public_key.bytes);
+            try a.rejectIdentity();
+            try Curve.rejectNonCanonical(r);
+            const expected_r = try Curve.fromBytes(r);
+            try expected_r.rejectIdentity();
+            expected_r_batch[i] = expected_r;
+            r_batch[i] = r;
+            s_batch[i] = s;
+            a_batch[i] = a;
+        }
+
+        var hram_batch: [count]Curve.scalar.CompressedScalar = undefined;
+        for (signature_batch, 0..) |signature, i| {
+            var h = Sha512.init(.{});
+            h.update(&r_batch[i]);
+            h.update(&signature.public_key.bytes);
+            h.update(signature.msg);
+            var hram64: [Sha512.digest_length]u8 = undefined;
+            h.final(&hram64);
+            hram_batch[i] = Curve.scalar.reduce64(hram64);
+        }
+
+        var z_batch: [count]Curve.scalar.CompressedScalar = undefined;
+        for (&z_batch) |*z| {
+            crypto.random.bytes(z[0..16]);
+            mem.set(u8, z[16..], 0);
+        }
+
+        var zs_sum = Curve.scalar.zero;
+        for (z_batch, 0..) |z, i| {
+            const zs = Curve.scalar.mul(z, s_batch[i]);
+            zs_sum = Curve.scalar.add(zs_sum, zs);
+        }
+        zs_sum = Curve.scalar.mul8(zs_sum);
+
+        var zhs: [count]Curve.scalar.CompressedScalar = undefined;
+        for (z_batch, 0..) |z, i| {
+            zhs[i] = Curve.scalar.mul(z, hram_batch[i]);
+        }
+
+        const zr = (try Curve.mulMulti(count, expected_r_batch, z_batch)).clearCofactor();
+        const zah = (try Curve.mulMulti(count, a_batch, zhs)).clearCofactor();
+
+        const zsb = try Curve.basePoint.mulPublic(zs_sum);
+        if (zr.add(zah).sub(zsb).rejectIdentity()) |_| {
+            return error.SignatureVerificationFailed;
+        } else |_| {}
+    }
+
+    /// Ed25519 signatures with key blinding.
+    pub const key_blinding = struct {
+        /// Length (in bytes) of a blinding seed.
+        pub const blind_seed_length = 32;
+
+        /// A blind secret key.
+        pub const BlindSecretKey = struct {
+            prefix: [64]u8,
+            blind_scalar: CompressedScalar,
+            blind_public_key: BlindPublicKey,
+        };
+
+        /// A blind public key.
+        pub const BlindPublicKey = struct {
+            /// Public key equivalent, that can used for signature verification.
+            key: PublicKey,
+
+            /// Recover a public key from a blind version of it.
+            pub fn unblind(blind_public_key: BlindPublicKey, blind_seed: [blind_seed_length]u8, ctx: []const u8) (IdentityElementError || NonCanonicalError || EncodingError || WeakPublicKeyError)!PublicKey {
+                const blind_h = blindCtx(blind_seed, ctx);
+                const inv_blind_factor = Scalar.fromBytes(blind_h[0..32].*).invert().toBytes();
+                const pk_p = try (try Curve.fromBytes(blind_public_key.key.bytes)).mul(inv_blind_factor);
+                return PublicKey.fromBytes(pk_p.toBytes());
+            }
+        };
+
+        /// A blind key pair.
+        pub const BlindKeyPair = struct {
+            blind_public_key: BlindPublicKey,
+            blind_secret_key: BlindSecretKey,
+
+            /// Create an blind key pair from an existing key pair, a blinding seed and a context.
+            pub fn init(key_pair: Ed25519.KeyPair, blind_seed: [blind_seed_length]u8, ctx: []const u8) (NonCanonicalError || IdentityElementError)!BlindKeyPair {
+                var h: [Sha512.digest_length]u8 = undefined;
+                Sha512.hash(&key_pair.secret_key.seed(), &h, .{});
+                Curve.scalar.clamp(h[0..32]);
+                const scalar = Curve.scalar.reduce(h[0..32].*);
+
+                const blind_h = blindCtx(blind_seed, ctx);
+                const blind_factor = Curve.scalar.reduce(blind_h[0..32].*);
+
+                const blind_scalar = Curve.scalar.mul(scalar, blind_factor);
+                const blind_public_key = BlindPublicKey{
+                    .key = try PublicKey.fromBytes((Curve.basePoint.mul(blind_scalar) catch return error.IdentityElement).toBytes()),
+                };
+
+                var prefix: [64]u8 = undefined;
+                mem.copy(u8, prefix[0..32], h[32..64]);
+                mem.copy(u8, prefix[32..64], blind_h[32..64]);
+
+                const blind_secret_key = BlindSecretKey{
+                    .prefix = prefix,
+                    .blind_scalar = blind_scalar,
+                    .blind_public_key = blind_public_key,
+                };
+                return BlindKeyPair{
+                    .blind_public_key = blind_public_key,
+                    .blind_secret_key = blind_secret_key,
+                };
+            }
+
+            /// Sign a message using a blind key pair, and optional random noise.
+            /// Having noise creates non-standard, non-deterministic signatures,
+            /// but has been proven to increase resilience against fault attacks.
+            pub fn sign(key_pair: BlindKeyPair, msg: []const u8, noise: ?[noise_length]u8) (IdentityElementError || KeyMismatchError || NonCanonicalError || WeakPublicKeyError)!Signature {
+                const scalar = key_pair.blind_secret_key.blind_scalar;
+                const prefix = key_pair.blind_secret_key.prefix;
+
+                return (try PublicKey.fromBytes(key_pair.blind_public_key.key.bytes))
+                    .computeNonceAndSign(msg, noise, scalar, &prefix);
+            }
+        };
+
+        /// Compute a blind context from a blinding seed and a context.
+        fn blindCtx(blind_seed: [blind_seed_length]u8, ctx: []const u8) [Sha512.digest_length]u8 {
+            var blind_h: [Sha512.digest_length]u8 = undefined;
+            var hx = Sha512.init(.{});
+            hx.update(&blind_seed);
+            hx.update(&[1]u8{0});
+            hx.update(ctx);
+            hx.final(&blind_h);
+            return blind_h;
+        }
+
+        pub const sign = @compileError("deprecated; use BlindKeyPair.sign instead");
+        pub const unblindPublicKey = @compileError("deprecated; use BlindPublicKey.unblind instead");
+    };
+
+    pub const sign = @compileError("deprecated; use KeyPair.sign instead");
+    pub const verify = @compileError("deprecated; use PublicKey.verify instead");
+};
+
+test "ed25519 key pair creation" {
+    var seed: [32]u8 = undefined;
+    _ = try fmt.hexToBytes(seed[0..], "8052030376d47112be7f73ed7a019293dd12ad910b654455798b4667d73de166");
+    const key_pair = try Ed25519.KeyPair.create(seed);
+    var buf: [256]u8 = undefined;
+    try std.testing.expectEqualStrings(try std.fmt.bufPrint(&buf, "{s}", .{std.fmt.fmtSliceHexUpper(&key_pair.secret_key.toBytes())}), "8052030376D47112BE7F73ED7A019293DD12AD910B654455798B4667D73DE1662D6F7455D97B4A3A10D7293909D1A4F2058CB9A370E43FA8154BB280DB839083");
+    try std.testing.expectEqualStrings(try std.fmt.bufPrint(&buf, "{s}", .{std.fmt.fmtSliceHexUpper(&key_pair.public_key.toBytes())}), "2D6F7455D97B4A3A10D7293909D1A4F2058CB9A370E43FA8154BB280DB839083");
+}
+
+test "ed25519 signature" {
+    var seed: [32]u8 = undefined;
+    _ = try fmt.hexToBytes(seed[0..], "8052030376d47112be7f73ed7a019293dd12ad910b654455798b4667d73de166");
+    const key_pair = try Ed25519.KeyPair.create(seed);
+
+    const sig = try key_pair.sign("test", null);
+    var buf: [128]u8 = undefined;
+    try std.testing.expectEqualStrings(try std.fmt.bufPrint(&buf, "{s}", .{std.fmt.fmtSliceHexUpper(&sig.toBytes())}), "10A442B4A80CC4225B154F43BEF28D2472CA80221951262EB8E0DF9091575E2687CC486E77263C3418C757522D54F84B0359236ABBBD4ACD20DC297FDCA66808");
+    try sig.verify("test", key_pair.public_key);
+    try std.testing.expectError(error.SignatureVerificationFailed, sig.verify("TEST", key_pair.public_key));
+}
+
+test "ed25519 batch verification" {
+    var i: usize = 0;
+    while (i < 100) : (i += 1) {
+        const key_pair = t
