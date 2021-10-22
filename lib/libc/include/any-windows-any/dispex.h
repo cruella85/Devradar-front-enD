@@ -257,4 +257,239 @@ typedef struct IDispatchExVtbl {
         WORD wFlags,
         DISPPARAMS *pDispParams,
         VARIANT *pVarResult,
-        EX
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** IDispatchEx methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetDispID)(
+        IDispatchEx *This,
+        BSTR bstrName,
+        DWORD grfdex,
+        DISPID *pid);
+
+    HRESULT (STDMETHODCALLTYPE *InvokeEx)(
+        IDispatchEx *This,
+        DISPID id,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pdp,
+        VARIANT *pvarRes,
+        EXCEPINFO *pei,
+        IServiceProvider *pspCaller);
+
+    HRESULT (STDMETHODCALLTYPE *DeleteMemberByName)(
+        IDispatchEx *This,
+        BSTR bstrName,
+        DWORD grfdex);
+
+    HRESULT (STDMETHODCALLTYPE *DeleteMemberByDispID)(
+        IDispatchEx *This,
+        DISPID id);
+
+    HRESULT (STDMETHODCALLTYPE *GetMemberProperties)(
+        IDispatchEx *This,
+        DISPID id,
+        DWORD grfdexFetch,
+        DWORD *pgrfdex);
+
+    HRESULT (STDMETHODCALLTYPE *GetMemberName)(
+        IDispatchEx *This,
+        DISPID id,
+        BSTR *pbstrName);
+
+    HRESULT (STDMETHODCALLTYPE *GetNextDispID)(
+        IDispatchEx *This,
+        DWORD grfdex,
+        DISPID id,
+        DISPID *pid);
+
+    HRESULT (STDMETHODCALLTYPE *GetNameSpaceParent)(
+        IDispatchEx *This,
+        IUnknown **ppunk);
+
+    END_INTERFACE
+} IDispatchExVtbl;
+
+interface IDispatchEx {
+    CONST_VTBL IDispatchExVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDispatchEx_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDispatchEx_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDispatchEx_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define IDispatchEx_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IDispatchEx_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IDispatchEx_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IDispatchEx_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** IDispatchEx methods ***/
+#define IDispatchEx_GetDispID(This,bstrName,grfdex,pid) (This)->lpVtbl->GetDispID(This,bstrName,grfdex,pid)
+#define IDispatchEx_InvokeEx(This,id,lcid,wFlags,pdp,pvarRes,pei,pspCaller) (This)->lpVtbl->InvokeEx(This,id,lcid,wFlags,pdp,pvarRes,pei,pspCaller)
+#define IDispatchEx_DeleteMemberByName(This,bstrName,grfdex) (This)->lpVtbl->DeleteMemberByName(This,bstrName,grfdex)
+#define IDispatchEx_DeleteMemberByDispID(This,id) (This)->lpVtbl->DeleteMemberByDispID(This,id)
+#define IDispatchEx_GetMemberProperties(This,id,grfdexFetch,pgrfdex) (This)->lpVtbl->GetMemberProperties(This,id,grfdexFetch,pgrfdex)
+#define IDispatchEx_GetMemberName(This,id,pbstrName) (This)->lpVtbl->GetMemberName(This,id,pbstrName)
+#define IDispatchEx_GetNextDispID(This,grfdex,id,pid) (This)->lpVtbl->GetNextDispID(This,grfdex,id,pid)
+#define IDispatchEx_GetNameSpaceParent(This,ppunk) (This)->lpVtbl->GetNameSpaceParent(This,ppunk)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDispatchEx_QueryInterface(IDispatchEx* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDispatchEx_AddRef(IDispatchEx* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDispatchEx_Release(IDispatchEx* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT IDispatchEx_GetTypeInfoCount(IDispatchEx* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT IDispatchEx_GetTypeInfo(IDispatchEx* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT IDispatchEx_GetIDsOfNames(IDispatchEx* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT IDispatchEx_Invoke(IDispatchEx* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** IDispatchEx methods ***/
+static FORCEINLINE HRESULT IDispatchEx_GetDispID(IDispatchEx* This,BSTR bstrName,DWORD grfdex,DISPID *pid) {
+    return This->lpVtbl->GetDispID(This,bstrName,grfdex,pid);
+}
+static FORCEINLINE HRESULT IDispatchEx_InvokeEx(IDispatchEx* This,DISPID id,LCID lcid,WORD wFlags,DISPPARAMS *pdp,VARIANT *pvarRes,EXCEPINFO *pei,IServiceProvider *pspCaller) {
+    return This->lpVtbl->InvokeEx(This,id,lcid,wFlags,pdp,pvarRes,pei,pspCaller);
+}
+static FORCEINLINE HRESULT IDispatchEx_DeleteMemberByName(IDispatchEx* This,BSTR bstrName,DWORD grfdex) {
+    return This->lpVtbl->DeleteMemberByName(This,bstrName,grfdex);
+}
+static FORCEINLINE HRESULT IDispatchEx_DeleteMemberByDispID(IDispatchEx* This,DISPID id) {
+    return This->lpVtbl->DeleteMemberByDispID(This,id);
+}
+static FORCEINLINE HRESULT IDispatchEx_GetMemberProperties(IDispatchEx* This,DISPID id,DWORD grfdexFetch,DWORD *pgrfdex) {
+    return This->lpVtbl->GetMemberProperties(This,id,grfdexFetch,pgrfdex);
+}
+static FORCEINLINE HRESULT IDispatchEx_GetMemberName(IDispatchEx* This,DISPID id,BSTR *pbstrName) {
+    return This->lpVtbl->GetMemberName(This,id,pbstrName);
+}
+static FORCEINLINE HRESULT IDispatchEx_GetNextDispID(IDispatchEx* This,DWORD grfdex,DISPID id,DISPID *pid) {
+    return This->lpVtbl->GetNextDispID(This,grfdex,id,pid);
+}
+static FORCEINLINE HRESULT IDispatchEx_GetNameSpaceParent(IDispatchEx* This,IUnknown **ppunk) {
+    return This->lpVtbl->GetNameSpaceParent(This,ppunk);
+}
+#endif
+#endif
+
+#endif
+
+HRESULT STDMETHODCALLTYPE IDispatchEx_RemoteInvokeEx_Proxy(
+    IDispatchEx* This,
+    DISPID id,
+    LCID lcid,
+    DWORD dwFlags,
+    DISPPARAMS *pdp,
+    VARIANT *pvarRes,
+    EXCEPINFO *pei,
+    IServiceProvider *pspCaller,
+    UINT cvarRefArg,
+    UINT *rgiRefArg,
+    VARIANT *rgvarRefArg);
+void __RPC_STUB IDispatchEx_RemoteInvokeEx_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IDispatchEx_InvokeEx_Proxy(
+    IDispatchEx* This,
+    DISPID id,
+    LCID lcid,
+    WORD wFlags,
+    DISPPARAMS *pdp,
+    VARIANT *pvarRes,
+    EXCEPINFO *pei,
+    IServiceProvider *pspCaller);
+HRESULT __RPC_STUB IDispatchEx_InvokeEx_Stub(
+    IDispatchEx* This,
+    DISPID id,
+    LCID lcid,
+    DWORD dwFlags,
+    DISPPARAMS *pdp,
+    VARIANT *pvarRes,
+    EXCEPINFO *pei,
+    IServiceProvider *pspCaller,
+    UINT cvarRefArg,
+    UINT *rgiRefArg,
+    VARIANT *rgvarRefArg);
+
+#endif  /* __IDispatchEx_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDispError interface
+ */
+#ifndef __IDispError_INTERFACE_DEFINED__
+#define __IDispError_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDispError, 0xa6ef9861, 0xc720, 0x11d0, 0x93,0x37, 0x00,0xa0,0xc9,0x0d,0xca,0xa9);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a6ef9861-c720-11d0-9337-00a0c90dcaa9")
+IDispError : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE QueryErrorInfo(
+        GUID guidErrorType,
+        IDispError **ppde) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetNext(
+        IDispError **ppde) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetHresult(
+        HRESULT *phr) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSource(
+        BSTR *pbstrSource) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetHelpInfo(
+        BSTR *pbstrFileName,
+        DWORD *pdwContext) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDescription(
+        BSTR *pbstrDescription) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDispError, 0xa6ef9861, 0xc720, 0x11d0, 0x93,0x37, 0x00,0xa0,0xc9,0x0d,0xca,0xa9)
+#endif
+#else
+typedef struct IDispErrorVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDispError *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDispError *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDispError *This);
+
+    /*** IDispError methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryErrorInfo)(
+        IDispError *This,
+        GUID guidErrorType,
+        IDispError **ppde);
+
+    HRESULT (STDMETHODCALLTYPE *GetNext)(
+        IDispError *This,
+        IDispError **ppde);
+
+    HRESULT (STDMETHODCALLTYPE *GetHresult)(
+        IDispError *This,
+        HRESULT *
