@@ -492,4 +492,257 @@ typedef struct IDispErrorVtbl {
 
     HRESULT (STDMETHODCALLTYPE *GetHresult)(
         IDispError *This,
-        HRESULT *
+        HRESULT *phr);
+
+    HRESULT (STDMETHODCALLTYPE *GetSource)(
+        IDispError *This,
+        BSTR *pbstrSource);
+
+    HRESULT (STDMETHODCALLTYPE *GetHelpInfo)(
+        IDispError *This,
+        BSTR *pbstrFileName,
+        DWORD *pdwContext);
+
+    HRESULT (STDMETHODCALLTYPE *GetDescription)(
+        IDispError *This,
+        BSTR *pbstrDescription);
+
+    END_INTERFACE
+} IDispErrorVtbl;
+
+interface IDispError {
+    CONST_VTBL IDispErrorVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDispError_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDispError_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDispError_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispError methods ***/
+#define IDispError_QueryErrorInfo(This,guidErrorType,ppde) (This)->lpVtbl->QueryErrorInfo(This,guidErrorType,ppde)
+#define IDispError_GetNext(This,ppde) (This)->lpVtbl->GetNext(This,ppde)
+#define IDispError_GetHresult(This,phr) (This)->lpVtbl->GetHresult(This,phr)
+#define IDispError_GetSource(This,pbstrSource) (This)->lpVtbl->GetSource(This,pbstrSource)
+#define IDispError_GetHelpInfo(This,pbstrFileName,pdwContext) (This)->lpVtbl->GetHelpInfo(This,pbstrFileName,pdwContext)
+#define IDispError_GetDescription(This,pbstrDescription) (This)->lpVtbl->GetDescription(This,pbstrDescription)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDispError_QueryInterface(IDispError* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDispError_AddRef(IDispError* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDispError_Release(IDispError* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispError methods ***/
+static FORCEINLINE HRESULT IDispError_QueryErrorInfo(IDispError* This,GUID guidErrorType,IDispError **ppde) {
+    return This->lpVtbl->QueryErrorInfo(This,guidErrorType,ppde);
+}
+static FORCEINLINE HRESULT IDispError_GetNext(IDispError* This,IDispError **ppde) {
+    return This->lpVtbl->GetNext(This,ppde);
+}
+static FORCEINLINE HRESULT IDispError_GetHresult(IDispError* This,HRESULT *phr) {
+    return This->lpVtbl->GetHresult(This,phr);
+}
+static FORCEINLINE HRESULT IDispError_GetSource(IDispError* This,BSTR *pbstrSource) {
+    return This->lpVtbl->GetSource(This,pbstrSource);
+}
+static FORCEINLINE HRESULT IDispError_GetHelpInfo(IDispError* This,BSTR *pbstrFileName,DWORD *pdwContext) {
+    return This->lpVtbl->GetHelpInfo(This,pbstrFileName,pdwContext);
+}
+static FORCEINLINE HRESULT IDispError_GetDescription(IDispError* This,BSTR *pbstrDescription) {
+    return This->lpVtbl->GetDescription(This,pbstrDescription);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDispError_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IVariantChangeType interface
+ */
+#ifndef __IVariantChangeType_INTERFACE_DEFINED__
+#define __IVariantChangeType_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IVariantChangeType, 0xa6ef9862, 0xc720, 0x11d0, 0x93,0x37, 0x00,0xa0,0xc9,0x0d,0xca,0xa9);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a6ef9862-c720-11d0-9337-00a0c90dcaa9")
+IVariantChangeType : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE ChangeType(
+        VARIANT *pvarDst,
+        VARIANT *pvarSrc,
+        LCID lcid,
+        VARTYPE vtNew) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IVariantChangeType, 0xa6ef9862, 0xc720, 0x11d0, 0x93,0x37, 0x00,0xa0,0xc9,0x0d,0xca,0xa9)
+#endif
+#else
+typedef struct IVariantChangeTypeVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IVariantChangeType *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IVariantChangeType *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IVariantChangeType *This);
+
+    /*** IVariantChangeType methods ***/
+    HRESULT (STDMETHODCALLTYPE *ChangeType)(
+        IVariantChangeType *This,
+        VARIANT *pvarDst,
+        VARIANT *pvarSrc,
+        LCID lcid,
+        VARTYPE vtNew);
+
+    END_INTERFACE
+} IVariantChangeTypeVtbl;
+
+interface IVariantChangeType {
+    CONST_VTBL IVariantChangeTypeVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IVariantChangeType_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IVariantChangeType_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IVariantChangeType_Release(This) (This)->lpVtbl->Release(This)
+/*** IVariantChangeType methods ***/
+#define IVariantChangeType_ChangeType(This,pvarDst,pvarSrc,lcid,vtNew) (This)->lpVtbl->ChangeType(This,pvarDst,pvarSrc,lcid,vtNew)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IVariantChangeType_QueryInterface(IVariantChangeType* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IVariantChangeType_AddRef(IVariantChangeType* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IVariantChangeType_Release(IVariantChangeType* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IVariantChangeType methods ***/
+static FORCEINLINE HRESULT IVariantChangeType_ChangeType(IVariantChangeType* This,VARIANT *pvarDst,VARIANT *pvarSrc,LCID lcid,VARTYPE vtNew) {
+    return This->lpVtbl->ChangeType(This,pvarDst,pvarSrc,lcid,vtNew);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IVariantChangeType_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IObjectIdentity interface
+ */
+#ifndef __IObjectIdentity_INTERFACE_DEFINED__
+#define __IObjectIdentity_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IObjectIdentity, 0xca04b7e6, 0x0d21, 0x11d1, 0x8c,0xc5, 0x00,0xc0,0x4f,0xc2,0xb0,0x85);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("ca04b7e6-0d21-11d1-8cc5-00c04fc2b085")
+IObjectIdentity : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE IsEqualObject(
+        IUnknown *punk) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IObjectIdentity, 0xca04b7e6, 0x0d21, 0x11d1, 0x8c,0xc5, 0x00,0xc0,0x4f,0xc2,0xb0,0x85)
+#endif
+#else
+typedef struct IObjectIdentityVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IObjectIdentity *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IObjectIdentity *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IObjectIdentity *This);
+
+    /*** IObjectIdentity methods ***/
+    HRESULT (STDMETHODCALLTYPE *IsEqualObject)(
+        IObjectIdentity *This,
+        IUnknown *punk);
+
+    END_INTERFACE
+} IObjectIdentityVtbl;
+
+interface IObjectIdentity {
+    CONST_VTBL IObjectIdentityVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IObjectIdentity_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IObjectIdentity_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IObjectIdentity_Release(This) (This)->lpVtbl->Release(This)
+/*** IObjectIdentity methods ***/
+#define IObjectIdentity_IsEqualObject(This,punk) (This)->lpVtbl->IsEqualObject(This,punk)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IObjectIdentity_QueryInterface(IObjectIdentity* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IObjectIdentity_AddRef(IObjectIdentity* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IObjectIdentity_Release(IObjectIdentity* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IObjectIdentity methods ***/
+static FORCEINLINE HRESULT IObjectIdentity_IsEqualObject(IObjectIdentity* This,IUnknown *punk) {
+    return This->lpVtbl->IsEqualObject(This,punk);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IObjectIdentity_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ICanHandleException interface
+ */
+#ifndef __ICanHandleException_INTERFACE_DEFINED__
+#define __ICanHandleException_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ICanHandleException, 0xc5598e60, 0xb307, 0x11d1, 0xb2,0x7d, 0x00,0x60,0x08,0xc3,0xfb,0xfb);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c5598e60-b307-11d1-b27d-006008c3fbfb")
+ICanHandleException : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE CanHandleException(
+        EXCEPINFO *pExcepInfo,
+        VARIANT *pvar) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ICanHandleException, 0xc5598e60, 0xb307, 0x11d1, 0xb2,0x7d, 0x00,0x60,0x08,0xc3,0xfb,0xfb)
+#endif
+#else
+typedef struct ICanHandleExceptionVtbl
