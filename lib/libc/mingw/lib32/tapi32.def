@@ -281,3 +281,6 @@ tapiRequestDrop@8
 tapiRequestMakeCall@16
 tapiRequestMakeCallA@16
 tapiRequestMakeCallW@16
+tapiRequestMediaCall@40
+tapiRequestMediaCallA@40
+tapiRequestMediaCallW@40
