@@ -745,4 +745,161 @@ ICanHandleException : public IUnknown
 __CRT_UUID_DECL(ICanHandleException, 0xc5598e60, 0xb307, 0x11d1, 0xb2,0x7d, 0x00,0x60,0x08,0xc3,0xfb,0xfb)
 #endif
 #else
-typedef struct ICanHandleExceptionVtbl
+typedef struct ICanHandleExceptionVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ICanHandleException *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ICanHandleException *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ICanHandleException *This);
+
+    /*** ICanHandleException methods ***/
+    HRESULT (STDMETHODCALLTYPE *CanHandleException)(
+        ICanHandleException *This,
+        EXCEPINFO *pExcepInfo,
+        VARIANT *pvar);
+
+    END_INTERFACE
+} ICanHandleExceptionVtbl;
+
+interface ICanHandleException {
+    CONST_VTBL ICanHandleExceptionVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ICanHandleException_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ICanHandleException_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ICanHandleException_Release(This) (This)->lpVtbl->Release(This)
+/*** ICanHandleException methods ***/
+#define ICanHandleException_CanHandleException(This,pExcepInfo,pvar) (This)->lpVtbl->CanHandleException(This,pExcepInfo,pvar)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ICanHandleException_QueryInterface(ICanHandleException* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ICanHandleException_AddRef(ICanHandleException* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ICanHandleException_Release(ICanHandleException* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ICanHandleException methods ***/
+static FORCEINLINE HRESULT ICanHandleException_CanHandleException(ICanHandleException* This,EXCEPINFO *pExcepInfo,VARIANT *pvar) {
+    return This->lpVtbl->CanHandleException(This,pExcepInfo,pvar);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ICanHandleException_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IProvideRuntimeContext interface
+ */
+#ifndef __IProvideRuntimeContext_INTERFACE_DEFINED__
+#define __IProvideRuntimeContext_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IProvideRuntimeContext, 0x10e2414a, 0xec59, 0x49d2, 0xbc,0x51, 0x5a,0xdd,0x2c,0x36,0xfe,0xbc);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("10e2414a-ec59-49d2-bc51-5add2c36febc")
+IProvideRuntimeContext : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentSourceContext(
+        DWORD_PTR *pdwContext,
+        VARIANT_BOOL *pfExecutingGlobalCode) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IProvideRuntimeContext, 0x10e2414a, 0xec59, 0x49d2, 0xbc,0x51, 0x5a,0xdd,0x2c,0x36,0xfe,0xbc)
+#endif
+#else
+typedef struct IProvideRuntimeContextVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IProvideRuntimeContext *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IProvideRuntimeContext *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IProvideRuntimeContext *This);
+
+    /*** IProvideRuntimeContext methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCurrentSourceContext)(
+        IProvideRuntimeContext *This,
+        DWORD_PTR *pdwContext,
+        VARIANT_BOOL *pfExecutingGlobalCode);
+
+    END_INTERFACE
+} IProvideRuntimeContextVtbl;
+
+interface IProvideRuntimeContext {
+    CONST_VTBL IProvideRuntimeContextVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IProvideRuntimeContext_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IProvideRuntimeContext_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IProvideRuntimeContext_Release(This) (This)->lpVtbl->Release(This)
+/*** IProvideRuntimeContext methods ***/
+#define IProvideRuntimeContext_GetCurrentSourceContext(This,pdwContext,pfExecutingGlobalCode) (This)->lpVtbl->GetCurrentSourceContext(This,pdwContext,pfExecutingGlobalCode)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IProvideRuntimeContext_QueryInterface(IProvideRuntimeContext* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IProvideRuntimeContext_AddRef(IProvideRuntimeContext* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IProvideRuntimeContext_Release(IProvideRuntimeContext* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IProvideRuntimeContext methods ***/
+static FORCEINLINE HRESULT IProvideRuntimeContext_GetCurrentSourceContext(IProvideRuntimeContext* This,DWORD_PTR *pdwContext,VARIANT_BOOL *pfExecutingGlobalCode) {
+    return This->lpVtbl->GetCurrentSourceContext(This,pdwContext,pfExecutingGlobalCode);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IProvideRuntimeContext_INTERFACE_DEFINED__ */
+
+#endif
+#endif
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER VARIANT_UserSize     (ULONG *, ULONG, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserMarshal  (ULONG *, unsigned char *, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserUnmarshal(ULONG *, unsigned char *, VARIANT *);
+void            __RPC_USER VARIANT_UserFree     (ULONG *, VARIANT *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __dispex_h__ */
