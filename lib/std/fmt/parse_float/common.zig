@@ -59,4 +59,33 @@ pub fn Number(comptime T: type) type {
         /// More than max_mantissa digits were found during parse
         many_digits: bool,
         /// The number was a hex-float (e.g. 0x1.234p567)
-        hex: boo
+        hex: bool,
+    };
+}
+
+/// Determine if 8 bytes are all decimal digits.
+/// This does not care about the order in which the bytes were loaded.
+pub fn isEightDigits(v: u64) bool {
+    const a = v +% 0x4646_4646_4646_4646;
+    const b = v -% 0x3030_3030_3030_3030;
+    return ((a | b) & 0x8080_8080_8080_8080) == 0;
+}
+
+pub fn isDigit(c: u8, comptime base: u8) bool {
+    std.debug.assert(base == 10 or base == 16);
+
+    return if (base == 10)
+        '0' <= c and c <= '9'
+    else
+        '0' <= c and c <= '9' or 'a' <= c and c <= 'f' or 'A' <= c and c <= 'F';
+}
+
+/// Returns the underlying storage type used for the mantissa of floating-point type.
+/// The output unsigned type must have at least as many bits as the input floating-point type.
+pub fn mantissaType(comptime T: type) type {
+    return switch (T) {
+        f16, f32, f64 => u64,
+        f128 => u128,
+        else => unreachable,
+    };
+}
