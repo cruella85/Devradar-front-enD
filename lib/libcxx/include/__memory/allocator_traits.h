@@ -287,4 +287,119 @@ struct _LIBCPP_TEMPLATE_VIS allocator_traits
     _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
     static void construct(allocator_type& __a, _Tp* __p, _Args&&... __args) {
         _LIBCPP_SUPPRESS_DEPRECATED_PUSH
-        __a.co
+        __a.construct(__p, _VSTD::forward<_Args>(__args)...);
+        _LIBCPP_SUPPRESS_DEPRECATED_POP
+    }
+    template <class _Tp, class... _Args, class = void, class =
+        __enable_if_t<!__has_construct<allocator_type, _Tp*, _Args...>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static void construct(allocator_type&, _Tp* __p, _Args&&... __args) {
+#if _LIBCPP_STD_VER > 17
+        _VSTD::construct_at(__p, _VSTD::forward<_Args>(__args)...);
+#else
+        ::new ((void*)__p) _Tp(_VSTD::forward<_Args>(__args)...);
+#endif
+    }
+
+    template <class _Tp, class =
+        __enable_if_t<__has_destroy<allocator_type, _Tp*>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static void destroy(allocator_type& __a, _Tp* __p) {
+        _LIBCPP_SUPPRESS_DEPRECATED_PUSH
+        __a.destroy(__p);
+        _LIBCPP_SUPPRESS_DEPRECATED_POP
+    }
+    template <class _Tp, class = void, class =
+        __enable_if_t<!__has_destroy<allocator_type, _Tp*>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static void destroy(allocator_type&, _Tp* __p) {
+#if _LIBCPP_STD_VER > 17
+        _VSTD::destroy_at(__p);
+#else
+        __p->~_Tp();
+#endif
+    }
+
+    template <class _Ap = _Alloc, class =
+        __enable_if_t<__has_max_size<const _Ap>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static size_type max_size(const allocator_type& __a) _NOEXCEPT {
+        _LIBCPP_SUPPRESS_DEPRECATED_PUSH
+        return __a.max_size();
+        _LIBCPP_SUPPRESS_DEPRECATED_POP
+    }
+    template <class _Ap = _Alloc, class = void, class =
+        __enable_if_t<!__has_max_size<const _Ap>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static size_type max_size(const allocator_type&) _NOEXCEPT {
+        return numeric_limits<size_type>::max() / sizeof(value_type);
+    }
+
+    template <class _Ap = _Alloc, class =
+        __enable_if_t<__has_select_on_container_copy_construction<const _Ap>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static allocator_type select_on_container_copy_construction(const allocator_type& __a) {
+        return __a.select_on_container_copy_construction();
+    }
+    template <class _Ap = _Alloc, class = void, class =
+        __enable_if_t<!__has_select_on_container_copy_construction<const _Ap>::value> >
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17
+    static allocator_type select_on_container_copy_construction(const allocator_type& __a) {
+        return __a;
+    }
+};
+
+template <class _Traits, class _Tp>
+struct __rebind_alloc_helper {
+#ifndef _LIBCPP_CXX03_LANG
+    using type _LIBCPP_NODEBUG = typename _Traits::template rebind_alloc<_Tp>;
+#else
+    using type = typename _Traits::template rebind_alloc<_Tp>::other;
+#endif
+};
+
+// __is_default_allocator
+template <class _Tp>
+struct __is_default_allocator : false_type { };
+
+template <class> class allocator;
+
+template <class _Tp>
+struct __is_default_allocator<allocator<_Tp> > : true_type { };
+
+// __is_cpp17_move_insertable
+template <class _Alloc, class = void>
+struct __is_cpp17_move_insertable
+    : is_move_constructible<typename _Alloc::value_type>
+{ };
+
+template <class _Alloc>
+struct __is_cpp17_move_insertable<_Alloc, __enable_if_t<
+    !__is_default_allocator<_Alloc>::value &&
+    __has_construct<_Alloc, typename _Alloc::value_type*, typename _Alloc::value_type&&>::value
+> > : true_type { };
+
+// __is_cpp17_copy_insertable
+template <class _Alloc, class = void>
+struct __is_cpp17_copy_insertable
+    : integral_constant<bool,
+        is_copy_constructible<typename _Alloc::value_type>::value &&
+        __is_cpp17_move_insertable<_Alloc>::value
+    >
+{ };
+
+template <class _Alloc>
+struct __is_cpp17_copy_insertable<_Alloc, __enable_if_t<
+    !__is_default_allocator<_Alloc>::value &&
+    __has_construct<_Alloc, typename _Alloc::value_type*, const typename _Alloc::value_type&>::value
+> >
+    : __is_cpp17_move_insertable<_Alloc>
+{ };
+
+#undef _LIBCPP_ALLOCATOR_TRAITS_HAS_XXX
+
+_LIBCPP_END_NAMESPACE_STD
+
+_LIBCPP_POP_MACROS
+
+#endif // _LIBCPP___MEMORY_ALLOCATOR_TRAITS_H
