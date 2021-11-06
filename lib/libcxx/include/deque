@@ -1436,4 +1436,248 @@ public:
     const_reference front() const _NOEXCEPT;
     _LIBCPP_INLINE_VISIBILITY
     reference back() _NOEXCEPT;
-    _
+    _LIBCPP_INLINE_VISIBILITY
+    const_reference back() const _NOEXCEPT;
+
+    // 23.2.2.3 modifiers:
+    void push_front(const value_type& __v);
+    void push_back(const value_type& __v);
+#ifndef _LIBCPP_CXX03_LANG
+#if _LIBCPP_STD_VER > 14
+    template <class... _Args> reference emplace_front(_Args&&... __args);
+    template <class... _Args> reference emplace_back (_Args&&... __args);
+#else
+    template <class... _Args> void      emplace_front(_Args&&... __args);
+    template <class... _Args> void      emplace_back (_Args&&... __args);
+#endif
+    template <class... _Args> iterator emplace(const_iterator __p, _Args&&... __args);
+
+    void push_front(value_type&& __v);
+    void push_back(value_type&& __v);
+    iterator insert(const_iterator __p, value_type&& __v);
+
+    _LIBCPP_INLINE_VISIBILITY
+    iterator insert(const_iterator __p, initializer_list<value_type> __il)
+        {return insert(__p, __il.begin(), __il.end());}
+#endif // _LIBCPP_CXX03_LANG
+    iterator insert(const_iterator __p, const value_type& __v);
+    iterator insert(const_iterator __p, size_type __n, const value_type& __v);
+    template <class _InputIter>
+        iterator insert(const_iterator __p, _InputIter __f, _InputIter __l,
+                         typename enable_if<__is_exactly_cpp17_input_iterator<_InputIter>::value>::type* = 0);
+    template <class _ForwardIterator>
+        iterator insert(const_iterator __p, _ForwardIterator __f, _ForwardIterator __l,
+                        typename enable_if<__is_exactly_cpp17_forward_iterator<_ForwardIterator>::value>::type* = 0);
+    template <class _BiIter>
+        iterator insert(const_iterator __p, _BiIter __f, _BiIter __l,
+                         typename enable_if<__is_cpp17_bidirectional_iterator<_BiIter>::value>::type* = 0);
+
+    void pop_front();
+    void pop_back();
+    iterator erase(const_iterator __p);
+    iterator erase(const_iterator __f, const_iterator __l);
+
+    _LIBCPP_INLINE_VISIBILITY
+    void swap(deque& __c)
+#if _LIBCPP_STD_VER >= 14
+        _NOEXCEPT;
+#else
+        _NOEXCEPT_(!__alloc_traits::propagate_on_container_swap::value ||
+                   __is_nothrow_swappable<allocator_type>::value);
+#endif
+    _LIBCPP_INLINE_VISIBILITY
+    void clear() _NOEXCEPT;
+
+    _LIBCPP_INLINE_VISIBILITY
+    bool __invariants() const {return __base::__invariants();}
+
+    typedef typename __base::__map_const_pointer __map_const_pointer;
+
+    _LIBCPP_INLINE_VISIBILITY
+    static size_type __recommend_blocks(size_type __n)
+    {
+        return __n / __base::__block_size + (__n % __base::__block_size != 0);
+    }
+    _LIBCPP_INLINE_VISIBILITY
+    size_type __capacity() const
+    {
+        return __base::__map_.size() == 0 ? 0 : __base::__map_.size() * __base::__block_size - 1;
+    }
+    _LIBCPP_INLINE_VISIBILITY
+    size_type __block_count() const
+    {
+        return __base::__map_.size();
+    }
+
+    _LIBCPP_INLINE_VISIBILITY
+    size_type __front_spare() const
+    {
+        return __base::__start_;
+    }
+    _LIBCPP_INLINE_VISIBILITY
+    size_type __front_spare_blocks() const {
+      return __front_spare() / __base::__block_size;
+    }
+    _LIBCPP_INLINE_VISIBILITY
+    size_type __back_spare() const
+    {
+        return __capacity() - (__base::__start_ + __base::size());
+    }
+    _LIBCPP_INLINE_VISIBILITY
+    size_type __back_spare_blocks() const {
+      return __back_spare() / __base::__block_size;
+    }
+
+ private:
+    _LIBCPP_INLINE_VISIBILITY
+    bool __maybe_remove_front_spare(bool __keep_one = true) {
+      if (__front_spare_blocks() >= 2 || (!__keep_one && __front_spare_blocks())) {
+        __alloc_traits::deallocate(__base::__alloc(), __base::__map_.front(),
+                                   __base::__block_size);
+        __base::__map_.pop_front();
+        __base::__start_ -= __base::__block_size;
+        return true;
+      }
+      return false;
+    }
+
+    _LIBCPP_INLINE_VISIBILITY
+    bool __maybe_remove_back_spare(bool __keep_one = true) {
+      if (__back_spare_blocks() >= 2 || (!__keep_one && __back_spare_blocks())) {
+        __alloc_traits::deallocate(__base::__alloc(), __base::__map_.back(),
+                                   __base::__block_size);
+        __base::__map_.pop_back();
+        return true;
+      }
+      return false;
+    }
+
+    template <class _InpIter>
+        void __append(_InpIter __f, _InpIter __l,
+                 typename enable_if<__is_exactly_cpp17_input_iterator<_InpIter>::value>::type* = 0);
+    template <class _ForIter>
+        void __append(_ForIter __f, _ForIter __l,
+                      typename enable_if<__is_cpp17_forward_iterator<_ForIter>::value>::type* = 0);
+    void __append(size_type __n);
+    void __append(size_type __n, const value_type& __v);
+    void __erase_to_end(const_iterator __f);
+    void __add_front_capacity();
+    void __add_front_capacity(size_type __n);
+    void __add_back_capacity();
+    void __add_back_capacity(size_type __n);
+    iterator __move_and_check(iterator __f, iterator __l, iterator __r,
+                              const_pointer& __vt);
+    iterator __move_backward_and_check(iterator __f, iterator __l, iterator __r,
+                                       const_pointer& __vt);
+    void __move_construct_and_check(iterator __f, iterator __l,
+                                    iterator __r, const_pointer& __vt);
+    void __move_construct_backward_and_check(iterator __f, iterator __l,
+                                             iterator __r, const_pointer& __vt);
+
+    _LIBCPP_INLINE_VISIBILITY
+    void __copy_assign_alloc(const deque& __c)
+        {__copy_assign_alloc(__c, integral_constant<bool,
+                      __alloc_traits::propagate_on_container_copy_assignment::value>());}
+
+    _LIBCPP_INLINE_VISIBILITY
+    void __copy_assign_alloc(const deque& __c, true_type)
+        {
+            if (__base::__alloc() != __c.__alloc())
+            {
+                clear();
+                shrink_to_fit();
+            }
+            __base::__alloc() = __c.__alloc();
+            __base::__map_.__alloc() = __c.__map_.__alloc();
+        }
+
+    _LIBCPP_INLINE_VISIBILITY
+    void __copy_assign_alloc(const deque&, false_type)
+        {}
+
+    void __move_assign(deque& __c, true_type)
+        _NOEXCEPT_(is_nothrow_move_assignable<allocator_type>::value);
+    void __move_assign(deque& __c, false_type);
+};
+
+#if _LIBCPP_STD_VER >= 17
+template<class _InputIterator,
+         class _Alloc = allocator<__iter_value_type<_InputIterator>>,
+         class = enable_if_t<__is_cpp17_input_iterator<_InputIterator>::value>,
+         class = enable_if_t<__is_allocator<_Alloc>::value>
+         >
+deque(_InputIterator, _InputIterator)
+  -> deque<__iter_value_type<_InputIterator>, _Alloc>;
+
+template<class _InputIterator,
+         class _Alloc,
+         class = enable_if_t<__is_cpp17_input_iterator<_InputIterator>::value>,
+         class = enable_if_t<__is_allocator<_Alloc>::value>
+         >
+deque(_InputIterator, _InputIterator, _Alloc)
+  -> deque<__iter_value_type<_InputIterator>, _Alloc>;
+#endif
+
+template <class _Tp, class _Allocator>
+deque<_Tp, _Allocator>::deque(size_type __n)
+{
+    if (__n > 0)
+        __append(__n);
+}
+
+#if _LIBCPP_STD_VER > 11
+template <class _Tp, class _Allocator>
+deque<_Tp, _Allocator>::deque(size_type __n, const _Allocator& __a)
+    : __base(__a)
+{
+    if (__n > 0)
+        __append(__n);
+}
+#endif
+
+template <class _Tp, class _Allocator>
+deque<_Tp, _Allocator>::deque(size_type __n, const value_type& __v)
+{
+    if (__n > 0)
+        __append(__n, __v);
+}
+
+template <class _Tp, class _Allocator>
+template <class _InputIter>
+deque<_Tp, _Allocator>::deque(_InputIter __f, _InputIter __l,
+              typename enable_if<__is_cpp17_input_iterator<_InputIter>::value>::type*)
+{
+    __append(__f, __l);
+}
+
+template <class _Tp, class _Allocator>
+template <class _InputIter>
+deque<_Tp, _Allocator>::deque(_InputIter __f, _InputIter __l, const allocator_type& __a,
+              typename enable_if<__is_cpp17_input_iterator<_InputIter>::value>::type*)
+    : __base(__a)
+{
+    __append(__f, __l);
+}
+
+template <class _Tp, class _Allocator>
+deque<_Tp, _Allocator>::deque(const deque& __c)
+    : __base(__alloc_traits::select_on_container_copy_construction(__c.__alloc()))
+{
+    __append(__c.begin(), __c.end());
+}
+
+template <class _Tp, class _Allocator>
+deque<_Tp, _Allocator>::deque(const deque& __c, const __type_identity_t<allocator_type>& __a)
+    : __base(__a)
+{
+    __append(__c.begin(), __c.end());
+}
+
+template <class _Tp, class _Allocator>
+deque<_Tp, _Allocator>&
+deque<_Tp, _Allocator>::operator=(const deque& __c)
+{
+    if (this != _VSTD::addressof(__c))
+    {
+        __copy_assign_alloc(__c);
+        assign(__c.be
