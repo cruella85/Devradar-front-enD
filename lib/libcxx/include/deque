@@ -1982,4 +1982,255 @@ deque<_Tp, _Allocator>::emplace_back(_Args&&... __args)
         __add_back_capacity();
     // __back_spare() >= 1
     __alloc_traits::construct(__a, _VSTD::addressof(*__base::end()),
-                              _VSTD::forward<_Ar
+                              _VSTD::forward<_Args>(__args)...);
+    ++__base::size();
+#if _LIBCPP_STD_VER > 14
+    return *--__base::end();
+#endif
+}
+
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::push_front(value_type&& __v)
+{
+    allocator_type& __a = __base::__alloc();
+    if (__front_spare() == 0)
+        __add_front_capacity();
+    // __front_spare() >= 1
+    __alloc_traits::construct(__a, _VSTD::addressof(*--__base::begin()), _VSTD::move(__v));
+    --__base::__start_;
+    ++__base::size();
+}
+
+
+template <class _Tp, class _Allocator>
+template <class... _Args>
+#if _LIBCPP_STD_VER > 14
+typename deque<_Tp, _Allocator>::reference
+#else
+void
+#endif
+deque<_Tp, _Allocator>::emplace_front(_Args&&... __args)
+{
+    allocator_type& __a = __base::__alloc();
+    if (__front_spare() == 0)
+        __add_front_capacity();
+    // __front_spare() >= 1
+    __alloc_traits::construct(__a, _VSTD::addressof(*--__base::begin()), _VSTD::forward<_Args>(__args)...);
+    --__base::__start_;
+    ++__base::size();
+#if _LIBCPP_STD_VER > 14
+    return *__base::begin();
+#endif
+}
+
+template <class _Tp, class _Allocator>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::insert(const_iterator __p, value_type&& __v)
+{
+    size_type __pos = __p - __base::begin();
+    size_type __to_end = __base::size() - __pos;
+    allocator_type& __a = __base::__alloc();
+    if (__pos < __to_end)
+    {   // insert by shifting things backward
+        if (__front_spare() == 0)
+            __add_front_capacity();
+        // __front_spare() >= 1
+        if (__pos == 0)
+        {
+            __alloc_traits::construct(__a, _VSTD::addressof(*--__base::begin()), _VSTD::move(__v));
+            --__base::__start_;
+            ++__base::size();
+        }
+        else
+        {
+            iterator __b = __base::begin();
+            iterator __bm1 = _VSTD::prev(__b);
+            __alloc_traits::construct(__a, _VSTD::addressof(*__bm1), _VSTD::move(*__b));
+            --__base::__start_;
+            ++__base::size();
+            if (__pos > 1)
+                __b = _VSTD::move(_VSTD::next(__b), __b + __pos, __b);
+            *__b = _VSTD::move(__v);
+        }
+    }
+    else
+    {   // insert by shifting things forward
+        if (__back_spare() == 0)
+            __add_back_capacity();
+        // __back_capacity >= 1
+        size_type __de = __base::size() - __pos;
+        if (__de == 0)
+        {
+            __alloc_traits::construct(__a, _VSTD::addressof(*__base::end()), _VSTD::move(__v));
+            ++__base::size();
+        }
+        else
+        {
+            iterator __e = __base::end();
+            iterator __em1 = _VSTD::prev(__e);
+            __alloc_traits::construct(__a, _VSTD::addressof(*__e), _VSTD::move(*__em1));
+            ++__base::size();
+            if (__de > 1)
+                __e = _VSTD::move_backward(__e - __de, __em1, __e);
+            *--__e = _VSTD::move(__v);
+        }
+    }
+    return __base::begin() + __pos;
+}
+
+template <class _Tp, class _Allocator>
+template <class... _Args>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::emplace(const_iterator __p, _Args&&... __args)
+{
+    size_type __pos = __p - __base::begin();
+    size_type __to_end = __base::size() - __pos;
+    allocator_type& __a = __base::__alloc();
+    if (__pos < __to_end)
+    {   // insert by shifting things backward
+        if (__front_spare() == 0)
+            __add_front_capacity();
+        // __front_spare() >= 1
+        if (__pos == 0)
+        {
+            __alloc_traits::construct(__a, _VSTD::addressof(*--__base::begin()), _VSTD::forward<_Args>(__args)...);
+            --__base::__start_;
+            ++__base::size();
+        }
+        else
+        {
+            __temp_value<value_type, _Allocator> __tmp(this->__alloc(), _VSTD::forward<_Args>(__args)...);
+            iterator __b = __base::begin();
+            iterator __bm1 = _VSTD::prev(__b);
+            __alloc_traits::construct(__a, _VSTD::addressof(*__bm1), _VSTD::move(*__b));
+            --__base::__start_;
+            ++__base::size();
+            if (__pos > 1)
+                __b = _VSTD::move(_VSTD::next(__b), __b + __pos, __b);
+            *__b = _VSTD::move(__tmp.get());
+        }
+    }
+    else
+    {   // insert by shifting things forward
+        if (__back_spare() == 0)
+            __add_back_capacity();
+        // __back_capacity >= 1
+        size_type __de = __base::size() - __pos;
+        if (__de == 0)
+        {
+            __alloc_traits::construct(__a, _VSTD::addressof(*__base::end()), _VSTD::forward<_Args>(__args)...);
+            ++__base::size();
+        }
+        else
+        {
+            __temp_value<value_type, _Allocator> __tmp(this->__alloc(), _VSTD::forward<_Args>(__args)...);
+            iterator __e = __base::end();
+            iterator __em1 = _VSTD::prev(__e);
+            __alloc_traits::construct(__a, _VSTD::addressof(*__e), _VSTD::move(*__em1));
+            ++__base::size();
+            if (__de > 1)
+                __e = _VSTD::move_backward(__e - __de, __em1, __e);
+            *--__e = _VSTD::move(__tmp.get());
+        }
+    }
+    return __base::begin() + __pos;
+}
+
+#endif // _LIBCPP_CXX03_LANG
+
+
+template <class _Tp, class _Allocator>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::insert(const_iterator __p, const value_type& __v)
+{
+    size_type __pos = __p - __base::begin();
+    size_type __to_end = __base::size() - __pos;
+    allocator_type& __a = __base::__alloc();
+    if (__pos < __to_end)
+    {   // insert by shifting things backward
+        if (__front_spare() == 0)
+            __add_front_capacity();
+        // __front_spare() >= 1
+        if (__pos == 0)
+        {
+            __alloc_traits::construct(__a, _VSTD::addressof(*--__base::begin()), __v);
+            --__base::__start_;
+            ++__base::size();
+        }
+        else
+        {
+            const_pointer __vt = pointer_traits<const_pointer>::pointer_to(__v);
+            iterator __b = __base::begin();
+            iterator __bm1 = _VSTD::prev(__b);
+            if (__vt == pointer_traits<const_pointer>::pointer_to(*__b))
+                __vt = pointer_traits<const_pointer>::pointer_to(*__bm1);
+            __alloc_traits::construct(__a, _VSTD::addressof(*__bm1), _VSTD::move(*__b));
+            --__base::__start_;
+            ++__base::size();
+            if (__pos > 1)
+                __b = __move_and_check(_VSTD::next(__b), __b + __pos, __b, __vt);
+            *__b = *__vt;
+        }
+    }
+    else
+    {   // insert by shifting things forward
+        if (__back_spare() == 0)
+            __add_back_capacity();
+        // __back_capacity >= 1
+        size_type __de = __base::size() - __pos;
+        if (__de == 0)
+        {
+            __alloc_traits::construct(__a, _VSTD::addressof(*__base::end()), __v);
+            ++__base::size();
+        }
+        else
+        {
+            const_pointer __vt = pointer_traits<const_pointer>::pointer_to(__v);
+            iterator __e = __base::end();
+            iterator __em1 = _VSTD::prev(__e);
+            if (__vt == pointer_traits<const_pointer>::pointer_to(*__em1))
+                __vt = pointer_traits<const_pointer>::pointer_to(*__e);
+            __alloc_traits::construct(__a, _VSTD::addressof(*__e), _VSTD::move(*__em1));
+            ++__base::size();
+            if (__de > 1)
+                __e = __move_backward_and_check(__e - __de, __em1, __e, __vt);
+            *--__e = *__vt;
+        }
+    }
+    return __base::begin() + __pos;
+}
+
+template <class _Tp, class _Allocator>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::insert(const_iterator __p, size_type __n, const value_type& __v)
+{
+    size_type __pos = __p - __base::begin();
+    size_type __to_end = __base::size() - __pos;
+    allocator_type& __a = __base::__alloc();
+    if (__pos < __to_end)
+    {   // insert by shifting things backward
+        if (__n > __front_spare())
+            __add_front_capacity(__n - __front_spare());
+        // __n <= __front_spare()
+        iterator __old_begin = __base::begin();
+        iterator __i = __old_begin;
+        if (__n > __pos)
+        {
+            for (size_type __m = __n - __pos; __m; --__m, --__base::__start_, ++__base::size())
+                __alloc_traits::construct(__a, _VSTD::addressof(*--__i), __v);
+            __n = __pos;
+        }
+        if (__n > 0)
+        {
+            const_pointer __vt = pointer_traits<const_pointer>::pointer_to(__v);
+            iterator __obn = __old_begin + __n;
+            __move_construct_backward_and_check(__old_begin, __obn, __i, __vt);
+            if (__n < __pos)
+                __old_begin = __move_and_check(__obn, __old_begin + __pos, __old_begin, __vt);
+            _VSTD::fill_n(__old_begin, __n, *__vt);
+        }
+    }
+    else
+    {   // insert by shifting things forward
+        size_type __back_capacity = __back_spare();
