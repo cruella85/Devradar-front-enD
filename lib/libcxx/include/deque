@@ -2234,3 +2234,223 @@ deque<_Tp, _Allocator>::insert(const_iterator __p, size_type __n, const value_ty
     else
     {   // insert by shifting things forward
         size_type __back_capacity = __back_spare();
+        if (__n > __back_capacity)
+            __add_back_capacity(__n - __back_capacity);
+        // __n <= __back_capacity
+        iterator __old_end = __base::end();
+        iterator __i = __old_end;
+        size_type __de = __base::size() - __pos;
+        if (__n > __de)
+        {
+            for (size_type __m = __n - __de; __m; --__m, (void) ++__i, ++__base::size())
+                __alloc_traits::construct(__a, _VSTD::addressof(*__i), __v);
+            __n = __de;
+        }
+        if (__n > 0)
+        {
+            const_pointer __vt = pointer_traits<const_pointer>::pointer_to(__v);
+            iterator __oen = __old_end - __n;
+            __move_construct_and_check(__oen, __old_end, __i, __vt);
+            if (__n < __de)
+                __old_end = __move_backward_and_check(__old_end - __de, __oen, __old_end, __vt);
+            _VSTD::fill_n(__old_end - __n, __n, *__vt);
+        }
+    }
+    return __base::begin() + __pos;
+}
+
+template <class _Tp, class _Allocator>
+template <class _InputIter>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::insert(const_iterator __p, _InputIter __f, _InputIter __l,
+                               typename enable_if<__is_exactly_cpp17_input_iterator<_InputIter>::value>::type*)
+{
+    __split_buffer<value_type, allocator_type&> __buf(__base::__alloc());
+    __buf.__construct_at_end(__f, __l);
+    typedef typename __split_buffer<value_type, allocator_type&>::iterator __bi;
+    return insert(__p, move_iterator<__bi>(__buf.begin()), move_iterator<__bi>(__buf.end()));
+}
+
+template <class _Tp, class _Allocator>
+template <class _ForwardIterator>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::insert(const_iterator __p, _ForwardIterator __f, _ForwardIterator __l,
+                               typename enable_if<__is_exactly_cpp17_forward_iterator<_ForwardIterator>::value>::type*)
+{
+    size_type __n = _VSTD::distance(__f, __l);
+    __split_buffer<value_type, allocator_type&> __buf(__n, 0, __base::__alloc());
+    __buf.__construct_at_end(__f, __l);
+    typedef typename __split_buffer<value_type, allocator_type&>::iterator __fwd;
+    return insert(__p, move_iterator<__fwd>(__buf.begin()), move_iterator<__fwd>(__buf.end()));
+}
+
+template <class _Tp, class _Allocator>
+template <class _BiIter>
+typename deque<_Tp, _Allocator>::iterator
+deque<_Tp, _Allocator>::insert(const_iterator __p, _BiIter __f, _BiIter __l,
+                               typename enable_if<__is_cpp17_bidirectional_iterator<_BiIter>::value>::type*)
+{
+    size_type __n = _VSTD::distance(__f, __l);
+    size_type __pos = __p - __base::begin();
+    size_type __to_end = __base::size() - __pos;
+    allocator_type& __a = __base::__alloc();
+    if (__pos < __to_end)
+    {   // insert by shifting things backward
+        if (__n > __front_spare())
+            __add_front_capacity(__n - __front_spare());
+        // __n <= __front_spare()
+        iterator __old_begin = __base::begin();
+        iterator __i = __old_begin;
+        _BiIter __m = __f;
+        if (__n > __pos)
+        {
+            __m = __pos < __n / 2 ? _VSTD::prev(__l, __pos) : _VSTD::next(__f, __n - __pos);
+            for (_BiIter __j = __m; __j != __f; --__base::__start_, ++__base::size())
+                __alloc_traits::construct(__a, _VSTD::addressof(*--__i), *--__j);
+            __n = __pos;
+        }
+        if (__n > 0)
+        {
+            iterator __obn = __old_begin + __n;
+            for (iterator __j = __obn; __j != __old_begin;)
+            {
+                __alloc_traits::construct(__a, _VSTD::addressof(*--__i), _VSTD::move(*--__j));
+                --__base::__start_;
+                ++__base::size();
+            }
+            if (__n < __pos)
+                __old_begin = _VSTD::move(__obn, __old_begin + __pos, __old_begin);
+            _VSTD::copy(__m, __l, __old_begin);
+        }
+    }
+    else
+    {   // insert by shifting things forward
+        size_type __back_capacity = __back_spare();
+        if (__n > __back_capacity)
+            __add_back_capacity(__n - __back_capacity);
+        // __n <= __back_capacity
+        iterator __old_end = __base::end();
+        iterator __i = __old_end;
+        _BiIter __m = __l;
+        size_type __de = __base::size() - __pos;
+        if (__n > __de)
+        {
+            __m = __de < __n / 2 ? _VSTD::next(__f, __de) : _VSTD::prev(__l, __n - __de);
+            for (_BiIter __j = __m; __j != __l; ++__i, (void) ++__j, ++__base::size())
+                __alloc_traits::construct(__a, _VSTD::addressof(*__i), *__j);
+            __n = __de;
+        }
+        if (__n > 0)
+        {
+            iterator __oen = __old_end - __n;
+            for (iterator __j = __oen; __j != __old_end; ++__i, (void) ++__j, ++__base::size())
+                __alloc_traits::construct(__a, _VSTD::addressof(*__i), _VSTD::move(*__j));
+            if (__n < __de)
+                __old_end = _VSTD::move_backward(__old_end - __de, __oen, __old_end);
+            _VSTD::copy_backward(__f, __m, __old_end);
+        }
+    }
+    return __base::begin() + __pos;
+}
+
+template <class _Tp, class _Allocator>
+template <class _InpIter>
+void
+deque<_Tp, _Allocator>::__append(_InpIter __f, _InpIter __l,
+                                 typename enable_if<__is_exactly_cpp17_input_iterator<_InpIter>::value>::type*)
+{
+    for (; __f != __l; ++__f)
+#ifdef _LIBCPP_CXX03_LANG
+        push_back(*__f);
+#else
+        emplace_back(*__f);
+#endif
+}
+
+template <class _Tp, class _Allocator>
+template <class _ForIter>
+void
+deque<_Tp, _Allocator>::__append(_ForIter __f, _ForIter __l,
+                                 typename enable_if<__is_cpp17_forward_iterator<_ForIter>::value>::type*)
+{
+    size_type __n = _VSTD::distance(__f, __l);
+    allocator_type& __a = __base::__alloc();
+    size_type __back_capacity = __back_spare();
+    if (__n > __back_capacity)
+        __add_back_capacity(__n - __back_capacity);
+    // __n <= __back_capacity
+    for (__deque_block_range __br : __deque_range(__base::end(), __base::end() + __n)) {
+      _ConstructTransaction __tx(this, __br);
+      for (; __tx.__pos_ != __tx.__end_; ++__tx.__pos_, (void)++__f) {
+        __alloc_traits::construct(__a, _VSTD::__to_address(__tx.__pos_), *__f);
+      }
+    }
+}
+
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::__append(size_type __n)
+{
+    allocator_type& __a = __base::__alloc();
+    size_type __back_capacity = __back_spare();
+    if (__n > __back_capacity)
+        __add_back_capacity(__n - __back_capacity);
+    // __n <= __back_capacity
+    for (__deque_block_range __br : __deque_range(__base::end(), __base::end() + __n)) {
+      _ConstructTransaction __tx(this, __br);
+      for (; __tx.__pos_ != __tx.__end_; ++__tx.__pos_) {
+        __alloc_traits::construct(__a, _VSTD::__to_address(__tx.__pos_));
+      }
+    }
+}
+
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::__append(size_type __n, const value_type& __v)
+{
+    allocator_type& __a = __base::__alloc();
+    size_type __back_capacity = __back_spare();
+    if (__n > __back_capacity)
+        __add_back_capacity(__n - __back_capacity);
+    // __n <= __back_capacity
+    for (__deque_block_range __br : __deque_range(__base::end(), __base::end() + __n)) {
+      _ConstructTransaction __tx(this, __br);
+      for (; __tx.__pos_ != __tx.__end_; ++__tx.__pos_) {
+        __alloc_traits::construct(__a, _VSTD::__to_address(__tx.__pos_), __v);
+      }
+    }
+
+}
+
+// Create front capacity for one block of elements.
+// Strong guarantee.  Either do it or don't touch anything.
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::__add_front_capacity()
+{
+    allocator_type& __a = __base::__alloc();
+    if (__back_spare() >= __base::__block_size)
+    {
+        __base::__start_ += __base::__block_size;
+        pointer __pt = __base::__map_.back();
+        __base::__map_.pop_back();
+        __base::__map_.push_front(__pt);
+    }
+    // Else if __base::__map_.size() < __base::__map_.capacity() then we need to allocate 1 buffer
+    else if (__base::__map_.size() < __base::__map_.capacity())
+    {   // we can put the new buffer into the map, but don't shift things around
+        // until all buffers are allocated.  If we throw, we don't need to fix
+        // anything up (any added buffers are undetectible)
+        if (__base::__map_.__front_spare() > 0)
+            __base::__map_.push_front(__alloc_traits::allocate(__a, __base::__block_size));
+        else
+        {
+            __base::__map_.push_back(__alloc_traits::allocate(__a, __base::__block_size));
+            // Done allocating, reorder capacity
+            pointer __pt = __base::__map_.back();
+            __base::__map_.pop_back();
+            __base::__map_.push_front(__pt);
+        }
+        __base::__start_ = __base::__map_.size() == 1 ?
+                               __base::__block_size / 2 :
+           
