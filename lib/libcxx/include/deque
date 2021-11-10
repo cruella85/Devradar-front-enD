@@ -2453,4 +2453,208 @@ deque<_Tp, _Allocator>::__add_front_capacity()
         }
         __base::__start_ = __base::__map_.size() == 1 ?
                                __base::__block_size / 2 :
-           
+                               __base::__start_ + __base::__block_size;
+    }
+    // Else need to allocate 1 buffer, *and* we need to reallocate __map_.
+    else
+    {
+        __split_buffer<pointer, typename __base::__pointer_allocator&>
+            __buf(max<size_type>(2 * __base::__map_.capacity(), 1),
+                  0, __base::__map_.__alloc());
+
+        typedef __allocator_destructor<_Allocator> _Dp;
+        unique_ptr<pointer, _Dp> __hold(
+            __alloc_traits::allocate(__a, __base::__block_size),
+                _Dp(__a, __base::__block_size));
+        __buf.push_back(__hold.get());
+        __hold.release();
+
+        for (typename __base::__map_pointer __i = __base::__map_.begin();
+                __i != __base::__map_.end(); ++__i)
+            __buf.push_back(*__i);
+        _VSTD::swap(__base::__map_.__first_, __buf.__first_);
+        _VSTD::swap(__base::__map_.__begin_, __buf.__begin_);
+        _VSTD::swap(__base::__map_.__end_, __buf.__end_);
+        _VSTD::swap(__base::__map_.__end_cap(), __buf.__end_cap());
+        __base::__start_ = __base::__map_.size() == 1 ?
+                               __base::__block_size / 2 :
+                               __base::__start_ + __base::__block_size;
+    }
+}
+
+// Create front capacity for __n elements.
+// Strong guarantee.  Either do it or don't touch anything.
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::__add_front_capacity(size_type __n)
+{
+    allocator_type& __a = __base::__alloc();
+    size_type __nb = __recommend_blocks(__n + __base::__map_.empty());
+    // Number of unused blocks at back:
+    size_type __back_capacity = __back_spare() / __base::__block_size;
+    __back_capacity = _VSTD::min(__back_capacity, __nb);  // don't take more than you need
+    __nb -= __back_capacity;  // number of blocks need to allocate
+    // If __nb == 0, then we have sufficient capacity.
+    if (__nb == 0)
+    {
+        __base::__start_ += __base::__block_size * __back_capacity;
+        for (; __back_capacity > 0; --__back_capacity)
+        {
+            pointer __pt = __base::__map_.back();
+            __base::__map_.pop_back();
+            __base::__map_.push_front(__pt);
+        }
+    }
+    // Else if __nb <= __map_.capacity() - __map_.size() then we need to allocate __nb buffers
+    else if (__nb <= __base::__map_.capacity() - __base::__map_.size())
+    {   // we can put the new buffers into the map, but don't shift things around
+        // until all buffers are allocated.  If we throw, we don't need to fix
+        // anything up (any added buffers are undetectible)
+        for (; __nb > 0; --__nb, __base::__start_ += __base::__block_size - (__base::__map_.size() == 1))
+        {
+            if (__base::__map_.__front_spare() == 0)
+                break;
+            __base::__map_.push_front(__alloc_traits::allocate(__a, __base::__block_size));
+        }
+        for (; __nb > 0; --__nb, ++__back_capacity)
+            __base::__map_.push_back(__alloc_traits::allocate(__a, __base::__block_size));
+        // Done allocating, reorder capacity
+        __base::__start_ += __back_capacity * __base::__block_size;
+        for (; __back_capacity > 0; --__back_capacity)
+        {
+            pointer __pt = __base::__map_.back();
+            __base::__map_.pop_back();
+            __base::__map_.push_front(__pt);
+        }
+    }
+    // Else need to allocate __nb buffers, *and* we need to reallocate __map_.
+    else
+    {
+        size_type __ds = (__nb + __back_capacity) * __base::__block_size - __base::__map_.empty();
+        __split_buffer<pointer, typename __base::__pointer_allocator&>
+            __buf(max<size_type>(2* __base::__map_.capacity(),
+                                 __nb + __base::__map_.size()),
+                  0, __base::__map_.__alloc());
+#ifndef _LIBCPP_NO_EXCEPTIONS
+        try
+        {
+#endif // _LIBCPP_NO_EXCEPTIONS
+            for (; __nb > 0; --__nb)
+                __buf.push_back(__alloc_traits::allocate(__a, __base::__block_size));
+#ifndef _LIBCPP_NO_EXCEPTIONS
+        }
+        catch (...)
+        {
+            for (typename __base::__map_pointer __i = __buf.begin();
+                    __i != __buf.end(); ++__i)
+                __alloc_traits::deallocate(__a, *__i, __base::__block_size);
+            throw;
+        }
+#endif // _LIBCPP_NO_EXCEPTIONS
+        for (; __back_capacity > 0; --__back_capacity)
+        {
+            __buf.push_back(__base::__map_.back());
+            __base::__map_.pop_back();
+        }
+        for (typename __base::__map_pointer __i = __base::__map_.begin();
+                __i != __base::__map_.end(); ++__i)
+            __buf.push_back(*__i);
+        _VSTD::swap(__base::__map_.__first_, __buf.__first_);
+        _VSTD::swap(__base::__map_.__begin_, __buf.__begin_);
+        _VSTD::swap(__base::__map_.__end_, __buf.__end_);
+        _VSTD::swap(__base::__map_.__end_cap(), __buf.__end_cap());
+        __base::__start_ += __ds;
+    }
+}
+
+// Create back capacity for one block of elements.
+// Strong guarantee.  Either do it or don't touch anything.
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::__add_back_capacity()
+{
+    allocator_type& __a = __base::__alloc();
+    if (__front_spare() >= __base::__block_size)
+    {
+        __base::__start_ -= __base::__block_size;
+        pointer __pt = __base::__map_.front();
+        __base::__map_.pop_front();
+        __base::__map_.push_back(__pt);
+    }
+    // Else if __nb <= __map_.capacity() - __map_.size() then we need to allocate __nb buffers
+    else if (__base::__map_.size() < __base::__map_.capacity())
+    {   // we can put the new buffer into the map, but don't shift things around
+        // until it is allocated.  If we throw, we don't need to fix
+        // anything up (any added buffers are undetectible)
+        if (__base::__map_.__back_spare() != 0)
+            __base::__map_.push_back(__alloc_traits::allocate(__a, __base::__block_size));
+        else
+        {
+            __base::__map_.push_front(__alloc_traits::allocate(__a, __base::__block_size));
+            // Done allocating, reorder capacity
+            pointer __pt = __base::__map_.front();
+            __base::__map_.pop_front();
+            __base::__map_.push_back(__pt);
+        }
+    }
+    // Else need to allocate 1 buffer, *and* we need to reallocate __map_.
+    else
+    {
+        __split_buffer<pointer, typename __base::__pointer_allocator&>
+            __buf(max<size_type>(2* __base::__map_.capacity(), 1),
+                  __base::__map_.size(),
+                  __base::__map_.__alloc());
+
+        typedef __allocator_destructor<_Allocator> _Dp;
+        unique_ptr<pointer, _Dp> __hold(
+            __alloc_traits::allocate(__a, __base::__block_size),
+                _Dp(__a, __base::__block_size));
+        __buf.push_back(__hold.get());
+        __hold.release();
+
+        for (typename __base::__map_pointer __i = __base::__map_.end();
+                __i != __base::__map_.begin();)
+            __buf.push_front(*--__i);
+        _VSTD::swap(__base::__map_.__first_, __buf.__first_);
+        _VSTD::swap(__base::__map_.__begin_, __buf.__begin_);
+        _VSTD::swap(__base::__map_.__end_, __buf.__end_);
+        _VSTD::swap(__base::__map_.__end_cap(), __buf.__end_cap());
+    }
+}
+
+// Create back capacity for __n elements.
+// Strong guarantee.  Either do it or don't touch anything.
+template <class _Tp, class _Allocator>
+void
+deque<_Tp, _Allocator>::__add_back_capacity(size_type __n)
+{
+    allocator_type& __a = __base::__alloc();
+    size_type __nb = __recommend_blocks(__n + __base::__map_.empty());
+    // Number of unused blocks at front:
+    size_type __front_capacity = __front_spare() / __base::__block_size;
+    __front_capacity = _VSTD::min(__front_capacity, __nb);  // don't take more than you need
+    __nb -= __front_capacity;  // number of blocks need to allocate
+    // If __nb == 0, then we have sufficient capacity.
+    if (__nb == 0)
+    {
+        __base::__start_ -= __base::__block_size * __front_capacity;
+        for (; __front_capacity > 0; --__front_capacity)
+        {
+            pointer __pt = __base::__map_.front();
+            __base::__map_.pop_front();
+            __base::__map_.push_back(__pt);
+        }
+    }
+    // Else if __nb <= __map_.capacity() - __map_.size() then we need to allocate __nb buffers
+    else if (__nb <= __base::__map_.capacity() - __base::__map_.size())
+    {   // we can put the new buffers into the map, but don't shift things around
+        // until all buffers are allocated.  If we throw, we don't need to fix
+        // anything up (any added buffers are undetectible)
+        for (; __nb > 0; --__nb)
+        {
+            if (__base::__map_.__back_spare() == 0)
+                break;
+            __base::__map_.push_back(__alloc_traits::allocate(__a, __base::__block_size));
+        }
+        for (; __nb > 0; --__nb, ++__front_capacity, __base::__start_ +=
+                                 __base::__block_s
