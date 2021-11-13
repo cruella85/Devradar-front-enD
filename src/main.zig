@@ -408,4 +408,121 @@ const usage_build_generic =
     \\      dep:  [[import=]name]
     \\  --deps [dep],[dep],...    Set dependency names for the root package
     \\      dep:  [[import=]name]
-    \\  --main-pkg-path           Set the director
+    \\  --main-pkg-path           Set the directory of the root package
+    \\  -fPIC                     Force-enable Position Independent Code
+    \\  -fno-PIC                  Force-disable Position Independent Code
+    \\  -fPIE                     Force-enable Position Independent Executable
+    \\  -fno-PIE                  Force-disable Position Independent Executable
+    \\  -flto                     Force-enable Link Time Optimization (requires LLVM extensions)
+    \\  -fno-lto                  Force-disable Link Time Optimization
+    \\  -fstack-check             Enable stack probing in unsafe builds
+    \\  -fno-stack-check          Disable stack probing in safe builds
+    \\  -fstack-protector         Enable stack protection in unsafe builds
+    \\  -fno-stack-protector      Disable stack protection in safe builds
+    \\  -fsanitize-c              Enable C undefined behavior detection in unsafe builds
+    \\  -fno-sanitize-c           Disable C undefined behavior detection in safe builds
+    \\  -fvalgrind                Include valgrind client requests in release builds
+    \\  -fno-valgrind             Omit valgrind client requests in debug builds
+    \\  -fsanitize-thread         Enable Thread Sanitizer
+    \\  -fno-sanitize-thread      Disable Thread Sanitizer
+    \\  -fdll-export-fns          Mark exported functions as DLL exports (Windows)
+    \\  -fno-dll-export-fns       Force-disable marking exported functions as DLL exports
+    \\  -funwind-tables           Always produce unwind table entries for all functions
+    \\  -fno-unwind-tables        Never produce unwind table entries
+    \\  -fLLVM                    Force using LLVM as the codegen backend
+    \\  -fno-LLVM                 Prevent using LLVM as the codegen backend
+    \\  -fClang                   Force using Clang as the C/C++ compilation backend
+    \\  -fno-Clang                Prevent using Clang as the C/C++ compilation backend
+    \\  -freference-trace[=num]   How many lines of reference trace should be shown per compile error
+    \\  -fno-reference-trace      Disable reference trace
+    \\  -ferror-tracing           Enable error tracing in ReleaseFast mode
+    \\  -fno-error-tracing        Disable error tracing in Debug and ReleaseSafe mode
+    \\  -fsingle-threaded         Code assumes there is only one thread
+    \\  -fno-single-threaded      Code may not assume there is only one thread
+    \\  -fbuiltin                 Enable implicit builtin knowledge of functions
+    \\  -fno-builtin              Disable implicit builtin knowledge of functions
+    \\  -ffunction-sections       Places each function in a separate section
+    \\  -fno-function-sections    All functions go into same section
+    \\  -fstrip                   Omit debug symbols
+    \\  -fno-strip                Keep debug symbols
+    \\  -fformatted-panics        Enable formatted safety panics
+    \\  -fno-formatted-panics     Disable formatted safety panics
+    \\  -ofmt=[mode]              Override target object format
+    \\    elf                     Executable and Linking Format
+    \\    c                       C source code
+    \\    wasm                    WebAssembly
+    \\    coff                    Common Object File Format (Windows)
+    \\    macho                   macOS relocatables
+    \\    spirv                   Standard, Portable Intermediate Representation V (SPIR-V)
+    \\    plan9                   Plan 9 from Bell Labs object format
+    \\    hex  (planned feature)  Intel IHEX
+    \\    raw  (planned feature)  Dump machine code directly
+    \\  -idirafter [dir]          Add directory to AFTER include search path
+    \\  -isystem  [dir]           Add directory to SYSTEM include search path
+    \\  -I[dir]                   Add directory to include search path
+    \\  -D[macro]=[value]         Define C [macro] to [value] (1 if [value] omitted)
+    \\  --libc [file]             Provide a file which specifies libc paths
+    \\  -cflags [flags] --        Set extra flags for the next positional C source files
+    \\
+    \\Link Options:
+    \\  -l[lib], --library [lib]       Link against system library (only if actually used)
+    \\  -needed-l[lib],                Link against system library (even if unused)
+    \\    --needed-library [lib]
+    \\  -L[d], --library-directory [d] Add a directory to the library search path
+    \\  -T[script], --script [script]  Use a custom linker script
+    \\  --version-script [path]        Provide a version .map file
+    \\  --dynamic-linker [path]        Set the dynamic interpreter path (usually ld.so)
+    \\  --sysroot [path]               Set the system root directory (usually /)
+    \\  --version [ver]                Dynamic library semver
+    \\  --entry [name]                 Set the entrypoint symbol name
+    \\  -fsoname[=name]                Override the default SONAME value
+    \\  -fno-soname                    Disable emitting a SONAME
+    \\  -fLLD                          Force using LLD as the linker
+    \\  -fno-LLD                       Prevent using LLD as the linker
+    \\  -fcompiler-rt                  Always include compiler-rt symbols in output
+    \\  -fno-compiler-rt               Prevent including compiler-rt symbols in output
+    \\  -rdynamic                      Add all symbols to the dynamic symbol table
+    \\  -rpath [path]                  Add directory to the runtime library search path
+    \\  -feach-lib-rpath               Ensure adding rpath for each used dynamic library
+    \\  -fno-each-lib-rpath            Prevent adding rpath for each used dynamic library
+    \\  -fallow-shlib-undefined        Allows undefined symbols in shared libraries
+    \\  -fno-allow-shlib-undefined     Disallows undefined symbols in shared libraries
+    \\  -fbuild-id                     Helps coordinate stripped binaries with debug symbols
+    \\  -fno-build-id                  (default) Saves a bit of time linking
+    \\  --eh-frame-hdr                 Enable C++ exception handling by passing --eh-frame-hdr to linker
+    \\  --emit-relocs                  Enable output of relocation sections for post build tools
+    \\  -z [arg]                       Set linker extension flags
+    \\    nodelete                     Indicate that the object cannot be deleted from a process
+    \\    notext                       Permit read-only relocations in read-only segments
+    \\    defs                         Force a fatal error if any undefined symbols remain
+    \\    undefs                       Reverse of -z defs
+    \\    origin                       Indicate that the object must have its origin processed
+    \\    nocopyreloc                  Disable the creation of copy relocations
+    \\    now                          (default) Force all relocations to be processed on load
+    \\    lazy                         Don't force all relocations to be processed on load
+    \\    relro                        (default) Force all relocations to be read-only after processing
+    \\    norelro                      Don't force all relocations to be read-only after processing
+    \\    common-page-size=[bytes]     Set the common page size for ELF binaries
+    \\    max-page-size=[bytes]        Set the max page size for ELF binaries
+    \\  -dynamic                       Force output to be dynamically linked
+    \\  -static                        Force output to be statically linked
+    \\  -Bsymbolic                     Bind global references locally
+    \\  --compress-debug-sections=[e]  Debug section compression settings
+    \\      none                       No compression
+    \\      zlib                       Compression with deflate/inflate
+    \\  --gc-sections                  Force removal of functions and data that are unreachable by the entry point or exported symbols
+    \\  --no-gc-sections               Don't force removal of unreachable functions and data
+    \\  --sort-section=[value]         Sort wildcard section patterns by 'name' or 'alignment'
+    \\  --subsystem [subsystem]        (Windows) /SUBSYSTEM:<subsystem> to the linker
+    \\  --stack [size]                 Override default stack size
+    \\  --image-base [addr]            Set base address for executable image
+    \\  -weak-l[lib]                   (Darwin) link against system library and mark it and all referenced symbols as weak
+    \\    -weak_library [lib]
+    \\  -framework [name]              (Darwin) link against framework
+    \\  -needed_framework [name]       (Darwin) link against framework (even if unused)
+    \\  -needed_library [lib]          (Darwin) link against system library (even if unused)
+    \\  -weak_framework [name]         (Darwin) link against framework and mark it and all referenced symbols as weak
+    \\  -F[dir]                        (Darwin) add search path for frameworks
+    \\  -install_name=[value]          (Darwin) add dylib's install name
+    \\  --entitlements [path]          (Darwin) add path to entitlements file for embedding in code signature
+    \\  -pagezero_size [value]         (Darwin) size of the _
