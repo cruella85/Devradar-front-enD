@@ -249,4 +249,163 @@ pub fn mainArgs(gpa: Allocator, arena: Allocator, args: []const []const u8) !voi
         if (mem.eql(u8, args[1], "cc")) {
             return std.process.execve(arena, args[1..], &env_map);
         } else {
-            const modified_args = try aren
+            const modified_args = try arena.dupe([]const u8, args);
+            modified_args[0] = "cc";
+            return std.process.execve(arena, modified_args, &env_map);
+        }
+    }
+
+    defer log_scopes.deinit(gpa);
+
+    const cmd = args[1];
+    const cmd_args = args[2..];
+    if (mem.eql(u8, cmd, "build-exe")) {
+        return buildOutputType(gpa, arena, args, .{ .build = .Exe });
+    } else if (mem.eql(u8, cmd, "build-lib")) {
+        return buildOutputType(gpa, arena, args, .{ .build = .Lib });
+    } else if (mem.eql(u8, cmd, "build-obj")) {
+        return buildOutputType(gpa, arena, args, .{ .build = .Obj });
+    } else if (mem.eql(u8, cmd, "test")) {
+        return buildOutputType(gpa, arena, args, .zig_test);
+    } else if (mem.eql(u8, cmd, "run")) {
+        return buildOutputType(gpa, arena, args, .run);
+    } else if (mem.eql(u8, cmd, "dlltool") or
+        mem.eql(u8, cmd, "ranlib") or
+        mem.eql(u8, cmd, "lib") or
+        mem.eql(u8, cmd, "ar"))
+    {
+        return process.exit(try llvmArMain(arena, args));
+    } else if (mem.eql(u8, cmd, "cc")) {
+        return buildOutputType(gpa, arena, args, .cc);
+    } else if (mem.eql(u8, cmd, "c++")) {
+        return buildOutputType(gpa, arena, args, .cpp);
+    } else if (mem.eql(u8, cmd, "translate-c")) {
+        return buildOutputType(gpa, arena, args, .translate_c);
+    } else if (mem.eql(u8, cmd, "clang") or
+        mem.eql(u8, cmd, "-cc1") or mem.eql(u8, cmd, "-cc1as"))
+    {
+        return process.exit(try clangMain(arena, args));
+    } else if (mem.eql(u8, cmd, "ld.lld") or
+        mem.eql(u8, cmd, "lld-link") or
+        mem.eql(u8, cmd, "wasm-ld"))
+    {
+        return process.exit(try lldMain(arena, args, true));
+    } else if (mem.eql(u8, cmd, "build")) {
+        return cmdBuild(gpa, arena, cmd_args);
+    } else if (mem.eql(u8, cmd, "fmt")) {
+        return cmdFmt(gpa, arena, cmd_args);
+    } else if (mem.eql(u8, cmd, "objcopy")) {
+        return @import("objcopy.zig").cmdObjCopy(gpa, arena, cmd_args);
+    } else if (mem.eql(u8, cmd, "libc")) {
+        return cmdLibC(gpa, cmd_args);
+    } else if (mem.eql(u8, cmd, "init-exe")) {
+        return cmdInit(gpa, arena, cmd_args, .Exe);
+    } else if (mem.eql(u8, cmd, "init-lib")) {
+        return cmdInit(gpa, arena, cmd_args, .Lib);
+    } else if (mem.eql(u8, cmd, "targets")) {
+        const info = try detectNativeTargetInfo(.{});
+        const stdout = io.getStdOut().writer();
+        return @import("print_targets.zig").cmdTargets(arena, cmd_args, stdout, info.target);
+    } else if (mem.eql(u8, cmd, "version")) {
+        try std.io.getStdOut().writeAll(build_options.version ++ "\n");
+        // Check libc++ linkage to make sure Zig was built correctly, but only for "env" and "version"
+        // to avoid affecting the startup time for build-critical commands (check takes about ~10 μs)
+        return verifyLibcxxCorrectlyLinked();
+    } else if (mem.eql(u8, cmd, "env")) {
+        verifyLibcxxCorrectlyLinked();
+        return @import("print_env.zig").cmdEnv(arena, cmd_args, io.getStdOut().writer());
+    } else if (mem.eql(u8, cmd, "zen")) {
+        return io.getStdOut().writeAll(info_zen);
+    } else if (mem.eql(u8, cmd, "help") or mem.eql(u8, cmd, "-h") or mem.eql(u8, cmd, "--help")) {
+        return io.getStdOut().writeAll(usage);
+    } else if (mem.eql(u8, cmd, "ast-check")) {
+        return cmdAstCheck(gpa, arena, cmd_args);
+    } else if (debug_extensions_enabled and mem.eql(u8, cmd, "changelist")) {
+        return cmdChangelist(gpa, arena, cmd_args);
+    } else {
+        std.log.info("{s}", .{usage});
+        fatal("unknown command: {s}", .{args[1]});
+    }
+}
+
+const usage_build_generic =
+    \\Usage: zig build-exe   [options] [files]
+    \\       zig build-lib   [options] [files]
+    \\       zig build-obj   [options] [files]
+    \\       zig test        [options] [files]
+    \\       zig run         [options] [files] [-- [args]]
+    \\       zig translate-c [options] [file]
+    \\
+    \\Supported file types:
+    \\                    .zig    Zig source code
+    \\                      .o    ELF object file
+    \\                      .o    Mach-O (macOS) object file
+    \\                      .o    WebAssembly object file
+    \\                    .obj    COFF (Windows) object file
+    \\                    .lib    COFF (Windows) static library
+    \\                      .a    ELF static library
+    \\                      .a    Mach-O (macOS) static library
+    \\                      .a    WebAssembly static library
+    \\                     .so    ELF shared object (dynamic link)
+    \\                    .dll    Windows Dynamic Link Library
+    \\                  .dylib    Mach-O (macOS) dynamic library
+    \\                    .tbd    (macOS) text-based dylib definition
+    \\                      .s    Target-specific assembly source code
+    \\                      .S    Assembly with C preprocessor (requires LLVM extensions)
+    \\                      .c    C source code (requires LLVM extensions)
+    \\  .cxx .cc .C .cpp .stub    C++ source code (requires LLVM extensions)
+    \\                      .m    Objective-C source code (requires LLVM extensions)
+    \\                     .mm    Objective-C++ source code (requires LLVM extensions)
+    \\                     .bc    LLVM IR Module (requires LLVM extensions)
+    \\                     .cu    Cuda source code (requires LLVM extensions)
+    \\
+    \\General Options:
+    \\  -h, --help                Print this help and exit
+    \\  --watch                   Enable compiler REPL
+    \\  --color [auto|off|on]     Enable or disable colored error messages
+    \\  -femit-bin[=path]         (default) Output machine code
+    \\  -fno-emit-bin             Do not output machine code
+    \\  -femit-asm[=path]         Output .s (assembly code)
+    \\  -fno-emit-asm             (default) Do not output .s (assembly code)
+    \\  -femit-llvm-ir[=path]     Produce a .ll file with LLVM IR (requires LLVM extensions)
+    \\  -fno-emit-llvm-ir         (default) Do not produce a .ll file with LLVM IR
+    \\  -femit-llvm-bc[=path]     Produce a LLVM module as a .bc file (requires LLVM extensions)
+    \\  -fno-emit-llvm-bc         (default) Do not produce a LLVM module as a .bc file
+    \\  -femit-h[=path]           Generate a C header file (.h)
+    \\  -fno-emit-h               (default) Do not generate a C header file (.h)
+    \\  -femit-docs[=path]        Create a docs/ dir with html documentation
+    \\  -fno-emit-docs            (default) Do not produce docs/ dir with html documentation
+    \\  -femit-analysis[=path]    Write analysis JSON file with type information
+    \\  -fno-emit-analysis        (default) Do not write analysis JSON file with type information
+    \\  -femit-implib[=path]      (default) Produce an import .lib when building a Windows DLL
+    \\  -fno-emit-implib          Do not produce an import .lib when building a Windows DLL
+    \\  --show-builtin            Output the source of @import("builtin") then exit
+    \\  --cache-dir [path]        Override the local cache directory
+    \\  --global-cache-dir [path] Override the global cache directory
+    \\  --zig-lib-dir [path]      Override path to Zig installation lib directory
+    \\  --enable-cache            Output to cache directory; print path to stdout
+    \\
+    \\Compile Options:
+    \\  -target [name]            <arch><sub>-<os>-<abi> see the targets command
+    \\  -mcpu [cpu]               Specify target CPU and feature set
+    \\  -mcmodel=[default|tiny|   Limit range of code and data virtual addresses
+    \\            small|kernel|
+    \\            medium|large]
+    \\  -x language               Treat subsequent input files as having type <language>
+    \\  -mred-zone                Force-enable the "red-zone"
+    \\  -mno-red-zone             Force-disable the "red-zone"
+    \\  -fomit-frame-pointer      Omit the stack frame pointer
+    \\  -fno-omit-frame-pointer   Store the stack frame pointer
+    \\  -mexec-model=[value]      (WASI) Execution model
+    \\  --name [name]             Override root name (not a file path)
+    \\  -O [mode]                 Choose what to optimize for
+    \\    Debug                   (default) Optimizations off, safety on
+    \\    ReleaseFast             Optimizations on, safety off
+    \\    ReleaseSafe             Optimizations on, safety on
+    \\    ReleaseSmall            Optimize for small binary, safety off
+    \\  --mod [name]:[deps]:[src] Make a module available for dependency under the given name
+    \\      deps: [dep],[dep],...
+    \\      dep:  [[import=]name]
+    \\  --deps [dep],[dep],...    Set dependency names for the root package
+    \\      dep:  [[import=]name]
+    \\  --main-pkg-path           Set the director
