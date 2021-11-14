@@ -525,4 +525,217 @@ const usage_build_generic =
     \\  -F[dir]                        (Darwin) add search path for frameworks
     \\  -install_name=[value]          (Darwin) add dylib's install name
     \\  --entitlements [path]          (Darwin) add path to entitlements file for embedding in code signature
-    \\  -pagezero_size [value]         (Darwin) size of the _
+    \\  -pagezero_size [value]         (Darwin) size of the __PAGEZERO segment in hexadecimal notation
+    \\  -search_paths_first            (Darwin) search each dir in library search paths for `libx.dylib` then `libx.a`
+    \\  -search_dylibs_first           (Darwin) search `libx.dylib` in each dir in library search paths, then `libx.a`
+    \\  -headerpad [value]             (Darwin) set minimum space for future expansion of the load commands in hexadecimal notation
+    \\  -headerpad_max_install_names   (Darwin) set enough space as if all paths were MAXPATHLEN
+    \\  -dead_strip                    (Darwin) remove functions and data that are unreachable by the entry point or exported symbols
+    \\  -dead_strip_dylibs             (Darwin) remove dylibs that are unreachable by the entry point or exported symbols
+    \\  --import-memory                (WebAssembly) import memory from the environment
+    \\  --import-symbols               (WebAssembly) import missing symbols from the host environment
+    \\  --import-table                 (WebAssembly) import function table from the host environment
+    \\  --export-table                 (WebAssembly) export function table to the host environment
+    \\  --initial-memory=[bytes]       (WebAssembly) initial size of the linear memory
+    \\  --max-memory=[bytes]           (WebAssembly) maximum size of the linear memory
+    \\  --shared-memory                (WebAssembly) use shared linear memory
+    \\  --global-base=[addr]           (WebAssembly) where to start to place global data
+    \\  --export=[value]               (WebAssembly) Force a symbol to be exported
+    \\
+    \\Test Options:
+    \\  --test-filter [text]           Skip tests that do not match filter
+    \\  --test-name-prefix [text]      Add prefix to all tests
+    \\  --test-cmd [arg]               Specify test execution command one arg at a time
+    \\  --test-cmd-bin                 Appends test binary path to test cmd args
+    \\  --test-evented-io              Runs the test in evented I/O mode
+    \\  --test-no-exec                 Compiles test binary without running it
+    \\  --test-runner [path]           Specify a custom test runner
+    \\
+    \\Debug Options (Zig Compiler Development):
+    \\  -fopt-bisect-limit [limit]   Only run [limit] first LLVM optimization passes
+    \\  -ftime-report                Print timing diagnostics
+    \\  -fstack-report               Print stack size diagnostics
+    \\  --verbose-link               Display linker invocations
+    \\  --verbose-cc                 Display C compiler invocations
+    \\  --verbose-air                Enable compiler debug output for Zig AIR
+    \\  --verbose-llvm-ir            Enable compiler debug output for LLVM IR
+    \\  --verbose-cimport            Enable compiler debug output for C imports
+    \\  --verbose-llvm-cpu-features  Enable compiler debug output for LLVM CPU features
+    \\  --debug-log [scope]          Enable printing debug/info log messages for scope
+    \\  --debug-compile-errors       Crash with helpful diagnostics at the first compile error
+    \\  --debug-link-snapshot        Enable dumping of the linker's state in JSON format
+    \\
+;
+
+const repl_help =
+    \\Commands:
+    \\         update  Detect changes to source files and update output files.
+    \\            run  Execute the output file, if it is an executable or test.
+    \\ update-and-run  Perform an `update` followed by `run`.
+    \\           help  Print this text
+    \\           exit  Quit this repl
+    \\
+;
+
+const SOName = union(enum) {
+    no,
+    yes_default_value,
+    yes: []const u8,
+};
+
+const EmitBin = union(enum) {
+    no,
+    yes_default_path,
+    yes: []const u8,
+    yes_a_out,
+};
+
+const Emit = union(enum) {
+    no,
+    yes_default_path,
+    yes: []const u8,
+
+    const Resolved = struct {
+        data: ?Compilation.EmitLoc,
+        dir: ?fs.Dir,
+
+        fn deinit(self: *Resolved) void {
+            if (self.dir) |*dir| {
+                dir.close();
+            }
+        }
+    };
+
+    fn resolve(emit: Emit, default_basename: []const u8) !Resolved {
+        var resolved: Resolved = .{ .data = null, .dir = null };
+        errdefer resolved.deinit();
+
+        switch (emit) {
+            .no => {},
+            .yes_default_path => {
+                resolved.data = Compilation.EmitLoc{
+                    .directory = .{ .path = null, .handle = fs.cwd() },
+                    .basename = default_basename,
+                };
+            },
+            .yes => |full_path| {
+                const basename = fs.path.basename(full_path);
+                if (fs.path.dirname(full_path)) |dirname| {
+                    const handle = try fs.cwd().openDir(dirname, .{});
+                    resolved = .{
+                        .dir = handle,
+                        .data = Compilation.EmitLoc{
+                            .basename = basename,
+                            .directory = .{
+                                .path = dirname,
+                                .handle = handle,
+                            },
+                        },
+                    };
+                } else {
+                    resolved.data = Compilation.EmitLoc{
+                        .basename = basename,
+                        .directory = .{ .path = null, .handle = fs.cwd() },
+                    };
+                }
+            },
+        }
+        return resolved;
+    }
+};
+
+fn optionalStringEnvVar(arena: Allocator, name: []const u8) !?[]const u8 {
+    // Env vars aren't used in the bootstrap stage.
+    if (build_options.only_c) {
+        return null;
+    }
+    if (std.process.getEnvVarOwned(arena, name)) |value| {
+        return value;
+    } else |err| switch (err) {
+        error.EnvironmentVariableNotFound => return null,
+        else => |e| return e,
+    }
+}
+
+const ArgMode = union(enum) {
+    build: std.builtin.OutputMode,
+    cc,
+    cpp,
+    translate_c,
+    zig_test,
+    run,
+};
+
+fn buildOutputType(
+    gpa: Allocator,
+    arena: Allocator,
+    all_args: []const []const u8,
+    arg_mode: ArgMode,
+) !void {
+    var color: Color = .auto;
+    var optimize_mode: std.builtin.Mode = .Debug;
+    var provided_name: ?[]const u8 = null;
+    var link_mode: ?std.builtin.LinkMode = null;
+    var dll_export_fns: ?bool = null;
+    var single_threaded: ?bool = null;
+    var root_src_file: ?[]const u8 = null;
+    var version: std.builtin.Version = .{ .major = 0, .minor = 0, .patch = 0 };
+    var have_version = false;
+    var compatibility_version: ?std.builtin.Version = null;
+    var strip: ?bool = null;
+    var formatted_panics: ?bool = null;
+    var function_sections = false;
+    var no_builtin = false;
+    var watch = false;
+    var debug_compile_errors = false;
+    var verbose_link = (builtin.os.tag != .wasi or builtin.link_libc) and std.process.hasEnvVarConstant("ZIG_VERBOSE_LINK");
+    var verbose_cc = (builtin.os.tag != .wasi or builtin.link_libc) and std.process.hasEnvVarConstant("ZIG_VERBOSE_CC");
+    var verbose_air = false;
+    var verbose_llvm_ir = false;
+    var verbose_cimport = false;
+    var verbose_llvm_cpu_features = false;
+    var time_report = false;
+    var stack_report = false;
+    var show_builtin = false;
+    var emit_bin: EmitBin = .yes_default_path;
+    var emit_asm: Emit = .no;
+    var emit_llvm_ir: Emit = .no;
+    var emit_llvm_bc: Emit = .no;
+    var emit_docs: Emit = .no;
+    var emit_analysis: Emit = .no;
+    var emit_implib: Emit = .yes_default_path;
+    var emit_implib_arg_provided = false;
+    var target_arch_os_abi: []const u8 = "native";
+    var target_mcpu: ?[]const u8 = null;
+    var target_dynamic_linker: ?[]const u8 = null;
+    var target_ofmt: ?[]const u8 = null;
+    var output_mode: std.builtin.OutputMode = undefined;
+    var emit_h: Emit = .no;
+    var soname: SOName = undefined;
+    var ensure_libc_on_non_freestanding = false;
+    var ensure_libcpp_on_non_freestanding = false;
+    var link_libc = false;
+    var link_libcpp = false;
+    var link_libunwind = false;
+    var want_native_include_dirs = false;
+    var enable_cache: ?bool = null;
+    var want_pic: ?bool = null;
+    var want_pie: ?bool = null;
+    var want_lto: ?bool = null;
+    var want_unwind_tables: ?bool = null;
+    var want_sanitize_c: ?bool = null;
+    var want_stack_check: ?bool = null;
+    var want_stack_protector: ?u32 = null;
+    var want_red_zone: ?bool = null;
+    var omit_frame_pointer: ?bool = null;
+    var want_valgrind: ?bool = null;
+    var want_tsan: ?bool = null;
+    var want_compiler_rt: ?bool = null;
+    var rdynamic: bool = false;
+    var linker_script: ?[]const u8 = null;
+    var version_script: ?[]const u8 = null;
+    var disable_c_depfile = false;
+    var linker_sort_section: ?link.SortSection = null;
+    var linker_gc_sections: ?bool = null;
+    var linker_compress_debug_sections: ?link.CompressDebugSections = null;
+    var linker_allow_shlib_undefined: ?bool = null;
