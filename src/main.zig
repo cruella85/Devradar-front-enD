@@ -739,3 +739,209 @@ fn buildOutputType(
     var linker_gc_sections: ?bool = null;
     var linker_compress_debug_sections: ?link.CompressDebugSections = null;
     var linker_allow_shlib_undefined: ?bool = null;
+    var linker_bind_global_refs_locally: ?bool = null;
+    var linker_import_memory: ?bool = null;
+    var linker_import_symbols: bool = false;
+    var linker_import_table: bool = false;
+    var linker_export_table: bool = false;
+    var linker_initial_memory: ?u64 = null;
+    var linker_max_memory: ?u64 = null;
+    var linker_shared_memory: bool = false;
+    var linker_global_base: ?u64 = null;
+    var linker_print_gc_sections: bool = false;
+    var linker_print_icf_sections: bool = false;
+    var linker_print_map: bool = false;
+    var linker_opt_bisect_limit: i32 = -1;
+    var linker_z_nocopyreloc = false;
+    var linker_z_nodelete = false;
+    var linker_z_notext = false;
+    var linker_z_defs = false;
+    var linker_z_origin = false;
+    var linker_z_now = true;
+    var linker_z_relro = true;
+    var linker_z_common_page_size: ?u64 = null;
+    var linker_z_max_page_size: ?u64 = null;
+    var linker_tsaware = false;
+    var linker_nxcompat = false;
+    var linker_dynamicbase = false;
+    var linker_optimization: ?u8 = null;
+    var linker_module_definition_file: ?[]const u8 = null;
+    var test_evented_io = false;
+    var test_no_exec = false;
+    var entry: ?[]const u8 = null;
+    var stack_size_override: ?u64 = null;
+    var image_base_override: ?u64 = null;
+    var use_llvm: ?bool = null;
+    var use_lld: ?bool = null;
+    var use_clang: ?bool = null;
+    var link_eh_frame_hdr = false;
+    var link_emit_relocs = false;
+    var each_lib_rpath: ?bool = null;
+    var build_id: ?bool = null;
+    var sysroot: ?[]const u8 = null;
+    var libc_paths_file: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_LIBC");
+    var machine_code_model: std.builtin.CodeModel = .default;
+    var runtime_args_start: ?usize = null;
+    var test_filter: ?[]const u8 = null;
+    var test_name_prefix: ?[]const u8 = null;
+    var test_runner_path: ?[]const u8 = null;
+    var override_local_cache_dir: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_LOCAL_CACHE_DIR");
+    var override_global_cache_dir: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_GLOBAL_CACHE_DIR");
+    var override_lib_dir: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_LIB_DIR");
+    var main_pkg_path: ?[]const u8 = null;
+    var clang_preprocessor_mode: Compilation.ClangPreprocessorMode = .no;
+    var subsystem: ?std.Target.SubSystem = null;
+    var major_subsystem_version: ?u32 = null;
+    var minor_subsystem_version: ?u32 = null;
+    var wasi_exec_model: ?std.builtin.WasiExecModel = null;
+    var enable_link_snapshots: bool = false;
+    var native_darwin_sdk: ?std.zig.system.darwin.DarwinSDK = null;
+    var install_name: ?[]const u8 = null;
+    var hash_style: link.HashStyle = .both;
+    var entitlements: ?[]const u8 = null;
+    var pagezero_size: ?u64 = null;
+    var search_strategy: ?link.File.MachO.SearchStrategy = null;
+    var headerpad_size: ?u32 = null;
+    var headerpad_max_install_names: bool = false;
+    var dead_strip_dylibs: bool = false;
+    var reference_trace: ?u32 = null;
+    var error_tracing: ?bool = null;
+    var pdb_out_path: ?[]const u8 = null;
+
+    // e.g. -m3dnow or -mno-outline-atomics. They correspond to std.Target llvm cpu feature names.
+    // This array is populated by zig cc frontend and then has to be converted to zig-style
+    // CPU features.
+    var llvm_m_args = std.ArrayList([]const u8).init(gpa);
+    defer llvm_m_args.deinit();
+
+    var system_libs = std.StringArrayHashMap(Compilation.SystemLib).init(gpa);
+    defer system_libs.deinit();
+
+    var static_libs = std.ArrayList([]const u8).init(gpa);
+    defer static_libs.deinit();
+
+    var wasi_emulated_libs = std.ArrayList(wasi_libc.CRTFile).init(gpa);
+    defer wasi_emulated_libs.deinit();
+
+    var clang_argv = std.ArrayList([]const u8).init(gpa);
+    defer clang_argv.deinit();
+
+    var extra_cflags = std.ArrayList([]const u8).init(gpa);
+    defer extra_cflags.deinit();
+
+    var lib_dirs = std.ArrayList([]const u8).init(gpa);
+    defer lib_dirs.deinit();
+
+    var rpath_list = std.ArrayList([]const u8).init(gpa);
+    defer rpath_list.deinit();
+
+    var c_source_files = std.ArrayList(Compilation.CSourceFile).init(gpa);
+    defer c_source_files.deinit();
+
+    var link_objects = std.ArrayList(Compilation.LinkObject).init(gpa);
+    defer link_objects.deinit();
+
+    // This map is a flag per link_objects item, used to represent the
+    // `-l :file.so` syntax from gcc/clang.
+    // This is only exposed from the `zig cc` interface. It means that the `path`
+    // field from the corresponding `link_objects` element is a suffix, and is
+    // to be tried against each library path as a prefix until an existing file is found.
+    // This map remains empty for the main CLI.
+    var link_objects_lib_search_paths: std.AutoHashMapUnmanaged(u32, void) = .{};
+
+    var framework_dirs = std.ArrayList([]const u8).init(gpa);
+    defer framework_dirs.deinit();
+
+    var frameworks: std.StringArrayHashMapUnmanaged(Compilation.SystemLib) = .{};
+
+    // null means replace with the test executable binary
+    var test_exec_args = std.ArrayList(?[]const u8).init(gpa);
+    defer test_exec_args.deinit();
+
+    var linker_export_symbol_names = std.ArrayList([]const u8).init(gpa);
+    defer linker_export_symbol_names.deinit();
+
+    // Contains every module specified via --mod. The dependencies are added
+    // after argument parsing is completed. We use a StringArrayHashMap to make
+    // error output consistent.
+    var modules = std.StringArrayHashMap(struct {
+        mod: *Package,
+        deps_str: []const u8, // still in CLI arg format
+    }).init(gpa);
+    defer {
+        var it = modules.iterator();
+        while (it.next()) |kv| kv.value_ptr.mod.destroy(gpa);
+        modules.deinit();
+    }
+
+    // The dependency string for the root package
+    var root_deps_str: ?[]const u8 = null;
+
+    // before arg parsing, check for the NO_COLOR environment variable
+    // if it exists, default the color setting to .off
+    // explicit --color arguments will still override this setting.
+    // Disable color on WASI per https://github.com/WebAssembly/WASI/issues/162
+    color = if (builtin.os.tag == .wasi or std.process.hasEnvVarConstant("NO_COLOR")) .off else .auto;
+
+    switch (arg_mode) {
+        .build, .translate_c, .zig_test, .run => {
+            var optimize_mode_string: ?[]const u8 = null;
+            switch (arg_mode) {
+                .build => |m| {
+                    output_mode = m;
+                },
+                .translate_c => {
+                    emit_bin = .no;
+                    output_mode = .Obj;
+                },
+                .zig_test, .run => {
+                    output_mode = .Exe;
+                },
+                else => unreachable,
+            }
+
+            soname = .yes_default_value;
+
+            const Iterator = struct {
+                resp_file: ?ArgIteratorResponseFile = null,
+                args: []const []const u8,
+                i: usize = 0,
+                fn next(it: *@This()) ?[]const u8 {
+                    if (it.i >= it.args.len) {
+                        if (it.resp_file) |*resp| return resp.next();
+                        return null;
+                    }
+                    defer it.i += 1;
+                    return it.args[it.i];
+                }
+                fn nextOrFatal(it: *@This()) []const u8 {
+                    if (it.i >= it.args.len) {
+                        if (it.resp_file) |*resp| if (resp.next()) |ret| return ret;
+                        fatal("expected parameter after {s}", .{it.args[it.i - 1]});
+                    }
+                    defer it.i += 1;
+                    return it.args[it.i];
+                }
+            };
+            var args_iter = Iterator{
+                .args = all_args[2..],
+            };
+
+            var cssan = ClangSearchSanitizer.init(gpa, &clang_argv);
+            defer cssan.map.deinit();
+
+            var file_ext: ?Compilation.FileExt = null;
+            args_loop: while (args_iter.next()) |arg| {
+                if (mem.startsWith(u8, arg, "@")) {
+                    // This is a "compiler response file". We must parse the file and treat its
+                    // contents as command line parameters.
+                    const resp_file_path = arg[1..];
+                    args_iter.resp_file = initArgIteratorResponseFile(arena, resp_file_path) catch |err| {
+                        fatal("unable to read response file '{s}': {s}", .{ resp_file_path, @errorName(err) });
+                    };
+                } else if (mem.startsWith(u8, arg, "-")) {
+                    if (mem.eql(u8, arg, "-h") or mem.eql(u8, arg, "--help")) {
+                        try io.getStdOut().writeAll(usage_build_generic);
+                        return cleanExit();
+                    } else if (mem.eql(u8, arg, "--")) {
+                        if (arg_mode =
