@@ -944,4 +944,135 @@ fn buildOutputType(
                         try io.getStdOut().writeAll(usage_build_generic);
                         return cleanExit();
                     } else if (mem.eql(u8, arg, "--")) {
-                        if (arg_mode =
+                        if (arg_mode == .run) {
+                            // args_iter.i is 1, referring the next arg after "--" in ["--", ...]
+                            // Add +2 to the index so it is relative to all_args
+                            runtime_args_start = args_iter.i + 2;
+                            break :args_loop;
+                        } else {
+                            fatal("unexpected end-of-parameter mark: --", .{});
+                        }
+                    } else if (mem.eql(u8, arg, "--mod")) {
+                        const info = args_iter.nextOrFatal();
+                        var info_it = mem.split(u8, info, ":");
+                        const mod_name = info_it.next() orelse fatal("expected non-empty argument after {s}", .{arg});
+                        const deps_str = info_it.next() orelse fatal("expected 'name:deps:path' after {s}", .{arg});
+                        const root_src_orig = info_it.rest();
+                        if (root_src_orig.len == 0) fatal("expected 'name:deps:path' after {s}", .{arg});
+                        if (mod_name.len == 0) fatal("empty name for module at '{s}'", .{root_src_orig});
+
+                        const root_src = try introspect.resolvePath(arena, root_src_orig);
+
+                        for ([_][]const u8{ "std", "root", "builtin" }) |name| {
+                            if (mem.eql(u8, mod_name, name)) {
+                                fatal("unable to add module '{s}' -> '{s}': conflicts with builtin module", .{ mod_name, root_src });
+                            }
+                        }
+
+                        var mod_it = modules.iterator();
+                        while (mod_it.next()) |kv| {
+                            if (std.mem.eql(u8, mod_name, kv.key_ptr.*)) {
+                                fatal("unable to add module '{s}' -> '{s}': already exists as '{s}'", .{ mod_name, root_src, kv.value_ptr.mod.root_src_path });
+                            }
+                        }
+
+                        try modules.ensureUnusedCapacity(1);
+                        modules.put(mod_name, .{
+                            .mod = try Package.create(
+                                gpa,
+                                fs.path.dirname(root_src),
+                                fs.path.basename(root_src),
+                            ),
+                            .deps_str = deps_str,
+                        }) catch unreachable;
+                    } else if (mem.eql(u8, arg, "--deps")) {
+                        if (root_deps_str != null) {
+                            fatal("only one --deps argument is allowed", .{});
+                        }
+                        root_deps_str = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--main-pkg-path")) {
+                        main_pkg_path = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "-cflags")) {
+                        extra_cflags.shrinkRetainingCapacity(0);
+                        while (true) {
+                            const next_arg = args_iter.next() orelse {
+                                fatal("expected -- after -cflags", .{});
+                            };
+                            if (mem.eql(u8, next_arg, "--")) break;
+                            try extra_cflags.append(next_arg);
+                        }
+                    } else if (mem.eql(u8, arg, "--color")) {
+                        const next_arg = args_iter.next() orelse {
+                            fatal("expected [auto|on|off] after --color", .{});
+                        };
+                        color = std.meta.stringToEnum(Color, next_arg) orelse {
+                            fatal("expected [auto|on|off] after --color, found '{s}'", .{next_arg});
+                        };
+                    } else if (mem.eql(u8, arg, "--subsystem")) {
+                        subsystem = try parseSubSystem(args_iter.nextOrFatal());
+                    } else if (mem.eql(u8, arg, "-O")) {
+                        optimize_mode_string = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--entry")) {
+                        entry = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--stack")) {
+                        const next_arg = args_iter.nextOrFatal();
+                        stack_size_override = std.fmt.parseUnsigned(u64, next_arg, 0) catch |err| {
+                            fatal("unable to parse stack size '{s}': {s}", .{ next_arg, @errorName(err) });
+                        };
+                    } else if (mem.eql(u8, arg, "--image-base")) {
+                        const next_arg = args_iter.nextOrFatal();
+                        image_base_override = std.fmt.parseUnsigned(u64, next_arg, 0) catch |err| {
+                            fatal("unable to parse image base override '{s}': {s}", .{ next_arg, @errorName(err) });
+                        };
+                    } else if (mem.eql(u8, arg, "--name")) {
+                        provided_name = args_iter.nextOrFatal();
+                        if (!mem.eql(u8, provided_name.?, fs.path.basename(provided_name.?)))
+                            fatal("invalid package name '{s}': cannot contain folder separators", .{provided_name.?});
+                    } else if (mem.eql(u8, arg, "-rpath")) {
+                        try rpath_list.append(args_iter.nextOrFatal());
+                    } else if (mem.eql(u8, arg, "--library-directory") or mem.eql(u8, arg, "-L")) {
+                        try lib_dirs.append(args_iter.nextOrFatal());
+                    } else if (mem.eql(u8, arg, "-F")) {
+                        try framework_dirs.append(args_iter.nextOrFatal());
+                    } else if (mem.eql(u8, arg, "-framework")) {
+                        try frameworks.put(gpa, args_iter.nextOrFatal(), .{});
+                    } else if (mem.eql(u8, arg, "-weak_framework")) {
+                        try frameworks.put(gpa, args_iter.nextOrFatal(), .{ .weak = true });
+                    } else if (mem.eql(u8, arg, "-needed_framework")) {
+                        try frameworks.put(gpa, args_iter.nextOrFatal(), .{ .needed = true });
+                    } else if (mem.eql(u8, arg, "-install_name")) {
+                        install_name = args_iter.nextOrFatal();
+                    } else if (mem.startsWith(u8, arg, "--compress-debug-sections=")) {
+                        const param = arg["--compress-debug-sections=".len..];
+                        linker_compress_debug_sections = std.meta.stringToEnum(link.CompressDebugSections, param) orelse {
+                            fatal("expected --compress-debug-sections=[none|zlib], found '{s}'", .{param});
+                        };
+                    } else if (mem.eql(u8, arg, "--compress-debug-sections")) {
+                        linker_compress_debug_sections = link.CompressDebugSections.zlib;
+                    } else if (mem.eql(u8, arg, "-pagezero_size")) {
+                        const next_arg = args_iter.nextOrFatal();
+                        pagezero_size = std.fmt.parseUnsigned(u64, eatIntPrefix(next_arg, 16), 16) catch |err| {
+                            fatal("unable to parse pagezero size'{s}': {s}", .{ next_arg, @errorName(err) });
+                        };
+                    } else if (mem.eql(u8, arg, "-search_paths_first")) {
+                        search_strategy = .paths_first;
+                    } else if (mem.eql(u8, arg, "-search_dylibs_first")) {
+                        search_strategy = .dylibs_first;
+                    } else if (mem.eql(u8, arg, "-headerpad")) {
+                        const next_arg = args_iter.nextOrFatal();
+                        headerpad_size = std.fmt.parseUnsigned(u32, eatIntPrefix(next_arg, 16), 16) catch |err| {
+                            fatal("unable to parse headerpat size '{s}': {s}", .{ next_arg, @errorName(err) });
+                        };
+                    } else if (mem.eql(u8, arg, "-headerpad_max_install_names")) {
+                        headerpad_max_install_names = true;
+                    } else if (mem.eql(u8, arg, "-dead_strip")) {
+                        linker_gc_sections = true;
+                    } else if (mem.eql(u8, arg, "-dead_strip_dylibs")) {
+                        dead_strip_dylibs = true;
+                    } else if (mem.eql(u8, arg, "-T") or mem.eql(u8, arg, "--script")) {
+                        linker_script = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--version-script")) {
+                        version_script = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--library") or mem.eql(u8, arg, "-l")) {
+                        // We don't know whether this library is part of libc or libc++ until
+                        // we resolve the target, so we simply appen
