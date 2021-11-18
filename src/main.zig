@@ -1075,4 +1075,139 @@ fn buildOutputType(
                         version_script = args_iter.nextOrFatal();
                     } else if (mem.eql(u8, arg, "--library") or mem.eql(u8, arg, "-l")) {
                         // We don't know whether this library is part of libc or libc++ until
-                        // we resolve the target, so we simply appen
+                        // we resolve the target, so we simply append to the list for now.
+                        try system_libs.put(args_iter.nextOrFatal(), .{});
+                    } else if (mem.eql(u8, arg, "--needed-library") or
+                        mem.eql(u8, arg, "-needed-l") or
+                        mem.eql(u8, arg, "-needed_library"))
+                    {
+                        const next_arg = args_iter.nextOrFatal();
+                        try system_libs.put(next_arg, .{ .needed = true });
+                    } else if (mem.eql(u8, arg, "-weak_library") or mem.eql(u8, arg, "-weak-l")) {
+                        try system_libs.put(args_iter.nextOrFatal(), .{ .weak = true });
+                    } else if (mem.eql(u8, arg, "-D")) {
+                        try clang_argv.append(arg);
+                        try clang_argv.append(args_iter.nextOrFatal());
+                    } else if (mem.eql(u8, arg, "-I")) {
+                        try cssan.addIncludePath(.I, arg, args_iter.nextOrFatal(), false);
+                    } else if (mem.eql(u8, arg, "-isystem") or mem.eql(u8, arg, "-iwithsysroot")) {
+                        try cssan.addIncludePath(.isystem, arg, args_iter.nextOrFatal(), false);
+                    } else if (mem.eql(u8, arg, "-idirafter")) {
+                        try cssan.addIncludePath(.idirafter, arg, args_iter.nextOrFatal(), false);
+                    } else if (mem.eql(u8, arg, "-iframework") or mem.eql(u8, arg, "-iframeworkwithsysroot")) {
+                        try cssan.addIncludePath(.iframework, arg, args_iter.nextOrFatal(), false);
+                    } else if (mem.eql(u8, arg, "--version")) {
+                        const next_arg = args_iter.nextOrFatal();
+                        version = std.builtin.Version.parse(next_arg) catch |err| {
+                            fatal("unable to parse --version '{s}': {s}", .{ next_arg, @errorName(err) });
+                        };
+                        have_version = true;
+                    } else if (mem.eql(u8, arg, "-target")) {
+                        target_arch_os_abi = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "-mcpu")) {
+                        target_mcpu = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "-mcmodel")) {
+                        machine_code_model = parseCodeModel(args_iter.nextOrFatal());
+                    } else if (mem.startsWith(u8, arg, "-ofmt=")) {
+                        target_ofmt = arg["-ofmt=".len..];
+                    } else if (mem.startsWith(u8, arg, "-mcpu=")) {
+                        target_mcpu = arg["-mcpu=".len..];
+                    } else if (mem.startsWith(u8, arg, "-mcmodel=")) {
+                        machine_code_model = parseCodeModel(arg["-mcmodel=".len..]);
+                    } else if (mem.startsWith(u8, arg, "-O")) {
+                        optimize_mode_string = arg["-O".len..];
+                    } else if (mem.eql(u8, arg, "--dynamic-linker")) {
+                        target_dynamic_linker = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--sysroot")) {
+                        sysroot = args_iter.nextOrFatal();
+                        try clang_argv.append("-isysroot");
+                        try clang_argv.append(sysroot.?);
+                    } else if (mem.eql(u8, arg, "--libc")) {
+                        libc_paths_file = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--test-filter")) {
+                        test_filter = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--test-name-prefix")) {
+                        test_name_prefix = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--test-runner")) {
+                        test_runner_path = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--test-cmd")) {
+                        try test_exec_args.append(args_iter.nextOrFatal());
+                    } else if (mem.eql(u8, arg, "--cache-dir")) {
+                        override_local_cache_dir = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--global-cache-dir")) {
+                        override_global_cache_dir = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--zig-lib-dir")) {
+                        override_lib_dir = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "--debug-log")) {
+                        if (!build_options.enable_logging) {
+                            std.log.warn("Zig was compiled without logging enabled (-Dlog). --debug-log has no effect.", .{});
+                        } else {
+                            try log_scopes.append(gpa, args_iter.nextOrFatal());
+                        }
+                    } else if (mem.eql(u8, arg, "--debug-link-snapshot")) {
+                        if (!build_options.enable_link_snapshots) {
+                            std.log.warn("Zig was compiled without linker snapshots enabled (-Dlink-snapshot). --debug-link-snapshot has no effect.", .{});
+                        } else {
+                            enable_link_snapshots = true;
+                        }
+                    } else if (mem.eql(u8, arg, "--entitlements")) {
+                        entitlements = args_iter.nextOrFatal();
+                    } else if (mem.eql(u8, arg, "-fcompiler-rt")) {
+                        want_compiler_rt = true;
+                    } else if (mem.eql(u8, arg, "-fno-compiler-rt")) {
+                        want_compiler_rt = false;
+                    } else if (mem.eql(u8, arg, "-feach-lib-rpath")) {
+                        each_lib_rpath = true;
+                    } else if (mem.eql(u8, arg, "-fno-each-lib-rpath")) {
+                        each_lib_rpath = false;
+                    } else if (mem.eql(u8, arg, "-fbuild-id")) {
+                        build_id = true;
+                    } else if (mem.eql(u8, arg, "-fno-build-id")) {
+                        build_id = false;
+                    } else if (mem.eql(u8, arg, "--enable-cache")) {
+                        enable_cache = true;
+                    } else if (mem.eql(u8, arg, "--test-cmd-bin")) {
+                        try test_exec_args.append(null);
+                    } else if (mem.eql(u8, arg, "--test-evented-io")) {
+                        test_evented_io = true;
+                    } else if (mem.eql(u8, arg, "--test-no-exec")) {
+                        test_no_exec = true;
+                    } else if (mem.eql(u8, arg, "--watch")) {
+                        watch = true;
+                    } else if (mem.eql(u8, arg, "-ftime-report")) {
+                        time_report = true;
+                    } else if (mem.eql(u8, arg, "-fstack-report")) {
+                        stack_report = true;
+                    } else if (mem.eql(u8, arg, "-fPIC")) {
+                        want_pic = true;
+                    } else if (mem.eql(u8, arg, "-fno-PIC")) {
+                        want_pic = false;
+                    } else if (mem.eql(u8, arg, "-fPIE")) {
+                        want_pie = true;
+                    } else if (mem.eql(u8, arg, "-fno-PIE")) {
+                        want_pie = false;
+                    } else if (mem.eql(u8, arg, "-flto")) {
+                        want_lto = true;
+                    } else if (mem.eql(u8, arg, "-fno-lto")) {
+                        want_lto = false;
+                    } else if (mem.eql(u8, arg, "-funwind-tables")) {
+                        want_unwind_tables = true;
+                    } else if (mem.eql(u8, arg, "-fno-unwind-tables")) {
+                        want_unwind_tables = false;
+                    } else if (mem.eql(u8, arg, "-fstack-check")) {
+                        want_stack_check = true;
+                    } else if (mem.eql(u8, arg, "-fno-stack-check")) {
+                        want_stack_check = false;
+                    } else if (mem.eql(u8, arg, "-fstack-protector")) {
+                        want_stack_protector = Compilation.default_stack_protector_buffer_size;
+                    } else if (mem.eql(u8, arg, "-fno-stack-protector")) {
+                        want_stack_protector = 0;
+                    } else if (mem.eql(u8, arg, "-mred-zone")) {
+                        want_red_zone = true;
+                    } else if (mem.eql(u8, arg, "-mno-red-zone")) {
+                        want_red_zone = false;
+                    } else if (mem.eql(u8, arg, "-fomit-frame-pointer")) {
+                        omit_frame_pointer = true;
+                    } else if (mem.eql(u8, arg, "-fno-omit-frame-pointer")) {
+                        omit_frame_pointer = false;
+                    } else if (mem.eql(u8, arg, "
