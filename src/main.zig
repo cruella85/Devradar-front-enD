@@ -1502,4 +1502,158 @@ fn buildOutputType(
             var out_path: ?[]const u8 = null;
             var is_shared_lib = false;
             var linker_args = std.ArrayList([]const u8).init(arena);
-            var it = ClangArgIterat
+            var it = ClangArgIterator.init(arena, all_args);
+            var emit_llvm = false;
+            var needed = false;
+            var must_link = false;
+            var force_static_libs = false;
+            var file_ext: ?Compilation.FileExt = null;
+            while (it.has_next) {
+                it.next() catch |err| {
+                    fatal("unable to parse command line parameters: {s}", .{@errorName(err)});
+                };
+                switch (it.zig_equivalent) {
+                    .target => target_arch_os_abi = it.only_arg, // example: -target riscv64-linux-unknown
+                    .o => {
+                        // We handle -o /dev/null equivalent to -fno-emit-bin because
+                        // otherwise our atomic rename into place will fail. This also
+                        // makes Zig do less work, avoiding pointless file system operations.
+                        if (mem.eql(u8, it.only_arg, "/dev/null")) {
+                            emit_bin = .no;
+                        } else {
+                            out_path = it.only_arg;
+                        }
+                    },
+                    .c => c_out_mode = .object, // -c
+                    .asm_only => c_out_mode = .assembly, // -S
+                    .preprocess_only => c_out_mode = .preprocessor, // -E
+                    .emit_llvm => emit_llvm = true,
+                    .x => {
+                        const lang = mem.sliceTo(it.only_arg, 0);
+                        if (mem.eql(u8, lang, "none")) {
+                            file_ext = null;
+                        } else if (Compilation.LangToExt.get(lang)) |got_ext| {
+                            file_ext = got_ext;
+                        } else {
+                            fatal("language not recognized: '{s}'", .{lang});
+                        }
+                    },
+                    .other => {
+                        try clang_argv.appendSlice(it.other_args);
+                    },
+                    .positional => switch (file_ext orelse
+                        Compilation.classifyFileExt(mem.sliceTo(it.only_arg, 0))) {
+                        .assembly, .assembly_with_cpp, .c, .cpp, .ll, .bc, .h, .m, .mm, .cu => {
+                            try c_source_files.append(.{
+                                .src_path = it.only_arg,
+                                .ext = file_ext, // duped while parsing the args.
+                            });
+                        },
+                        .unknown, .shared_library, .object, .static_library => try link_objects.append(.{
+                            .path = it.only_arg,
+                            .must_link = must_link,
+                        }),
+                        .def => {
+                            linker_module_definition_file = it.only_arg;
+                        },
+                        .zig => {
+                            if (root_src_file) |other| {
+                                fatal("found another zig file '{s}' after root source file '{s}'", .{ it.only_arg, other });
+                            } else root_src_file = it.only_arg;
+                        },
+                    },
+                    .l => {
+                        // -l
+                        // We don't know whether this library is part of libc or libc++ until
+                        // we resolve the target, so we simply append to the list for now.
+                        if (mem.startsWith(u8, it.only_arg, ":")) {
+                            // This "feature" of gcc/clang means to treat this as a positional
+                            // link object, but using the library search directories as a prefix.
+                            try link_objects.append(.{
+                                .path = it.only_arg[1..],
+                                .must_link = must_link,
+                            });
+                            const index = @intCast(u32, link_objects.items.len - 1);
+                            try link_objects_lib_search_paths.put(arena, index, {});
+                        } else if (force_static_libs) {
+                            try static_libs.append(it.only_arg);
+                        } else {
+                            try system_libs.put(it.only_arg, .{ .needed = needed });
+                        }
+                    },
+                    .ignore => {},
+                    .driver_punt => {
+                        // Never mind what we're doing, just pass the args directly. For example --help.
+                        return process.exit(try clangMain(arena, all_args));
+                    },
+                    .pic => want_pic = true,
+                    .no_pic => want_pic = false,
+                    .pie => want_pie = true,
+                    .no_pie => want_pie = false,
+                    .lto => want_lto = true,
+                    .no_lto => want_lto = false,
+                    .red_zone => want_red_zone = true,
+                    .no_red_zone => want_red_zone = false,
+                    .omit_frame_pointer => omit_frame_pointer = true,
+                    .no_omit_frame_pointer => omit_frame_pointer = false,
+                    .function_sections => function_sections = true,
+                    .no_function_sections => function_sections = false,
+                    .builtin => no_builtin = false,
+                    .no_builtin => no_builtin = true,
+                    .color_diagnostics => color = .on,
+                    .no_color_diagnostics => color = .off,
+                    .stack_check => want_stack_check = true,
+                    .no_stack_check => want_stack_check = false,
+                    .stack_protector => {
+                        if (want_stack_protector == null) {
+                            want_stack_protector = Compilation.default_stack_protector_buffer_size;
+                        }
+                    },
+                    .no_stack_protector => want_stack_protector = 0,
+                    .unwind_tables => want_unwind_tables = true,
+                    .no_unwind_tables => want_unwind_tables = false,
+                    .nostdlib => {
+                        ensure_libc_on_non_freestanding = false;
+                        ensure_libcpp_on_non_freestanding = false;
+                    },
+                    .nostdlib_cpp => ensure_libcpp_on_non_freestanding = false,
+                    .shared => {
+                        link_mode = .Dynamic;
+                        is_shared_lib = true;
+                    },
+                    .rdynamic => rdynamic = true,
+                    .wl => {
+                        var split_it = mem.split(u8, it.only_arg, ",");
+                        while (split_it.next()) |linker_arg| {
+                            // Handle nested-joined args like `-Wl,-rpath=foo`.
+                            // Must be prefixed with 1 or 2 dashes.
+                            if (linker_arg.len >= 3 and
+                                linker_arg[0] == '-' and
+                                linker_arg[2] != '-')
+                            {
+                                if (mem.indexOfScalar(u8, linker_arg, '=')) |equals_pos| {
+                                    const key = linker_arg[0..equals_pos];
+                                    const value = linker_arg[equals_pos + 1 ..];
+                                    if (mem.eql(u8, key, "build-id")) {
+                                        build_id = true;
+                                        warn("ignoring build-id style argument: '{s}'", .{value});
+                                        continue;
+                                    } else if (mem.eql(u8, key, "--sort-common")) {
+                                        // this ignores --sort=common=<anything>; ignoring plain --sort-common
+                                        // is done below.
+                                        continue;
+                                    }
+                                    try linker_args.append(key);
+                                    try linker_args.append(value);
+                                    continue;
+                                }
+                            }
+                            if (mem.eql(u8, linker_arg, "--as-needed")) {
+                                needed = false;
+                            } else if (mem.eql(u8, linker_arg, "--no-as-needed")) {
+                                needed = true;
+                            } else if (mem.eql(u8, linker_arg, "-no-pie")) {
+                                want_pie = false;
+                            } else if (mem.eql(u8, linker_arg, "--sort-common")) {
+                                // from ld.lld(1): --sort-common is ignored for GNU compatibility,
+                                // this ignores plain --sort
