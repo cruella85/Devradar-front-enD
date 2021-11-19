@@ -1210,4 +1210,147 @@ fn buildOutputType(
                         omit_frame_pointer = true;
                     } else if (mem.eql(u8, arg, "-fno-omit-frame-pointer")) {
                         omit_frame_pointer = false;
-                    } else if (mem.eql(u8, arg, "
+                    } else if (mem.eql(u8, arg, "-fsanitize-c")) {
+                        want_sanitize_c = true;
+                    } else if (mem.eql(u8, arg, "-fno-sanitize-c")) {
+                        want_sanitize_c = false;
+                    } else if (mem.eql(u8, arg, "-fvalgrind")) {
+                        want_valgrind = true;
+                    } else if (mem.eql(u8, arg, "-fno-valgrind")) {
+                        want_valgrind = false;
+                    } else if (mem.eql(u8, arg, "-fsanitize-thread")) {
+                        want_tsan = true;
+                    } else if (mem.eql(u8, arg, "-fno-sanitize-thread")) {
+                        want_tsan = false;
+                    } else if (mem.eql(u8, arg, "-fLLVM")) {
+                        use_llvm = true;
+                    } else if (mem.eql(u8, arg, "-fno-LLVM")) {
+                        use_llvm = false;
+                    } else if (mem.eql(u8, arg, "-fLLD")) {
+                        use_lld = true;
+                    } else if (mem.eql(u8, arg, "-fno-LLD")) {
+                        use_lld = false;
+                    } else if (mem.eql(u8, arg, "-fClang")) {
+                        use_clang = true;
+                    } else if (mem.eql(u8, arg, "-fno-Clang")) {
+                        use_clang = false;
+                    } else if (mem.eql(u8, arg, "-freference-trace")) {
+                        reference_trace = 256;
+                    } else if (mem.startsWith(u8, arg, "-freference-trace=")) {
+                        const num = arg["-freference-trace=".len..];
+                        reference_trace = std.fmt.parseUnsigned(u32, num, 10) catch |err| {
+                            fatal("unable to parse reference_trace count '{s}': {s}", .{ num, @errorName(err) });
+                        };
+                    } else if (mem.eql(u8, arg, "-fno-reference-trace")) {
+                        reference_trace = null;
+                    } else if (mem.eql(u8, arg, "-ferror-tracing")) {
+                        error_tracing = true;
+                    } else if (mem.eql(u8, arg, "-fno-error-tracing")) {
+                        error_tracing = false;
+                    } else if (mem.eql(u8, arg, "-rdynamic")) {
+                        rdynamic = true;
+                    } else if (mem.eql(u8, arg, "-fsoname")) {
+                        soname = .yes_default_value;
+                    } else if (mem.startsWith(u8, arg, "-fsoname=")) {
+                        soname = .{ .yes = arg["-fsoname=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-soname")) {
+                        soname = .no;
+                    } else if (mem.eql(u8, arg, "-femit-bin")) {
+                        emit_bin = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-bin=")) {
+                        emit_bin = .{ .yes = arg["-femit-bin=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-bin")) {
+                        emit_bin = .no;
+                    } else if (mem.eql(u8, arg, "-femit-h")) {
+                        emit_h = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-h=")) {
+                        emit_h = .{ .yes = arg["-femit-h=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-h")) {
+                        emit_h = .no;
+                    } else if (mem.eql(u8, arg, "-femit-asm")) {
+                        emit_asm = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-asm=")) {
+                        emit_asm = .{ .yes = arg["-femit-asm=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-asm")) {
+                        emit_asm = .no;
+                    } else if (mem.eql(u8, arg, "-femit-llvm-ir")) {
+                        emit_llvm_ir = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-llvm-ir=")) {
+                        emit_llvm_ir = .{ .yes = arg["-femit-llvm-ir=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-llvm-ir")) {
+                        emit_llvm_ir = .no;
+                    } else if (mem.eql(u8, arg, "-femit-llvm-bc")) {
+                        emit_llvm_bc = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-llvm-bc=")) {
+                        emit_llvm_bc = .{ .yes = arg["-femit-llvm-bc=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-llvm-bc")) {
+                        emit_llvm_bc = .no;
+                    } else if (mem.eql(u8, arg, "-femit-docs")) {
+                        emit_docs = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-docs=")) {
+                        emit_docs = .{ .yes = arg["-femit-docs=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-docs")) {
+                        emit_docs = .no;
+                    } else if (mem.eql(u8, arg, "-femit-analysis")) {
+                        emit_analysis = .yes_default_path;
+                    } else if (mem.startsWith(u8, arg, "-femit-analysis=")) {
+                        emit_analysis = .{ .yes = arg["-femit-analysis=".len..] };
+                    } else if (mem.eql(u8, arg, "-fno-emit-analysis")) {
+                        emit_analysis = .no;
+                    } else if (mem.eql(u8, arg, "-femit-implib")) {
+                        emit_implib = .yes_default_path;
+                        emit_implib_arg_provided = true;
+                    } else if (mem.startsWith(u8, arg, "-femit-implib=")) {
+                        emit_implib = .{ .yes = arg["-femit-implib=".len..] };
+                        emit_implib_arg_provided = true;
+                    } else if (mem.eql(u8, arg, "-fno-emit-implib")) {
+                        emit_implib = .no;
+                        emit_implib_arg_provided = true;
+                    } else if (mem.eql(u8, arg, "-dynamic")) {
+                        link_mode = .Dynamic;
+                    } else if (mem.eql(u8, arg, "-static")) {
+                        link_mode = .Static;
+                    } else if (mem.eql(u8, arg, "-fdll-export-fns")) {
+                        dll_export_fns = true;
+                    } else if (mem.eql(u8, arg, "-fno-dll-export-fns")) {
+                        dll_export_fns = false;
+                    } else if (mem.eql(u8, arg, "--show-builtin")) {
+                        show_builtin = true;
+                        emit_bin = .no;
+                    } else if (mem.eql(u8, arg, "-fstrip")) {
+                        strip = true;
+                    } else if (mem.eql(u8, arg, "-fno-strip")) {
+                        strip = false;
+                    } else if (mem.eql(u8, arg, "-fformatted-panics")) {
+                        formatted_panics = true;
+                    } else if (mem.eql(u8, arg, "-fno-formatted-panics")) {
+                        formatted_panics = false;
+                    } else if (mem.eql(u8, arg, "-fsingle-threaded")) {
+                        single_threaded = true;
+                    } else if (mem.eql(u8, arg, "-fno-single-threaded")) {
+                        single_threaded = false;
+                    } else if (mem.eql(u8, arg, "-ffunction-sections")) {
+                        function_sections = true;
+                    } else if (mem.eql(u8, arg, "-fno-function-sections")) {
+                        function_sections = false;
+                    } else if (mem.eql(u8, arg, "-fbuiltin")) {
+                        no_builtin = false;
+                    } else if (mem.eql(u8, arg, "-fno-builtin")) {
+                        no_builtin = true;
+                    } else if (mem.startsWith(u8, arg, "-fopt-bisect-limit=")) {
+                        linker_opt_bisect_limit = std.math.lossyCast(i32, parseIntSuffix(arg, "-fopt-bisect-limit=".len));
+                    } else if (mem.eql(u8, arg, "--eh-frame-hdr")) {
+                        link_eh_frame_hdr = true;
+                    } else if (mem.eql(u8, arg, "--emit-relocs")) {
+                        link_emit_relocs = true;
+                    } else if (mem.eql(u8, arg, "-fallow-shlib-undefined")) {
+                        linker_allow_shlib_undefined = true;
+                    } else if (mem.eql(u8, arg, "-fno-allow-shlib-undefined")) {
+                        linker_allow_shlib_undefined = false;
+                    } else if (mem.eql(u8, arg, "-z")) {
+                        const z_arg = args_iter.nextOrFatal();
+                        if (mem.eql(u8, z_arg, "nodelete")) {
+                            linker_z_nodelete = true;
+                        } else if (mem.eql(u8, z_arg, "notext")) {
+                            linker_z_notext = true;
+    
