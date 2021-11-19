@@ -1353,4 +1353,153 @@ fn buildOutputType(
                             linker_z_nodelete = true;
                         } else if (mem.eql(u8, z_arg, "notext")) {
                             linker_z_notext = true;
-    
+                        } else if (mem.eql(u8, z_arg, "defs")) {
+                            linker_z_defs = true;
+                        } else if (mem.eql(u8, z_arg, "undefs")) {
+                            linker_z_defs = false;
+                        } else if (mem.eql(u8, z_arg, "origin")) {
+                            linker_z_origin = true;
+                        } else if (mem.eql(u8, z_arg, "nocopyreloc")) {
+                            linker_z_nocopyreloc = true;
+                        } else if (mem.eql(u8, z_arg, "now")) {
+                            linker_z_now = true;
+                        } else if (mem.eql(u8, z_arg, "lazy")) {
+                            linker_z_now = false;
+                        } else if (mem.eql(u8, z_arg, "relro")) {
+                            linker_z_relro = true;
+                        } else if (mem.eql(u8, z_arg, "norelro")) {
+                            linker_z_relro = false;
+                        } else if (mem.startsWith(u8, z_arg, "common-page-size=")) {
+                            linker_z_common_page_size = parseIntSuffix(z_arg, "common-page-size=".len);
+                        } else if (mem.startsWith(u8, z_arg, "max-page-size=")) {
+                            linker_z_max_page_size = parseIntSuffix(z_arg, "max-page-size=".len);
+                        } else {
+                            fatal("unsupported linker extension flag: -z {s}", .{z_arg});
+                        }
+                    } else if (mem.eql(u8, arg, "--import-memory")) {
+                        linker_import_memory = true;
+                    } else if (mem.eql(u8, arg, "--import-symbols")) {
+                        linker_import_symbols = true;
+                    } else if (mem.eql(u8, arg, "--import-table")) {
+                        linker_import_table = true;
+                    } else if (mem.eql(u8, arg, "--export-table")) {
+                        linker_export_table = true;
+                    } else if (mem.startsWith(u8, arg, "--initial-memory=")) {
+                        linker_initial_memory = parseIntSuffix(arg, "--initial-memory=".len);
+                    } else if (mem.startsWith(u8, arg, "--max-memory=")) {
+                        linker_max_memory = parseIntSuffix(arg, "--max-memory=".len);
+                    } else if (mem.startsWith(u8, arg, "--shared-memory")) {
+                        linker_shared_memory = true;
+                    } else if (mem.startsWith(u8, arg, "--global-base=")) {
+                        linker_global_base = parseIntSuffix(arg, "--global-base=".len);
+                    } else if (mem.startsWith(u8, arg, "--export=")) {
+                        try linker_export_symbol_names.append(arg["--export=".len..]);
+                    } else if (mem.eql(u8, arg, "-Bsymbolic")) {
+                        linker_bind_global_refs_locally = true;
+                    } else if (mem.eql(u8, arg, "--gc-sections")) {
+                        linker_gc_sections = true;
+                    } else if (mem.eql(u8, arg, "--no-gc-sections")) {
+                        linker_gc_sections = false;
+                    } else if (mem.eql(u8, arg, "--debug-compile-errors")) {
+                        if (!crash_report.is_enabled) {
+                            std.log.warn("Zig was compiled in a release mode. --debug-compile-errors has no effect.", .{});
+                        } else {
+                            debug_compile_errors = true;
+                        }
+                    } else if (mem.eql(u8, arg, "--verbose-link")) {
+                        verbose_link = true;
+                    } else if (mem.eql(u8, arg, "--verbose-cc")) {
+                        verbose_cc = true;
+                    } else if (mem.eql(u8, arg, "--verbose-air")) {
+                        verbose_air = true;
+                    } else if (mem.eql(u8, arg, "--verbose-llvm-ir")) {
+                        verbose_llvm_ir = true;
+                    } else if (mem.eql(u8, arg, "--verbose-cimport")) {
+                        verbose_cimport = true;
+                    } else if (mem.eql(u8, arg, "--verbose-llvm-cpu-features")) {
+                        verbose_llvm_cpu_features = true;
+                    } else if (mem.startsWith(u8, arg, "-T")) {
+                        linker_script = arg[2..];
+                    } else if (mem.startsWith(u8, arg, "-L")) {
+                        try lib_dirs.append(arg[2..]);
+                    } else if (mem.startsWith(u8, arg, "-F")) {
+                        try framework_dirs.append(arg[2..]);
+                    } else if (mem.startsWith(u8, arg, "-l")) {
+                        // We don't know whether this library is part of libc or libc++ until
+                        // we resolve the target, so we simply append to the list for now.
+                        try system_libs.put(arg["-l".len..], .{});
+                    } else if (mem.startsWith(u8, arg, "-needed-l")) {
+                        try system_libs.put(arg["-needed-l".len..], .{ .needed = true });
+                    } else if (mem.startsWith(u8, arg, "-weak-l")) {
+                        try system_libs.put(arg["-weak-l".len..], .{ .weak = true });
+                    } else if (mem.startsWith(u8, arg, "-D")) {
+                        try clang_argv.append(arg);
+                    } else if (mem.startsWith(u8, arg, "-I")) {
+                        try cssan.addIncludePath(.I, arg, arg[2..], true);
+                    } else if (mem.eql(u8, arg, "-x")) {
+                        const lang = args_iter.nextOrFatal();
+                        if (mem.eql(u8, lang, "none")) {
+                            file_ext = null;
+                        } else if (Compilation.LangToExt.get(lang)) |got_ext| {
+                            file_ext = got_ext;
+                        } else {
+                            fatal("language not recognized: '{s}'", .{lang});
+                        }
+                    } else if (mem.startsWith(u8, arg, "-mexec-model=")) {
+                        wasi_exec_model = std.meta.stringToEnum(std.builtin.WasiExecModel, arg["-mexec-model=".len..]) orelse {
+                            fatal("expected [command|reactor] for -mexec-mode=[value], found '{s}'", .{arg["-mexec-model=".len..]});
+                        };
+                    } else {
+                        fatal("unrecognized parameter: '{s}'", .{arg});
+                    }
+                } else switch (file_ext orelse
+                    Compilation.classifyFileExt(arg)) {
+                    .object, .static_library, .shared_library => try link_objects.append(.{ .path = arg }),
+                    .assembly, .assembly_with_cpp, .c, .cpp, .h, .ll, .bc, .m, .mm, .cu => {
+                        try c_source_files.append(.{
+                            .src_path = arg,
+                            .extra_flags = try arena.dupe([]const u8, extra_cflags.items),
+                            // duped when parsing the args.
+                            .ext = file_ext,
+                        });
+                    },
+                    .zig => {
+                        if (root_src_file) |other| {
+                            fatal("found another zig file '{s}' after root source file '{s}'", .{ arg, other });
+                        } else root_src_file = arg;
+                    },
+                    .def, .unknown => {
+                        fatal("unrecognized file extension of parameter '{s}'", .{arg});
+                    },
+                }
+            }
+            if (optimize_mode_string) |s| {
+                optimize_mode = std.meta.stringToEnum(std.builtin.Mode, s) orelse
+                    fatal("unrecognized optimization mode: '{s}'", .{s});
+            }
+        },
+        .cc, .cpp => {
+            if (build_options.only_c) unreachable;
+
+            emit_h = .no;
+            soname = .no;
+            ensure_libc_on_non_freestanding = true;
+            ensure_libcpp_on_non_freestanding = arg_mode == .cpp;
+            want_native_include_dirs = true;
+            // Clang's driver enables this switch unconditionally.
+            // Disabling the emission of .eh_frame_hdr can unexpectedly break
+            // some functionality that depend on it, such as C++ exceptions and
+            // DWARF-based stack traces.
+            link_eh_frame_hdr = true;
+
+            const COutMode = enum {
+                link,
+                object,
+                assembly,
+                preprocessor,
+            };
+            var c_out_mode: COutMode = .link;
+            var out_path: ?[]const u8 = null;
+            var is_shared_lib = false;
+            var linker_args = std.ArrayList([]const u8).init(arena);
+            var it = ClangArgIterat
