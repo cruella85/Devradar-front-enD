@@ -1656,4 +1656,171 @@ fn buildOutputType(
                                 want_pie = false;
                             } else if (mem.eql(u8, linker_arg, "--sort-common")) {
                                 // from ld.lld(1): --sort-common is ignored for GNU compatibility,
-                                // this ignores plain --sort
+                                // this ignores plain --sort-common
+                            } else if (mem.eql(u8, linker_arg, "--whole-archive") or
+                                mem.eql(u8, linker_arg, "-whole-archive"))
+                            {
+                                must_link = true;
+                            } else if (mem.eql(u8, linker_arg, "--no-whole-archive") or
+                                mem.eql(u8, linker_arg, "-no-whole-archive"))
+                            {
+                                must_link = false;
+                            } else if (mem.eql(u8, linker_arg, "-Bdynamic") or
+                                mem.eql(u8, linker_arg, "-dy") or
+                                mem.eql(u8, linker_arg, "-call_shared"))
+                            {
+                                force_static_libs = false;
+                            } else if (mem.eql(u8, linker_arg, "-Bstatic") or
+                                mem.eql(u8, linker_arg, "-dn") or
+                                mem.eql(u8, linker_arg, "-non_shared") or
+                                mem.eql(u8, linker_arg, "-static"))
+                            {
+                                force_static_libs = true;
+                            } else if (mem.eql(u8, linker_arg, "-search_paths_first")) {
+                                search_strategy = .paths_first;
+                            } else if (mem.eql(u8, linker_arg, "-search_dylibs_first")) {
+                                search_strategy = .dylibs_first;
+                            } else {
+                                try linker_args.append(linker_arg);
+                            }
+                        }
+                    },
+                    .optimize => {
+                        // Alright, what release mode do they want?
+                        const level = if (it.only_arg.len >= 1 and it.only_arg[0] == 'O') it.only_arg[1..] else it.only_arg;
+                        if (mem.eql(u8, level, "s") or
+                            mem.eql(u8, level, "z"))
+                        {
+                            optimize_mode = .ReleaseSmall;
+                        } else if (mem.eql(u8, level, "1") or
+                            mem.eql(u8, level, "2") or
+                            mem.eql(u8, level, "3") or
+                            mem.eql(u8, level, "4") or
+                            mem.eql(u8, level, "fast"))
+                        {
+                            optimize_mode = .ReleaseFast;
+                        } else if (mem.eql(u8, level, "g") or
+                            mem.eql(u8, level, "0"))
+                        {
+                            optimize_mode = .Debug;
+                        } else {
+                            try clang_argv.appendSlice(it.other_args);
+                        }
+                    },
+                    .debug => {
+                        strip = false;
+                        if (mem.eql(u8, it.only_arg, "g")) {
+                            // We handled with strip = false above.
+                        } else if (mem.eql(u8, it.only_arg, "g1") or
+                            mem.eql(u8, it.only_arg, "gline-tables-only"))
+                        {
+                            // We handled with strip = false above. but we also want reduced debug info.
+                            try clang_argv.append("-gline-tables-only");
+                        } else {
+                            try clang_argv.appendSlice(it.other_args);
+                        }
+                    },
+                    .sanitize => {
+                        if (mem.eql(u8, it.only_arg, "undefined")) {
+                            want_sanitize_c = true;
+                        } else if (mem.eql(u8, it.only_arg, "thread")) {
+                            want_tsan = true;
+                        } else {
+                            try clang_argv.appendSlice(it.other_args);
+                        }
+                    },
+                    .linker_script => linker_script = it.only_arg,
+                    .verbose => {
+                        verbose_link = true;
+                        // Have Clang print more infos, some tools such as CMake
+                        // parse this to discover any implicit include and
+                        // library dir to look-up into.
+                        try clang_argv.append("-v");
+                    },
+                    .dry_run => {
+                        verbose_link = true;
+                        try clang_argv.append("-###");
+                        // This flag is supposed to mean "dry run" but currently this
+                        // will actually still execute. The tracking issue for this is
+                        // https://github.com/ziglang/zig/issues/7170
+                    },
+                    .for_linker => try linker_args.append(it.only_arg),
+                    .linker_input_z => {
+                        try linker_args.append("-z");
+                        try linker_args.append(it.only_arg);
+                    },
+                    .lib_dir => try lib_dirs.append(it.only_arg),
+                    .mcpu => target_mcpu = it.only_arg,
+                    .m => try llvm_m_args.append(it.only_arg),
+                    .dep_file => {
+                        disable_c_depfile = true;
+                        try clang_argv.appendSlice(it.other_args);
+                    },
+                    .dep_file_to_stdout => { // -M, -MM
+                        // "Like -MD, but also implies -E and writes to stdout by default"
+                        // "Like -MMD, but also implies -E and writes to stdout by default"
+                        c_out_mode = .preprocessor;
+                        disable_c_depfile = true;
+                        try clang_argv.appendSlice(it.other_args);
+                    },
+                    .framework_dir => try framework_dirs.append(it.only_arg),
+                    .framework => try frameworks.put(gpa, it.only_arg, .{}),
+                    .nostdlibinc => want_native_include_dirs = false,
+                    .strip => strip = true,
+                    .exec_model => {
+                        wasi_exec_model = std.meta.stringToEnum(std.builtin.WasiExecModel, it.only_arg) orelse {
+                            fatal("expected [command|reactor] for -mexec-mode=[value], found '{s}'", .{it.only_arg});
+                        };
+                    },
+                    .sysroot => {
+                        sysroot = it.only_arg;
+                    },
+                    .entry => {
+                        entry = it.only_arg;
+                    },
+                    .weak_library => try system_libs.put(it.only_arg, .{ .weak = true }),
+                    .weak_framework => try frameworks.put(gpa, it.only_arg, .{ .weak = true }),
+                    .headerpad_max_install_names => headerpad_max_install_names = true,
+                    .compress_debug_sections => {
+                        if (it.only_arg.len == 0) {
+                            linker_compress_debug_sections = .zlib;
+                        } else {
+                            linker_compress_debug_sections = std.meta.stringToEnum(link.CompressDebugSections, it.only_arg) orelse {
+                                fatal("expected [none|zlib] after --compress-debug-sections, found '{s}'", .{it.only_arg});
+                            };
+                        }
+                    },
+                    .install_name => {
+                        install_name = it.only_arg;
+                    },
+                    .undefined => {
+                        if (mem.eql(u8, "dynamic_lookup", it.only_arg)) {
+                            linker_allow_shlib_undefined = true;
+                        } else if (mem.eql(u8, "error", it.only_arg)) {
+                            linker_allow_shlib_undefined = false;
+                        } else {
+                            fatal("unsupported -undefined option '{s}'", .{it.only_arg});
+                        }
+                    },
+                }
+            }
+            // Parse linker args.
+            var i: usize = 0;
+            while (i < linker_args.items.len) : (i += 1) {
+                const arg = linker_args.items[i];
+                if (mem.eql(u8, arg, "-soname") or
+                    mem.eql(u8, arg, "--soname"))
+                {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    const name = linker_args.items[i];
+                    soname = .{ .yes = name };
+                    // Use it as --name.
+                    // Example: libsoundio.so.2
+                    var prefix: usize = 0;
+                    if (mem.startsWith(u8, name, "lib")) {
+                        prefix = 3;
+                    }
+                    var end:
