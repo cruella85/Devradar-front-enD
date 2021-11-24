@@ -1823,4 +1823,167 @@ fn buildOutputType(
                     if (mem.startsWith(u8, name, "lib")) {
                         prefix = 3;
                     }
-                    var end:
+                    var end: usize = name.len;
+                    if (mem.endsWith(u8, name, ".so")) {
+                        end -= 3;
+                    } else {
+                        var found_digit = false;
+                        while (end > 0 and std.ascii.isDigit(name[end - 1])) {
+                            found_digit = true;
+                            end -= 1;
+                        }
+                        if (found_digit and end > 0 and name[end - 1] == '.') {
+                            end -= 1;
+                        } else {
+                            end = name.len;
+                        }
+                        if (mem.endsWith(u8, name[prefix..end], ".so")) {
+                            end -= 3;
+                        }
+                    }
+                    provided_name = name[prefix..end];
+                } else if (mem.eql(u8, arg, "-rpath")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try rpath_list.append(linker_args.items[i]);
+                } else if (mem.eql(u8, arg, "--subsystem")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    subsystem = try parseSubSystem(linker_args.items[i]);
+                } else if (mem.eql(u8, arg, "-I") or
+                    mem.eql(u8, arg, "--dynamic-linker") or
+                    mem.eql(u8, arg, "-dynamic-linker"))
+                {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    target_dynamic_linker = linker_args.items[i];
+                } else if (mem.eql(u8, arg, "-E") or
+                    mem.eql(u8, arg, "--export-dynamic") or
+                    mem.eql(u8, arg, "-export-dynamic"))
+                {
+                    rdynamic = true;
+                } else if (mem.eql(u8, arg, "--version-script")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    version_script = linker_args.items[i];
+                } else if (mem.eql(u8, arg, "-O")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    linker_optimization = std.fmt.parseUnsigned(u8, linker_args.items[i], 10) catch |err| {
+                        fatal("unable to parse optimization level '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                } else if (mem.startsWith(u8, arg, "-O")) {
+                    linker_optimization = std.fmt.parseUnsigned(u8, arg["-O".len..], 10) catch |err| {
+                        fatal("unable to parse optimization level '{s}': {s}", .{ arg, @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "-pagezero_size")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    const next_arg = linker_args.items[i];
+                    pagezero_size = std.fmt.parseUnsigned(u64, eatIntPrefix(next_arg, 16), 16) catch |err| {
+                        fatal("unable to parse pagezero size '{s}': {s}", .{ next_arg, @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "-headerpad")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    const next_arg = linker_args.items[i];
+                    headerpad_size = std.fmt.parseUnsigned(u32, eatIntPrefix(next_arg, 16), 16) catch |err| {
+                        fatal("unable to parse  headerpad size '{s}': {s}", .{ next_arg, @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "-headerpad_max_install_names")) {
+                    headerpad_max_install_names = true;
+                } else if (mem.eql(u8, arg, "-dead_strip")) {
+                    linker_gc_sections = true;
+                } else if (mem.eql(u8, arg, "-dead_strip_dylibs")) {
+                    dead_strip_dylibs = true;
+                } else if (mem.eql(u8, arg, "--no-undefined")) {
+                    linker_z_defs = true;
+                } else if (mem.eql(u8, arg, "--gc-sections")) {
+                    linker_gc_sections = true;
+                } else if (mem.eql(u8, arg, "--no-gc-sections")) {
+                    linker_gc_sections = false;
+                } else if (mem.eql(u8, arg, "--print-gc-sections")) {
+                    linker_print_gc_sections = true;
+                } else if (mem.eql(u8, arg, "--print-icf-sections")) {
+                    linker_print_icf_sections = true;
+                } else if (mem.eql(u8, arg, "--print-map")) {
+                    linker_print_map = true;
+                } else if (mem.eql(u8, arg, "--sort-section")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    const arg1 = linker_args.items[i];
+                    linker_sort_section = std.meta.stringToEnum(link.SortSection, arg1) orelse {
+                        fatal("expected [name|alignment] after --sort-section, found '{s}'", .{arg1});
+                    };
+                } else if (mem.eql(u8, arg, "--allow-shlib-undefined") or
+                    mem.eql(u8, arg, "-allow-shlib-undefined"))
+                {
+                    linker_allow_shlib_undefined = true;
+                } else if (mem.eql(u8, arg, "--no-allow-shlib-undefined") or
+                    mem.eql(u8, arg, "-no-allow-shlib-undefined"))
+                {
+                    linker_allow_shlib_undefined = false;
+                } else if (mem.eql(u8, arg, "-Bsymbolic")) {
+                    linker_bind_global_refs_locally = true;
+                } else if (mem.eql(u8, arg, "--import-memory")) {
+                    linker_import_memory = true;
+                } else if (mem.eql(u8, arg, "--import-symbols")) {
+                    linker_import_symbols = true;
+                } else if (mem.eql(u8, arg, "--import-table")) {
+                    linker_import_table = true;
+                } else if (mem.eql(u8, arg, "--export-table")) {
+                    linker_export_table = true;
+                } else if (mem.startsWith(u8, arg, "--initial-memory=")) {
+                    linker_initial_memory = parseIntSuffix(arg, "--initial-memory=".len);
+                } else if (mem.startsWith(u8, arg, "--max-memory=")) {
+                    linker_max_memory = parseIntSuffix(arg, "--max-memory=".len);
+                } else if (mem.startsWith(u8, arg, "--shared-memory")) {
+                    linker_shared_memory = true;
+                } else if (mem.startsWith(u8, arg, "--global-base=")) {
+                    linker_global_base = parseIntSuffix(arg, "--global-base=".len);
+                } else if (mem.startsWith(u8, arg, "--export=")) {
+                    try linker_export_symbol_names.append(arg["--export=".len..]);
+                } else if (mem.eql(u8, arg, "--export")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try linker_export_symbol_names.append(linker_args.items[i]);
+                } else if (mem.eql(u8, arg, "--compress-debug-sections")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    const arg1 = linker_args.items[i];
+                    linker_compress_debug_sections = std.meta.stringToEnum(link.CompressDebugSections, arg1) orelse {
+                        fatal("expected [none|zlib] after --compress-debug-sections, found '{s}'", .{arg1});
+                    };
+                } else if (mem.startsWith(u8, arg, "-z")) {
+                    var z_arg = arg[2..];
+                    if (z_arg.len == 0) {
+                        i += 1;
+                        if (i >= linker_args.items.len) {
+                            fatal("expected linker extension flag after '{s}'", .{arg});
+                        }
+                        z_arg = linker_args.items[i];
+                    }
+                    if (mem.eql(u8, z_arg, "nodelete")) {
+                        linker_z_nodelete = true;
+                    } else if (mem.eql(u8, z_arg, "notext")) {
+                        linker_z_notext = 
