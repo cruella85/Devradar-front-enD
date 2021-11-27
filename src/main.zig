@@ -2144,4 +2144,187 @@ fn buildOutputType(
                     }
                     try frameworks.put(gpa, linker_args.items[i], .{ .weak = true });
                 } else if (mem.eql(u8, arg, "-needed_framework")) {
-    
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try frameworks.put(gpa, linker_args.items[i], .{ .needed = true });
+                } else if (mem.eql(u8, arg, "-needed_library")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try system_libs.put(linker_args.items[i], .{ .needed = true });
+                } else if (mem.startsWith(u8, arg, "-weak-l")) {
+                    try system_libs.put(arg["-weak-l".len..], .{ .weak = true });
+                } else if (mem.eql(u8, arg, "-weak_library")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try system_libs.put(linker_args.items[i], .{ .weak = true });
+                } else if (mem.eql(u8, arg, "-compatibility_version")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    compatibility_version = std.builtin.Version.parse(linker_args.items[i]) catch |err| {
+                        fatal("unable to parse -compatibility_version '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "-current_version")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    version = std.builtin.Version.parse(linker_args.items[i]) catch |err| {
+                        fatal("unable to parse -current_version '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                    have_version = true;
+                } else if (mem.eql(u8, arg, "--out-implib") or
+                    mem.eql(u8, arg, "-implib"))
+                {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    emit_implib = .{ .yes = linker_args.items[i] };
+                    emit_implib_arg_provided = true;
+                } else if (mem.eql(u8, arg, "-undefined")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    if (mem.eql(u8, "dynamic_lookup", linker_args.items[i])) {
+                        linker_allow_shlib_undefined = true;
+                    } else if (mem.eql(u8, "error", linker_args.items[i])) {
+                        linker_allow_shlib_undefined = false;
+                    } else {
+                        fatal("unsupported -undefined option '{s}'", .{linker_args.items[i]});
+                    }
+                } else if (mem.eql(u8, arg, "-install_name")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    install_name = linker_args.items[i];
+                } else if (mem.eql(u8, arg, "-force_load")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try link_objects.append(.{
+                        .path = linker_args.items[i],
+                        .must_link = true,
+                    });
+                } else if (mem.eql(u8, arg, "-hash-style") or
+                    mem.eql(u8, arg, "--hash-style"))
+                {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    const next_arg = linker_args.items[i];
+                    hash_style = std.meta.stringToEnum(link.HashStyle, next_arg) orelse {
+                        fatal("expected [sysv|gnu|both] after --hash-style, found '{s}'", .{
+                            next_arg,
+                        });
+                    };
+                } else if (mem.startsWith(u8, arg, "/subsystem:")) {
+                    var split_it = mem.splitBackwards(u8, arg, ":");
+                    subsystem = try parseSubSystem(split_it.first());
+                } else if (mem.startsWith(u8, arg, "/implib:")) {
+                    var split_it = mem.splitBackwards(u8, arg, ":");
+                    emit_implib = .{ .yes = split_it.first() };
+                    emit_implib_arg_provided = true;
+                } else if (mem.startsWith(u8, arg, "/pdb:")) {
+                    var split_it = mem.splitBackwards(u8, arg, ":");
+                    pdb_out_path = split_it.first();
+                } else if (mem.startsWith(u8, arg, "/version:")) {
+                    var split_it = mem.splitBackwards(u8, arg, ":");
+                    const version_arg = split_it.first();
+                    version = std.builtin.Version.parse(version_arg) catch |err| {
+                        fatal("unable to parse /version '{s}': {s}", .{ arg, @errorName(err) });
+                    };
+
+                    have_version = true;
+                } else {
+                    fatal("unsupported linker arg: {s}", .{arg});
+                }
+            }
+
+            if (want_sanitize_c) |wsc| {
+                if (wsc and optimize_mode == .ReleaseFast) {
+                    optimize_mode = .ReleaseSafe;
+                }
+            }
+
+            switch (c_out_mode) {
+                .link => {
+                    output_mode = if (is_shared_lib) .Lib else .Exe;
+                    emit_bin = if (out_path) |p| .{ .yes = p } else EmitBin.yes_a_out;
+                    if (emit_llvm) {
+                        fatal("-emit-llvm cannot be used when linking", .{});
+                    }
+                },
+                .object => {
+                    output_mode = .Obj;
+                    if (emit_llvm) {
+                        emit_bin = .no;
+                        if (out_path) |p| {
+                            emit_llvm_bc = .{ .yes = p };
+                        } else {
+                            emit_llvm_bc = .yes_default_path;
+                        }
+                    } else {
+                        if (out_path) |p| {
+                            emit_bin = .{ .yes = p };
+                        } else {
+                            emit_bin = .yes_default_path;
+                        }
+                    }
+                },
+                .assembly => {
+                    output_mode = .Obj;
+                    emit_bin = .no;
+                    if (emit_llvm) {
+                        if (out_path) |p| {
+                            emit_llvm_ir = .{ .yes = p };
+                        } else {
+                            emit_llvm_ir = .yes_default_path;
+                        }
+                    } else {
+                        if (out_path) |p| {
+                            emit_asm = .{ .yes = p };
+                        } else {
+                            emit_asm = .yes_default_path;
+                        }
+                    }
+                },
+                .preprocessor => {
+                    output_mode = .Obj;
+                    // An error message is generated when there is more than 1 C source file.
+                    if (c_source_files.items.len != 1) {
+                        // For example `zig cc` and no args should print the "no input files" message.
+                        return process.exit(try clangMain(arena, all_args));
+                    }
+                    if (out_path) |p| {
+                        emit_bin = .{ .yes = p };
+                        clang_preprocessor_mode = .yes;
+                    } else {
+                        clang_preprocessor_mode = .stdout;
+                    }
+                },
+            }
+            if (c_source_files.items.len == 0 and
+                link_objects.items.len == 0 and
+                root_src_file == null)
+            {
+                // For example `zig cc` and no args should print the "no input files" message.
+                // There could be other reasons to punt to clang, for example, --help.
+                return process.exit(try clangMain(arena, all_args));
+            }
+        },
+    }
+
+    {
+        // Resolve module
