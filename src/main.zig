@@ -2327,4 +2327,198 @@ fn buildOutputType(
     }
 
     {
-        // Resolve module
+        // Resolve module dependencies
+        var it = modules.iterator();
+        while (it.next()) |kv| {
+            const deps_str = kv.value_ptr.deps_str;
+            var deps_it = ModuleDepIterator.init(deps_str);
+            while (deps_it.next()) |dep| {
+                if (dep.expose.len == 0) {
+                    fatal("module '{s}' depends on '{s}' with a blank name", .{ kv.key_ptr.*, dep.name });
+                }
+
+                for ([_][]const u8{ "std", "root", "builtin" }) |name| {
+                    if (mem.eql(u8, dep.expose, name)) {
+                        fatal("unable to add module '{s}' under name '{s}': conflicts with builtin module", .{ dep.name, dep.expose });
+                    }
+                }
+
+                const dep_mod = modules.get(dep.name) orelse
+                    fatal("module '{s}' depends on module '{s}' which does not exist", .{ kv.key_ptr.*, dep.name });
+
+                try kv.value_ptr.mod.add(gpa, dep.expose, dep_mod.mod);
+            }
+        }
+    }
+
+    if (arg_mode == .build and optimize_mode == .ReleaseSmall and strip == null)
+        strip = true;
+
+    if (arg_mode == .translate_c and c_source_files.items.len != 1) {
+        fatal("translate-c expects exactly 1 source file (found {d})", .{c_source_files.items.len});
+    }
+
+    if (root_src_file == null and arg_mode == .zig_test) {
+        fatal("`zig test` expects a zig source file argument", .{});
+    }
+
+    const root_name = if (provided_name) |n| n else blk: {
+        if (arg_mode == .zig_test) {
+            break :blk "test";
+        } else if (root_src_file) |file| {
+            const basename = fs.path.basename(file);
+            break :blk basename[0 .. basename.len - fs.path.extension(basename).len];
+        } else if (c_source_files.items.len >= 1) {
+            const basename = fs.path.basename(c_source_files.items[0].src_path);
+            break :blk basename[0 .. basename.len - fs.path.extension(basename).len];
+        } else if (link_objects.items.len >= 1) {
+            const basename = fs.path.basename(link_objects.items[0].path);
+            break :blk basename[0 .. basename.len - fs.path.extension(basename).len];
+        } else if (emit_bin == .yes) {
+            const basename = fs.path.basename(emit_bin.yes);
+            break :blk basename[0 .. basename.len - fs.path.extension(basename).len];
+        } else if (show_builtin) {
+            break :blk "builtin";
+        } else if (arg_mode == .run) {
+            fatal("`zig run` expects at least one positional argument", .{});
+            // TODO once the attempt to unwrap error: LinkingWithoutZigSourceUnimplemented
+            // is solved, remove the above fatal() and uncomment the `break` below.
+            //break :blk "run";
+        } else {
+            fatal("expected a positional argument, -femit-bin=[path], --show-builtin, or --name [name]", .{});
+        }
+    };
+
+    var target_parse_options: std.zig.CrossTarget.ParseOptions = .{
+        .arch_os_abi = target_arch_os_abi,
+        .cpu_features = target_mcpu,
+        .dynamic_linker = target_dynamic_linker,
+        .object_format = target_ofmt,
+    };
+
+    // Before passing the mcpu string in for parsing, we convert any -m flags that were
+    // passed in via zig cc to zig-style.
+    if (llvm_m_args.items.len != 0) {
+        // If this returns null, we let it fall through to the case below which will
+        // run the full parse function and do proper error handling.
+        if (std.zig.CrossTarget.parseCpuArch(target_parse_options)) |cpu_arch| {
+            var llvm_to_zig_name = std.StringHashMap([]const u8).init(gpa);
+            defer llvm_to_zig_name.deinit();
+
+            for (cpu_arch.allFeaturesList()) |feature| {
+                const llvm_name = feature.llvm_name orelse continue;
+                try llvm_to_zig_name.put(llvm_name, feature.name);
+            }
+
+            var mcpu_buffer = std.ArrayList(u8).init(gpa);
+            defer mcpu_buffer.deinit();
+
+            try mcpu_buffer.appendSlice(target_mcpu orelse "baseline");
+
+            for (llvm_m_args.items) |llvm_m_arg| {
+                if (mem.startsWith(u8, llvm_m_arg, "mno-")) {
+                    const llvm_name = llvm_m_arg["mno-".len..];
+                    const zig_name = llvm_to_zig_name.get(llvm_name) orelse {
+                        fatal("target architecture {s} has no LLVM CPU feature named '{s}'", .{
+                            @tagName(cpu_arch), llvm_name,
+                        });
+                    };
+                    try mcpu_buffer.append('-');
+                    try mcpu_buffer.appendSlice(zig_name);
+                } else if (mem.startsWith(u8, llvm_m_arg, "m")) {
+                    const llvm_name = llvm_m_arg["m".len..];
+                    const zig_name = llvm_to_zig_name.get(llvm_name) orelse {
+                        fatal("target architecture {s} has no LLVM CPU feature named '{s}'", .{
+                            @tagName(cpu_arch), llvm_name,
+                        });
+                    };
+                    try mcpu_buffer.append('+');
+                    try mcpu_buffer.appendSlice(zig_name);
+                } else {
+                    unreachable;
+                }
+            }
+
+            const adjusted_target_mcpu = try arena.dupe(u8, mcpu_buffer.items);
+            std.log.debug("adjusted target_mcpu: {s}", .{adjusted_target_mcpu});
+            target_parse_options.cpu_features = adjusted_target_mcpu;
+        }
+    }
+
+    const cross_target = try parseCrossTargetOrReportFatalError(arena, target_parse_options);
+    const target_info = try detectNativeTargetInfo(cross_target);
+
+    if (target_info.target.os.tag != .freestanding) {
+        if (ensure_libc_on_non_freestanding)
+            link_libc = true;
+        if (ensure_libcpp_on_non_freestanding)
+            link_libcpp = true;
+    }
+
+    if (target_info.target.cpu.arch.isWasm() and linker_shared_memory) {
+        if (output_mode == .Obj) {
+            fatal("shared memory is not allowed in object files", .{});
+        }
+
+        if (!target_info.target.cpu.features.isEnabled(@enumToInt(std.Target.wasm.Feature.atomics)) or
+            !target_info.target.cpu.features.isEnabled(@enumToInt(std.Target.wasm.Feature.bulk_memory)))
+        {
+            fatal("'atomics' and 'bulk-memory' features must be enabled to use shared memory", .{});
+        }
+    }
+
+    // Now that we have target info, we can find out if any of the system libraries
+    // are part of libc or libc++. We remove them from the list and communicate their
+    // existence via flags instead.
+    {
+        // Similarly, if any libs in this list are statically provided, we remove
+        // them from this list and populate the link_objects array instead.
+        const sep = fs.path.sep_str;
+        var test_path = std.ArrayList(u8).init(gpa);
+        defer test_path.deinit();
+
+        var i: usize = 0;
+        syslib: while (i < system_libs.count()) {
+            const lib_name = system_libs.keys()[i];
+
+            if (target_util.is_libc_lib_name(target_info.target, lib_name)) {
+                link_libc = true;
+                system_libs.orderedRemoveAt(i);
+                continue;
+            }
+            if (target_util.is_libcpp_lib_name(target_info.target, lib_name)) {
+                link_libcpp = true;
+                system_libs.orderedRemoveAt(i);
+                continue;
+            }
+            switch (target_util.classifyCompilerRtLibName(target_info.target, lib_name)) {
+                .none => {},
+                .only_libunwind, .both => {
+                    link_libunwind = true;
+                    system_libs.orderedRemoveAt(i);
+                    continue;
+                },
+                .only_compiler_rt => {
+                    std.log.warn("ignoring superfluous library '{s}': this dependency is fulfilled instead by compiler-rt which zig unconditionally provides", .{lib_name});
+                    system_libs.orderedRemoveAt(i);
+                    continue;
+                },
+            }
+
+            if (fs.path.isAbsolute(lib_name)) {
+                fatal("cannot use absolute path as a system library: {s}", .{lib_name});
+            }
+
+            if (target_info.target.os.tag == .wasi) {
+                if (wasi_libc.getEmulatedLibCRTFile(lib_name)) |crt_file| {
+                    try wasi_emulated_libs.append(crt_file);
+                    system_libs.orderedRemoveAt(i);
+                    continue;
+                }
+            }
+
+            for (lib_dirs.items) |lib_dir_path| {
+                if (cross_target.isDarwin()) break; // Targeting Darwin we let the linker resolve the libraries in the correct order
+                test_path.clearRetainingCapacity();
+                try test_path.writer().print("{s}" ++ sep ++ "{s}{s}{s}", .{
+                    lib_di
