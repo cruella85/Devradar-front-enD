@@ -1986,4 +1986,162 @@ fn buildOutputType(
                     if (mem.eql(u8, z_arg, "nodelete")) {
                         linker_z_nodelete = true;
                     } else if (mem.eql(u8, z_arg, "notext")) {
-                        linker_z_notext = 
+                        linker_z_notext = true;
+                    } else if (mem.eql(u8, z_arg, "defs")) {
+                        linker_z_defs = true;
+                    } else if (mem.eql(u8, z_arg, "undefs")) {
+                        linker_z_defs = false;
+                    } else if (mem.eql(u8, z_arg, "origin")) {
+                        linker_z_origin = true;
+                    } else if (mem.eql(u8, z_arg, "nocopyreloc")) {
+                        linker_z_nocopyreloc = true;
+                    } else if (mem.eql(u8, z_arg, "noexecstack")) {
+                        // noexecstack is the default when linking with LLD
+                    } else if (mem.eql(u8, z_arg, "now")) {
+                        linker_z_now = true;
+                    } else if (mem.eql(u8, z_arg, "lazy")) {
+                        linker_z_now = false;
+                    } else if (mem.eql(u8, z_arg, "relro")) {
+                        linker_z_relro = true;
+                    } else if (mem.eql(u8, z_arg, "norelro")) {
+                        linker_z_relro = false;
+                    } else if (mem.startsWith(u8, z_arg, "stack-size=")) {
+                        const next_arg = z_arg["stack-size=".len..];
+                        stack_size_override = std.fmt.parseUnsigned(u64, next_arg, 0) catch |err| {
+                            fatal("unable to parse stack size '{s}': {s}", .{ next_arg, @errorName(err) });
+                        };
+                    } else if (mem.startsWith(u8, z_arg, "common-page-size=")) {
+                        linker_z_common_page_size = parseIntSuffix(z_arg, "common-page-size=".len);
+                    } else if (mem.startsWith(u8, z_arg, "max-page-size=")) {
+                        linker_z_max_page_size = parseIntSuffix(z_arg, "max-page-size=".len);
+                    } else {
+                        fatal("unsupported linker extension flag: -z {s}", .{z_arg});
+                    }
+                } else if (mem.eql(u8, arg, "--major-image-version")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    version.major = std.fmt.parseUnsigned(u32, linker_args.items[i], 10) catch |err| {
+                        fatal("unable to parse major image version '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                    have_version = true;
+                } else if (mem.eql(u8, arg, "--minor-image-version")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    version.minor = std.fmt.parseUnsigned(u32, linker_args.items[i], 10) catch |err| {
+                        fatal("unable to parse minor image version '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                    have_version = true;
+                } else if (mem.eql(u8, arg, "-e") or mem.eql(u8, arg, "--entry")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    entry = linker_args.items[i];
+                } else if (mem.eql(u8, arg, "--stack") or mem.eql(u8, arg, "-stack_size")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    stack_size_override = std.fmt.parseUnsigned(u64, linker_args.items[i], 0) catch |err| {
+                        fatal("unable to parse stack size override '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "--image-base")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    image_base_override = std.fmt.parseUnsigned(u64, linker_args.items[i], 0) catch |err| {
+                        fatal("unable to parse image base override '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "-T") or mem.eql(u8, arg, "--script")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    linker_script = linker_args.items[i];
+                } else if (mem.eql(u8, arg, "--eh-frame-hdr")) {
+                    link_eh_frame_hdr = true;
+                } else if (mem.eql(u8, arg, "--no-eh-frame-hdr")) {
+                    link_eh_frame_hdr = false;
+                } else if (mem.eql(u8, arg, "--tsaware")) {
+                    linker_tsaware = true;
+                } else if (mem.eql(u8, arg, "--nxcompat")) {
+                    linker_nxcompat = true;
+                } else if (mem.eql(u8, arg, "--dynamicbase")) {
+                    linker_dynamicbase = true;
+                } else if (mem.eql(u8, arg, "--high-entropy-va")) {
+                    // This option does not do anything.
+                } else if (mem.eql(u8, arg, "--export-all-symbols")) {
+                    rdynamic = true;
+                } else if (mem.eql(u8, arg, "--color-diagnostics") or
+                    mem.eql(u8, arg, "--color-diagnostics=always"))
+                {
+                    color = .on;
+                } else if (mem.eql(u8, arg, "--no-color-diagnostics") or
+                    mem.eql(u8, arg, "--color-diagnostics=never"))
+                {
+                    color = .off;
+                } else if (mem.eql(u8, arg, "-s") or mem.eql(u8, arg, "--strip-all") or
+                    mem.eql(u8, arg, "-S") or mem.eql(u8, arg, "--strip-debug"))
+                {
+                    // -s, --strip-all             Strip all symbols
+                    // -S, --strip-debug           Strip debugging symbols
+                    strip = true;
+                } else if (mem.eql(u8, arg, "--start-group") or
+                    mem.eql(u8, arg, "--end-group"))
+                {
+                    // We don't need to care about these because these args are
+                    // for resolving circular dependencies but our linker takes
+                    // care of this without explicit args.
+                } else if (mem.eql(u8, arg, "--major-os-version") or
+                    mem.eql(u8, arg, "--minor-os-version"))
+                {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    // This option does not do anything.
+                } else if (mem.eql(u8, arg, "--major-subsystem-version")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+
+                    major_subsystem_version = std.fmt.parseUnsigned(
+                        u32,
+                        linker_args.items[i],
+                        10,
+                    ) catch |err| {
+                        fatal("unable to parse major subsystem version '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "--minor-subsystem-version")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+
+                    minor_subsystem_version = std.fmt.parseUnsigned(
+                        u32,
+                        linker_args.items[i],
+                        10,
+                    ) catch |err| {
+                        fatal("unable to parse minor subsystem version '{s}': {s}", .{ linker_args.items[i], @errorName(err) });
+                    };
+                } else if (mem.eql(u8, arg, "-framework")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try frameworks.put(gpa, linker_args.items[i], .{});
+                } else if (mem.eql(u8, arg, "-weak_framework")) {
+                    i += 1;
+                    if (i >= linker_args.items.len) {
+                        fatal("expected linker arg after '{s}'", .{arg});
+                    }
+                    try frameworks.put(gpa, linker_args.items[i], .{ .weak = true });
+                } else if (mem.eql(u8, arg, "-needed_framework")) {
+    
