@@ -2521,4 +2521,216 @@ fn buildOutputType(
                 if (cross_target.isDarwin()) break; // Targeting Darwin we let the linker resolve the libraries in the correct order
                 test_path.clearRetainingCapacity();
                 try test_path.writer().print("{s}" ++ sep ++ "{s}{s}{s}", .{
-                    lib_di
+                    lib_dir_path,
+                    target_info.target.libPrefix(),
+                    lib_name,
+                    target_info.target.staticLibSuffix(),
+                });
+                fs.cwd().access(test_path.items, .{}) catch |err| switch (err) {
+                    error.FileNotFound => continue,
+                    else => |e| fatal("unable to search for static library '{s}': {s}", .{
+                        test_path.items, @errorName(e),
+                    }),
+                };
+                try link_objects.append(.{ .path = try arena.dupe(u8, test_path.items) });
+                system_libs.orderedRemoveAt(i);
+                continue :syslib;
+            }
+
+            // Unfortunately, in the case of MinGW we also need to look for `libfoo.a`.
+            if (target_info.target.isMinGW()) {
+                for (lib_dirs.items) |lib_dir_path| {
+                    test_path.clearRetainingCapacity();
+                    try test_path.writer().print("{s}" ++ sep ++ "lib{s}.a", .{
+                        lib_dir_path, lib_name,
+                    });
+                    fs.cwd().access(test_path.items, .{}) catch |err| switch (err) {
+                        error.FileNotFound => continue,
+                        else => |e| fatal("unable to search for static library '{s}': {s}", .{
+                            test_path.items, @errorName(e),
+                        }),
+                    };
+                    try link_objects.append(.{ .path = try arena.dupe(u8, test_path.items) });
+                    system_libs.orderedRemoveAt(i);
+                    continue :syslib;
+                }
+            }
+
+            std.log.scoped(.cli).debug("depending on system for -l{s}", .{lib_name});
+
+            i += 1;
+        }
+    }
+    // libc++ depends on libc
+    if (link_libcpp) {
+        link_libc = true;
+    }
+
+    if (use_lld) |opt| {
+        if (opt and cross_target.isDarwin()) {
+            fatal("LLD requested with Mach-O object format. Only the self-hosted linker is supported for this target.", .{});
+        }
+    }
+
+    if (want_lto) |opt| {
+        if (opt and cross_target.isDarwin()) {
+            fatal("LTO is not yet supported with the Mach-O object format. More details: https://github.com/ziglang/zig/issues/8680", .{});
+        }
+    }
+
+    if (comptime builtin.target.isDarwin()) {
+        // If we want to link against frameworks, we need system headers.
+        if (framework_dirs.items.len > 0 or frameworks.count() > 0)
+            want_native_include_dirs = true;
+    }
+
+    if (sysroot == null and cross_target.isNativeOs() and
+        (system_libs.count() != 0 or want_native_include_dirs))
+    {
+        const paths = std.zig.system.NativePaths.detect(arena, target_info) catch |err| {
+            fatal("unable to detect native system paths: {s}", .{@errorName(err)});
+        };
+        for (paths.warnings.items) |warning| {
+            warn("{s}", .{warning});
+        }
+
+        const has_sysroot = if (comptime builtin.target.isDarwin()) outer: {
+            if (std.zig.system.darwin.isDarwinSDKInstalled(arena)) {
+                const sdk = std.zig.system.darwin.getDarwinSDK(arena, target_info.target) orelse
+                    break :outer false;
+                native_darwin_sdk = sdk;
+                try clang_argv.ensureUnusedCapacity(2);
+                clang_argv.appendAssumeCapacity("-isysroot");
+                clang_argv.appendAssumeCapacity(sdk.path);
+                break :outer true;
+            } else break :outer false;
+        } else false;
+
+        try clang_argv.ensureUnusedCapacity(paths.include_dirs.items.len * 2);
+        const isystem_flag = if (has_sysroot) "-iwithsysroot" else "-isystem";
+        for (paths.include_dirs.items) |include_dir| {
+            clang_argv.appendAssumeCapacity(isystem_flag);
+            clang_argv.appendAssumeCapacity(include_dir);
+        }
+
+        try clang_argv.ensureUnusedCapacity(paths.framework_dirs.items.len * 2);
+        try framework_dirs.ensureUnusedCapacity(paths.framework_dirs.items.len);
+        const iframework_flag = if (has_sysroot) "-iframeworkwithsysroot" else "-iframework";
+        for (paths.framework_dirs.items) |framework_dir| {
+            clang_argv.appendAssumeCapacity(iframework_flag);
+            clang_argv.appendAssumeCapacity(framework_dir);
+            framework_dirs.appendAssumeCapacity(framework_dir);
+        }
+
+        for (paths.lib_dirs.items) |lib_dir| {
+            try lib_dirs.append(lib_dir);
+        }
+        for (paths.rpaths.items) |rpath| {
+            try rpath_list.append(rpath);
+        }
+    }
+
+    {
+        // Resolve static libraries into full paths.
+        const sep = fs.path.sep_str;
+
+        var test_path = std.ArrayList(u8).init(gpa);
+        defer test_path.deinit();
+
+        for (static_libs.items) |static_lib| {
+            for (lib_dirs.items) |lib_dir_path| {
+                test_path.clearRetainingCapacity();
+                try test_path.writer().print("{s}" ++ sep ++ "{s}{s}{s}", .{
+                    lib_dir_path,
+                    target_info.target.libPrefix(),
+                    static_lib,
+                    target_info.target.staticLibSuffix(),
+                });
+                fs.cwd().access(test_path.items, .{}) catch |err| switch (err) {
+                    error.FileNotFound => continue,
+                    else => |e| fatal("unable to search for static library '{s}': {s}", .{
+                        test_path.items, @errorName(e),
+                    }),
+                };
+                try link_objects.append(.{ .path = try arena.dupe(u8, test_path.items) });
+                break;
+            } else {
+                var search_paths = std.ArrayList(u8).init(arena);
+                for (lib_dirs.items) |lib_dir_path| {
+                    try search_paths.writer().print("\n {s}" ++ sep ++ "{s}{s}{s}", .{
+                        lib_dir_path,
+                        target_info.target.libPrefix(),
+                        static_lib,
+                        target_info.target.staticLibSuffix(),
+                    });
+                }
+                try search_paths.appendSlice("\n suggestion: use full paths to static libraries on the command line rather than using -l and -L arguments");
+                fatal("static library '{s}' not found. search paths: {s}", .{
+                    static_lib, search_paths.items,
+                });
+            }
+        }
+    }
+
+    // Resolve `-l :file.so` syntax from `zig cc`. We use a separate map for this data
+    // since this is an uncommon case.
+    {
+        var it = link_objects_lib_search_paths.iterator();
+        while (it.next()) |item| {
+            const link_object_i = item.key_ptr.*;
+            const suffix = link_objects.items[link_object_i].path;
+
+            for (lib_dirs.items) |lib_dir_path| {
+                const test_path = try fs.path.join(arena, &.{ lib_dir_path, suffix });
+                fs.cwd().access(test_path, .{}) catch |err| switch (err) {
+                    error.FileNotFound => continue,
+                    else => |e| fatal("unable to search for library '{s}': {s}", .{
+                        test_path, @errorName(e),
+                    }),
+                };
+                link_objects.items[link_object_i].path = test_path;
+                break;
+            } else {
+                fatal("library '{s}' not found", .{suffix});
+            }
+        }
+    }
+
+    const object_format = target_info.target.ofmt;
+
+    if (output_mode == .Obj and (object_format == .coff or object_format == .macho)) {
+        const total_obj_count = c_source_files.items.len +
+            @boolToInt(root_src_file != null) +
+            link_objects.items.len;
+        if (total_obj_count > 1) {
+            fatal("{s} does not support linking multiple objects into one", .{@tagName(object_format)});
+        }
+    }
+
+    var cleanup_emit_bin_dir: ?fs.Dir = null;
+    defer if (cleanup_emit_bin_dir) |*dir| dir.close();
+
+    const have_enable_cache = enable_cache orelse false;
+    const optional_version = if (have_version) version else null;
+
+    const resolved_soname: ?[]const u8 = switch (soname) {
+        .yes => |explicit| explicit,
+        .no => null,
+        .yes_default_value => switch (object_format) {
+            .elf => if (have_version)
+                try std.fmt.allocPrint(arena, "lib{s}.so.{d}", .{ root_name, version.major })
+            else
+                try std.fmt.allocPrint(arena, "lib{s}.so", .{root_name}),
+            else => null,
+        },
+    };
+
+    const a_out_basename = switch (object_format) {
+        .coff => "a.exe",
+        else => "a.out",
+    };
+
+    const emit_bin_loc: ?Compilation.EmitLoc = switch (emit_bin) {
+        .no => null,
+        .yes_default_path => Compilation.EmitLoc{
+ 
