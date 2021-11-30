@@ -2953,4 +2953,215 @@ fn buildOutputType(
         var it = ModuleDepIterator.init(root_deps_str orelse "");
         while (it.next()) |dep| {
             if (dep.expose.len == 0) {
-      
+                fatal("root module depends on '{s}' with a blank name", .{dep.name});
+            }
+
+            for ([_][]const u8{ "std", "root", "builtin" }) |name| {
+                if (mem.eql(u8, dep.expose, name)) {
+                    fatal("unable to add module '{s}' under name '{s}': conflicts with builtin module", .{ dep.name, dep.expose });
+                }
+            }
+
+            const dep_mod = modules.get(dep.name) orelse
+                fatal("root module depends on module '{s}' which does not exist", .{dep.name});
+
+            try mod.add(gpa, dep.expose, dep_mod.mod);
+        }
+    }
+
+    const self_exe_path: ?[]const u8 = if (!process.can_spawn)
+        null
+    else
+        introspect.findZigExePath(arena) catch |err| {
+            fatal("unable to find zig self exe path: {s}", .{@errorName(err)});
+        };
+
+    var zig_lib_directory: Compilation.Directory = d: {
+        if (override_lib_dir) |unresolved_lib_dir| {
+            const lib_dir = try introspect.resolvePath(arena, unresolved_lib_dir);
+            break :d .{
+                .path = lib_dir,
+                .handle = fs.cwd().openDir(lib_dir, .{}) catch |err| {
+                    fatal("unable to open zig lib directory '{s}': {s}", .{ lib_dir, @errorName(err) });
+                },
+            };
+        } else if (builtin.os.tag == .wasi) {
+            break :d getWasiPreopen("/lib");
+        } else if (self_exe_path) |p| {
+            break :d introspect.findZigLibDirFromSelfExe(arena, p) catch |err| {
+                fatal("unable to find zig installation directory: {s}", .{@errorName(err)});
+            };
+        } else {
+            unreachable;
+        }
+    };
+
+    defer zig_lib_directory.handle.close();
+
+    var thread_pool: ThreadPool = undefined;
+    try thread_pool.init(gpa);
+    defer thread_pool.deinit();
+
+    var libc_installation: ?LibCInstallation = null;
+    defer if (libc_installation) |*l| l.deinit(gpa);
+
+    if (libc_paths_file) |paths_file| {
+        libc_installation = LibCInstallation.parse(gpa, paths_file, cross_target) catch |err| {
+            fatal("unable to parse libc paths file at path {s}: {s}", .{ paths_file, @errorName(err) });
+        };
+    }
+
+    var global_cache_directory: Compilation.Directory = l: {
+        if (override_global_cache_dir) |p| {
+            break :l .{
+                .handle = try fs.cwd().makeOpenPath(p, .{}),
+                .path = p,
+            };
+        }
+        if (builtin.os.tag == .wasi) {
+            break :l getWasiPreopen("/cache");
+        }
+        const p = try introspect.resolveGlobalCacheDir(arena);
+        break :l .{
+            .handle = try fs.cwd().makeOpenPath(p, .{}),
+            .path = p,
+        };
+    };
+    defer global_cache_directory.handle.close();
+
+    var cleanup_local_cache_dir: ?fs.Dir = null;
+    defer if (cleanup_local_cache_dir) |*dir| dir.close();
+
+    var local_cache_directory: Compilation.Directory = l: {
+        if (override_local_cache_dir) |local_cache_dir_path| {
+            const dir = try fs.cwd().makeOpenPath(local_cache_dir_path, .{});
+            cleanup_local_cache_dir = dir;
+            break :l .{
+                .handle = dir,
+                .path = local_cache_dir_path,
+            };
+        }
+        if (arg_mode == .run) {
+            break :l global_cache_directory;
+        }
+        if (main_pkg) |pkg| {
+            // search upwards from cwd until we find directory with build.zig
+            const cwd_path = try process.getCwdAlloc(arena);
+            const build_zig = "build.zig";
+            const zig_cache = "zig-cache";
+            var dirname: []const u8 = cwd_path;
+            while (true) {
+                const joined_path = try fs.path.join(arena, &[_][]const u8{ dirname, build_zig });
+                if (fs.cwd().access(joined_path, .{})) |_| {
+                    const cache_dir_path = try fs.path.join(arena, &[_][]const u8{ dirname, zig_cache });
+                    const dir = try pkg.root_src_directory.handle.makeOpenPath(cache_dir_path, .{});
+                    cleanup_local_cache_dir = dir;
+                    break :l .{ .handle = dir, .path = cache_dir_path };
+                } else |err| switch (err) {
+                    error.FileNotFound => {
+                        dirname = fs.path.dirname(dirname) orelse {
+                            break :l global_cache_directory;
+                        };
+                        continue;
+                    },
+                    else => break :l global_cache_directory,
+                }
+            }
+        }
+        // Otherwise we really don't have a reasonable place to put the local cache directory,
+        // so we utilize the global one.
+        break :l global_cache_directory;
+    };
+
+    if (build_options.have_llvm and emit_asm != .no) {
+        // LLVM has no way to set this non-globally.
+        const argv = [_][*:0]const u8{ "zig (LLVM option parsing)", "--x86-asm-syntax=intel" };
+        @import("codegen/llvm/bindings.zig").ParseCommandLineOptions(argv.len, &argv);
+    }
+
+    const clang_passthrough_mode = switch (arg_mode) {
+        .cc, .cpp, .translate_c => true,
+        else => false,
+    };
+
+    gimmeMoreOfThoseSweetSweetFileDescriptors();
+
+    const comp = Compilation.create(gpa, .{
+        .zig_lib_directory = zig_lib_directory,
+        .local_cache_directory = local_cache_directory,
+        .global_cache_directory = global_cache_directory,
+        .root_name = root_name,
+        .target = target_info.target,
+        .is_native_os = cross_target.isNativeOs(),
+        .is_native_abi = cross_target.isNativeAbi(),
+        .dynamic_linker = target_info.dynamic_linker.get(),
+        .sysroot = sysroot,
+        .output_mode = output_mode,
+        .main_pkg = main_pkg,
+        .emit_bin = emit_bin_loc,
+        .emit_h = emit_h_resolved.data,
+        .emit_asm = emit_asm_resolved.data,
+        .emit_llvm_ir = emit_llvm_ir_resolved.data,
+        .emit_llvm_bc = emit_llvm_bc_resolved.data,
+        .emit_docs = emit_docs_resolved.data,
+        .emit_analysis = emit_analysis_resolved.data,
+        .emit_implib = emit_implib_resolved.data,
+        .link_mode = link_mode,
+        .dll_export_fns = dll_export_fns,
+        .optimize_mode = optimize_mode,
+        .keep_source_files_loaded = false,
+        .clang_argv = clang_argv.items,
+        .lib_dirs = lib_dirs.items,
+        .rpath_list = rpath_list.items,
+        .c_source_files = c_source_files.items,
+        .link_objects = link_objects.items,
+        .framework_dirs = framework_dirs.items,
+        .frameworks = frameworks,
+        .system_lib_names = system_libs.keys(),
+        .system_lib_infos = system_libs.values(),
+        .wasi_emulated_libs = wasi_emulated_libs.items,
+        .link_libc = link_libc,
+        .link_libcpp = link_libcpp,
+        .link_libunwind = link_libunwind,
+        .want_pic = want_pic,
+        .want_pie = want_pie,
+        .want_lto = want_lto,
+        .want_unwind_tables = want_unwind_tables,
+        .want_sanitize_c = want_sanitize_c,
+        .want_stack_check = want_stack_check,
+        .want_stack_protector = want_stack_protector,
+        .want_red_zone = want_red_zone,
+        .omit_frame_pointer = omit_frame_pointer,
+        .want_valgrind = want_valgrind,
+        .want_tsan = want_tsan,
+        .want_compiler_rt = want_compiler_rt,
+        .use_llvm = use_llvm,
+        .use_lld = use_lld,
+        .use_clang = use_clang,
+        .hash_style = hash_style,
+        .rdynamic = rdynamic,
+        .linker_script = linker_script,
+        .version_script = version_script,
+        .disable_c_depfile = disable_c_depfile,
+        .soname = resolved_soname,
+        .linker_sort_section = linker_sort_section,
+        .linker_gc_sections = linker_gc_sections,
+        .linker_allow_shlib_undefined = linker_allow_shlib_undefined,
+        .linker_bind_global_refs_locally = linker_bind_global_refs_locally,
+        .linker_import_memory = linker_import_memory,
+        .linker_import_symbols = linker_import_symbols,
+        .linker_import_table = linker_import_table,
+        .linker_export_table = linker_export_table,
+        .linker_initial_memory = linker_initial_memory,
+        .linker_max_memory = linker_max_memory,
+        .linker_shared_memory = linker_shared_memory,
+        .linker_print_gc_sections = linker_print_gc_sections,
+        .linker_print_icf_sections = linker_print_icf_sections,
+        .linker_print_map = linker_print_map,
+        .linker_opt_bisect_limit = linker_opt_bisect_limit,
+        .linker_global_base = linker_global_base,
+        .linker_export_symbol_names = linker_export_symbol_names.items,
+        .linker_z_nocopyreloc = linker_z_nocopyreloc,
+        .linker_z_nodelete = linker_z_nodelete,
+        .linker_z_notext = linker_z_notext,
+        
