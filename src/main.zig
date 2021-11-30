@@ -2733,4 +2733,224 @@ fn buildOutputType(
     const emit_bin_loc: ?Compilation.EmitLoc = switch (emit_bin) {
         .no => null,
         .yes_default_path => Compilation.EmitLoc{
- 
+            .directory = blk: {
+                switch (arg_mode) {
+                    .run, .zig_test => break :blk null,
+                    else => {
+                        if (have_enable_cache) {
+                            break :blk null;
+                        } else {
+                            break :blk .{ .path = null, .handle = fs.cwd() };
+                        }
+                    },
+                }
+            },
+            .basename = try std.zig.binNameAlloc(arena, .{
+                .root_name = root_name,
+                .target = target_info.target,
+                .output_mode = output_mode,
+                .link_mode = link_mode,
+                .version = optional_version,
+            }),
+        },
+        .yes => |full_path| b: {
+            const basename = fs.path.basename(full_path);
+            if (have_enable_cache) {
+                break :b Compilation.EmitLoc{
+                    .basename = basename,
+                    .directory = null,
+                };
+            }
+            if (fs.path.dirname(full_path)) |dirname| {
+                const handle = fs.cwd().openDir(dirname, .{}) catch |err| {
+                    fatal("unable to open output directory '{s}': {s}", .{ dirname, @errorName(err) });
+                };
+                cleanup_emit_bin_dir = handle;
+                break :b Compilation.EmitLoc{
+                    .basename = basename,
+                    .directory = .{
+                        .path = dirname,
+                        .handle = handle,
+                    },
+                };
+            } else {
+                break :b Compilation.EmitLoc{
+                    .basename = basename,
+                    .directory = .{ .path = null, .handle = fs.cwd() },
+                };
+            }
+        },
+        .yes_a_out => Compilation.EmitLoc{
+            .directory = .{ .path = null, .handle = fs.cwd() },
+            .basename = a_out_basename,
+        },
+    };
+
+    const default_h_basename = try std.fmt.allocPrint(arena, "{s}.h", .{root_name});
+    var emit_h_resolved = emit_h.resolve(default_h_basename) catch |err| {
+        switch (emit_h) {
+            .yes => |p| {
+                fatal("unable to open directory from argument '-femit-h', '{s}': {s}", .{
+                    p, @errorName(err),
+                });
+            },
+            .yes_default_path => {
+                fatal("unable to open directory from arguments '--name' or '-fsoname', '{s}': {s}", .{
+                    default_h_basename, @errorName(err),
+                });
+            },
+            .no => unreachable,
+        }
+    };
+    defer emit_h_resolved.deinit();
+
+    const default_asm_basename = try std.fmt.allocPrint(arena, "{s}.s", .{root_name});
+    var emit_asm_resolved = emit_asm.resolve(default_asm_basename) catch |err| {
+        switch (emit_asm) {
+            .yes => |p| {
+                fatal("unable to open directory from argument '-femit-asm', '{s}': {s}", .{
+                    p, @errorName(err),
+                });
+            },
+            .yes_default_path => {
+                fatal("unable to open directory from arguments '--name' or '-fsoname', '{s}': {s}", .{
+                    default_asm_basename, @errorName(err),
+                });
+            },
+            .no => unreachable,
+        }
+    };
+    defer emit_asm_resolved.deinit();
+
+    const default_llvm_ir_basename = try std.fmt.allocPrint(arena, "{s}.ll", .{root_name});
+    var emit_llvm_ir_resolved = emit_llvm_ir.resolve(default_llvm_ir_basename) catch |err| {
+        switch (emit_llvm_ir) {
+            .yes => |p| {
+                fatal("unable to open directory from argument '-femit-llvm-ir', '{s}': {s}", .{
+                    p, @errorName(err),
+                });
+            },
+            .yes_default_path => {
+                fatal("unable to open directory from arguments '--name' or '-fsoname', '{s}': {s}", .{
+                    default_llvm_ir_basename, @errorName(err),
+                });
+            },
+            .no => unreachable,
+        }
+    };
+    defer emit_llvm_ir_resolved.deinit();
+
+    const default_llvm_bc_basename = try std.fmt.allocPrint(arena, "{s}.bc", .{root_name});
+    var emit_llvm_bc_resolved = emit_llvm_bc.resolve(default_llvm_bc_basename) catch |err| {
+        switch (emit_llvm_bc) {
+            .yes => |p| {
+                fatal("unable to open directory from argument '-femit-llvm-bc', '{s}': {s}", .{
+                    p, @errorName(err),
+                });
+            },
+            .yes_default_path => {
+                fatal("unable to open directory from arguments '--name' or '-fsoname', '{s}': {s}", .{
+                    default_llvm_bc_basename, @errorName(err),
+                });
+            },
+            .no => unreachable,
+        }
+    };
+    defer emit_llvm_bc_resolved.deinit();
+
+    const default_analysis_basename = try std.fmt.allocPrint(arena, "{s}-analysis.json", .{root_name});
+    var emit_analysis_resolved = emit_analysis.resolve(default_analysis_basename) catch |err| {
+        switch (emit_analysis) {
+            .yes => |p| {
+                fatal("unable to open directory from argument '-femit-analysis',  '{s}': {s}", .{
+                    p, @errorName(err),
+                });
+            },
+            .yes_default_path => {
+                fatal("unable to open directory from arguments 'name' or 'soname', '{s}': {s}", .{
+                    default_analysis_basename, @errorName(err),
+                });
+            },
+            .no => unreachable,
+        }
+    };
+    defer emit_analysis_resolved.deinit();
+
+    var emit_docs_resolved = emit_docs.resolve("docs") catch |err| {
+        switch (emit_docs) {
+            .yes => |p| {
+                fatal("unable to open directory from argument '-femit-docs', '{s}': {s}", .{
+                    p, @errorName(err),
+                });
+            },
+            .yes_default_path => {
+                fatal("unable to open directory 'docs': {s}", .{@errorName(err)});
+            },
+            .no => unreachable,
+        }
+    };
+    defer emit_docs_resolved.deinit();
+
+    const is_exe_or_dyn_lib = switch (output_mode) {
+        .Obj => false,
+        .Lib => (link_mode orelse .Static) == .Dynamic,
+        .Exe => true,
+    };
+    // Note that cmake when targeting Windows will try to execute
+    // zig cc to make an executable and output an implib too.
+    const implib_eligible = is_exe_or_dyn_lib and
+        emit_bin_loc != null and target_info.target.os.tag == .windows;
+    if (!implib_eligible) {
+        if (!emit_implib_arg_provided) {
+            emit_implib = .no;
+        } else if (emit_implib != .no) {
+            fatal("the argument -femit-implib is allowed only when building a Windows DLL", .{});
+        }
+    }
+    const default_implib_basename = try std.fmt.allocPrint(arena, "{s}.lib", .{root_name});
+    var emit_implib_resolved = switch (emit_implib) {
+        .no => Emit.Resolved{ .data = null, .dir = null },
+        .yes => |p| emit_implib.resolve(default_implib_basename) catch |err| {
+            fatal("unable to open directory from argument '-femit-implib', '{s}': {s}", .{
+                p, @errorName(err),
+            });
+        },
+        .yes_default_path => Emit.Resolved{
+            .data = Compilation.EmitLoc{
+                .directory = emit_bin_loc.?.directory,
+                .basename = default_implib_basename,
+            },
+            .dir = null,
+        },
+    };
+    defer emit_implib_resolved.deinit();
+
+    const main_pkg: ?*Package = if (root_src_file) |unresolved_src_path| blk: {
+        const src_path = try introspect.resolvePath(arena, unresolved_src_path);
+        if (main_pkg_path) |unresolved_main_pkg_path| {
+            const p = try introspect.resolvePath(arena, unresolved_main_pkg_path);
+            if (p.len == 0) {
+                break :blk try Package.create(gpa, null, src_path);
+            } else {
+                const rel_src_path = try fs.path.relative(arena, p, src_path);
+                break :blk try Package.create(gpa, p, rel_src_path);
+            }
+        } else {
+            const root_src_dir_path = fs.path.dirname(src_path);
+            break :blk Package.create(gpa, root_src_dir_path, fs.path.basename(src_path)) catch |err| {
+                if (root_src_dir_path) |p| {
+                    fatal("unable to open '{s}': {s}", .{ p, @errorName(err) });
+                } else {
+                    return err;
+                }
+            };
+        }
+    } else null;
+    defer if (main_pkg) |p| p.destroy(gpa);
+
+    // Transfer packages added with --deps to the root package
+    if (main_pkg) |mod| {
+        var it = ModuleDepIterator.init(root_deps_str orelse "");
+        while (it.next()) |dep| {
+            if (dep.expose.len == 0) {
+      
