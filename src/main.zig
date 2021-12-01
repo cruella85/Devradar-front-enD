@@ -3164,4 +3164,226 @@ fn buildOutputType(
         .linker_z_nocopyreloc = linker_z_nocopyreloc,
         .linker_z_nodelete = linker_z_nodelete,
         .linker_z_notext = linker_z_notext,
-        
+        .linker_z_defs = linker_z_defs,
+        .linker_z_origin = linker_z_origin,
+        .linker_z_now = linker_z_now,
+        .linker_z_relro = linker_z_relro,
+        .linker_z_common_page_size = linker_z_common_page_size,
+        .linker_z_max_page_size = linker_z_max_page_size,
+        .linker_tsaware = linker_tsaware,
+        .linker_nxcompat = linker_nxcompat,
+        .linker_dynamicbase = linker_dynamicbase,
+        .linker_optimization = linker_optimization,
+        .linker_compress_debug_sections = linker_compress_debug_sections,
+        .linker_module_definition_file = linker_module_definition_file,
+        .major_subsystem_version = major_subsystem_version,
+        .minor_subsystem_version = minor_subsystem_version,
+        .link_eh_frame_hdr = link_eh_frame_hdr,
+        .link_emit_relocs = link_emit_relocs,
+        .entry = entry,
+        .stack_size_override = stack_size_override,
+        .image_base_override = image_base_override,
+        .strip = strip,
+        .formatted_panics = formatted_panics,
+        .single_threaded = single_threaded,
+        .function_sections = function_sections,
+        .no_builtin = no_builtin,
+        .self_exe_path = self_exe_path,
+        .thread_pool = &thread_pool,
+        .clang_passthrough_mode = clang_passthrough_mode,
+        .clang_preprocessor_mode = clang_preprocessor_mode,
+        .version = optional_version,
+        .libc_installation = if (libc_installation) |*lci| lci else null,
+        .verbose_cc = verbose_cc,
+        .verbose_link = verbose_link,
+        .verbose_air = verbose_air,
+        .verbose_llvm_ir = verbose_llvm_ir,
+        .verbose_cimport = verbose_cimport,
+        .verbose_llvm_cpu_features = verbose_llvm_cpu_features,
+        .machine_code_model = machine_code_model,
+        .color = color,
+        .time_report = time_report,
+        .stack_report = stack_report,
+        .is_test = arg_mode == .zig_test,
+        .each_lib_rpath = each_lib_rpath,
+        .build_id = build_id,
+        .test_evented_io = test_evented_io,
+        .test_filter = test_filter,
+        .test_name_prefix = test_name_prefix,
+        .test_runner_path = test_runner_path,
+        .disable_lld_caching = !have_enable_cache,
+        .subsystem = subsystem,
+        .wasi_exec_model = wasi_exec_model,
+        .debug_compile_errors = debug_compile_errors,
+        .enable_link_snapshots = enable_link_snapshots,
+        .native_darwin_sdk = native_darwin_sdk,
+        .install_name = install_name,
+        .entitlements = entitlements,
+        .pagezero_size = pagezero_size,
+        .search_strategy = search_strategy,
+        .headerpad_size = headerpad_size,
+        .headerpad_max_install_names = headerpad_max_install_names,
+        .dead_strip_dylibs = dead_strip_dylibs,
+        .reference_trace = reference_trace,
+        .error_tracing = error_tracing,
+        .pdb_out_path = pdb_out_path,
+    }) catch |err| switch (err) {
+        error.LibCUnavailable => {
+            const target = target_info.target;
+            const triple_name = try target.zigTriple(arena);
+            std.log.err("unable to find or provide libc for target '{s}'", .{triple_name});
+
+            for (target_util.available_libcs) |t| {
+                if (t.arch == target.cpu.arch and t.os == target.os.tag) {
+                    if (t.os_ver) |os_ver| {
+                        std.log.info("zig can provide libc for related target {s}-{s}.{d}-{s}", .{
+                            @tagName(t.arch), @tagName(t.os), os_ver.major, @tagName(t.abi),
+                        });
+                    } else {
+                        std.log.info("zig can provide libc for related target {s}-{s}-{s}", .{
+                            @tagName(t.arch), @tagName(t.os), @tagName(t.abi),
+                        });
+                    }
+                }
+            }
+            process.exit(1);
+        },
+        error.ExportTableAndImportTableConflict => {
+            fatal("--import-table and --export-table may not be used together", .{});
+        },
+        else => fatal("unable to create compilation: {s}", .{@errorName(err)}),
+    };
+    var comp_destroyed = false;
+    defer if (!comp_destroyed) comp.destroy();
+
+    if (show_builtin) {
+        return std.io.getStdOut().writeAll(try comp.generateBuiltinZigSource(arena));
+    }
+    if (arg_mode == .translate_c) {
+        return cmdTranslateC(comp, arena, have_enable_cache);
+    }
+
+    const hook: AfterUpdateHook = blk: {
+        if (!have_enable_cache)
+            break :blk .none;
+
+        switch (emit_bin) {
+            .no => break :blk .none,
+            .yes_default_path => break :blk .print_emit_bin_dir_path,
+            .yes => |full_path| break :blk .{ .update = full_path },
+            .yes_a_out => break :blk .{ .update = a_out_basename },
+        }
+    };
+
+    updateModule(gpa, comp, hook) catch |err| switch (err) {
+        error.SemanticAnalyzeFail => if (!watch) process.exit(1),
+        else => |e| return e,
+    };
+    if (build_options.only_c) return cleanExit();
+    try comp.makeBinFileExecutable();
+
+    if (test_exec_args.items.len == 0 and object_format == .c) default_exec_args: {
+        // Default to using `zig run` to execute the produced .c code from `zig test`.
+        const c_code_loc = emit_bin_loc orelse break :default_exec_args;
+        const c_code_directory = c_code_loc.directory orelse comp.bin_file.options.emit.?.directory;
+        const c_code_path = try fs.path.join(arena, &[_][]const u8{
+            c_code_directory.path orelse ".", c_code_loc.basename,
+        });
+        try test_exec_args.append(self_exe_path);
+        try test_exec_args.append("run");
+        if (zig_lib_directory.path) |p| {
+            try test_exec_args.appendSlice(&.{ "-I", p });
+        }
+
+        if (link_libc) {
+            try test_exec_args.append("-lc");
+        } else if (target_info.target.os.tag == .windows) {
+            try test_exec_args.appendSlice(&.{
+                "--subsystem", "console",
+                "-lkernel32",  "-lntdll",
+            });
+        }
+
+        if (!mem.eql(u8, target_arch_os_abi, "native")) {
+            try test_exec_args.append("-target");
+            try test_exec_args.append(target_arch_os_abi);
+        }
+        if (target_mcpu) |mcpu| {
+            try test_exec_args.append(try std.fmt.allocPrint(arena, "-mcpu={s}", .{mcpu}));
+        }
+        if (target_dynamic_linker) |dl| {
+            try test_exec_args.append("--dynamic-linker");
+            try test_exec_args.append(dl);
+        }
+        try test_exec_args.append(c_code_path);
+    }
+
+    const run_or_test = switch (arg_mode) {
+        .run => true,
+        .zig_test => !test_no_exec,
+        else => false,
+    };
+    if (run_or_test) {
+        try runOrTest(
+            comp,
+            gpa,
+            arena,
+            test_exec_args.items,
+            self_exe_path.?,
+            arg_mode,
+            target_info,
+            watch,
+            &comp_destroyed,
+            all_args,
+            runtime_args_start,
+            link_libc,
+        );
+    }
+
+    const stdin = std.io.getStdIn().reader();
+    const stderr = std.io.getStdErr().writer();
+    var repl_buf: [1024]u8 = undefined;
+
+    const ReplCmd = enum {
+        update,
+        help,
+        run,
+        update_and_run,
+    };
+
+    var last_cmd: ReplCmd = .help;
+
+    while (watch) {
+        try stderr.print("(zig) ", .{});
+        try comp.makeBinFileExecutable();
+        if (stdin.readUntilDelimiterOrEof(&repl_buf, '\n') catch |err| {
+            try stderr.print("\nUnable to parse command: {s}\n", .{@errorName(err)});
+            continue;
+        }) |line| {
+            const actual_line = mem.trimRight(u8, line, "\r\n ");
+            const cmd: ReplCmd = blk: {
+                if (mem.eql(u8, actual_line, "update")) {
+                    break :blk .update;
+                } else if (mem.eql(u8, actual_line, "exit")) {
+                    break;
+                } else if (mem.eql(u8, actual_line, "help")) {
+                    break :blk .help;
+                } else if (mem.eql(u8, actual_line, "run")) {
+                    break :blk .run;
+                } else if (mem.eql(u8, actual_line, "update-and-run")) {
+                    break :blk .update_and_run;
+                } else if (actual_line.len == 0) {
+                    break :blk last_cmd;
+                } else {
+                    try stderr.print("unknown command: {s}\n", .{actual_line});
+                    continue;
+                }
+            };
+            last_cmd = cmd;
+            switch (cmd) {
+                .update => {
+                    tracy.frameMark();
+                    if (output_mode == .Exe) {
+                        try comp.makeBinFileWritable();
+                    }
+                    updateModule(
