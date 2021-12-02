@@ -3386,4 +3386,237 @@ fn buildOutputType(
                     if (output_mode == .Exe) {
                         try comp.makeBinFileWritable();
                     }
-                    updateModule(
+                    updateModule(gpa, comp, hook) catch |err| switch (err) {
+                        error.SemanticAnalyzeFail => continue,
+                        else => |e| return e,
+                    };
+                },
+                .help => {
+                    try stderr.writeAll(repl_help);
+                },
+                .run => {
+                    tracy.frameMark();
+                    try runOrTest(
+                        comp,
+                        gpa,
+                        arena,
+                        test_exec_args.items,
+                        self_exe_path.?,
+                        arg_mode,
+                        target_info,
+                        watch,
+                        &comp_destroyed,
+                        all_args,
+                        runtime_args_start,
+                        link_libc,
+                    );
+                },
+                .update_and_run => {
+                    tracy.frameMark();
+                    if (output_mode == .Exe) {
+                        try comp.makeBinFileWritable();
+                    }
+                    updateModule(gpa, comp, hook) catch |err| switch (err) {
+                        error.SemanticAnalyzeFail => continue,
+                        else => |e| return e,
+                    };
+                    try comp.makeBinFileExecutable();
+                    try runOrTest(
+                        comp,
+                        gpa,
+                        arena,
+                        test_exec_args.items,
+                        self_exe_path.?,
+                        arg_mode,
+                        target_info,
+                        watch,
+                        &comp_destroyed,
+                        all_args,
+                        runtime_args_start,
+                        link_libc,
+                    );
+                },
+            }
+        } else {
+            break;
+        }
+    }
+    // Skip resource deallocation in release builds; let the OS do it.
+    return cleanExit();
+}
+
+const ModuleDepIterator = struct {
+    split: mem.SplitIterator(u8),
+
+    fn init(deps_str: []const u8) ModuleDepIterator {
+        return .{ .split = mem.split(u8, deps_str, ",") };
+    }
+
+    const Dependency = struct {
+        expose: []const u8,
+        name: []const u8,
+    };
+
+    fn next(it: *ModuleDepIterator) ?Dependency {
+        if (it.split.buffer.len == 0) return null; // don't return "" for the first iteration on ""
+        const str = it.split.next() orelse return null;
+        if (mem.indexOfScalar(u8, str, '=')) |i| {
+            return .{
+                .expose = str[0..i],
+                .name = str[i + 1 ..],
+            };
+        } else {
+            return .{ .expose = str, .name = str };
+        }
+    }
+};
+
+fn parseCrossTargetOrReportFatalError(
+    allocator: Allocator,
+    opts: std.zig.CrossTarget.ParseOptions,
+) !std.zig.CrossTarget {
+    var opts_with_diags = opts;
+    var diags: std.zig.CrossTarget.ParseOptions.Diagnostics = .{};
+    if (opts_with_diags.diagnostics == null) {
+        opts_with_diags.diagnostics = &diags;
+    }
+    return std.zig.CrossTarget.parse(opts_with_diags) catch |err| switch (err) {
+        error.UnknownCpuModel => {
+            help: {
+                var help_text = std.ArrayList(u8).init(allocator);
+                defer help_text.deinit();
+                for (diags.arch.?.allCpuModels()) |cpu| {
+                    help_text.writer().print(" {s}\n", .{cpu.name}) catch break :help;
+                }
+                std.log.info("available CPUs for architecture '{s}':\n{s}", .{
+                    @tagName(diags.arch.?), help_text.items,
+                });
+            }
+            fatal("unknown CPU: '{s}'", .{diags.cpu_name.?});
+        },
+        error.UnknownCpuFeature => {
+            help: {
+                var help_text = std.ArrayList(u8).init(allocator);
+                defer help_text.deinit();
+                for (diags.arch.?.allFeaturesList()) |feature| {
+                    help_text.writer().print(" {s}: {s}\n", .{ feature.name, feature.description }) catch break :help;
+                }
+                std.log.info("available CPU features for architecture '{s}':\n{s}", .{
+                    @tagName(diags.arch.?), help_text.items,
+                });
+            }
+            fatal("unknown CPU feature: '{s}'", .{diags.unknown_feature_name.?});
+        },
+        error.UnknownObjectFormat => {
+            help: {
+                var help_text = std.ArrayList(u8).init(allocator);
+                defer help_text.deinit();
+                inline for (@typeInfo(std.Target.ObjectFormat).Enum.fields) |field| {
+                    help_text.writer().print(" {s}\n", .{field.name}) catch break :help;
+                }
+                std.log.info("available object formats:\n{s}", .{help_text.items});
+            }
+            fatal("unknown object format: '{s}'", .{opts.object_format.?});
+        },
+        else => |e| return e,
+    };
+}
+
+fn runOrTest(
+    comp: *Compilation,
+    gpa: Allocator,
+    arena: Allocator,
+    test_exec_args: []const ?[]const u8,
+    self_exe_path: []const u8,
+    arg_mode: ArgMode,
+    target_info: std.zig.system.NativeTargetInfo,
+    watch: bool,
+    comp_destroyed: *bool,
+    all_args: []const []const u8,
+    runtime_args_start: ?usize,
+    link_libc: bool,
+) !void {
+    const exe_emit = comp.bin_file.options.emit orelse return;
+    // A naive `directory.join` here will indeed get the correct path to the binary,
+    // however, in the case of cwd, we actually want `./foo` so that the path can be executed.
+    const exe_path = try fs.path.join(arena, &[_][]const u8{
+        exe_emit.directory.path orelse ".", exe_emit.sub_path,
+    });
+
+    var argv = std.ArrayList([]const u8).init(gpa);
+    defer argv.deinit();
+
+    if (test_exec_args.len == 0) {
+        try argv.append(exe_path);
+    } else {
+        for (test_exec_args) |arg| {
+            try argv.append(arg orelse exe_path);
+        }
+    }
+    if (runtime_args_start) |i| {
+        try argv.appendSlice(all_args[i..]);
+    }
+    var env_map = try std.process.getEnvMap(arena);
+    try env_map.put("ZIG_EXE", self_exe_path);
+
+    // We do not execve for tests because if the test fails we want to print
+    // the error message and invocation below.
+    if (std.process.can_execv and arg_mode == .run and !watch) {
+        // execv releases the locks; no need to destroy the Compilation here.
+        const err = std.process.execve(gpa, argv.items, &env_map);
+        try warnAboutForeignBinaries(arena, arg_mode, target_info, link_libc);
+        const cmd = try std.mem.join(arena, " ", argv.items);
+        fatal("the following command failed to execve with '{s}':\n{s}", .{ @errorName(err), cmd });
+    } else if (std.process.can_spawn) {
+        var child = std.ChildProcess.init(argv.items, gpa);
+        child.env_map = &env_map;
+        child.stdin_behavior = .Inherit;
+        child.stdout_behavior = .Inherit;
+        child.stderr_behavior = .Inherit;
+
+        if (!watch) {
+            // Here we release all the locks associated with the Compilation so
+            // that whatever this child process wants to do won't deadlock.
+            comp.destroy();
+            comp_destroyed.* = true;
+        }
+
+        const term = child.spawnAndWait() catch |err| {
+            try warnAboutForeignBinaries(arena, arg_mode, target_info, link_libc);
+            const cmd = try std.mem.join(arena, " ", argv.items);
+            fatal("the following command failed with '{s}':\n{s}", .{ @errorName(err), cmd });
+        };
+        switch (arg_mode) {
+            .run, .build => {
+                switch (term) {
+                    .Exited => |code| {
+                        if (code == 0) {
+                            if (!watch) return cleanExit();
+                        } else if (watch) {
+                            warn("process exited with code {d}", .{code});
+                        } else {
+                            process.exit(code);
+                        }
+                    },
+                    else => {
+                        if (watch) {
+                            warn("process aborted abnormally", .{});
+                        } else {
+                            process.exit(1);
+                        }
+                    },
+                }
+            },
+            .zig_test => {
+                switch (term) {
+                    .Exited => |code| {
+                        if (code == 0) {
+                            if (!watch) return cleanExit();
+                        } else {
+                            const cmd = try std.mem.join(arena, " ", argv.items);
+                            fatal("the following test command failed with exit code {d}:\n{s}", .{ code, cmd });
+                        }
+                    },
+                    else => {
+                        const cmd = try std.mem.join(arena, " ", argv.items);
+                  
