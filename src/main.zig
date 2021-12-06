@@ -5706,4 +5706,189 @@ fn warnAboutForeignBinaries(
             const host_name = try host_target_info.target.zigTriple(arena);
             const foreign_name = try target_info.target.zigTriple(arena);
             switch (arg_mode) {
-                .zig_test
+                .zig_test => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '--test-cmd {s} --test-cmd-bin' " ++
+                        "to run the tests",
+                    .{ host_name, foreign_name, qemu },
+                ),
+                else => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '{s}' to run the binary",
+                    .{ host_name, foreign_name, qemu },
+                ),
+            }
+        },
+        .wine => |wine| {
+            const host_name = try host_target_info.target.zigTriple(arena);
+            const foreign_name = try target_info.target.zigTriple(arena);
+            switch (arg_mode) {
+                .zig_test => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '--test-cmd {s} --test-cmd-bin' " ++
+                        "to run the tests",
+                    .{ host_name, foreign_name, wine },
+                ),
+                else => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '{s}' to run the binary",
+                    .{ host_name, foreign_name, wine },
+                ),
+            }
+        },
+        .wasmtime => |wasmtime| {
+            const host_name = try host_target_info.target.zigTriple(arena);
+            const foreign_name = try target_info.target.zigTriple(arena);
+            switch (arg_mode) {
+                .zig_test => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '--test-cmd {s} --test-cmd-bin' " ++
+                        "to run the tests",
+                    .{ host_name, foreign_name, wasmtime },
+                ),
+                else => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '{s}' to run the binary",
+                    .{ host_name, foreign_name, wasmtime },
+                ),
+            }
+        },
+        .darling => |darling| {
+            const host_name = try host_target_info.target.zigTriple(arena);
+            const foreign_name = try target_info.target.zigTriple(arena);
+            switch (arg_mode) {
+                .zig_test => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '--test-cmd {s} --test-cmd-bin' " ++
+                        "to run the tests",
+                    .{ host_name, foreign_name, darling },
+                ),
+                else => warn(
+                    "the host system ({s}) does not appear to be capable of executing binaries " ++
+                        "from the target ({s}). Consider using '{s}' to run the binary",
+                    .{ host_name, foreign_name, darling },
+                ),
+            }
+        },
+        .bad_dl => |foreign_dl| {
+            const host_dl = host_target_info.dynamic_linker.get() orelse "(none)";
+            const tip_suffix = switch (arg_mode) {
+                .zig_test => ", '--test-no-exec', or '--test-cmd'",
+                else => "",
+            };
+            warn("the host system does not appear to be capable of executing binaries from the target because the host dynamic linker is '{s}', while the target dynamic linker is '{s}'. Consider using '--dynamic-linker'{s}", .{
+                host_dl, foreign_dl, tip_suffix,
+            });
+        },
+        .bad_os_or_cpu => {
+            const host_name = try host_target_info.target.zigTriple(arena);
+            const foreign_name = try target_info.target.zigTriple(arena);
+            const tip_suffix = switch (arg_mode) {
+                .zig_test => ". Consider using '--test-no-exec' or '--test-cmd'",
+                else => "",
+            };
+            warn("the host system ({s}) does not appear to be capable of executing binaries from the target ({s}){s}", .{
+                host_name, foreign_name, tip_suffix,
+            });
+        },
+    }
+}
+
+fn parseSubSystem(next_arg: []const u8) !std.Target.SubSystem {
+    if (mem.eql(u8, next_arg, "console")) {
+        return .Console;
+    } else if (mem.eql(u8, next_arg, "windows")) {
+        return .Windows;
+    } else if (mem.eql(u8, next_arg, "posix")) {
+        return .Posix;
+    } else if (mem.eql(u8, next_arg, "native")) {
+        return .Native;
+    } else if (mem.eql(u8, next_arg, "efi_application")) {
+        return .EfiApplication;
+    } else if (mem.eql(u8, next_arg, "efi_boot_service_driver")) {
+        return .EfiBootServiceDriver;
+    } else if (mem.eql(u8, next_arg, "efi_rom")) {
+        return .EfiRom;
+    } else if (mem.eql(u8, next_arg, "efi_runtime_driver")) {
+        return .EfiRuntimeDriver;
+    } else {
+        fatal("invalid: --subsystem: '{s}'. Options are:\n{s}", .{
+            next_arg,
+            \\  console
+            \\  windows
+            \\  posix
+            \\  native
+            \\  efi_application
+            \\  efi_boot_service_driver
+            \\  efi_rom
+            \\  efi_runtime_driver
+            \\
+        });
+    }
+}
+
+/// Model a header searchlist as a group.
+/// Silently ignore superfluous search dirs.
+/// Warn when a dir is added to multiple searchlists.
+const ClangSearchSanitizer = struct {
+    argv: *std.ArrayList([]const u8),
+    map: std.StringHashMap(Membership),
+
+    fn init(gpa: Allocator, argv: *std.ArrayList([]const u8)) @This() {
+        return .{
+            .argv = argv,
+            .map = std.StringHashMap(Membership).init(gpa),
+        };
+    }
+
+    fn addIncludePath(self: *@This(), group: Group, arg: []const u8, dir: []const u8, joined: bool) !void {
+        const gopr = try self.map.getOrPut(dir);
+        const m = gopr.value_ptr;
+        if (!gopr.found_existing) {
+            // init empty membership
+            m.* = .{};
+        }
+        const wtxt = "add '{s}' to header searchlist '-{s}' conflicts with '-{s}'";
+        switch (group) {
+            .I => {
+                if (m.I) return;
+                m.I = true;
+                if (m.isystem) std.log.warn(wtxt, .{ dir, "I", "isystem" });
+                if (m.idirafter) std.log.warn(wtxt, .{ dir, "I", "idirafter" });
+                if (m.iframework) std.log.warn(wtxt, .{ dir, "I", "iframework" });
+            },
+            .isystem => {
+                if (m.isystem) return;
+                m.isystem = true;
+                if (m.I) std.log.warn(wtxt, .{ dir, "isystem", "I" });
+                if (m.idirafter) std.log.warn(wtxt, .{ dir, "isystem", "idirafter" });
+                if (m.iframework) std.log.warn(wtxt, .{ dir, "isystem", "iframework" });
+            },
+            .idirafter => {
+                if (m.idirafter) return;
+                m.idirafter = true;
+                if (m.I) std.log.warn(wtxt, .{ dir, "idirafter", "I" });
+                if (m.isystem) std.log.warn(wtxt, .{ dir, "idirafter", "isystem" });
+                if (m.iframework) std.log.warn(wtxt, .{ dir, "idirafter", "iframework" });
+            },
+            .iframework => {
+                if (m.iframework) return;
+                m.iframework = true;
+                if (m.I) std.log.warn(wtxt, .{ dir, "iframework", "I" });
+                if (m.isystem) std.log.warn(wtxt, .{ dir, "iframework", "isystem" });
+                if (m.idirafter) std.log.warn(wtxt, .{ dir, "iframework", "idirafter" });
+            },
+        }
+        try self.argv.append(arg);
+        if (!joined) try self.argv.append(dir);
+    }
+
+    const Group = enum { I, isystem, idirafter, iframework };
+
+    const Membership = packed struct {
+        I: bool = false,
+        isystem: bool = false,
+        idirafter: bool = false,
+        iframework: bool = false,
+    };
+};
