@@ -4052,4 +4052,184 @@ pub fn cmdBuild(gpa: Allocator, arena: Allocator, args: []const []const u8) !voi
         _ = try child_argv.addOne();
 
         {
-            
+            var i: usize = 0;
+            while (i < args.len) : (i += 1) {
+                const arg = args[i];
+                if (mem.startsWith(u8, arg, "-")) {
+                    if (mem.eql(u8, arg, "--build-file")) {
+                        if (i + 1 >= args.len) fatal("expected argument after '{s}'", .{arg});
+                        i += 1;
+                        build_file = args[i];
+                        continue;
+                    } else if (mem.eql(u8, arg, "--zig-lib-dir")) {
+                        if (i + 1 >= args.len) fatal("expected argument after '{s}'", .{arg});
+                        i += 1;
+                        override_lib_dir = args[i];
+                        try child_argv.appendSlice(&[_][]const u8{ arg, args[i] });
+                        continue;
+                    } else if (mem.eql(u8, arg, "--build-runner")) {
+                        if (i + 1 >= args.len) fatal("expected argument after '{s}'", .{arg});
+                        i += 1;
+                        override_build_runner = args[i];
+                        continue;
+                    } else if (mem.eql(u8, arg, "--cache-dir")) {
+                        if (i + 1 >= args.len) fatal("expected argument after '{s}'", .{arg});
+                        i += 1;
+                        override_local_cache_dir = args[i];
+                        continue;
+                    } else if (mem.eql(u8, arg, "--global-cache-dir")) {
+                        if (i + 1 >= args.len) fatal("expected argument after '{s}'", .{arg});
+                        i += 1;
+                        override_global_cache_dir = args[i];
+                        continue;
+                    } else if (mem.eql(u8, arg, "--prominent-compile-errors")) {
+                        prominent_compile_errors = true;
+                    } else if (mem.eql(u8, arg, "-freference-trace")) {
+                        try child_argv.append(arg);
+                        reference_trace = 256;
+                    } else if (mem.startsWith(u8, arg, "-freference-trace=")) {
+                        try child_argv.append(arg);
+                        const num = arg["-freference-trace=".len..];
+                        reference_trace = std.fmt.parseUnsigned(u32, num, 10) catch |err| {
+                            fatal("unable to parse reference_trace count '{s}': {s}", .{ num, @errorName(err) });
+                        };
+                    } else if (mem.eql(u8, arg, "-fno-reference-trace")) {
+                        try child_argv.append(arg);
+                        reference_trace = null;
+                    } else if (mem.eql(u8, arg, "--debug-compile-errors")) {
+                        try child_argv.append(arg);
+                        debug_compile_errors = true;
+                    }
+                }
+                try child_argv.append(arg);
+            }
+        }
+
+        var zig_lib_directory: Compilation.Directory = if (override_lib_dir) |lib_dir| .{
+            .path = lib_dir,
+            .handle = fs.cwd().openDir(lib_dir, .{}) catch |err| {
+                fatal("unable to open zig lib directory from 'zig-lib-dir' argument: '{s}': {s}", .{ lib_dir, @errorName(err) });
+            },
+        } else introspect.findZigLibDirFromSelfExe(arena, self_exe_path) catch |err| {
+            fatal("unable to find zig installation directory '{s}': {s}", .{ self_exe_path, @errorName(err) });
+        };
+        defer zig_lib_directory.handle.close();
+
+        var cleanup_build_dir: ?fs.Dir = null;
+        defer if (cleanup_build_dir) |*dir| dir.close();
+
+        const cwd_path = try process.getCwdAlloc(arena);
+        const build_zig_basename = if (build_file) |bf| fs.path.basename(bf) else "build.zig";
+        const build_directory: Compilation.Directory = blk: {
+            if (build_file) |bf| {
+                if (fs.path.dirname(bf)) |dirname| {
+                    const dir = fs.cwd().openDir(dirname, .{}) catch |err| {
+                        fatal("unable to open directory to build file from argument 'build-file', '{s}': {s}", .{ dirname, @errorName(err) });
+                    };
+                    cleanup_build_dir = dir;
+                    break :blk .{ .path = dirname, .handle = dir };
+                }
+
+                break :blk .{ .path = null, .handle = fs.cwd() };
+            }
+            // Search up parent directories until we find build.zig.
+            var dirname: []const u8 = cwd_path;
+            while (true) {
+                const joined_path = try fs.path.join(arena, &[_][]const u8{ dirname, build_zig_basename });
+                if (fs.cwd().access(joined_path, .{})) |_| {
+                    const dir = fs.cwd().openDir(dirname, .{}) catch |err| {
+                        fatal("unable to open directory while searching for build.zig file, '{s}': {s}", .{ dirname, @errorName(err) });
+                    };
+                    break :blk .{ .path = dirname, .handle = dir };
+                } else |err| switch (err) {
+                    error.FileNotFound => {
+                        dirname = fs.path.dirname(dirname) orelse {
+                            std.log.info("{s}", .{
+                                \\Initialize a 'build.zig' template file with `zig init-lib` or `zig init-exe`,
+                                \\or see `zig --help` for more options.
+                            });
+                            fatal("No 'build.zig' file found, in the current directory or any parent directories.", .{});
+                        };
+                        continue;
+                    },
+                    else => |e| return e,
+                }
+            }
+        };
+        child_argv.items[argv_index_build_file] = build_directory.path orelse cwd_path;
+
+        var global_cache_directory: Compilation.Directory = l: {
+            const p = override_global_cache_dir orelse try introspect.resolveGlobalCacheDir(arena);
+            break :l .{
+                .handle = try fs.cwd().makeOpenPath(p, .{}),
+                .path = p,
+            };
+        };
+        defer global_cache_directory.handle.close();
+
+        child_argv.items[argv_index_global_cache_dir] = global_cache_directory.path orelse cwd_path;
+
+        var local_cache_directory: Compilation.Directory = l: {
+            if (override_local_cache_dir) |local_cache_dir_path| {
+                break :l .{
+                    .handle = try fs.cwd().makeOpenPath(local_cache_dir_path, .{}),
+                    .path = local_cache_dir_path,
+                };
+            }
+            const cache_dir_path = try build_directory.join(arena, &[_][]const u8{"zig-cache"});
+            break :l .{
+                .handle = try build_directory.handle.makeOpenPath("zig-cache", .{}),
+                .path = cache_dir_path,
+            };
+        };
+        defer local_cache_directory.handle.close();
+
+        child_argv.items[argv_index_cache_dir] = local_cache_directory.path orelse cwd_path;
+
+        gimmeMoreOfThoseSweetSweetFileDescriptors();
+
+        const cross_target: std.zig.CrossTarget = .{};
+        const target_info = try detectNativeTargetInfo(cross_target);
+
+        const exe_basename = try std.zig.binNameAlloc(arena, .{
+            .root_name = "build",
+            .target = target_info.target,
+            .output_mode = .Exe,
+        });
+        const emit_bin: Compilation.EmitLoc = .{
+            .directory = null, // Use the local zig-cache.
+            .basename = exe_basename,
+        };
+        var thread_pool: ThreadPool = undefined;
+        try thread_pool.init(gpa);
+        defer thread_pool.deinit();
+
+        var cleanup_build_runner_dir: ?fs.Dir = null;
+        defer if (cleanup_build_runner_dir) |*dir| dir.close();
+
+        var main_pkg: Package = if (override_build_runner) |build_runner_path|
+            .{
+                .root_src_directory = blk: {
+                    if (std.fs.path.dirname(build_runner_path)) |dirname| {
+                        const dir = fs.cwd().openDir(dirname, .{}) catch |err| {
+                            fatal("unable to open directory to build runner from argument 'build-runner', '{s}': {s}", .{ dirname, @errorName(err) });
+                        };
+                        cleanup_build_runner_dir = dir;
+                        break :blk .{ .path = dirname, .handle = dir };
+                    }
+
+                    break :blk .{ .path = null, .handle = fs.cwd() };
+                },
+                .root_src_path = std.fs.path.basename(build_runner_path),
+            }
+        else
+            .{
+                .root_src_directory = zig_lib_directory,
+                .root_src_path = "build_runner.zig",
+            };
+
+        if (!build_options.omit_pkg_fetching_code) {
+            var http_client: std.http.Client = .{ .allocator = gpa };
+            defer http_client.deinit();
+
+            // Here we provide an import to
