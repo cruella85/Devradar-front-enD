@@ -4460,4 +4460,273 @@ pub fn cmdFmt(gpa: Allocator, arena: Allocator, args: []const []const u8) !void 
                     i += 1;
                     const next_arg = args[i];
                     color = std.meta.stringToEnum(Color, next_arg) orelse {
-                        fatal("expected [auto|on|off] after --color, f
+                        fatal("expected [auto|on|off] after --color, found '{s}'", .{next_arg});
+                    };
+                } else if (mem.eql(u8, arg, "--stdin")) {
+                    stdin_flag = true;
+                } else if (mem.eql(u8, arg, "--check")) {
+                    check_flag = true;
+                } else if (mem.eql(u8, arg, "--ast-check")) {
+                    check_ast_flag = true;
+                } else if (mem.eql(u8, arg, "--exclude")) {
+                    if (i + 1 >= args.len) {
+                        fatal("expected parameter after --exclude", .{});
+                    }
+                    i += 1;
+                    const next_arg = args[i];
+                    try excluded_files.append(next_arg);
+                } else {
+                    fatal("unrecognized parameter: '{s}'", .{arg});
+                }
+            } else {
+                try input_files.append(arg);
+            }
+        }
+    }
+
+    if (stdin_flag) {
+        if (input_files.items.len != 0) {
+            fatal("cannot use --stdin with positional arguments", .{});
+        }
+
+        const stdin = io.getStdIn();
+        const source_code = readSourceFileToEndAlloc(gpa, &stdin, null) catch |err| {
+            fatal("unable to read stdin: {}", .{err});
+        };
+        defer gpa.free(source_code);
+
+        var tree = Ast.parse(gpa, source_code, .zig) catch |err| {
+            fatal("error parsing stdin: {}", .{err});
+        };
+        defer tree.deinit(gpa);
+
+        try printErrsMsgToStdErr(gpa, arena, tree, "<stdin>", color);
+        var has_ast_error = false;
+        if (check_ast_flag) {
+            const Module = @import("Module.zig");
+            const AstGen = @import("AstGen.zig");
+
+            var file: Module.File = .{
+                .status = .never_loaded,
+                .source_loaded = true,
+                .zir_loaded = false,
+                .sub_file_path = "<stdin>",
+                .source = source_code,
+                .stat = undefined,
+                .tree = tree,
+                .tree_loaded = true,
+                .zir = undefined,
+                .pkg = undefined,
+                .root_decl = .none,
+            };
+
+            file.pkg = try Package.create(gpa, null, file.sub_file_path);
+            defer file.pkg.destroy(gpa);
+
+            file.zir = try AstGen.generate(gpa, file.tree);
+            file.zir_loaded = true;
+            defer file.zir.deinit(gpa);
+
+            if (file.zir.hasCompileErrors()) {
+                var arena_instance = std.heap.ArenaAllocator.init(gpa);
+                defer arena_instance.deinit();
+                var errors = std.ArrayList(Compilation.AllErrors.Message).init(gpa);
+                defer errors.deinit();
+
+                try Compilation.AllErrors.addZir(arena_instance.allocator(), &errors, &file);
+                const ttyconf: std.debug.TTY.Config = switch (color) {
+                    .auto => std.debug.detectTTYConfig(std.io.getStdErr()),
+                    .on => .escape_codes,
+                    .off => .no_color,
+                };
+                for (errors.items) |full_err_msg| {
+                    full_err_msg.renderToStdErr(ttyconf);
+                }
+                has_ast_error = true;
+            }
+        }
+        if (tree.errors.len != 0 or has_ast_error) {
+            process.exit(1);
+        }
+        const formatted = try tree.render(gpa);
+        defer gpa.free(formatted);
+
+        if (check_flag) {
+            const code: u8 = @boolToInt(mem.eql(u8, formatted, source_code));
+            process.exit(code);
+        }
+
+        return io.getStdOut().writeAll(formatted);
+    }
+
+    if (input_files.items.len == 0) {
+        fatal("expected at least one source file argument", .{});
+    }
+
+    var fmt = Fmt{
+        .gpa = gpa,
+        .arena = arena,
+        .seen = Fmt.SeenMap.init(gpa),
+        .any_error = false,
+        .check_ast = check_ast_flag,
+        .color = color,
+        .out_buffer = std.ArrayList(u8).init(gpa),
+    };
+    defer fmt.seen.deinit();
+    defer fmt.out_buffer.deinit();
+
+    // Mark any excluded files/directories as already seen,
+    // so that they are skipped later during actual processing
+    for (excluded_files.items) |file_path| {
+        var dir = fs.cwd().openDir(file_path, .{}) catch |err| switch (err) {
+            error.FileNotFound => continue,
+            else => |e| return e,
+        };
+        defer dir.close();
+
+        const stat = try dir.stat();
+        try fmt.seen.put(stat.inode, {});
+    }
+
+    for (input_files.items) |file_path| {
+        try fmtPath(&fmt, file_path, check_flag, fs.cwd(), file_path);
+    }
+    if (fmt.any_error) {
+        process.exit(1);
+    }
+}
+
+const FmtError = error{
+    SystemResources,
+    OperationAborted,
+    IoPending,
+    BrokenPipe,
+    Unexpected,
+    WouldBlock,
+    FileClosed,
+    DestinationAddressRequired,
+    DiskQuota,
+    FileTooBig,
+    InputOutput,
+    NoSpaceLeft,
+    AccessDenied,
+    OutOfMemory,
+    RenameAcrossMountPoints,
+    ReadOnlyFileSystem,
+    LinkQuotaExceeded,
+    FileBusy,
+    EndOfStream,
+    Unseekable,
+    NotOpenForWriting,
+    UnsupportedEncoding,
+    ConnectionResetByPeer,
+    LockViolation,
+    NetNameDeleted,
+    InvalidArgument,
+} || fs.File.OpenError;
+
+fn fmtPath(fmt: *Fmt, file_path: []const u8, check_mode: bool, dir: fs.Dir, sub_path: []const u8) FmtError!void {
+    fmtPathFile(fmt, file_path, check_mode, dir, sub_path) catch |err| switch (err) {
+        error.IsDir, error.AccessDenied => return fmtPathDir(fmt, file_path, check_mode, dir, sub_path),
+        else => {
+            warn("unable to format '{s}': {s}", .{ file_path, @errorName(err) });
+            fmt.any_error = true;
+            return;
+        },
+    };
+}
+
+fn fmtPathDir(
+    fmt: *Fmt,
+    file_path: []const u8,
+    check_mode: bool,
+    parent_dir: fs.Dir,
+    parent_sub_path: []const u8,
+) FmtError!void {
+    var iterable_dir = try parent_dir.openIterableDir(parent_sub_path, .{});
+    defer iterable_dir.close();
+
+    const stat = try iterable_dir.dir.stat();
+    if (try fmt.seen.fetchPut(stat.inode, {})) |_| return;
+
+    var dir_it = iterable_dir.iterate();
+    while (try dir_it.next()) |entry| {
+        const is_dir = entry.kind == .Directory;
+
+        if (is_dir and (mem.eql(u8, entry.name, "zig-cache") or mem.eql(u8, entry.name, "zig-out"))) continue;
+
+        if (is_dir or entry.kind == .File and (mem.endsWith(u8, entry.name, ".zig") or mem.endsWith(u8, entry.name, ".zon"))) {
+            const full_path = try fs.path.join(fmt.gpa, &[_][]const u8{ file_path, entry.name });
+            defer fmt.gpa.free(full_path);
+
+            if (is_dir) {
+                try fmtPathDir(fmt, full_path, check_mode, iterable_dir.dir, entry.name);
+            } else {
+                fmtPathFile(fmt, full_path, check_mode, iterable_dir.dir, entry.name) catch |err| {
+                    warn("unable to format '{s}': {s}", .{ full_path, @errorName(err) });
+                    fmt.any_error = true;
+                    return;
+                };
+            }
+        }
+    }
+}
+
+fn fmtPathFile(
+    fmt: *Fmt,
+    file_path: []const u8,
+    check_mode: bool,
+    dir: fs.Dir,
+    sub_path: []const u8,
+) FmtError!void {
+    const source_file = try dir.openFile(sub_path, .{});
+    var file_closed = false;
+    errdefer if (!file_closed) source_file.close();
+
+    const stat = try source_file.stat();
+
+    if (stat.kind == .Directory)
+        return error.IsDir;
+
+    const source_code = try readSourceFileToEndAlloc(
+        fmt.gpa,
+        &source_file,
+        std.math.cast(usize, stat.size) orelse return error.FileTooBig,
+    );
+    defer fmt.gpa.free(source_code);
+
+    source_file.close();
+    file_closed = true;
+
+    // Add to set after no longer possible to get error.IsDir.
+    if (try fmt.seen.fetchPut(stat.inode, {})) |_| return;
+
+    var tree = try Ast.parse(fmt.gpa, source_code, .zig);
+    defer tree.deinit(fmt.gpa);
+
+    try printErrsMsgToStdErr(fmt.gpa, fmt.arena, tree, file_path, fmt.color);
+    if (tree.errors.len != 0) {
+        fmt.any_error = true;
+        return;
+    }
+
+    if (fmt.check_ast) {
+        const Module = @import("Module.zig");
+        const AstGen = @import("AstGen.zig");
+
+        var file: Module.File = .{
+            .status = .never_loaded,
+            .source_loaded = true,
+            .zir_loaded = false,
+            .sub_file_path = file_path,
+            .source = source_code,
+            .stat = .{
+                .size = stat.size,
+                .inode = stat.inode,
+                .mtime = stat.mtime,
+            },
+            .tree = tree,
+            .tree_loaded = true,
+            .zir = undefined,
+            .pkg = undefined,
+      
