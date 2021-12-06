@@ -4729,4 +4729,235 @@ fn fmtPathFile(
             .tree_loaded = true,
             .zir = undefined,
             .pkg = undefined,
-      
+            .root_decl = .none,
+        };
+
+        file.pkg = try Package.create(fmt.gpa, null, file.sub_file_path);
+        defer file.pkg.destroy(fmt.gpa);
+
+        if (stat.size > max_src_size)
+            return error.FileTooBig;
+
+        file.zir = try AstGen.generate(fmt.gpa, file.tree);
+        file.zir_loaded = true;
+        defer file.zir.deinit(fmt.gpa);
+
+        if (file.zir.hasCompileErrors()) {
+            var arena_instance = std.heap.ArenaAllocator.init(fmt.gpa);
+            defer arena_instance.deinit();
+            var errors = std.ArrayList(Compilation.AllErrors.Message).init(fmt.gpa);
+            defer errors.deinit();
+
+            try Compilation.AllErrors.addZir(arena_instance.allocator(), &errors, &file);
+            const ttyconf: std.debug.TTY.Config = switch (fmt.color) {
+                .auto => std.debug.detectTTYConfig(std.io.getStdErr()),
+                .on => .escape_codes,
+                .off => .no_color,
+            };
+            for (errors.items) |full_err_msg| {
+                full_err_msg.renderToStdErr(ttyconf);
+            }
+            fmt.any_error = true;
+        }
+    }
+
+    // As a heuristic, we make enough capacity for the same as the input source.
+    fmt.out_buffer.shrinkRetainingCapacity(0);
+    try fmt.out_buffer.ensureTotalCapacity(source_code.len);
+
+    try tree.renderToArrayList(&fmt.out_buffer);
+    if (mem.eql(u8, fmt.out_buffer.items, source_code))
+        return;
+
+    if (check_mode) {
+        const stdout = io.getStdOut().writer();
+        try stdout.print("{s}\n", .{file_path});
+        fmt.any_error = true;
+    } else {
+        var af = try dir.atomicFile(sub_path, .{ .mode = stat.mode });
+        defer af.deinit();
+
+        try af.file.writeAll(fmt.out_buffer.items);
+        try af.finish();
+        const stdout = io.getStdOut().writer();
+        try stdout.print("{s}\n", .{file_path});
+    }
+}
+
+pub fn printErrsMsgToStdErr(
+    gpa: mem.Allocator,
+    arena: mem.Allocator,
+    tree: Ast,
+    path: []const u8,
+    color: Color,
+) !void {
+    const parse_errors: []const Ast.Error = tree.errors;
+    var i: usize = 0;
+    while (i < parse_errors.len) : (i += 1) {
+        const parse_error = parse_errors[i];
+        const lok_token = parse_error.token;
+        const token_tags = tree.tokens.items(.tag);
+        const start_loc = tree.tokenLocation(0, lok_token);
+        const source_line = tree.source[start_loc.line_start..start_loc.line_end];
+
+        var text_buf = std.ArrayList(u8).init(gpa);
+        defer text_buf.deinit();
+        const writer = text_buf.writer();
+        try tree.renderError(parse_error, writer);
+        const text = try arena.dupe(u8, text_buf.items);
+
+        var notes_buffer: [2]Compilation.AllErrors.Message = undefined;
+        var notes_len: usize = 0;
+
+        if (token_tags[parse_error.token + @boolToInt(parse_error.token_is_prev)] == .invalid) {
+            const bad_off = @intCast(u32, tree.tokenSlice(parse_error.token + @boolToInt(parse_error.token_is_prev)).len);
+            const byte_offset = @intCast(u32, start_loc.line_start) + @intCast(u32, start_loc.column) + bad_off;
+            notes_buffer[notes_len] = .{
+                .src = .{
+                    .src_path = path,
+                    .msg = try std.fmt.allocPrint(arena, "invalid byte: '{'}'", .{
+                        std.zig.fmtEscapes(tree.source[byte_offset..][0..1]),
+                    }),
+                    .span = .{ .start = byte_offset, .end = byte_offset + 1, .main = byte_offset },
+                    .line = @intCast(u32, start_loc.line),
+                    .column = @intCast(u32, start_loc.column) + bad_off,
+                    .source_line = source_line,
+                },
+            };
+            notes_len += 1;
+        }
+
+        for (parse_errors[i + 1 ..]) |note| {
+            if (!note.is_note) break;
+
+            text_buf.items.len = 0;
+            try tree.renderError(note, writer);
+            const note_loc = tree.tokenLocation(0, note.token);
+            const byte_offset = @intCast(u32, note_loc.line_start);
+            notes_buffer[notes_len] = .{
+                .src = .{
+                    .src_path = path,
+                    .msg = try arena.dupe(u8, text_buf.items),
+                    .span = .{
+                        .start = byte_offset,
+                        .end = byte_offset + @intCast(u32, tree.tokenSlice(note.token).len),
+                        .main = byte_offset,
+                    },
+                    .line = @intCast(u32, note_loc.line),
+                    .column = @intCast(u32, note_loc.column),
+                    .source_line = tree.source[note_loc.line_start..note_loc.line_end],
+                },
+            };
+            i += 1;
+            notes_len += 1;
+        }
+
+        const extra_offset = tree.errorOffset(parse_error);
+        const byte_offset = @intCast(u32, start_loc.line_start) + extra_offset;
+        const message: Compilation.AllErrors.Message = .{
+            .src = .{
+                .src_path = path,
+                .msg = text,
+                .span = .{
+                    .start = byte_offset,
+                    .end = byte_offset + @intCast(u32, tree.tokenSlice(lok_token).len),
+                    .main = byte_offset,
+                },
+                .line = @intCast(u32, start_loc.line),
+                .column = @intCast(u32, start_loc.column) + extra_offset,
+                .source_line = source_line,
+                .notes = notes_buffer[0..notes_len],
+            },
+        };
+
+        const ttyconf: std.debug.TTY.Config = switch (color) {
+            .auto => std.debug.detectTTYConfig(std.io.getStdErr()),
+            .on => .escape_codes,
+            .off => .no_color,
+        };
+
+        message.renderToStdErr(ttyconf);
+    }
+}
+
+pub const info_zen =
+    \\
+    \\ * Communicate intent precisely.
+    \\ * Edge cases matter.
+    \\ * Favor reading code over writing code.
+    \\ * Only one obvious way to do things.
+    \\ * Runtime crashes are better than bugs.
+    \\ * Compile errors are better than runtime crashes.
+    \\ * Incremental improvements.
+    \\ * Avoid local maximums.
+    \\ * Reduce the amount one must remember.
+    \\ * Focus on code rather than style.
+    \\ * Resource allocation may fail; resource deallocation must succeed.
+    \\ * Memory is a resource.
+    \\ * Together we serve the users.
+    \\
+    \\
+;
+
+extern fn ZigClangIsLLVMUsingSeparateLibcxx() bool;
+
+extern "c" fn ZigClang_main(argc: c_int, argv: [*:null]?[*:0]u8) c_int;
+extern "c" fn ZigLlvmAr_main(argc: c_int, argv: [*:null]?[*:0]u8) c_int;
+
+fn argsCopyZ(alloc: Allocator, args: []const []const u8) ![:null]?[*:0]u8 {
+    var argv = try alloc.allocSentinel(?[*:0]u8, args.len, null);
+    for (args, 0..) |arg, i| {
+        argv[i] = try alloc.dupeZ(u8, arg); // TODO If there was an argsAllocZ we could avoid this allocation.
+    }
+    return argv;
+}
+
+pub fn clangMain(alloc: Allocator, args: []const []const u8) error{OutOfMemory}!u8 {
+    if (!build_options.have_llvm)
+        fatal("`zig cc` and `zig c++` unavailable: compiler built without LLVM extensions", .{});
+
+    var arena_instance = std.heap.ArenaAllocator.init(alloc);
+    defer arena_instance.deinit();
+    const arena = arena_instance.allocator();
+
+    // Convert the args to the null-terminated format Clang expects.
+    const argv = try argsCopyZ(arena, args);
+    const exit_code = ZigClang_main(@intCast(c_int, argv.len), argv.ptr);
+    return @bitCast(u8, @truncate(i8, exit_code));
+}
+
+pub fn llvmArMain(alloc: Allocator, args: []const []const u8) error{OutOfMemory}!u8 {
+    if (!build_options.have_llvm)
+        fatal("`zig ar`, `zig dlltool`, `zig ranlib', and `zig lib` unavailable: compiler built without LLVM extensions", .{});
+
+    var arena_instance = std.heap.ArenaAllocator.init(alloc);
+    defer arena_instance.deinit();
+    const arena = arena_instance.allocator();
+
+    // Convert the args to the format llvm-ar expects.
+    // We intentionally shave off the zig binary at args[0].
+    const argv = try argsCopyZ(arena, args[1..]);
+    const exit_code = ZigLlvmAr_main(@intCast(c_int, argv.len), argv.ptr);
+    return @bitCast(u8, @truncate(i8, exit_code));
+}
+
+/// The first argument determines which backend is invoked. The options are:
+/// * `ld.lld` - ELF
+/// * `lld-link` - COFF
+/// * `wasm-ld` - WebAssembly
+pub fn lldMain(
+    alloc: Allocator,
+    args: []const []const u8,
+    can_exit_early: bool,
+) error{OutOfMemory}!u8 {
+    if (!build_options.have_llvm)
+        fatal("`zig {s}` unavailable: compiler built without LLVM extensions", .{args[0]});
+
+    // Print a warning if lld is called multiple times in the same process,
+    // since it may misbehave
+    // https://github.com/ziglang/zig/issues/3825
+    const CallCounter = struct {
+        var count: usize = 0;
+    };
+    if (CallCounter.count == 1) { // Issue the warning on the first repeat call
+        warn(
