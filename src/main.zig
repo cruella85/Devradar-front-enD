@@ -5209,4 +5209,251 @@ pub const ClangArgIterator = struct {
                 if (prefix_len != 0) {
                     self.only_arg = arg[prefix_len..];
                     if (self.next_index >= self.argv.len) {
-                        fatal("Expected par
+                        fatal("Expected parameter after '{s}'", .{arg});
+                    }
+                    self.second_arg = self.argv[self.next_index];
+                    self.incrementArgIndex();
+                    self.other_args.len += 1;
+                    self.zig_equivalent = clang_arg.zig_equivalent;
+                    break :find_clang_arg;
+                }
+            },
+            .separate => if (clang_arg.matchEql(arg) > 0) {
+                if (self.next_index >= self.argv.len) {
+                    fatal("Expected parameter after '{s}'", .{arg});
+                }
+                self.only_arg = self.argv[self.next_index];
+                self.incrementArgIndex();
+                self.other_args.len += 1;
+                self.zig_equivalent = clang_arg.zig_equivalent;
+                break :find_clang_arg;
+            },
+            .remaining_args_joined => {
+                const prefix_len = clang_arg.matchStartsWith(arg);
+                if (prefix_len != 0) {
+                    @panic("TODO");
+                }
+            },
+            .multi_arg => |num_args| if (clang_arg.matchEql(arg) > 0) {
+                // Example `-sectcreate <arg1> <arg2> <arg3>`.
+                var i: usize = 0;
+                while (i < num_args) : (i += 1) {
+                    self.incrementArgIndex();
+                    self.other_args.len += 1;
+                }
+                self.zig_equivalent = clang_arg.zig_equivalent;
+                break :find_clang_arg;
+            },
+        } else {
+            fatal("Unknown Clang option: '{s}'", .{arg});
+        }
+    }
+
+    fn incrementArgIndex(self: *ClangArgIterator) void {
+        self.next_index += 1;
+        self.resolveRespFileArgs();
+    }
+
+    fn resolveRespFileArgs(self: *ClangArgIterator) void {
+        const arena = self.arena;
+        if (self.next_index >= self.argv.len) {
+            if (self.root_args) |root_args| {
+                self.next_index = root_args.next_index;
+                self.argv = root_args.argv;
+
+                arena.destroy(root_args);
+                self.root_args = null;
+            }
+            if (self.next_index >= self.argv.len) {
+                self.has_next = false;
+            }
+        }
+    }
+};
+
+fn parseCodeModel(arg: []const u8) std.builtin.CodeModel {
+    return std.meta.stringToEnum(std.builtin.CodeModel, arg) orelse
+        fatal("unsupported machine code model: '{s}'", .{arg});
+}
+
+/// Raise the open file descriptor limit. Ask and ye shall receive.
+/// For one example of why this is handy, consider the case of building musl libc.
+/// We keep a lock open for each of the object files in the form of a file descriptor
+/// until they are finally put into an archive file. This is to allow a zig-cache
+/// garbage collector to run concurrently to zig processes, and to allow multiple
+/// zig processes to run concurrently with each other, without clobbering each other.
+fn gimmeMoreOfThoseSweetSweetFileDescriptors() void {
+    if (!@hasDecl(std.os.system, "rlimit")) return;
+    const posix = std.os;
+
+    var lim = posix.getrlimit(.NOFILE) catch return; // Oh well; we tried.
+    if (comptime builtin.target.isDarwin()) {
+        // On Darwin, `NOFILE` is bounded by a hardcoded value `OPEN_MAX`.
+        // According to the man pages for setrlimit():
+        //   setrlimit() now returns with errno set to EINVAL in places that historically succeeded.
+        //   It no longer accepts "rlim_cur = RLIM.INFINITY" for RLIM.NOFILE.
+        //   Use "rlim_cur = min(OPEN_MAX, rlim_max)".
+        lim.max = std.math.min(std.os.darwin.OPEN_MAX, lim.max);
+    }
+    if (lim.cur == lim.max) return;
+
+    // Do a binary search for the limit.
+    var min: posix.rlim_t = lim.cur;
+    var max: posix.rlim_t = 1 << 20;
+    // But if there's a defined upper bound, don't search, just set it.
+    if (lim.max != posix.RLIM.INFINITY) {
+        min = lim.max;
+        max = lim.max;
+    }
+
+    while (true) {
+        lim.cur = min + @divTrunc(max - min, 2); // on freebsd rlim_t is signed
+        if (posix.setrlimit(.NOFILE, lim)) |_| {
+            min = lim.cur;
+        } else |_| {
+            max = lim.cur;
+        }
+        if (min + 1 >= max) break;
+    }
+}
+
+test "fds" {
+    gimmeMoreOfThoseSweetSweetFileDescriptors();
+}
+
+fn detectNativeTargetInfo(cross_target: std.zig.CrossTarget) !std.zig.system.NativeTargetInfo {
+    return std.zig.system.NativeTargetInfo.detect(cross_target);
+}
+
+/// Indicate that we are now terminating with a successful exit code.
+/// In debug builds, this is a no-op, so that the calling code's
+/// cleanup mechanisms are tested and so that external tools that
+/// check for resource leaks can be accurate. In release builds, this
+/// calls exit(0), and does not return.
+pub fn cleanExit() void {
+    if (builtin.mode == .Debug) {
+        return;
+    } else {
+        process.exit(0);
+    }
+}
+
+const usage_ast_check =
+    \\Usage: zig ast-check [file]
+    \\
+    \\    Given a .zig source file, reports any compile errors that can be
+    \\    ascertained on the basis of the source code alone, without target
+    \\    information or type checking.
+    \\
+    \\    If [file] is omitted, stdin is used.
+    \\
+    \\Options:
+    \\  -h, --help            Print this help and exit
+    \\  --color [auto|off|on] Enable or disable colored error messages
+    \\  -t                    (debug option) Output ZIR in text form to stdout
+    \\
+    \\
+;
+
+pub fn cmdAstCheck(
+    gpa: Allocator,
+    arena: Allocator,
+    args: []const []const u8,
+) !void {
+    const Module = @import("Module.zig");
+    const AstGen = @import("AstGen.zig");
+    const Zir = @import("Zir.zig");
+
+    var color: Color = .auto;
+    var want_output_text = false;
+    var zig_source_file: ?[]const u8 = null;
+
+    var i: usize = 0;
+    while (i < args.len) : (i += 1) {
+        const arg = args[i];
+        if (mem.startsWith(u8, arg, "-")) {
+            if (mem.eql(u8, arg, "-h") or mem.eql(u8, arg, "--help")) {
+                try io.getStdOut().writeAll(usage_ast_check);
+                return cleanExit();
+            } else if (mem.eql(u8, arg, "-t")) {
+                want_output_text = true;
+            } else if (mem.eql(u8, arg, "--color")) {
+                if (i + 1 >= args.len) {
+                    fatal("expected [auto|on|off] after --color", .{});
+                }
+                i += 1;
+                const next_arg = args[i];
+                color = std.meta.stringToEnum(Color, next_arg) orelse {
+                    fatal("expected [auto|on|off] after --color, found '{s}'", .{next_arg});
+                };
+            } else {
+                fatal("unrecognized parameter: '{s}'", .{arg});
+            }
+        } else if (zig_source_file == null) {
+            zig_source_file = arg;
+        } else {
+            fatal("extra positional parameter: '{s}'", .{arg});
+        }
+    }
+
+    var file: Module.File = .{
+        .status = .never_loaded,
+        .source_loaded = false,
+        .tree_loaded = false,
+        .zir_loaded = false,
+        .sub_file_path = undefined,
+        .source = undefined,
+        .stat = undefined,
+        .tree = undefined,
+        .zir = undefined,
+        .pkg = undefined,
+        .root_decl = .none,
+    };
+    if (zig_source_file) |file_name| {
+        var f = fs.cwd().openFile(file_name, .{}) catch |err| {
+            fatal("unable to open file for ast-check '{s}': {s}", .{ file_name, @errorName(err) });
+        };
+        defer f.close();
+
+        const stat = try f.stat();
+
+        if (stat.size > max_src_size)
+            return error.FileTooBig;
+
+        const source = try arena.allocSentinel(u8, @intCast(usize, stat.size), 0);
+        const amt = try f.readAll(source);
+        if (amt != stat.size)
+            return error.UnexpectedEndOfFile;
+
+        file.sub_file_path = file_name;
+        file.source = source;
+        file.source_loaded = true;
+        file.stat = .{
+            .size = stat.size,
+            .inode = stat.inode,
+            .mtime = stat.mtime,
+        };
+    } else {
+        const stdin = io.getStdIn();
+        const source = readSourceFileToEndAlloc(arena, &stdin, null) catch |err| {
+            fatal("unable to read stdin: {}", .{err});
+        };
+        file.sub_file_path = "<stdin>";
+        file.source = source;
+        file.source_loaded = true;
+        file.stat.size = source.len;
+    }
+
+    file.pkg = try Package.create(gpa, null, file.sub_file_path);
+    defer file.pkg.destroy(gpa);
+
+    file.tree = try Ast.parse(gpa, file.source, .zig);
+    file.tree_loaded = true;
+    defer file.tree.deinit(gpa);
+
+    try printErrsMsgToStdErr(gpa, arena, file.tree, file.sub_file_path, color);
+    if (file.tree.errors.len != 0) {
+        process.exit(1);
+    }
+
+    file.zir = try AstGen.gene
