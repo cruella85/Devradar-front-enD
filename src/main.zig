@@ -3831,4 +3831,225 @@ fn cmdTranslateC(comp: *Compilation, arena: Allocator, enable_cache: bool) !void
 pub const usage_libc =
     \\Usage: zig libc
     \\
-  
+    \\    Detect the native libc installation and print the resulting
+    \\    paths to stdout. You can save this into a file and then edit
+    \\    the paths to create a cross compilation libc kit. Then you
+    \\    can pass `--libc [file]` for Zig to use it.
+    \\
+    \\Usage: zig libc [paths_file]
+    \\
+    \\    Parse a libc installation text file and validate it.
+    \\
+    \\Options:
+    \\    -h, --help             Print this help and exit
+    \\    -target [name]         <arch><sub>-<os>-<abi> see the targets command
+    \\
+;
+
+pub fn cmdLibC(gpa: Allocator, args: []const []const u8) !void {
+    var input_file: ?[]const u8 = null;
+    var target_arch_os_abi: []const u8 = "native";
+    {
+        var i: usize = 0;
+        while (i < args.len) : (i += 1) {
+            const arg = args[i];
+            if (mem.startsWith(u8, arg, "-")) {
+                if (mem.eql(u8, arg, "-h") or mem.eql(u8, arg, "--help")) {
+                    const stdout = io.getStdOut().writer();
+                    try stdout.writeAll(usage_libc);
+                    return cleanExit();
+                } else if (mem.eql(u8, arg, "-target")) {
+                    if (i + 1 >= args.len) fatal("expected parameter after {s}", .{arg});
+                    i += 1;
+                    target_arch_os_abi = args[i];
+                } else {
+                    fatal("unrecognized parameter: '{s}'", .{arg});
+                }
+            } else if (input_file != null) {
+                fatal("unexpected extra parameter: '{s}'", .{arg});
+            } else {
+                input_file = arg;
+            }
+        }
+    }
+
+    const cross_target = try parseCrossTargetOrReportFatalError(gpa, .{
+        .arch_os_abi = target_arch_os_abi,
+    });
+
+    if (input_file) |libc_file| {
+        var libc = LibCInstallation.parse(gpa, libc_file, cross_target) catch |err| {
+            fatal("unable to parse libc file at path {s}: {s}", .{ libc_file, @errorName(err) });
+        };
+        defer libc.deinit(gpa);
+    } else {
+        if (!cross_target.isNative()) {
+            fatal("unable to detect libc for non-native target", .{});
+        }
+
+        var libc = LibCInstallation.findNative(.{
+            .allocator = gpa,
+            .verbose = true,
+        }) catch |err| {
+            fatal("unable to detect native libc: {s}", .{@errorName(err)});
+        };
+        defer libc.deinit(gpa);
+
+        var bw = io.bufferedWriter(io.getStdOut().writer());
+        try libc.render(bw.writer());
+        try bw.flush();
+    }
+}
+
+pub const usage_init =
+    \\Usage: zig init-exe
+    \\       zig init-lib
+    \\
+    \\   Initializes a `zig build` project in the current working
+    \\   directory.
+    \\
+    \\Options:
+    \\   -h, --help             Print this help and exit
+    \\
+    \\
+;
+
+pub fn cmdInit(
+    gpa: Allocator,
+    arena: Allocator,
+    args: []const []const u8,
+    output_mode: std.builtin.OutputMode,
+) !void {
+    _ = gpa;
+    {
+        var i: usize = 0;
+        while (i < args.len) : (i += 1) {
+            const arg = args[i];
+            if (mem.startsWith(u8, arg, "-")) {
+                if (mem.eql(u8, arg, "-h") or mem.eql(u8, arg, "--help")) {
+                    try io.getStdOut().writeAll(usage_init);
+                    return cleanExit();
+                } else {
+                    fatal("unrecognized parameter: '{s}'", .{arg});
+                }
+            } else {
+                fatal("unexpected extra parameter: '{s}'", .{arg});
+            }
+        }
+    }
+    const self_exe_path = try introspect.findZigExePath(arena);
+    var zig_lib_directory = introspect.findZigLibDirFromSelfExe(arena, self_exe_path) catch |err| {
+        fatal("unable to find zig installation directory: {s}\n", .{@errorName(err)});
+    };
+    defer zig_lib_directory.handle.close();
+
+    const s = fs.path.sep_str;
+    const template_sub_path = switch (output_mode) {
+        .Obj => unreachable,
+        .Lib => "init-lib",
+        .Exe => "init-exe",
+    };
+    var template_dir = zig_lib_directory.handle.openDir(template_sub_path, .{}) catch |err| {
+        const path = zig_lib_directory.path orelse ".";
+        fatal("unable to open zig project template directory '{s}{s}{s}': {s}", .{ path, s, template_sub_path, @errorName(err) });
+    };
+    defer template_dir.close();
+
+    const cwd_path = try process.getCwdAlloc(arena);
+    const cwd_basename = fs.path.basename(cwd_path);
+
+    const max_bytes = 10 * 1024 * 1024;
+    const build_zig_contents = template_dir.readFileAlloc(arena, "build.zig", max_bytes) catch |err| {
+        fatal("unable to read template file 'build.zig': {s}", .{@errorName(err)});
+    };
+    var modified_build_zig_contents = try std.ArrayList(u8).initCapacity(arena, build_zig_contents.len);
+    for (build_zig_contents) |c| {
+        if (c == '$') {
+            try modified_build_zig_contents.appendSlice(cwd_basename);
+        } else {
+            try modified_build_zig_contents.append(c);
+        }
+    }
+    const main_zig_contents = template_dir.readFileAlloc(arena, "src" ++ s ++ "main.zig", max_bytes) catch |err| {
+        fatal("unable to read template file 'main.zig': {s}", .{@errorName(err)});
+    };
+    if (fs.cwd().access("build.zig", .{})) |_| {
+        fatal("existing build.zig file would be overwritten", .{});
+    } else |err| switch (err) {
+        error.FileNotFound => {},
+        else => fatal("unable to test existence of build.zig: {s}\n", .{@errorName(err)}),
+    }
+    if (fs.cwd().access("src" ++ s ++ "main.zig", .{})) |_| {
+        fatal("existing src" ++ s ++ "main.zig file would be overwritten", .{});
+    } else |err| switch (err) {
+        error.FileNotFound => {},
+        else => fatal("unable to test existence of src" ++ s ++ "main.zig: {s}\n", .{@errorName(err)}),
+    }
+    var src_dir = try fs.cwd().makeOpenPath("src", .{});
+    defer src_dir.close();
+
+    try src_dir.writeFile("main.zig", main_zig_contents);
+    try fs.cwd().writeFile("build.zig", modified_build_zig_contents.items);
+
+    std.log.info("Created build.zig", .{});
+    std.log.info("Created src" ++ s ++ "main.zig", .{});
+
+    switch (output_mode) {
+        .Lib => std.log.info("Next, try `zig build --help` or `zig build test`", .{}),
+        .Exe => std.log.info("Next, try `zig build --help` or `zig build run`", .{}),
+        .Obj => unreachable,
+    }
+}
+
+pub const usage_build =
+    \\Usage: zig build [steps] [options]
+    \\
+    \\   Build a project from build.zig.
+    \\
+    \\Options:
+    \\   -freference-trace[=num]       How many lines of reference trace should be shown per compile error
+    \\   -fno-reference-trace          Disable reference trace
+    \\   --build-file [file]           Override path to build.zig
+    \\   --cache-dir [path]            Override path to local Zig cache directory
+    \\   --global-cache-dir [path]     Override path to global Zig cache directory
+    \\   --zig-lib-dir [arg]           Override path to Zig lib directory
+    \\   --build-runner [file]         Override path to build runner
+    \\   --prominent-compile-errors    Output compile errors formatted for a human to read
+    \\   -h, --help                    Print this help and exit
+    \\
+;
+
+pub fn cmdBuild(gpa: Allocator, arena: Allocator, args: []const []const u8) !void {
+    var color: Color = .auto;
+    var prominent_compile_errors: bool = false;
+
+    // We want to release all the locks before executing the child process, so we make a nice
+    // big block here to ensure the cleanup gets run when we extract out our argv.
+    const child_argv = argv: {
+        const self_exe_path = try introspect.findZigExePath(arena);
+
+        var build_file: ?[]const u8 = null;
+        var override_lib_dir: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_LIB_DIR");
+        var override_global_cache_dir: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_GLOBAL_CACHE_DIR");
+        var override_local_cache_dir: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_LOCAL_CACHE_DIR");
+        var override_build_runner: ?[]const u8 = try optionalStringEnvVar(arena, "ZIG_BUILD_RUNNER");
+        var child_argv = std.ArrayList([]const u8).init(arena);
+        var reference_trace: ?u32 = null;
+        var debug_compile_errors = false;
+
+        const argv_index_exe = child_argv.items.len;
+        _ = try child_argv.addOne();
+
+        try child_argv.append(self_exe_path);
+
+        const argv_index_build_file = child_argv.items.len;
+        _ = try child_argv.addOne();
+
+        const argv_index_cache_dir = child_argv.items.len;
+        _ = try child_argv.addOne();
+
+        const argv_index_global_cache_dir = child_argv.items.len;
+        _ = try child_argv.addOne();
+
+        {
+            
