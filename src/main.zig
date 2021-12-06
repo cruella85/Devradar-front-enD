@@ -5456,4 +5456,254 @@ pub fn cmdAstCheck(
         process.exit(1);
     }
 
-    file.zir = try AstGen.gene
+    file.zir = try AstGen.generate(gpa, file.tree);
+    file.zir_loaded = true;
+    defer file.zir.deinit(gpa);
+
+    if (file.zir.hasCompileErrors()) {
+        var errors = std.ArrayList(Compilation.AllErrors.Message).init(arena);
+        try Compilation.AllErrors.addZir(arena, &errors, &file);
+        const ttyconf: std.debug.TTY.Config = switch (color) {
+            .auto => std.debug.detectTTYConfig(std.io.getStdErr()),
+            .on => .escape_codes,
+            .off => .no_color,
+        };
+        for (errors.items) |full_err_msg| {
+            full_err_msg.renderToStdErr(ttyconf);
+        }
+        process.exit(1);
+    }
+
+    if (!want_output_text) {
+        return cleanExit();
+    }
+    if (!debug_extensions_enabled) {
+        fatal("-t option only available in debug builds of zig", .{});
+    }
+
+    {
+        const token_bytes = @sizeOf(Ast.TokenList) +
+            file.tree.tokens.len * (@sizeOf(std.zig.Token.Tag) + @sizeOf(Ast.ByteOffset));
+        const tree_bytes = @sizeOf(Ast) + file.tree.nodes.len *
+            (@sizeOf(Ast.Node.Tag) +
+            @sizeOf(Ast.Node.Data) +
+            @sizeOf(Ast.TokenIndex));
+        const instruction_bytes = file.zir.instructions.len *
+            // Here we don't use @sizeOf(Zir.Inst.Data) because it would include
+            // the debug safety tag but we want to measure release size.
+            (@sizeOf(Zir.Inst.Tag) + 8);
+        const extra_bytes = file.zir.extra.len * @sizeOf(u32);
+        const total_bytes = @sizeOf(Zir) + instruction_bytes + extra_bytes +
+            file.zir.string_bytes.len * @sizeOf(u8);
+        const stdout = io.getStdOut();
+        const fmtIntSizeBin = std.fmt.fmtIntSizeBin;
+        // zig fmt: off
+        try stdout.writer().print(
+            \\# Source bytes:       {}
+            \\# Tokens:             {} ({})
+            \\# AST Nodes:          {} ({})
+            \\# Total ZIR bytes:    {}
+            \\# Instructions:       {d} ({})
+            \\# String Table Bytes: {}
+            \\# Extra Data Items:   {d} ({})
+            \\
+        , .{
+            fmtIntSizeBin(file.source.len),
+            file.tree.tokens.len, fmtIntSizeBin(token_bytes),
+            file.tree.nodes.len, fmtIntSizeBin(tree_bytes),
+            fmtIntSizeBin(total_bytes),
+            file.zir.instructions.len, fmtIntSizeBin(instruction_bytes),
+            fmtIntSizeBin(file.zir.string_bytes.len),
+            file.zir.extra.len, fmtIntSizeBin(extra_bytes),
+        });
+        // zig fmt: on
+    }
+
+    return @import("print_zir.zig").renderAsTextToFile(gpa, &file, io.getStdOut());
+}
+
+/// This is only enabled for debug builds.
+pub fn cmdChangelist(
+    gpa: Allocator,
+    arena: Allocator,
+    args: []const []const u8,
+) !void {
+    const Module = @import("Module.zig");
+    const AstGen = @import("AstGen.zig");
+    const Zir = @import("Zir.zig");
+
+    const old_source_file = args[0];
+    const new_source_file = args[1];
+
+    var f = fs.cwd().openFile(old_source_file, .{}) catch |err| {
+        fatal("unable to open old source file for comparison '{s}': {s}", .{ old_source_file, @errorName(err) });
+    };
+    defer f.close();
+
+    const stat = try f.stat();
+
+    if (stat.size > max_src_size)
+        return error.FileTooBig;
+
+    var file: Module.File = .{
+        .status = .never_loaded,
+        .source_loaded = false,
+        .tree_loaded = false,
+        .zir_loaded = false,
+        .sub_file_path = old_source_file,
+        .source = undefined,
+        .stat = .{
+            .size = stat.size,
+            .inode = stat.inode,
+            .mtime = stat.mtime,
+        },
+        .tree = undefined,
+        .zir = undefined,
+        .pkg = undefined,
+        .root_decl = .none,
+    };
+
+    file.pkg = try Package.create(gpa, null, file.sub_file_path);
+    defer file.pkg.destroy(gpa);
+
+    const source = try arena.allocSentinel(u8, @intCast(usize, stat.size), 0);
+    const amt = try f.readAll(source);
+    if (amt != stat.size)
+        return error.UnexpectedEndOfFile;
+    file.source = source;
+    file.source_loaded = true;
+
+    file.tree = try Ast.parse(gpa, file.source, .zig);
+    file.tree_loaded = true;
+    defer file.tree.deinit(gpa);
+
+    try printErrsMsgToStdErr(gpa, arena, file.tree, old_source_file, .auto);
+    if (file.tree.errors.len != 0) {
+        process.exit(1);
+    }
+
+    file.zir = try AstGen.generate(gpa, file.tree);
+    file.zir_loaded = true;
+    defer file.zir.deinit(gpa);
+
+    if (file.zir.hasCompileErrors()) {
+        var errors = std.ArrayList(Compilation.AllErrors.Message).init(arena);
+        try Compilation.AllErrors.addZir(arena, &errors, &file);
+        const ttyconf = std.debug.detectTTYConfig(std.io.getStdErr());
+        for (errors.items) |full_err_msg| {
+            full_err_msg.renderToStdErr(ttyconf);
+        }
+        process.exit(1);
+    }
+
+    var new_f = fs.cwd().openFile(new_source_file, .{}) catch |err| {
+        fatal("unable to open new source file for comparison '{s}': {s}", .{ new_source_file, @errorName(err) });
+    };
+    defer new_f.close();
+
+    const new_stat = try new_f.stat();
+
+    if (new_stat.size > max_src_size)
+        return error.FileTooBig;
+
+    const new_source = try arena.allocSentinel(u8, @intCast(usize, new_stat.size), 0);
+    const new_amt = try new_f.readAll(new_source);
+    if (new_amt != new_stat.size)
+        return error.UnexpectedEndOfFile;
+
+    var new_tree = try Ast.parse(gpa, new_source, .zig);
+    defer new_tree.deinit(gpa);
+
+    try printErrsMsgToStdErr(gpa, arena, new_tree, new_source_file, .auto);
+    if (new_tree.errors.len != 0) {
+        process.exit(1);
+    }
+
+    var old_zir = file.zir;
+    defer old_zir.deinit(gpa);
+    file.zir_loaded = false;
+    file.zir = try AstGen.generate(gpa, new_tree);
+    file.zir_loaded = true;
+
+    if (file.zir.hasCompileErrors()) {
+        var errors = std.ArrayList(Compilation.AllErrors.Message).init(arena);
+        try Compilation.AllErrors.addZir(arena, &errors, &file);
+        const ttyconf = std.debug.detectTTYConfig(std.io.getStdErr());
+        for (errors.items) |full_err_msg| {
+            full_err_msg.renderToStdErr(ttyconf);
+        }
+        process.exit(1);
+    }
+
+    var inst_map: std.AutoHashMapUnmanaged(Zir.Inst.Index, Zir.Inst.Index) = .{};
+    defer inst_map.deinit(gpa);
+
+    var extra_map: std.AutoHashMapUnmanaged(u32, u32) = .{};
+    defer extra_map.deinit(gpa);
+
+    try Module.mapOldZirToNew(gpa, old_zir, file.zir, &inst_map, &extra_map);
+
+    var bw = io.bufferedWriter(io.getStdOut().writer());
+    const stdout = bw.writer();
+    {
+        try stdout.print("Instruction mappings:\n", .{});
+        var it = inst_map.iterator();
+        while (it.next()) |entry| {
+            try stdout.print(" %{d} => %{d}\n", .{
+                entry.key_ptr.*, entry.value_ptr.*,
+            });
+        }
+    }
+    {
+        try stdout.print("Extra mappings:\n", .{});
+        var it = extra_map.iterator();
+        while (it.next()) |entry| {
+            try stdout.print(" {d} => {d}\n", .{
+                entry.key_ptr.*, entry.value_ptr.*,
+            });
+        }
+    }
+    try bw.flush();
+}
+
+fn eatIntPrefix(arg: []const u8, radix: u8) []const u8 {
+    if (arg.len > 2 and arg[0] == '0') {
+        switch (std.ascii.toLower(arg[1])) {
+            'b' => if (radix == 2) return arg[2..],
+            'o' => if (radix == 8) return arg[2..],
+            'x' => if (radix == 16) return arg[2..],
+            else => {},
+        }
+    }
+    return arg;
+}
+
+fn parseIntSuffix(arg: []const u8, prefix_len: usize) u64 {
+    return std.fmt.parseUnsigned(u64, arg[prefix_len..], 0) catch |err| {
+        fatal("unable to parse '{s}': {s}", .{ arg, @errorName(err) });
+    };
+}
+
+fn warnAboutForeignBinaries(
+    arena: Allocator,
+    arg_mode: ArgMode,
+    target_info: std.zig.system.NativeTargetInfo,
+    link_libc: bool,
+) !void {
+    const host_cross_target: std.zig.CrossTarget = .{};
+    const host_target_info = try detectNativeTargetInfo(host_cross_target);
+
+    switch (host_target_info.getExternalExecutor(target_info, .{ .link_libc = link_libc })) {
+        .native => return,
+        .rosetta => {
+            const host_name = try host_target_info.target.zigTriple(arena);
+            const foreign_name = try target_info.target.zigTriple(arena);
+            warn("the host system ({s}) does not appear to be capable of executing binaries from the target ({s}). Consider installing Rosetta.", .{
+                host_name, foreign_name,
+            });
+        },
+        .qemu => |qemu| {
+            const host_name = try host_target_info.target.zigTriple(arena);
+            const foreign_name = try target_info.target.zigTriple(arena);
+            switch (arg_mode) {
+                .zig_test
