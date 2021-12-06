@@ -4960,4 +4960,253 @@ pub fn lldMain(
         var count: usize = 0;
     };
     if (CallCounter.count == 1) { // Issue the warning on the first repeat call
-        warn(
+        warn("invoking LLD for the second time within the same process because the host OS ({s}) does not support spawning child processes. This sometimes activates LLD bugs", .{@tagName(builtin.os.tag)});
+    }
+    CallCounter.count += 1;
+
+    var arena_instance = std.heap.ArenaAllocator.init(alloc);
+    defer arena_instance.deinit();
+    const arena = arena_instance.allocator();
+
+    // Convert the args to the format LLD expects.
+    // We intentionally shave off the zig binary at args[0].
+    const argv = try argsCopyZ(arena, args[1..]);
+    // "If an error occurs, false will be returned."
+    const ok = rc: {
+        const llvm = @import("codegen/llvm/bindings.zig");
+        const argc = @intCast(c_int, argv.len);
+        if (mem.eql(u8, args[1], "ld.lld")) {
+            break :rc llvm.LinkELF(argc, argv.ptr, can_exit_early, false);
+        } else if (mem.eql(u8, args[1], "lld-link")) {
+            break :rc llvm.LinkCOFF(argc, argv.ptr, can_exit_early, false);
+        } else if (mem.eql(u8, args[1], "wasm-ld")) {
+            break :rc llvm.LinkWasm(argc, argv.ptr, can_exit_early, false);
+        } else {
+            unreachable;
+        }
+    };
+    return @boolToInt(!ok);
+}
+
+const ArgIteratorResponseFile = process.ArgIteratorGeneral(.{ .comments = true, .single_quotes = true });
+
+/// Initialize the arguments from a Response File. "*.rsp"
+fn initArgIteratorResponseFile(allocator: Allocator, resp_file_path: []const u8) !ArgIteratorResponseFile {
+    const max_bytes = 10 * 1024 * 1024; // 10 MiB of command line arguments is a reasonable limit
+    var cmd_line = try fs.cwd().readFileAlloc(allocator, resp_file_path, max_bytes);
+    errdefer allocator.free(cmd_line);
+
+    return ArgIteratorResponseFile.initTakeOwnership(allocator, cmd_line);
+}
+
+const clang_args = @import("clang_options.zig").list;
+
+pub const ClangArgIterator = struct {
+    has_next: bool,
+    zig_equivalent: ZigEquivalent,
+    only_arg: []const u8,
+    second_arg: []const u8,
+    other_args: []const []const u8,
+    argv: []const []const u8,
+    next_index: usize,
+    root_args: ?*Args,
+    arg_iterator_response_file: ArgIteratorResponseFile,
+    arena: Allocator,
+
+    pub const ZigEquivalent = enum {
+        target,
+        o,
+        c,
+        m,
+        x,
+        other,
+        positional,
+        l,
+        ignore,
+        driver_punt,
+        pic,
+        no_pic,
+        pie,
+        no_pie,
+        lto,
+        no_lto,
+        unwind_tables,
+        no_unwind_tables,
+        nostdlib,
+        nostdlib_cpp,
+        shared,
+        rdynamic,
+        wl,
+        preprocess_only,
+        asm_only,
+        optimize,
+        debug,
+        sanitize,
+        linker_script,
+        dry_run,
+        verbose,
+        for_linker,
+        linker_input_z,
+        lib_dir,
+        mcpu,
+        dep_file,
+        dep_file_to_stdout,
+        framework_dir,
+        framework,
+        nostdlibinc,
+        red_zone,
+        no_red_zone,
+        omit_frame_pointer,
+        no_omit_frame_pointer,
+        function_sections,
+        no_function_sections,
+        builtin,
+        no_builtin,
+        color_diagnostics,
+        no_color_diagnostics,
+        stack_check,
+        no_stack_check,
+        stack_protector,
+        no_stack_protector,
+        strip,
+        exec_model,
+        emit_llvm,
+        sysroot,
+        entry,
+        weak_library,
+        weak_framework,
+        headerpad_max_install_names,
+        compress_debug_sections,
+        install_name,
+        undefined,
+    };
+
+    const Args = struct {
+        next_index: usize,
+        argv: []const []const u8,
+    };
+
+    fn init(arena: Allocator, argv: []const []const u8) ClangArgIterator {
+        return .{
+            .next_index = 2, // `zig cc foo` this points to `foo`
+            .has_next = argv.len > 2,
+            .zig_equivalent = undefined,
+            .only_arg = undefined,
+            .second_arg = undefined,
+            .other_args = undefined,
+            .argv = argv,
+            .root_args = null,
+            .arg_iterator_response_file = undefined,
+            .arena = arena,
+        };
+    }
+
+    fn next(self: *ClangArgIterator) !void {
+        assert(self.has_next);
+        assert(self.next_index < self.argv.len);
+        // In this state we know that the parameter we are looking at is a root parameter
+        // rather than an argument to a parameter.
+        // We adjust the len below when necessary.
+        self.other_args = (self.argv.ptr + self.next_index)[0..1];
+        var arg = self.argv[self.next_index];
+        self.incrementArgIndex();
+
+        if (mem.startsWith(u8, arg, "@")) {
+            if (self.root_args != null) return error.NestedResponseFile;
+
+            // This is a "compiler response file". We must parse the file and treat its
+            // contents as command line parameters.
+            const arena = self.arena;
+            const resp_file_path = arg[1..];
+
+            self.arg_iterator_response_file =
+                initArgIteratorResponseFile(arena, resp_file_path) catch |err| {
+                fatal("unable to read response file '{s}': {s}", .{ resp_file_path, @errorName(err) });
+            };
+            // NOTE: The ArgIteratorResponseFile returns tokens from next() that are slices of an
+            // internal buffer. This internal buffer is arena allocated, so it is not cleaned up here.
+
+            var resp_arg_list = std.ArrayList([]const u8).init(arena);
+            defer resp_arg_list.deinit();
+            {
+                while (self.arg_iterator_response_file.next()) |token| {
+                    try resp_arg_list.append(token);
+                }
+
+                const args = try arena.create(Args);
+                errdefer arena.destroy(args);
+                args.* = .{
+                    .next_index = self.next_index,
+                    .argv = self.argv,
+                };
+                self.root_args = args;
+            }
+            const resp_arg_slice = try resp_arg_list.toOwnedSlice();
+            self.next_index = 0;
+            self.argv = resp_arg_slice;
+
+            if (resp_arg_slice.len == 0) {
+                self.resolveRespFileArgs();
+                return;
+            }
+
+            self.has_next = true;
+            self.other_args = (self.argv.ptr + self.next_index)[0..1]; // We adjust len below when necessary.
+            arg = self.argv[self.next_index];
+            self.incrementArgIndex();
+        }
+
+        if (mem.eql(u8, arg, "-") or !mem.startsWith(u8, arg, "-")) {
+            self.zig_equivalent = .positional;
+            self.only_arg = arg;
+            return;
+        }
+
+        find_clang_arg: for (clang_args) |clang_arg| switch (clang_arg.syntax) {
+            .flag => {
+                const prefix_len = clang_arg.matchEql(arg);
+                if (prefix_len > 0) {
+                    self.zig_equivalent = clang_arg.zig_equivalent;
+                    self.only_arg = arg[prefix_len..];
+
+                    break :find_clang_arg;
+                }
+            },
+            .joined, .comma_joined => {
+                // joined example: --target=foo
+                // comma_joined example: -Wl,-soname,libsoundio.so.2
+                const prefix_len = clang_arg.matchStartsWith(arg);
+                if (prefix_len != 0) {
+                    self.zig_equivalent = clang_arg.zig_equivalent;
+                    self.only_arg = arg[prefix_len..]; // This will skip over the "--target=" part.
+
+                    break :find_clang_arg;
+                }
+            },
+            .joined_or_separate => {
+                // Examples: `-lfoo`, `-l foo`
+                const prefix_len = clang_arg.matchStartsWith(arg);
+                if (prefix_len == arg.len) {
+                    if (self.next_index >= self.argv.len) {
+                        fatal("Expected parameter after '{s}'", .{arg});
+                    }
+                    self.only_arg = self.argv[self.next_index];
+                    self.incrementArgIndex();
+                    self.other_args.len += 1;
+                    self.zig_equivalent = clang_arg.zig_equivalent;
+
+                    break :find_clang_arg;
+                } else if (prefix_len != 0) {
+                    self.zig_equivalent = clang_arg.zig_equivalent;
+                    self.only_arg = arg[prefix_len..];
+
+                    break :find_clang_arg;
+                }
+            },
+            .joined_and_separate => {
+                // Example: `-Xopenmp-target=riscv64-linux-unknown foo`
+                const prefix_len = clang_arg.matchStartsWith(arg);
+                if (prefix_len != 0) {
+                    self.only_arg = arg[prefix_len..];
+                    if (self.next_index >= self.argv.len) {
+                        fatal("Expected par
