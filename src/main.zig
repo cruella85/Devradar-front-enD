@@ -4232,4 +4232,232 @@ pub fn cmdBuild(gpa: Allocator, arena: Allocator, args: []const []const u8) !voi
             var http_client: std.http.Client = .{ .allocator = gpa };
             defer http_client.deinit();
 
-            // Here we provide an import to
+            // Here we provide an import to the build runner that allows using reflection to find
+            // all of the dependencies. Without this, there would be no way to use `@import` to
+            // access dependencies by name, since `@import` requires string literals.
+            var dependencies_source = std.ArrayList(u8).init(gpa);
+            defer dependencies_source.deinit();
+            try dependencies_source.appendSlice("pub const imports = struct {\n");
+
+            // This will go into the same package. It contains the file system paths
+            // to all the build.zig files.
+            var build_roots_source = std.ArrayList(u8).init(gpa);
+            defer build_roots_source.deinit();
+
+            var all_modules: Package.AllModules = .{};
+            defer all_modules.deinit(gpa);
+
+            // Here we borrow main package's table and will replace it with a fresh
+            // one after this process completes.
+            main_pkg.fetchAndAddDependencies(
+                arena,
+                &thread_pool,
+                &http_client,
+                build_directory,
+                global_cache_directory,
+                local_cache_directory,
+                &dependencies_source,
+                &build_roots_source,
+                "",
+                color,
+                &all_modules,
+            ) catch |err| switch (err) {
+                error.PackageFetchFailed => process.exit(1),
+                else => |e| return e,
+            };
+
+            try dependencies_source.appendSlice("};\npub const build_root = struct {\n");
+            try dependencies_source.appendSlice(build_roots_source.items);
+            try dependencies_source.appendSlice("};\n");
+
+            const deps_pkg = try Package.createFilePkg(
+                gpa,
+                local_cache_directory,
+                "dependencies.zig",
+                dependencies_source.items,
+            );
+
+            mem.swap(Package.Table, &main_pkg.table, &deps_pkg.table);
+            try main_pkg.add(gpa, "@dependencies", deps_pkg);
+        }
+
+        var build_pkg: Package = .{
+            .root_src_directory = build_directory,
+            .root_src_path = build_zig_basename,
+        };
+        try main_pkg.add(gpa, "@build", &build_pkg);
+
+        const comp = Compilation.create(gpa, .{
+            .zig_lib_directory = zig_lib_directory,
+            .local_cache_directory = local_cache_directory,
+            .global_cache_directory = global_cache_directory,
+            .root_name = "build",
+            .target = target_info.target,
+            .is_native_os = cross_target.isNativeOs(),
+            .is_native_abi = cross_target.isNativeAbi(),
+            .dynamic_linker = target_info.dynamic_linker.get(),
+            .output_mode = .Exe,
+            .main_pkg = &main_pkg,
+            .emit_bin = emit_bin,
+            .emit_h = null,
+            .optimize_mode = .Debug,
+            .self_exe_path = self_exe_path,
+            .thread_pool = &thread_pool,
+            .cache_mode = .whole,
+            .reference_trace = reference_trace,
+            .debug_compile_errors = debug_compile_errors,
+        }) catch |err| {
+            fatal("unable to create compilation: {s}", .{@errorName(err)});
+        };
+        defer comp.destroy();
+
+        updateModule(gpa, comp, .none) catch |err| switch (err) {
+            error.SemanticAnalyzeFail => process.exit(1),
+            else => |e| return e,
+        };
+        try comp.makeBinFileExecutable();
+
+        const emit = comp.bin_file.options.emit.?;
+        child_argv.items[argv_index_exe] = try emit.directory.join(
+            arena,
+            &[_][]const u8{emit.sub_path},
+        );
+
+        break :argv child_argv.items;
+    };
+
+    if (std.process.can_spawn) {
+        var child = std.ChildProcess.init(child_argv, gpa);
+        child.stdin_behavior = .Inherit;
+        child.stdout_behavior = .Inherit;
+        child.stderr_behavior = .Inherit;
+
+        const term = try child.spawnAndWait();
+        switch (term) {
+            .Exited => |code| {
+                if (code == 0) return cleanExit();
+
+                if (prominent_compile_errors) {
+                    fatal("the build command failed with exit code {d}", .{code});
+                } else {
+                    const cmd = try std.mem.join(arena, " ", child_argv);
+                    fatal("the following build command failed with exit code {d}:\n{s}", .{ code, cmd });
+                }
+            },
+            else => {
+                const cmd = try std.mem.join(arena, " ", child_argv);
+                fatal("the following build command crashed:\n{s}", .{cmd});
+            },
+        }
+    } else {
+        const cmd = try std.mem.join(arena, " ", child_argv);
+        fatal("the following command cannot be executed ({s} does not support spawning a child process):\n{s}", .{ @tagName(builtin.os.tag), cmd });
+    }
+}
+
+fn readSourceFileToEndAlloc(
+    allocator: mem.Allocator,
+    input: *const fs.File,
+    size_hint: ?usize,
+) ![:0]u8 {
+    const source_code = input.readToEndAllocOptions(
+        allocator,
+        max_src_size,
+        size_hint,
+        @alignOf(u16),
+        0,
+    ) catch |err| switch (err) {
+        error.ConnectionResetByPeer => unreachable,
+        error.ConnectionTimedOut => unreachable,
+        error.NotOpenForReading => unreachable,
+        else => |e| return e,
+    };
+    errdefer allocator.free(source_code);
+
+    // Detect unsupported file types with their Byte Order Mark
+    const unsupported_boms = [_][]const u8{
+        "\xff\xfe\x00\x00", // UTF-32 little endian
+        "\xfe\xff\x00\x00", // UTF-32 big endian
+        "\xfe\xff", // UTF-16 big endian
+    };
+    for (unsupported_boms) |bom| {
+        if (mem.startsWith(u8, source_code, bom)) {
+            return error.UnsupportedEncoding;
+        }
+    }
+
+    // If the file starts with a UTF-16 little endian BOM, translate it to UTF-8
+    if (mem.startsWith(u8, source_code, "\xff\xfe")) {
+        const source_code_utf16_le = mem.bytesAsSlice(u16, source_code);
+        const source_code_utf8 = std.unicode.utf16leToUtf8AllocZ(allocator, source_code_utf16_le) catch |err| switch (err) {
+            error.DanglingSurrogateHalf => error.UnsupportedEncoding,
+            error.ExpectedSecondSurrogateHalf => error.UnsupportedEncoding,
+            error.UnexpectedSecondSurrogateHalf => error.UnsupportedEncoding,
+            else => |e| return e,
+        };
+
+        allocator.free(source_code);
+        return source_code_utf8;
+    }
+
+    return source_code;
+}
+
+pub const usage_fmt =
+    \\Usage: zig fmt [file]...
+    \\
+    \\   Formats the input files and modifies them in-place.
+    \\   Arguments can be files or directories, which are searched
+    \\   recursively.
+    \\
+    \\Options:
+    \\   -h, --help             Print this help and exit
+    \\   --color [auto|off|on]  Enable or disable colored error messages
+    \\   --stdin                Format code from stdin; output to stdout
+    \\   --check                List non-conforming files and exit with an error
+    \\                          if the list is non-empty
+    \\   --ast-check            Run zig ast-check on every file
+    \\   --exclude [file]       Exclude file or directory from formatting
+    \\
+    \\
+;
+
+const Fmt = struct {
+    seen: SeenMap,
+    any_error: bool,
+    check_ast: bool,
+    color: Color,
+    gpa: Allocator,
+    arena: Allocator,
+    out_buffer: std.ArrayList(u8),
+
+    const SeenMap = std.AutoHashMap(fs.File.INode, void);
+};
+
+pub fn cmdFmt(gpa: Allocator, arena: Allocator, args: []const []const u8) !void {
+    var color: Color = .auto;
+    var stdin_flag: bool = false;
+    var check_flag: bool = false;
+    var check_ast_flag: bool = false;
+    var input_files = ArrayList([]const u8).init(gpa);
+    defer input_files.deinit();
+    var excluded_files = ArrayList([]const u8).init(gpa);
+    defer excluded_files.deinit();
+
+    {
+        var i: usize = 0;
+        while (i < args.len) : (i += 1) {
+            const arg = args[i];
+            if (mem.startsWith(u8, arg, "-")) {
+                if (mem.eql(u8, arg, "-h") or mem.eql(u8, arg, "--help")) {
+                    const stdout = io.getStdOut().writer();
+                    try stdout.writeAll(usage_fmt);
+                    return cleanExit();
+                } else if (mem.eql(u8, arg, "--color")) {
+                    if (i + 1 >= args.len) {
+                        fatal("expected [auto|on|off] after --color", .{});
+                    }
+                    i += 1;
+                    const next_arg = args[i];
+                    color = std.meta.stringToEnum(Color, next_arg) orelse {
+                        fatal("expected [auto|on|off] after --color, f
