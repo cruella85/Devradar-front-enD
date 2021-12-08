@@ -266,4 +266,6 @@ struct SizeClassAllocator32LocalCache {
     }
     b->SetFromArray(&c->batch[first_idx_to_drain], count);
     c->count -= count;
-    allocator->DeallocateBatch(&stats_, class_
+    allocator->DeallocateBatch(&stats_, class_id, b);
+  }
+};
