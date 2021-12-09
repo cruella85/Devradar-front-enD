@@ -251,4 +251,117 @@ pub fn BoundedArray(comptime T: type, comptime buffer_capacity: usize) type {
             std.io.Writer(*Self, error{Overflow}, appendWrite);
 
         /// Initializes a writer which will write into the array.
-     
+        pub fn writer(self: *Self) Writer {
+            return .{ .context = self };
+        }
+
+        /// Same as `appendSlice` except it returns the number of bytes written, which is always the same
+        /// as `m.len`. The purpose of this function existing is to match `std.io.Writer` API.
+        fn appendWrite(self: *Self, m: []const u8) error{Overflow}!usize {
+            try self.appendSlice(m);
+            return m.len;
+        }
+    };
+}
+
+test "BoundedArray" {
+    var a = try BoundedArray(u8, 64).init(32);
+
+    try testing.expectEqual(a.capacity(), 64);
+    try testing.expectEqual(a.slice().len, 32);
+    try testing.expectEqual(a.constSlice().len, 32);
+
+    try a.resize(48);
+    try testing.expectEqual(a.len, 48);
+
+    const x = [_]u8{1} ** 10;
+    a = try BoundedArray(u8, 64).fromSlice(&x);
+    try testing.expectEqualSlices(u8, &x, a.constSlice());
+
+    var a2 = a;
+    try testing.expectEqualSlices(u8, a.constSlice(), a2.constSlice());
+    a2.set(0, 0);
+    try testing.expect(a.get(0) != a2.get(0));
+
+    try testing.expectError(error.Overflow, a.resize(100));
+    try testing.expectError(error.Overflow, BoundedArray(u8, x.len - 1).fromSlice(&x));
+
+    try a.resize(0);
+    try a.ensureUnusedCapacity(a.capacity());
+    (try a.addOne()).* = 0;
+    try a.ensureUnusedCapacity(a.capacity() - 1);
+    try testing.expectEqual(a.len, 1);
+
+    const uninitialized = try a.addManyAsArray(4);
+    try testing.expectEqual(uninitialized.len, 4);
+    try testing.expectEqual(a.len, 5);
+
+    try a.append(0xff);
+    try testing.expectEqual(a.len, 6);
+    try testing.expectEqual(a.pop(), 0xff);
+
+    a.appendAssumeCapacity(0xff);
+    try testing.expectEqual(a.len, 6);
+    try testing.expectEqual(a.pop(), 0xff);
+
+    try a.resize(1);
+    try testing.expectEqual(a.popOrNull(), 0);
+    try testing.expectEqual(a.popOrNull(), null);
+    var unused = a.unusedCapacitySlice();
+    mem.set(u8, unused[0..8], 2);
+    unused[8] = 3;
+    unused[9] = 4;
+    try testing.expectEqual(unused.len, a.capacity());
+    try a.resize(10);
+
+    try a.insert(5, 0xaa);
+    try testing.expectEqual(a.len, 11);
+    try testing.expectEqual(a.get(5), 0xaa);
+    try testing.expectEqual(a.get(9), 3);
+    try testing.expectEqual(a.get(10), 4);
+
+    try a.insert(11, 0xbb);
+    try testing.expectEqual(a.len, 12);
+    try testing.expectEqual(a.pop(), 0xbb);
+
+    try a.appendSlice(&x);
+    try testing.expectEqual(a.len, 11 + x.len);
+
+    try a.appendNTimes(0xbb, 5);
+    try testing.expectEqual(a.len, 11 + x.len + 5);
+    try testing.expectEqual(a.pop(), 0xbb);
+
+    a.appendNTimesAssumeCapacity(0xcc, 5);
+    try testing.expectEqual(a.len, 11 + x.len + 5 - 1 + 5);
+    try testing.expectEqual(a.pop(), 0xcc);
+
+    try testing.expectEqual(a.len, 29);
+    try a.replaceRange(1, 20, &x);
+    try testing.expectEqual(a.len, 29 + x.len - 20);
+
+    try a.insertSlice(0, &x);
+    try testing.expectEqual(a.len, 29 + x.len - 20 + x.len);
+
+    try a.replaceRange(1, 5, &x);
+    try testing.expectEqual(a.len, 29 + x.len - 20 + x.len + x.len - 5);
+
+    try a.append(10);
+    try testing.expectEqual(a.pop(), 10);
+
+    try a.append(20);
+    const removed = a.orderedRemove(5);
+    try testing.expectEqual(removed, 1);
+    try testing.expectEqual(a.len, 34);
+
+    a.set(0, 0xdd);
+    a.set(a.len - 1, 0xee);
+    const swapped = a.swapRemove(0);
+    try testing.expectEqual(swapped, 0xdd);
+    try testing.expectEqual(a.get(0), 0xee);
+
+    while (a.popOrNull()) |_| {}
+    const w = a.writer();
+    const s = "hello, this is a test string";
+    try w.writeAll(s);
+    try testing.expectEqualStrings(s, a.constSlice());
+}
