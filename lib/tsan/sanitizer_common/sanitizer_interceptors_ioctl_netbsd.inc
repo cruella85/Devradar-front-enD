@@ -1314,3 +1314,223 @@ static void ioctl_table_fill() {
   _(VIDIOC_G_INPUT, WRITE, sizeof(int));
   _(VIDIOC_S_INPUT, READWRITE, sizeof(int));
   _(VIDIOC_G_OUTPUT, WRITE, sizeof(int));
+  _(VIDIOC_S_OUTPUT, READWRITE, sizeof(int));
+  _(VIDIOC_ENUMOUTPUT, READWRITE, struct_v4l2_output_sz);
+  _(VIDIOC_G_AUDOUT, WRITE, struct_v4l2_audioout_sz);
+  _(VIDIOC_S_AUDOUT, READ, struct_v4l2_audioout_sz);
+  _(VIDIOC_G_MODULATOR, READWRITE, struct_v4l2_modulator_sz);
+  _(VIDIOC_S_MODULATOR, READ, struct_v4l2_modulator_sz);
+  _(VIDIOC_G_FREQUENCY, READWRITE, struct_v4l2_frequency_sz);
+  _(VIDIOC_S_FREQUENCY, READ, struct_v4l2_frequency_sz);
+  _(VIDIOC_CROPCAP, READWRITE, struct_v4l2_cropcap_sz);
+  _(VIDIOC_G_CROP, READWRITE, struct_v4l2_crop_sz);
+  _(VIDIOC_S_CROP, READ, struct_v4l2_crop_sz);
+  _(VIDIOC_G_JPEGCOMP, WRITE, struct_v4l2_jpegcompression_sz);
+  _(VIDIOC_S_JPEGCOMP, READ, struct_v4l2_jpegcompression_sz);
+  _(VIDIOC_QUERYSTD, WRITE, sizeof(u64));
+  _(VIDIOC_TRY_FMT, READWRITE, struct_v4l2_format_sz);
+  _(VIDIOC_ENUMAUDIO, READWRITE, struct_v4l2_audio_sz);
+  _(VIDIOC_ENUMAUDOUT, READWRITE, struct_v4l2_audioout_sz);
+  _(VIDIOC_G_PRIORITY, WRITE, enum_v4l2_priority_sz);
+  _(VIDIOC_S_PRIORITY, READ, enum_v4l2_priority_sz);
+  _(VIDIOC_ENUM_FRAMESIZES, READWRITE, struct_v4l2_frmsizeenum_sz);
+  _(VIDIOC_ENUM_FRAMEINTERVALS, READWRITE, struct_v4l2_frmivalenum_sz);
+  /* Entries from file: sys/wdog.h */
+  _(WDOGIOC_GMODE, READWRITE, struct_wdog_mode_sz);
+  _(WDOGIOC_SMODE, READ, struct_wdog_mode_sz);
+  _(WDOGIOC_WHICH, WRITE, struct_wdog_mode_sz);
+  _(WDOGIOC_TICKLE, NONE, 0);
+  _(WDOGIOC_GTICKLER, WRITE, sizeof(int));
+  _(WDOGIOC_GWDOGS, READWRITE, struct_wdog_conf_sz);
+  /* Entries from file: sys/kcov.h */
+  _(KCOV_IOC_SETBUFSIZE, READ, sizeof(u64));
+  _(KCOV_IOC_ENABLE, READ, sizeof(int));
+  _(KCOV_IOC_DISABLE, NONE, 0);
+  /* Entries from file: sys/ipmi.h */
+  _(IPMICTL_RECEIVE_MSG_TRUNC, READWRITE, struct_ipmi_recv_sz);
+  _(IPMICTL_RECEIVE_MSG, READWRITE, struct_ipmi_recv_sz);
+  _(IPMICTL_SEND_COMMAND, READ, struct_ipmi_req_sz);
+  _(IPMICTL_REGISTER_FOR_CMD, READ, struct_ipmi_cmdspec_sz);
+  _(IPMICTL_UNREGISTER_FOR_CMD, READ, struct_ipmi_cmdspec_sz);
+  _(IPMICTL_SET_GETS_EVENTS_CMD, READ, sizeof(int));
+  _(IPMICTL_SET_MY_ADDRESS_CMD, READ, sizeof(unsigned int));
+  _(IPMICTL_GET_MY_ADDRESS_CMD, WRITE, sizeof(unsigned int));
+  _(IPMICTL_SET_MY_LUN_CMD, READ, sizeof(unsigned int));
+  _(IPMICTL_GET_MY_LUN_CMD, WRITE, sizeof(unsigned int));
+  /* Entries from file: soundcard.h */
+  _(SNDCTL_DSP_RESET, NONE, 0);
+  _(SNDCTL_DSP_SYNC, NONE, 0);
+  _(SNDCTL_DSP_SPEED, READWRITE, sizeof(int));
+  _(SOUND_PCM_READ_RATE, WRITE, sizeof(int));
+  _(SNDCTL_DSP_STEREO, READWRITE, sizeof(int));
+  _(SNDCTL_DSP_GETBLKSIZE, READWRITE, sizeof(int));
+  _(SNDCTL_DSP_SETFMT, READWRITE, sizeof(int));
+  _(SOUND_PCM_READ_BITS, WRITE, sizeof(int));
+  _(SNDCTL_DSP_CHANNELS, READWRITE, sizeof(int));
+  _(SOUND_PCM_READ_CHANNELS, WRITE, sizeof(int));
+  _(SOUND_PCM_WRITE_FILTER, READWRITE, sizeof(int));
+  _(SOUND_PCM_READ_FILTER, WRITE, sizeof(int));
+  _(SNDCTL_DSP_POST, NONE, 0);
+  _(SNDCTL_DSP_SUBDIVIDE, READWRITE, sizeof(int));
+  _(SNDCTL_DSP_SETFRAGMENT, READWRITE, sizeof(int));
+  _(SNDCTL_DSP_GETFMTS, WRITE, sizeof(int));
+  _(SNDCTL_DSP_GETOSPACE, WRITE, struct_audio_buf_info_sz);
+  _(SNDCTL_DSP_GETISPACE, WRITE, struct_audio_buf_info_sz);
+  _(SNDCTL_DSP_NONBLOCK, NONE, 0);
+  _(SNDCTL_DSP_GETCAPS, WRITE, sizeof(int));
+  _(SNDCTL_DSP_GETTRIGGER, WRITE, sizeof(int));
+  _(SNDCTL_DSP_SETTRIGGER, READ, sizeof(int));
+  _(SNDCTL_DSP_GETIPTR, WRITE, struct_count_info_sz);
+  _(SNDCTL_DSP_GETOPTR, WRITE, struct_count_info_sz);
+  _(SNDCTL_DSP_MAPINBUF, WRITE, struct_buffmem_desc_sz);
+  _(SNDCTL_DSP_MAPOUTBUF, WRITE, struct_buffmem_desc_sz);
+  _(SNDCTL_DSP_SETSYNCRO, NONE, 0);
+  _(SNDCTL_DSP_SETDUPLEX, NONE, 0);
+  _(SNDCTL_DSP_PROFILE, READ, sizeof(int));
+  _(SNDCTL_DSP_GETODELAY, WRITE, sizeof(int));
+  _(SOUND_MIXER_INFO, WRITE, struct_mixer_info_sz);
+  _(SOUND_OLD_MIXER_INFO, WRITE, struct__old_mixer_info_sz);
+  _(OSS_GETVERSION, WRITE, sizeof(int));
+  _(SNDCTL_SYSINFO, WRITE, struct_oss_sysinfo_sz);
+  _(SNDCTL_AUDIOINFO, READWRITE, struct_oss_audioinfo_sz);
+  _(SNDCTL_ENGINEINFO, READWRITE, struct_oss_audioinfo_sz);
+  _(SNDCTL_DSP_GETPLAYVOL, WRITE, sizeof(unsigned int));
+  _(SNDCTL_DSP_SETPLAYVOL, READ, sizeof(unsigned int));
+  _(SNDCTL_DSP_GETRECVOL, WRITE, sizeof(unsigned int));
+  _(SNDCTL_DSP_SETRECVOL, READ, sizeof(unsigned int));
+  _(SNDCTL_DSP_SKIP, NONE, 0);
+  _(SNDCTL_DSP_SILENCE, NONE, 0);
+  /* Entries from file: dev/filemon/filemon.h (compat <= 9.99.26) */
+  _(FILEMON_SET_FD, READWRITE, sizeof(int));
+  _(FILEMON_SET_PID, READWRITE, sizeof(int));
+  /* Entries from file: dev/usb/urio.h (compat <= 9.99.43) */
+  _(URIO_SEND_COMMAND, READWRITE, struct_urio_command_sz);
+  _(URIO_RECV_COMMAND, READWRITE, struct_urio_command_sz);
+#undef _
+} // NOLINT
+
+static bool ioctl_initialized = false;
+
+struct ioctl_desc_compare {
+  bool operator()(const ioctl_desc &left, const ioctl_desc &right) const {
+    return left.req < right.req;
+  }
+};
+
+static void ioctl_init() {
+  ioctl_table_fill();
+  Sort(ioctl_table, ioctl_table_size, ioctl_desc_compare());
+
+  bool bad = false;
+  for (unsigned i = 0; i < ioctl_table_size - 1; ++i) {
+    if (ioctl_table[i].req >= ioctl_table[i + 1].req) {
+      Printf("Duplicate or unsorted ioctl request id %x >= %x (%s vs %s)\n",
+             ioctl_table[i].req, ioctl_table[i + 1].req, ioctl_table[i].name,
+             ioctl_table[i + 1].name);
+      bad = true;
+    }
+  }
+
+  if (bad)
+    Die();
+
+  ioctl_initialized = true;
+}
+
+static const ioctl_desc *ioctl_table_lookup(unsigned req) {
+  int left = 0;
+  int right = ioctl_table_size;
+  while (left < right) {
+    int mid = (left + right) / 2;
+    if (ioctl_table[mid].req < req)
+      left = mid + 1;
+    else
+      right = mid;
+  }
+  if (left == right && ioctl_table[left].req == req)
+    return ioctl_table + left;
+  else
+    return nullptr;
+}
+
+static bool ioctl_decode(unsigned req, ioctl_desc *desc) {
+  CHECK(desc);
+  desc->req = req;
+  desc->name = "<DECODED_IOCTL>";
+  desc->size = IOC_SIZE(req);
+  // Sanity check.
+  if (desc->size > 0xFFFF)
+    return false;
+  unsigned dir = IOC_DIR(req);
+  switch (dir) {
+  case IOC_NONE:
+    desc->type = ioctl_desc::NONE;
+    break;
+  case IOC_READ | IOC_WRITE:
+    desc->type = ioctl_desc::READWRITE;
+    break;
+  case IOC_READ:
+    desc->type = ioctl_desc::WRITE;
+    break;
+  case IOC_WRITE:
+    desc->type = ioctl_desc::READ;
+    break;
+  default:
+    return false;
+  }
+  // Size can be 0 iff type is NONE.
+  if ((desc->type == IOC_NONE) != (desc->size == 0))
+    return false;
+  // Sanity check.
+  if (IOC_TYPE(req) == 0)
+    return false;
+  return true;
+}
+
+static const ioctl_desc *ioctl_lookup(unsigned req) {
+  const ioctl_desc *desc = ioctl_table_lookup(req);
+  if (desc)
+    return desc;
+
+  // Try stripping access size from the request id.
+  desc = ioctl_table_lookup(req & ~(IOC_SIZEMASK << IOC_SIZESHIFT));
+  // Sanity check: requests that encode access size are either read or write and
+  // have size of 0 in the table.
+  if (desc && desc->size == 0 &&
+      (desc->type == ioctl_desc::READWRITE || desc->type == ioctl_desc::WRITE ||
+       desc->type == ioctl_desc::READ))
+    return desc;
+  return nullptr;
+}
+
+static void ioctl_common_pre(void *ctx, const ioctl_desc *desc, int d,
+                             unsigned request, void *arg) {
+  if (desc->type == ioctl_desc::READ || desc->type == ioctl_desc::READWRITE) {
+    unsigned size = desc->size ? desc->size : IOC_SIZE(request);
+    COMMON_INTERCEPTOR_READ_RANGE(ctx, arg, size);
+  }
+  if (desc->type != ioctl_desc::CUSTOM)
+    return;
+  if (request == IOCTL_SIOCGIFCONF) {
+    struct __sanitizer_ifconf *ifc = (__sanitizer_ifconf *)arg;
+    COMMON_INTERCEPTOR_READ_RANGE(ctx, (char *)&ifc->ifc_len,
+                                  sizeof(ifc->ifc_len));
+  }
+}
+
+static void ioctl_common_post(void *ctx, const ioctl_desc *desc, int res, int d,
+                              unsigned request, void *arg) {
+  if (desc->type == ioctl_desc::WRITE || desc->type == ioctl_desc::READWRITE) {
+    // FIXME: add verbose output
+    unsigned size = desc->size ? desc->size : IOC_SIZE(request);
+    COMMON_INTERCEPTOR_WRITE_RANGE(ctx, arg, size);
+  }
+  if (desc->type != ioctl_desc::CUSTOM)
+    return;
+  if (request == IOCTL_SIOCGIFCONF) {
+    struct __sanitizer_ifconf *ifc = (__sanitizer_ifconf *)arg;
+    COMMON_INTERCEPTOR_WRITE_RANGE(ctx, ifc->ifc_ifcu.ifcu_req, ifc->ifc_len);
+  }
+}
+
+#endif // SANITIZER_NETBSD
