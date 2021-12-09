@@ -126,4 +126,232 @@
  *
  * To check if a logical eraseblock is mapped to a physical eraseblock, the
  * %UBI_IOCEBISMAP ioctl command should be used. It returns %0 if the LEB is
- * not mapped, and %1
+ * not mapped, and %1 if it is mapped.
+ *
+ * Set an UBI volume property
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~
+ *
+ * To set an UBI volume property the %UBI_IOCSETPROP ioctl command should be
+ * used. A pointer to a &struct ubi_set_vol_prop_req object is expected to be
+ * passed. The object describes which property should be set, and to which value
+ * it should be set.
+ *
+ * Block devices on UBI volumes
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *
+ * To create a R/O block device on top of an UBI volume the %UBI_IOCVOLCRBLK
+ * should be used. A pointer to a &struct ubi_blkcreate_req object is expected
+ * to be passed, which is not used and reserved for future usage.
+ *
+ * Conversely, to remove a block device the %UBI_IOCVOLRMBLK should be used,
+ * which takes no arguments.
+ */
+
+/*
+ * When a new UBI volume or UBI device is created, users may either specify the
+ * volume/device number they want to create or to let UBI automatically assign
+ * the number using these constants.
+ */
+#define UBI_VOL_NUM_AUTO (-1)
+#define UBI_DEV_NUM_AUTO (-1)
+
+/* Maximum volume name length */
+#define UBI_MAX_VOLUME_NAME 127
+
+/* ioctl commands of UBI character devices */
+
+#define UBI_IOC_MAGIC 'o'
+
+/* Create an UBI volume */
+#define UBI_IOCMKVOL _IOW(UBI_IOC_MAGIC, 0, struct ubi_mkvol_req)
+/* Remove an UBI volume */
+#define UBI_IOCRMVOL _IOW(UBI_IOC_MAGIC, 1, __s32)
+/* Re-size an UBI volume */
+#define UBI_IOCRSVOL _IOW(UBI_IOC_MAGIC, 2, struct ubi_rsvol_req)
+/* Re-name volumes */
+#define UBI_IOCRNVOL _IOW(UBI_IOC_MAGIC, 3, struct ubi_rnvol_req)
+
+/* Read the specified PEB and scrub it if there are bitflips */
+#define UBI_IOCRPEB _IOW(UBI_IOC_MAGIC, 4, __s32)
+/* Force scrubbing on the specified PEB */
+#define UBI_IOCSPEB _IOW(UBI_IOC_MAGIC, 5, __s32)
+
+/* ioctl commands of the UBI control character device */
+
+#define UBI_CTRL_IOC_MAGIC 'o'
+
+/* Attach an MTD device */
+#define UBI_IOCATT _IOW(UBI_CTRL_IOC_MAGIC, 64, struct ubi_attach_req)
+/* Detach an MTD device */
+#define UBI_IOCDET _IOW(UBI_CTRL_IOC_MAGIC, 65, __s32)
+
+/* ioctl commands of UBI volume character devices */
+
+#define UBI_VOL_IOC_MAGIC 'O'
+
+/* Start UBI volume update
+ * Note: This actually takes a pointer (__s64*), but we can't change
+ *       that without breaking the ABI on 32bit systems
+ */
+#define UBI_IOCVOLUP _IOW(UBI_VOL_IOC_MAGIC, 0, __s64)
+/* LEB erasure command, used for debugging, disabled by default */
+#define UBI_IOCEBER _IOW(UBI_VOL_IOC_MAGIC, 1, __s32)
+/* Atomic LEB change command */
+#define UBI_IOCEBCH _IOW(UBI_VOL_IOC_MAGIC, 2, __s32)
+/* Map LEB command */
+#define UBI_IOCEBMAP _IOW(UBI_VOL_IOC_MAGIC, 3, struct ubi_map_req)
+/* Unmap LEB command */
+#define UBI_IOCEBUNMAP _IOW(UBI_VOL_IOC_MAGIC, 4, __s32)
+/* Check if LEB is mapped command */
+#define UBI_IOCEBISMAP _IOR(UBI_VOL_IOC_MAGIC, 5, __s32)
+/* Set an UBI volume property */
+#define UBI_IOCSETVOLPROP _IOW(UBI_VOL_IOC_MAGIC, 6, \
+			       struct ubi_set_vol_prop_req)
+/* Create a R/O block device on top of an UBI volume */
+#define UBI_IOCVOLCRBLK _IOW(UBI_VOL_IOC_MAGIC, 7, struct ubi_blkcreate_req)
+/* Remove the R/O block device */
+#define UBI_IOCVOLRMBLK _IO(UBI_VOL_IOC_MAGIC, 8)
+
+/* Maximum MTD device name length supported by UBI */
+#define MAX_UBI_MTD_NAME_LEN 127
+
+/* Maximum amount of UBI volumes that can be re-named at one go */
+#define UBI_MAX_RNVOL 32
+
+/*
+ * UBI volume type constants.
+ *
+ * @UBI_DYNAMIC_VOLUME: dynamic volume
+ * @UBI_STATIC_VOLUME:  static volume
+ */
+enum {
+	UBI_DYNAMIC_VOLUME = 3,
+	UBI_STATIC_VOLUME  = 4,
+};
+
+/*
+ * UBI set volume property ioctl constants.
+ *
+ * @UBI_VOL_PROP_DIRECT_WRITE: allow (any non-zero value) or disallow (value 0)
+ *                             user to directly write and erase individual
+ *                             eraseblocks on dynamic volumes
+ */
+enum {
+	UBI_VOL_PROP_DIRECT_WRITE = 1,
+};
+
+/**
+ * struct ubi_attach_req - attach MTD device request.
+ * @ubi_num: UBI device number to create
+ * @mtd_num: MTD device number to attach
+ * @vid_hdr_offset: VID header offset (use defaults if %0)
+ * @max_beb_per1024: maximum expected number of bad PEB per 1024 PEBs
+ * @padding: reserved for future, not used, has to be zeroed
+ *
+ * This data structure is used to specify MTD device UBI has to attach and the
+ * parameters it has to use. The number which should be assigned to the new UBI
+ * device is passed in @ubi_num. UBI may automatically assign the number if
+ * @UBI_DEV_NUM_AUTO is passed. In this case, the device number is returned in
+ * @ubi_num.
+ *
+ * Most applications should pass %0 in @vid_hdr_offset to make UBI use default
+ * offset of the VID header within physical eraseblocks. The default offset is
+ * the next min. I/O unit after the EC header. For example, it will be offset
+ * 512 in case of a 512 bytes page NAND flash with no sub-page support. Or
+ * it will be 512 in case of a 2KiB page NAND flash with 4 512-byte sub-pages.
+ *
+ * But in rare cases, if this optimizes things, the VID header may be placed to
+ * a different offset. For example, the boot-loader might do things faster if
+ * the VID header sits at the end of the first 2KiB NAND page with 4 sub-pages.
+ * As the boot-loader would not normally need to read EC headers (unless it
+ * needs UBI in RW mode), it might be faster to calculate ECC. This is weird
+ * example, but it real-life example. So, in this example, @vid_hdr_offer would
+ * be 2KiB-64 bytes = 1984. Note, that this position is not even 512-bytes
+ * aligned, which is OK, as UBI is clever enough to realize this is 4th
+ * sub-page of the first page and add needed padding.
+ *
+ * The @max_beb_per1024 is the maximum amount of bad PEBs UBI expects on the
+ * UBI device per 1024 eraseblocks.  This value is often given in an other form
+ * in the NAND datasheet (min NVB i.e. minimal number of valid blocks). The
+ * maximum expected bad eraseblocks per 1024 is then:
+ *    1024 * (1 - MinNVB / MaxNVB)
+ * Which gives 20 for most NAND devices.  This limit is used in order to derive
+ * amount of eraseblock UBI reserves for handling new bad blocks. If the device
+ * has more bad eraseblocks than this limit, UBI does not reserve any physical
+ * eraseblocks for new bad eraseblocks, but attempts to use available
+ * eraseblocks (if any). The accepted range is 0-768. If 0 is given, the
+ * default kernel value of %CONFIG_MTD_UBI_BEB_LIMIT will be used.
+ */
+struct ubi_attach_req {
+	__s32 ubi_num;
+	__s32 mtd_num;
+	__s32 vid_hdr_offset;
+	__s16 max_beb_per1024;
+	__s8 padding[10];
+};
+
+/*
+ * UBI volume flags.
+ *
+ * @UBI_VOL_SKIP_CRC_CHECK_FLG: skip the CRC check done on a static volume at
+ *				open time. Only valid for static volumes and
+ *				should only be used if the volume user has a
+ *				way to verify data integrity
+ */
+enum {
+	UBI_VOL_SKIP_CRC_CHECK_FLG = 0x1,
+};
+
+#define UBI_VOL_VALID_FLGS	(UBI_VOL_SKIP_CRC_CHECK_FLG)
+
+/**
+ * struct ubi_mkvol_req - volume description data structure used in
+ *                        volume creation requests.
+ * @vol_id: volume number
+ * @alignment: volume alignment
+ * @bytes: volume size in bytes
+ * @vol_type: volume type (%UBI_DYNAMIC_VOLUME or %UBI_STATIC_VOLUME)
+ * @flags: volume flags (%UBI_VOL_SKIP_CRC_CHECK_FLG)
+ * @name_len: volume name length
+ * @padding2: reserved for future, not used, has to be zeroed
+ * @name: volume name
+ *
+ * This structure is used by user-space programs when creating new volumes. The
+ * @used_bytes field is only necessary when creating static volumes.
+ *
+ * The @alignment field specifies the required alignment of the volume logical
+ * eraseblock. This means, that the size of logical eraseblocks will be aligned
+ * to this number, i.e.,
+ *	(UBI device logical eraseblock size) mod (@alignment) = 0.
+ *
+ * To put it differently, the logical eraseblock of this volume may be slightly
+ * shortened in order to make it properly aligned. The alignment has to be
+ * multiple of the flash minimal input/output unit, or %1 to utilize the entire
+ * available space of logical eraseblocks.
+ *
+ * The @alignment field may be useful, for example, when one wants to maintain
+ * a block device on top of an UBI volume. In this case, it is desirable to fit
+ * an integer number of blocks in logical eraseblocks of this UBI volume. With
+ * alignment it is possible to update this volume using plane UBI volume image
+ * BLOBs, without caring about how to properly align them.
+ */
+struct ubi_mkvol_req {
+	__s32 vol_id;
+	__s32 alignment;
+	__s64 bytes;
+	__s8 vol_type;
+	__u8 flags;
+	__s16 name_len;
+	__s8 padding2[4];
+	char name[UBI_MAX_VOLUME_NAME + 1];
+} __attribute__((packed));
+
+/**
+ * struct ubi_rsvol_req - a data structure used in volume re-size requests.
+ * @vol_id: ID of the volume to re-size
+ * @bytes: new size of the volume in bytes
+ *
+ * Re-sizing is possible for both dynamic and static volumes. But while dynamic
+ * volumes may be re-sized arbitrarily, static volumes cannot be made to be
+ * smaller than the number of bytes they bear. To arbitrarily shrink a static
+ * volume, it must be wi
