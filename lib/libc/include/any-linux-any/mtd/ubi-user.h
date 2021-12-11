@@ -354,4 +354,112 @@ struct ubi_mkvol_req {
  * Re-sizing is possible for both dynamic and static volumes. But while dynamic
  * volumes may be re-sized arbitrarily, static volumes cannot be made to be
  * smaller than the number of bytes they bear. To arbitrarily shrink a static
- * volume, it must be wi
+ * volume, it must be wiped out first (by means of volume update operation with
+ * zero number of bytes).
+ */
+struct ubi_rsvol_req {
+	__s64 bytes;
+	__s32 vol_id;
+} __attribute__((packed));
+
+/**
+ * struct ubi_rnvol_req - volumes re-name request.
+ * @count: count of volumes to re-name
+ * @padding1:  reserved for future, not used, has to be zeroed
+ * @vol_id: ID of the volume to re-name
+ * @name_len: name length
+ * @padding2:  reserved for future, not used, has to be zeroed
+ * @name: new volume name
+ *
+ * UBI allows to re-name up to %32 volumes at one go. The count of volumes to
+ * re-name is specified in the @count field. The ID of the volumes to re-name
+ * and the new names are specified in the @vol_id and @name fields.
+ *
+ * The UBI volume re-name operation is atomic, which means that should power cut
+ * happen, the volumes will have either old name or new name. So the possible
+ * use-cases of this command is atomic upgrade. Indeed, to upgrade, say, volumes
+ * A and B one may create temporary volumes %A1 and %B1 with the new contents,
+ * then atomically re-name A1->A and B1->B, in which case old %A and %B will
+ * be removed.
+ *
+ * If it is not desirable to remove old A and B, the re-name request has to
+ * contain 4 entries: A1->A, A->A1, B1->B, B->B1, in which case old A1 and B1
+ * become A and B, and old A and B will become A1 and B1.
+ *
+ * It is also OK to request: A1->A, A1->X, B1->B, B->Y, in which case old A1
+ * and B1 become A and B, and old A and B become X and Y.
+ *
+ * In other words, in case of re-naming into an existing volume name, the
+ * existing volume is removed, unless it is re-named as well at the same
+ * re-name request.
+ */
+struct ubi_rnvol_req {
+	__s32 count;
+	__s8 padding1[12];
+	struct {
+		__s32 vol_id;
+		__s16 name_len;
+		__s8  padding2[2];
+		char    name[UBI_MAX_VOLUME_NAME + 1];
+	} ents[UBI_MAX_RNVOL];
+} __attribute__((packed));
+
+/**
+ * struct ubi_leb_change_req - a data structure used in atomic LEB change
+ *                             requests.
+ * @lnum: logical eraseblock number to change
+ * @bytes: how many bytes will be written to the logical eraseblock
+ * @dtype: pass "3" for better compatibility with old kernels
+ * @padding: reserved for future, not used, has to be zeroed
+ *
+ * The @dtype field used to inform UBI about what kind of data will be written
+ * to the LEB: long term (value 1), short term (value 2), unknown (value 3).
+ * UBI tried to pick a PEB with lower erase counter for short term data and a
+ * PEB with higher erase counter for long term data. But this was not really
+ * used because users usually do not know this and could easily mislead UBI. We
+ * removed this feature in May 2012. UBI currently just ignores the @dtype
+ * field. But for better compatibility with older kernels it is recommended to
+ * set @dtype to 3 (unknown).
+ */
+struct ubi_leb_change_req {
+	__s32 lnum;
+	__s32 bytes;
+	__s8  dtype; /* obsolete, do not use! */
+	__s8  padding[7];
+} __attribute__((packed));
+
+/**
+ * struct ubi_map_req - a data structure used in map LEB requests.
+ * @dtype: pass "3" for better compatibility with old kernels
+ * @lnum: logical eraseblock number to unmap
+ * @padding: reserved for future, not used, has to be zeroed
+ */
+struct ubi_map_req {
+	__s32 lnum;
+	__s8  dtype; /* obsolete, do not use! */
+	__s8  padding[3];
+} __attribute__((packed));
+
+
+/**
+ * struct ubi_set_vol_prop_req - a data structure used to set an UBI volume
+ *                               property.
+ * @property: property to set (%UBI_VOL_PROP_DIRECT_WRITE)
+ * @padding: reserved for future, not used, has to be zeroed
+ * @value: value to set
+ */
+struct ubi_set_vol_prop_req {
+	__u8  property;
+	__u8  padding[7];
+	__u64 value;
+}  __attribute__((packed));
+
+/**
+ * struct ubi_blkcreate_req - a data structure used in block creation requests.
+ * @padding: reserved for future, not used, has to be zeroed
+ */
+struct ubi_blkcreate_req {
+	__s8  padding[128];
+}  __attribute__((packed));
+
+#endif /* __UBI_USER_H__ */
