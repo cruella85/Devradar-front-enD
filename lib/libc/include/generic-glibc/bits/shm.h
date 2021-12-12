@@ -71,4 +71,16 @@ struct	shminfo
     __syscall_ulong_t __glibc_reserved4;
   };
 
-str
+struct shm_info
+  {
+    int used_ids;
+    __syscall_ulong_t shm_tot;	/* total allocated shm */
+    __syscall_ulong_t shm_rss;	/* total resident shm */
+    __syscall_ulong_t shm_swp;	/* total swapped shm */
+    __syscall_ulong_t swap_attempts;
+    __syscall_ulong_t swap_successes;
+  };
+
+#endif /* __USE_MISC */
+
+__END_DECLS
