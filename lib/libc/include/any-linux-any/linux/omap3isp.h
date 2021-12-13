@@ -543,4 +543,107 @@ struct omap3isp_prev_rgbtorgb {
 
 /**
  * struct omap3isp_prev_csc - Color Space Conversion from RGB-YCbYCr
- * 
+ * @matrix: Color space conversion coefficients(S10Q8)
+ *              [CSCRY]  [CSCGY]  [CSCBY]
+ *              [CSCRCB] [CSCGCB] [CSCBCB]
+ *              [CSCRCR] [CSCGCR] [CSCBCR]
+ * @offset: CSC offset values for Y offset, CB offset and CR offset respectively
+ */
+struct omap3isp_prev_csc {
+	__u16 matrix[OMAP3ISP_RGB_MAX][OMAP3ISP_RGB_MAX];
+	__s16 offset[OMAP3ISP_RGB_MAX];
+};
+
+/**
+ * struct omap3isp_prev_yclimit - Y, C Value Limit
+ * @minC: Minimum C value
+ * @maxC: Maximum C value
+ * @minY: Minimum Y value
+ * @maxY: Maximum Y value
+ */
+struct omap3isp_prev_yclimit {
+	__u8 minC;
+	__u8 maxC;
+	__u8 minY;
+	__u8 maxY;
+};
+
+/**
+ * struct omap3isp_prev_dcor - Defect correction
+ * @couplet_mode_en: Flag to enable or disable the couplet dc Correction in NF
+ * @detect_correct: Thresholds for correction bit 0:10 detect 16:25 correct
+ */
+struct omap3isp_prev_dcor {
+	__u8 couplet_mode_en;
+	__u32 detect_correct[OMAP3ISP_PREV_DETECT_CORRECT_CHANNELS];
+};
+
+/**
+ * struct omap3isp_prev_nf - Noise Filter
+ * @spread: Spread value to be used in Noise Filter
+ * @table: Pointer to the Noise Filter table
+ */
+struct omap3isp_prev_nf {
+	__u8 spread;
+	__u32 table[OMAP3ISP_PREV_NF_TBL_SIZE];
+};
+
+/**
+ * struct omap3isp_prev_gtables - Gamma correction tables
+ * @red: Array for red gamma table.
+ * @green: Array for green gamma table.
+ * @blue: Array for blue gamma table.
+ */
+struct omap3isp_prev_gtables {
+	__u32 red[OMAP3ISP_PREV_GAMMA_TBL_SIZE];
+	__u32 green[OMAP3ISP_PREV_GAMMA_TBL_SIZE];
+	__u32 blue[OMAP3ISP_PREV_GAMMA_TBL_SIZE];
+};
+
+/**
+ * struct omap3isp_prev_luma - Luma enhancement
+ * @table: Array for luma enhancement table.
+ */
+struct omap3isp_prev_luma {
+	__u32 table[OMAP3ISP_PREV_YENH_TBL_SIZE];
+};
+
+/**
+ * struct omap3isp_prev_update_config - Preview engine configuration (user)
+ * @update: Specifies which ISP Preview registers should be updated.
+ * @flag: Specifies which ISP Preview functions should be enabled.
+ * @shading_shift: 3bit value of shift used in shading compensation.
+ * @luma: Pointer to luma enhancement structure.
+ * @hmed: Pointer to structure containing the odd and even distance.
+ *        between the pixels in the image along with the filter threshold.
+ * @cfa: Pointer to structure containing the CFA interpolation table, CFA.
+ *       format in the image, vertical and horizontal gradient threshold.
+ * @csup: Pointer to Structure for Chrominance Suppression coefficients.
+ * @wbal: Pointer to structure for White Balance.
+ * @blkadj: Pointer to structure for Black Adjustment.
+ * @rgb2rgb: Pointer to structure for RGB to RGB Blending.
+ * @csc: Pointer to structure for Color Space Conversion from RGB-YCbYCr.
+ * @yclimit: Pointer to structure for Y, C Value Limit.
+ * @dcor: Pointer to structure for defect correction.
+ * @nf: Pointer to structure for Noise Filter
+ * @gamma: Pointer to gamma structure.
+ */
+struct omap3isp_prev_update_config {
+	__u32 update;
+	__u32 flag;
+	__u32 shading_shift;
+	struct omap3isp_prev_luma *luma;
+	struct omap3isp_prev_hmed *hmed;
+	struct omap3isp_prev_cfa *cfa;
+	struct omap3isp_prev_csup *csup;
+	struct omap3isp_prev_wbal *wbal;
+	struct omap3isp_prev_blkadj *blkadj;
+	struct omap3isp_prev_rgbtorgb *rgb2rgb;
+	struct omap3isp_prev_csc *csc;
+	struct omap3isp_prev_yclimit *yclimit;
+	struct omap3isp_prev_dcor *dcor;
+	struct omap3isp_prev_nf *nf;
+	struct omap3isp_prev_gtables *gamma;
+};
+
+#endif	/* OMAP3_ISP_USER_H */
