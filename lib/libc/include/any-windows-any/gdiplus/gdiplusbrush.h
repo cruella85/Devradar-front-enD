@@ -354,3 +354,253 @@ public:
 	{
 		if (!presetColors || count < 0)
 			return lastStatus = InvalidParameter;
+
+		ARGB *presetArgb =
+			(ARGB*) DllExports::GdipAlloc(count * sizeof(ARGB));
+		if (!presetArgb)
+			return lastStatus = OutOfMemory;
+		for (INT i = 0; i < count; ++i) {
+			presetArgb[i] = presetColors[i].GetValue();
+		}
+
+		Status status = updateStatus(DllExports::GdipSetLinePresetBlend(
+				(GpLineGradient*) nativeBrush,
+				presetArgb, blendPositions, count));
+		DllExports::GdipFree((void*) presetArgb);
+		return status;
+	}
+	Status SetLinearColors(const Color& color1, const Color& color2)
+	{
+		return updateStatus(DllExports::GdipSetLineColors(
+				(GpLineGradient*) nativeBrush,
+				color1.GetValue(), color2.GetValue()));
+	}
+	Status SetTransform(const Matrix *matrix)
+	{
+		return updateStatus(DllExports::GdipSetLineTransform(
+				(GpLineGradient*) nativeBrush,
+				matrix ? matrix->nativeMatrix : NULL));
+	}
+	Status SetWrapMode(WrapMode wrapMode)
+	{
+		return updateStatus(DllExports::GdipSetLineWrapMode(
+				(GpLineGradient*) nativeBrush, wrapMode));
+	}
+	Status TranslateTransform(REAL dx, REAL dy,
+			MatrixOrder order = MatrixOrderPrepend)
+	{
+		return updateStatus(DllExports::GdipTranslateLineTransform(
+				(GpLineGradient*) nativeBrush, dx, dy, order));
+	}
+
+private:
+	LinearGradientBrush(GpBrush *brush, Status status): Brush(brush, status) {}
+	LinearGradientBrush(const LinearGradientBrush& brush);
+	LinearGradientBrush& operator=(const LinearGradientBrush&);
+};
+
+class SolidBrush: public Brush
+{
+public:
+	SolidBrush(const Color& color)
+	{
+		GpSolidFill *nativeSolidFill = NULL;
+		lastStatus = DllExports::GdipCreateSolidFill(
+				color.GetValue(), &nativeSolidFill);
+		nativeBrush = nativeSolidFill; 
+	}
+	virtual SolidBrush* Clone() const
+	{
+		GpBrush *cloneBrush = NULL;
+		Status status = updateStatus(DllExports::GdipCloneBrush(
+				nativeBrush, &cloneBrush));
+		if (status == Ok) {
+			SolidBrush *result =
+				new SolidBrush(cloneBrush, lastStatus);
+			if (!result) {
+				DllExports::GdipDeleteBrush(cloneBrush);
+				updateStatus(OutOfMemory);
+			}
+			return result;
+		} else {
+			return NULL;
+		}
+	}
+
+	Status GetColor(Color *color) const
+	{
+		return updateStatus(DllExports::GdipGetSolidFillColor(
+				(GpSolidFill*) nativeBrush,
+				color ? &color->Value : NULL));
+	}
+	Status SetColor(const Color& color)
+	{
+		return updateStatus(DllExports::GdipSetSolidFillColor(
+				(GpSolidFill*) nativeBrush, color.GetValue()));
+	}
+
+private:
+	SolidBrush(GpBrush *brush, Status status): Brush(brush, status) {}
+	SolidBrush(const SolidBrush&);
+	SolidBrush& operator=(const SolidBrush&);
+};
+
+class TextureBrush: public Brush
+{
+public:
+	TextureBrush(Image *image, WrapMode wrapMode = WrapModeTile)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTexture(
+				image ? image->nativeImage : NULL,
+				wrapMode, &nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	TextureBrush(Image *image, WrapMode wrapMode,
+			REAL dstX, REAL dstY, REAL dstWidth, REAL dstHeight)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTexture2(
+				image ? image->nativeImage : NULL,
+				wrapMode, dstX, dstY, dstWidth, dstHeight,
+				&nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	TextureBrush(Image *image, WrapMode wrapMode,
+			INT dstX, INT dstY, INT dstWidth, INT dstHeight)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTexture2I(
+				image ? image->nativeImage : NULL,
+				wrapMode, dstX, dstY, dstWidth, dstHeight,
+				&nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	TextureBrush(Image *image, WrapMode wrapMode, const RectF& dstRect)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTexture2(
+				image ? image->nativeImage : NULL, wrapMode,
+				dstRect.X, dstRect.Y,
+				dstRect.Width, dstRect.Height, &nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	TextureBrush(Image *image, WrapMode wrapMode, const Rect& dstRect)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTexture2I(
+				image ? image->nativeImage : NULL, wrapMode,
+				dstRect.X, dstRect.Y,
+				dstRect.Width, dstRect.Height, &nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	TextureBrush(Image *image, const RectF& dstRect,
+			ImageAttributes *imageAttributes = NULL)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTextureIA(
+				image ? image->nativeImage : NULL,
+				imageAttributes ? imageAttributes->nativeImageAttributes : NULL,
+				dstRect.X, dstRect.Y,
+				dstRect.Width, dstRect.Height, &nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	TextureBrush(Image *image, const Rect& dstRect,
+			ImageAttributes *imageAttributes = NULL)
+	{
+		GpTexture *nativeTexture = NULL;
+		lastStatus = DllExports::GdipCreateTextureIAI(
+				image ? image->nativeImage : NULL,
+				imageAttributes ? imageAttributes->nativeImageAttributes : NULL,
+				dstRect.X, dstRect.Y,
+				dstRect.Width, dstRect.Height, &nativeTexture);
+		nativeBrush = nativeTexture;
+	}
+	virtual TextureBrush* Clone() const
+	{
+		GpBrush *cloneBrush = NULL;
+		Status status = updateStatus(DllExports::GdipCloneBrush(
+				nativeBrush, &cloneBrush));
+		if (status == Ok) {
+			TextureBrush *result =
+				new TextureBrush(cloneBrush, lastStatus);
+			if (!result) {
+				DllExports::GdipDeleteBrush(cloneBrush);
+				updateStatus(OutOfMemory);
+			}
+			return result;
+		} else {
+			return NULL;
+		}
+	}
+
+	//TODO: implement TextureBrush::GetImage()
+	//Image *GetImage() const
+	//{
+	//	// where is the Image allocated (static,member,new,other)?
+	//	// GdipGetTextureImage just returns a GpImage*
+	//	updateStatus(NotImplemented);
+	//	return NULL;
+	//}
+	Status GetTransfrom(Matrix *matrix) const
+	{
+		return updateStatus(DllExports::GdipGetTextureTransform(
+				(GpTexture*) nativeBrush,
+				matrix ? matrix->nativeMatrix : NULL));
+	}
+	WrapMode GetWrapMode() const
+	{
+		WrapMode result = WrapModeTile;
+		updateStatus(DllExports::GdipGetTextureWrapMode(
+				(GpTexture*) nativeBrush, &result));
+		return result;
+	}
+	Status MultiplyTransform(const Matrix *matrix,
+			MatrixOrder order = MatrixOrderPrepend)
+	{
+		return updateStatus(DllExports::GdipMultiplyTextureTransform(
+				(GpTexture*) nativeBrush,
+				matrix ? matrix->nativeMatrix : NULL, order));
+	}
+	Status ResetTransform()
+	{
+		return updateStatus(DllExports::GdipResetTextureTransform(
+				(GpTexture*) nativeBrush));
+	}
+	Status RotateTransform(REAL angle,
+			MatrixOrder order = MatrixOrderPrepend)
+	{
+		return updateStatus(DllExports::GdipRotateTextureTransform(
+				(GpTexture*) nativeBrush, angle, order));
+	}
+	Status ScaleTransform(REAL sx, REAL sy,
+			MatrixOrder order = MatrixOrderPrepend)
+	{
+		return updateStatus(DllExports::GdipScaleTextureTransform(
+				(GpTexture*) nativeBrush, sx, sy, order));
+	}
+	Status SetTransform(const Matrix *matrix)
+	{
+		return updateStatus(DllExports::GdipSetTextureTransform(
+				(GpTexture*) nativeBrush,
+				matrix ? matrix->nativeMatrix : NULL));
+	}
+	Status SetWrapMode(WrapMode wrapMode)
+	{
+		return updateStatus(DllExports::GdipSetTextureWrapMode(
+				(GpTexture*) nativeBrush, wrapMode));
+	}
+	Status TranslateTransform(REAL dx, REAL dy,
+			MatrixOrder order = MatrixOrderPrepend)
+	{
+		return updateStatus(DllExports::GdipTranslateTextureTransform(
+				(GpTexture*) nativeBrush, dx, dy, order));
+	}
+
+private:
+	TextureBrush(GpBrush *brush, Status status): Brush(brush, status) {}
+	TextureBrush(const TextureBrush&);
+	TextureBrush& operator=(const TextureBrush&);
+};
+
+#endif /* __GDIPLUS_BRUSH_H */
