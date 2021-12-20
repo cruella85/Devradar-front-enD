@@ -320,3 +320,79 @@ enum {
  * with NOTE_ABSOLUTE: causes the timer to continue to tick across sleep,
  *      still uses gettimeofday epoch
  * with NOTE_MACHTIME and NOTE_ABSOLUTE: uses mach continuous time epoch
+ * without NOTE_ABSOLUTE (interval timer mode): continues to tick across sleep
+ */
+#define NOTE_MACHTIME   0x00000100              /* data is mach absolute time units */
+/* timeout uses the mach absolute time epoch */
+
+
+/*
+ * data/hint fflags for EVFILT_MACHPORT, shared with userspace.
+ *
+ * Only portsets are supported at this time.
+ *
+ * The fflags field can optionally contain the MACH_RCV_MSG, MACH_RCV_LARGE,
+ * and related trailer receive options as defined in <mach/message.h>.
+ * The presence of these flags directs the kevent64() call to attempt to receive
+ * the message during kevent delivery, rather than just indicate that a message exists.
+ * On setup, The ext[0] field contains the receive buffer pointer and ext[1] contains
+ * the receive buffer length.  Upon event delivery, the actual received message size
+ * is returned in ext[1].  As with mach_msg(), the buffer must be large enough to
+ * receive the message and the requested (or default) message trailers.  In addition,
+ * the fflags field contains the return code normally returned by mach_msg().
+ *
+ * If MACH_RCV_MSG is specified, and the ext[1] field specifies a zero length, the
+ * system call argument specifying an ouput area (kevent_qos) will be consulted. If
+ * the system call specified an output data area, the user-space address
+ * of the received message is carved from that provided output data area (if enough
+ * space remains there). The address and length of each received message is
+ * returned in the ext[0] and ext[1] fields (respectively) of the corresponding kevent.
+ *
+ * IF_MACH_RCV_VOUCHER_CONTENT is specified, the contents of the message voucher is
+ * extracted (as specified in the xflags field) and stored in ext[2] up to ext[3]
+ * length.  If the input length is zero, and the system call provided a data area,
+ * the space for the voucher content is carved from the provided space and its
+ * address and length is returned in ext[2] and ext[3] respectively.
+ *
+ * If no message receipt options were provided in the fflags field on setup, no
+ * message is received by this call. Instead, on output, the data field simply
+ * contains the name of the actual port detected with a message waiting.
+ */
+
+/*
+ * DEPRECATED!!!!!!!!!
+ * NOTE_TRACK, NOTE_TRACKERR, and NOTE_CHILD are no longer supported as of 10.5
+ */
+/* additional flags for EVFILT_PROC */
+#define NOTE_TRACK      0x00000001              /* follow across forks */
+#define NOTE_TRACKERR   0x00000002              /* could not track child */
+#define NOTE_CHILD      0x00000004              /* am a child process */
+
+
+
+/* Temporay solution for BootX to use inode.h till kqueue moves to vfs layer */
+struct knote;
+SLIST_HEAD(klist, knote);
+
+
+struct timespec;
+
+__BEGIN_DECLS
+int     kqueue(void);
+int     kevent(int kq,
+    const struct kevent *changelist, int nchanges,
+    struct kevent *eventlist, int nevents,
+    const struct timespec *timeout);
+int     kevent64(int kq,
+    const struct kevent64_s *changelist, int nchanges,
+    struct kevent64_s *eventlist, int nevents,
+    unsigned int flags,
+    const struct timespec *timeout);
+
+
+__END_DECLS
+
+
+
+
+#endif /* !_SYS_EVENT_H_ */
