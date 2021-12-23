@@ -54,4 +54,16 @@ public:
     _LIBCPP_INLINE_VISIBILITY raw_storage_iterator& operator=(_Tp&& __element)
         {::new ((void*)_VSTD::addressof(*__x_)) _Tp(_VSTD::move(__element)); return *this;}
 #endif
-    _LIBCPP_IN
+    _LIBCPP_INLINE_VISIBILITY raw_storage_iterator& operator++() {++__x_; return *this;}
+    _LIBCPP_INLINE_VISIBILITY raw_storage_iterator  operator++(int)
+        {raw_storage_iterator __t(*this); ++__x_; return __t;}
+#if _LIBCPP_STD_VER >= 14
+    _LIBCPP_INLINE_VISIBILITY _OutputIterator base() const { return __x_; }
+#endif
+};
+
+#endif // _LIBCPP_STD_VER <= 17 || defined(_LIBCPP_ENABLE_CXX20_REMOVED_RAW_STORAGE_ITERATOR)
+
+_LIBCPP_END_NAMESPACE_STD
+
+#endif // _LIBCPP___MEMORY_RAW_STORAGE_ITERATOR_H
