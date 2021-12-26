@@ -321,4 +321,236 @@ void *malloc(size_t n)
 		unlock_bin(i);
 	}
 	lock(mal.split_merge_lock);
-	for (
+	for (mask = mal.binmap & -(1ULL<<i); mask; mask -= (mask&-mask)) {
+		j = first_set(mask);
+		lock_bin(j);
+		c = mal.bins[j].head;
+		if (c != BIN_TO_CHUNK(j)) {
+			unbin(c, j);
+			unlock_bin(j);
+			break;
+		}
+		unlock_bin(j);
+	}
+	if (!mask) {
+		c = expand_heap(n);
+		if (!c) {
+			unlock(mal.split_merge_lock);
+			return 0;
+		}
+	}
+	trim(c, n);
+	unlock(mal.split_merge_lock);
+	return CHUNK_TO_MEM(c);
+}
+
+int __malloc_allzerop(void *p)
+{
+	return IS_MMAPPED(MEM_TO_CHUNK(p));
+}
+
+void *realloc(void *p, size_t n)
+{
+	struct chunk *self, *next;
+	size_t n0, n1;
+	void *new;
+
+	if (!p) return malloc(n);
+
+	if (adjust_size(&n) < 0) return 0;
+
+	self = MEM_TO_CHUNK(p);
+	n1 = n0 = CHUNK_SIZE(self);
+
+	if (n<=n0 && n0-n<=DONTCARE) return p;
+
+	if (IS_MMAPPED(self)) {
+		size_t extra = self->psize;
+		char *base = (char *)self - extra;
+		size_t oldlen = n0 + extra;
+		size_t newlen = n + extra;
+		/* Crash on realloc of freed chunk */
+		if (extra & 1) a_crash();
+		if (newlen < PAGE_SIZE && (new = malloc(n-OVERHEAD))) {
+			n0 = n;
+			goto copy_free_ret;
+		}
+		newlen = (newlen + PAGE_SIZE-1) & -PAGE_SIZE;
+		if (oldlen == newlen) return p;
+		base = __mremap(base, oldlen, newlen, MREMAP_MAYMOVE);
+		if (base == (void *)-1)
+			goto copy_realloc;
+		self = (void *)(base + extra);
+		self->csize = newlen - extra;
+		return CHUNK_TO_MEM(self);
+	}
+
+	next = NEXT_CHUNK(self);
+
+	/* Crash on corrupted footer (likely from buffer overflow) */
+	if (next->psize != self->csize) a_crash();
+
+	if (n < n0) {
+		int i = bin_index_up(n);
+		int j = bin_index(n0);
+		if (i<j && (mal.binmap & (1ULL << i)))
+			goto copy_realloc;
+		struct chunk *split = (void *)((char *)self + n);
+		self->csize = split->psize = n | C_INUSE;
+		split->csize = next->psize = n0-n | C_INUSE;
+		__bin_chunk(split);
+		return CHUNK_TO_MEM(self);
+	}
+
+	lock(mal.split_merge_lock);
+
+	size_t nsize = next->csize & C_INUSE ? 0 : CHUNK_SIZE(next);
+	if (n0+nsize >= n) {
+		int i = bin_index(nsize);
+		lock_bin(i);
+		if (!(next->csize & C_INUSE)) {
+			unbin(next, i);
+			unlock_bin(i);
+			next = NEXT_CHUNK(next);
+			self->csize = next->psize = n0+nsize | C_INUSE;
+			trim(self, n);
+			unlock(mal.split_merge_lock);
+			return CHUNK_TO_MEM(self);
+		}
+		unlock_bin(i);
+	}
+	unlock(mal.split_merge_lock);
+
+copy_realloc:
+	/* As a last resort, allocate a new chunk and copy to it. */
+	new = malloc(n-OVERHEAD);
+	if (!new) return 0;
+copy_free_ret:
+	memcpy(new, p, (n<n0 ? n : n0) - OVERHEAD);
+	free(CHUNK_TO_MEM(self));
+	return new;
+}
+
+void __bin_chunk(struct chunk *self)
+{
+	struct chunk *next = NEXT_CHUNK(self);
+
+	/* Crash on corrupted footer (likely from buffer overflow) */
+	if (next->psize != self->csize) a_crash();
+
+	lock(mal.split_merge_lock);
+
+	size_t osize = CHUNK_SIZE(self), size = osize;
+
+	/* Since we hold split_merge_lock, only transition from free to
+	 * in-use can race; in-use to free is impossible */
+	size_t psize = self->psize & C_INUSE ? 0 : CHUNK_PSIZE(self);
+	size_t nsize = next->csize & C_INUSE ? 0 : CHUNK_SIZE(next);
+
+	if (psize) {
+		int i = bin_index(psize);
+		lock_bin(i);
+		if (!(self->psize & C_INUSE)) {
+			struct chunk *prev = PREV_CHUNK(self);
+			unbin(prev, i);
+			self = prev;
+			size += psize;
+		}
+		unlock_bin(i);
+	}
+	if (nsize) {
+		int i = bin_index(nsize);
+		lock_bin(i);
+		if (!(next->csize & C_INUSE)) {
+			unbin(next, i);
+			next = NEXT_CHUNK(next);
+			size += nsize;
+		}
+		unlock_bin(i);
+	}
+
+	int i = bin_index(size);
+	lock_bin(i);
+
+	self->csize = size;
+	next->psize = size;
+	bin_chunk(self, i);
+	unlock(mal.split_merge_lock);
+
+	/* Replace middle of large chunks with fresh zero pages */
+	if (size > RECLAIM && (size^(size-osize)) > size-osize) {
+		uintptr_t a = (uintptr_t)self + SIZE_ALIGN+PAGE_SIZE-1 & -PAGE_SIZE;
+		uintptr_t b = (uintptr_t)next - SIZE_ALIGN & -PAGE_SIZE;
+		int e = errno;
+#if 1
+		__madvise((void *)a, b-a, MADV_DONTNEED);
+#else
+		__mmap((void *)a, b-a, PROT_READ|PROT_WRITE,
+			MAP_PRIVATE|MAP_ANONYMOUS|MAP_FIXED, -1, 0);
+#endif
+		errno = e;
+	}
+
+	unlock_bin(i);
+}
+
+static void unmap_chunk(struct chunk *self)
+{
+	size_t extra = self->psize;
+	char *base = (char *)self - extra;
+	size_t len = CHUNK_SIZE(self) + extra;
+	/* Crash on double free */
+	if (extra & 1) a_crash();
+	int e = errno;
+	__munmap(base, len);
+	errno = e;
+}
+
+void free(void *p)
+{
+	if (!p) return;
+
+	struct chunk *self = MEM_TO_CHUNK(p);
+
+	if (IS_MMAPPED(self))
+		unmap_chunk(self);
+	else
+		__bin_chunk(self);
+}
+
+void __malloc_donate(char *start, char *end)
+{
+	size_t align_start_up = (SIZE_ALIGN-1) & (-(uintptr_t)start - OVERHEAD);
+	size_t align_end_down = (SIZE_ALIGN-1) & (uintptr_t)end;
+
+	/* Getting past this condition ensures that the padding for alignment
+	 * and header overhead will not overflow and will leave a nonzero
+	 * multiple of SIZE_ALIGN bytes between start and end. */
+	if (end - start <= OVERHEAD + align_start_up + align_end_down)
+		return;
+	start += align_start_up + OVERHEAD;
+	end   -= align_end_down;
+
+	struct chunk *c = MEM_TO_CHUNK(start), *n = MEM_TO_CHUNK(end);
+	c->psize = n->csize = C_INUSE;
+	c->csize = n->psize = C_INUSE | (end-start);
+	__bin_chunk(c);
+}
+
+void __malloc_atfork(int who)
+{
+	if (who<0) {
+		lock(mal.split_merge_lock);
+		for (int i=0; i<64; i++)
+			lock(mal.bins[i].lock);
+	} else if (!who) {
+		for (int i=0; i<64; i++)
+			unlock(mal.bins[i].lock);
+		unlock(mal.split_merge_lock);
+	} else {
+		for (int i=0; i<64; i++)
+			mal.bins[i].lock[0] = mal.bins[i].lock[1] = 0;
+		mal.split_merge_lock[1] = 0;
+		mal.split_merge_lock[0] = 0;
+	}
+}
