@@ -1,0 +1,17 @@
+/**
+ * This file has no copyright assigned and is placed in the Public Domain.
+ * This file is part of the mingw-w64 runtime package.
+ * No warranty is given; refer to the file DISCLAIMER.PD within this package.
+ */
+COLORMGMTDLGORD DIALOG DISCARDABLE 0,0,350,190
+STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE
+CAPTION "Color Management"
+FONT 8,"MS Shell Dlg"
+BEGIN
+    CONTROL "",IDC_STATIC,"Static",SS_ETCHEDHORZ,170,83,11,1
+    CONTROL "",IDC_STATIC,"Static",SS_ETCHEDHORZ,170,113,11,1
+    CONTROL "",IDC_STATIC,"Static",SS_ETCHEDVERT,179,83,1,32
+    CONTROL "",IDC_STATIC,"Static",SS_ETCHEDHORZ,180,97,11,1
+    CONTROL "",IDC_STATIC,"Static",SS_ETCHEDHORZ,170,143,21,1
+    CONTROL "&Basic color management: Specify how colors appear on your monitor and printer.",rad1,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP | WS_GROUP,23,40,310,10
+    CONTROL "&Proofing: See colors on your monitor and/or printer as th
