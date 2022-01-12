@@ -356,4 +356,262 @@ POST_SYSCALL(ptrace)
       POST_READ(addr, struct_ptrace_ptrace_io_desc_struct_sz);
       if (addr->piod_op == ptrace_piod_write_d ||
           addr->piod_op == ptrace_piod_write_i) {
-        POST_READ(addr->piod_addr, a
+        POST_READ(addr->piod_addr, addr->piod_len);
+      }
+      if (addr->piod_op == ptrace_piod_read_d ||
+          addr->piod_op == ptrace_piod_read_i ||
+          addr->piod_op == ptrace_piod_read_auxv) {
+        POST_WRITE(addr->piod_addr, addr->piod_len);
+      }
+    } else if (req_ == ptrace_pt_lwpinfo) {
+      struct __sanitizer_ptrace_lwpinfo *addr =
+          (struct __sanitizer_ptrace_lwpinfo *)addr_;
+      POST_READ(&addr->pl_lwpid, sizeof(__sanitizer_lwpid_t));
+      POST_WRITE(addr, struct_ptrace_ptrace_lwpinfo_struct_sz);
+    } else if (req_ == ptrace_pt_set_event_mask) {
+      POST_READ(addr_, struct_ptrace_ptrace_event_struct_sz);
+    } else if (req_ == ptrace_pt_get_event_mask) {
+      POST_WRITE(addr_, struct_ptrace_ptrace_event_struct_sz);
+    } else if (req_ == ptrace_pt_set_siginfo) {
+      POST_READ(addr_, struct_ptrace_ptrace_siginfo_struct_sz);
+    } else if (req_ == ptrace_pt_get_siginfo) {
+      POST_WRITE(addr_, struct_ptrace_ptrace_siginfo_struct_sz);
+    } else if (req_ == ptrace_pt_lwpstatus) {
+      struct __sanitizer_ptrace_lwpstatus *addr =
+          (struct __sanitizer_ptrace_lwpstatus *)addr_;
+      POST_READ(&addr->pl_lwpid, sizeof(__sanitizer_lwpid_t));
+      POST_WRITE(addr, struct_ptrace_ptrace_lwpstatus_struct_sz);
+    } else if (req_ == ptrace_pt_lwpnext) {
+      struct __sanitizer_ptrace_lwpstatus *addr =
+          (struct __sanitizer_ptrace_lwpstatus *)addr_;
+      POST_READ(&addr->pl_lwpid, sizeof(__sanitizer_lwpid_t));
+      POST_WRITE(addr, struct_ptrace_ptrace_lwpstatus_struct_sz);
+    } else if (req_ == ptrace_pt_setregs) {
+      POST_READ(addr_, struct_ptrace_reg_struct_sz);
+    } else if (req_ == ptrace_pt_getregs) {
+      POST_WRITE(addr_, struct_ptrace_reg_struct_sz);
+    } else if (req_ == ptrace_pt_setfpregs) {
+      POST_READ(addr_, struct_ptrace_fpreg_struct_sz);
+    } else if (req_ == ptrace_pt_getfpregs) {
+      POST_WRITE(addr_, struct_ptrace_fpreg_struct_sz);
+    } else if (req_ == ptrace_pt_setdbregs) {
+      POST_READ(addr_, struct_ptrace_dbreg_struct_sz);
+    } else if (req_ == ptrace_pt_getdbregs) {
+      POST_WRITE(addr_, struct_ptrace_dbreg_struct_sz);
+    }
+  }
+}
+PRE_SYSCALL(recvmsg)(long long s_, void *msg_, long long flags_) {
+  PRE_WRITE(msg_, sizeof(__sanitizer_msghdr));
+}
+POST_SYSCALL(recvmsg)
+(long long res, long long s_, void *msg_, long long flags_) {
+  if (res > 0) {
+    POST_WRITE(msg_, sizeof(__sanitizer_msghdr));
+  }
+}
+PRE_SYSCALL(sendmsg)(long long s_, void *msg_, long long flags_) {
+  PRE_READ(msg_, sizeof(__sanitizer_msghdr));
+}
+POST_SYSCALL(sendmsg)
+(long long res, long long s_, void *msg_, long long flags_) {
+  if (res > 0) {
+    POST_READ(msg_, sizeof(__sanitizer_msghdr));
+  }
+}
+PRE_SYSCALL(recvfrom)
+(long long s_, void *buf_, long long len_, long long flags_, void *from_,
+  void *fromlenaddr_) {
+  PRE_WRITE(buf_, len_);
+  PRE_WRITE(from_, struct_sockaddr_sz);
+  PRE_WRITE(fromlenaddr_, sizeof(__sanitizer_socklen_t));
+}
+POST_SYSCALL(recvfrom)
+(long long res, long long s_, void *buf_, long long len_, long long flags_,
+  void *from_, void *fromlenaddr_) {
+  if (res >= 0) {
+    POST_WRITE(buf_, res);
+    POST_WRITE(from_, struct_sockaddr_sz);
+    POST_WRITE(fromlenaddr_, sizeof(__sanitizer_socklen_t));
+  }
+}
+PRE_SYSCALL(accept)(long long s_, void *name_, void *anamelen_) {
+  PRE_WRITE(name_, struct_sockaddr_sz);
+  PRE_WRITE(anamelen_, sizeof(__sanitizer_socklen_t));
+}
+POST_SYSCALL(accept)
+(long long res, long long s_, void *name_, void *anamelen_) {
+  if (res == 0) {
+    POST_WRITE(name_, struct_sockaddr_sz);
+    POST_WRITE(anamelen_, sizeof(__sanitizer_socklen_t));
+  }
+}
+PRE_SYSCALL(getpeername)(long long fdes_, void *asa_, void *alen_) {
+  PRE_WRITE(asa_, struct_sockaddr_sz);
+  PRE_WRITE(alen_, sizeof(__sanitizer_socklen_t));
+}
+POST_SYSCALL(getpeername)
+(long long res, long long fdes_, void *asa_, void *alen_) {
+  if (res == 0) {
+    POST_WRITE(asa_, struct_sockaddr_sz);
+    POST_WRITE(alen_, sizeof(__sanitizer_socklen_t));
+  }
+}
+PRE_SYSCALL(getsockname)(long long fdes_, void *asa_, void *alen_) {
+  PRE_WRITE(asa_, struct_sockaddr_sz);
+  PRE_WRITE(alen_, sizeof(__sanitizer_socklen_t));
+}
+POST_SYSCALL(getsockname)
+(long long res, long long fdes_, void *asa_, void *alen_) {
+  if (res == 0) {
+    POST_WRITE(asa_, struct_sockaddr_sz);
+    POST_WRITE(alen_, sizeof(__sanitizer_socklen_t));
+  }
+}
+PRE_SYSCALL(access)(void *path_, long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(access)(long long res, void *path_, long long flags_) {
+  if (res == 0) {
+    const char *path = (const char *)path_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(chflags)(void *path_, long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(chflags)(long long res, void *path_, long long flags_) {
+  if (res == 0) {
+    const char *path = (const char *)path_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(fchflags)(long long fd_, long long flags_) { /* Nothing to do */ }
+POST_SYSCALL(fchflags)(long long res, long long fd_, long long flags_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(sync)(void) { /* Nothing to do */ }
+POST_SYSCALL(sync)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(kill)(long long pid_, long long signum_) { /* Nothing to do */ }
+POST_SYSCALL(kill)(long long res, long long pid_, long long signum_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_43_stat43)(void *path_, void *ub_) { /* TODO */ }
+POST_SYSCALL(compat_43_stat43)(long long res, void *path_, void *ub_) {
+  /* TODO */
+}
+PRE_SYSCALL(getppid)(void) { /* Nothing to do */ }
+POST_SYSCALL(getppid)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(compat_43_lstat43)(void *path_, void *ub_) { /* TODO */ }
+POST_SYSCALL(compat_43_lstat43)(long long res, void *path_, void *ub_) {
+  /* TODO */
+}
+PRE_SYSCALL(dup)(long long fd_) { /* Nothing to do */ }
+POST_SYSCALL(dup)(long long res, long long fd_) { /* Nothing to do */ }
+PRE_SYSCALL(pipe)(void) {
+  /* pipe returns two descriptors through two returned values */
+}
+POST_SYSCALL(pipe)(long long res) {
+  /* pipe returns two descriptors through two returned values */
+}
+PRE_SYSCALL(getegid)(void) { /* Nothing to do */ }
+POST_SYSCALL(getegid)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(profil)
+(void *samples_, long long size_, long long offset_, long long scale_) {
+  if (samples_) {
+    PRE_WRITE(samples_, size_);
+  }
+}
+POST_SYSCALL(profil)
+(long long res, void *samples_, long long size_, long long offset_,
+  long long scale_) {
+  if (res == 0) {
+    if (samples_) {
+      POST_WRITE(samples_, size_);
+    }
+  }
+}
+PRE_SYSCALL(ktrace)
+(void *fname_, long long ops_, long long facs_, long long pid_) {
+  const char *fname = (const char *)fname_;
+  if (fname) {
+    PRE_READ(fname, __sanitizer::internal_strlen(fname) + 1);
+  }
+}
+POST_SYSCALL(ktrace)
+(long long res, void *fname_, long long ops_, long long facs_, long long pid_) {
+  const char *fname = (const char *)fname_;
+  if (res == 0) {
+    if (fname) {
+      POST_READ(fname, __sanitizer::internal_strlen(fname) + 1);
+    }
+  }
+}
+PRE_SYSCALL(compat_13_sigaction13)(long long signum_, void *nsa_, void *osa_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_13_sigaction13)
+(long long res, long long signum_, void *nsa_, void *osa_) {
+  /* TODO */
+}
+PRE_SYSCALL(getgid)(void) { /* Nothing to do */ }
+POST_SYSCALL(getgid)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(compat_13_sigprocmask13)(long long how_, long long mask_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_13_sigprocmask13)
+(long long res, long long how_, long long mask_) {
+  /* TODO */
+}
+PRE_SYSCALL(__getlogin)(void *namebuf_, long long namelen_) {
+  if (namebuf_) {
+    PRE_WRITE(namebuf_, namelen_);
+  }
+}
+POST_SYSCALL(__getlogin)(long long res, void *namebuf_, long long namelen_) {
+  if (res == 0) {
+    if (namebuf_) {
+      POST_WRITE(namebuf_, namelen_);
+    }
+  }
+}
+PRE_SYSCALL(__setlogin)(void *namebuf_) {
+  const char *namebuf = (const char *)namebuf_;
+  if (namebuf) {
+    PRE_READ(namebuf, __sanitizer::internal_strlen(namebuf) + 1);
+  }
+}
+POST_SYSCALL(__setlogin)(long long res, void *namebuf_) {
+  if (res == 0) {
+    const char *namebuf = (const char *)namebuf_;
+    if (namebuf) {
+      POST_READ(namebuf, __sanitizer::internal_strlen(namebuf) + 1);
+    }
+  }
+}
+PRE_SYSCALL(acct)(void *path_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(acct)(long long res, void *path_) {
+  if (res == 0) {
+    const char *path = (const char *)path_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(compat_13_sigpending13)(void) { /* TODO */ }
+POST_SY
