@@ -614,4 +614,273 @@ POST_SYSCALL(acct)(long long res, void *path_) {
   }
 }
 PRE_SYSCALL(compat_13_sigpending13)(void) { /* TODO */ }
-POST_SY
+POST_SYSCALL(compat_13_sigpending13)(long long res) { /* TODO */ }
+PRE_SYSCALL(compat_13_sigaltstack13)(void *nss_, void *oss_) { /* TODO */ }
+POST_SYSCALL(compat_13_sigaltstack13)(long long res, void *nss_, void *oss_) {
+  /* TODO */
+}
+PRE_SYSCALL(ioctl)(long long fd_, long long com_, void *data_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(ioctl)(long long res, long long fd_, long long com_, void *data_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_12_oreboot)(long long opt_) { /* TODO */ }
+POST_SYSCALL(compat_12_oreboot)(long long res, long long opt_) { /* TODO */ }
+PRE_SYSCALL(revoke)(void *path_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(revoke)(long long res, void *path_) {
+  if (res == 0) {
+    const char *path = (const char *)path_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(symlink)(void *path_, void *link_) {
+  const char *path = (const char *)path_;
+  const char *link = (const char *)link_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (link) {
+    PRE_READ(link, __sanitizer::internal_strlen(link) + 1);
+  }
+}
+POST_SYSCALL(symlink)(long long res, void *path_, void *link_) {
+  if (res == 0) {
+    const char *path = (const char *)path_;
+    const char *link = (const char *)link_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+    if (link) {
+      POST_READ(link, __sanitizer::internal_strlen(link) + 1);
+    }
+  }
+}
+PRE_SYSCALL(readlink)(void *path_, void *buf_, long long count_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (buf_) {
+    PRE_WRITE(buf_, count_);
+  }
+}
+POST_SYSCALL(readlink)
+(long long res, void *path_, void *buf_, long long count_) {
+  if (res > 0) {
+    const char *path = (const char *)path_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+    if (buf_) {
+      PRE_WRITE(buf_, res);
+    }
+  }
+}
+PRE_SYSCALL(execve)(void *path_, void *argp_, void *envp_) {
+  const char *path = (const char *)path_;
+  char **argp = (char **)argp_;
+  char **envp = (char **)envp_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (argp && argp[0]) {
+    char *a = argp[0];
+    while (a++) {
+      PRE_READ(a, __sanitizer::internal_strlen(a) + 1);
+    }
+  }
+  if (envp && envp[0]) {
+    char *e = envp[0];
+    while (e++) {
+      PRE_READ(e, __sanitizer::internal_strlen(e) + 1);
+    }
+  }
+}
+POST_SYSCALL(execve)(long long res, void *path_, void *argp_, void *envp_) {
+  /* If we are here, something went wrong */
+  const char *path = (const char *)path_;
+  char **argp = (char **)argp_;
+  char **envp = (char **)envp_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (argp && argp[0]) {
+    char *a = argp[0];
+    while (a++) {
+      POST_READ(a, __sanitizer::internal_strlen(a) + 1);
+    }
+  }
+  if (envp && envp[0]) {
+    char *e = envp[0];
+    while (e++) {
+      POST_READ(e, __sanitizer::internal_strlen(e) + 1);
+    }
+  }
+}
+PRE_SYSCALL(umask)(long long newmask_) { /* Nothing to do */ }
+POST_SYSCALL(umask)(long long res, long long newmask_) { /* Nothing to do */ }
+PRE_SYSCALL(chroot)(void *path_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(chroot)(long long res, void *path_) {
+  if (res == 0) {
+    const char *path = (const char *)path_;
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(compat_43_fstat43)(long long fd_, void *sb_) { /* TODO */ }
+POST_SYSCALL(compat_43_fstat43)(long long res, long long fd_, void *sb_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_ogetkerninfo)
+(long long op_, void *where_, void *size_, long long arg_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_ogetkerninfo)
+(long long res, long long op_, void *where_, void *size_, long long arg_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_ogetpagesize)(void) { /* TODO */ }
+POST_SYSCALL(compat_43_ogetpagesize)(long long res) { /* TODO */ }
+PRE_SYSCALL(compat_12_msync)(void *addr_, long long len_) { /* TODO */ }
+POST_SYSCALL(compat_12_msync)(long long res, void *addr_, long long len_) {
+  /* TODO */
+}
+PRE_SYSCALL(vfork)(void) { /* Nothing to do */ }
+POST_SYSCALL(vfork)(long long res) { /* Nothing to do */ }
+/* syscall 67 has been skipped */
+/* syscall 68 has been skipped */
+/* syscall 69 has been skipped */
+/* syscall 70 has been skipped */
+PRE_SYSCALL(compat_43_ommap)
+(void *addr_, long long len_, long long prot_, long long flags_, long long fd_,
+  long long pos_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_ommap)
+(long long res, void *addr_, long long len_, long long prot_, long long flags_,
+  long long fd_, long long pos_) {
+  /* TODO */
+}
+PRE_SYSCALL(vadvise)(long long anom_) { /* Nothing to do */ }
+POST_SYSCALL(vadvise)(long long res, long long anom_) { /* Nothing to do */ }
+PRE_SYSCALL(munmap)(void *addr_, long long len_) { /* Nothing to do */ }
+POST_SYSCALL(munmap)(long long res, void *addr_, long long len_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(mprotect)(void *addr_, long long len_, long long prot_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(mprotect)
+(long long res, void *addr_, long long len_, long long prot_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(madvise)(void *addr_, long long len_, long long behav_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(madvise)
+(long long res, void *addr_, long long len_, long long behav_) {
+  /* Nothing to do */
+}
+/* syscall 76 has been skipped */
+/* syscall 77 has been skipped */
+PRE_SYSCALL(mincore)(void *addr_, long long len_, void *vec_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(mincore)(long long res, void *addr_, long long len_, void *vec_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(getgroups)(long long gidsetsize_, void *gidset_) {
+  unsigned int *gidset = (unsigned int *)gidset_;
+  if (gidset) {
+    PRE_WRITE(gidset, sizeof(*gidset) * gidsetsize_);
+  }
+}
+POST_SYSCALL(getgroups)(long long res, long long gidsetsize_, void *gidset_) {
+  if (res == 0) {
+    unsigned int *gidset = (unsigned int *)gidset_;
+    if (gidset) {
+      POST_WRITE(gidset, sizeof(*gidset) * gidsetsize_);
+    }
+  }
+}
+PRE_SYSCALL(setgroups)(long long gidsetsize_, void *gidset_) {
+  unsigned int *gidset = (unsigned int *)gidset_;
+  if (gidset) {
+    PRE_READ(gidset, sizeof(*gidset) * gidsetsize_);
+  }
+}
+POST_SYSCALL(setgroups)(long long res, long long gidsetsize_, void *gidset_) {
+  if (res == 0) {
+    unsigned int *gidset = (unsigned int *)gidset_;
+    if (gidset) {
+      POST_READ(gidset, sizeof(*gidset) * gidsetsize_);
+    }
+  }
+}
+PRE_SYSCALL(getpgrp)(void) { /* Nothing to do */ }
+POST_SYSCALL(getpgrp)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(setpgid)(long long pid_, long long pgid_) { /* Nothing to do */ }
+POST_SYSCALL(setpgid)(long long res, long long pid_, long long pgid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_50_setitimer)(long long which_, void *itv_, void *oitv_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_setitimer)
+(long long res, long long which_, void *itv_, void *oitv_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_owait)(void) { /* TODO */ }
+POST_SYSCALL(compat_43_owait)(long long res) { /* TODO */ }
+PRE_SYSCALL(compat_12_oswapon)(void *name_) { /* TODO */ }
+POST_SYSCALL(compat_12_oswapon)(long long res, void *name_) { /* TODO */ }
+PRE_SYSCALL(compat_50_getitimer)(long long which_, void *itv_) { /* TODO */ }
+POST_SYSCALL(compat_50_getitimer)(long long res, long long which_, void *itv_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_ogethostname)(void *hostname_, long long len_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_ogethostname)
+(long long res, void *hostname_, long long len_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_osethostname)(void *hostname_, long long len_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_osethostname)
+(long long res, void *hostname_, long long len_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_ogetdtablesize)(void) { /* TODO */ }
+POST_SYSCALL(compat_43_ogetdtablesize)(long long res) { /* TODO */ }
+PRE_SYSCALL(dup2)(long long from_, long long to_) { /* Nothing to do */ }
+POST_SYSCALL(dup2)(long long res, long long from_, long long to_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(getrandom)(void *buf_, long long buflen_, long long flags_) {
+  /* TODO */
+}
+POST_SYSCALL(getrandom)
+(long long res, void *buf_, long long buflen_, long long flags_) {
+  /* TODO */
+}
+PRE_SYSCALL(fcntl)(long long fd_, long long cmd_, void *arg_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(fcntl)(long long res, long long fd_, long long cmd_, void *arg_) {
+  /* Nothing to do */
