@@ -884,3 +884,282 @@ PRE_SYSCALL(fcntl)(long long fd_, long long cmd_, void *arg_) {
 }
 POST_SYSCALL(fcntl)(long long res, long long fd_, long long cmd_, void *arg_) {
   /* Nothing to do */
+}
+PRE_SYSCALL(compat_50_select)
+(long long nd_, void *in_, void *ou_, void *ex_, void *tv_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_select)
+(long long res, long long nd_, void *in_, void *ou_, void *ex_, void *tv_) {
+  /* TODO */
+}
+/* syscall 94 has been skipped */
+PRE_SYSCALL(fsync)(long long fd_) { /* Nothing to do */ }
+POST_SYSCALL(fsync)(long long res, long long fd_) { /* Nothing to do */ }
+PRE_SYSCALL(setpriority)(long long which_, long long who_, long long prio_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(setpriority)
+(long long res, long long which_, long long who_, long long prio_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_30_socket)
+(long long domain_, long long type_, long long protocol_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_30_socket)
+(long long res, long long domain_, long long type_, long long protocol_) {
+  /* TODO */
+}
+PRE_SYSCALL(connect)(long long s_, void *name_, long long namelen_) {
+  PRE_READ(name_, namelen_);
+}
+POST_SYSCALL(connect)
+(long long res, long long s_, void *name_, long long namelen_) {
+  if (res == 0) {
+    POST_READ(name_, namelen_);
+  }
+}
+PRE_SYSCALL(compat_43_oaccept)(long long s_, void *name_, void *anamelen_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_oaccept)
+(long long res, long long s_, void *name_, void *anamelen_) {
+  /* TODO */
+}
+PRE_SYSCALL(getpriority)(long long which_, long long who_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(getpriority)(long long res, long long which_, long long who_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_43_osend)
+(long long s_, void *buf_, long long len_, long long flags_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_osend)
+(long long res, long long s_, void *buf_, long long len_, long long flags_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_orecv)
+(long long s_, void *buf_, long long len_, long long flags_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_orecv)
+(long long res, long long s_, void *buf_, long long len_, long long flags_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_13_sigreturn13)(void *sigcntxp_) { /* TODO */ }
+POST_SYSCALL(compat_13_sigreturn13)(long long res, void *sigcntxp_) {
+  /* TODO */
+}
+PRE_SYSCALL(bind)(long long s_, void *name_, long long namelen_) {
+  PRE_READ(name_, namelen_);
+}
+POST_SYSCALL(bind)
+(long long res, long long s_, void *name_, long long namelen_) {
+  if (res == 0) {
+    PRE_READ(name_, namelen_);
+  }
+}
+PRE_SYSCALL(setsockopt)
+(long long s_, long long level_, long long name_, void *val_,
+  long long valsize_) {
+  if (val_) {
+    PRE_READ(val_, valsize_);
+  }
+}
+POST_SYSCALL(setsockopt)
+(long long res, long long s_, long long level_, long long name_, void *val_,
+  long long valsize_) {
+  if (res == 0) {
+    if (val_) {
+      POST_READ(val_, valsize_);
+    }
+  }
+}
+PRE_SYSCALL(listen)(long long s_, long long backlog_) { /* Nothing to do */ }
+POST_SYSCALL(listen)(long long res, long long s_, long long backlog_) {
+  /* Nothing to do */
+}
+/* syscall 107 has been skipped */
+PRE_SYSCALL(compat_43_osigvec)(long long signum_, void *nsv_, void *osv_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_osigvec)
+(long long res, long long signum_, void *nsv_, void *osv_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_osigblock)(long long mask_) { /* TODO */ }
+POST_SYSCALL(compat_43_osigblock)(long long res, long long mask_) { /* TODO */ }
+PRE_SYSCALL(compat_43_osigsetmask)(long long mask_) { /* TODO */ }
+POST_SYSCALL(compat_43_osigsetmask)(long long res, long long mask_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_13_sigsuspend13)(long long mask_) { /* TODO */ }
+POST_SYSCALL(compat_13_sigsuspend13)(long long res, long long mask_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_osigstack)(void *nss_, void *oss_) { /* TODO */ }
+POST_SYSCALL(compat_43_osigstack)(long long res, void *nss_, void *oss_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_orecvmsg)(long long s_, void *msg_, long long flags_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_orecvmsg)
+(long long res, long long s_, void *msg_, long long flags_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_osendmsg)(long long s_, void *msg_, long long flags_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_osendmsg)
+(long long res, long long s_, void *msg_, long long flags_) {
+  /* TODO */
+}
+/* syscall 115 has been skipped */
+PRE_SYSCALL(compat_50_gettimeofday)(void *tp_, void *tzp_) { /* TODO */ }
+POST_SYSCALL(compat_50_gettimeofday)(long long res, void *tp_, void *tzp_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_50_getrusage)(long long who_, void *rusage_) { /* TODO */ }
+POST_SYSCALL(compat_50_getrusage)
+(long long res, long long who_, void *rusage_) {
+  /* TODO */
+}
+PRE_SYSCALL(getsockopt)
+(long long s_, long long level_, long long name_, void *val_, void *avalsize_) {
+  /* TODO */
+}
+POST_SYSCALL(getsockopt)
+(long long res, long long s_, long long level_, long long name_, void *val_,
+  void *avalsize_) {
+  /* TODO */
+}
+/* syscall 119 has been skipped */
+PRE_SYSCALL(readv)(long long fd_, void *iovp_, long long iovcnt_) {
+  struct __sanitizer_iovec *iovp = (struct __sanitizer_iovec *)iovp_;
+  int i;
+  if (iovp) {
+    PRE_READ(iovp, sizeof(struct __sanitizer_iovec) * iovcnt_);
+    for (i = 0; i < iovcnt_; i++) {
+      PRE_WRITE(iovp[i].iov_base, iovp[i].iov_len);
+    }
+  }
+}
+POST_SYSCALL(readv)
+(long long res, long long fd_, void *iovp_, long long iovcnt_) {
+  struct __sanitizer_iovec *iovp = (struct __sanitizer_iovec *)iovp_;
+  int i;
+  uptr m, n = res;
+  if (res > 0) {
+    if (iovp) {
+      POST_READ(iovp, sizeof(struct __sanitizer_iovec) * iovcnt_);
+      for (i = 0; i < iovcnt_ && n > 0; i++) {
+        m = n > iovp[i].iov_len ? iovp[i].iov_len : n;
+        POST_WRITE(iovp[i].iov_base, m);
+        n -= m;
+      }
+    }
+  }
+}
+PRE_SYSCALL(writev)(long long fd_, void *iovp_, long long iovcnt_) {
+  struct __sanitizer_iovec *iovp = (struct __sanitizer_iovec *)iovp_;
+  int i;
+  if (iovp) {
+    PRE_READ(iovp, sizeof(struct __sanitizer_iovec) * iovcnt_);
+    for (i = 0; i < iovcnt_; i++) {
+      PRE_READ(iovp[i].iov_base, iovp[i].iov_len);
+    }
+  }
+}
+POST_SYSCALL(writev)
+(long long res, long long fd_, void *iovp_, long long iovcnt_) {
+  struct __sanitizer_iovec *iovp = (struct __sanitizer_iovec *)iovp_;
+  int i;
+  uptr m, n = res;
+  if (res > 0) {
+    if (iovp) {
+      POST_READ(iovp, sizeof(struct __sanitizer_iovec) * iovcnt_);
+      for (i = 0; i < iovcnt_ && n > 0; i++) {
+        m = n > iovp[i].iov_len ? iovp[i].iov_len : n;
+        POST_READ(iovp[i].iov_base, m);
+        n -= m;
+      }
+    }
+  }
+}
+PRE_SYSCALL(compat_50_settimeofday)(void *tv_, void *tzp_) { /* TODO */ }
+POST_SYSCALL(compat_50_settimeofday)(long long res, void *tv_, void *tzp_) {
+  /* TODO */
+}
+PRE_SYSCALL(fchown)(long long fd_, long long uid_, long long gid_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(fchown)
+(long long res, long long fd_, long long uid_, long long gid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(fchmod)(long long fd_, long long mode_) { /* Nothing to do */ }
+POST_SYSCALL(fchmod)(long long res, long long fd_, long long mode_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_43_orecvfrom)
+(long long s_, void *buf_, long long len_, long long flags_, void *from_,
+  void *fromlenaddr_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_orecvfrom)
+(long long res, long long s_, void *buf_, long long len_, long long flags_,
+  void *from_, void *fromlenaddr_) {
+  /* TODO */
+}
+PRE_SYSCALL(setreuid)(long long ruid_, long long euid_) { /* Nothing to do */ }
+POST_SYSCALL(setreuid)(long long res, long long ruid_, long long euid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(setregid)(long long rgid_, long long egid_) { /* Nothing to do */ }
+POST_SYSCALL(setregid)(long long res, long long rgid_, long long egid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(rename)(void *from_, void *to_) {
+  const char *from = (const char *)from_;
+  const char *to = (const char *)to_;
+  if (from) {
+    PRE_READ(from, __sanitizer::internal_strlen(from) + 1);
+  }
+  if (to) {
+    PRE_READ(to, __sanitizer::internal_strlen(to) + 1);
+  }
+}
+POST_SYSCALL(rename)(long long res, void *from_, void *to_) {
+  if (res == 0) {
+    const char *from = (const char *)from_;
+    const char *to = (const char *)to_;
+    if (from) {
+      POST_READ(from, __sanitizer::internal_strlen(from) + 1);
+    }
+    if (to) {
+      POST_READ(to, __sanitizer::internal_strlen(to) + 1);
+    }
+  }
+}
+PRE_SYSCALL(compat_43_otruncate)(void *path_, long long length_) { /* TODO */ }
+POST_SYSCALL(compat_43_otruncate)
+(long long res, void *path_, long long length_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_43_oftruncate)(long long fd_, long long length_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_43_oftruncate)
+(long long res, long long fd_, long long length_) {
+  /* TODO */
+}
+PRE_SYSCALL(flock)(long long fd_, long long how_) { /* Nothing to do */ }
+POST_SYSCALL(flock)(long long res, long long fd_, long long how_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(mkfifo)(void *path_, long long mode_) {
+  cons
