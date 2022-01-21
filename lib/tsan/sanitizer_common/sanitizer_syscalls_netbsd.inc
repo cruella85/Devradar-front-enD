@@ -1716,3 +1716,262 @@ POST_SYSCALL(msgget)(long long res, long long key_, long long msgflg_) {
 PRE_SYSCALL(msgsnd)
 (long long msqid_, void *msgp_, long long msgsz_, long long msgflg_) {
   if (msgp_) {
+    PRE_READ(msgp_, msgsz_);
+  }
+}
+POST_SYSCALL(msgsnd)
+(long long res, long long msqid_, void *msgp_, long long msgsz_,
+  long long msgflg_) {
+  if (res == 0) {
+    if (msgp_) {
+      POST_READ(msgp_, msgsz_);
+    }
+  }
+}
+PRE_SYSCALL(msgrcv)
+(long long msqid_, void *msgp_, long long msgsz_, long long msgtyp_,
+  long long msgflg_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(msgrcv)
+(long long res, long long msqid_, void *msgp_, long long msgsz_,
+  long long msgtyp_, long long msgflg_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(shmat)(long long shmid_, void *shmaddr_, long long shmflg_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(shmat)
+(long long res, long long shmid_, void *shmaddr_, long long shmflg_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_14_shmctl)(long long shmid_, long long cmd_, void *buf_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_14_shmctl)
+(long long res, long long shmid_, long long cmd_, void *buf_) {
+  /* TODO */
+}
+PRE_SYSCALL(shmdt)(void *shmaddr_) { /* Nothing to do */ }
+POST_SYSCALL(shmdt)(long long res, void *shmaddr_) { /* Nothing to do */ }
+PRE_SYSCALL(shmget)(long long key_, long long size_, long long shmflg_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(shmget)
+(long long res, long long key_, long long size_, long long shmflg_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_50_clock_gettime)(long long clock_id_, void *tp_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_clock_gettime)
+(long long res, long long clock_id_, void *tp_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_50_clock_settime)(long long clock_id_, void *tp_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_clock_settime)
+(long long res, long long clock_id_, void *tp_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_50_clock_getres)(long long clock_id_, void *tp_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_clock_getres)
+(long long res, long long clock_id_, void *tp_) {
+  /* TODO */
+}
+PRE_SYSCALL(timer_create)(long long clock_id_, void *evp_, void *timerid_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(timer_create)
+(long long res, long long clock_id_, void *evp_, void *timerid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(timer_delete)(long long timerid_) { /* Nothing to do */ }
+POST_SYSCALL(timer_delete)(long long res, long long timerid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_50_timer_settime)
+(long long timerid_, long long flags_, void *value_, void *ovalue_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_timer_settime)
+(long long res, long long timerid_, long long flags_, void *value_,
+  void *ovalue_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_50_timer_gettime)(long long timerid_, void *value_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_timer_gettime)
+(long long res, long long timerid_, void *value_) {
+  /* TODO */
+}
+PRE_SYSCALL(timer_getoverrun)(long long timerid_) { /* Nothing to do */ }
+POST_SYSCALL(timer_getoverrun)(long long res, long long timerid_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_50_nanosleep)(void *rqtp_, void *rmtp_) { /* TODO */ }
+POST_SYSCALL(compat_50_nanosleep)(long long res, void *rqtp_, void *rmtp_) {
+  /* TODO */
+}
+PRE_SYSCALL(fdatasync)(long long fd_) { /* Nothing to do */ }
+POST_SYSCALL(fdatasync)(long long res, long long fd_) { /* Nothing to do */ }
+PRE_SYSCALL(mlockall)(long long flags_) { /* Nothing to do */ }
+POST_SYSCALL(mlockall)(long long res, long long flags_) { /* Nothing to do */ }
+PRE_SYSCALL(munlockall)(void) { /* Nothing to do */ }
+POST_SYSCALL(munlockall)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(compat_50___sigtimedwait)(void *set_, void *info_, void *timeout_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50___sigtimedwait)
+(long long res, void *set_, void *info_, void *timeout_) {
+  /* TODO */
+}
+PRE_SYSCALL(sigqueueinfo)(long long pid_, void *info_) {
+  if (info_) {
+    PRE_READ(info_, siginfo_t_sz);
+  }
+}
+POST_SYSCALL(sigqueueinfo)(long long res, long long pid_, void *info_) {}
+PRE_SYSCALL(modctl)(long long cmd_, void *arg_) { /* TODO */ }
+POST_SYSCALL(modctl)(long long res, long long cmd_, void *arg_) { /* TODO */ }
+PRE_SYSCALL(_ksem_init)(long long value_, void *idp_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_init)(long long res, long long value_, void *idp_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_ksem_open)
+(void *name_, long long oflag_, long long mode_, long long value_, void *idp_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    PRE_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+POST_SYSCALL(_ksem_open)
+(long long res, void *name_, long long oflag_, long long mode_,
+  long long value_, void *idp_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    POST_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+PRE_SYSCALL(_ksem_unlink)(void *name_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    PRE_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+POST_SYSCALL(_ksem_unlink)(long long res, void *name_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    POST_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+PRE_SYSCALL(_ksem_close)(long long id_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_close)(long long res, long long id_) { /* Nothing to do */ }
+PRE_SYSCALL(_ksem_post)(long long id_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_post)(long long res, long long id_) { /* Nothing to do */ }
+PRE_SYSCALL(_ksem_wait)(long long id_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_wait)(long long res, long long id_) { /* Nothing to do */ }
+PRE_SYSCALL(_ksem_trywait)(long long id_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_trywait)(long long res, long long id_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_ksem_getvalue)(long long id_, void *value_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_getvalue)(long long res, long long id_, void *value_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_ksem_destroy)(long long id_) { /* Nothing to do */ }
+POST_SYSCALL(_ksem_destroy)(long long res, long long id_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_ksem_timedwait)(long long id_, void *abstime_) {
+  if (abstime_) {
+    PRE_READ(abstime_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(_ksem_timedwait)(long long res, long long id_, void *abstime_) {}
+PRE_SYSCALL(mq_open)
+(void *name_, long long oflag_, long long mode_, void *attr_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    PRE_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+POST_SYSCALL(mq_open)
+(long long res, void *name_, long long oflag_, long long mode_, void *attr_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    POST_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+PRE_SYSCALL(mq_close)(long long mqdes_) { /* Nothing to do */ }
+POST_SYSCALL(mq_close)(long long res, long long mqdes_) { /* Nothing to do */ }
+PRE_SYSCALL(mq_unlink)(void *name_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    PRE_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+POST_SYSCALL(mq_unlink)(long long res, void *name_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    POST_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+PRE_SYSCALL(mq_getattr)(long long mqdes_, void *mqstat_) { /* Nothing to do */ }
+POST_SYSCALL(mq_getattr)(long long res, long long mqdes_, void *mqstat_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(mq_setattr)(long long mqdes_, void *mqstat_, void *omqstat_) {
+  if (mqstat_) {
+    PRE_READ(mqstat_, struct_mq_attr_sz);
+  }
+}
+POST_SYSCALL(mq_setattr)
+(long long res, long long mqdes_, void *mqstat_, void *omqstat_) {}
+PRE_SYSCALL(mq_notify)(long long mqdes_, void *notification_) {
+  if (notification_) {
+    PRE_READ(notification_, struct_sigevent_sz);
+  }
+}
+POST_SYSCALL(mq_notify)(long long res, long long mqdes_, void *notification_) {}
+PRE_SYSCALL(mq_send)
+(long long mqdes_, void *msg_ptr_, long long msg_len_, long long msg_prio_) {
+  if (msg_ptr_) {
+    PRE_READ(msg_ptr_, msg_len_);
+  }
+}
+POST_SYSCALL(mq_send)
+(long long res, long long mqdes_, void *msg_ptr_, long long msg_len_,
+  long long msg_prio_) {}
+PRE_SYSCALL(mq_receive)
+(long long mqdes_, void *msg_ptr_, long long msg_len_, void *msg_prio_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(mq_receive)
+(long long res, long long mqdes_, void *msg_ptr_, long long msg_len_,
+  void *msg_prio_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_50_mq_timedsend)
+(long long mqdes_, void *msg_ptr_, long long msg_len_, long long msg_prio_,
+  void *abs_timeout_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_mq_timedsend)
+(long long res, long long mqdes_, void *msg_ptr_, long long msg_len_,
+  long long msg_prio_, void *abs_timeout_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_50_mq_timedreceive)
+(long long mqdes_, void *msg_ptr_, long long msg_len_, void *msg_prio_,
+  void *abs_timeout_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_mq_timedreceive)
+(long long res, long long mqdes_, void *msg_ptr_, long long msg_len_,
+  void *msg_prio_, void *abs_timeout_) {
+  /*
