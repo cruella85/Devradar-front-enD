@@ -2504,4 +2504,290 @@ PRE_SYSCALL(compat_90_fstatvfs1)(long long fd_, void *buf_, long long flags_) {
   /* Nothing to do */
 }
 POST_SYSCALL(compat_90_fstatvfs1)
-(long lon
+(long long res, long long fd_, void *buf_, long long flags_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_30_fhstatvfs1)(void *fhp_, void *buf_, long long flags_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_30_fhstatvfs1)
+(long long res, void *fhp_, void *buf_, long long flags_) {
+  /* TODO */
+}
+PRE_SYSCALL(extattrctl)
+(void *path_, long long cmd_, void *filename_, long long attrnamespace_,
+  void *attrname_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattrctl)
+(long long res, void *path_, long long cmd_, void *filename_,
+  long long attrnamespace_, void *attrname_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_set_file)
+(void *path_, long long attrnamespace_, void *attrname_, void *data_,
+  long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_set_file)
+(long long res, void *path_, long long attrnamespace_, void *attrname_,
+  void *data_, long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_get_file)
+(void *path_, long long attrnamespace_, void *attrname_, void *data_,
+  long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_get_file)
+(long long res, void *path_, long long attrnamespace_, void *attrname_,
+  void *data_, long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_delete_file)
+(void *path_, long long attrnamespace_, void *attrname_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_delete_file)
+(long long res, void *path_, long long attrnamespace_, void *attrname_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_set_fd)
+(long long fd_, long long attrnamespace_, void *attrname_, void *data_,
+  long long nbytes_) {
+  /* TODO */
+}
+POST_SYSCALL(extattr_set_fd)
+(long long res, long long fd_, long long attrnamespace_, void *attrname_,
+  void *data_, long long nbytes_) {
+  /* TODO */
+}
+PRE_SYSCALL(extattr_get_fd)
+(long long fd_, long long attrnamespace_, void *attrname_, void *data_,
+  long long nbytes_) {
+  /* TODO */
+}
+POST_SYSCALL(extattr_get_fd)
+(long long res, long long fd_, long long attrnamespace_, void *attrname_,
+  void *data_, long long nbytes_) {
+  /* TODO */
+}
+PRE_SYSCALL(extattr_delete_fd)
+(long long fd_, long long attrnamespace_, void *attrname_) {
+  /* TODO */
+}
+POST_SYSCALL(extattr_delete_fd)
+(long long res, long long fd_, long long attrnamespace_, void *attrname_) {
+  /* TODO */
+}
+PRE_SYSCALL(extattr_set_link)
+(void *path_, long long attrnamespace_, void *attrname_, void *data_,
+  long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_set_link)
+(long long res, void *path_, long long attrnamespace_, void *attrname_,
+  void *data_, long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_get_link)
+(void *path_, long long attrnamespace_, void *attrname_, void *data_,
+  long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_get_link)
+(long long res, void *path_, long long attrnamespace_, void *attrname_,
+  void *data_, long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_delete_link)
+(void *path_, long long attrnamespace_, void *attrname_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_delete_link)
+(long long res, void *path_, long long attrnamespace_, void *attrname_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_list_fd)
+(long long fd_, long long attrnamespace_, void *data_, long long nbytes_) {
+  /* TODO */
+}
+POST_SYSCALL(extattr_list_fd)
+(long long res, long long fd_, long long attrnamespace_, void *data_,
+  long long nbytes_) {
+  /* TODO */
+}
+PRE_SYSCALL(extattr_list_file)
+(void *path_, long long attrnamespace_, void *data_, long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_list_file)
+(long long res, void *path_, long long attrnamespace_, void *data_,
+  long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(extattr_list_link)
+(void *path_, long long attrnamespace_, void *data_, long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(extattr_list_link)
+(long long res, void *path_, long long attrnamespace_, void *data_,
+  long long nbytes_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(compat_50_pselect)
+(long long nd_, void *in_, void *ou_, void *ex_, void *ts_, void *mask_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_pselect)
+(long long res, long long nd_, void *in_, void *ou_, void *ex_, void *ts_,
+  void *mask_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_50_pollts)
+(void *fds_, long long nfds_, void *ts_, void *mask_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_pollts)
+(long long res, void *fds_, long long nfds_, void *ts_, void *mask_) {
+  /* TODO */
+}
+PRE_SYSCALL(setxattr)
+(void *path_, void *name_, void *value_, long long size_, long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(setxattr)
+(long long res, void *path_, void *name_, void *value_, long long size_,
+  long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(lsetxattr)
+(void *path_, void *name_, void *value_, long long size_, long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(lsetxattr)
+(long long res, void *path_, void *name_, void *value_, long long size_,
+  long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(fsetxattr)
+(long long fd_, void *name_, void *value_, long long size_, long long flags_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(fsetxattr)
+(long long res, long long fd_, void *name_, void *value_, long long size_,
+  long long flags_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(getxattr)(void *path_, void *name_, void *value_, long long size_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(getxattr)
+(long long res, void *path_, void *name_, void *value_, long long size_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(lgetxattr)
+(void *path_, void *name_, void *value_, long long size_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(lgetxattr)
+(long long res, void *path_, void *name_, void *value_, long long size_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(fgetxattr)
+(long long fd_, void *name_, void *value_, long long size_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(fgetxattr)
+(long long res, long long fd_, void *name_, void *value_, long long size_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(listxattr)(void *path_, void *list_, long long size_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(listxattr)
+(long long res, void *path_, void *list_, long long size_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POS
