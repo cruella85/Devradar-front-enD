@@ -2249,3 +2249,259 @@ POST_SYSCALL(utrace)(long long res, void *label_, void *addr_, long long len_) {
   }
   if (addr_) {
     POST_READ(addr_, len_);
+  }
+}
+PRE_SYSCALL(getcontext)(void *ucp_) { /* Nothing to do */ }
+POST_SYSCALL(getcontext)(long long res, void *ucp_) { /* Nothing to do */ }
+PRE_SYSCALL(setcontext)(void *ucp_) {
+  if (ucp_) {
+    PRE_READ(ucp_, ucontext_t_sz);
+  }
+}
+POST_SYSCALL(setcontext)(long long res, void *ucp_) {}
+PRE_SYSCALL(_lwp_create)(void *ucp_, long long flags_, void *new_lwp_) {
+  if (ucp_) {
+    PRE_READ(ucp_, ucontext_t_sz);
+  }
+}
+POST_SYSCALL(_lwp_create)
+(long long res, void *ucp_, long long flags_, void *new_lwp_) {}
+PRE_SYSCALL(_lwp_exit)(void) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_exit)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(_lwp_self)(void) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_self)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(_lwp_wait)(long long wait_for_, void *departed_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(_lwp_wait)(long long res, long long wait_for_, void *departed_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_suspend)(long long target_) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_suspend)(long long res, long long target_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_continue)(long long target_) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_continue)(long long res, long long target_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_wakeup)(long long target_) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_wakeup)(long long res, long long target_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_getprivate)(void) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_getprivate)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(_lwp_setprivate)(void *ptr_) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_setprivate)(long long res, void *ptr_) { /* Nothing to do */ }
+PRE_SYSCALL(_lwp_kill)(long long target_, long long signo_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(_lwp_kill)(long long res, long long target_, long long signo_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_detach)(long long target_) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_detach)(long long res, long long target_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_50__lwp_park)
+(void *ts_, long long unpark_, void *hint_, void *unparkhint_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50__lwp_park)
+(long long res, void *ts_, long long unpark_, void *hint_, void *unparkhint_) {
+  /* TODO */
+}
+PRE_SYSCALL(_lwp_unpark)(long long target_, void *hint_) { /* Nothing to do */ }
+POST_SYSCALL(_lwp_unpark)(long long res, long long target_, void *hint_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_unpark_all)(void *targets_, long long ntargets_, void *hint_) {
+  if (targets_) {
+    PRE_READ(targets_, ntargets_ * sizeof(__sanitizer_lwpid_t));
+  }
+}
+POST_SYSCALL(_lwp_unpark_all)
+(long long res, void *targets_, long long ntargets_, void *hint_) {}
+PRE_SYSCALL(_lwp_setname)(long long target_, void *name_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    PRE_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+POST_SYSCALL(_lwp_setname)(long long res, long long target_, void *name_) {
+  const char *name = (const char *)name_;
+  if (name) {
+    POST_READ(name, __sanitizer::internal_strlen(name) + 1);
+  }
+}
+PRE_SYSCALL(_lwp_getname)(long long target_, void *name_, long long len_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(_lwp_getname)
+(long long res, long long target_, void *name_, long long len_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_lwp_ctl)(long long features_, void **address_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(_lwp_ctl)(long long res, long long features_, void **address_) {
+  /* Nothing to do */
+}
+/* syscall 326 has been skipped */
+/* syscall 327 has been skipped */
+/* syscall 328 has been skipped */
+/* syscall 329 has been skipped */
+PRE_SYSCALL(compat_60_sa_register)
+(void *newv_, void **oldv_, long long flags_, long long stackinfo_offset_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_60_sa_register)
+(long long res, void *newv_, void **oldv_, long long flags_,
+  long long stackinfo_offset_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_60_sa_stacks)(long long num_, void *stacks_) { /* TODO */ }
+POST_SYSCALL(compat_60_sa_stacks)
+(long long res, long long num_, void *stacks_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_60_sa_enable)(void) { /* TODO */ }
+POST_SYSCALL(compat_60_sa_enable)(long long res) { /* TODO */ }
+PRE_SYSCALL(compat_60_sa_setconcurrency)(long long concurrency_) { /* TODO */ }
+POST_SYSCALL(compat_60_sa_setconcurrency)
+(long long res, long long concurrency_) {
+  /* TODO */
+}
+PRE_SYSCALL(compat_60_sa_yield)(void) { /* TODO */ }
+POST_SYSCALL(compat_60_sa_yield)(long long res) { /* TODO */ }
+PRE_SYSCALL(compat_60_sa_preempt)(long long sa_id_) { /* TODO */ }
+POST_SYSCALL(compat_60_sa_preempt)(long long res, long long sa_id_) {
+  /* TODO */
+}
+/* syscall 336 has been skipped */
+/* syscall 337 has been skipped */
+/* syscall 338 has been skipped */
+/* syscall 339 has been skipped */
+PRE_SYSCALL(__sigaction_sigtramp)
+(long long signum_, void *nsa_, void *osa_, void *tramp_, long long vers_) {
+  if (nsa_) {
+    PRE_READ(nsa_, sizeof(__sanitizer_sigaction));
+  }
+}
+POST_SYSCALL(__sigaction_sigtramp)
+(long long res, long long signum_, void *nsa_, void *osa_, void *tramp_,
+  long long vers_) {
+  if (nsa_) {
+    PRE_READ(nsa_, sizeof(__sanitizer_sigaction));
+  }
+}
+/* syscall 341 has been skipped */
+/* syscall 342 has been skipped */
+PRE_SYSCALL(rasctl)(void *addr_, long long len_, long long op_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(rasctl)
+(long long res, void *addr_, long long len_, long long op_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(kqueue)(void) { /* Nothing to do */ }
+POST_SYSCALL(kqueue)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(compat_50_kevent)
+(long long fd_, void *changelist_, long long nchanges_, void *eventlist_,
+  long long nevents_, void *timeout_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_50_kevent)
+(long long res, long long fd_, void *changelist_, long long nchanges_,
+  void *eventlist_, long long nevents_, void *timeout_) {
+  /* TODO */
+}
+PRE_SYSCALL(_sched_setparam)
+(long long pid_, long long lid_, long long policy_, void *params_) {
+  if (params_) {
+    PRE_READ(params_, struct_sched_param_sz);
+  }
+}
+POST_SYSCALL(_sched_setparam)
+(long long res, long long pid_, long long lid_, long long policy_,
+  void *params_) {
+  if (params_) {
+    PRE_READ(params_, struct_sched_param_sz);
+  }
+}
+PRE_SYSCALL(_sched_getparam)
+(long long pid_, long long lid_, void *policy_, void *params_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(_sched_getparam)
+(long long res, long long pid_, long long lid_, void *policy_, void *params_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(_sched_setaffinity)
+(long long pid_, long long lid_, long long size_, void *cpuset_) {
+  if (cpuset_) {
+    PRE_READ(cpuset_, size_);
+  }
+}
+POST_SYSCALL(_sched_setaffinity)
+(long long res, long long pid_, long long lid_, long long size_,
+  void *cpuset_) {
+  if (cpuset_) {
+    PRE_READ(cpuset_, size_);
+  }
+}
+PRE_SYSCALL(_sched_getaffinity)
+(long long pid_, long long lid_, long long size_, void *cpuset_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(_sched_getaffinity)
+(long long res, long long pid_, long long lid_, long long size_,
+  void *cpuset_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(sched_yield)(void) { /* Nothing to do */ }
+POST_SYSCALL(sched_yield)(long long res) { /* Nothing to do */ }
+PRE_SYSCALL(_sched_protect)(long long priority_) { /* Nothing to do */ }
+POST_SYSCALL(_sched_protect)(long long res, long long priority_) {
+  /* Nothing to do */
+}
+/* syscall 352 has been skipped */
+/* syscall 353 has been skipped */
+PRE_SYSCALL(fsync_range)
+(long long fd_, long long flags_, long long start_, long long length_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(fsync_range)
+(long long res, long long fd_, long long flags_, long long start_,
+  long long length_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(uuidgen)(void *store_, long long count_) { /* Nothing to do */ }
+POST_SYSCALL(uuidgen)(long long res, void *store_, long long count_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_90_getvfsstat)
+(void *buf_, long long bufsize_, long long flags_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(compat_90_getvfsstat)
+(long long res, void *buf_, long long bufsize_, long long flags_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(compat_90_statvfs1)(void *path_, void *buf_, long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(compat_90_statvfs1)
+(long long res, void *path_, void *buf_, long long flags_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(compat_90_fstatvfs1)(long long fd_, void *buf_, long long flags_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(compat_90_fstatvfs1)
+(long lon
