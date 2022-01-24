@@ -3065,4 +3065,276 @@ PRE_SYSCALL(__settimeofday50)(void *tv_, void *tzp_) {
 POST_SYSCALL(__settimeofday50)(long long res, void *tv_, void *tzp_) {}
 PRE_SYSCALL(__utimes50)(void *path_, void *tptr_) {
   struct __sanitizer_timespec **tptr = (struct __sanitizer_timespec **)tptr_;
-  const char *path = (const char *
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (tptr) {
+    PRE_READ(tptr[0], struct_timespec_sz);
+    PRE_READ(tptr[1], struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__utimes50)(long long res, void *path_, void *tptr_) {}
+PRE_SYSCALL(__adjtime50)(void *delta_, void *olddelta_) {
+  if (delta_) {
+    PRE_READ(delta_, timeval_sz);
+  }
+}
+POST_SYSCALL(__adjtime50)(long long res, void *delta_, void *olddelta_) {}
+PRE_SYSCALL(__lfs_segwait50)(void *fsidp_, void *tv_) { /* TODO */ }
+POST_SYSCALL(__lfs_segwait50)(long long res, void *fsidp_, void *tv_) {
+  /* TODO */
+}
+PRE_SYSCALL(__futimes50)(long long fd_, void *tptr_) {
+  struct __sanitizer_timespec **tptr = (struct __sanitizer_timespec **)tptr_;
+  if (tptr) {
+    PRE_READ(tptr[0], struct_timespec_sz);
+    PRE_READ(tptr[1], struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__futimes50)(long long res, long long fd_, void *tptr_) {}
+PRE_SYSCALL(__lutimes50)(void *path_, void *tptr_) {
+  struct __sanitizer_timespec **tptr = (struct __sanitizer_timespec **)tptr_;
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (tptr) {
+    PRE_READ(tptr[0], struct_timespec_sz);
+    PRE_READ(tptr[1], struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__lutimes50)(long long res, void *path_, void *tptr_) {
+  struct __sanitizer_timespec **tptr = (struct __sanitizer_timespec **)tptr_;
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (tptr) {
+    POST_READ(tptr[0], struct_timespec_sz);
+    POST_READ(tptr[1], struct_timespec_sz);
+  }
+}
+PRE_SYSCALL(__setitimer50)(long long which_, void *itv_, void *oitv_) {
+  struct __sanitizer_itimerval *itv = (struct __sanitizer_itimerval *)itv_;
+  if (itv) {
+    PRE_READ(&itv->it_interval.tv_sec, sizeof(__sanitizer_time_t));
+    PRE_READ(&itv->it_interval.tv_usec, sizeof(__sanitizer_suseconds_t));
+    PRE_READ(&itv->it_value.tv_sec, sizeof(__sanitizer_time_t));
+    PRE_READ(&itv->it_value.tv_usec, sizeof(__sanitizer_suseconds_t));
+  }
+}
+POST_SYSCALL(__setitimer50)
+(long long res, long long which_, void *itv_, void *oitv_) {}
+PRE_SYSCALL(__getitimer50)(long long which_, void *itv_) { /* Nothing to do */ }
+POST_SYSCALL(__getitimer50)(long long res, long long which_, void *itv_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__clock_gettime50)(long long clock_id_, void *tp_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(__clock_gettime50)(long long res, long long clock_id_, void *tp_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__clock_settime50)(long long clock_id_, void *tp_) {
+  if (tp_) {
+    PRE_READ(tp_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__clock_settime50)
+(long long res, long long clock_id_, void *tp_) {}
+PRE_SYSCALL(__clock_getres50)(long long clock_id_, void *tp_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(__clock_getres50)(long long res, long long clock_id_, void *tp_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__nanosleep50)(void *rqtp_, void *rmtp_) {
+  if (rqtp_) {
+    PRE_READ(rqtp_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__nanosleep50)(long long res, void *rqtp_, void *rmtp_) {}
+PRE_SYSCALL(____sigtimedwait50)(void *set_, void *info_, void *timeout_) {
+  if (set_) {
+    PRE_READ(set_, sizeof(__sanitizer_sigset_t));
+  }
+  if (timeout_) {
+    PRE_READ(timeout_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(____sigtimedwait50)
+(long long res, void *set_, void *info_, void *timeout_) {}
+PRE_SYSCALL(__mq_timedsend50)
+(long long mqdes_, void *msg_ptr_, long long msg_len_, long long msg_prio_,
+  void *abs_timeout_) {
+  if (msg_ptr_) {
+    PRE_READ(msg_ptr_, msg_len_);
+  }
+  if (abs_timeout_) {
+    PRE_READ(abs_timeout_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__mq_timedsend50)
+(long long res, long long mqdes_, void *msg_ptr_, long long msg_len_,
+  long long msg_prio_, void *abs_timeout_) {}
+PRE_SYSCALL(__mq_timedreceive50)
+(long long mqdes_, void *msg_ptr_, long long msg_len_, void *msg_prio_,
+  void *abs_timeout_) {
+  if (msg_ptr_) {
+    PRE_READ(msg_ptr_, msg_len_);
+  }
+  if (abs_timeout_) {
+    PRE_READ(abs_timeout_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__mq_timedreceive50)
+(long long res, long long mqdes_, void *msg_ptr_, long long msg_len_,
+  void *msg_prio_, void *abs_timeout_) {}
+PRE_SYSCALL(compat_60__lwp_park)
+(void *ts_, long long unpark_, void *hint_, void *unparkhint_) {
+  /* TODO */
+}
+POST_SYSCALL(compat_60__lwp_park)
+(long long res, void *ts_, long long unpark_, void *hint_, void *unparkhint_) {
+  /* TODO */
+}
+PRE_SYSCALL(__kevent50)
+(long long fd_, void *changelist_, long long nchanges_, void *eventlist_,
+  long long nevents_, void *timeout_) {
+  if (changelist_) {
+    PRE_READ(changelist_, nchanges_ * struct_kevent_sz);
+  }
+  if (timeout_) {
+    PRE_READ(timeout_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__kevent50)
+(long long res, long long fd_, void *changelist_, long long nchanges_,
+  void *eventlist_, long long nevents_, void *timeout_) {}
+PRE_SYSCALL(__pselect50)
+(long long nd_, void *in_, void *ou_, void *ex_, void *ts_, void *mask_) {
+  if (ts_) {
+    PRE_READ(ts_, struct_timespec_sz);
+  }
+  if (mask_) {
+    PRE_READ(mask_, sizeof(struct __sanitizer_sigset_t));
+  }
+}
+POST_SYSCALL(__pselect50)
+(long long res, long long nd_, void *in_, void *ou_, void *ex_, void *ts_,
+  void *mask_) {}
+PRE_SYSCALL(__pollts50)(void *fds_, long long nfds_, void *ts_, void *mask_) {
+  if (ts_) {
+    PRE_READ(ts_, struct_timespec_sz);
+  }
+  if (mask_) {
+    PRE_READ(mask_, sizeof(struct __sanitizer_sigset_t));
+  }
+}
+POST_SYSCALL(__pollts50)
+(long long res, void *fds_, long long nfds_, void *ts_, void *mask_) {}
+PRE_SYSCALL(__aio_suspend50)(void *list_, long long nent_, void *timeout_) {
+  int i;
+  const struct aiocb *const *list = (const struct aiocb *const *)list_;
+  if (list) {
+    for (i = 0; i < nent_; i++) {
+      if (list[i]) {
+        PRE_READ(list[i], sizeof(struct __sanitizer_aiocb));
+      }
+    }
+  }
+  if (timeout_) {
+    PRE_READ(timeout_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(__aio_suspend50)
+(long long res, void *list_, long long nent_, void *timeout_) {}
+PRE_SYSCALL(__stat50)(void *path_, void *ub_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(__stat50)(long long res, void *path_, void *ub_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(__fstat50)(long long fd_, void *sb_) { /* Nothing to do */ }
+POST_SYSCALL(__fstat50)(long long res, long long fd_, void *sb_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__lstat50)(void *path_, void *ub_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(__lstat50)(long long res, void *path_, void *ub_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(____semctl50)
+(long long semid_, long long semnum_, long long cmd_, void *arg_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(____semctl50)
+(long long res, long long semid_, long long semnum_, long long cmd_,
+  void *arg_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__shmctl50)(long long shmid_, long long cmd_, void *buf_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(__shmctl50)
+(long long res, long long shmid_, long long cmd_, void *buf_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__msgctl50)(long long msqid_, long long cmd_, void *buf_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(__msgctl50)
+(long long res, long long msqid_, long long cmd_, void *buf_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__getrusage50)(long long who_, void *rusage_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(__getrusage50)(long long res, long long who_, void *rusage_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__timer_settime50)
+(long long timerid_, long long flags_, void *value_, void *ovalue_) {
+  struct __sanitizer_itimerval *value = (struct __sanitizer_itimerval *)value_;
+  if (value) {
+    PRE_READ(&value->it_interval.tv_sec, sizeof(__sanitizer_time_t));
+    PRE_READ(&value->it_interval.tv_usec, sizeof(__sanitizer_suseconds_t));
+    PRE_READ(&value->it_value.tv_sec, sizeof(__sanitizer_time_t));
+    PRE_READ(&value->it_value.tv_usec, sizeof(__sanitizer_suseconds_t));
+  }
+}
+POST_SYSCALL(__timer_settime50)
+(long long res, long long timerid_, long long flags_, void *value_,
+  void *ovalue_) {
+  struct __sanitizer_itimerval *value = (struct __sanitizer_itimerval *)value_;
+  if (res == 0) {
+    if (value) {
+      POST_READ(&value->it_interval.tv_sec, sizeof(__sanitizer_time_t));
+      POST_READ(&value->it_interval.tv_usec, sizeof(__sanitizer_suseconds_t));
+      POST_READ(&value->it_value.tv_sec, sizeof(__sanitizer_time_t));
+      POST_READ(&value->it_value.tv_usec, sizeof(__sanitizer_suseconds_t));
+    }
+  }
+}
+PRE_SYSCALL(__timer_gettime50)(long long timerid_, void *value_) {
+  /* Nothing to do */
+}
+POST_SYS
