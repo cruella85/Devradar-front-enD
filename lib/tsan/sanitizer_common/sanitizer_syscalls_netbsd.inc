@@ -3337,4 +3337,310 @@ POST_SYSCALL(__timer_settime50)
 PRE_SYSCALL(__timer_gettime50)(long long timerid_, void *value_) {
   /* Nothing to do */
 }
-POST_SYS
+POST_SYSCALL(__timer_gettime50)
+(long long res, long long timerid_, void *value_) {
+  /* Nothing to do */
+}
+#if defined(NTP) || !defined(_KERNEL_OPT)
+PRE_SYSCALL(__ntp_gettime50)(void *ntvp_) { /* Nothing to do */ }
+POST_SYSCALL(__ntp_gettime50)(long long res, void *ntvp_) {
+  /* Nothing to do */
+}
+#else
+/* syscall 448 has been skipped */
+#endif
+PRE_SYSCALL(__wait450)
+(long long pid_, void *status_, long long options_, void *rusage_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(__wait450)
+(long long res, long long pid_, void *status_, long long options_,
+  void *rusage_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(__mknod50)(void *path_, long long mode_, long long dev_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(__mknod50)
+(long long res, void *path_, long long mode_, long long dev_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(__fhstat50)(void *fhp_, long long fh_size_, void *sb_) {
+  if (fhp_) {
+    PRE_READ(fhp_, fh_size_);
+  }
+}
+POST_SYSCALL(__fhstat50)
+(long long res, void *fhp_, long long fh_size_, void *sb_) {
+  if (res == 0) {
+    if (fhp_) {
+      POST_READ(fhp_, fh_size_);
+    }
+  }
+}
+/* syscall 452 has been skipped */
+PRE_SYSCALL(pipe2)(void *fildes_, long long flags_) { /* Nothing to do */ }
+POST_SYSCALL(pipe2)(long long res, void *fildes_, long long flags_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(dup3)(long long from_, long long to_, long long flags_) {
+  /* Nothing to do */
+}
+POST_SYSCALL(dup3)
+(long long res, long long from_, long long to_, long long flags_) {
+  /* Nothing to do */
+}
+PRE_SYSCALL(kqueue1)(long long flags_) { /* Nothing to do */ }
+POST_SYSCALL(kqueue1)(long long res, long long flags_) { /* Nothing to do */ }
+PRE_SYSCALL(paccept)
+(long long s_, void *name_, void *anamelen_, void *mask_, long long flags_) {
+  if (mask_) {
+    PRE_READ(mask_, sizeof(__sanitizer_sigset_t));
+  }
+}
+POST_SYSCALL(paccept)
+(long long res, long long s_, void *name_, void *anamelen_, void *mask_,
+  long long flags_) {
+  if (res >= 0) {
+    if (mask_) {
+      PRE_READ(mask_, sizeof(__sanitizer_sigset_t));
+    }
+  }
+}
+PRE_SYSCALL(linkat)
+(long long fd1_, void *name1_, long long fd2_, void *name2_, long long flags_) {
+  const char *name1 = (const char *)name1_;
+  const char *name2 = (const char *)name2_;
+  if (name1) {
+    PRE_READ(name1, __sanitizer::internal_strlen(name1) + 1);
+  }
+  if (name2) {
+    PRE_READ(name2, __sanitizer::internal_strlen(name2) + 1);
+  }
+}
+POST_SYSCALL(linkat)
+(long long res, long long fd1_, void *name1_, long long fd2_, void *name2_,
+  long long flags_) {
+  const char *name1 = (const char *)name1_;
+  const char *name2 = (const char *)name2_;
+  if (res == 0) {
+    if (name1) {
+      POST_READ(name1, __sanitizer::internal_strlen(name1) + 1);
+    }
+    if (name2) {
+      POST_READ(name2, __sanitizer::internal_strlen(name2) + 1);
+    }
+  }
+}
+PRE_SYSCALL(renameat)
+(long long fromfd_, void *from_, long long tofd_, void *to_) {
+  const char *from = (const char *)from_;
+  const char *to = (const char *)to_;
+  if (from) {
+    PRE_READ(from, __sanitizer::internal_strlen(from) + 1);
+  }
+  if (to) {
+    PRE_READ(to, __sanitizer::internal_strlen(to) + 1);
+  }
+}
+POST_SYSCALL(renameat)
+(long long res, long long fromfd_, void *from_, long long tofd_, void *to_) {
+  const char *from = (const char *)from_;
+  const char *to = (const char *)to_;
+  if (res == 0) {
+    if (from) {
+      POST_READ(from, __sanitizer::internal_strlen(from) + 1);
+    }
+    if (to) {
+      POST_READ(to, __sanitizer::internal_strlen(to) + 1);
+    }
+  }
+}
+PRE_SYSCALL(mkfifoat)(long long fd_, void *path_, long long mode_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(mkfifoat)
+(long long res, long long fd_, void *path_, long long mode_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(mknodat)
+(long long fd_, void *path_, long long mode_, long long PAD_, long long dev_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(mknodat)
+(long long res, long long fd_, void *path_, long long mode_, long long PAD_,
+  long long dev_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(mkdirat)(long long fd_, void *path_, long long mode_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(mkdirat)
+(long long res, long long fd_, void *path_, long long mode_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(faccessat)
+(long long fd_, void *path_, long long amode_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(faccessat)
+(long long res, long long fd_, void *path_, long long amode_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(fchmodat)
+(long long fd_, void *path_, long long mode_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(fchmodat)
+(long long res, long long fd_, void *path_, long long mode_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(fchownat)
+(long long fd_, void *path_, long long owner_, long long group_,
+  long long flag_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(fchownat)
+(long long res, long long fd_, void *path_, long long owner_, long long group_,
+  long long flag_) {
+  const char *path = (const char *)path_;
+  if (res == 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(fexecve)(long long fd_, void *argp_, void *envp_) { /* TODO */ }
+POST_SYSCALL(fexecve)(long long res, long long fd_, void *argp_, void *envp_) {
+  /* TODO */
+}
+PRE_SYSCALL(fstatat)(long long fd_, void *path_, void *buf_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(fstatat)
+(long long res, long long fd_, void *path_, void *buf_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+PRE_SYSCALL(utimensat)
+(long long fd_, void *path_, void *tptr_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+  if (tptr_) {
+    PRE_READ(tptr_, struct_timespec_sz);
+  }
+}
+POST_SYSCALL(utimensat)
+(long long res, long long fd_, void *path_, void *tptr_, long long flag_) {
+  const char *path = (const char *)path_;
+  if (res > 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+    if (tptr_) {
+      POST_READ(tptr_, struct_timespec_sz);
+    }
+  }
+}
+PRE_SYSCALL(openat)
+(long long fd_, void *path_, long long oflags_, long long mode_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(openat)
+(long long res, long long fd_, void *path_, long long oflags_,
+  long long mode_) {
+  const char *path = (const char *)path_;
+  if (res > 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(readlinkat)
+(long long fd_, void *path_, void *buf_, long long bufsize_) {
+  const char *path = (const char *)path_;
+  if (path) {
+    PRE_READ(path, __sanitizer::internal_strlen(path) + 1);
+  }
+}
+POST_SYSCALL(readlinkat)
+(long long res, long long fd_, void *path_, void *buf_, long long bufsize_) {
+  const char *path = (const char *)path_;
+  if (res > 0) {
+    if (path) {
+      POST_READ(path, __sanitizer::internal_strlen(path) + 1);
+    }
+  }
+}
+PRE_SYSCALL(symlinkat)(void *path1_, long long fd_, void *path2_) {
+  const char *path1 = (const char *)path1_;
+  const char *path2 = (const char *)path2_;
+  if (path1) {
+    PRE_READ(path1, __sanitizer::internal_strlen(path1) + 1);
+  }
+  if (path2) {
+    PRE_READ(path2, __sanitizer::internal_strlen(path2) + 1);
+  }
+}
+POST_SYSCAL
