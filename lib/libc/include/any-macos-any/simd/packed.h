@@ -320,4 +320,175 @@ typedef __attribute__((__ext_vector_type__(2),__aligned__(4))) simd_long1 simd_p
  *  relaxed alignment.
  *  @description In C++ and Metal, this type is also available as
  *  simd::packed::long4. The alignment of this type is that of the
- *  u
+ *  underlying scalar element type, so you can use it to load or store from
+ *  an array of that type.                                                    */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(4),__aligned__(8))) simd_long1 simd_packed_long4;
+#else
+typedef __attribute__((__ext_vector_type__(4),__aligned__(4))) simd_long1 simd_packed_long4;
+#endif
+
+/*! @abstract A vector of eight 64-bit signed (twos-complement) integers
+ *  with relaxed alignment.
+ *  @description In C++ this type is also available as simd::packed::long8.
+ *  This type is not available in Metal. The alignment of this type is only
+ *  that of the underlying scalar element type, so you can use it to load or
+ *  store from an array of that type.                                         */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(8),__aligned__(8))) simd_long1 simd_packed_long8;
+#else
+typedef __attribute__((__ext_vector_type__(8),__aligned__(4))) simd_long1 simd_packed_long8;
+#endif
+
+/*! @abstract A vector of two 64-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description In C++ and Metal, this type is also available as
+ *  simd::packed::ulong2. The alignment of this type is that of the
+ *  underlying scalar element type, so you can use it to load or store from
+ *  an array of that type.                                                    */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(2),__aligned__(8))) simd_ulong1 simd_packed_ulong2;
+#else
+typedef __attribute__((__ext_vector_type__(2),__aligned__(4))) simd_ulong1 simd_packed_ulong2;
+#endif
+
+/*! @abstract A vector of four 64-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description In C++ and Metal, this type is also available as
+ *  simd::packed::ulong4. The alignment of this type is that of the
+ *  underlying scalar element type, so you can use it to load or store from
+ *  an array of that type.                                                    */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(4),__aligned__(8))) simd_ulong1 simd_packed_ulong4;
+#else
+typedef __attribute__((__ext_vector_type__(4),__aligned__(4))) simd_ulong1 simd_packed_ulong4;
+#endif
+
+/*! @abstract A vector of eight 64-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description In C++ this type is also available as simd::packed::ulong8.
+ *  This type is not available in Metal. The alignment of this type is only
+ *  that of the underlying scalar element type, so you can use it to load or
+ *  store from an array of that type.                                         */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(8),__aligned__(8))) simd_ulong1 simd_packed_ulong8;
+#else
+typedef __attribute__((__ext_vector_type__(8),__aligned__(4))) simd_ulong1 simd_packed_ulong8;
+#endif
+
+/*! @abstract A vector of two 64-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description In C++ and Metal, this type is also available as
+ *  simd::packed::double2. The alignment of this type is that of the
+ *  underlying scalar element type, so you can use it to load or store from
+ *  an array of that type.                                                    */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(2),__aligned__(8))) double simd_packed_double2;
+#else
+typedef __attribute__((__ext_vector_type__(2),__aligned__(4))) double simd_packed_double2;
+#endif
+
+/*! @abstract A vector of four 64-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description In C++ and Metal, this type is also available as
+ *  simd::packed::double4. The alignment of this type is that of the
+ *  underlying scalar element type, so you can use it to load or store from
+ *  an array of that type.                                                    */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(4),__aligned__(8))) double simd_packed_double4;
+#else
+typedef __attribute__((__ext_vector_type__(4),__aligned__(4))) double simd_packed_double4;
+#endif
+
+/*! @abstract A vector of eight 64-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description In C++ this type is also available as
+ *  simd::packed::double8. This type is not available in Metal. The
+ *  alignment of this type is only that of the underlying scalar element
+ *  type, so you can use it to load or store from an array of that type.      */
+#if defined __LP64__
+typedef __attribute__((__ext_vector_type__(8),__aligned__(8))) double simd_packed_double8;
+#else
+typedef __attribute__((__ext_vector_type__(8),__aligned__(4))) double simd_packed_double8;
+#endif
+
+/*  MARK: C++ vector types                                                    */
+#if defined __cplusplus
+namespace simd {
+  namespace packed {
+    /*! @abstract A vector of two 8-bit signed (twos-complement) integers
+     *  with relaxed alignment.
+     *  @description In C or Objective-C, this type is available as
+     *  simd_packed_char2. The alignment of this type is only that of the
+     *  underlying scalar element type, so you can use it to load or store
+     *  from an array of that type.                                           */
+typedef ::simd_packed_char2 char2;
+  
+    /*! @abstract A vector of four 8-bit signed (twos-complement) integers
+     *  with relaxed alignment.
+     *  @description In C or Objective-C, this type is available as
+     *  simd_packed_char4. The alignment of this type is only that of the
+     *  underlying scalar element type, so you can use it to load or store
+     *  from an array of that type.                                           */
+typedef ::simd_packed_char4 char4;
+  
+    /*! @abstract A vector of eight 8-bit signed (twos-complement) integers
+     *  with relaxed alignment.
+     *  @description This type is not available in Metal. In C or
+     *  Objective-C, this type is available as simd_packed_char8. The
+     *  alignment of this type is only that of the underlying scalar element
+     *  type, so you can use it to load or store from an array of that type.  */
+typedef ::simd_packed_char8 char8;
+  
+    /*! @abstract A vector of sixteen 8-bit signed (twos-complement)
+     *  integers with relaxed alignment.
+     *  @description This type is not available in Metal. In C or
+     *  Objective-C, this type is available as simd_packed_char16. The
+     *  alignment of this type is only that of the underlying scalar element
+     *  type, so you can use it to load or store from an array of that type.  */
+typedef ::simd_packed_char16 char16;
+  
+    /*! @abstract A vector of thirty-two 8-bit signed (twos-complement)
+     *  integers with relaxed alignment.
+     *  @description This type is not available in Metal. In C or
+     *  Objective-C, this type is available as simd_packed_char32. The
+     *  alignment of this type is only that of the underlying scalar element
+     *  type, so you can use it to load or store from an array of that type.  */
+typedef ::simd_packed_char32 char32;
+  
+    /*! @abstract A vector of sixty-four 8-bit signed (twos-complement)
+     *  integers with relaxed alignment.
+     *  @description This type is not available in Metal. In C or
+     *  Objective-C, this type is available as simd_packed_char64. The
+     *  alignment of this type is only that of the underlying scalar element
+     *  type, so you can use it to load or store from an array of that type.  */
+typedef ::simd_packed_char64 char64;
+  
+    /*! @abstract A vector of two 8-bit unsigned integers with relaxed
+     *  alignment.
+     *  @description In C or Objective-C, this type is available as
+     *  simd_packed_uchar2. The alignment of this type is only that of the
+     *  underlying scalar element type, so you can use it to load or store
+     *  from an array of that type.                                           */
+typedef ::simd_packed_uchar2 uchar2;
+  
+    /*! @abstract A vector of four 8-bit unsigned integers with relaxed
+     *  alignment.
+     *  @description In C or Objective-C, this type is available as
+     *  simd_packed_uchar4. The alignment of this type is only that of the
+     *  underlying scalar element type, so you can use it to load or store
+     *  from an array of that type.                                           */
+typedef ::simd_packed_uchar4 uchar4;
+  
+    /*! @abstract A vector of eight 8-bit unsigned integers with relaxed
+     *  alignment.
+     *  @description This type is not available in Metal. In C or
+     *  Objective-C, this type is available as simd_packed_uchar8. The
+     *  alignment of this type is only that of the underlying scalar element
+     *  type, so you can use it to load or store from an array of that type.  */
+typedef ::simd_packed_uchar8 uchar8;
+  
+    /*! @abstract A vector of sixteen 8-bit unsigned integers with relaxed
+     *  alignment.
+     *  @description This type is not available in Metal. In C or
+     *  Objective-C, this type is available as simd_packed_u
