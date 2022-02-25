@@ -821,4 +821,188 @@ typedef simd_packed_uchar4 packed_uchar4;
  *  alignment.
  *  @description This type is deprecated; you should use simd_packed_uchar8
  *  or simd::packed::uchar8 instead.                                          */
-typed
+typedef simd_packed_uchar8 packed_uchar8;
+
+/*! @abstract A vector of sixteen 8-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uchar16
+ *  or simd::packed::uchar16 instead.                                         */
+typedef simd_packed_uchar16 packed_uchar16;
+
+/*! @abstract A vector of thirty-two 8-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uchar32
+ *  or simd::packed::uchar32 instead.                                         */
+typedef simd_packed_uchar32 packed_uchar32;
+
+/*! @abstract A vector of sixty-four 8-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uchar64
+ *  or simd::packed::uchar64 instead.                                         */
+typedef simd_packed_uchar64 packed_uchar64;
+
+/*! @abstract A vector of two 16-bit signed (twos-complement) integers with
+ *  relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_short2
+ *  or simd::packed::short2 instead.                                          */
+typedef simd_packed_short2 packed_short2;
+
+/*! @abstract A vector of four 16-bit signed (twos-complement) integers with
+ *  relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_short4
+ *  or simd::packed::short4 instead.                                          */
+typedef simd_packed_short4 packed_short4;
+
+/*! @abstract A vector of eight 16-bit signed (twos-complement) integers
+ *  with relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_short8
+ *  or simd::packed::short8 instead.                                          */
+typedef simd_packed_short8 packed_short8;
+
+/*! @abstract A vector of sixteen 16-bit signed (twos-complement) integers
+ *  with relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_short16
+ *  or simd::packed::short16 instead.                                         */
+typedef simd_packed_short16 packed_short16;
+
+/*! @abstract A vector of thirty-two 16-bit signed (twos-complement)
+ *  integers with relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_short32
+ *  or simd::packed::short32 instead.                                         */
+typedef simd_packed_short32 packed_short32;
+
+/*! @abstract A vector of two 16-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_ushort2
+ *  or simd::packed::ushort2 instead.                                         */
+typedef simd_packed_ushort2 packed_ushort2;
+
+/*! @abstract A vector of four 16-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_ushort4
+ *  or simd::packed::ushort4 instead.                                         */
+typedef simd_packed_ushort4 packed_ushort4;
+
+/*! @abstract A vector of eight 16-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_ushort8
+ *  or simd::packed::ushort8 instead.                                         */
+typedef simd_packed_ushort8 packed_ushort8;
+
+/*! @abstract A vector of sixteen 16-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use
+ *  simd_packed_ushort16 or simd::packed::ushort16 instead.                   */
+typedef simd_packed_ushort16 packed_ushort16;
+
+/*! @abstract A vector of thirty-two 16-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use
+ *  simd_packed_ushort32 or simd::packed::ushort32 instead.                   */
+typedef simd_packed_ushort32 packed_ushort32;
+
+/*! @abstract A vector of two 32-bit signed (twos-complement) integers with
+ *  relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_int2 or
+ *  simd::packed::int2 instead.                                               */
+typedef simd_packed_int2 packed_int2;
+
+/*! @abstract A vector of four 32-bit signed (twos-complement) integers with
+ *  relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_int4 or
+ *  simd::packed::int4 instead.                                               */
+typedef simd_packed_int4 packed_int4;
+
+/*! @abstract A vector of eight 32-bit signed (twos-complement) integers
+ *  with relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_int8 or
+ *  simd::packed::int8 instead.                                               */
+typedef simd_packed_int8 packed_int8;
+
+/*! @abstract A vector of sixteen 32-bit signed (twos-complement) integers
+ *  with relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_int16
+ *  or simd::packed::int16 instead.                                           */
+typedef simd_packed_int16 packed_int16;
+
+/*! @abstract A vector of two 32-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uint2
+ *  or simd::packed::uint2 instead.                                           */
+typedef simd_packed_uint2 packed_uint2;
+
+/*! @abstract A vector of four 32-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uint4
+ *  or simd::packed::uint4 instead.                                           */
+typedef simd_packed_uint4 packed_uint4;
+
+/*! @abstract A vector of eight 32-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uint8
+ *  or simd::packed::uint8 instead.                                           */
+typedef simd_packed_uint8 packed_uint8;
+
+/*! @abstract A vector of sixteen 32-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_uint16
+ *  or simd::packed::uint16 instead.                                          */
+typedef simd_packed_uint16 packed_uint16;
+
+/*! @abstract A vector of two 32-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_float2
+ *  or simd::packed::float2 instead.                                          */
+typedef simd_packed_float2 packed_float2;
+
+/*! @abstract A vector of four 32-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_float4
+ *  or simd::packed::float4 instead.                                          */
+typedef simd_packed_float4 packed_float4;
+
+/*! @abstract A vector of eight 32-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_float8
+ *  or simd::packed::float8 instead.                                          */
+typedef simd_packed_float8 packed_float8;
+
+/*! @abstract A vector of sixteen 32-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_float16
+ *  or simd::packed::float16 instead.                                         */
+typedef simd_packed_float16 packed_float16;
+
+/*! @abstract A vector of two 64-bit signed (twos-complement) integers with
+ *  relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_long2
+ *  or simd::packed::long2 instead.                                           */
+typedef simd_packed_long2 packed_long2;
+
+/*! @abstract A vector of four 64-bit signed (twos-complement) integers with
+ *  relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_long4
+ *  or simd::packed::long4 instead.                                           */
+typedef simd_packed_long4 packed_long4;
+
+/*! @abstract A vector of eight 64-bit signed (twos-complement) integers
+ *  with relaxed alignment.
+ *  @description This type is deprecated; you should use simd_packed_long8
+ *  or simd::packed::long8 instead.                                           */
+typedef simd_packed_long8 packed_long8;
+
+/*! @abstract A vector of two 64-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_ulong2
+ *  or simd::packed::ulong2 instead.                                          */
+typedef simd_packed_ulong2 packed_ulong2;
+
+/*! @abstract A vector of four 64-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_ulong4
+ *  or simd::packed::ulong4 instead.                                          */
+typedef simd_packed_ulong4 packed_ulong4;
+
+/*! @abstract A vector of eight 64-bit unsigned integers with relaxed
+ *  alignment.
+ *  @description T
