@@ -1005,4 +1005,27 @@ typedef simd_packed_ulong4 packed_ulong4;
 
 /*! @abstract A vector of eight 64-bit unsigned integers with relaxed
  *  alignment.
- *  @description T
+ *  @description This type is deprecated; you should use simd_packed_ulong8
+ *  or simd::packed::ulong8 instead.                                          */
+typedef simd_packed_ulong8 packed_ulong8;
+
+/*! @abstract A vector of two 64-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_double2
+ *  or simd::packed::double2 instead.                                         */
+typedef simd_packed_double2 packed_double2;
+
+/*! @abstract A vector of four 64-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_double4
+ *  or simd::packed::double4 instead.                                         */
+typedef simd_packed_double4 packed_double4;
+
+/*! @abstract A vector of eight 64-bit floating-point numbers with relaxed
+ *  alignment.
+ *  @description This type is deprecated; you should use simd_packed_double8
+ *  or simd::packed::double8 instead.                                         */
+typedef simd_packed_double8 packed_double8;
+
+# endif /* SIMD_COMPILER_HAS_REQUIRED_FEATURES */
+#endif
