@@ -653,4 +653,61 @@ static FORCEINLINE HRESULT IAudioEndpointVolumeEx_SetMasterVolumeLevelScalar(IAu
 static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetMasterVolumeLevel(IAudioEndpointVolumeEx* This,FLOAT *fLevelDB) {
     return This->lpVtbl->GetMasterVolumeLevel(This,fLevelDB);
 }
-static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetMasterVolumeLev
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetMasterVolumeLevelScalar(IAudioEndpointVolumeEx* This,FLOAT *fLevel) {
+    return This->lpVtbl->GetMasterVolumeLevelScalar(This,fLevel);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_SetChannelVolumeLevel(IAudioEndpointVolumeEx* This,UINT nChannel,FLOAT fLevelDB,LPCGUID pguidEventContext) {
+    return This->lpVtbl->SetChannelVolumeLevel(This,nChannel,fLevelDB,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_SetChannelVolumeLevelScalar(IAudioEndpointVolumeEx* This,UINT nChannel,FLOAT fLevel,LPCGUID pguidEventContext) {
+    return This->lpVtbl->SetChannelVolumeLevelScalar(This,nChannel,fLevel,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetChannelVolumeLevel(IAudioEndpointVolumeEx* This,UINT nChannel,FLOAT *fLevelDB) {
+    return This->lpVtbl->GetChannelVolumeLevel(This,nChannel,fLevelDB);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetChannelVolumeLevelScalar(IAudioEndpointVolumeEx* This,UINT nChannel,FLOAT *fLevel) {
+    return This->lpVtbl->GetChannelVolumeLevelScalar(This,nChannel,fLevel);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_SetMute(IAudioEndpointVolumeEx* This,WINBOOL bMute,LPCGUID pguidEventContext) {
+    return This->lpVtbl->SetMute(This,bMute,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetMute(IAudioEndpointVolumeEx* This,WINBOOL *bMute) {
+    return This->lpVtbl->GetMute(This,bMute);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetVolumeStepInfo(IAudioEndpointVolumeEx* This,UINT *pnStep,UINT *pnStepCount) {
+    return This->lpVtbl->GetVolumeStepInfo(This,pnStep,pnStepCount);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_VolumeStepUp(IAudioEndpointVolumeEx* This,LPCGUID pguidEventContext) {
+    return This->lpVtbl->VolumeStepUp(This,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_VolumeStepDown(IAudioEndpointVolumeEx* This,LPCGUID pguidEventContext) {
+    return This->lpVtbl->VolumeStepDown(This,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_QueryHardwareSupport(IAudioEndpointVolumeEx* This,DWORD *pdwHardwareSupportMask) {
+    return This->lpVtbl->QueryHardwareSupport(This,pdwHardwareSupportMask);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetVolumeRange(IAudioEndpointVolumeEx* This,FLOAT *pflVolumeMindB,FLOAT *pflVolumeMaxdB,FLOAT *pflVolumeIncrementdB) {
+    return This->lpVtbl->GetVolumeRange(This,pflVolumeMindB,pflVolumeMaxdB,pflVolumeIncrementdB);
+}
+/*** IAudioEndpointVolumeEx methods ***/
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetVolumeRangeChannel(IAudioEndpointVolumeEx* This,UINT iChannel,FLOAT *pflVolumeMindB,FLOAT *pflVolumeMaxdB,FLOAT *pflVolumeIncrementdB) {
+    return This->lpVtbl->GetVolumeRangeChannel(This,iChannel,pflVolumeMindB,pflVolumeMaxdB,pflVolumeIncrementdB);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAudioEndpointVolumeEx_INTERFACE_DEFINED__ */
+
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __endpointvolume_h__ */
