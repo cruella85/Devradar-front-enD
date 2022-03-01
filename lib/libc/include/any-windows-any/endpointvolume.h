@@ -465,4 +465,192 @@ static FORCEINLINE HRESULT IAudioEndpointVolume_GetVolumeRange(IAudioEndpointVol
 #ifndef __IAudioEndpointVolumeEx_INTERFACE_DEFINED__
 #define __IAudioEndpointVolumeEx_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IAudioEndpointVolumeEx, 0x66e1
+DEFINE_GUID(IID_IAudioEndpointVolumeEx, 0x66e11784, 0xf695, 0x4f28, 0xa5,0x05, 0xa7,0x08,0x00,0x81,0xa7,0x8f);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("66e11784-f695-4f28-a505-a7080081a78f")
+IAudioEndpointVolumeEx : public IAudioEndpointVolume
+{
+    virtual HRESULT STDMETHODCALLTYPE GetVolumeRangeChannel(
+        UINT iChannel,
+        FLOAT *pflVolumeMindB,
+        FLOAT *pflVolumeMaxdB,
+        FLOAT *pflVolumeIncrementdB) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAudioEndpointVolumeEx, 0x66e11784, 0xf695, 0x4f28, 0xa5,0x05, 0xa7,0x08,0x00,0x81,0xa7,0x8f)
+#endif
+#else
+typedef struct IAudioEndpointVolumeExVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAudioEndpointVolumeEx *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAudioEndpointVolumeEx *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAudioEndpointVolumeEx *This);
+
+    /*** IAudioEndpointVolume methods ***/
+    HRESULT (STDMETHODCALLTYPE *RegisterControlChangeNotify)(
+        IAudioEndpointVolumeEx *This,
+        IAudioEndpointVolumeCallback *pNotify);
+
+    HRESULT (STDMETHODCALLTYPE *UnregisterControlChangeNotify)(
+        IAudioEndpointVolumeEx *This,
+        IAudioEndpointVolumeCallback *pNotify);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelCount)(
+        IAudioEndpointVolumeEx *This,
+        UINT *pnChannelCount);
+
+    HRESULT (STDMETHODCALLTYPE *SetMasterVolumeLevel)(
+        IAudioEndpointVolumeEx *This,
+        FLOAT fLevelDB,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *SetMasterVolumeLevelScalar)(
+        IAudioEndpointVolumeEx *This,
+        FLOAT fLevel,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *GetMasterVolumeLevel)(
+        IAudioEndpointVolumeEx *This,
+        FLOAT *fLevelDB);
+
+    HRESULT (STDMETHODCALLTYPE *GetMasterVolumeLevelScalar)(
+        IAudioEndpointVolumeEx *This,
+        FLOAT *fLevel);
+
+    HRESULT (STDMETHODCALLTYPE *SetChannelVolumeLevel)(
+        IAudioEndpointVolumeEx *This,
+        UINT nChannel,
+        FLOAT fLevelDB,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *SetChannelVolumeLevelScalar)(
+        IAudioEndpointVolumeEx *This,
+        UINT nChannel,
+        FLOAT fLevel,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelVolumeLevel)(
+        IAudioEndpointVolumeEx *This,
+        UINT nChannel,
+        FLOAT *fLevelDB);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelVolumeLevelScalar)(
+        IAudioEndpointVolumeEx *This,
+        UINT nChannel,
+        FLOAT *fLevel);
+
+    HRESULT (STDMETHODCALLTYPE *SetMute)(
+        IAudioEndpointVolumeEx *This,
+        WINBOOL bMute,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *GetMute)(
+        IAudioEndpointVolumeEx *This,
+        WINBOOL *bMute);
+
+    HRESULT (STDMETHODCALLTYPE *GetVolumeStepInfo)(
+        IAudioEndpointVolumeEx *This,
+        UINT *pnStep,
+        UINT *pnStepCount);
+
+    HRESULT (STDMETHODCALLTYPE *VolumeStepUp)(
+        IAudioEndpointVolumeEx *This,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *VolumeStepDown)(
+        IAudioEndpointVolumeEx *This,
+        LPCGUID pguidEventContext);
+
+    HRESULT (STDMETHODCALLTYPE *QueryHardwareSupport)(
+        IAudioEndpointVolumeEx *This,
+        DWORD *pdwHardwareSupportMask);
+
+    HRESULT (STDMETHODCALLTYPE *GetVolumeRange)(
+        IAudioEndpointVolumeEx *This,
+        FLOAT *pflVolumeMindB,
+        FLOAT *pflVolumeMaxdB,
+        FLOAT *pflVolumeIncrementdB);
+
+    /*** IAudioEndpointVolumeEx methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetVolumeRangeChannel)(
+        IAudioEndpointVolumeEx *This,
+        UINT iChannel,
+        FLOAT *pflVolumeMindB,
+        FLOAT *pflVolumeMaxdB,
+        FLOAT *pflVolumeIncrementdB);
+
+    END_INTERFACE
+} IAudioEndpointVolumeExVtbl;
+
+interface IAudioEndpointVolumeEx {
+    CONST_VTBL IAudioEndpointVolumeExVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAudioEndpointVolumeEx_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAudioEndpointVolumeEx_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAudioEndpointVolumeEx_Release(This) (This)->lpVtbl->Release(This)
+/*** IAudioEndpointVolume methods ***/
+#define IAudioEndpointVolumeEx_RegisterControlChangeNotify(This,pNotify) (This)->lpVtbl->RegisterControlChangeNotify(This,pNotify)
+#define IAudioEndpointVolumeEx_UnregisterControlChangeNotify(This,pNotify) (This)->lpVtbl->UnregisterControlChangeNotify(This,pNotify)
+#define IAudioEndpointVolumeEx_GetChannelCount(This,pnChannelCount) (This)->lpVtbl->GetChannelCount(This,pnChannelCount)
+#define IAudioEndpointVolumeEx_SetMasterVolumeLevel(This,fLevelDB,pguidEventContext) (This)->lpVtbl->SetMasterVolumeLevel(This,fLevelDB,pguidEventContext)
+#define IAudioEndpointVolumeEx_SetMasterVolumeLevelScalar(This,fLevel,pguidEventContext) (This)->lpVtbl->SetMasterVolumeLevelScalar(This,fLevel,pguidEventContext)
+#define IAudioEndpointVolumeEx_GetMasterVolumeLevel(This,fLevelDB) (This)->lpVtbl->GetMasterVolumeLevel(This,fLevelDB)
+#define IAudioEndpointVolumeEx_GetMasterVolumeLevelScalar(This,fLevel) (This)->lpVtbl->GetMasterVolumeLevelScalar(This,fLevel)
+#define IAudioEndpointVolumeEx_SetChannelVolumeLevel(This,nChannel,fLevelDB,pguidEventContext) (This)->lpVtbl->SetChannelVolumeLevel(This,nChannel,fLevelDB,pguidEventContext)
+#define IAudioEndpointVolumeEx_SetChannelVolumeLevelScalar(This,nChannel,fLevel,pguidEventContext) (This)->lpVtbl->SetChannelVolumeLevelScalar(This,nChannel,fLevel,pguidEventContext)
+#define IAudioEndpointVolumeEx_GetChannelVolumeLevel(This,nChannel,fLevelDB) (This)->lpVtbl->GetChannelVolumeLevel(This,nChannel,fLevelDB)
+#define IAudioEndpointVolumeEx_GetChannelVolumeLevelScalar(This,nChannel,fLevel) (This)->lpVtbl->GetChannelVolumeLevelScalar(This,nChannel,fLevel)
+#define IAudioEndpointVolumeEx_SetMute(This,bMute,pguidEventContext) (This)->lpVtbl->SetMute(This,bMute,pguidEventContext)
+#define IAudioEndpointVolumeEx_GetMute(This,bMute) (This)->lpVtbl->GetMute(This,bMute)
+#define IAudioEndpointVolumeEx_GetVolumeStepInfo(This,pnStep,pnStepCount) (This)->lpVtbl->GetVolumeStepInfo(This,pnStep,pnStepCount)
+#define IAudioEndpointVolumeEx_VolumeStepUp(This,pguidEventContext) (This)->lpVtbl->VolumeStepUp(This,pguidEventContext)
+#define IAudioEndpointVolumeEx_VolumeStepDown(This,pguidEventContext) (This)->lpVtbl->VolumeStepDown(This,pguidEventContext)
+#define IAudioEndpointVolumeEx_QueryHardwareSupport(This,pdwHardwareSupportMask) (This)->lpVtbl->QueryHardwareSupport(This,pdwHardwareSupportMask)
+#define IAudioEndpointVolumeEx_GetVolumeRange(This,pflVolumeMindB,pflVolumeMaxdB,pflVolumeIncrementdB) (This)->lpVtbl->GetVolumeRange(This,pflVolumeMindB,pflVolumeMaxdB,pflVolumeIncrementdB)
+/*** IAudioEndpointVolumeEx methods ***/
+#define IAudioEndpointVolumeEx_GetVolumeRangeChannel(This,iChannel,pflVolumeMindB,pflVolumeMaxdB,pflVolumeIncrementdB) (This)->lpVtbl->GetVolumeRangeChannel(This,iChannel,pflVolumeMindB,pflVolumeMaxdB,pflVolumeIncrementdB)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_QueryInterface(IAudioEndpointVolumeEx* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAudioEndpointVolumeEx_AddRef(IAudioEndpointVolumeEx* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAudioEndpointVolumeEx_Release(IAudioEndpointVolumeEx* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAudioEndpointVolume methods ***/
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_RegisterControlChangeNotify(IAudioEndpointVolumeEx* This,IAudioEndpointVolumeCallback *pNotify) {
+    return This->lpVtbl->RegisterControlChangeNotify(This,pNotify);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_UnregisterControlChangeNotify(IAudioEndpointVolumeEx* This,IAudioEndpointVolumeCallback *pNotify) {
+    return This->lpVtbl->UnregisterControlChangeNotify(This,pNotify);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetChannelCount(IAudioEndpointVolumeEx* This,UINT *pnChannelCount) {
+    return This->lpVtbl->GetChannelCount(This,pnChannelCount);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_SetMasterVolumeLevel(IAudioEndpointVolumeEx* This,FLOAT fLevelDB,LPCGUID pguidEventContext) {
+    return This->lpVtbl->SetMasterVolumeLevel(This,fLevelDB,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_SetMasterVolumeLevelScalar(IAudioEndpointVolumeEx* This,FLOAT fLevel,LPCGUID pguidEventContext) {
+    return This->lpVtbl->SetMasterVolumeLevelScalar(This,fLevel,pguidEventContext);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetMasterVolumeLevel(IAudioEndpointVolumeEx* This,FLOAT *fLevelDB) {
+    return This->lpVtbl->GetMasterVolumeLevel(This,fLevelDB);
+}
+static FORCEINLINE HRESULT IAudioEndpointVolumeEx_GetMasterVolumeLev
