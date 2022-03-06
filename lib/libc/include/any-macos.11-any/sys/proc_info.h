@@ -678,4 +678,121 @@ struct proc_fileportinfo {
 #define PROC_PIDTASKINFO_SIZE           (sizeof(struct proc_taskinfo))
 
 #define PROC_PIDTHREADINFO              5
-#defin
+#define PROC_PIDTHREADINFO_SIZE         (sizeof(struct proc_threadinfo))
+
+#define PROC_PIDLISTTHREADS             6
+#define PROC_PIDLISTTHREADS_SIZE        (2* sizeof(uint32_t))
+
+#define PROC_PIDREGIONINFO              7
+#define PROC_PIDREGIONINFO_SIZE         (sizeof(struct proc_regioninfo))
+
+#define PROC_PIDREGIONPATHINFO          8
+#define PROC_PIDREGIONPATHINFO_SIZE     (sizeof(struct proc_regionwithpathinfo))
+
+#define PROC_PIDVNODEPATHINFO           9
+#define PROC_PIDVNODEPATHINFO_SIZE      (sizeof(struct proc_vnodepathinfo))
+
+#define PROC_PIDTHREADPATHINFO          10
+#define PROC_PIDTHREADPATHINFO_SIZE     (sizeof(struct proc_threadwithpathinfo))
+
+#define PROC_PIDPATHINFO                11
+#define PROC_PIDPATHINFO_SIZE           (MAXPATHLEN)
+#define PROC_PIDPATHINFO_MAXSIZE        (4*MAXPATHLEN)
+
+#define PROC_PIDWORKQUEUEINFO           12
+#define PROC_PIDWORKQUEUEINFO_SIZE      (sizeof(struct proc_workqueueinfo))
+
+#define PROC_PIDT_SHORTBSDINFO          13
+#define PROC_PIDT_SHORTBSDINFO_SIZE     (sizeof(struct proc_bsdshortinfo))
+
+#define PROC_PIDLISTFILEPORTS           14
+#define PROC_PIDLISTFILEPORTS_SIZE      (sizeof(struct proc_fileportinfo))
+
+#define PROC_PIDTHREADID64INFO          15
+#define PROC_PIDTHREADID64INFO_SIZE     (sizeof(struct proc_threadinfo))
+
+#define PROC_PID_RUSAGE                 16
+#define PROC_PID_RUSAGE_SIZE            0
+
+/* Flavors for proc_pidfdinfo */
+
+#define PROC_PIDFDVNODEINFO             1
+#define PROC_PIDFDVNODEINFO_SIZE        (sizeof(struct vnode_fdinfo))
+
+#define PROC_PIDFDVNODEPATHINFO         2
+#define PROC_PIDFDVNODEPATHINFO_SIZE    (sizeof(struct vnode_fdinfowithpath))
+
+#define PROC_PIDFDSOCKETINFO            3
+#define PROC_PIDFDSOCKETINFO_SIZE       (sizeof(struct socket_fdinfo))
+
+#define PROC_PIDFDPSEMINFO              4
+#define PROC_PIDFDPSEMINFO_SIZE         (sizeof(struct psem_fdinfo))
+
+#define PROC_PIDFDPSHMINFO              5
+#define PROC_PIDFDPSHMINFO_SIZE         (sizeof(struct pshm_fdinfo))
+
+#define PROC_PIDFDPIPEINFO              6
+#define PROC_PIDFDPIPEINFO_SIZE         (sizeof(struct pipe_fdinfo))
+
+#define PROC_PIDFDKQUEUEINFO            7
+#define PROC_PIDFDKQUEUEINFO_SIZE       (sizeof(struct kqueue_fdinfo))
+
+#define PROC_PIDFDATALKINFO             8
+#define PROC_PIDFDATALKINFO_SIZE        (sizeof(struct appletalk_fdinfo))
+
+
+
+/* Flavors for proc_pidfileportinfo */
+
+#define PROC_PIDFILEPORTVNODEPATHINFO   2       /* out: vnode_fdinfowithpath */
+#define PROC_PIDFILEPORTVNODEPATHINFO_SIZE      \
+	                                PROC_PIDFDVNODEPATHINFO_SIZE
+
+#define PROC_PIDFILEPORTSOCKETINFO      3       /* out: socket_fdinfo */
+#define PROC_PIDFILEPORTSOCKETINFO_SIZE PROC_PIDFDSOCKETINFO_SIZE
+
+#define PROC_PIDFILEPORTPSHMINFO        5       /* out: pshm_fdinfo */
+#define PROC_PIDFILEPORTPSHMINFO_SIZE   PROC_PIDFDPSHMINFO_SIZE
+
+#define PROC_PIDFILEPORTPIPEINFO        6       /* out: pipe_fdinfo */
+#define PROC_PIDFILEPORTPIPEINFO_SIZE   PROC_PIDFDPIPEINFO_SIZE
+
+/* used for proc_setcontrol */
+#define PROC_SELFSET_PCONTROL           1
+
+#define PROC_SELFSET_THREADNAME         2
+#define PROC_SELFSET_THREADNAME_SIZE    (MAXTHREADNAMESIZE -1)
+
+#define PROC_SELFSET_VMRSRCOWNER        3
+
+#define PROC_SELFSET_DELAYIDLESLEEP     4
+
+/* used for proc_dirtycontrol */
+#define PROC_DIRTYCONTROL_TRACK         1
+#define PROC_DIRTYCONTROL_SET           2
+#define PROC_DIRTYCONTROL_GET           3
+#define PROC_DIRTYCONTROL_CLEAR         4
+
+/* proc_track_dirty() flags */
+#define PROC_DIRTY_TRACK                0x1
+#define PROC_DIRTY_ALLOW_IDLE_EXIT      0x2
+#define PROC_DIRTY_DEFER                0x4
+#define PROC_DIRTY_LAUNCH_IN_PROGRESS   0x8
+#define PROC_DIRTY_DEFER_ALWAYS         0x10
+
+/* proc_get_dirty() flags */
+#define PROC_DIRTY_TRACKED              0x1
+#define PROC_DIRTY_ALLOWS_IDLE_EXIT     0x2
+#define PROC_DIRTY_IS_DIRTY             0x4
+#define PROC_DIRTY_LAUNCH_IS_IN_PROGRESS   0x8
+
+/* Flavors for proc_udata_info */
+#define PROC_UDATA_INFO_GET             1
+#define PROC_UDATA_INFO_SET             2
+
+
+
+
+__END_DECLS
+
+#endif /*_SYS_PROC_INFO_H */
