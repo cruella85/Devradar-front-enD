@@ -401,4 +401,281 @@ struct in_sockinfo {
 #define TSI_S_LISTEN            1       /* listening for connection */
 #define TSI_S_SYN_SENT          2       /* active, have sent syn */
 #define TSI_S_SYN_RECEIVED      3       /* have send and received syn */
-#define
+#define TSI_S_ESTABLISHED       4       /* established */
+#define TSI_S__CLOSE_WAIT       5       /* rcvd fin, waiting for close */
+#define TSI_S_FIN_WAIT_1        6       /* have closed, sent fin */
+#define TSI_S_CLOSING           7       /* closed xchd FIN; await FIN ACK */
+#define TSI_S_LAST_ACK          8       /* had fin and close; await FIN ACK */
+#define TSI_S_FIN_WAIT_2        9       /* have closed, fin is acked */
+#define TSI_S_TIME_WAIT         10      /* in 2*msl quiet wait after close */
+#define TSI_S_RESERVED          11      /* pseudo state: reserved */
+
+struct tcp_sockinfo {
+	struct in_sockinfo              tcpsi_ini;
+	int                             tcpsi_state;
+	int                             tcpsi_timer[TSI_T_NTIMERS];
+	int                             tcpsi_mss;
+	uint32_t                        tcpsi_flags;
+	uint32_t                        rfu_1;          /* reserved */
+	uint64_t                        tcpsi_tp;       /* opaque handle of TCP protocol control block */
+};
+
+/*
+ * Unix Domain Sockets
+ */
+
+
+struct un_sockinfo {
+	uint64_t                                unsi_conn_so;   /* opaque handle of connected socket */
+	uint64_t                                unsi_conn_pcb;  /* opaque handle of connected protocol control block */
+	union {
+		struct sockaddr_un      ua_sun;
+		char                    ua_dummy[SOCK_MAXADDRLEN];
+	}                                       unsi_addr;      /* bound address */
+	union {
+		struct sockaddr_un      ua_sun;
+		char                    ua_dummy[SOCK_MAXADDRLEN];
+	}                                       unsi_caddr;     /* address of socket connected to */
+};
+
+/*
+ * PF_NDRV Sockets
+ */
+
+struct ndrv_info {
+	uint32_t        ndrvsi_if_family;
+	uint32_t        ndrvsi_if_unit;
+	char            ndrvsi_if_name[IF_NAMESIZE];
+};
+
+/*
+ * Kernel Event Sockets
+ */
+
+struct kern_event_info {
+	uint32_t        kesi_vendor_code_filter;
+	uint32_t        kesi_class_filter;
+	uint32_t        kesi_subclass_filter;
+};
+
+/*
+ * Kernel Control Sockets
+ */
+
+struct kern_ctl_info {
+	uint32_t        kcsi_id;
+	uint32_t        kcsi_reg_unit;
+	uint32_t        kcsi_flags;                     /* support flags */
+	uint32_t        kcsi_recvbufsize;               /* request more than the default buffer size */
+	uint32_t        kcsi_sendbufsize;               /* request more than the default buffer size */
+	uint32_t        kcsi_unit;
+	char            kcsi_name[MAX_KCTL_NAME];       /* unique nke identifier, provided by DTS */
+};
+
+/*
+ * VSock Sockets
+ */
+
+struct vsock_sockinfo {
+	uint32_t        local_cid;
+	uint32_t        local_port;
+	uint32_t        remote_cid;
+	uint32_t        remote_port;
+};
+
+/* soi_state */
+
+#define SOI_S_NOFDREF           0x0001  /* no file table ref any more */
+#define SOI_S_ISCONNECTED       0x0002  /* socket connected to a peer */
+#define SOI_S_ISCONNECTING      0x0004  /* in process of connecting to peer */
+#define SOI_S_ISDISCONNECTING   0x0008  /* in process of disconnecting */
+#define SOI_S_CANTSENDMORE      0x0010  /* can't send more data to peer */
+#define SOI_S_CANTRCVMORE       0x0020  /* can't receive more data from peer */
+#define SOI_S_RCVATMARK         0x0040  /* at mark on input */
+#define SOI_S_PRIV              0x0080  /* privileged for broadcast, raw... */
+#define SOI_S_NBIO              0x0100  /* non-blocking ops */
+#define SOI_S_ASYNC             0x0200  /* async i/o notify */
+#define SOI_S_INCOMP            0x0800  /* Unaccepted, incomplete connection */
+#define SOI_S_COMP              0x1000  /* unaccepted, complete connection */
+#define SOI_S_ISDISCONNECTED    0x2000  /* socket disconnected from peer */
+#define SOI_S_DRAINING          0x4000  /* close waiting for blocked system calls to drain */
+
+struct sockbuf_info {
+	uint32_t                sbi_cc;
+	uint32_t                sbi_hiwat;                      /* SO_RCVBUF, SO_SNDBUF */
+	uint32_t                sbi_mbcnt;
+	uint32_t                sbi_mbmax;
+	uint32_t                sbi_lowat;
+	short                   sbi_flags;
+	short                   sbi_timeo;
+};
+
+enum {
+	SOCKINFO_GENERIC        = 0,
+	SOCKINFO_IN             = 1,
+	SOCKINFO_TCP            = 2,
+	SOCKINFO_UN             = 3,
+	SOCKINFO_NDRV           = 4,
+	SOCKINFO_KERN_EVENT     = 5,
+	SOCKINFO_KERN_CTL       = 6,
+	SOCKINFO_VSOCK          = 7,
+};
+
+struct socket_info {
+	struct vinfo_stat                       soi_stat;
+	uint64_t                                soi_so;         /* opaque handle of socket */
+	uint64_t                                soi_pcb;        /* opaque handle of protocol control block */
+	int                                     soi_type;
+	int                                     soi_protocol;
+	int                                     soi_family;
+	short                                   soi_options;
+	short                                   soi_linger;
+	short                                   soi_state;
+	short                                   soi_qlen;
+	short                                   soi_incqlen;
+	short                                   soi_qlimit;
+	short                                   soi_timeo;
+	u_short                                 soi_error;
+	uint32_t                                soi_oobmark;
+	struct sockbuf_info                     soi_rcv;
+	struct sockbuf_info                     soi_snd;
+	int                                     soi_kind;
+	uint32_t                                rfu_1;          /* reserved */
+	union {
+		struct in_sockinfo      pri_in;                 /* SOCKINFO_IN */
+		struct tcp_sockinfo     pri_tcp;                /* SOCKINFO_TCP */
+		struct un_sockinfo      pri_un;                 /* SOCKINFO_UN */
+		struct ndrv_info        pri_ndrv;               /* SOCKINFO_NDRV */
+		struct kern_event_info  pri_kern_event;         /* SOCKINFO_KERN_EVENT */
+		struct kern_ctl_info    pri_kern_ctl;           /* SOCKINFO_KERN_CTL */
+		struct vsock_sockinfo   pri_vsock;              /* SOCKINFO_VSOCK */
+	}                                       soi_proto;
+};
+
+struct socket_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct socket_info      psi;
+};
+
+
+
+struct psem_info {
+	struct vinfo_stat       psem_stat;
+	char                    psem_name[MAXPATHLEN];
+};
+
+struct psem_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct psem_info        pseminfo;
+};
+
+
+
+struct pshm_info  {
+	struct vinfo_stat       pshm_stat;
+	uint64_t                pshm_mappaddr;
+	char                    pshm_name[MAXPATHLEN];
+};
+
+struct pshm_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct pshm_info        pshminfo;
+};
+
+
+struct pipe_info {
+	struct vinfo_stat       pipe_stat;
+	uint64_t                pipe_handle;
+	uint64_t                pipe_peerhandle;
+	int                     pipe_status;
+	int                     rfu_1;  /* reserved */
+};
+
+struct pipe_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct pipe_info        pipeinfo;
+};
+
+
+struct kqueue_info {
+	struct vinfo_stat       kq_stat;
+	uint32_t                kq_state;
+	uint32_t                rfu_1;  /* reserved */
+};
+
+struct kqueue_dyninfo {
+	struct kqueue_info kqdi_info;
+	uint64_t kqdi_servicer;
+	uint64_t kqdi_owner;
+	uint32_t kqdi_sync_waiters;
+	uint8_t  kqdi_sync_waiter_qos;
+	uint8_t  kqdi_async_qos;
+	uint16_t kqdi_request_state;
+	uint8_t  kqdi_events_qos;
+	uint8_t  kqdi_pri;
+	uint8_t  kqdi_pol;
+	uint8_t  kqdi_cpupercent;
+	uint8_t  _kqdi_reserved0[4];
+	uint64_t _kqdi_reserved1[4];
+};
+
+/* keep in sync with KQ_* in sys/eventvar.h */
+#define PROC_KQUEUE_SELECT      0x0001
+#define PROC_KQUEUE_SLEEP       0x0002
+#define PROC_KQUEUE_32          0x0008
+#define PROC_KQUEUE_64          0x0010
+#define PROC_KQUEUE_QOS         0x0020
+
+struct kqueue_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct kqueue_info      kqueueinfo;
+};
+
+struct appletalk_info {
+	struct vinfo_stat       atalk_stat;
+};
+
+struct appletalk_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct appletalk_info   appletalkinfo;
+};
+
+typedef uint64_t proc_info_udata_t;
+
+/* defns of process file desc type */
+#define PROX_FDTYPE_ATALK       0
+#define PROX_FDTYPE_VNODE       1
+#define PROX_FDTYPE_SOCKET      2
+#define PROX_FDTYPE_PSHM        3
+#define PROX_FDTYPE_PSEM        4
+#define PROX_FDTYPE_KQUEUE      5
+#define PROX_FDTYPE_PIPE        6
+#define PROX_FDTYPE_FSEVENTS    7
+#define PROX_FDTYPE_NETPOLICY   9
+
+struct proc_fdinfo {
+	int32_t                 proc_fd;
+	uint32_t                proc_fdtype;
+};
+
+struct proc_fileportinfo {
+	uint32_t                proc_fileport;
+	uint32_t                proc_fdtype;
+};
+
+
+/* Flavors for proc_pidinfo() */
+#define PROC_PIDLISTFDS                 1
+#define PROC_PIDLISTFD_SIZE             (sizeof(struct proc_fdinfo))
+
+#define PROC_PIDTASKALLINFO             2
+#define PROC_PIDTASKALLINFO_SIZE        (sizeof(struct proc_taskallinfo))
+
+#define PROC_PIDTBSDINFO                3
+#define PROC_PIDTBSDINFO_SIZE           (sizeof(struct proc_bsdinfo))
+
+#define PROC_PIDTASKINFO                4
+#define PROC_PIDTASKINFO_SIZE           (sizeof(struct proc_taskinfo))
+
+#define PROC_PIDTHREADINFO              5
+#defin
