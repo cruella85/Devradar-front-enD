@@ -156,4 +156,249 @@ struct proc_threadinfo {
 	uint64_t                pth_user_time;          /* user run time */
 	uint64_t                pth_system_time;        /* system run time */
 	int32_t                 pth_cpu_usage;          /* scaled cpu usage percentage */
-	int32_t                 pth_policy
+	int32_t                 pth_policy;             /* scheduling policy in effect */
+	int32_t                 pth_run_state;          /* run state (see below) */
+	int32_t                 pth_flags;              /* various flags (see below) */
+	int32_t                 pth_sleep_time;         /* number of seconds that thread */
+	int32_t                 pth_curpri;             /* cur priority*/
+	int32_t                 pth_priority;           /*  priority*/
+	int32_t                 pth_maxpriority;        /* max priority*/
+	char                    pth_name[MAXTHREADNAMESIZE];    /* thread name, if any */
+};
+
+struct proc_regioninfo {
+	uint32_t                pri_protection;
+	uint32_t                pri_max_protection;
+	uint32_t                pri_inheritance;
+	uint32_t                pri_flags;              /* shared, external pager, is submap */
+	uint64_t                pri_offset;
+	uint32_t                pri_behavior;
+	uint32_t                pri_user_wired_count;
+	uint32_t                pri_user_tag;
+	uint32_t                pri_pages_resident;
+	uint32_t                pri_pages_shared_now_private;
+	uint32_t                pri_pages_swapped_out;
+	uint32_t                pri_pages_dirtied;
+	uint32_t                pri_ref_count;
+	uint32_t                pri_shadow_depth;
+	uint32_t                pri_share_mode;
+	uint32_t                pri_private_pages_resident;
+	uint32_t                pri_shared_pages_resident;
+	uint32_t                pri_obj_id;
+	uint32_t                pri_depth;
+	uint64_t                pri_address;
+	uint64_t                pri_size;
+};
+
+#define PROC_REGION_SUBMAP      1
+#define PROC_REGION_SHARED      2
+
+#define SM_COW             1
+#define SM_PRIVATE         2
+#define SM_EMPTY           3
+#define SM_SHARED          4
+#define SM_TRUESHARED      5
+#define SM_PRIVATE_ALIASED 6
+#define SM_SHARED_ALIASED  7
+#define SM_LARGE_PAGE      8
+
+
+/*
+ *	Thread run states (state field).
+ */
+
+#define TH_STATE_RUNNING        1       /* thread is running normally */
+#define TH_STATE_STOPPED        2       /* thread is stopped */
+#define TH_STATE_WAITING        3       /* thread is waiting normally */
+#define TH_STATE_UNINTERRUPTIBLE 4      /* thread is in an uninterruptible
+	                                 *  wait */
+#define TH_STATE_HALTED         5       /* thread is halted at a
+	                                 *  clean point */
+
+/*
+ *	Thread flags (flags field).
+ */
+#define TH_FLAGS_SWAPPED        0x1     /* thread is swapped out */
+#define TH_FLAGS_IDLE           0x2     /* thread is an idle thread */
+
+
+struct proc_workqueueinfo {
+	uint32_t        pwq_nthreads;           /* total number of workqueue threads */
+	uint32_t        pwq_runthreads;         /* total number of running workqueue threads */
+	uint32_t        pwq_blockedthreads;     /* total number of blocked workqueue threads */
+	uint32_t        pwq_state;
+};
+
+/*
+ *	workqueue state (pwq_state field)
+ */
+#define WQ_EXCEEDED_CONSTRAINED_THREAD_LIMIT 0x1
+#define WQ_EXCEEDED_TOTAL_THREAD_LIMIT 0x2
+#define WQ_FLAGS_AVAILABLE 0x4
+
+struct proc_fileinfo {
+	uint32_t                fi_openflags;
+	uint32_t                fi_status;
+	off_t                   fi_offset;
+	int32_t                 fi_type;
+	uint32_t                fi_guardflags;
+};
+
+/* stats flags in proc_fileinfo */
+#define PROC_FP_SHARED  1       /* shared by more than one fd */
+#define PROC_FP_CLEXEC  2       /* close on exec */
+#define PROC_FP_GUARDED 4       /* guarded fd */
+#define PROC_FP_CLFORK  8       /* close on fork */
+
+#define PROC_FI_GUARD_CLOSE             (1u << 0)
+#define PROC_FI_GUARD_DUP               (1u << 1)
+#define PROC_FI_GUARD_SOCKET_IPC        (1u << 2)
+#define PROC_FI_GUARD_FILEPORT          (1u << 3)
+
+struct proc_exitreasonbasicinfo {
+	uint32_t                        beri_namespace;
+	uint64_t                        beri_code;
+	uint64_t                        beri_flags;
+	uint32_t                        beri_reason_buf_size;
+} __attribute__((packed));
+
+struct proc_exitreasoninfo {
+	uint32_t                        eri_namespace;
+	uint64_t                        eri_code;
+	uint64_t                        eri_flags;
+	uint32_t                        eri_reason_buf_size;
+	uint64_t                        eri_kcd_buf;
+} __attribute__((packed));
+
+/*
+ * A copy of stat64 with static sized fields.
+ */
+struct vinfo_stat {
+	uint32_t        vst_dev;        /* [XSI] ID of device containing file */
+	uint16_t        vst_mode;       /* [XSI] Mode of file (see below) */
+	uint16_t        vst_nlink;      /* [XSI] Number of hard links */
+	uint64_t        vst_ino;        /* [XSI] File serial number */
+	uid_t           vst_uid;        /* [XSI] User ID of the file */
+	gid_t           vst_gid;        /* [XSI] Group ID of the file */
+	int64_t         vst_atime;      /* [XSI] Time of last access */
+	int64_t         vst_atimensec;  /* nsec of last access */
+	int64_t         vst_mtime;      /* [XSI] Last data modification time */
+	int64_t         vst_mtimensec;  /* last data modification nsec */
+	int64_t         vst_ctime;      /* [XSI] Time of last status change */
+	int64_t         vst_ctimensec;  /* nsec of last status change */
+	int64_t         vst_birthtime;  /*  File creation time(birth)  */
+	int64_t         vst_birthtimensec;      /* nsec of File creation time */
+	off_t           vst_size;       /* [XSI] file size, in bytes */
+	int64_t         vst_blocks;     /* [XSI] blocks allocated for file */
+	int32_t         vst_blksize;    /* [XSI] optimal blocksize for I/O */
+	uint32_t        vst_flags;      /* user defined flags for file */
+	uint32_t        vst_gen;        /* file generation number */
+	uint32_t        vst_rdev;       /* [XSI] Device ID */
+	int64_t         vst_qspare[2];  /* RESERVED: DO NOT USE! */
+};
+
+struct vnode_info {
+	struct vinfo_stat       vi_stat;
+	int                     vi_type;
+	int                     vi_pad;
+	fsid_t                  vi_fsid;
+};
+
+struct vnode_info_path {
+	struct vnode_info       vip_vi;
+	char                    vip_path[MAXPATHLEN];   /* tail end of it  */
+};
+
+struct vnode_fdinfo {
+	struct proc_fileinfo    pfi;
+	struct vnode_info       pvi;
+};
+
+struct vnode_fdinfowithpath {
+	struct proc_fileinfo    pfi;
+	struct vnode_info_path  pvip;
+};
+
+struct proc_regionwithpathinfo {
+	struct proc_regioninfo  prp_prinfo;
+	struct vnode_info_path  prp_vip;
+};
+
+struct proc_regionpath {
+	uint64_t prpo_addr;
+	uint64_t prpo_regionlength;
+	char prpo_path[MAXPATHLEN];
+};
+
+struct proc_vnodepathinfo {
+	struct vnode_info_path  pvi_cdir;
+	struct vnode_info_path  pvi_rdir;
+};
+
+struct proc_threadwithpathinfo {
+	struct proc_threadinfo  pt;
+	struct vnode_info_path  pvip;
+};
+
+/*
+ *  Socket
+ */
+
+
+/*
+ * IPv4 and IPv6 Sockets
+ */
+
+#define INI_IPV4        0x1
+#define INI_IPV6        0x2
+
+struct in4in6_addr {
+	u_int32_t               i46a_pad32[3];
+	struct in_addr          i46a_addr4;
+};
+
+struct in_sockinfo {
+	int                                     insi_fport;             /* foreign port */
+	int                                     insi_lport;             /* local port */
+	uint64_t                                insi_gencnt;            /* generation count of this instance */
+	uint32_t                                insi_flags;             /* generic IP/datagram flags */
+	uint32_t                                insi_flow;
+
+	uint8_t                                 insi_vflag;             /* ini_IPV4 or ini_IPV6 */
+	uint8_t                                 insi_ip_ttl;            /* time to live proto */
+	uint32_t                                rfu_1;                  /* reserved */
+	/* protocol dependent part */
+	union {
+		struct in4in6_addr      ina_46;
+		struct in6_addr         ina_6;
+	}                                       insi_faddr;             /* foreign host table entry */
+	union {
+		struct in4in6_addr      ina_46;
+		struct in6_addr         ina_6;
+	}                                       insi_laddr;             /* local host table entry */
+	struct {
+		u_char                  in4_tos;                        /* type of service */
+	}                                       insi_v4;
+	struct {
+		uint8_t                 in6_hlim;
+		int                     in6_cksum;
+		u_short                 in6_ifindex;
+		short                   in6_hops;
+	}                                       insi_v6;
+};
+
+/*
+ * TCP Sockets
+ */
+
+#define TSI_T_REXMT             0       /* retransmit */
+#define TSI_T_PERSIST           1       /* retransmit persistence */
+#define TSI_T_KEEP              2       /* keep alive */
+#define TSI_T_2MSL              3       /* 2*msl quiet time timer */
+#define TSI_T_NTIMERS           4
+
+#define TSI_S_CLOSED            0       /* closed */
+#define TSI_S_LISTEN            1       /* listening for connection */
+#define TSI_S_SYN_SENT          2       /* active, have sent syn */
+#define TSI_S_SYN_RECEIVED      3       /* have send and received syn */
+#define
