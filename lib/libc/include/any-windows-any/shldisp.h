@@ -6636,3 +6636,1423 @@ typedef struct IShellDispatch6Vtbl {
         IShellDispatch6 *This,
         BSTR bstrPolicyName,
         VARIANT *pValue);
+
+    HRESULT (STDMETHODCALLTYPE *GetSetting)(
+        IShellDispatch6 *This,
+        LONG lSetting,
+        VARIANT_BOOL *pResult);
+
+    /*** IShellDispatch5 methods ***/
+    HRESULT (STDMETHODCALLTYPE *WindowSwitcher)(
+        IShellDispatch6 *This);
+
+    /*** IShellDispatch6 methods ***/
+    HRESULT (STDMETHODCALLTYPE *SearchCommand)(
+        IShellDispatch6 *This);
+
+    END_INTERFACE
+} IShellDispatch6Vtbl;
+
+interface IShellDispatch6 {
+    CONST_VTBL IShellDispatch6Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IShellDispatch6_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IShellDispatch6_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IShellDispatch6_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define IShellDispatch6_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IShellDispatch6_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IShellDispatch6_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IShellDispatch6_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** IShellDispatch methods ***/
+#define IShellDispatch6_get_Application(This,ppid) (This)->lpVtbl->get_Application(This,ppid)
+#define IShellDispatch6_get_Parent(This,ppid) (This)->lpVtbl->get_Parent(This,ppid)
+#define IShellDispatch6_NameSpace(This,vDir,ppsdf) (This)->lpVtbl->NameSpace(This,vDir,ppsdf)
+#define IShellDispatch6_BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf) (This)->lpVtbl->BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf)
+#define IShellDispatch6_Windows(This,ppid) (This)->lpVtbl->Windows(This,ppid)
+#define IShellDispatch6_Open(This,vDir) (This)->lpVtbl->Open(This,vDir)
+#define IShellDispatch6_Explore(This,vDir) (This)->lpVtbl->Explore(This,vDir)
+#define IShellDispatch6_MinimizeAll(This) (This)->lpVtbl->MinimizeAll(This)
+#define IShellDispatch6_UndoMinimizeALL(This) (This)->lpVtbl->UndoMinimizeALL(This)
+#define IShellDispatch6_FileRun(This) (This)->lpVtbl->FileRun(This)
+#define IShellDispatch6_CascadeWindows(This) (This)->lpVtbl->CascadeWindows(This)
+#define IShellDispatch6_TileVertically(This) (This)->lpVtbl->TileVertically(This)
+#define IShellDispatch6_TileHorizontally(This) (This)->lpVtbl->TileHorizontally(This)
+#define IShellDispatch6_ShutdownWindows(This) (This)->lpVtbl->ShutdownWindows(This)
+#define IShellDispatch6_Suspend(This) (This)->lpVtbl->Suspend(This)
+#define IShellDispatch6_EjectPC(This) (This)->lpVtbl->EjectPC(This)
+#define IShellDispatch6_SetTime(This) (This)->lpVtbl->SetTime(This)
+#define IShellDispatch6_TrayProperties(This) (This)->lpVtbl->TrayProperties(This)
+#define IShellDispatch6_Help(This) (This)->lpVtbl->Help(This)
+#define IShellDispatch6_FindFiles(This) (This)->lpVtbl->FindFiles(This)
+#define IShellDispatch6_FindComputer(This) (This)->lpVtbl->FindComputer(This)
+#define IShellDispatch6_RefreshMenu(This) (This)->lpVtbl->RefreshMenu(This)
+#define IShellDispatch6_ControlPanelItem(This,bstrDir) (This)->lpVtbl->ControlPanelItem(This,bstrDir)
+/*** IShellDispatch2 methods ***/
+#define IShellDispatch6_IsRestricted(This,Group,Restriction,plRestrictValue) (This)->lpVtbl->IsRestricted(This,Group,Restriction,plRestrictValue)
+#define IShellDispatch6_ShellExecute(This,File,vArgs,vDir,vOperation,vShow) (This)->lpVtbl->ShellExecute(This,File,vArgs,vDir,vOperation,vShow)
+#define IShellDispatch6_FindPrinter(This,name,location,model) (This)->lpVtbl->FindPrinter(This,name,location,model)
+#define IShellDispatch6_GetSystemInformation(This,name,pv) (This)->lpVtbl->GetSystemInformation(This,name,pv)
+#define IShellDispatch6_ServiceStart(This,ServiceName,Persistent,pSuccess) (This)->lpVtbl->ServiceStart(This,ServiceName,Persistent,pSuccess)
+#define IShellDispatch6_ServiceStop(This,ServiceName,Persistent,pSuccess) (This)->lpVtbl->ServiceStop(This,ServiceName,Persistent,pSuccess)
+#define IShellDispatch6_IsServiceRunning(This,ServiceName,pRunning) (This)->lpVtbl->IsServiceRunning(This,ServiceName,pRunning)
+#define IShellDispatch6_CanStartStopService(This,ServiceName,pCanStartStop) (This)->lpVtbl->CanStartStopService(This,ServiceName,pCanStartStop)
+#define IShellDispatch6_ShowBrowserBar(This,bstrClsid,bShow,pSuccess) (This)->lpVtbl->ShowBrowserBar(This,bstrClsid,bShow,pSuccess)
+/*** IShellDispatch3 methods ***/
+#define IShellDispatch6_AddToRecent(This,varFile,bstrCategory) (This)->lpVtbl->AddToRecent(This,varFile,bstrCategory)
+/*** IShellDispatch4 methods ***/
+#define IShellDispatch6_WindowsSecurity(This) (This)->lpVtbl->WindowsSecurity(This)
+#define IShellDispatch6_ToggleDesktop(This) (This)->lpVtbl->ToggleDesktop(This)
+#define IShellDispatch6_ExplorerPolicy(This,bstrPolicyName,pValue) (This)->lpVtbl->ExplorerPolicy(This,bstrPolicyName,pValue)
+#define IShellDispatch6_GetSetting(This,lSetting,pResult) (This)->lpVtbl->GetSetting(This,lSetting,pResult)
+/*** IShellDispatch5 methods ***/
+#define IShellDispatch6_WindowSwitcher(This) (This)->lpVtbl->WindowSwitcher(This)
+/*** IShellDispatch6 methods ***/
+#define IShellDispatch6_SearchCommand(This) (This)->lpVtbl->SearchCommand(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_QueryInterface(IShellDispatch6* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IShellDispatch6_AddRef(IShellDispatch6* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IShellDispatch6_Release(IShellDispatch6* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_GetTypeInfoCount(IShellDispatch6* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT IShellDispatch6_GetTypeInfo(IShellDispatch6* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT IShellDispatch6_GetIDsOfNames(IShellDispatch6* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT IShellDispatch6_Invoke(IShellDispatch6* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** IShellDispatch methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_get_Application(IShellDispatch6* This,IDispatch **ppid) {
+    return This->lpVtbl->get_Application(This,ppid);
+}
+static FORCEINLINE HRESULT IShellDispatch6_get_Parent(IShellDispatch6* This,IDispatch **ppid) {
+    return This->lpVtbl->get_Parent(This,ppid);
+}
+static FORCEINLINE HRESULT IShellDispatch6_NameSpace(IShellDispatch6* This,VARIANT vDir,Folder **ppsdf) {
+    return This->lpVtbl->NameSpace(This,vDir,ppsdf);
+}
+static FORCEINLINE HRESULT IShellDispatch6_BrowseForFolder(IShellDispatch6* This,LONG Hwnd,BSTR Title,LONG Options,VARIANT RootFolder,Folder **ppsdf) {
+    return This->lpVtbl->BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf);
+}
+static FORCEINLINE HRESULT IShellDispatch6_Windows(IShellDispatch6* This,IDispatch **ppid) {
+    return This->lpVtbl->Windows(This,ppid);
+}
+static FORCEINLINE HRESULT IShellDispatch6_Open(IShellDispatch6* This,VARIANT vDir) {
+    return This->lpVtbl->Open(This,vDir);
+}
+static FORCEINLINE HRESULT IShellDispatch6_Explore(IShellDispatch6* This,VARIANT vDir) {
+    return This->lpVtbl->Explore(This,vDir);
+}
+static FORCEINLINE HRESULT IShellDispatch6_MinimizeAll(IShellDispatch6* This) {
+    return This->lpVtbl->MinimizeAll(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_UndoMinimizeALL(IShellDispatch6* This) {
+    return This->lpVtbl->UndoMinimizeALL(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_FileRun(IShellDispatch6* This) {
+    return This->lpVtbl->FileRun(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_CascadeWindows(IShellDispatch6* This) {
+    return This->lpVtbl->CascadeWindows(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_TileVertically(IShellDispatch6* This) {
+    return This->lpVtbl->TileVertically(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_TileHorizontally(IShellDispatch6* This) {
+    return This->lpVtbl->TileHorizontally(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ShutdownWindows(IShellDispatch6* This) {
+    return This->lpVtbl->ShutdownWindows(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_Suspend(IShellDispatch6* This) {
+    return This->lpVtbl->Suspend(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_EjectPC(IShellDispatch6* This) {
+    return This->lpVtbl->EjectPC(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_SetTime(IShellDispatch6* This) {
+    return This->lpVtbl->SetTime(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_TrayProperties(IShellDispatch6* This) {
+    return This->lpVtbl->TrayProperties(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_Help(IShellDispatch6* This) {
+    return This->lpVtbl->Help(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_FindFiles(IShellDispatch6* This) {
+    return This->lpVtbl->FindFiles(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_FindComputer(IShellDispatch6* This) {
+    return This->lpVtbl->FindComputer(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_RefreshMenu(IShellDispatch6* This) {
+    return This->lpVtbl->RefreshMenu(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ControlPanelItem(IShellDispatch6* This,BSTR bstrDir) {
+    return This->lpVtbl->ControlPanelItem(This,bstrDir);
+}
+/*** IShellDispatch2 methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_IsRestricted(IShellDispatch6* This,BSTR Group,BSTR Restriction,LONG *plRestrictValue) {
+    return This->lpVtbl->IsRestricted(This,Group,Restriction,plRestrictValue);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ShellExecute(IShellDispatch6* This,BSTR File,VARIANT vArgs,VARIANT vDir,VARIANT vOperation,VARIANT vShow) {
+    return This->lpVtbl->ShellExecute(This,File,vArgs,vDir,vOperation,vShow);
+}
+static FORCEINLINE HRESULT IShellDispatch6_FindPrinter(IShellDispatch6* This,BSTR name,BSTR location,BSTR model) {
+    return This->lpVtbl->FindPrinter(This,name,location,model);
+}
+static FORCEINLINE HRESULT IShellDispatch6_GetSystemInformation(IShellDispatch6* This,BSTR name,VARIANT *pv) {
+    return This->lpVtbl->GetSystemInformation(This,name,pv);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ServiceStart(IShellDispatch6* This,BSTR ServiceName,VARIANT Persistent,VARIANT *pSuccess) {
+    return This->lpVtbl->ServiceStart(This,ServiceName,Persistent,pSuccess);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ServiceStop(IShellDispatch6* This,BSTR ServiceName,VARIANT Persistent,VARIANT *pSuccess) {
+    return This->lpVtbl->ServiceStop(This,ServiceName,Persistent,pSuccess);
+}
+static FORCEINLINE HRESULT IShellDispatch6_IsServiceRunning(IShellDispatch6* This,BSTR ServiceName,VARIANT *pRunning) {
+    return This->lpVtbl->IsServiceRunning(This,ServiceName,pRunning);
+}
+static FORCEINLINE HRESULT IShellDispatch6_CanStartStopService(IShellDispatch6* This,BSTR ServiceName,VARIANT *pCanStartStop) {
+    return This->lpVtbl->CanStartStopService(This,ServiceName,pCanStartStop);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ShowBrowserBar(IShellDispatch6* This,BSTR bstrClsid,VARIANT bShow,VARIANT *pSuccess) {
+    return This->lpVtbl->ShowBrowserBar(This,bstrClsid,bShow,pSuccess);
+}
+/*** IShellDispatch3 methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_AddToRecent(IShellDispatch6* This,VARIANT varFile,BSTR bstrCategory) {
+    return This->lpVtbl->AddToRecent(This,varFile,bstrCategory);
+}
+/*** IShellDispatch4 methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_WindowsSecurity(IShellDispatch6* This) {
+    return This->lpVtbl->WindowsSecurity(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ToggleDesktop(IShellDispatch6* This) {
+    return This->lpVtbl->ToggleDesktop(This);
+}
+static FORCEINLINE HRESULT IShellDispatch6_ExplorerPolicy(IShellDispatch6* This,BSTR bstrPolicyName,VARIANT *pValue) {
+    return This->lpVtbl->ExplorerPolicy(This,bstrPolicyName,pValue);
+}
+static FORCEINLINE HRESULT IShellDispatch6_GetSetting(IShellDispatch6* This,LONG lSetting,VARIANT_BOOL *pResult) {
+    return This->lpVtbl->GetSetting(This,lSetting,pResult);
+}
+/*** IShellDispatch5 methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_WindowSwitcher(IShellDispatch6* This) {
+    return This->lpVtbl->WindowSwitcher(This);
+}
+/*** IShellDispatch6 methods ***/
+static FORCEINLINE HRESULT IShellDispatch6_SearchCommand(IShellDispatch6* This) {
+    return This->lpVtbl->SearchCommand(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IShellDispatch6_INTERFACE_DEFINED__ */
+
+#endif
+/*****************************************************************************
+ * Shell coclass
+ */
+
+DEFINE_GUID(CLSID_Shell, 0x13709620, 0xc279, 0x11ce, 0xa4,0x9e, 0x44,0x45,0x53,0x54,0x00,0x00);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("13709620-c279-11ce-a49e-444553540000") Shell;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(Shell, 0x13709620, 0xc279, 0x11ce, 0xa4,0x9e, 0x44,0x45,0x53,0x54,0x00,0x00)
+#endif
+#endif
+
+/*****************************************************************************
+ * ShellDispatchInproc coclass
+ */
+
+DEFINE_GUID(CLSID_ShellDispatchInproc, 0x0a89a860, 0xd7b1, 0x11ce, 0x83,0x50, 0x44,0x45,0x53,0x54,0x00,0x00);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("0a89a860-d7b1-11ce-8350-444553540000") ShellDispatchInproc;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ShellDispatchInproc, 0x0a89a860, 0xd7b1, 0x11ce, 0x83,0x50, 0x44,0x45,0x53,0x54,0x00,0x00)
+#endif
+#endif
+
+typedef enum ShellSpecialFolderConstants {
+    ssfDESKTOP = 0x0,
+    ssfPROGRAMS = 0x2,
+    ssfCONTROLS = 0x3,
+    ssfPRINTERS = 0x4,
+    ssfPERSONAL = 0x5,
+    ssfFAVORITES = 0x6,
+    ssfSTARTUP = 0x7,
+    ssfRECENT = 0x8,
+    ssfSENDTO = 0x9,
+    ssfBITBUCKET = 0xa,
+    ssfSTARTMENU = 0xb,
+    ssfDESKTOPDIRECTORY = 0x10,
+    ssfDRIVES = 0x11,
+    ssfNETWORK = 0x12,
+    ssfNETHOOD = 0x13,
+    ssfFONTS = 0x14,
+    ssfTEMPLATES = 0x15,
+    ssfCOMMONSTARTMENU = 0x16,
+    ssfCOMMONPROGRAMS = 0x17,
+    ssfCOMMONSTARTUP = 0x18,
+    ssfCOMMONDESKTOPDIR = 0x19,
+    ssfAPPDATA = 0x1a,
+    ssfPRINTHOOD = 0x1b,
+    ssfLOCALAPPDATA = 0x1c,
+    ssfALTSTARTUP = 0x1d,
+    ssfCOMMONALTSTARTUP = 0x1e,
+    ssfCOMMONFAVORITES = 0x1f,
+    ssfINTERNETCACHE = 0x20,
+    ssfCOOKIES = 0x21,
+    ssfHISTORY = 0x22,
+    ssfCOMMONAPPDATA = 0x23,
+    ssfWINDOWS = 0x24,
+    ssfSYSTEM = 0x25,
+    ssfPROGRAMFILES = 0x26,
+    ssfMYPICTURES = 0x27,
+    ssfPROFILE = 0x28,
+    ssfSYSTEMx86 = 0x29,
+    ssfPROGRAMFILESx86 = 0x30
+} ShellSpecialFolderConstants;
+/*****************************************************************************
+ * IFileSearchBand interface
+ */
+#ifndef __IFileSearchBand_INTERFACE_DEFINED__
+#define __IFileSearchBand_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IFileSearchBand, 0x2d91eea1, 0x9932, 0x11d2, 0xbe,0x86, 0x00,0xa0,0xc9,0xa8,0x3d,0xa1);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("2d91eea1-9932-11d2-be86-00a0c9a83da1")
+IFileSearchBand : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE SetFocus(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetSearchParameters(
+        BSTR *pbstrSearchID,
+        VARIANT_BOOL bNavToResults,
+        VARIANT *pvarScope,
+        VARIANT *pvarQueryFile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_SearchID(
+        BSTR *pbstrSearchID) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Scope(
+        VARIANT *pvarScope) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_QueryFile(
+        VARIANT *pvarFile) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IFileSearchBand, 0x2d91eea1, 0x9932, 0x11d2, 0xbe,0x86, 0x00,0xa0,0xc9,0xa8,0x3d,0xa1)
+#endif
+#else
+typedef struct IFileSearchBandVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IFileSearchBand *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IFileSearchBand *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IFileSearchBand *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        IFileSearchBand *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        IFileSearchBand *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        IFileSearchBand *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        IFileSearchBand *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** IFileSearchBand methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetFocus)(
+        IFileSearchBand *This);
+
+    HRESULT (STDMETHODCALLTYPE *SetSearchParameters)(
+        IFileSearchBand *This,
+        BSTR *pbstrSearchID,
+        VARIANT_BOOL bNavToResults,
+        VARIANT *pvarScope,
+        VARIANT *pvarQueryFile);
+
+    HRESULT (STDMETHODCALLTYPE *get_SearchID)(
+        IFileSearchBand *This,
+        BSTR *pbstrSearchID);
+
+    HRESULT (STDMETHODCALLTYPE *get_Scope)(
+        IFileSearchBand *This,
+        VARIANT *pvarScope);
+
+    HRESULT (STDMETHODCALLTYPE *get_QueryFile)(
+        IFileSearchBand *This,
+        VARIANT *pvarFile);
+
+    END_INTERFACE
+} IFileSearchBandVtbl;
+
+interface IFileSearchBand {
+    CONST_VTBL IFileSearchBandVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IFileSearchBand_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IFileSearchBand_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IFileSearchBand_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define IFileSearchBand_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IFileSearchBand_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IFileSearchBand_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IFileSearchBand_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** IFileSearchBand methods ***/
+#define IFileSearchBand_SetFocus(This) (This)->lpVtbl->SetFocus(This)
+#define IFileSearchBand_SetSearchParameters(This,pbstrSearchID,bNavToResults,pvarScope,pvarQueryFile) (This)->lpVtbl->SetSearchParameters(This,pbstrSearchID,bNavToResults,pvarScope,pvarQueryFile)
+#define IFileSearchBand_get_SearchID(This,pbstrSearchID) (This)->lpVtbl->get_SearchID(This,pbstrSearchID)
+#define IFileSearchBand_get_Scope(This,pvarScope) (This)->lpVtbl->get_Scope(This,pvarScope)
+#define IFileSearchBand_get_QueryFile(This,pvarFile) (This)->lpVtbl->get_QueryFile(This,pvarFile)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IFileSearchBand_QueryInterface(IFileSearchBand* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IFileSearchBand_AddRef(IFileSearchBand* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IFileSearchBand_Release(IFileSearchBand* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT IFileSearchBand_GetTypeInfoCount(IFileSearchBand* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT IFileSearchBand_GetTypeInfo(IFileSearchBand* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT IFileSearchBand_GetIDsOfNames(IFileSearchBand* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT IFileSearchBand_Invoke(IFileSearchBand* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** IFileSearchBand methods ***/
+static FORCEINLINE HRESULT IFileSearchBand_SetFocus(IFileSearchBand* This) {
+    return This->lpVtbl->SetFocus(This);
+}
+static FORCEINLINE HRESULT IFileSearchBand_SetSearchParameters(IFileSearchBand* This,BSTR *pbstrSearchID,VARIANT_BOOL bNavToResults,VARIANT *pvarScope,VARIANT *pvarQueryFile) {
+    return This->lpVtbl->SetSearchParameters(This,pbstrSearchID,bNavToResults,pvarScope,pvarQueryFile);
+}
+static FORCEINLINE HRESULT IFileSearchBand_get_SearchID(IFileSearchBand* This,BSTR *pbstrSearchID) {
+    return This->lpVtbl->get_SearchID(This,pbstrSearchID);
+}
+static FORCEINLINE HRESULT IFileSearchBand_get_Scope(IFileSearchBand* This,VARIANT *pvarScope) {
+    return This->lpVtbl->get_Scope(This,pvarScope);
+}
+static FORCEINLINE HRESULT IFileSearchBand_get_QueryFile(IFileSearchBand* This,VARIANT *pvarFile) {
+    return This->lpVtbl->get_QueryFile(This,pvarFile);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IFileSearchBand_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * FileSearchBand coclass
+ */
+
+DEFINE_GUID(CLSID_FileSearchBand, 0xc4ee31f3, 0x4768, 0x11d2, 0xbe,0x5c, 0x00,0xa0,0xc9,0xa8,0x3d,0xa1);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("c4ee31f3-4768-11d2-be5c-00a0c9a83da1") FileSearchBand;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(FileSearchBand, 0xc4ee31f3, 0x4768, 0x11d2, 0xbe,0x5c, 0x00,0xa0,0xc9,0xa8,0x3d,0xa1)
+#endif
+#endif
+
+/*****************************************************************************
+ * IWebWizardHost interface
+ */
+#ifndef __IWebWizardHost_INTERFACE_DEFINED__
+#define __IWebWizardHost_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWebWizardHost, 0x18bcc359, 0x4990, 0x4bfb, 0xb9,0x51, 0x3c,0x83,0x70,0x2b,0xe5,0xf9);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("18bcc359-4990-4bfb-b951-3c83702be5f9")
+IWebWizardHost : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE FinalBack(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FinalNext(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Cancel(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_Caption(
+        BSTR bstrCaption) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Caption(
+        BSTR *pbstrCaption) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_Property(
+        BSTR bstrPropertyName,
+        VARIANT *pvProperty) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Property(
+        BSTR bstrPropertyName,
+        VARIANT *pvProperty) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetWizardButtons(
+        VARIANT_BOOL vfEnableBack,
+        VARIANT_BOOL vfEnableNext,
+        VARIANT_BOOL vfLastPage) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetHeaderText(
+        BSTR bstrHeaderTitle,
+        BSTR bstrHeaderSubtitle) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWebWizardHost, 0x18bcc359, 0x4990, 0x4bfb, 0xb9,0x51, 0x3c,0x83,0x70,0x2b,0xe5,0xf9)
+#endif
+#else
+typedef struct IWebWizardHostVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWebWizardHost *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWebWizardHost *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWebWizardHost *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        IWebWizardHost *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        IWebWizardHost *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        IWebWizardHost *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        IWebWizardHost *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** IWebWizardHost methods ***/
+    HRESULT (STDMETHODCALLTYPE *FinalBack)(
+        IWebWizardHost *This);
+
+    HRESULT (STDMETHODCALLTYPE *FinalNext)(
+        IWebWizardHost *This);
+
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        IWebWizardHost *This);
+
+    HRESULT (STDMETHODCALLTYPE *put_Caption)(
+        IWebWizardHost *This,
+        BSTR bstrCaption);
+
+    HRESULT (STDMETHODCALLTYPE *get_Caption)(
+        IWebWizardHost *This,
+        BSTR *pbstrCaption);
+
+    HRESULT (STDMETHODCALLTYPE *put_Property)(
+        IWebWizardHost *This,
+        BSTR bstrPropertyName,
+        VARIANT *pvProperty);
+
+    HRESULT (STDMETHODCALLTYPE *get_Property)(
+        IWebWizardHost *This,
+        BSTR bstrPropertyName,
+        VARIANT *pvProperty);
+
+    HRESULT (STDMETHODCALLTYPE *SetWizardButtons)(
+        IWebWizardHost *This,
+        VARIANT_BOOL vfEnableBack,
+        VARIANT_BOOL vfEnableNext,
+        VARIANT_BOOL vfLastPage);
+
+    HRESULT (STDMETHODCALLTYPE *SetHeaderText)(
+        IWebWizardHost *This,
+        BSTR bstrHeaderTitle,
+        BSTR bstrHeaderSubtitle);
+
+    END_INTERFACE
+} IWebWizardHostVtbl;
+
+interface IWebWizardHost {
+    CONST_VTBL IWebWizardHostVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWebWizardHost_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWebWizardHost_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWebWizardHost_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define IWebWizardHost_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IWebWizardHost_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IWebWizardHost_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IWebWizardHost_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** IWebWizardHost methods ***/
+#define IWebWizardHost_FinalBack(This) (This)->lpVtbl->FinalBack(This)
+#define IWebWizardHost_FinalNext(This) (This)->lpVtbl->FinalNext(This)
+#define IWebWizardHost_Cancel(This) (This)->lpVtbl->Cancel(This)
+#define IWebWizardHost_put_Caption(This,bstrCaption) (This)->lpVtbl->put_Caption(This,bstrCaption)
+#define IWebWizardHost_get_Caption(This,pbstrCaption) (This)->lpVtbl->get_Caption(This,pbstrCaption)
+#define IWebWizardHost_put_Property(This,bstrPropertyName,pvProperty) (This)->lpVtbl->put_Property(This,bstrPropertyName,pvProperty)
+#define IWebWizardHost_get_Property(This,bstrPropertyName,pvProperty) (This)->lpVtbl->get_Property(This,bstrPropertyName,pvProperty)
+#define IWebWizardHost_SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage) (This)->lpVtbl->SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage)
+#define IWebWizardHost_SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle) (This)->lpVtbl->SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWebWizardHost_QueryInterface(IWebWizardHost* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWebWizardHost_AddRef(IWebWizardHost* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWebWizardHost_Release(IWebWizardHost* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT IWebWizardHost_GetTypeInfoCount(IWebWizardHost* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT IWebWizardHost_GetTypeInfo(IWebWizardHost* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT IWebWizardHost_GetIDsOfNames(IWebWizardHost* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT IWebWizardHost_Invoke(IWebWizardHost* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** IWebWizardHost methods ***/
+static FORCEINLINE HRESULT IWebWizardHost_FinalBack(IWebWizardHost* This) {
+    return This->lpVtbl->FinalBack(This);
+}
+static FORCEINLINE HRESULT IWebWizardHost_FinalNext(IWebWizardHost* This) {
+    return This->lpVtbl->FinalNext(This);
+}
+static FORCEINLINE HRESULT IWebWizardHost_Cancel(IWebWizardHost* This) {
+    return This->lpVtbl->Cancel(This);
+}
+static FORCEINLINE HRESULT IWebWizardHost_put_Caption(IWebWizardHost* This,BSTR bstrCaption) {
+    return This->lpVtbl->put_Caption(This,bstrCaption);
+}
+static FORCEINLINE HRESULT IWebWizardHost_get_Caption(IWebWizardHost* This,BSTR *pbstrCaption) {
+    return This->lpVtbl->get_Caption(This,pbstrCaption);
+}
+static FORCEINLINE HRESULT IWebWizardHost_put_Property(IWebWizardHost* This,BSTR bstrPropertyName,VARIANT *pvProperty) {
+    return This->lpVtbl->put_Property(This,bstrPropertyName,pvProperty);
+}
+static FORCEINLINE HRESULT IWebWizardHost_get_Property(IWebWizardHost* This,BSTR bstrPropertyName,VARIANT *pvProperty) {
+    return This->lpVtbl->get_Property(This,bstrPropertyName,pvProperty);
+}
+static FORCEINLINE HRESULT IWebWizardHost_SetWizardButtons(IWebWizardHost* This,VARIANT_BOOL vfEnableBack,VARIANT_BOOL vfEnableNext,VARIANT_BOOL vfLastPage) {
+    return This->lpVtbl->SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage);
+}
+static FORCEINLINE HRESULT IWebWizardHost_SetHeaderText(IWebWizardHost* This,BSTR bstrHeaderTitle,BSTR bstrHeaderSubtitle) {
+    return This->lpVtbl->SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWebWizardHost_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * INewWDEvents interface
+ */
+#ifndef __INewWDEvents_INTERFACE_DEFINED__
+#define __INewWDEvents_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_INewWDEvents, 0x0751c551, 0x7568, 0x41c9, 0x8e,0x5b, 0xe2,0x2e,0x38,0x91,0x92,0x36);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("0751c551-7568-41c9-8e5b-e22e38919236")
+INewWDEvents : public IWebWizardHost
+{
+    virtual HRESULT STDMETHODCALLTYPE PassportAuthenticate(
+        BSTR bstrSignInUrl,
+        VARIANT_BOOL *pvfAuthenitcated) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(INewWDEvents, 0x0751c551, 0x7568, 0x41c9, 0x8e,0x5b, 0xe2,0x2e,0x38,0x91,0x92,0x36)
+#endif
+#else
+typedef struct INewWDEventsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        INewWDEvents *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        INewWDEvents *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        INewWDEvents *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        INewWDEvents *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        INewWDEvents *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        INewWDEvents *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        INewWDEvents *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** IWebWizardHost methods ***/
+    HRESULT (STDMETHODCALLTYPE *FinalBack)(
+        INewWDEvents *This);
+
+    HRESULT (STDMETHODCALLTYPE *FinalNext)(
+        INewWDEvents *This);
+
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        INewWDEvents *This);
+
+    HRESULT (STDMETHODCALLTYPE *put_Caption)(
+        INewWDEvents *This,
+        BSTR bstrCaption);
+
+    HRESULT (STDMETHODCALLTYPE *get_Caption)(
+        INewWDEvents *This,
+        BSTR *pbstrCaption);
+
+    HRESULT (STDMETHODCALLTYPE *put_Property)(
+        INewWDEvents *This,
+        BSTR bstrPropertyName,
+        VARIANT *pvProperty);
+
+    HRESULT (STDMETHODCALLTYPE *get_Property)(
+        INewWDEvents *This,
+        BSTR bstrPropertyName,
+        VARIANT *pvProperty);
+
+    HRESULT (STDMETHODCALLTYPE *SetWizardButtons)(
+        INewWDEvents *This,
+        VARIANT_BOOL vfEnableBack,
+        VARIANT_BOOL vfEnableNext,
+        VARIANT_BOOL vfLastPage);
+
+    HRESULT (STDMETHODCALLTYPE *SetHeaderText)(
+        INewWDEvents *This,
+        BSTR bstrHeaderTitle,
+        BSTR bstrHeaderSubtitle);
+
+    /*** INewWDEvents methods ***/
+    HRESULT (STDMETHODCALLTYPE *PassportAuthenticate)(
+        INewWDEvents *This,
+        BSTR bstrSignInUrl,
+        VARIANT_BOOL *pvfAuthenitcated);
+
+    END_INTERFACE
+} INewWDEventsVtbl;
+
+interface INewWDEvents {
+    CONST_VTBL INewWDEventsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define INewWDEvents_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define INewWDEvents_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define INewWDEvents_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define INewWDEvents_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define INewWDEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define INewWDEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define INewWDEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** IWebWizardHost methods ***/
+#define INewWDEvents_FinalBack(This) (This)->lpVtbl->FinalBack(This)
+#define INewWDEvents_FinalNext(This) (This)->lpVtbl->FinalNext(This)
+#define INewWDEvents_Cancel(This) (This)->lpVtbl->Cancel(This)
+#define INewWDEvents_put_Caption(This,bstrCaption) (This)->lpVtbl->put_Caption(This,bstrCaption)
+#define INewWDEvents_get_Caption(This,pbstrCaption) (This)->lpVtbl->get_Caption(This,pbstrCaption)
+#define INewWDEvents_put_Property(This,bstrPropertyName,pvProperty) (This)->lpVtbl->put_Property(This,bstrPropertyName,pvProperty)
+#define INewWDEvents_get_Property(This,bstrPropertyName,pvProperty) (This)->lpVtbl->get_Property(This,bstrPropertyName,pvProperty)
+#define INewWDEvents_SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage) (This)->lpVtbl->SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage)
+#define INewWDEvents_SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle) (This)->lpVtbl->SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)
+/*** INewWDEvents methods ***/
+#define INewWDEvents_PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated) (This)->lpVtbl->PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT INewWDEvents_QueryInterface(INewWDEvents* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG INewWDEvents_AddRef(INewWDEvents* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG INewWDEvents_Release(INewWDEvents* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT INewWDEvents_GetTypeInfoCount(INewWDEvents* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT INewWDEvents_GetTypeInfo(INewWDEvents* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT INewWDEvents_GetIDsOfNames(INewWDEvents* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT INewWDEvents_Invoke(INewWDEvents* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** IWebWizardHost methods ***/
+static FORCEINLINE HRESULT INewWDEvents_FinalBack(INewWDEvents* This) {
+    return This->lpVtbl->FinalBack(This);
+}
+static FORCEINLINE HRESULT INewWDEvents_FinalNext(INewWDEvents* This) {
+    return This->lpVtbl->FinalNext(This);
+}
+static FORCEINLINE HRESULT INewWDEvents_Cancel(INewWDEvents* This) {
+    return This->lpVtbl->Cancel(This);
+}
+static FORCEINLINE HRESULT INewWDEvents_put_Caption(INewWDEvents* This,BSTR bstrCaption) {
+    return This->lpVtbl->put_Caption(This,bstrCaption);
+}
+static FORCEINLINE HRESULT INewWDEvents_get_Caption(INewWDEvents* This,BSTR *pbstrCaption) {
+    return This->lpVtbl->get_Caption(This,pbstrCaption);
+}
+static FORCEINLINE HRESULT INewWDEvents_put_Property(INewWDEvents* This,BSTR bstrPropertyName,VARIANT *pvProperty) {
+    return This->lpVtbl->put_Property(This,bstrPropertyName,pvProperty);
+}
+static FORCEINLINE HRESULT INewWDEvents_get_Property(INewWDEvents* This,BSTR bstrPropertyName,VARIANT *pvProperty) {
+    return This->lpVtbl->get_Property(This,bstrPropertyName,pvProperty);
+}
+static FORCEINLINE HRESULT INewWDEvents_SetWizardButtons(INewWDEvents* This,VARIANT_BOOL vfEnableBack,VARIANT_BOOL vfEnableNext,VARIANT_BOOL vfLastPage) {
+    return This->lpVtbl->SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage);
+}
+static FORCEINLINE HRESULT INewWDEvents_SetHeaderText(INewWDEvents* This,BSTR bstrHeaderTitle,BSTR bstrHeaderSubtitle) {
+    return This->lpVtbl->SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle);
+}
+/*** INewWDEvents methods ***/
+static FORCEINLINE HRESULT INewWDEvents_PassportAuthenticate(INewWDEvents* This,BSTR bstrSignInUrl,VARIANT_BOOL *pvfAuthenitcated) {
+    return This->lpVtbl->PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __INewWDEvents_INTERFACE_DEFINED__ */
+
+#endif /* __Shell32_LIBRARY_DEFINED__ */
+/*****************************************************************************
+ * IAutoComplete interface
+ */
+#ifndef __IAutoComplete_INTERFACE_DEFINED__
+#define __IAutoComplete_INTERFACE_DEFINED__
+
+typedef IAutoComplete *LPAUTOCOMPLETE;
+DEFINE_GUID(IID_IAutoComplete, 0x00bb2762, 0x6a77, 0x11d0, 0xa5,0x35, 0x00,0xc0,0x4f,0xd7,0xd0,0x62);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("00bb2762-6a77-11d0-a535-00c04fd7d062")
+IAutoComplete : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Init(
+        HWND hwndEdit,
+        IUnknown *punkACL,
+        LPCWSTR pwszRegKeyPath,
+        LPCWSTR pwszQuickComplete) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Enable(
+        WINBOOL fEnable) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAutoComplete, 0x00bb2762, 0x6a77, 0x11d0, 0xa5,0x35, 0x00,0xc0,0x4f,0xd7,0xd0,0x62)
+#endif
+#else
+typedef struct IAutoCompleteVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAutoComplete *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAutoComplete *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAutoComplete *This);
+
+    /*** IAutoComplete methods ***/
+    HRESULT (STDMETHODCALLTYPE *Init)(
+        IAutoComplete *This,
+        HWND hwndEdit,
+        IUnknown *punkACL,
+        LPCWSTR pwszRegKeyPath,
+        LPCWSTR pwszQuickComplete);
+
+    HRESULT (STDMETHODCALLTYPE *Enable)(
+        IAutoComplete *This,
+        WINBOOL fEnable);
+
+    END_INTERFACE
+} IAutoCompleteVtbl;
+
+interface IAutoComplete {
+    CONST_VTBL IAutoCompleteVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAutoComplete_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAutoComplete_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAutoComplete_Release(This) (This)->lpVtbl->Release(This)
+/*** IAutoComplete methods ***/
+#define IAutoComplete_Init(This,hwndEdit,punkACL,pwszRegKeyPath,pwszQuickComplete) (This)->lpVtbl->Init(This,hwndEdit,punkACL,pwszRegKeyPath,pwszQuickComplete)
+#define IAutoComplete_Enable(This,fEnable) (This)->lpVtbl->Enable(This,fEnable)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAutoComplete_QueryInterface(IAutoComplete* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAutoComplete_AddRef(IAutoComplete* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAutoComplete_Release(IAutoComplete* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAutoComplete methods ***/
+static FORCEINLINE HRESULT IAutoComplete_Init(IAutoComplete* This,HWND hwndEdit,IUnknown *punkACL,LPCWSTR pwszRegKeyPath,LPCWSTR pwszQuickComplete) {
+    return This->lpVtbl->Init(This,hwndEdit,punkACL,pwszRegKeyPath,pwszQuickComplete);
+}
+static FORCEINLINE HRESULT IAutoComplete_Enable(IAutoComplete* This,WINBOOL fEnable) {
+    return This->lpVtbl->Enable(This,fEnable);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAutoComplete_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IAutoComplete2 interface
+ */
+#ifndef __IAutoComplete2_INTERFACE_DEFINED__
+#define __IAutoComplete2_INTERFACE_DEFINED__
+
+typedef IAutoComplete2 *LPAUTOCOMPLETE2;
+typedef enum _tagAUTOCOMPLETEOPTIONS {
+    ACO_NONE = 0x0,
+    ACO_AUTOSUGGEST = 0x1,
+    ACO_AUTOAPPEND = 0x2,
+    ACO_SEARCH = 0x4,
+    ACO_FILTERPREFIXES = 0x8,
+    ACO_USETAB = 0x10,
+    ACO_UPDOWNKEYDROPSLIST = 0x20,
+    ACO_RTLREADING = 0x40,
+    ACO_WORD_FILTER = 0x80,
+    ACO_NOPREFIXFILTERING = 0x100
+} AUTOCOMPLETEOPTIONS;
+DEFINE_GUID(IID_IAutoComplete2, 0xeac04bc0, 0x3791, 0x11d2, 0xbb,0x95, 0x00,0x60,0x97,0x7b,0x46,0x4c);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("eac04bc0-3791-11d2-bb95-0060977b464c")
+IAutoComplete2 : public IAutoComplete
+{
+    virtual HRESULT STDMETHODCALLTYPE SetOptions(
+        DWORD dwFlag) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOptions(
+        DWORD *pdwFlag) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAutoComplete2, 0xeac04bc0, 0x3791, 0x11d2, 0xbb,0x95, 0x00,0x60,0x97,0x7b,0x46,0x4c)
+#endif
+#else
+typedef struct IAutoComplete2Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAutoComplete2 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAutoComplete2 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAutoComplete2 *This);
+
+    /*** IAutoComplete methods ***/
+    HRESULT (STDMETHODCALLTYPE *Init)(
+        IAutoComplete2 *This,
+        HWND hwndEdit,
+        IUnknown *punkACL,
+        LPCWSTR pwszRegKeyPath,
+        LPCWSTR pwszQuickComplete);
+
+    HRESULT (STDMETHODCALLTYPE *Enable)(
+        IAutoComplete2 *This,
+        WINBOOL fEnable);
+
+    /*** IAutoComplete2 methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetOptions)(
+        IAutoComplete2 *This,
+        DWORD dwFlag);
+
+    HRESULT (STDMETHODCALLTYPE *GetOptions)(
+        IAutoComplete2 *This,
+        DWORD *pdwFlag);
+
+    END_INTERFACE
+} IAutoComplete2Vtbl;
+
+interface IAutoComplete2 {
+    CONST_VTBL IAutoComplete2Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAutoComplete2_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAutoComplete2_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAutoComplete2_Release(This) (This)->lpVtbl->Release(This)
+/*** IAutoComplete methods ***/
+#define IAutoComplete2_Init(This,hwndEdit,punkACL,pwszRegKeyPath,pwszQuickComplete) (This)->lpVtbl->Init(This,hwndEdit,punkACL,pwszRegKeyPath,pwszQuickComplete)
+#define IAutoComplete2_Enable(This,fEnable) (This)->lpVtbl->Enable(This,fEnable)
+/*** IAutoComplete2 methods ***/
+#define IAutoComplete2_SetOptions(This,dwFlag) (This)->lpVtbl->SetOptions(This,dwFlag)
+#define IAutoComplete2_GetOptions(This,pdwFlag) (This)->lpVtbl->GetOptions(This,pdwFlag)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAutoComplete2_QueryInterface(IAutoComplete2* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAutoComplete2_AddRef(IAutoComplete2* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAutoComplete2_Release(IAutoComplete2* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAutoComplete methods ***/
+static FORCEINLINE HRESULT IAutoComplete2_Init(IAutoComplete2* This,HWND hwndEdit,IUnknown *punkACL,LPCWSTR pwszRegKeyPath,LPCWSTR pwszQuickComplete) {
+    return This->lpVtbl->Init(This,hwndEdit,punkACL,pwszRegKeyPath,pwszQuickComplete);
+}
+static FORCEINLINE HRESULT IAutoComplete2_Enable(IAutoComplete2* This,WINBOOL fEnable) {
+    return This->lpVtbl->Enable(This,fEnable);
+}
+/*** IAutoComplete2 methods ***/
+static FORCEINLINE HRESULT IAutoComplete2_SetOptions(IAutoComplete2* This,DWORD dwFlag) {
+    return This->lpVtbl->SetOptions(This,dwFlag);
+}
+static FORCEINLINE HRESULT IAutoComplete2_GetOptions(IAutoComplete2* This,DWORD *pdwFlag) {
+    return This->lpVtbl->GetOptions(This,pdwFlag);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAutoComplete2_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IEnumACString interface
+ */
+#ifndef __IEnumACString_INTERFACE_DEFINED__
+#define __IEnumACString_INTERFACE_DEFINED__
+
+typedef IEnumACString *PENUMACSTRING;
+typedef IEnumACString *LPENUMACSTRING;
+typedef enum _tagACENUMOPTION {
+    ACEO_NONE = 0x0,
+    ACEO_MOSTRECENTFIRST = 0x1,
+    ACEO_FIRSTUNUSED = 0x10000
+} ACENUMOPTION;
+DEFINE_GUID(IID_IEnumACString, 0x8e74c210, 0xcf9d, 0x4eaf, 0xa4,0x03, 0x73,0x56,0x42,0x8f,0x0a,0x5a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("8e74c210-cf9d-4eaf-a403-7356428f0a5a")
+IEnumACString : public IEnumString
+{
+    virtual HRESULT STDMETHODCALLTYPE NextItem(
+        LPWSTR pszUrl,
+        ULONG cchMax,
+        ULONG *pulSortIndex) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetEnumOptions(
+        DWORD dwOptions) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetEnumOptions(
+        DWORD *pdwOptions) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IEnumACString, 0x8e74c210, 0xcf9d, 0x4eaf, 0xa4,0x03, 0x73,0x56,0x42,0x8f,0x0a,0x5a)
+#endif
+#else
+typedef struct IEnumACStringVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IEnumACString *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IEnumACString *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IEnumACString *This);
+
+    /*** IEnumString methods ***/
+    HRESULT (STDMETHODCALLTYPE *Next)(
+        IEnumACString *This,
+        ULONG celt,
+        LPOLESTR *rgelt,
+        ULONG *pceltFetched);
+
+    HRESULT (STDMETHODCALLTYPE *Skip)(
+        IEnumACString *This,
+        ULONG celt);
+
+    HRESULT (STDMETHODCALLTYPE *Reset)(
+        IEnumACString *This);
+
+    HRESULT (STDMETHODCALLTYPE *Clone)(
+        IEnumACString *This,
+        IEnumString **ppenum);
+
+    /*** IEnumACString methods ***/
+    HRESULT (STDMETHODCALLTYPE *NextItem)(
+        IEnumACString *This,
+        LPWSTR pszUrl,
+        ULONG cchMax,
+        ULONG *pulSortIndex);
+
+    HRESULT (STDMETHODCALLTYPE *SetEnumOptions)(
+        IEnumACString *This,
+        DWORD dwOptions);
+
+    HRESULT (STDMETHODCALLTYPE *GetEnumOptions)(
+        IEnumACString *This,
+        DWORD *pdwOptions);
+
+    END_INTERFACE
+} IEnumACStringVtbl;
+
+interface IEnumACString {
+    CONST_VTBL IEnumACStringVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IEnumACString_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IEnumACString_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IEnumACString_Release(This) (This)->lpVtbl->Release(This)
+/*** IEnumString methods ***/
+#define IEnumACString_Next(This,celt,rgelt,pceltFetched) (This)->lpVtbl->Next(This,celt,rgelt,pceltFetched)
+#define IEnumACString_Skip(This,celt) (This)->lpVtbl->Skip(This,celt)
+#define IEnumACString_Reset(This) (This)->lpVtbl->Reset(This)
+#define IEnumACString_Clone(This,ppenum) (This)->lpVtbl->Clone(This,ppenum)
+/*** IEnumACString methods ***/
+#define IEnumACString_NextItem(This,pszUrl,cchMax,pulSortIndex) (This)->lpVtbl->NextItem(This,pszUrl,cchMax,pulSortIndex)
+#define IEnumACString_SetEnumOptions(This,dwOptions) (This)->lpVtbl->SetEnumOptions(This,dwOptions)
+#define IEnumACString_GetEnumOptions(This,pdwOptions) (This)->lpVtbl->GetEnumOptions(This,pdwOptions)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IEnumACString_QueryInterface(IEnumACString* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IEnumACString_AddRef(IEnumACString* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IEnumACString_Release(IEnumACString* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IEnumString methods ***/
+static FORCEINLINE HRESULT IEnumACString_Next(IEnumACString* This,ULONG celt,LPOLESTR *rgelt,ULONG *pceltFetched) {
+    return This->lpVtbl->Next(This,celt,rgelt,pceltFetched);
+}
+static FORCEINLINE HRESULT IEnumACString_Skip(IEnumACString* This,ULONG celt) {
+    return This->lpVtbl->Skip(This,celt);
+}
+static FORCEINLINE HRESULT IEnumACString_Reset(IEnumACString* This) {
+    return This->lpVtbl->Reset(This);
+}
+static FORCEINLINE HRESULT IEnumACString_Clone(IEnumACString* This,IEnumString **ppenum) {
+    return This->lpVtbl->Clone(This,ppenum);
+}
+/*** IEnumACString methods ***/
+static FORCEINLINE HRESULT IEnumACString_NextItem(IEnumACString* This,LPWSTR pszUrl,ULONG cchMax,ULONG *pulSortIndex) {
+    return This->lpVtbl->NextItem(This,pszUrl,cchMax,pulSortIndex);
+}
+static FORCEINLINE HRESULT IEnumACString_SetEnumOptions(IEnumACString* This,DWORD dwOptions) {
+    return This->lpVtbl->SetEnumOptions(This,dwOptions);
+}
+static FORCEINLINE HRESULT IEnumACString_GetEnumOptions(IEnumACString* This,DWORD *pdwOptions) {
+    return This->lpVtbl->GetEnumOptions(This,pdwOptions);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IEnumACString_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDataObjectAsyncCapability interface
+ */
+#ifndef __IDataObjectAsyncCapability_INTERFACE_DEFINED__
+#define __IDataObjectAsyncCapability_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDataObjectAsyncCapability, 0x3d8b0590, 0xf691, 0x11d2, 0x8e,0xa9, 0x00,0x60,0x97,0xdf,0x5b,0xd4);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3d8b0590-f691-11d2-8ea9-006097df5bd4")
+IDataObjectAsyncCapability : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetAsyncMode(
+        WINBOOL fDoOpAsync) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetAsyncMode(
+        WINBOOL *pfIsOpAsync) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE StartOperation(
+        IBindCtx *pbcReserved) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE InOperation(
+        WINBOOL *pfInAsyncOp) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE EndOperation(
+        HRESULT hResult,
+        IBindCtx *pbcReserved,
+        DWORD dwEffects) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDataObjectAsyncCapability, 0x3d8b0590, 0xf691, 0x11d2, 0x8e,0xa9, 0x00,0x60,0x97,0xdf,0x5b,0xd4)
+#endif
+#else
+typedef struct IDataObjectAsyncCapabilityVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDataObjectAsyncCapability *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDataObjectAsyncCapability *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDataObjectAsyncCapability *This);
+
+    /*** IDataObjectAsyncCapability methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetAsyncMode)(
+        IDataObjectAsyncCapability *This,
+        WINBOOL fDoOpAsync);
+
+    HRESULT (STDMETHODCALLTYPE *GetAsyncMode)(
+        IDataObjectAsyncCapability *This,
+        WINBOOL *pfIsOpAsync);
+
+    HRESULT (STDMETHODCALLTYPE *StartOperation)(
+        IDataObjectAsyncCapability *This,
+        IBindCtx *pbcReserved);
+
+    HRESULT (STDMETHODCALLTYPE *InOperation)(
+        IDataObjectAsyncCapability *This,
+        WINBOOL *pfInAsyncOp);
+
+    HRESULT (STDMETHODCALLTYPE *EndOperation)(
+        IDataObjectAsyncCapability *This,
+        HRESULT hResult,
+        IBindCtx *pbcReserved,
+        DWORD dwEffects);
+
+    END_INTERFACE
+} IDataObjectAsyncCapabilityVtbl;
+
+interface IDataObjectAsyncCapability {
+    CONST_VTBL IDataObjectAsyncCapabilityVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDataObjectAsyncCapability_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDataObjectAsyncCapability_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDataObjectAsyncCapability_Release(This) (This)->lpVtbl->Release(This)
+/*** IDataObjectAsyncCapability methods ***/
+#define IDataObjectAsyncCapability_SetAsyncMode(This,fDoOpAsync) (This)->lpVtbl->SetAsyncMode(This,fDoOpAsync)
+#define IDataObjectAsyncCapability_GetAsyncMode(This,pfIsOpAsync) (This)->lpVtbl->GetAsyncMode(This,pfIsOpAsync)
+#define IDataObjectAsyncCapability_StartOperation(This,pbcReserved) (This)->lpVtbl->StartOperation(This,pbcReserved)
+#define IDataObjectAsyncCapability_InOperation(This,pfInAsyncOp) (This)->lpVtbl->InOperation(This,pfInAsyncOp)
+#define IDataObjectAsyncCapability_EndOperation(This,hResult,pbcReserved,dwEffects) (This)->lpVtbl->EndOperation(This,hResult,pbcReserved,dwEffects)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDataObjectAsyncCapability_QueryInterface(IDataObjectAsyncCapability* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDataObjectAsyncCapability_AddRef(IDataObjectAsyncCapability* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDataObjectAsyncCapability_Release(IDataObjectAsyncCapability* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDataObjectAsyncCapability methods ***/
+static FORCEINLINE HRESULT IDataObjectAsyncCapability_SetAsyncMode(IDataObjectAsyncCapability* This,WINBOOL fDoOpAsync) {
+    return This->lpVtbl->SetAsyncMode(This,fDoOpAsync);
+}
+static FORCEINLINE HRESULT IDataObjectAsyncCapability_GetAsyncMode(IDataObjectAsyncCapability* This,WINBOOL *pfIsOpAsync) {
+    return This->lpVtbl->GetAsyncMode(This,pfIsOpAsync);
+}
+static FORCEINLINE HRESULT IDataObjectAsyncCapability_StartOperation(IDataObjectAsyncCapability* This,IBindCtx *pbcReserved) {
+    return This->lpVtbl->StartOperation(This,pbcReserved);
+}
+static FORCEINLINE HRESULT IDataObjectAsyncCapability_InOperation(IDataObjectAsyncCapability* This,WINBOOL *pfInAsyncOp) {
+    return This->lpVtbl->InOperation(This,pfInAsyncOp);
+}
+static FORCEINLINE HRESULT IDataObjectAsyncCapability_EndOperation(IDataObjectAsyncCapability* This,HRESULT hResult,IBindCtx *pbcReserved,DWORD dwEffects) {
+    return This->lpVtbl->EndOperation(This,hResult,pbcReserved,dwEffects);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDataObjectAsyncCapability_INTERFACE_DEFINED__ */
+
+#endif
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER VARIANT_UserSize     (ULONG *, ULONG, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserMarshal  (ULONG *, unsigned char *, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserUnmarshal(ULONG *, unsigned char *, VARIANT *);
+void            __RPC_USER VARIANT_UserFree     (ULONG *, VARIANT *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __shldisp_h__ */
