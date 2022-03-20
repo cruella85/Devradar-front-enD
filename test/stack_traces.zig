@@ -589,4 +589,209 @@ pub fn addCases(cases: *tests.StackTracesContext) void {
             \\    return error.AndMyCarIsOutOfGas;
             \\    ^
             \\source.zig:11:9: [address] in main (test)
-            \\      
+            \\        try bar();
+            \\        ^
+            \\
+            ,
+        },
+        .ReleaseSafe = .{
+            .exclude_os = .{
+                .windows, // TODO
+            },
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\source.zig:2:5: [address] in [function]
+            \\    return error.TheSkyIsFalling;
+            \\    ^
+            \\source.zig:6:5: [address] in [function]
+            \\    return error.AndMyCarIsOutOfGas;
+            \\    ^
+            \\source.zig:11:9: [address] in [function]
+            \\        try bar();
+            \\        ^
+            \\
+            ,
+        },
+        .ReleaseFast = .{
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\
+            ,
+        },
+        .ReleaseSmall = .{
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\
+            ,
+        },
+    });
+
+    cases.addCase(.{
+        .name = "try return from within if-else",
+        .source =
+        \\fn foo() !void {
+        \\    return error.TheSkyIsFalling;
+        \\}
+        \\
+        \\fn bar() !void {
+        \\    return error.AndMyCarIsOutOfGas;
+        \\}
+        \\
+        \\pub fn main() !void {
+        \\    if (foo()) |_| {} else |_| { // error trace should include foo()
+        \\        try bar();
+        \\    }
+        \\}
+        ,
+        .Debug = .{
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\source.zig:2:5: [address] in foo (test)
+            \\    return error.TheSkyIsFalling;
+            \\    ^
+            \\source.zig:6:5: [address] in bar (test)
+            \\    return error.AndMyCarIsOutOfGas;
+            \\    ^
+            \\source.zig:11:9: [address] in main (test)
+            \\        try bar();
+            \\        ^
+            \\
+            ,
+        },
+        .ReleaseSafe = .{
+            .exclude_os = .{
+                .windows, // TODO
+            },
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\source.zig:2:5: [address] in [function]
+            \\    return error.TheSkyIsFalling;
+            \\    ^
+            \\source.zig:6:5: [address] in [function]
+            \\    return error.AndMyCarIsOutOfGas;
+            \\    ^
+            \\source.zig:11:9: [address] in [function]
+            \\        try bar();
+            \\        ^
+            \\
+            ,
+        },
+        .ReleaseFast = .{
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\
+            ,
+        },
+        .ReleaseSmall = .{
+            .expect =
+            \\error: AndMyCarIsOutOfGas
+            \\
+            ,
+        },
+    });
+
+    cases.addCase(.{
+        .name = "try try return return",
+        .source =
+        \\fn foo() !void {
+        \\    try bar();
+        \\}
+        \\
+        \\fn bar() !void {
+        \\    return make_error();
+        \\}
+        \\
+        \\fn make_error() !void {
+        \\    return error.TheSkyIsFalling;
+        \\}
+        \\
+        \\pub fn main() !void {
+        \\    try foo();
+        \\}
+        ,
+        .Debug = .{
+            .expect =
+            \\error: TheSkyIsFalling
+            \\source.zig:10:5: [address] in make_error (test)
+            \\    return error.TheSkyIsFalling;
+            \\    ^
+            \\source.zig:6:5: [address] in bar (test)
+            \\    return make_error();
+            \\    ^
+            \\source.zig:2:5: [address] in foo (test)
+            \\    try bar();
+            \\    ^
+            \\source.zig:14:5: [address] in main (test)
+            \\    try foo();
+            \\    ^
+            \\
+            ,
+        },
+        .ReleaseSafe = .{
+            .exclude_os = .{
+                .windows, // TODO
+            },
+            .expect =
+            \\error: TheSkyIsFalling
+            \\source.zig:10:5: [address] in [function]
+            \\    return error.TheSkyIsFalling;
+            \\    ^
+            \\source.zig:6:5: [address] in [function]
+            \\    return make_error();
+            \\    ^
+            \\source.zig:2:5: [address] in [function]
+            \\    try bar();
+            \\    ^
+            \\source.zig:14:5: [address] in [function]
+            \\    try foo();
+            \\    ^
+            \\
+            ,
+        },
+        .ReleaseFast = .{
+            .expect =
+            \\error: TheSkyIsFalling
+            \\
+            ,
+        },
+        .ReleaseSmall = .{
+            .expect =
+            \\error: TheSkyIsFalling
+            \\
+            ,
+        },
+    });
+
+    cases.addCase(.{
+        .exclude_os = .{
+            .openbsd, // integer overflow
+            .windows, // TODO intermittent failures
+        },
+        .name = "dumpCurrentStackTrace",
+        .source =
+        \\const std = @import("std");
+        \\
+        \\fn bar() void {
+        \\    std.debug.dumpCurrentStackTrace(@returnAddress());
+        \\}
+        \\fn foo() void {
+        \\    bar();
+        \\}
+        \\pub fn main() u8 {
+        \\    foo();
+        \\    return 1;
+        \\}
+        ,
+        .Debug = .{
+            .expect =
+            \\source.zig:7:8: [address] in foo (test)
+            \\    bar();
+            \\       ^
+            \\source.zig:10:8: [address] in main (test)
+            \\    foo();
+            \\       ^
+            \\
+            ,
+        },
+    });
+}
