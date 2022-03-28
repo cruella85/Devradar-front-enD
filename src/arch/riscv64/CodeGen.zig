@@ -617,4 +617,194 @@ fn genBody(self: *Self, body: []const Air.Inst.Index) InnerError!void {
 
             .dbg_block_begin,
             .dbg_block_end,
-            => try
+            => try self.airDbgBlock(inst),
+
+            .call              => try self.airCall(inst, .auto),
+            .call_always_tail  => try self.airCall(inst, .always_tail),
+            .call_never_tail   => try self.airCall(inst, .never_tail),
+            .call_never_inline => try self.airCall(inst, .never_inline),
+
+            .atomic_store_unordered => try self.airAtomicStore(inst, .Unordered),
+            .atomic_store_monotonic => try self.airAtomicStore(inst, .Monotonic),
+            .atomic_store_release   => try self.airAtomicStore(inst, .Release),
+            .atomic_store_seq_cst   => try self.airAtomicStore(inst, .SeqCst),
+
+            .struct_field_ptr_index_0 => try self.airStructFieldPtrIndex(inst, 0),
+            .struct_field_ptr_index_1 => try self.airStructFieldPtrIndex(inst, 1),
+            .struct_field_ptr_index_2 => try self.airStructFieldPtrIndex(inst, 2),
+            .struct_field_ptr_index_3 => try self.airStructFieldPtrIndex(inst, 3),
+
+            .field_parent_ptr => try self.airFieldParentPtr(inst),
+
+            .switch_br       => try self.airSwitch(inst),
+            .slice_ptr       => try self.airSlicePtr(inst),
+            .slice_len       => try self.airSliceLen(inst),
+
+            .ptr_slice_len_ptr => try self.airPtrSliceLenPtr(inst),
+            .ptr_slice_ptr_ptr => try self.airPtrSlicePtrPtr(inst),
+
+            .array_elem_val      => try self.airArrayElemVal(inst),
+            .slice_elem_val      => try self.airSliceElemVal(inst),
+            .slice_elem_ptr      => try self.airSliceElemPtr(inst),
+            .ptr_elem_val        => try self.airPtrElemVal(inst),
+            .ptr_elem_ptr        => try self.airPtrElemPtr(inst),
+
+            .constant => unreachable, // excluded from function bodies
+            .const_ty => unreachable, // excluded from function bodies
+            .unreach  => self.finishAirBookkeeping(),
+
+            .optional_payload           => try self.airOptionalPayload(inst),
+            .optional_payload_ptr       => try self.airOptionalPayloadPtr(inst),
+            .optional_payload_ptr_set   => try self.airOptionalPayloadPtrSet(inst),
+            .unwrap_errunion_err        => try self.airUnwrapErrErr(inst),
+            .unwrap_errunion_payload    => try self.airUnwrapErrPayload(inst),
+            .unwrap_errunion_err_ptr    => try self.airUnwrapErrErrPtr(inst),
+            .unwrap_errunion_payload_ptr=> try self.airUnwrapErrPayloadPtr(inst),
+            .errunion_payload_ptr_set   => try self.airErrUnionPayloadPtrSet(inst),
+            .err_return_trace           => try self.airErrReturnTrace(inst),
+            .set_err_return_trace       => try self.airSetErrReturnTrace(inst),
+            .save_err_return_trace_index=> try self.airSaveErrReturnTraceIndex(inst),
+
+            .wrap_optional         => try self.airWrapOptional(inst),
+            .wrap_errunion_payload => try self.airWrapErrUnionPayload(inst),
+            .wrap_errunion_err     => try self.airWrapErrUnionErr(inst),
+
+            .add_optimized,
+            .addwrap_optimized,
+            .sub_optimized,
+            .subwrap_optimized,
+            .mul_optimized,
+            .mulwrap_optimized,
+            .div_float_optimized,
+            .div_trunc_optimized,
+            .div_floor_optimized,
+            .div_exact_optimized,
+            .rem_optimized,
+            .mod_optimized,
+            .neg_optimized,
+            .cmp_lt_optimized,
+            .cmp_lte_optimized,
+            .cmp_eq_optimized,
+            .cmp_gte_optimized,
+            .cmp_gt_optimized,
+            .cmp_neq_optimized,
+            .cmp_vector_optimized,
+            .reduce_optimized,
+            .float_to_int_optimized,
+            => return self.fail("TODO implement optimized float mode", .{}),
+
+            .is_named_enum_value => return self.fail("TODO implement is_named_enum_value", .{}),
+            .error_set_has_value => return self.fail("TODO implement error_set_has_value", .{}),
+            .vector_store_elem => return self.fail("TODO implement vector_store_elem", .{}),
+
+            .c_va_arg => return self.fail("TODO implement c_va_arg", .{}),
+            .c_va_copy => return self.fail("TODO implement c_va_copy", .{}),
+            .c_va_end => return self.fail("TODO implement c_va_end", .{}),
+            .c_va_start => return self.fail("TODO implement c_va_start", .{}),
+
+            .wasm_memory_size => unreachable,
+            .wasm_memory_grow => unreachable,
+            // zig fmt: on
+        }
+        if (std.debug.runtime_safety) {
+            if (self.air_bookkeeping < old_air_bookkeeping + 1) {
+                std.debug.panic("in codegen.zig, handling of AIR instruction %{d} ('{}') did not do proper bookkeeping. Look for a missing call to finishAir.", .{ inst, air_tags[inst] });
+            }
+        }
+    }
+}
+
+/// Asserts there is already capacity to insert into top branch inst_table.
+fn processDeath(self: *Self, inst: Air.Inst.Index) void {
+    const air_tags = self.air.instructions.items(.tag);
+    if (air_tags[inst] == .constant) return; // Constants are immortal.
+    // When editing this function, note that the logic must synchronize with `reuseOperand`.
+    const prev_value = self.getResolvedInstValue(inst);
+    const branch = &self.branch_stack.items[self.branch_stack.items.len - 1];
+    branch.inst_table.putAssumeCapacity(inst, .dead);
+    switch (prev_value) {
+        .register => |reg| {
+            self.register_manager.freeReg(reg);
+        },
+        else => {}, // TODO process stack allocation death
+    }
+}
+
+/// Called when there are no operands, and the instruction is always unreferenced.
+fn finishAirBookkeeping(self: *Self) void {
+    if (std.debug.runtime_safety) {
+        self.air_bookkeeping += 1;
+    }
+}
+
+fn finishAir(self: *Self, inst: Air.Inst.Index, result: MCValue, operands: [Liveness.bpi - 1]Air.Inst.Ref) void {
+    var tomb_bits = self.liveness.getTombBits(inst);
+    for (operands) |op| {
+        const dies = @truncate(u1, tomb_bits) != 0;
+        tomb_bits >>= 1;
+        if (!dies) continue;
+        const op_int = @enumToInt(op);
+        if (op_int < Air.Inst.Ref.typed_value_map.len) continue;
+        const op_index = @intCast(Air.Inst.Index, op_int - Air.Inst.Ref.typed_value_map.len);
+        self.processDeath(op_index);
+    }
+    const is_used = @truncate(u1, tomb_bits) == 0;
+    if (is_used) {
+        log.debug("%{d} => {}", .{ inst, result });
+        const branch = &self.branch_stack.items[self.branch_stack.items.len - 1];
+        branch.inst_table.putAssumeCapacityNoClobber(inst, result);
+
+        switch (result) {
+            .register => |reg| {
+                // In some cases (such as bitcast), an operand
+                // may be the same MCValue as the result. If
+                // that operand died and was a register, it
+                // was freed by processDeath. We have to
+                // "re-allocate" the register.
+                if (self.register_manager.isRegFree(reg)) {
+                    self.register_manager.getRegAssumeFree(reg, inst);
+                }
+            },
+            else => {},
+        }
+    }
+    self.finishAirBookkeeping();
+}
+
+fn ensureProcessDeathCapacity(self: *Self, additional_count: usize) !void {
+    const table = &self.branch_stack.items[self.branch_stack.items.len - 1].inst_table;
+    try table.ensureUnusedCapacity(self.gpa, additional_count);
+}
+
+fn allocMem(self: *Self, inst: Air.Inst.Index, abi_size: u32, abi_align: u32) !u32 {
+    if (abi_align > self.stack_align)
+        self.stack_align = abi_align;
+    // TODO find a free slot instead of always appending
+    const offset = mem.alignForwardGeneric(u32, self.next_stack_offset, abi_align);
+    self.next_stack_offset = offset + abi_size;
+    if (self.next_stack_offset > self.max_end_stack)
+        self.max_end_stack = self.next_stack_offset;
+    try self.stack.putNoClobber(self.gpa, offset, .{
+        .inst = inst,
+        .size = abi_size,
+    });
+    return offset;
+}
+
+/// Use a pointer instruction as the basis for allocating stack memory.
+fn allocMemPtr(self: *Self, inst: Air.Inst.Index) !u32 {
+    const elem_ty = self.air.typeOfIndex(inst).elemType();
+    const abi_size = math.cast(u32, elem_ty.abiSize(self.target.*)) orelse {
+        const mod = self.bin_file.options.module.?;
+        return self.fail("type '{}' too big to fit into stack frame", .{elem_ty.fmt(mod)});
+    };
+    // TODO swap this for inst.ty.ptrAlign
+    const abi_align = elem_ty.abiAlignment(self.target.*);
+    return self.allocMem(inst, abi_size, abi_align);
+}
+
+fn allocRegOrMem(self: *Self, inst: Air.Inst.Index, reg_ok: bool) !MCValue {
+    const elem_ty = self.air.typeOfIndex(inst);
+    const abi_size = math.cast(u32, elem_ty.abiSize(self.target.*)) orelse {
+        const mod = self.bin_file.options.module.?;
+        
