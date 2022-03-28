@@ -396,4 +396,225 @@ fn gen(self: *Self) !void {
 
         // exitlude jumps
         if (self.exitlude_jump_relocs.items.len > 0 and
-            sel
+            self.exitlude_jump_relocs.items[self.exitlude_jump_relocs.items.len - 1] == self.mir_instructions.len - 2)
+        {
+            // If the last Mir instruction (apart from the
+            // dbg_epilogue_begin) is the last exitlude jump
+            // relocation (which would just jump one instruction
+            // further), it can be safely removed
+            self.mir_instructions.orderedRemove(self.exitlude_jump_relocs.pop());
+        }
+
+        for (self.exitlude_jump_relocs.items) |jmp_reloc| {
+            _ = jmp_reloc;
+            return self.fail("TODO add branches in RISCV64", .{});
+        }
+
+        // ld ra, 8(sp)
+        _ = try self.addInst(.{
+            .tag = .ld,
+            .data = .{ .i_type = .{
+                .rd = .ra,
+                .rs1 = .sp,
+                .imm12 = 8,
+            } },
+        });
+
+        // ld s0, 0(sp)
+        _ = try self.addInst(.{
+            .tag = .ld,
+            .data = .{ .i_type = .{
+                .rd = .s0,
+                .rs1 = .sp,
+                .imm12 = 0,
+            } },
+        });
+
+        // addi sp, sp, 16
+        _ = try self.addInst(.{
+            .tag = .addi,
+            .data = .{ .i_type = .{
+                .rd = .sp,
+                .rs1 = .sp,
+                .imm12 = 16,
+            } },
+        });
+
+        // ret
+        _ = try self.addInst(.{
+            .tag = .ret,
+            .data = .{ .nop = {} },
+        });
+    } else {
+        _ = try self.addInst(.{
+            .tag = .dbg_prologue_end,
+            .data = .{ .nop = {} },
+        });
+
+        try self.genBody(self.air.getMainBody());
+
+        _ = try self.addInst(.{
+            .tag = .dbg_epilogue_begin,
+            .data = .{ .nop = {} },
+        });
+    }
+
+    // Drop them off at the rbrace.
+    _ = try self.addInst(.{
+        .tag = .dbg_line,
+        .data = .{ .dbg_line_column = .{
+            .line = self.end_di_line,
+            .column = self.end_di_column,
+        } },
+    });
+}
+
+fn genBody(self: *Self, body: []const Air.Inst.Index) InnerError!void {
+    const air_tags = self.air.instructions.items(.tag);
+
+    for (body) |inst| {
+        const old_air_bookkeeping = self.air_bookkeeping;
+        try self.ensureProcessDeathCapacity(Liveness.bpi);
+
+        switch (air_tags[inst]) {
+            // zig fmt: off
+            .ptr_add => try self.airPtrArithmetic(inst, .ptr_add),
+            .ptr_sub => try self.airPtrArithmetic(inst, .ptr_sub),
+
+            .add => try self.airBinOp(inst, .add),
+            .sub => try self.airBinOp(inst, .sub),
+
+            .addwrap         => try self.airAddWrap(inst),
+            .add_sat         => try self.airAddSat(inst),
+            .subwrap         => try self.airSubWrap(inst),
+            .sub_sat         => try self.airSubSat(inst),
+            .mul             => try self.airMul(inst),
+            .mulwrap         => try self.airMulWrap(inst),
+            .mul_sat         => try self.airMulSat(inst),
+            .rem             => try self.airRem(inst),
+            .mod             => try self.airMod(inst),
+            .shl, .shl_exact => try self.airShl(inst),
+            .shl_sat         => try self.airShlSat(inst),
+            .min             => try self.airMin(inst),
+            .max             => try self.airMax(inst),
+            .slice           => try self.airSlice(inst),
+
+            .sqrt,
+            .sin,
+            .cos,
+            .tan,
+            .exp,
+            .exp2,
+            .log,
+            .log2,
+            .log10,
+            .fabs,
+            .floor,
+            .ceil,
+            .round,
+            .trunc_float,
+            .neg,
+            => try self.airUnaryMath(inst),
+
+            .add_with_overflow => try self.airAddWithOverflow(inst),
+            .sub_with_overflow => try self.airSubWithOverflow(inst),
+            .mul_with_overflow => try self.airMulWithOverflow(inst),
+            .shl_with_overflow => try self.airShlWithOverflow(inst),
+
+            .div_float, .div_trunc, .div_floor, .div_exact => try self.airDiv(inst),
+
+            .cmp_lt  => try self.airCmp(inst, .lt),
+            .cmp_lte => try self.airCmp(inst, .lte),
+            .cmp_eq  => try self.airCmp(inst, .eq),
+            .cmp_gte => try self.airCmp(inst, .gte),
+            .cmp_gt  => try self.airCmp(inst, .gt),
+            .cmp_neq => try self.airCmp(inst, .neq),
+
+            .cmp_vector => try self.airCmpVector(inst),
+            .cmp_lt_errors_len => try self.airCmpLtErrorsLen(inst),
+
+            .bool_and        => try self.airBoolOp(inst),
+            .bool_or         => try self.airBoolOp(inst),
+            .bit_and         => try self.airBitAnd(inst),
+            .bit_or          => try self.airBitOr(inst),
+            .xor             => try self.airXor(inst),
+            .shr, .shr_exact => try self.airShr(inst),
+
+            .alloc           => try self.airAlloc(inst),
+            .ret_ptr         => try self.airRetPtr(inst),
+            .arg             => try self.airArg(inst),
+            .assembly        => try self.airAsm(inst),
+            .bitcast         => try self.airBitCast(inst),
+            .block           => try self.airBlock(inst),
+            .br              => try self.airBr(inst),
+            .trap            => try self.airTrap(),
+            .breakpoint      => try self.airBreakpoint(),
+            .ret_addr        => try self.airRetAddr(inst),
+            .frame_addr      => try self.airFrameAddress(inst),
+            .fence           => try self.airFence(),
+            .cond_br         => try self.airCondBr(inst),
+            .dbg_stmt        => try self.airDbgStmt(inst),
+            .fptrunc         => try self.airFptrunc(inst),
+            .fpext           => try self.airFpext(inst),
+            .intcast         => try self.airIntCast(inst),
+            .trunc           => try self.airTrunc(inst),
+            .bool_to_int     => try self.airBoolToInt(inst),
+            .is_non_null     => try self.airIsNonNull(inst),
+            .is_non_null_ptr => try self.airIsNonNullPtr(inst),
+            .is_null         => try self.airIsNull(inst),
+            .is_null_ptr     => try self.airIsNullPtr(inst),
+            .is_non_err      => try self.airIsNonErr(inst),
+            .is_non_err_ptr  => try self.airIsNonErrPtr(inst),
+            .is_err          => try self.airIsErr(inst),
+            .is_err_ptr      => try self.airIsErrPtr(inst),
+            .load            => try self.airLoad(inst),
+            .loop            => try self.airLoop(inst),
+            .not             => try self.airNot(inst),
+            .ptrtoint        => try self.airPtrToInt(inst),
+            .ret             => try self.airRet(inst),
+            .ret_load        => try self.airRetLoad(inst),
+            .store           => try self.airStore(inst),
+            .struct_field_ptr=> try self.airStructFieldPtr(inst),
+            .struct_field_val=> try self.airStructFieldVal(inst),
+            .array_to_slice  => try self.airArrayToSlice(inst),
+            .int_to_float    => try self.airIntToFloat(inst),
+            .float_to_int    => try self.airFloatToInt(inst),
+            .cmpxchg_strong  => try self.airCmpxchg(inst),
+            .cmpxchg_weak    => try self.airCmpxchg(inst),
+            .atomic_rmw      => try self.airAtomicRmw(inst),
+            .atomic_load     => try self.airAtomicLoad(inst),
+            .memcpy          => try self.airMemcpy(inst),
+            .memset          => try self.airMemset(inst),
+            .set_union_tag   => try self.airSetUnionTag(inst),
+            .get_union_tag   => try self.airGetUnionTag(inst),
+            .clz             => try self.airClz(inst),
+            .ctz             => try self.airCtz(inst),
+            .popcount        => try self.airPopcount(inst),
+            .byte_swap       => try self.airByteSwap(inst),
+            .bit_reverse     => try self.airBitReverse(inst),
+            .tag_name        => try self.airTagName(inst),
+            .error_name      => try self.airErrorName(inst),
+            .splat           => try self.airSplat(inst),
+            .select          => try self.airSelect(inst),
+            .shuffle         => try self.airShuffle(inst),
+            .reduce          => try self.airReduce(inst),
+            .aggregate_init  => try self.airAggregateInit(inst),
+            .union_init      => try self.airUnionInit(inst),
+            .prefetch        => try self.airPrefetch(inst),
+            .mul_add         => try self.airMulAdd(inst),
+            .addrspace_cast  => @panic("TODO"),
+
+            .@"try"          => @panic("TODO"),
+            .try_ptr         => @panic("TODO"),
+
+            .dbg_var_ptr,
+            .dbg_var_val,
+            => try self.airDbgVar(inst),
+
+            .dbg_inline_begin,
+            .dbg_inline_end,
+            => try self.airDbgInline(inst),
+
+            .dbg_block_begin,
+            .dbg_block_end,
+            => try
