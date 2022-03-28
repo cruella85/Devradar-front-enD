@@ -115,4 +115,285 @@ const MCValue = union(enum) {
     /// If the type is a pointer, it means the pointer address is at this memory location.
     memory: u64,
     /// The value is one of the stack variables.
-    /// If
+    /// If the type is a pointer, it means the pointer address is in the stack at this offset.
+    stack_offset: u32,
+    /// The value is a pointer to one of the stack variables (payload is stack offset).
+    ptr_stack_offset: u32,
+
+    fn isMemory(mcv: MCValue) bool {
+        return switch (mcv) {
+            .memory, .stack_offset => true,
+            else => false,
+        };
+    }
+
+    fn isImmediate(mcv: MCValue) bool {
+        return switch (mcv) {
+            .immediate => true,
+            else => false,
+        };
+    }
+
+    fn isMutable(mcv: MCValue) bool {
+        return switch (mcv) {
+            .none => unreachable,
+            .unreach => unreachable,
+            .dead => unreachable,
+
+            .immediate,
+            .memory,
+            .ptr_stack_offset,
+            .undef,
+            => false,
+
+            .register,
+            .stack_offset,
+            => true,
+        };
+    }
+};
+
+const Branch = struct {
+    inst_table: std.AutoArrayHashMapUnmanaged(Air.Inst.Index, MCValue) = .{},
+
+    fn deinit(self: *Branch, gpa: Allocator) void {
+        self.inst_table.deinit(gpa);
+        self.* = undefined;
+    }
+};
+
+const StackAllocation = struct {
+    inst: Air.Inst.Index,
+    /// TODO do we need size? should be determined by inst.ty.abiSize()
+    size: u32,
+};
+
+const BlockData = struct {
+    relocs: std.ArrayListUnmanaged(Reloc),
+    /// The first break instruction encounters `null` here and chooses a
+    /// machine code value for the block result, populating this field.
+    /// Following break instructions encounter that value and use it for
+    /// the location to store their block results.
+    mcv: MCValue,
+};
+
+const Reloc = union(enum) {
+    /// The value is an offset into the `Function` `code` from the beginning.
+    /// To perform the reloc, write 32-bit signed little-endian integer
+    /// which is a relative jump, based on the address following the reloc.
+    rel32: usize,
+    /// A branch in the ARM instruction set
+    arm_branch: struct {
+        pos: usize,
+        cond: @import("../arm/bits.zig").Condition,
+    },
+};
+
+const BigTomb = struct {
+    function: *Self,
+    inst: Air.Inst.Index,
+    lbt: Liveness.BigTomb,
+
+    fn feed(bt: *BigTomb, op_ref: Air.Inst.Ref) void {
+        const dies = bt.lbt.feed();
+        const op_index = Air.refToIndex(op_ref) orelse return;
+        if (!dies) return;
+        bt.function.processDeath(op_index);
+    }
+
+    fn finishAir(bt: *BigTomb, result: MCValue) void {
+        const is_used = !bt.function.liveness.isUnused(bt.inst);
+        if (is_used) {
+            log.debug("%{d} => {}", .{ bt.inst, result });
+            const branch = &bt.function.branch_stack.items[bt.function.branch_stack.items.len - 1];
+            branch.inst_table.putAssumeCapacityNoClobber(bt.inst, result);
+        }
+        bt.function.finishAirBookkeeping();
+    }
+};
+
+const Self = @This();
+
+pub fn generate(
+    bin_file: *link.File,
+    src_loc: Module.SrcLoc,
+    module_fn: *Module.Fn,
+    air: Air,
+    liveness: Liveness,
+    code: *std.ArrayList(u8),
+    debug_output: DebugInfoOutput,
+) CodeGenError!Result {
+    if (build_options.skip_non_native and builtin.cpu.arch != bin_file.options.target.cpu.arch) {
+        @panic("Attempted to compile for architecture that was disabled by build configuration");
+    }
+
+    const mod = bin_file.options.module.?;
+    const fn_owner_decl = mod.declPtr(module_fn.owner_decl);
+    assert(fn_owner_decl.has_tv);
+    const fn_type = fn_owner_decl.ty;
+
+    var branch_stack = std.ArrayList(Branch).init(bin_file.allocator);
+    defer {
+        assert(branch_stack.items.len == 1);
+        branch_stack.items[0].deinit(bin_file.allocator);
+        branch_stack.deinit();
+    }
+    try branch_stack.append(.{});
+
+    var function = Self{
+        .gpa = bin_file.allocator,
+        .air = air,
+        .liveness = liveness,
+        .target = &bin_file.options.target,
+        .bin_file = bin_file,
+        .mod_fn = module_fn,
+        .code = code,
+        .debug_output = debug_output,
+        .err_msg = null,
+        .args = undefined, // populated after `resolveCallingConventionValues`
+        .ret_mcv = undefined, // populated after `resolveCallingConventionValues`
+        .fn_type = fn_type,
+        .arg_index = 0,
+        .branch_stack = &branch_stack,
+        .src_loc = src_loc,
+        .stack_align = undefined,
+        .end_di_line = module_fn.rbrace_line,
+        .end_di_column = module_fn.rbrace_column,
+    };
+    defer function.stack.deinit(bin_file.allocator);
+    defer function.blocks.deinit(bin_file.allocator);
+    defer function.exitlude_jump_relocs.deinit(bin_file.allocator);
+
+    var call_info = function.resolveCallingConventionValues(fn_type) catch |err| switch (err) {
+        error.CodegenFail => return Result{ .fail = function.err_msg.? },
+        error.OutOfRegisters => return Result{
+            .fail = try ErrorMsg.create(bin_file.allocator, src_loc, "CodeGen ran out of registers. This is a bug in the Zig compiler.", .{}),
+        },
+        else => |e| return e,
+    };
+    defer call_info.deinit(&function);
+
+    function.args = call_info.args;
+    function.ret_mcv = call_info.return_value;
+    function.stack_align = call_info.stack_align;
+    function.max_end_stack = call_info.stack_byte_count;
+
+    function.gen() catch |err| switch (err) {
+        error.CodegenFail => return Result{ .fail = function.err_msg.? },
+        error.OutOfRegisters => return Result{
+            .fail = try ErrorMsg.create(bin_file.allocator, src_loc, "CodeGen ran out of registers. This is a bug in the Zig compiler.", .{}),
+        },
+        else => |e| return e,
+    };
+
+    var mir = Mir{
+        .instructions = function.mir_instructions.toOwnedSlice(),
+        .extra = try function.mir_extra.toOwnedSlice(bin_file.allocator),
+    };
+    defer mir.deinit(bin_file.allocator);
+
+    var emit = Emit{
+        .mir = mir,
+        .bin_file = bin_file,
+        .debug_output = debug_output,
+        .target = &bin_file.options.target,
+        .src_loc = src_loc,
+        .code = code,
+        .prev_di_pc = 0,
+        .prev_di_line = module_fn.lbrace_line,
+        .prev_di_column = module_fn.lbrace_column,
+    };
+    defer emit.deinit();
+
+    emit.emitMir() catch |err| switch (err) {
+        error.EmitFail => return Result{ .fail = emit.err_msg.? },
+        else => |e| return e,
+    };
+
+    if (function.err_msg) |em| {
+        return Result{ .fail = em };
+    } else {
+        return Result.ok;
+    }
+}
+
+fn addInst(self: *Self, inst: Mir.Inst) error{OutOfMemory}!Mir.Inst.Index {
+    const gpa = self.gpa;
+
+    try self.mir_instructions.ensureUnusedCapacity(gpa, 1);
+
+    const result_index = @intCast(Air.Inst.Index, self.mir_instructions.len);
+    self.mir_instructions.appendAssumeCapacity(inst);
+    return result_index;
+}
+
+pub fn addExtra(self: *Self, extra: anytype) Allocator.Error!u32 {
+    const fields = std.meta.fields(@TypeOf(extra));
+    try self.mir_extra.ensureUnusedCapacity(self.gpa, fields.len);
+    return self.addExtraAssumeCapacity(extra);
+}
+
+pub fn addExtraAssumeCapacity(self: *Self, extra: anytype) u32 {
+    const fields = std.meta.fields(@TypeOf(extra));
+    const result = @intCast(u32, self.mir_extra.items.len);
+    inline for (fields) |field| {
+        self.mir_extra.appendAssumeCapacity(switch (field.type) {
+            u32 => @field(extra, field.name),
+            i32 => @bitCast(u32, @field(extra, field.name)),
+            else => @compileError("bad field type"),
+        });
+    }
+    return result;
+}
+
+fn gen(self: *Self) !void {
+    const cc = self.fn_type.fnCallingConvention();
+    if (cc != .Naked) {
+        // TODO Finish function prologue and epilogue for riscv64.
+
+        // TODO Backpatch stack offset
+        // addi sp, sp, -16
+        _ = try self.addInst(.{
+            .tag = .addi,
+            .data = .{ .i_type = .{
+                .rd = .sp,
+                .rs1 = .sp,
+                .imm12 = -16,
+            } },
+        });
+
+        // sd ra, 8(sp)
+        _ = try self.addInst(.{
+            .tag = .sd,
+            .data = .{ .i_type = .{
+                .rd = .ra,
+                .rs1 = .sp,
+                .imm12 = 8,
+            } },
+        });
+
+        // sd s0, 0(sp)
+        _ = try self.addInst(.{
+            .tag = .sd,
+            .data = .{ .i_type = .{
+                .rd = .s0,
+                .rs1 = .sp,
+                .imm12 = 0,
+            } },
+        });
+
+        _ = try self.addInst(.{
+            .tag = .dbg_prologue_end,
+            .data = .{ .nop = {} },
+        });
+
+        try self.genBody(self.air.getMainBody());
+
+        _ = try self.addInst(.{
+            .tag = .dbg_epilogue_begin,
+            .data = .{ .nop = {} },
+        });
+
+        // exitlude jumps
+        if (self.exitlude_jump_relocs.items.len > 0 and
+            sel
