@@ -807,4 +807,197 @@ fn allocRegOrMem(self: *Self, inst: Air.Inst.Index, reg_ok: bool) !MCValue {
     const elem_ty = self.air.typeOfIndex(inst);
     const abi_size = math.cast(u32, elem_ty.abiSize(self.target.*)) orelse {
         const mod = self.bin_file.options.module.?;
-        
+        return self.fail("type '{}' too big to fit into stack frame", .{elem_ty.fmt(mod)});
+    };
+    const abi_align = elem_ty.abiAlignment(self.target.*);
+    if (abi_align > self.stack_align)
+        self.stack_align = abi_align;
+
+    if (reg_ok) {
+        // Make sure the type can fit in a register before we try to allocate one.
+        const ptr_bits = self.target.cpu.arch.ptrBitWidth();
+        const ptr_bytes: u64 = @divExact(ptr_bits, 8);
+        if (abi_size <= ptr_bytes) {
+            if (self.register_manager.tryAllocReg(inst, gp)) |reg| {
+                return MCValue{ .register = reg };
+            }
+        }
+    }
+    const stack_offset = try self.allocMem(inst, abi_size, abi_align);
+    return MCValue{ .stack_offset = stack_offset };
+}
+
+pub fn spillInstruction(self: *Self, reg: Register, inst: Air.Inst.Index) !void {
+    const stack_mcv = try self.allocRegOrMem(inst, false);
+    log.debug("spilling {d} to stack mcv {any}", .{ inst, stack_mcv });
+    const reg_mcv = self.getResolvedInstValue(inst);
+    assert(reg == reg_mcv.register);
+    const branch = &self.branch_stack.items[self.branch_stack.items.len - 1];
+    try branch.inst_table.put(self.gpa, inst, stack_mcv);
+    try self.genSetStack(self.air.typeOfIndex(inst), stack_mcv.stack_offset, reg_mcv);
+}
+
+/// Copies a value to a register without tracking the register. The register is not considered
+/// allocated. A second call to `copyToTmpRegister` may return the same register.
+/// This can have a side effect of spilling instructions to the stack to free up a register.
+fn copyToTmpRegister(self: *Self, ty: Type, mcv: MCValue) !Register {
+    const reg = try self.register_manager.allocReg(null, gp);
+    try self.genSetReg(ty, reg, mcv);
+    return reg;
+}
+
+/// Allocates a new register and copies `mcv` into it.
+/// `reg_owner` is the instruction that gets associated with the register in the register table.
+/// This can have a side effect of spilling instructions to the stack to free up a register.
+fn copyToNewRegister(self: *Self, reg_owner: Air.Inst.Index, mcv: MCValue) !MCValue {
+    const reg = try self.register_manager.allocReg(reg_owner, gp);
+    try self.genSetReg(self.air.typeOfIndex(reg_owner), reg, mcv);
+    return MCValue{ .register = reg };
+}
+
+fn airAlloc(self: *Self, inst: Air.Inst.Index) !void {
+    const stack_offset = try self.allocMemPtr(inst);
+    return self.finishAir(inst, .{ .ptr_stack_offset = stack_offset }, .{ .none, .none, .none });
+}
+
+fn airRetPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const stack_offset = try self.allocMemPtr(inst);
+    return self.finishAir(inst, .{ .ptr_stack_offset = stack_offset }, .{ .none, .none, .none });
+}
+
+fn airFptrunc(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airFptrunc for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airFpext(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airFpext for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airIntCast(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    if (self.liveness.isUnused(inst))
+        return self.finishAir(inst, .dead, .{ ty_op.operand, .none, .none });
+
+    const operand_ty = self.air.typeOf(ty_op.operand);
+    const operand = try self.resolveInst(ty_op.operand);
+    const info_a = operand_ty.intInfo(self.target.*);
+    const info_b = self.air.typeOfIndex(inst).intInfo(self.target.*);
+    if (info_a.signedness != info_b.signedness)
+        return self.fail("TODO gen intcast sign safety in semantic analysis", .{});
+
+    if (info_a.bits == info_b.bits)
+        return self.finishAir(inst, operand, .{ ty_op.operand, .none, .none });
+
+    return self.fail("TODO implement intCast for {}", .{self.target.cpu.arch});
+    // return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airTrunc(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    if (self.liveness.isUnused(inst))
+        return self.finishAir(inst, .dead, .{ ty_op.operand, .none, .none });
+
+    const operand = try self.resolveInst(ty_op.operand);
+    _ = operand;
+    return self.fail("TODO implement trunc for {}", .{self.target.cpu.arch});
+    // return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airBoolToInt(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const operand = try self.resolveInst(un_op);
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else operand;
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airNot(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement NOT for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airMin(self: *Self, inst: Air.Inst.Index) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement min for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airMax(self: *Self, inst: Air.Inst.Index) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement max for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airSlice(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const bin_op = self.air.extraData(Air.Bin, ty_pl.payload).data;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement slice for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+/// Don't call this function directly. Use binOp instead.
+///
+/// Calling this function signals an intention to generate a Mir
+/// instruction of the form
+///
+///     op dest, lhs, rhs
+///
+/// Asserts that generating an instruction of that form is possible.
+fn binOpRegister(
+    self: *Self,
+    tag: Air.Inst.Tag,
+    maybe_inst: ?Air.Inst.Index,
+    lhs: MCValue,
+    rhs: MCValue,
+    lhs_ty: Type,
+    rhs_ty: Type,
+) !MCValue {
+    const lhs_is_register = lhs == .register;
+    const rhs_is_register = rhs == .register;
+
+    const lhs_lock: ?RegisterLock = if (lhs_is_register)
+        self.register_manager.lockReg(lhs.register)
+    else
+        null;
+    defer if (lhs_lock) |reg| self.register_manager.unlockReg(reg);
+
+    const branch = &self.branch_stack.items[self.branch_stack.items.len - 1];
+
+    const lhs_reg = if (lhs_is_register) lhs.register else blk: {
+        const track_inst: ?Air.Inst.Index = if (maybe_inst) |inst| inst: {
+            const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+            break :inst Air.refToIndex(bin_op.lhs).?;
+        } else null;
+
+        const reg = try self.register_manager.allocReg(track_inst, gp);
+
+        if (track_inst) |inst| branch.inst_table.putAssumeCapacity(inst, .{ .register = reg });
+
+        break :blk reg;
+    };
+    const new_lhs_lock = self.register_manager.lockReg(lhs_reg);
+    defer if (new_lhs_lock) |reg| self.register_manager.unlockReg(reg);
+
+    const rhs_reg = if (rhs_is_register) rhs.register else blk: {
+        const track_inst: ?Air.Inst.Index = if (maybe_inst) |inst| inst: {
+            const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+            break :inst Air.refToIndex(bin_op.rhs).?;
+        } else null;
+
+        const reg = try self.register_manager.allocReg(track_inst, gp);
+
+        if (track_inst) |inst| branch.inst_table.putAssumeCapacity(inst, .{ .register = reg });
+
+        break :blk reg;
+    };
+    const new_rhs_lock = self.register_manager.lockReg(rhs_reg);
+    defer if (new_rhs_lock) |reg| self.register_manager.unlockReg(reg);
+
+    const dest_reg = if (maybe_inst) |inst| blk: {
+        const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+
+        if (lhs_is_register and self.reuseOperand(inst, bin_op.lhs,
