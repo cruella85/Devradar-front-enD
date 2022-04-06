@@ -1363,4 +1363,185 @@ fn airPtrSliceLenPtr(self: *Self, inst: Air.Inst.Index) !void {
     return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
 }
 
-fn airP
+fn airPtrSlicePtrPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement ptr_slice_ptr_ptr for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airSliceElemVal(self: *Self, inst: Air.Inst.Index) !void {
+    const is_volatile = false; // TODO
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const result: MCValue = if (!is_volatile and self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement slice_elem_val for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airSliceElemPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.Bin, ty_pl.payload).data;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement slice_elem_ptr for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ extra.lhs, extra.rhs, .none });
+}
+
+fn airArrayElemVal(self: *Self, inst: Air.Inst.Index) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement array_elem_val for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airPtrElemVal(self: *Self, inst: Air.Inst.Index) !void {
+    const is_volatile = false; // TODO
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const result: MCValue = if (!is_volatile and self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement ptr_elem_val for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airPtrElemPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.Bin, ty_pl.payload).data;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement ptr_elem_ptr for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ extra.lhs, extra.rhs, .none });
+}
+
+fn airSetUnionTag(self: *Self, inst: Air.Inst.Index) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    _ = bin_op;
+    return self.fail("TODO implement airSetUnionTag for {}", .{self.target.cpu.arch});
+    // return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airGetUnionTag(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airGetUnionTag for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airClz(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airClz for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airCtz(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airCtz for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airPopcount(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airPopcount for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airByteSwap(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airByteSwap for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airBitReverse(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airBitReverse for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airUnaryMath(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst))
+        .dead
+    else
+        return self.fail("TODO implement airUnaryMath for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn reuseOperand(self: *Self, inst: Air.Inst.Index, operand: Air.Inst.Ref, op_index: Liveness.OperandInt, mcv: MCValue) bool {
+    if (!self.liveness.operandDies(inst, op_index))
+        return false;
+
+    switch (mcv) {
+        .register => |reg| {
+            // If it's in the registers table, need to associate the register with the
+            // new instruction.
+            if (RegisterManager.indexOfRegIntoTracked(reg)) |index| {
+                if (!self.register_manager.isRegFree(reg)) {
+                    self.register_manager.registers[index] = inst;
+                }
+            }
+            log.debug("%{d} => {} (reused)", .{ inst, reg });
+        },
+        .stack_offset => |off| {
+            log.debug("%{d} => stack offset {d} (reused)", .{ inst, off });
+        },
+        else => return false,
+    }
+
+    // Prevent the operand deaths processing code from deallocating it.
+    self.liveness.clearOperandDeath(inst, op_index);
+
+    // That makes us responsible for doing the rest of the stuff that processDeath would have done.
+    const branch = &self.branch_stack.items[self.branch_stack.items.len - 1];
+    branch.inst_table.putAssumeCapacity(Air.refToIndex(operand).?, .dead);
+
+    return true;
+}
+
+fn load(self: *Self, dst_mcv: MCValue, ptr: MCValue, ptr_ty: Type) InnerError!void {
+    const elem_ty = ptr_ty.elemType();
+    switch (ptr) {
+        .none => unreachable,
+        .undef => unreachable,
+        .unreach => unreachable,
+        .dead => unreachable,
+        .immediate => |imm| try self.setRegOrMem(elem_ty, dst_mcv, .{ .memory = imm }),
+        .ptr_stack_offset => |off| try self.setRegOrMem(elem_ty, dst_mcv, .{ .stack_offset = off }),
+        .register => {
+            return self.fail("TODO implement loading from MCValue.register", .{});
+        },
+        .memory,
+        .stack_offset,
+        => {
+            const reg = try self.register_manager.allocReg(null, gp);
+            const reg_lock = self.register_manager.lockRegAssumeUnused(reg);
+            defer self.register_manager.unlockReg(reg_lock);
+
+            try self.genSetReg(ptr_ty, reg, ptr);
+            try self.load(dst_mcv, .{ .register = reg }, ptr_ty);
+        },
+    }
+}
+
+fn airLoad(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const elem_ty = self.air.typeOfIndex(inst);
+    const result: MCValue = result: {
+        if (!elem_ty.hasRuntimeBits())
+            break :result MCValue.none;
+
+        const ptr = try self.resolveInst(ty_op.operand);
+        const is_volatile = self.air.typeOf(ty_op.operand).isVolatilePtr();
+        if (self.liveness.isUnused(inst) and !is_volatile)
+            break :result MCValue.dead;
+
+        const dst_mcv: MCValue = blk: {
+            if (self.reuseOperand(inst, ty_op.operand, 0, ptr)) {
+                // The MCValue that holds the pointer can be re-used as the value.
+                break :blk ptr;
+            } else {
+                break :blk try self.allocRegOrMem(inst, true);
+            }
+        };
+        try self.load(dst_mcv, ptr, self.air.typeOf(ty_op.operand));
+        break :result dst_mcv;
+    };
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn store(self: *Self, ptr: MCValue, value: MCValue, ptr_ty: Type, value_ty: Type) !void {
+    _ = ptr_ty;
+
+    switch (ptr) {
+        .none => unreachable,
+        .undef => unreachable,
+        .unreach => unreachable,
+        .dead => unr
