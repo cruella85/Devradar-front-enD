@@ -1544,4 +1544,239 @@ fn store(self: *Self, ptr: MCValue, value: MCValue, ptr_ty: Type, value_ty: Type
         .none => unreachable,
         .undef => unreachable,
         .unreach => unreachable,
-        .dead => unr
+        .dead => unreachable,
+        .immediate => |imm| {
+            try self.setRegOrMem(value_ty, .{ .memory = imm }, value);
+        },
+        .ptr_stack_offset => |off| {
+            try self.genSetStack(value_ty, off, value);
+        },
+        .register => {
+            return self.fail("TODO implement storing to MCValue.register", .{});
+        },
+        .memory => {
+            return self.fail("TODO implement storing to MCValue.memory", .{});
+        },
+        .stack_offset => {
+            return self.fail("TODO implement storing to MCValue.stack_offset", .{});
+        },
+    }
+}
+
+fn airStore(self: *Self, inst: Air.Inst.Index) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const ptr = try self.resolveInst(bin_op.lhs);
+    const value = try self.resolveInst(bin_op.rhs);
+    const ptr_ty = self.air.typeOf(bin_op.lhs);
+    const value_ty = self.air.typeOf(bin_op.rhs);
+
+    try self.store(ptr, value, ptr_ty, value_ty);
+
+    return self.finishAir(inst, .dead, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airStructFieldPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.StructField, ty_pl.payload).data;
+    return self.structFieldPtr(extra.struct_operand, ty_pl.ty, extra.field_index);
+}
+
+fn airStructFieldPtrIndex(self: *Self, inst: Air.Inst.Index, index: u8) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    return self.structFieldPtr(ty_op.operand, ty_op.ty, index);
+}
+fn structFieldPtr(self: *Self, operand: Air.Inst.Ref, ty: Air.Inst.Ref, index: u32) !void {
+    _ = operand;
+    _ = ty;
+    _ = index;
+    return self.fail("TODO implement codegen struct_field_ptr", .{});
+    //return self.finishAir(inst, result, .{ extra.struct_ptr, .none, .none });
+}
+
+fn airStructFieldVal(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.StructField, ty_pl.payload).data;
+    _ = extra;
+    return self.fail("TODO implement codegen struct_field_val", .{});
+    //return self.finishAir(inst, result, .{ extra.struct_ptr, .none, .none });
+}
+
+fn airFieldParentPtr(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+    return self.fail("TODO implement codegen airFieldParentPtr", .{});
+}
+
+fn genArgDbgInfo(self: Self, inst: Air.Inst.Index, mcv: MCValue) !void {
+    const arg = self.air.instructions.items(.data)[inst].arg;
+    const ty = self.air.getRefType(arg.ty);
+    const name = self.mod_fn.getParamName(self.bin_file.options.module.?, arg.src_index);
+
+    switch (self.debug_output) {
+        .dwarf => |dw| switch (mcv) {
+            .register => |reg| try dw.genArgDbgInfo(name, ty, self.mod_fn.owner_decl, .{
+                .register = reg.dwarfLocOp(),
+            }),
+            .stack_offset => {},
+            else => {},
+        },
+        .plan9 => {},
+        .none => {},
+    }
+}
+
+fn airArg(self: *Self, inst: Air.Inst.Index) !void {
+    const arg_index = self.arg_index;
+    self.arg_index += 1;
+
+    const ty = self.air.typeOfIndex(inst);
+    _ = ty;
+
+    const result = self.args[arg_index];
+    // TODO support stack-only arguments
+    // TODO Copy registers to the stack
+    const mcv = result;
+    try self.genArgDbgInfo(inst, mcv);
+
+    if (self.liveness.isUnused(inst))
+        return self.finishAirBookkeeping();
+
+    switch (mcv) {
+        .register => |reg| {
+            self.register_manager.getRegAssumeFree(reg, inst);
+        },
+        else => {},
+    }
+
+    return self.finishAir(inst, mcv, .{ .none, .none, .none });
+}
+
+fn airTrap(self: *Self) !void {
+    _ = try self.addInst(.{
+        .tag = .unimp,
+        .data = .{ .nop = {} },
+    });
+    return self.finishAirBookkeeping();
+}
+
+fn airBreakpoint(self: *Self) !void {
+    _ = try self.addInst(.{
+        .tag = .ebreak,
+        .data = .{ .nop = {} },
+    });
+    return self.finishAirBookkeeping();
+}
+
+fn airRetAddr(self: *Self, inst: Air.Inst.Index) !void {
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airRetAddr for riscv64", .{});
+    return self.finishAir(inst, result, .{ .none, .none, .none });
+}
+
+fn airFrameAddress(self: *Self, inst: Air.Inst.Index) !void {
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airFrameAddress for riscv64", .{});
+    return self.finishAir(inst, result, .{ .none, .none, .none });
+}
+
+fn airFence(self: *Self) !void {
+    return self.fail("TODO implement fence() for {}", .{self.target.cpu.arch});
+    //return self.finishAirBookkeeping();
+}
+
+fn airCall(self: *Self, inst: Air.Inst.Index, modifier: std.builtin.CallModifier) !void {
+    if (modifier == .always_tail) return self.fail("TODO implement tail calls for riscv64", .{});
+    const pl_op = self.air.instructions.items(.data)[inst].pl_op;
+    const fn_ty = self.air.typeOf(pl_op.operand);
+    const callee = pl_op.operand;
+    const extra = self.air.extraData(Air.Call, pl_op.payload);
+    const args = @ptrCast([]const Air.Inst.Ref, self.air.extra[extra.end..][0..extra.data.args_len]);
+
+    var info = try self.resolveCallingConventionValues(fn_ty);
+    defer info.deinit(self);
+
+    // Due to incremental compilation, how function calls are generated depends
+    // on linking.
+    if (self.bin_file.cast(link.File.Elf)) |elf_file| {
+        for (info.args, 0..) |mc_arg, arg_i| {
+            const arg = args[arg_i];
+            const arg_ty = self.air.typeOf(arg);
+            const arg_mcv = try self.resolveInst(args[arg_i]);
+
+            switch (mc_arg) {
+                .none => continue,
+                .undef => unreachable,
+                .immediate => unreachable,
+                .unreach => unreachable,
+                .dead => unreachable,
+                .memory => unreachable,
+                .register => |reg| {
+                    try self.register_manager.getReg(reg, null);
+                    try self.genSetReg(arg_ty, reg, arg_mcv);
+                },
+                .stack_offset => {
+                    return self.fail("TODO implement calling with parameters in memory", .{});
+                },
+                .ptr_stack_offset => {
+                    return self.fail("TODO implement calling with MCValue.ptr_stack_offset arg", .{});
+                },
+            }
+        }
+
+        if (self.air.value(callee)) |func_value| {
+            if (func_value.castTag(.function)) |func_payload| {
+                const func = func_payload.data;
+                const atom_index = try elf_file.getOrCreateAtomForDecl(func.owner_decl);
+                const atom = elf_file.getAtom(atom_index);
+                const got_addr = @intCast(u32, atom.getOffsetTableAddress(elf_file));
+                try self.genSetReg(Type.initTag(.usize), .ra, .{ .memory = got_addr });
+                _ = try self.addInst(.{
+                    .tag = .jalr,
+                    .data = .{ .i_type = .{
+                        .rd = .ra,
+                        .rs1 = .ra,
+                        .imm12 = 0,
+                    } },
+                });
+            } else if (func_value.castTag(.extern_fn)) |_| {
+                return self.fail("TODO implement calling extern functions", .{});
+            } else {
+                return self.fail("TODO implement calling bitcasted functions", .{});
+            }
+        } else {
+            return self.fail("TODO implement calling runtime-known function pointer", .{});
+        }
+    } else if (self.bin_file.cast(link.File.Coff)) |_| {
+        return self.fail("TODO implement calling in COFF for {}", .{self.target.cpu.arch});
+    } else if (self.bin_file.cast(link.File.MachO)) |_| {
+        unreachable; // unsupported architecture for MachO
+    } else if (self.bin_file.cast(link.File.Plan9)) |_| {
+        return self.fail("TODO implement call on plan9 for {}", .{self.target.cpu.arch});
+    } else unreachable;
+
+    const result: MCValue = result: {
+        switch (info.return_value) {
+            .register => |reg| {
+                if (RegisterManager.indexOfReg(&callee_preserved_regs, reg) == null) {
+                    // Save function return value in a callee saved register
+                    break :result try self.copyToNewRegister(inst, info.return_value);
+                }
+            },
+            else => {},
+        }
+        break :result info.return_value;
+    };
+
+    if (args.len <= Liveness.bpi - 2) {
+        var buf = [1]Air.Inst.Ref{.none} ** (Liveness.bpi - 1);
+        buf[0] = callee;
+        std.mem.copy(Air.Inst.Ref, buf[1..], args);
+        return self.finishAir(inst, result, buf);
+    }
+    var bt = try self.iterateBigTomb(inst, 1 + args.len);
+    bt.feed(callee);
+    for (args) |arg| {
+        bt.feed(arg);
+    }
+    return bt.finishAir(result);
+}
+
+fn ret(self: *Self, mcv: MCValue) !void {
+    const ret_ty = self.f
