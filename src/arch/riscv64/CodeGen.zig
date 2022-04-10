@@ -1779,4 +1779,217 @@ fn airCall(self: *Self, inst: Air.Inst.Index, modifier: std.builtin.CallModifier
 }
 
 fn ret(self: *Self, mcv: MCValue) !void {
-    const ret_ty = self.f
+    const ret_ty = self.fn_type.fnReturnType();
+    try self.setRegOrMem(ret_ty, self.ret_mcv, mcv);
+    // Just add space for an instruction, patch this later
+    const index = try self.addInst(.{
+        .tag = .nop,
+        .data = .{ .nop = {} },
+    });
+    try self.exitlude_jump_relocs.append(self.gpa, index);
+}
+
+fn airRet(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const operand = try self.resolveInst(un_op);
+    try self.ret(operand);
+    return self.finishAir(inst, .dead, .{ un_op, .none, .none });
+}
+
+fn airRetLoad(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const ptr = try self.resolveInst(un_op);
+    _ = ptr;
+    return self.fail("TODO implement airRetLoad for {}", .{self.target.cpu.arch});
+    //return self.finishAir(inst, .dead, .{ un_op, .none, .none });
+}
+
+fn airCmp(self: *Self, inst: Air.Inst.Index, op: math.CompareOperator) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    if (self.liveness.isUnused(inst))
+        return self.finishAir(inst, .dead, .{ bin_op.lhs, bin_op.rhs, .none });
+    const ty = self.air.typeOf(bin_op.lhs);
+    const mod = self.bin_file.options.module.?;
+    assert(ty.eql(self.air.typeOf(bin_op.rhs), mod));
+    if (ty.zigTypeTag() == .ErrorSet)
+        return self.fail("TODO implement cmp for errors", .{});
+
+    const lhs = try self.resolveInst(bin_op.lhs);
+    const rhs = try self.resolveInst(bin_op.rhs);
+    _ = op;
+    _ = lhs;
+    _ = rhs;
+
+    return self.fail("TODO implement cmp for {}", .{self.target.cpu.arch});
+    // return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn airCmpVector(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+    return self.fail("TODO implement airCmpVector for {}", .{self.target.cpu.arch});
+}
+
+fn airCmpLtErrorsLen(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const operand = try self.resolveInst(un_op);
+    _ = operand;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airCmpLtErrorsLen for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airDbgStmt(self: *Self, inst: Air.Inst.Index) !void {
+    const dbg_stmt = self.air.instructions.items(.data)[inst].dbg_stmt;
+
+    _ = try self.addInst(.{
+        .tag = .dbg_line,
+        .data = .{ .dbg_line_column = .{
+            .line = dbg_stmt.line,
+            .column = dbg_stmt.column,
+        } },
+    });
+
+    return self.finishAirBookkeeping();
+}
+
+fn airDbgInline(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const function = self.air.values[ty_pl.payload].castTag(.function).?.data;
+    // TODO emit debug info for function change
+    _ = function;
+    return self.finishAir(inst, .dead, .{ .none, .none, .none });
+}
+
+fn airDbgBlock(self: *Self, inst: Air.Inst.Index) !void {
+    // TODO emit debug info lexical block
+    return self.finishAir(inst, .dead, .{ .none, .none, .none });
+}
+
+fn airDbgVar(self: *Self, inst: Air.Inst.Index) !void {
+    const pl_op = self.air.instructions.items(.data)[inst].pl_op;
+    const name = self.air.nullTerminatedString(pl_op.payload);
+    const operand = pl_op.operand;
+    // TODO emit debug info for this variable
+    _ = name;
+    return self.finishAir(inst, .dead, .{ operand, .none, .none });
+}
+
+fn airCondBr(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+
+    return self.fail("TODO implement condbr {}", .{self.target.cpu.arch});
+    // return self.finishAir(inst, .unreach, .{ pl_op.operand, .none, .none });
+}
+
+fn isNull(self: *Self, operand: MCValue) !MCValue {
+    _ = operand;
+    // Here you can specialize this instruction if it makes sense to, otherwise the default
+    // will call isNonNull and invert the result.
+    return self.fail("TODO call isNonNull and invert the result", .{});
+}
+
+fn isNonNull(self: *Self, operand: MCValue) !MCValue {
+    _ = operand;
+    // Here you can specialize this instruction if it makes sense to, otherwise the default
+    // will call isNull and invert the result.
+    return self.fail("TODO call isNull and invert the result", .{});
+}
+
+fn isErr(self: *Self, operand: MCValue) !MCValue {
+    _ = operand;
+    // Here you can specialize this instruction if it makes sense to, otherwise the default
+    // will call isNonNull and invert the result.
+    return self.fail("TODO call isNonErr and invert the result", .{});
+}
+
+fn isNonErr(self: *Self, operand: MCValue) !MCValue {
+    _ = operand;
+    // Here you can specialize this instruction if it makes sense to, otherwise the default
+    // will call isNull and invert the result.
+    return self.fail("TODO call isErr and invert the result", .{});
+}
+
+fn airIsNull(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand = try self.resolveInst(un_op);
+        break :result try self.isNull(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsNullPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand_ptr = try self.resolveInst(un_op);
+        const operand: MCValue = blk: {
+            if (self.reuseOperand(inst, un_op, 0, operand_ptr)) {
+                // The MCValue that holds the pointer can be re-used as the value.
+                break :blk operand_ptr;
+            } else {
+                break :blk try self.allocRegOrMem(inst, true);
+            }
+        };
+        try self.load(operand, operand_ptr, self.air.typeOf(un_op));
+        break :result try self.isNull(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsNonNull(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand = try self.resolveInst(un_op);
+        break :result try self.isNonNull(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsNonNullPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand_ptr = try self.resolveInst(un_op);
+        const operand: MCValue = blk: {
+            if (self.reuseOperand(inst, un_op, 0, operand_ptr)) {
+                // The MCValue that holds the pointer can be re-used as the value.
+                break :blk operand_ptr;
+            } else {
+                break :blk try self.allocRegOrMem(inst, true);
+            }
+        };
+        try self.load(operand, operand_ptr, self.air.typeOf(un_op));
+        break :result try self.isNonNull(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsErr(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand = try self.resolveInst(un_op);
+        break :result try self.isErr(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsErrPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand_ptr = try self.resolveInst(un_op);
+        const operand: MCValue = blk: {
+            if (self.reuseOperand(inst, un_op, 0, operand_ptr)) {
+                // The MCValue that holds the pointer can be re-used as the value.
+                break :blk operand_ptr;
+            } else {
+                break :blk try self.allocRegOrMem(inst, true);
+            }
+        };
+        try self.load(operand, operand_ptr, self.air.typeOf(un_op));
+        break :result try self.isErr(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsNonErr(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand = try self.resolveInst(un_o
