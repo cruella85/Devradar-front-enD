@@ -1992,4 +1992,203 @@ fn airIsErrPtr(self: *Self, inst: Air.Inst.Index) !void {
 fn airIsNonErr(self: *Self, inst: Air.Inst.Index) !void {
     const un_op = self.air.instructions.items(.data)[inst].un_op;
     const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
-        const operand = try self.resolveInst(un_o
+        const operand = try self.resolveInst(un_op);
+        break :result try self.isNonErr(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airIsNonErrPtr(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand_ptr = try self.resolveInst(un_op);
+        const operand: MCValue = blk: {
+            if (self.reuseOperand(inst, un_op, 0, operand_ptr)) {
+                // The MCValue that holds the pointer can be re-used as the value.
+                break :blk operand_ptr;
+            } else {
+                break :blk try self.allocRegOrMem(inst, true);
+            }
+        };
+        try self.load(operand, operand_ptr, self.air.typeOf(un_op));
+        break :result try self.isNonErr(operand);
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airLoop(self: *Self, inst: Air.Inst.Index) !void {
+    // A loop is a setup to be able to jump back to the beginning.
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const loop = self.air.extraData(Air.Block, ty_pl.payload);
+    const body = self.air.extra[loop.end..][0..loop.data.body_len];
+    const start_index = self.code.items.len;
+    try self.genBody(body);
+    try self.jump(start_index);
+    return self.finishAirBookkeeping();
+}
+
+/// Send control flow to the `index` of `self.code`.
+fn jump(self: *Self, index: usize) !void {
+    _ = index;
+    return self.fail("TODO implement jump for {}", .{self.target.cpu.arch});
+}
+
+fn airBlock(self: *Self, inst: Air.Inst.Index) !void {
+    try self.blocks.putNoClobber(self.gpa, inst, .{
+        // A block is a setup to be able to jump to the end.
+        .relocs = .{},
+        // It also acts as a receptacle for break operands.
+        // Here we use `MCValue.none` to represent a null value so that the first
+        // break instruction will choose a MCValue for the block result and overwrite
+        // this field. Following break instructions will use that MCValue to put their
+        // block results.
+        .mcv = MCValue{ .none = {} },
+    });
+    defer self.blocks.getPtr(inst).?.relocs.deinit(self.gpa);
+
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.Block, ty_pl.payload);
+    const body = self.air.extra[extra.end..][0..extra.data.body_len];
+    try self.genBody(body);
+
+    for (self.blocks.getPtr(inst).?.relocs.items) |reloc| try self.performReloc(reloc);
+
+    const result = self.blocks.getPtr(inst).?.mcv;
+    return self.finishAir(inst, result, .{ .none, .none, .none });
+}
+
+fn airSwitch(self: *Self, inst: Air.Inst.Index) !void {
+    const pl_op = self.air.instructions.items(.data)[inst].pl_op;
+    const condition = pl_op.operand;
+    _ = condition;
+    return self.fail("TODO airSwitch for {}", .{self.target.cpu.arch});
+    // return self.finishAir(inst, .dead, .{ condition, .none, .none });
+}
+
+fn performReloc(self: *Self, reloc: Reloc) !void {
+    _ = self;
+    switch (reloc) {
+        .rel32 => unreachable,
+        .arm_branch => unreachable,
+    }
+}
+
+fn airBr(self: *Self, inst: Air.Inst.Index) !void {
+    const branch = self.air.instructions.items(.data)[inst].br;
+    try self.br(branch.block_inst, branch.operand);
+    return self.finishAir(inst, .dead, .{ branch.operand, .none, .none });
+}
+
+fn airBoolOp(self: *Self, inst: Air.Inst.Index) !void {
+    const bin_op = self.air.instructions.items(.data)[inst].bin_op;
+    const air_tags = self.air.instructions.items(.tag);
+    _ = air_tags;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement boolean operations for {}", .{self.target.cpu.arch});
+    return self.finishAir(inst, result, .{ bin_op.lhs, bin_op.rhs, .none });
+}
+
+fn br(self: *Self, block: Air.Inst.Index, operand: Air.Inst.Ref) !void {
+    const block_data = self.blocks.getPtr(block).?;
+
+    if (self.air.typeOf(operand).hasRuntimeBits()) {
+        const operand_mcv = try self.resolveInst(operand);
+        const block_mcv = block_data.mcv;
+        if (block_mcv == .none) {
+            block_data.mcv = operand_mcv;
+        } else {
+            try self.setRegOrMem(self.air.typeOfIndex(block), block_mcv, operand_mcv);
+        }
+    }
+    return self.brVoid(block);
+}
+
+fn brVoid(self: *Self, block: Air.Inst.Index) !void {
+    const block_data = self.blocks.getPtr(block).?;
+
+    // Emit a jump with a relocation. It will be patched up after the block ends.
+    try block_data.relocs.ensureUnusedCapacity(self.gpa, 1);
+
+    return self.fail("TODO implement brvoid for {}", .{self.target.cpu.arch});
+}
+
+fn airAsm(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.Asm, ty_pl.payload);
+    const is_volatile = @truncate(u1, extra.data.flags >> 31) != 0;
+    const clobbers_len = @truncate(u31, extra.data.flags);
+    var extra_i: usize = extra.end;
+    const outputs = @ptrCast([]const Air.Inst.Ref, self.air.extra[extra_i..][0..extra.data.outputs_len]);
+    extra_i += outputs.len;
+    const inputs = @ptrCast([]const Air.Inst.Ref, self.air.extra[extra_i..][0..extra.data.inputs_len]);
+    extra_i += inputs.len;
+
+    const dead = !is_volatile and self.liveness.isUnused(inst);
+    const result: MCValue = if (dead) .dead else result: {
+        if (outputs.len > 1) {
+            return self.fail("TODO implement codegen for asm with more than 1 output", .{});
+        }
+
+        const output_constraint: ?[]const u8 = for (outputs) |output| {
+            if (output != .none) {
+                return self.fail("TODO implement codegen for non-expr asm", .{});
+            }
+            const extra_bytes = std.mem.sliceAsBytes(self.air.extra[extra_i..]);
+            const constraint = std.mem.sliceTo(std.mem.sliceAsBytes(self.air.extra[extra_i..]), 0);
+            const name = std.mem.sliceTo(extra_bytes[constraint.len + 1 ..], 0);
+            // This equation accounts for the fact that even if we have exactly 4 bytes
+            // for the string, we still use the next u32 for the null terminator.
+            extra_i += (constraint.len + name.len + (2 + 3)) / 4;
+
+            break constraint;
+        } else null;
+
+        for (inputs) |input| {
+            const input_bytes = std.mem.sliceAsBytes(self.air.extra[extra_i..]);
+            const constraint = std.mem.sliceTo(input_bytes, 0);
+            const name = std.mem.sliceTo(input_bytes[constraint.len + 1 ..], 0);
+            // This equation accounts for the fact that even if we have exactly 4 bytes
+            // for the string, we still use the next u32 for the null terminator.
+            extra_i += (constraint.len + name.len + (2 + 3)) / 4;
+
+            if (constraint.len < 3 or constraint[0] != '{' or constraint[constraint.len - 1] != '}') {
+                return self.fail("unrecognized asm input constraint: '{s}'", .{constraint});
+            }
+            const reg_name = constraint[1 .. constraint.len - 1];
+            const reg = parseRegName(reg_name) orelse
+                return self.fail("unrecognized register: '{s}'", .{reg_name});
+
+            const arg_mcv = try self.resolveInst(input);
+            try self.register_manager.getReg(reg, null);
+            try self.genSetReg(self.air.typeOf(input), reg, arg_mcv);
+        }
+
+        {
+            var clobber_i: u32 = 0;
+            while (clobber_i < clobbers_len) : (clobber_i += 1) {
+                const clobber = std.mem.sliceTo(std.mem.sliceAsBytes(self.air.extra[extra_i..]), 0);
+                // This equation accounts for the fact that even if we have exactly 4 bytes
+                // for the string, we still use the next u32 for the null terminator.
+                extra_i += clobber.len / 4 + 1;
+
+                // TODO honor these
+            }
+        }
+
+        const asm_source = std.mem.sliceAsBytes(self.air.extra[extra_i..])[0..extra.data.source_len];
+
+        if (mem.eql(u8, asm_source, "ecall")) {
+            _ = try self.addInst(.{
+                .tag = .ecall,
+                .data = .{ .nop = {} },
+            });
+        } else {
+            return self.fail("TODO implement support for more riscv64 assembly instructions", .{});
+        }
+
+        if (output_constraint) |output| {
+            if (output.len < 4 or output[0] != '=' or output[1] != '{' or output[output.len - 1] != '}') {
+                return self.fail("unrecognized asm output constraint: '{s}'", .{output});
+            }
+            const reg_name = output[2 .. output.len - 1];
+            const reg = parseRegName(reg_name) orelse
+                return self.fail("unrecognized register: '{
