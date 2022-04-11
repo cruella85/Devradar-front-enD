@@ -2191,4 +2191,241 @@ fn airAsm(self: *Self, inst: Air.Inst.Index) !void {
             }
             const reg_name = output[2 .. output.len - 1];
             const reg = parseRegName(reg_name) orelse
-                return self.fail("unrecognized register: '{
+                return self.fail("unrecognized register: '{s}'", .{reg_name});
+            break :result MCValue{ .register = reg };
+        } else {
+            break :result MCValue{ .none = {} };
+        }
+    };
+    simple: {
+        var buf = [1]Air.Inst.Ref{.none} ** (Liveness.bpi - 1);
+        var buf_index: usize = 0;
+        for (outputs) |output| {
+            if (output == .none) continue;
+
+            if (buf_index >= buf.len) break :simple;
+            buf[buf_index] = output;
+            buf_index += 1;
+        }
+        if (buf_index + inputs.len > buf.len) break :simple;
+        std.mem.copy(Air.Inst.Ref, buf[buf_index..], inputs);
+        return self.finishAir(inst, result, buf);
+    }
+    var bt = try self.iterateBigTomb(inst, outputs.len + inputs.len);
+    for (outputs) |output| {
+        if (output == .none) continue;
+
+        bt.feed(output);
+    }
+    for (inputs) |input| {
+        bt.feed(input);
+    }
+    return bt.finishAir(result);
+}
+
+fn iterateBigTomb(self: *Self, inst: Air.Inst.Index, operand_count: usize) !BigTomb {
+    try self.ensureProcessDeathCapacity(operand_count + 1);
+    return BigTomb{
+        .function = self,
+        .inst = inst,
+        .lbt = self.liveness.iterateBigTomb(inst),
+    };
+}
+
+/// Sets the value without any modifications to register allocation metadata or stack allocation metadata.
+fn setRegOrMem(self: *Self, ty: Type, loc: MCValue, val: MCValue) !void {
+    switch (loc) {
+        .none => return,
+        .register => |reg| return self.genSetReg(ty, reg, val),
+        .stack_offset => |off| return self.genSetStack(ty, off, val),
+        .memory => {
+            return self.fail("TODO implement setRegOrMem for memory", .{});
+        },
+        else => unreachable,
+    }
+}
+
+fn genSetStack(self: *Self, ty: Type, stack_offset: u32, mcv: MCValue) InnerError!void {
+    _ = ty;
+    _ = stack_offset;
+    _ = mcv;
+    return self.fail("TODO implement getSetStack for {}", .{self.target.cpu.arch});
+}
+
+fn genSetReg(self: *Self, ty: Type, reg: Register, mcv: MCValue) InnerError!void {
+    switch (mcv) {
+        .dead => unreachable,
+        .ptr_stack_offset => unreachable,
+        .unreach, .none => return, // Nothing to do.
+        .undef => {
+            if (!self.wantSafety())
+                return; // The already existing value will do just fine.
+            // Write the debug undefined value.
+            return self.genSetReg(ty, reg, .{ .immediate = 0xaaaaaaaaaaaaaaaa });
+        },
+        .immediate => |unsigned_x| {
+            const x = @bitCast(i64, unsigned_x);
+            if (math.minInt(i12) <= x and x <= math.maxInt(i12)) {
+                _ = try self.addInst(.{
+                    .tag = .addi,
+                    .data = .{ .i_type = .{
+                        .rd = reg,
+                        .rs1 = .zero,
+                        .imm12 = @intCast(i12, x),
+                    } },
+                });
+            } else if (math.minInt(i32) <= x and x <= math.maxInt(i32)) {
+                const lo12 = @truncate(i12, x);
+                const carry: i32 = if (lo12 < 0) 1 else 0;
+                const hi20 = @truncate(i20, (x >> 12) +% carry);
+
+                // TODO: add test case for 32-bit immediate
+                _ = try self.addInst(.{
+                    .tag = .lui,
+                    .data = .{ .u_type = .{
+                        .rd = reg,
+                        .imm20 = hi20,
+                    } },
+                });
+                _ = try self.addInst(.{
+                    .tag = .addi,
+                    .data = .{ .i_type = .{
+                        .rd = reg,
+                        .rs1 = reg,
+                        .imm12 = lo12,
+                    } },
+                });
+            } else {
+                // li rd, immediate
+                // "Myriad sequences"
+                return self.fail("TODO genSetReg 33-64 bit immediates for riscv64", .{}); // glhf
+            }
+        },
+        .register => |src_reg| {
+            // If the registers are the same, nothing to do.
+            if (src_reg.id() == reg.id())
+                return;
+
+            // mov reg, src_reg
+            _ = try self.addInst(.{
+                .tag = .mv,
+                .data = .{ .rr = .{
+                    .rd = reg,
+                    .rs = src_reg,
+                } },
+            });
+        },
+        .memory => |addr| {
+            // The value is in memory at a hard-coded address.
+            // If the type is a pointer, it means the pointer address is at this memory location.
+            try self.genSetReg(ty, reg, .{ .immediate = addr });
+
+            _ = try self.addInst(.{
+                .tag = .ld,
+                .data = .{ .i_type = .{
+                    .rd = reg,
+                    .rs1 = reg,
+                    .imm12 = 0,
+                } },
+            });
+            // LOAD imm=[i12 offset = 0], rs1 =
+
+            // return self.fail("TODO implement genSetReg memory for riscv64");
+        },
+        else => return self.fail("TODO implement getSetReg for riscv64 {}", .{mcv}),
+    }
+}
+
+fn airPtrToInt(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const result = try self.resolveInst(un_op);
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airBitCast(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result = if (self.liveness.isUnused(inst)) .dead else result: {
+        const operand = try self.resolveInst(ty_op.operand);
+        if (self.reuseOperand(inst, ty_op.operand, 0, operand)) break :result operand;
+
+        const operand_lock = switch (operand) {
+            .register => |reg| self.register_manager.lockReg(reg),
+            else => null,
+        };
+        defer if (operand_lock) |lock| self.register_manager.unlockReg(lock);
+
+        const dest = try self.allocRegOrMem(inst, true);
+        try self.setRegOrMem(self.air.typeOfIndex(inst), dest, operand);
+        break :result dest;
+    };
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airArrayToSlice(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airArrayToSlice for {}", .{
+        self.target.cpu.arch,
+    });
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airIntToFloat(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airIntToFloat for {}", .{
+        self.target.cpu.arch,
+    });
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airFloatToInt(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airFloatToInt for {}", .{
+        self.target.cpu.arch,
+    });
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airCmpxchg(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.Block, ty_pl.payload);
+    _ = extra;
+    return self.fail("TODO implement airCmpxchg for {}", .{
+        self.target.cpu.arch,
+    });
+    // return self.finishAir(inst, result, .{ extra.ptr, extra.expected_value, extra.new_value });
+}
+
+fn airAtomicRmw(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+    return self.fail("TODO implement airCmpxchg for {}", .{self.target.cpu.arch});
+}
+
+fn airAtomicLoad(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+    return self.fail("TODO implement airAtomicLoad for {}", .{self.target.cpu.arch});
+}
+
+fn airAtomicStore(self: *Self, inst: Air.Inst.Index, order: std.builtin.AtomicOrder) !void {
+    _ = inst;
+    _ = order;
+    return self.fail("TODO implement airAtomicStore for {}", .{self.target.cpu.arch});
+}
+
+fn airMemset(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+    return self.fail("TODO implement airMemset for {}", .{self.target.cpu.arch});
+}
+
+fn airMemcpy(self: *Self, inst: Air.Inst.Index) !void {
+    _ = inst;
+    return self.fail("TODO implement airMemcpy for {}", .{self.target.cpu.arch});
+}
+
+fn airTagName(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const operand = try self.resolveInst(un_op);
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else {
+        _ = operand;
+        return self.fail("TODO implement airTagName for riscv64", .{});
+    };
+    return self.finishA
