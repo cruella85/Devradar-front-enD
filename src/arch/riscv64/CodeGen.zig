@@ -2428,4 +2428,219 @@ fn airTagName(self: *Self, inst: Air.Inst.Index) !void {
         _ = operand;
         return self.fail("TODO implement airTagName for riscv64", .{});
     };
-    return self.finishA
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airErrorName(self: *Self, inst: Air.Inst.Index) !void {
+    const un_op = self.air.instructions.items(.data)[inst].un_op;
+    const operand = try self.resolveInst(un_op);
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else {
+        _ = operand;
+        return self.fail("TODO implement airErrorName for riscv64", .{});
+    };
+    return self.finishAir(inst, result, .{ un_op, .none, .none });
+}
+
+fn airSplat(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airSplat for riscv64", .{});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airSelect(self: *Self, inst: Air.Inst.Index) !void {
+    const pl_op = self.air.instructions.items(.data)[inst].pl_op;
+    const extra = self.air.extraData(Air.Bin, pl_op.payload).data;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airSelect for riscv64", .{});
+    return self.finishAir(inst, result, .{ pl_op.operand, extra.lhs, extra.rhs });
+}
+
+fn airShuffle(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_op = self.air.instructions.items(.data)[inst].ty_op;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airShuffle for riscv64", .{});
+    return self.finishAir(inst, result, .{ ty_op.operand, .none, .none });
+}
+
+fn airReduce(self: *Self, inst: Air.Inst.Index) !void {
+    const reduce = self.air.instructions.items(.data)[inst].reduce;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else return self.fail("TODO implement airReduce for riscv64", .{});
+    return self.finishAir(inst, result, .{ reduce.operand, .none, .none });
+}
+
+fn airAggregateInit(self: *Self, inst: Air.Inst.Index) !void {
+    const vector_ty = self.air.typeOfIndex(inst);
+    const len = vector_ty.vectorLen();
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const elements = @ptrCast([]const Air.Inst.Ref, self.air.extra[ty_pl.payload..][0..len]);
+    const result: MCValue = res: {
+        if (self.liveness.isUnused(inst)) break :res MCValue.dead;
+        return self.fail("TODO implement airAggregateInit for riscv64", .{});
+    };
+
+    if (elements.len <= Liveness.bpi - 1) {
+        var buf = [1]Air.Inst.Ref{.none} ** (Liveness.bpi - 1);
+        std.mem.copy(Air.Inst.Ref, &buf, elements);
+        return self.finishAir(inst, result, buf);
+    }
+    var bt = try self.iterateBigTomb(inst, elements.len);
+    for (elements) |elem| {
+        bt.feed(elem);
+    }
+    return bt.finishAir(result);
+}
+
+fn airUnionInit(self: *Self, inst: Air.Inst.Index) !void {
+    const ty_pl = self.air.instructions.items(.data)[inst].ty_pl;
+    const extra = self.air.extraData(Air.UnionInit, ty_pl.payload).data;
+    _ = extra;
+    return self.fail("TODO implement airUnionInit for riscv64", .{});
+    // return self.finishAir(inst, result, .{ extra.ptr, extra.expected_value, extra.new_value });
+}
+
+fn airPrefetch(self: *Self, inst: Air.Inst.Index) !void {
+    const prefetch = self.air.instructions.items(.data)[inst].prefetch;
+    return self.finishAir(inst, MCValue.dead, .{ prefetch.ptr, .none, .none });
+}
+
+fn airMulAdd(self: *Self, inst: Air.Inst.Index) !void {
+    const pl_op = self.air.instructions.items(.data)[inst].pl_op;
+    const extra = self.air.extraData(Air.Bin, pl_op.payload).data;
+    const result: MCValue = if (self.liveness.isUnused(inst)) .dead else {
+        return self.fail("TODO implement airMulAdd for riscv64", .{});
+    };
+    return self.finishAir(inst, result, .{ extra.lhs, extra.rhs, pl_op.operand });
+}
+
+fn resolveInst(self: *Self, inst: Air.Inst.Ref) InnerError!MCValue {
+    // First section of indexes correspond to a set number of constant values.
+    const ref_int = @enumToInt(inst);
+    if (ref_int < Air.Inst.Ref.typed_value_map.len) {
+        const tv = Air.Inst.Ref.typed_value_map[ref_int];
+        if (!tv.ty.hasRuntimeBits()) {
+            return MCValue{ .none = {} };
+        }
+        return self.genTypedValue(tv);
+    }
+
+    // If the type has no codegen bits, no need to store it.
+    const inst_ty = self.air.typeOf(inst);
+    if (!inst_ty.hasRuntimeBits())
+        return MCValue{ .none = {} };
+
+    const inst_index = @intCast(Air.Inst.Index, ref_int - Air.Inst.Ref.typed_value_map.len);
+    switch (self.air.instructions.items(.tag)[inst_index]) {
+        .constant => {
+            // Constants have static lifetimes, so they are always memoized in the outer most table.
+            const branch = &self.branch_stack.items[0];
+            const gop = try branch.inst_table.getOrPut(self.gpa, inst_index);
+            if (!gop.found_existing) {
+                const ty_pl = self.air.instructions.items(.data)[inst_index].ty_pl;
+                gop.value_ptr.* = try self.genTypedValue(.{
+                    .ty = inst_ty,
+                    .val = self.air.values[ty_pl.payload],
+                });
+            }
+            return gop.value_ptr.*;
+        },
+        .const_ty => unreachable,
+        else => return self.getResolvedInstValue(inst_index),
+    }
+}
+
+fn getResolvedInstValue(self: *Self, inst: Air.Inst.Index) MCValue {
+    // Treat each stack item as a "layer" on top of the previous one.
+    var i: usize = self.branch_stack.items.len;
+    while (true) {
+        i -= 1;
+        if (self.branch_stack.items[i].inst_table.get(inst)) |mcv| {
+            assert(mcv != .dead);
+            return mcv;
+        }
+    }
+}
+
+fn genTypedValue(self: *Self, typed_value: TypedValue) InnerError!MCValue {
+    const mcv: MCValue = switch (try codegen.genTypedValue(
+        self.bin_file,
+        self.src_loc,
+        typed_value,
+        self.mod_fn.owner_decl,
+    )) {
+        .mcv => |mcv| switch (mcv) {
+            .none => .none,
+            .undef => .undef,
+            .linker_load => unreachable, // TODO
+            .immediate => |imm| .{ .immediate = imm },
+            .memory => |addr| .{ .memory = addr },
+        },
+        .fail => |msg| {
+            self.err_msg = msg;
+            return error.CodegenFail;
+        },
+    };
+    return mcv;
+}
+
+const CallMCValues = struct {
+    args: []MCValue,
+    return_value: MCValue,
+    stack_byte_count: u32,
+    stack_align: u32,
+
+    fn deinit(self: *CallMCValues, func: *Self) void {
+        func.gpa.free(self.args);
+        self.* = undefined;
+    }
+};
+
+/// Caller must call `CallMCValues.deinit`.
+fn resolveCallingConventionValues(self: *Self, fn_ty: Type) !CallMCValues {
+    const cc = fn_ty.fnCallingConvention();
+    const param_types = try self.gpa.alloc(Type, fn_ty.fnParamLen());
+    defer self.gpa.free(param_types);
+    fn_ty.fnParamTypes(param_types);
+    var result: CallMCValues = .{
+        .args = try self.gpa.alloc(MCValue, param_types.len),
+        // These undefined values must be populated before returning from this function.
+        .return_value = undefined,
+        .stack_byte_count = undefined,
+        .stack_align = undefined,
+    };
+    errdefer self.gpa.free(result.args);
+
+    const ret_ty = fn_ty.fnReturnType();
+
+    switch (cc) {
+        .Naked => {
+            assert(result.args.len == 0);
+            result.return_value = .{ .unreach = {} };
+            result.stack_byte_count = 0;
+            result.stack_align = 1;
+            return result;
+        },
+        .Unspecified, .C => {
+            // LP64D ABI
+            //
+            // TODO make this generic with other ABIs, in particular
+            // with different hardware floating-point calling
+            // conventions
+            var next_register: usize = 0;
+            var next_stack_offset: u32 = 0;
+            const argument_registers = [_]Register{ .a0, .a1, .a2, .a3, .a4, .a5, .a6, .a7 };
+
+            for (param_types, 0..) |ty, i| {
+                const param_size = @intCast(u32, ty.abiSize(self.target.*));
+                if (param_size <= 8) {
+                    if (next_register < argument_registers.len) {
+                        result.args[i] = .{ .register = argument_registers[next_register] };
+                        next_register += 1;
+                    } else {
+                        result.args[i] = .{ .stack_offset = next_stack_offset };
+                        next_register += next_stack_offset;
+                    }
+                } else if (param_size <= 16) {
+                    if (next_register < argument_registers.len - 1) {
+                        return self.fail("TODO MCValues with 2 registers", .{});
+                    } else if (next_register < argument_registers.len) {
+                        return self.fail("TODO MCValues split register + stack", .{});
+                    } else {
+                        result.args[i] = 
