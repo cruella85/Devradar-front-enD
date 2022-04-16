@@ -2643,4 +2643,69 @@ fn resolveCallingConventionValues(self: *Self, fn_ty: Type) !CallMCValues {
                     } else if (next_register < argument_registers.len) {
                         return self.fail("TODO MCValues split register + stack", .{});
                     } else {
-                        result.args[i] = 
+                        result.args[i] = .{ .stack_offset = next_stack_offset };
+                        next_register += next_stack_offset;
+                    }
+                } else {
+                    result.args[i] = .{ .stack_offset = next_stack_offset };
+                    next_register += next_stack_offset;
+                }
+            }
+
+            result.stack_byte_count = next_stack_offset;
+            result.stack_align = 16;
+        },
+        else => return self.fail("TODO implement function parameters for {} on riscv64", .{cc}),
+    }
+
+    if (ret_ty.zigTypeTag() == .NoReturn) {
+        result.return_value = .{ .unreach = {} };
+    } else if (!ret_ty.hasRuntimeBits()) {
+        result.return_value = .{ .none = {} };
+    } else switch (cc) {
+        .Naked => unreachable,
+        .Unspecified, .C => {
+            const ret_ty_size = @intCast(u32, ret_ty.abiSize(self.target.*));
+            if (ret_ty_size <= 8) {
+                result.return_value = .{ .register = .a0 };
+            } else if (ret_ty_size <= 16) {
+                return self.fail("TODO support MCValue 2 registers", .{});
+            } else {
+                return self.fail("TODO support return by reference", .{});
+            }
+        },
+        else => return self.fail("TODO implement function return values for {}", .{cc}),
+    }
+    return result;
+}
+
+/// TODO support scope overrides. Also note this logic is duplicated with `Module.wantSafety`.
+fn wantSafety(self: *Self) bool {
+    return switch (self.bin_file.options.optimize_mode) {
+        .Debug => true,
+        .ReleaseSafe => true,
+        .ReleaseFast => false,
+        .ReleaseSmall => false,
+    };
+}
+
+fn fail(self: *Self, comptime format: []const u8, args: anytype) InnerError {
+    @setCold(true);
+    assert(self.err_msg == null);
+    self.err_msg = try ErrorMsg.create(self.bin_file.allocator, self.src_loc, format, args);
+    return error.CodegenFail;
+}
+
+fn failSymbol(self: *Self, comptime format: []const u8, args: anytype) InnerError {
+    @setCold(true);
+    assert(self.err_msg == null);
+    self.err_msg = try ErrorMsg.create(self.bin_file.allocator, self.src_loc, format, args);
+    return error.CodegenFail;
+}
+
+fn parseRegName(name: []const u8) ?Register {
+    if (@hasDecl(Register, "parseRegName")) {
+        return Register.parseRegName(name);
+    }
+    return std.meta.stringToEnum(Register, name);
+}
