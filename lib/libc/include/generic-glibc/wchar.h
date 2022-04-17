@@ -404,4 +404,258 @@ extern _Float64 wcstof64 (const wchar_t *__restrict __nptr,
 #endif
 
 #if __HAVE_FLOAT128 && defined __USE_GNU
-extern _Float128 wcstof128 (const wchar_t *__re
+extern _Float128 wcstof128 (const wchar_t *__restrict __nptr,
+			    wchar_t **__restrict __endptr) __THROW;
+#endif
+
+#if __HAVE_FLOAT32X && defined __USE_GNU
+extern _Float32x wcstof32x (const wchar_t *__restrict __nptr,
+			    wchar_t **__restrict __endptr) __THROW;
+#endif
+
+#if __HAVE_FLOAT64X && defined __USE_GNU
+extern _Float64x wcstof64x (const wchar_t *__restrict __nptr,
+			    wchar_t **__restrict __endptr) __THROW;
+#endif
+
+#if __HAVE_FLOAT128X && defined __USE_GNU
+extern _Float128x wcstof128x (const wchar_t *__restrict __nptr,
+			      wchar_t **__restrict __endptr) __THROW;
+#endif
+
+
+/* Convert initial portion of wide string NPTR to `long int'
+   representation.  */
+extern long int wcstol (const wchar_t *__restrict __nptr,
+			wchar_t **__restrict __endptr, int __base) __THROW;
+
+/* Convert initial portion of wide string NPTR to `unsigned long int'
+   representation.  */
+extern unsigned long int wcstoul (const wchar_t *__restrict __nptr,
+				  wchar_t **__restrict __endptr, int __base)
+     __THROW;
+
+#ifdef __USE_ISOC99
+/* Convert initial portion of wide string NPTR to `long long int'
+   representation.  */
+__extension__
+extern long long int wcstoll (const wchar_t *__restrict __nptr,
+			      wchar_t **__restrict __endptr, int __base)
+     __THROW;
+
+/* Convert initial portion of wide string NPTR to `unsigned long long int'
+   representation.  */
+__extension__
+extern unsigned long long int wcstoull (const wchar_t *__restrict __nptr,
+					wchar_t **__restrict __endptr,
+					int __base) __THROW;
+#endif /* ISO C99.  */
+
+#ifdef __USE_GNU
+/* Convert initial portion of wide string NPTR to `long long int'
+   representation.  */
+__extension__
+extern long long int wcstoq (const wchar_t *__restrict __nptr,
+			     wchar_t **__restrict __endptr, int __base)
+     __THROW;
+
+/* Convert initial portion of wide string NPTR to `unsigned long long int'
+   representation.  */
+__extension__
+extern unsigned long long int wcstouq (const wchar_t *__restrict __nptr,
+				       wchar_t **__restrict __endptr,
+				       int __base) __THROW;
+#endif /* Use GNU.  */
+
+#ifdef __USE_GNU
+/* Parallel versions of the functions above which take the locale to
+   use as an additional parameter.  These are GNU extensions inspired
+   by the POSIX.1-2008 extended locale API.  */
+extern long int wcstol_l (const wchar_t *__restrict __nptr,
+			  wchar_t **__restrict __endptr, int __base,
+			  locale_t __loc) __THROW;
+
+extern unsigned long int wcstoul_l (const wchar_t *__restrict __nptr,
+				    wchar_t **__restrict __endptr,
+				    int __base, locale_t __loc) __THROW;
+
+__extension__
+extern long long int wcstoll_l (const wchar_t *__restrict __nptr,
+				wchar_t **__restrict __endptr,
+				int __base, locale_t __loc) __THROW;
+
+__extension__
+extern unsigned long long int wcstoull_l (const wchar_t *__restrict __nptr,
+					  wchar_t **__restrict __endptr,
+					  int __base, locale_t __loc)
+     __THROW;
+
+extern double wcstod_l (const wchar_t *__restrict __nptr,
+			wchar_t **__restrict __endptr, locale_t __loc)
+     __THROW;
+
+extern float wcstof_l (const wchar_t *__restrict __nptr,
+		       wchar_t **__restrict __endptr, locale_t __loc)
+     __THROW;
+
+extern long double wcstold_l (const wchar_t *__restrict __nptr,
+			      wchar_t **__restrict __endptr,
+			      locale_t __loc) __THROW;
+
+# if __HAVE_FLOAT16
+extern _Float16 wcstof16_l (const wchar_t *__restrict __nptr,
+			    wchar_t **__restrict __endptr,
+			    locale_t __loc) __THROW;
+# endif
+
+# if __HAVE_FLOAT32
+extern _Float32 wcstof32_l (const wchar_t *__restrict __nptr,
+			    wchar_t **__restrict __endptr,
+			    locale_t __loc) __THROW;
+# endif
+
+# if __HAVE_FLOAT64
+extern _Float64 wcstof64_l (const wchar_t *__restrict __nptr,
+			    wchar_t **__restrict __endptr,
+			    locale_t __loc) __THROW;
+# endif
+
+# if __HAVE_FLOAT128
+extern _Float128 wcstof128_l (const wchar_t *__restrict __nptr,
+			      wchar_t **__restrict __endptr,
+			      locale_t __loc) __THROW;
+# endif
+
+# if __HAVE_FLOAT32X
+extern _Float32x wcstof32x_l (const wchar_t *__restrict __nptr,
+			      wchar_t **__restrict __endptr,
+			      locale_t __loc) __THROW;
+# endif
+
+# if __HAVE_FLOAT64X
+extern _Float64x wcstof64x_l (const wchar_t *__restrict __nptr,
+			      wchar_t **__restrict __endptr,
+			      locale_t __loc) __THROW;
+# endif
+
+# if __HAVE_FLOAT128X
+extern _Float128x wcstof128x_l (const wchar_t *__restrict __nptr,
+				wchar_t **__restrict __endptr,
+				locale_t __loc) __THROW;
+# endif
+#endif	/* use GNU */
+
+
+#ifdef __USE_XOPEN2K8
+/* Copy SRC to DEST, returning the address of the terminating L'\0' in
+   DEST.  */
+extern wchar_t *wcpcpy (wchar_t *__restrict __dest,
+			const wchar_t *__restrict __src) __THROW;
+
+/* Copy no more than N characters of SRC to DEST, returning the address of
+   the last character written into DEST.  */
+extern wchar_t *wcpncpy (wchar_t *__restrict __dest,
+			 const wchar_t *__restrict __src, size_t __n)
+     __THROW;
+#endif
+
+
+/* Wide character I/O functions.  */
+
+#if defined __USE_XOPEN2K8 || __GLIBC_USE (LIB_EXT2)
+# ifndef __attr_dealloc_fclose
+#   if defined __has_builtin
+#     if __has_builtin (__builtin_fclose)
+/* If the attribute macro hasn't been defined yet (by <stdio.h>) and
+   fclose is a built-in, use it.  */
+#      define __attr_dealloc_fclose __attr_dealloc (__builtin_fclose, 1)
+#     endif
+#   endif
+# endif
+# ifndef __attr_dealloc_fclose
+#  define __attr_dealloc_fclose /* empty */
+# endif
+
+/* Like OPEN_MEMSTREAM, but the stream is wide oriented and produces
+   a wide character string.  */
+extern __FILE *open_wmemstream (wchar_t **__bufloc, size_t *__sizeloc) __THROW
+  __attribute_malloc__ __attr_dealloc_fclose;
+#endif
+
+#if defined __USE_ISOC95 || defined __USE_UNIX98
+
+/* Select orientation for stream.  */
+extern int fwide (__FILE *__fp, int __mode) __THROW;
+
+
+/* Write formatted output to STREAM.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int fwprintf (__FILE *__restrict __stream,
+		     const wchar_t *__restrict __format, ...)
+     /* __attribute__ ((__format__ (__wprintf__, 2, 3))) */;
+/* Write formatted output to stdout.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int wprintf (const wchar_t *__restrict __format, ...)
+     /* __attribute__ ((__format__ (__wprintf__, 1, 2))) */;
+/* Write formatted output of at most N characters to S.  */
+extern int swprintf (wchar_t *__restrict __s, size_t __n,
+		     const wchar_t *__restrict __format, ...)
+     __THROW /* __attribute__ ((__format__ (__wprintf__, 3, 4))) */;
+
+/* Write formatted output to S from argument list ARG.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int vfwprintf (__FILE *__restrict __s,
+		      const wchar_t *__restrict __format,
+		      __gnuc_va_list __arg)
+     /* __attribute__ ((__format__ (__wprintf__, 2, 0))) */;
+/* Write formatted output to stdout from argument list ARG.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int vwprintf (const wchar_t *__restrict __format,
+		     __gnuc_va_list __arg)
+     /* __attribute__ ((__format__ (__wprintf__, 1, 0))) */;
+/* Write formatted output of at most N character to S from argument
+   list ARG.  */
+extern int vswprintf (wchar_t *__restrict __s, size_t __n,
+		      const wchar_t *__restrict __format,
+		      __gnuc_va_list __arg)
+     __THROW /* __attribute__ ((__format__ (__wprintf__, 3, 0))) */;
+
+
+/* Read formatted input from STREAM.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int fwscanf (__FILE *__restrict __stream,
+		    const wchar_t *__restrict __format, ...)
+     /* __attribute__ ((__format__ (__wscanf__, 2, 3))) */;
+/* Read formatted input from stdin.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int wscanf (const wchar_t *__restrict __format, ...)
+     /* __attribute__ ((__format__ (__wscanf__, 1, 2))) */;
+/* Read formatted input from S.  */
+extern int swscanf (const wchar_t *__restrict __s,
+		    const wchar_t *__restrict __format, ...)
+     __THROW /* __attribute__ ((__format__ (__wscanf__, 2, 3))) */;
+
+/* For historical reasons, the C99-compliant versions of the scanf
+   functions are at alternative names.  When __LDBL_COMPAT or
+   __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI are in effect, this is handled in
+   bits/wchar-ldbl.h.  */
+#if !__GLIBC_USE (DEPRECATED_SCANF) && !defined __LDBL_COMPAT \
+     && __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI == 0
+#  ifdef __REDIRECT
+extern int __REDIRECT (fwscanf, (__FILE *__restrict __stream,
+				 const wchar_t *__restrict __format, ...),
+		       __isoc99_fwscanf)
+     /* __attribute__ ((__format__ (__wscanf__, 2, 3))) */;
+extern int __REDIRECT (wscanf, (const wchar_t *__restric
