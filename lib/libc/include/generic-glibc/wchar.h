@@ -658,4 +658,220 @@ extern int __REDIRECT (fwscanf, (__FILE *__restrict __stream,
 				 const wchar_t *__restrict __format, ...),
 		       __isoc99_fwscanf)
      /* __attribute__ ((__format__ (__wscanf__, 2, 3))) */;
-extern int __REDIRECT (wscanf, (const wchar_t *__restric
+extern int __REDIRECT (wscanf, (const wchar_t *__restrict __format, ...),
+		       __isoc99_wscanf)
+     /* __attribute__ ((__format__ (__wscanf__, 1, 2))) */;
+extern int __REDIRECT_NTH (swscanf, (const wchar_t *__restrict __s,
+				     const wchar_t *__restrict __format,
+				     ...), __isoc99_swscanf)
+     /* __attribute__ ((__format__ (__wscanf__, 2, 3))) */;
+#  else
+extern int __isoc99_fwscanf (__FILE *__restrict __stream,
+			     const wchar_t *__restrict __format, ...);
+extern int __isoc99_wscanf (const wchar_t *__restrict __format, ...);
+extern int __isoc99_swscanf (const wchar_t *__restrict __s,
+			     const wchar_t *__restrict __format, ...)
+     __THROW;
+#   define fwscanf __isoc99_fwscanf
+#   define wscanf __isoc99_wscanf
+#   define swscanf __isoc99_swscanf
+#  endif
+# endif
+
+#endif /* Use ISO C95, C99 and Unix98. */
+
+#ifdef __USE_ISOC99
+/* Read formatted input from S into argument list ARG.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int vfwscanf (__FILE *__restrict __s,
+		     const wchar_t *__restrict __format,
+		     __gnuc_va_list __arg)
+     /* __attribute__ ((__format__ (__wscanf__, 2, 0))) */;
+/* Read formatted input from stdin into argument list ARG.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int vwscanf (const wchar_t *__restrict __format,
+		    __gnuc_va_list __arg)
+     /* __attribute__ ((__format__ (__wscanf__, 1, 0))) */;
+/* Read formatted input from S into argument list ARG.  */
+extern int vswscanf (const wchar_t *__restrict __s,
+		     const wchar_t *__restrict __format,
+		     __gnuc_va_list __arg)
+     __THROW /* __attribute__ ((__format__ (__wscanf__, 2, 0))) */;
+
+/* Same redirection as above for the v*wscanf family.  */
+# if !__GLIBC_USE (DEPRECATED_SCANF) \
+     && (!defined __LDBL_COMPAT || !defined __REDIRECT) \
+     && (defined __STRICT_ANSI__ || defined __USE_XOPEN2K) \
+     && __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI == 0
+#  ifdef __REDIRECT
+extern int __REDIRECT (vfwscanf, (__FILE *__restrict __s,
+				  const wchar_t *__restrict __format,
+				  __gnuc_va_list __arg), __isoc99_vfwscanf)
+     /* __attribute__ ((__format__ (__wscanf__, 2, 0))) */;
+extern int __REDIRECT (vwscanf, (const wchar_t *__restrict __format,
+				 __gnuc_va_list __arg), __isoc99_vwscanf)
+     /* __attribute__ ((__format__ (__wscanf__, 1, 0))) */;
+extern int __REDIRECT_NTH (vswscanf, (const wchar_t *__restrict __s,
+				      const wchar_t *__restrict __format,
+				      __gnuc_va_list __arg), __isoc99_vswscanf)
+     /* __attribute__ ((__format__ (__wscanf__, 2, 0))) */;
+#  else
+extern int __isoc99_vfwscanf (__FILE *__restrict __s,
+			      const wchar_t *__restrict __format,
+			      __gnuc_va_list __arg);
+extern int __isoc99_vwscanf (const wchar_t *__restrict __format,
+			     __gnuc_va_list __arg);
+extern int __isoc99_vswscanf (const wchar_t *__restrict __s,
+			      const wchar_t *__restrict __format,
+			      __gnuc_va_list __arg) __THROW;
+#   define vfwscanf __isoc99_vfwscanf
+#   define vwscanf __isoc99_vwscanf
+#   define vswscanf __isoc99_vswscanf
+#  endif
+# endif
+
+#endif /* Use ISO C99. */
+
+
+/* Read a character from STREAM.
+
+   These functions are possible cancellation points and therefore not
+   marked with __THROW.  */
+extern wint_t fgetwc (__FILE *__stream);
+extern wint_t getwc (__FILE *__stream);
+
+/* Read a character from stdin.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern wint_t getwchar (void);
+
+
+/* Write a character to STREAM.
+
+   These functions are possible cancellation points and therefore not
+   marked with __THROW.  */
+extern wint_t fputwc (wchar_t __wc, __FILE *__stream);
+extern wint_t putwc (wchar_t __wc, __FILE *__stream);
+
+/* Write a character to stdout.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern wint_t putwchar (wchar_t __wc);
+
+
+/* Get a newline-terminated wide character string of finite length
+   from STREAM.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern wchar_t *fgetws (wchar_t *__restrict __ws, int __n,
+			__FILE *__restrict __stream);
+
+/* Write a string to STREAM.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern int fputws (const wchar_t *__restrict __ws,
+		   __FILE *__restrict __stream);
+
+
+/* Push a character back onto the input buffer of STREAM.
+
+   This function is a possible cancellation point and therefore not
+   marked with __THROW.  */
+extern wint_t ungetwc (wint_t __wc, __FILE *__stream);
+
+
+#ifdef __USE_GNU
+/* These are defined to be equivalent to the `char' functions defined
+   in POSIX.1:1996.
+
+   These functions are not part of POSIX and therefore no official
+   cancellation point.  But due to similarity with an POSIX interface
+   or due to the implementation they are cancellation points and
+   therefore not marked with __THROW.  */
+extern wint_t getwc_unlocked (__FILE *__stream);
+extern wint_t getwchar_unlocked (void);
+
+/* This is the wide character version of a GNU extension.
+
+   This function is not part of POSIX and therefore no official
+   cancellation point.  But due to similarity with an POSIX interface
+   or due to the implementation it is a cancellation point and
+   therefore not marked with __THROW.  */
+extern wint_t fgetwc_unlocked (__FILE *__stream);
+
+/* Faster version when locking is not necessary.
+
+   This function is not part of POSIX and therefore no official
+   cancellation point.  But due to similarity with an POSIX interface
+   or due to the implementation it is a cancellation point and
+   therefore not marked with __THROW.  */
+extern wint_t fputwc_unlocked (wchar_t __wc, __FILE *__stream);
+
+/* These are defined to be equivalent to the `char' functions defined
+   in POSIX.1:1996.
+
+   These functions are not part of POSIX and therefore no official
+   cancellation point.  But due to similarity with an POSIX interface
+   or due to the implementation they are cancellation points and
+   therefore not marked with __THROW.  */
+extern wint_t putwc_unlocked (wchar_t __wc, __FILE *__stream);
+extern wint_t putwchar_unlocked (wchar_t __wc);
+
+
+/* This function does the same as `fgetws' but does not lock the stream.
+
+   This function is not part of POSIX and therefore no official
+   cancellation point.  But due to similarity with an POSIX interface
+   or due to the implementation it is a cancellation point and
+   therefore not marked with __THROW.  */
+extern wchar_t *fgetws_unlocked (wchar_t *__restrict __ws, int __n,
+				 __FILE *__restrict __stream);
+
+/* This function does the same as `fputws' but does not lock the stream.
+
+   This function is not part of POSIX and therefore no official
+   cancellation point.  But due to similarity with an POSIX interface
+   or due to the implementation it is a cancellation point and
+   therefore not marked with __THROW.  */
+extern int fputws_unlocked (const wchar_t *__restrict __ws,
+			    __FILE *__restrict __stream);
+#endif
+
+
+/* Format TP into S according to FORMAT.
+   Write no more than MAXSIZE wide characters and return the number
+   of wide characters written, or 0 if it would exceed MAXSIZE.  */
+extern size_t wcsftime (wchar_t *__restrict __s, size_t __maxsize,
+			const wchar_t *__restrict __format,
+			const struct tm *__restrict __tp) __THROW;
+
+# ifdef __USE_GNU
+/* Similar to `wcsftime' but takes the information from
+   the provided locale and not the global locale.  */
+extern size_t wcsftime_l (wchar_t *__restrict __s, size_t __maxsize,
+			  const wchar_t *__restrict __format,
+			  const struct tm *__restrict __tp,
+			  locale_t __loc) __THROW;
+# endif
+
+/* Define some macros helping to catch buffer overflows.  */
+#if __USE_FORTIFY_LEVEL > 0 && defined __fortify_function
+# include <bits/wchar2.h>
+#endif
+
+#include <bits/floatn.h>
+#if defined __LDBL_COMPAT || __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI == 1
+# include <bits/wchar-ldbl.h>
+#endif
+
+__END_DECLS
+
+#endif /* wchar.h  */
