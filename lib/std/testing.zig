@@ -193,4 +193,200 @@ test "expectEqual.union(enum)" {
     try expectEqual(a10, a10);
 }
 
-/// This function is intended to be used only in tests. When t
+/// This function is intended to be used only in tests. When the formatted result of the template
+/// and its arguments does not equal the expected text, it prints diagnostics to stderr to show how
+/// they are not equal, then returns an error.
+pub fn expectFmt(expected: []const u8, comptime template: []const u8, args: anytype) !void {
+    const result = try std.fmt.allocPrint(allocator, template, args);
+    defer allocator.free(result);
+    if (std.mem.eql(u8, result, expected)) return;
+
+    print("\n====== expected this output: =========\n", .{});
+    print("{s}", .{expected});
+    print("\n======== instead found this: =========\n", .{});
+    print("{s}", .{result});
+    print("\n======================================\n", .{});
+    return error.TestExpectedFmt;
+}
+
+/// This function is intended to be used only in tests. When the actual value is
+/// not approximately equal to the expected value, prints diagnostics to stderr
+/// to show exactly how they are not equal, then returns a test failure error.
+/// See `math.approxEqAbs` for more information on the tolerance parameter.
+/// The types must be floating-point.
+pub fn expectApproxEqAbs(expected: anytype, actual: @TypeOf(expected), tolerance: @TypeOf(expected)) !void {
+    const T = @TypeOf(expected);
+
+    switch (@typeInfo(T)) {
+        .Float => if (!math.approxEqAbs(T, expected, actual, tolerance)) {
+            std.debug.print("actual {}, not within absolute tolerance {} of expected {}\n", .{ actual, tolerance, expected });
+            return error.TestExpectedApproxEqAbs;
+        },
+
+        .ComptimeFloat => @compileError("Cannot approximately compare two comptime_float values"),
+
+        else => @compileError("Unable to compare non floating point values"),
+    }
+}
+
+test "expectApproxEqAbs" {
+    inline for ([_]type{ f16, f32, f64, f128 }) |T| {
+        const pos_x: T = 12.0;
+        const pos_y: T = 12.06;
+        const neg_x: T = -12.0;
+        const neg_y: T = -12.06;
+
+        try expectApproxEqAbs(pos_x, pos_y, 0.1);
+        try expectApproxEqAbs(neg_x, neg_y, 0.1);
+    }
+}
+
+/// This function is intended to be used only in tests. When the actual value is
+/// not approximately equal to the expected value, prints diagnostics to stderr
+/// to show exactly how they are not equal, then returns a test failure error.
+/// See `math.approxEqRel` for more information on the tolerance parameter.
+/// The types must be floating-point.
+pub fn expectApproxEqRel(expected: anytype, actual: @TypeOf(expected), tolerance: @TypeOf(expected)) !void {
+    const T = @TypeOf(expected);
+
+    switch (@typeInfo(T)) {
+        .Float => if (!math.approxEqRel(T, expected, actual, tolerance)) {
+            std.debug.print("actual {}, not within relative tolerance {} of expected {}\n", .{ actual, tolerance, expected });
+            return error.TestExpectedApproxEqRel;
+        },
+
+        .ComptimeFloat => @compileError("Cannot approximately compare two comptime_float values"),
+
+        else => @compileError("Unable to compare non floating point values"),
+    }
+}
+
+test "expectApproxEqRel" {
+    inline for ([_]type{ f16, f32, f64, f128 }) |T| {
+        const eps_value = comptime math.epsilon(T);
+        const sqrt_eps_value = comptime @sqrt(eps_value);
+
+        const pos_x: T = 12.0;
+        const pos_y: T = pos_x + 2 * eps_value;
+        const neg_x: T = -12.0;
+        const neg_y: T = neg_x - 2 * eps_value;
+
+        try expectApproxEqRel(pos_x, pos_y, sqrt_eps_value);
+        try expectApproxEqRel(neg_x, neg_y, sqrt_eps_value);
+    }
+}
+
+/// This function is intended to be used only in tests. When the two slices are not
+/// equal, prints diagnostics to stderr to show exactly how they are not equal (with
+/// the differences highlighted in red), then returns a test failure error.
+/// The colorized output is optional and controlled by the return of `std.debug.detectTTYConfig()`.
+/// If your inputs are UTF-8 encoded strings, consider calling `expectEqualStrings` instead.
+pub fn expectEqualSlices(comptime T: type, expected: []const T, actual: []const T) !void {
+    if (expected.ptr == actual.ptr and expected.len == actual.len) {
+        return;
+    }
+    const diff_index: usize = diff_index: {
+        const shortest = @min(expected.len, actual.len);
+        var index: usize = 0;
+        while (index < shortest) : (index += 1) {
+            if (!std.meta.eql(actual[index], expected[index])) break :diff_index index;
+        }
+        break :diff_index if (expected.len == actual.len) return else shortest;
+    };
+
+    std.debug.print("slices differ. first difference occurs at index {d} (0x{X})\n", .{ diff_index, diff_index });
+
+    // TODO: Should this be configurable by the caller?
+    const max_lines: usize = 16;
+    const max_window_size: usize = if (T == u8) max_lines * 16 else max_lines;
+
+    // Print a maximum of max_window_size items of each input, starting just before the
+    // first difference to give a bit of context.
+    var window_start: usize = 0;
+    if (@max(actual.len, expected.len) > max_window_size) {
+        const alignment = if (T == u8) 16 else 2;
+        window_start = std.mem.alignBackward(diff_index - @min(diff_index, alignment), alignment);
+    }
+    const expected_window = expected[window_start..@min(expected.len, window_start + max_window_size)];
+    const expected_truncated = window_start + expected_window.len < expected.len;
+    const actual_window = actual[window_start..@min(actual.len, window_start + max_window_size)];
+    const actual_truncated = window_start + actual_window.len < actual.len;
+
+    const ttyconf = std.debug.detectTTYConfig(std.io.getStdErr());
+    var differ = if (T == u8) BytesDiffer{
+        .expected = expected_window,
+        .actual = actual_window,
+        .ttyconf = ttyconf,
+    } else SliceDiffer(T){
+        .start_index = window_start,
+        .expected = expected_window,
+        .actual = actual_window,
+        .ttyconf = ttyconf,
+    };
+    const stderr = std.io.getStdErr();
+
+    // Print indexes as hex for slices of u8 since it's more likely to be binary data where
+    // that is usually useful.
+    const index_fmt = if (T == u8) "0x{X}" else "{}";
+
+    std.debug.print("\n============ expected this output: =============  len: {} (0x{X})\n\n", .{ expected.len, expected.len });
+    if (window_start > 0) {
+        if (T == u8) {
+            std.debug.print("... truncated, start index: " ++ index_fmt ++ " ...\n", .{window_start});
+        } else {
+            std.debug.print("... truncated ...\n", .{});
+        }
+    }
+    differ.write(stderr.writer()) catch {};
+    if (expected_truncated) {
+        const end_offset = window_start + expected_window.len;
+        const num_missing_items = expected.len - (window_start + expected_window.len);
+        if (T == u8) {
+            std.debug.print("... truncated, indexes [" ++ index_fmt ++ "..] not shown, remaining bytes: " ++ index_fmt ++ " ...\n", .{ end_offset, num_missing_items });
+        } else {
+            std.debug.print("... truncated, remaining items: " ++ index_fmt ++ " ...\n", .{num_missing_items});
+        }
+    }
+
+    // now reverse expected/actual and print again
+    differ.expected = actual_window;
+    differ.actual = expected_window;
+    std.debug.print("\n============= instead found this: ==============  len: {} (0x{X})\n\n", .{ actual.len, actual.len });
+    if (window_start > 0) {
+        if (T == u8) {
+            std.debug.print("... truncated, start index: " ++ index_fmt ++ " ...\n", .{window_start});
+        } else {
+            std.debug.print("... truncated ...\n", .{});
+        }
+    }
+    differ.write(stderr.writer()) catch {};
+    if (actual_truncated) {
+        const end_offset = window_start + actual_window.len;
+        const num_missing_items = actual.len - (window_start + actual_window.len);
+        if (T == u8) {
+            std.debug.print("... truncated, indexes [" ++ index_fmt ++ "..] not shown, remaining bytes: " ++ index_fmt ++ " ...\n", .{ end_offset, num_missing_items });
+        } else {
+            std.debug.print("... truncated, remaining items: " ++ index_fmt ++ " ...\n", .{num_missing_items});
+        }
+    }
+    std.debug.print("\n================================================\n\n", .{});
+
+    return error.TestExpectedEqual;
+}
+
+fn SliceDiffer(comptime T: type) type {
+    return struct {
+        start_index: usize,
+        expected: []const T,
+        actual: []const T,
+        ttyconf: std.debug.TTY.Config,
+
+        const Self = @This();
+
+        pub fn write(self: Self, writer: anytype) !void {
+            for (self.expected, 0..) |value, i| {
+                var full_index = self.start_index + i;
+                const diff = if (i < self.actual.len) !std.meta.eql(self.actual[i], value) else true;
+                if (diff) try self.ttyconf.setColor(writer, .Red);
+                try writer.print("[{}]: {any}\n", .{ full_index, value });
+                if (dif
