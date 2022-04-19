@@ -389,4 +389,247 @@ fn SliceDiffer(comptime T: type) type {
                 const diff = if (i < self.actual.len) !std.meta.eql(self.actual[i], value) else true;
                 if (diff) try self.ttyconf.setColor(writer, .Red);
                 try writer.print("[{}]: {any}\n", .{ full_index, value });
-                if (dif
+                if (diff) try self.ttyconf.setColor(writer, .Reset);
+            }
+        }
+    };
+}
+
+const BytesDiffer = struct {
+    expected: []const u8,
+    actual: []const u8,
+    ttyconf: std.debug.TTY.Config,
+
+    pub fn write(self: BytesDiffer, writer: anytype) !void {
+        var expected_iterator = ChunkIterator{ .bytes = self.expected };
+        while (expected_iterator.next()) |chunk| {
+            // to avoid having to calculate diffs twice per chunk
+            var diffs: std.bit_set.IntegerBitSet(16) = .{ .mask = 0 };
+            for (chunk, 0..) |byte, i| {
+                var absolute_byte_index = (expected_iterator.index - chunk.len) + i;
+                const diff = if (absolute_byte_index < self.actual.len) self.actual[absolute_byte_index] != byte else true;
+                if (diff) diffs.set(i);
+                try self.writeByteDiff(writer, "{X:0>2} ", byte, diff);
+                if (i == 7) try writer.writeByte(' ');
+            }
+            try writer.writeByte(' ');
+            if (chunk.len < 16) {
+                var missing_columns = (16 - chunk.len) * 3;
+                if (chunk.len < 8) missing_columns += 1;
+                try writer.writeByteNTimes(' ', missing_columns);
+            }
+            for (chunk, 0..) |byte, i| {
+                const byte_to_print = if (std.ascii.isPrint(byte)) byte else '.';
+                try self.writeByteDiff(writer, "{c}", byte_to_print, diffs.isSet(i));
+            }
+            try writer.writeByte('\n');
+        }
+    }
+
+    fn writeByteDiff(self: BytesDiffer, writer: anytype, comptime fmt: []const u8, byte: u8, diff: bool) !void {
+        if (diff) try self.ttyconf.setColor(writer, .Red);
+        try writer.print(fmt, .{byte});
+        if (diff) try self.ttyconf.setColor(writer, .Reset);
+    }
+
+    const ChunkIterator = struct {
+        bytes: []const u8,
+        index: usize = 0,
+
+        pub fn next(self: *ChunkIterator) ?[]const u8 {
+            if (self.index == self.bytes.len) return null;
+
+            const start_index = self.index;
+            const end_index = @min(self.bytes.len, start_index + 16);
+            self.index = end_index;
+            return self.bytes[start_index..end_index];
+        }
+    };
+};
+
+test {
+    try expectEqualSlices(u8, "foo\x00", "foo\x00");
+    try expectEqualSlices(u16, &[_]u16{ 100, 200, 300, 400 }, &[_]u16{ 100, 200, 300, 400 });
+    const E = enum { foo, bar };
+    const S = struct {
+        v: E,
+    };
+    try expectEqualSlices(
+        S,
+        &[_]S{ .{ .v = .foo }, .{ .v = .bar }, .{ .v = .foo }, .{ .v = .bar } },
+        &[_]S{ .{ .v = .foo }, .{ .v = .bar }, .{ .v = .foo }, .{ .v = .bar } },
+    );
+}
+
+/// This function is intended to be used only in tests. Checks that two slices or two arrays are equal,
+/// including that their sentinel (if any) are the same. Will error if given another type.
+pub fn expectEqualSentinel(comptime T: type, comptime sentinel: T, expected: [:sentinel]const T, actual: [:sentinel]const T) !void {
+    try expectEqualSlices(T, expected, actual);
+
+    const expected_value_sentinel = blk: {
+        switch (@typeInfo(@TypeOf(expected))) {
+            .Pointer => {
+                break :blk expected[expected.len];
+            },
+            .Array => |array_info| {
+                const indexable_outside_of_bounds = @as([]const array_info.child, &expected);
+                break :blk indexable_outside_of_bounds[indexable_outside_of_bounds.len];
+            },
+            else => {},
+        }
+    };
+
+    const actual_value_sentinel = blk: {
+        switch (@typeInfo(@TypeOf(actual))) {
+            .Pointer => {
+                break :blk actual[actual.len];
+            },
+            .Array => |array_info| {
+                const indexable_outside_of_bounds = @as([]const array_info.child, &actual);
+                break :blk indexable_outside_of_bounds[indexable_outside_of_bounds.len];
+            },
+            else => {},
+        }
+    };
+
+    if (!std.meta.eql(sentinel, expected_value_sentinel)) {
+        std.debug.print("expectEqualSentinel: 'expected' sentinel in memory is different from its type sentinel. type sentinel {}, in memory sentinel {}\n", .{ sentinel, expected_value_sentinel });
+        return error.TestExpectedEqual;
+    }
+
+    if (!std.meta.eql(sentinel, actual_value_sentinel)) {
+        std.debug.print("expectEqualSentinel: 'actual' sentinel in memory is different from its type sentinel. type sentinel {}, in memory sentinel {}\n", .{ sentinel, actual_value_sentinel });
+        return error.TestExpectedEqual;
+    }
+}
+
+/// This function is intended to be used only in tests.
+/// When `ok` is false, returns a test failure error.
+pub fn expect(ok: bool) !void {
+    if (!ok) return error.TestUnexpectedResult;
+}
+
+pub const TmpDir = struct {
+    dir: std.fs.Dir,
+    parent_dir: std.fs.Dir,
+    sub_path: [sub_path_len]u8,
+
+    const random_bytes_count = 12;
+    const sub_path_len = std.fs.base64_encoder.calcSize(random_bytes_count);
+
+    pub fn cleanup(self: *TmpDir) void {
+        self.dir.close();
+        self.parent_dir.deleteTree(&self.sub_path) catch {};
+        self.parent_dir.close();
+        self.* = undefined;
+    }
+};
+
+pub const TmpIterableDir = struct {
+    iterable_dir: std.fs.IterableDir,
+    parent_dir: std.fs.Dir,
+    sub_path: [sub_path_len]u8,
+
+    const random_bytes_count = 12;
+    const sub_path_len = std.fs.base64_encoder.calcSize(random_bytes_count);
+
+    pub fn cleanup(self: *TmpIterableDir) void {
+        self.iterable_dir.close();
+        self.parent_dir.deleteTree(&self.sub_path) catch {};
+        self.parent_dir.close();
+        self.* = undefined;
+    }
+};
+
+pub fn tmpDir(opts: std.fs.Dir.OpenDirOptions) TmpDir {
+    var random_bytes: [TmpDir.random_bytes_count]u8 = undefined;
+    std.crypto.random.bytes(&random_bytes);
+    var sub_path: [TmpDir.sub_path_len]u8 = undefined;
+    _ = std.fs.base64_encoder.encode(&sub_path, &random_bytes);
+
+    var cwd = std.fs.cwd();
+    var cache_dir = cwd.makeOpenPath("zig-cache", .{}) catch
+        @panic("unable to make tmp dir for testing: unable to make and open zig-cache dir");
+    defer cache_dir.close();
+    var parent_dir = cache_dir.makeOpenPath("tmp", .{}) catch
+        @panic("unable to make tmp dir for testing: unable to make and open zig-cache/tmp dir");
+    var dir = parent_dir.makeOpenPath(&sub_path, opts) catch
+        @panic("unable to make tmp dir for testing: unable to make and open the tmp dir");
+
+    return .{
+        .dir = dir,
+        .parent_dir = parent_dir,
+        .sub_path = sub_path,
+    };
+}
+
+pub fn tmpIterableDir(opts: std.fs.Dir.OpenDirOptions) TmpIterableDir {
+    var random_bytes: [TmpIterableDir.random_bytes_count]u8 = undefined;
+    std.crypto.random.bytes(&random_bytes);
+    var sub_path: [TmpIterableDir.sub_path_len]u8 = undefined;
+    _ = std.fs.base64_encoder.encode(&sub_path, &random_bytes);
+
+    var cwd = std.fs.cwd();
+    var cache_dir = cwd.makeOpenPath("zig-cache", .{}) catch
+        @panic("unable to make tmp dir for testing: unable to make and open zig-cache dir");
+    defer cache_dir.close();
+    var parent_dir = cache_dir.makeOpenPath("tmp", .{}) catch
+        @panic("unable to make tmp dir for testing: unable to make and open zig-cache/tmp dir");
+    var dir = parent_dir.makeOpenPathIterable(&sub_path, opts) catch
+        @panic("unable to make tmp dir for testing: unable to make and open the tmp dir");
+
+    return .{
+        .iterable_dir = dir,
+        .parent_dir = parent_dir,
+        .sub_path = sub_path,
+    };
+}
+
+test "expectEqual nested array" {
+    const a = [2][2]f32{
+        [_]f32{ 1.0, 0.0 },
+        [_]f32{ 0.0, 1.0 },
+    };
+
+    const b = [2][2]f32{
+        [_]f32{ 1.0, 0.0 },
+        [_]f32{ 0.0, 1.0 },
+    };
+
+    try expectEqual(a, b);
+}
+
+test "expectEqual vector" {
+    var a = @splat(4, @as(u32, 4));
+    var b = @splat(4, @as(u32, 4));
+
+    try expectEqual(a, b);
+}
+
+pub fn expectEqualStrings(expected: []const u8, actual: []const u8) !void {
+    if (std.mem.indexOfDiff(u8, actual, expected)) |diff_index| {
+        print("\n====== expected this output: =========\n", .{});
+        printWithVisibleNewlines(expected);
+        print("\n======== instead found this: =========\n", .{});
+        printWithVisibleNewlines(actual);
+        print("\n======================================\n", .{});
+
+        var diff_line_number: usize = 1;
+        for (expected[0..diff_index]) |value| {
+            if (value == '\n') diff_line_number += 1;
+        }
+        print("First difference occurs on line {d}:\n", .{diff_line_number});
+
+        print("expected:\n", .{});
+        printIndicatorLine(expected, diff_index);
+
+        print("found:\n", .{});
+        printIndicatorLine(actual, diff_index);
+
+        return error.TestExpectedEqual;
+    }
+}
+
+pub fn expectStringStartsWith(actual: []const u8, expected_starts_with: []const u8) !void {
+    if (std.mem.startsWith(u8, actual, expected_starts_with))
+ 
