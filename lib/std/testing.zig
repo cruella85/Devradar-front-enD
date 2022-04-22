@@ -863,4 +863,235 @@ test "expectEqualDeep primitive type" {
 
     // optional
     {
-        const foo
+        const foo: ?u32 = 1;
+        const bar: ?u32 = 1;
+        try expectEqualDeep(foo, bar);
+        try expectEqualDeep(?u32, ?u32);
+    }
+    // function type
+    {
+        const fnType = struct {
+            fn foo() void {
+                unreachable;
+            }
+        }.foo;
+        try expectEqualDeep(fnType, fnType);
+    }
+}
+
+test "expectEqualDeep pointer" {
+    const a = 1;
+    const b = 1;
+    try expectEqualDeep(&a, &b);
+}
+
+test "expectEqualDeep composite type" {
+    try expectEqualDeep("abc", "abc");
+    const s1: []const u8 = "abc";
+    const s2 = "abcd";
+    const s3: []const u8 = s2[0..3];
+    try expectEqualDeep(s1, s3);
+
+    const TestStruct = struct { s: []const u8 };
+    try expectEqualDeep(TestStruct{ .s = "abc" }, TestStruct{ .s = "abc" });
+    try expectEqualDeep([_][]const u8{ "a", "b", "c" }, [_][]const u8{ "a", "b", "c" });
+
+    // vector
+    try expectEqualDeep(@splat(4, @as(u32, 4)), @splat(4, @as(u32, 4)));
+
+    // nested array
+    {
+        const a = [2][2]f32{
+            [_]f32{ 1.0, 0.0 },
+            [_]f32{ 0.0, 1.0 },
+        };
+
+        const b = [2][2]f32{
+            [_]f32{ 1.0, 0.0 },
+            [_]f32{ 0.0, 1.0 },
+        };
+
+        try expectEqualDeep(a, b);
+        try expectEqualDeep(&a, &b);
+    }
+}
+
+fn printIndicatorLine(source: []const u8, indicator_index: usize) void {
+    const line_begin_index = if (std.mem.lastIndexOfScalar(u8, source[0..indicator_index], '\n')) |line_begin|
+        line_begin + 1
+    else
+        0;
+    const line_end_index = if (std.mem.indexOfScalar(u8, source[indicator_index..], '\n')) |line_end|
+        (indicator_index + line_end)
+    else
+        source.len;
+
+    printLine(source[line_begin_index..line_end_index]);
+    {
+        var i: usize = line_begin_index;
+        while (i < indicator_index) : (i += 1)
+            print(" ", .{});
+    }
+    if (indicator_index >= source.len)
+        print("^ (end of string)\n", .{})
+    else
+        print("^ ('\\x{x:0>2}')\n", .{source[indicator_index]});
+}
+
+fn printWithVisibleNewlines(source: []const u8) void {
+    var i: usize = 0;
+    while (std.mem.indexOfScalar(u8, source[i..], '\n')) |nl| : (i += nl + 1) {
+        printLine(source[i .. i + nl]);
+    }
+    print("{s}␃\n", .{source[i..]}); // End of Text symbol (ETX)
+}
+
+fn printLine(line: []const u8) void {
+    if (line.len != 0) switch (line[line.len - 1]) {
+        ' ', '\t' => return print("{s}⏎\n", .{line}), // Carriage return symbol,
+        else => {},
+    };
+    print("{s}\n", .{line});
+}
+
+test {
+    try expectEqualStrings("foo", "foo");
+}
+
+/// Exhaustively check that allocation failures within `test_fn` are handled without
+/// introducing memory leaks. If used with the `testing.allocator` as the `backing_allocator`,
+/// it will also be able to detect double frees, etc (when runtime safety is enabled).
+///
+/// The provided `test_fn` must have a `std.mem.Allocator` as its first argument,
+/// and must have a return type of `!void`. Any extra arguments of `test_fn` can
+/// be provided via the `extra_args` tuple.
+///
+/// Any relevant state shared between runs of `test_fn` *must* be reset within `test_fn`.
+///
+/// The strategy employed is to:
+/// - Run the test function once to get the total number of allocations.
+/// - Then, iterate and run the function X more times, incrementing
+///   the failing index each iteration (where X is the total number of
+///   allocations determined previously)
+///
+/// Expects that `test_fn` has a deterministic number of memory allocations:
+/// - If an allocation was made to fail during a run of `test_fn`, but `test_fn`
+///   didn't return `error.OutOfMemory`, then `error.SwallowedOutOfMemoryError`
+///   is returned from `checkAllAllocationFailures`. You may want to ignore this
+///   depending on whether or not the code you're testing includes some strategies
+///   for recovering from `error.OutOfMemory`.
+/// - If a run of `test_fn` with an expected allocation failure executes without
+///   an allocation failure being induced, then `error.NondeterministicMemoryUsage`
+///   is returned. This error means that there are allocation points that won't be
+///   tested by the strategy this function employs (that is, there are sometimes more
+///   points of allocation than the initial run of `test_fn` detects).
+///
+/// ---
+///
+/// Here's an example using a simple test case that will cause a leak when the
+/// allocation of `bar` fails (but will pass normally):
+///
+/// ```zig
+/// test {
+///     const length: usize = 10;
+///     const allocator = std.testing.allocator;
+///     var foo = try allocator.alloc(u8, length);
+///     var bar = try allocator.alloc(u8, length);
+///
+///     allocator.free(foo);
+///     allocator.free(bar);
+/// }
+/// ```
+///
+/// The test case can be converted to something that this function can use by
+/// doing:
+///
+/// ```zig
+/// fn testImpl(allocator: std.mem.Allocator, length: usize) !void {
+///     var foo = try allocator.alloc(u8, length);
+///     var bar = try allocator.alloc(u8, length);
+///
+///     allocator.free(foo);
+///     allocator.free(bar);
+/// }
+///
+/// test {
+///     const length: usize = 10;
+///     const allocator = std.testing.allocator;
+///     try std.testing.checkAllAllocationFailures(allocator, testImpl, .{length});
+/// }
+/// ```
+///
+/// Running this test will show that `foo` is leaked when the allocation of
+/// `bar` fails. The simplest fix, in this case, would be to use defer like so:
+///
+/// ```zig
+/// fn testImpl(allocator: std.mem.Allocator, length: usize) !void {
+///     var foo = try allocator.alloc(u8, length);
+///     defer allocator.free(foo);
+///     var bar = try allocator.alloc(u8, length);
+///     defer allocator.free(bar);
+/// }
+/// ```
+pub fn checkAllAllocationFailures(backing_allocator: std.mem.Allocator, comptime test_fn: anytype, extra_args: anytype) !void {
+    switch (@typeInfo(@typeInfo(@TypeOf(test_fn)).Fn.return_type.?)) {
+        .ErrorUnion => |info| {
+            if (info.payload != void) {
+                @compileError("Return type must be !void");
+            }
+        },
+        else => @compileError("Return type must be !void"),
+    }
+    if (@typeInfo(@TypeOf(extra_args)) != .Struct) {
+        @compileError("Expected tuple or struct argument, found " ++ @typeName(@TypeOf(extra_args)));
+    }
+
+    const ArgsTuple = std.meta.ArgsTuple(@TypeOf(test_fn));
+    const fn_args_fields = @typeInfo(ArgsTuple).Struct.fields;
+    if (fn_args_fields.len == 0 or fn_args_fields[0].type != std.mem.Allocator) {
+        @compileError("The provided function must have an " ++ @typeName(std.mem.Allocator) ++ " as its first argument");
+    }
+    const expected_args_tuple_len = fn_args_fields.len - 1;
+    if (extra_args.len != expected_args_tuple_len) {
+        @compileError("The provided function expects " ++ std.fmt.comptimePrint("{d}", .{expected_args_tuple_len}) ++ " extra arguments, but the provided tuple contains " ++ std.fmt.comptimePrint("{d}", .{extra_args.len}));
+    }
+
+    // Setup the tuple that will actually be used with @call (we'll need to insert
+    // the failing allocator in field @"0" before each @call)
+    var args: ArgsTuple = undefined;
+    inline for (@typeInfo(@TypeOf(extra_args)).Struct.fields, 0..) |field, i| {
+        const arg_i_str = comptime str: {
+            var str_buf: [100]u8 = undefined;
+            const args_i = i + 1;
+            const str_len = std.fmt.formatIntBuf(&str_buf, args_i, 10, .lower, .{});
+            break :str str_buf[0..str_len];
+        };
+        @field(args, arg_i_str) = @field(extra_args, field.name);
+    }
+
+    // Try it once with unlimited memory, make sure it works
+    const needed_alloc_count = x: {
+        var failing_allocator_inst = std.testing.FailingAllocator.init(backing_allocator, std.math.maxInt(usize));
+        args.@"0" = failing_allocator_inst.allocator();
+
+        try @call(.auto, test_fn, args);
+        break :x failing_allocator_inst.index;
+    };
+
+    var fail_index: usize = 0;
+    while (fail_index < needed_alloc_count) : (fail_index += 1) {
+        var failing_allocator_inst = std.testing.FailingAllocator.init(backing_allocator, fail_index);
+        args.@"0" = failing_allocator_inst.allocator();
+
+        if (@call(.auto, test_fn, args)) |_| {
+            if (failing_allocator_inst.has_induced_failure) {
+                return error.SwallowedOutOfMemoryError;
+            } else {
+                return error.NondeterministicMemoryUsage;
+            }
+        } else |err| switch (err) {
+            error.OutOfMemory => {
+                if (failing_allocator_inst.allocated_bytes != failing_allocator_inst.freed_bytes) {
+                    print(
+                        "\nfail_index: {d}/{d}\nallocated bytes: {d}\nfreed bytes: {d}\nallocations: {d}\ndeallocations: {d}\nallocation that was made to fail: {}",
+       
