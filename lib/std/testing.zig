@@ -1094,4 +1094,45 @@ pub fn checkAllAllocationFailures(backing_allocator: std.mem.Allocator, comptime
                 if (failing_allocator_inst.allocated_bytes != failing_allocator_inst.freed_bytes) {
                     print(
                         "\nfail_index: {d}/{d}\nallocated bytes: {d}\nfreed bytes: {d}\nallocations: {d}\ndeallocations: {d}\nallocation that was made to fail: {}",
-       
+                        .{
+                            fail_index,
+                            needed_alloc_count,
+                            failing_allocator_inst.allocated_bytes,
+                            failing_allocator_inst.freed_bytes,
+                            failing_allocator_inst.allocations,
+                            failing_allocator_inst.deallocations,
+                            failing_allocator_inst.getStackTrace(),
+                        },
+                    );
+                    return error.MemoryLeakDetected;
+                }
+            },
+            else => return err,
+        }
+    }
+}
+
+/// Given a type, references all the declarations inside, so that the semantic analyzer sees them.
+pub fn refAllDecls(comptime T: type) void {
+    if (!builtin.is_test) return;
+    inline for (comptime std.meta.declarations(T)) |decl| {
+        if (decl.is_pub) _ = @field(T, decl.name);
+    }
+}
+
+/// Given a type, recursively references all the declarations inside, so that the semantic analyzer sees them.
+/// For deep types, you may use `@setEvalBranchQuota`.
+pub fn refAllDeclsRecursive(comptime T: type) void {
+    if (!builtin.is_test) return;
+    inline for (comptime std.meta.declarations(T)) |decl| {
+        if (decl.is_pub) {
+            if (@TypeOf(@field(T, decl.name)) == type) {
+                switch (@typeInfo(@field(T, decl.name))) {
+                    .Struct, .Enum, .Union, .Opaque => refAllDeclsRecursive(@field(T, decl.name)),
+                    else => {},
+                }
+            }
+            _ = @field(T, decl.name);
+        }
+    }
+}
