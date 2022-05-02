@@ -105,4 +105,207 @@ pub const Register = enum(u8) {
 
             @enumToInt(Register.q0)...@enumToInt(Register.q31) => @intCast(u5, @enumToInt(self) - @enumToInt(Register.q0)),
             @enumToInt(Register.d0)...@enumToInt(Register.d31) => @intCast(u5, @enumToInt(self) - @enumToInt(Register.d0)),
-            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intCast(u5, @en
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intCast(u5, @enumToInt(self) - @enumToInt(Register.s0)),
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => @intCast(u5, @enumToInt(self) - @enumToInt(Register.h0)),
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => @intCast(u5, @enumToInt(self) - @enumToInt(Register.b0)),
+            else => unreachable,
+        };
+    }
+
+    /// Returns the bit-width of the register.
+    pub fn size(self: Register) u8 {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.x0)...@enumToInt(Register.xzr) => 64,
+            @enumToInt(Register.w0)...@enumToInt(Register.wzr) => 32,
+
+            @enumToInt(Register.sp) => 64,
+            @enumToInt(Register.wsp) => 32,
+
+            @enumToInt(Register.q0)...@enumToInt(Register.q31) => 128,
+            @enumToInt(Register.d0)...@enumToInt(Register.d31) => 64,
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => 32,
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => 16,
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => 8,
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a general-purpose register to its 64 bit alias.
+    pub fn toX(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.x0)...@enumToInt(Register.xzr) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.x0) + @enumToInt(Register.x0),
+            ),
+            @enumToInt(Register.w0)...@enumToInt(Register.wzr) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.w0) + @enumToInt(Register.x0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a general-purpose register to its 32 bit alias.
+    pub fn toW(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.x0)...@enumToInt(Register.xzr) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.x0) + @enumToInt(Register.w0),
+            ),
+            @enumToInt(Register.w0)...@enumToInt(Register.wzr) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.w0) + @enumToInt(Register.w0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a floating-point register to its 128 bit alias.
+    pub fn toQ(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.q0)...@enumToInt(Register.q31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.q0) + @enumToInt(Register.q0),
+            ),
+            @enumToInt(Register.d0)...@enumToInt(Register.d31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.d0) + @enumToInt(Register.q0),
+            ),
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.s0) + @enumToInt(Register.q0),
+            ),
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.h0) + @enumToInt(Register.q0),
+            ),
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.b0) + @enumToInt(Register.q0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a floating-point register to its 64 bit alias.
+    pub fn toD(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.q0)...@enumToInt(Register.q31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.q0) + @enumToInt(Register.d0),
+            ),
+            @enumToInt(Register.d0)...@enumToInt(Register.d31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.d0) + @enumToInt(Register.d0),
+            ),
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.s0) + @enumToInt(Register.d0),
+            ),
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.h0) + @enumToInt(Register.d0),
+            ),
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.b0) + @enumToInt(Register.d0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a floating-point register to its 32 bit alias.
+    pub fn toS(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.q0)...@enumToInt(Register.q31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.q0) + @enumToInt(Register.s0),
+            ),
+            @enumToInt(Register.d0)...@enumToInt(Register.d31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.d0) + @enumToInt(Register.s0),
+            ),
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.s0) + @enumToInt(Register.s0),
+            ),
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.h0) + @enumToInt(Register.s0),
+            ),
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.b0) + @enumToInt(Register.s0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a floating-point register to its 16 bit alias.
+    pub fn toH(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.q0)...@enumToInt(Register.q31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.q0) + @enumToInt(Register.h0),
+            ),
+            @enumToInt(Register.d0)...@enumToInt(Register.d31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.d0) + @enumToInt(Register.h0),
+            ),
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.s0) + @enumToInt(Register.h0),
+            ),
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.h0) + @enumToInt(Register.h0),
+            ),
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.b0) + @enumToInt(Register.h0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    /// Convert from a floating-point register to its 8 bit alias.
+    pub fn toB(self: Register) Register {
+        return switch (@enumToInt(self)) {
+            @enumToInt(Register.q0)...@enumToInt(Register.q31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.q0) + @enumToInt(Register.b0),
+            ),
+            @enumToInt(Register.d0)...@enumToInt(Register.d31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.d0) + @enumToInt(Register.b0),
+            ),
+            @enumToInt(Register.s0)...@enumToInt(Register.s31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.s0) + @enumToInt(Register.b0),
+            ),
+            @enumToInt(Register.h0)...@enumToInt(Register.h31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.h0) + @enumToInt(Register.b0),
+            ),
+            @enumToInt(Register.b0)...@enumToInt(Register.b31) => @intToEnum(
+                Register,
+                @enumToInt(self) - @enumToInt(Register.b0) + @enumToInt(Register.b0),
+            ),
+            else => unreachable,
+        };
+    }
+
+    pub fn dwarfLocOp(self: Register) u8 {
+        return @as(u8, self.enc()) + DW.OP.reg0;
+    }
+
+    /// DWARF encodings that push a value onto the DWARF stack that is either
+    /// the contents of a register or the result of adding the contents a given
+    /// register to a given signed offset.
+    pub fn dwarfLocOpDeref(self: Register) u8 {
+        return @as(u8, self.enc()) + DW.OP.breg0;
+    }
+};
+
+test "Register.enc" {
+    try testing.expectE
