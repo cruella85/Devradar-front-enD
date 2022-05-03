@@ -308,4 +308,324 @@ pub const Register = enum(u8) {
 };
 
 test "Register.enc" {
-    try testing.expectE
+    try testing.expectEqual(@as(u5, 0), Register.x0.enc());
+    try testing.expectEqual(@as(u5, 0), Register.w0.enc());
+
+    try testing.expectEqual(@as(u5, 31), Register.xzr.enc());
+    try testing.expectEqual(@as(u5, 31), Register.wzr.enc());
+
+    try testing.expectEqual(@as(u5, 31), Register.sp.enc());
+    try testing.expectEqual(@as(u5, 31), Register.sp.enc());
+}
+
+test "Register.size" {
+    try testing.expectEqual(@as(u8, 64), Register.x19.size());
+    try testing.expectEqual(@as(u8, 32), Register.w3.size());
+}
+
+test "Register.toX/toW" {
+    try testing.expectEqual(Register.x0, Register.w0.toX());
+    try testing.expectEqual(Register.x0, Register.x0.toX());
+
+    try testing.expectEqual(Register.w3, Register.w3.toW());
+    try testing.expectEqual(Register.w3, Register.x3.toW());
+}
+
+/// Represents an instruction in the AArch64 instruction set
+pub const Instruction = union(enum) {
+    move_wide_immediate: packed struct {
+        rd: u5,
+        imm16: u16,
+        hw: u2,
+        fixed: u6 = 0b100101,
+        opc: u2,
+        sf: u1,
+    },
+    pc_relative_address: packed struct {
+        rd: u5,
+        immhi: u19,
+        fixed: u5 = 0b10000,
+        immlo: u2,
+        op: u1,
+    },
+    load_store_register: packed struct {
+        rt: u5,
+        rn: u5,
+        offset: u12,
+        opc: u2,
+        op1: u2,
+        v: u1,
+        fixed: u3 = 0b111,
+        size: u2,
+    },
+    load_store_register_pair: packed struct {
+        rt1: u5,
+        rn: u5,
+        rt2: u5,
+        imm7: u7,
+        load: u1,
+        encoding: u2,
+        fixed: u5 = 0b101_0_0,
+        opc: u2,
+    },
+    load_literal: packed struct {
+        rt: u5,
+        imm19: u19,
+        fixed: u6 = 0b011_0_00,
+        opc: u2,
+    },
+    exception_generation: packed struct {
+        ll: u2,
+        op2: u3,
+        imm16: u16,
+        opc: u3,
+        fixed: u8 = 0b1101_0100,
+    },
+    unconditional_branch_register: packed struct {
+        op4: u5,
+        rn: u5,
+        op3: u6,
+        op2: u5,
+        opc: u4,
+        fixed: u7 = 0b1101_011,
+    },
+    unconditional_branch_immediate: packed struct {
+        imm26: u26,
+        fixed: u5 = 0b00101,
+        op: u1,
+    },
+    no_operation: packed struct {
+        fixed: u32 = 0b1101010100_0_00_011_0010_0000_000_11111,
+    },
+    logical_shifted_register: packed struct {
+        rd: u5,
+        rn: u5,
+        imm6: u6,
+        rm: u5,
+        n: u1,
+        shift: u2,
+        fixed: u5 = 0b01010,
+        opc: u2,
+        sf: u1,
+    },
+    add_subtract_immediate: packed struct {
+        rd: u5,
+        rn: u5,
+        imm12: u12,
+        sh: u1,
+        fixed: u6 = 0b100010,
+        s: u1,
+        op: u1,
+        sf: u1,
+    },
+    logical_immediate: packed struct {
+        rd: u5,
+        rn: u5,
+        imms: u6,
+        immr: u6,
+        n: u1,
+        fixed: u6 = 0b100100,
+        opc: u2,
+        sf: u1,
+    },
+    bitfield: packed struct {
+        rd: u5,
+        rn: u5,
+        imms: u6,
+        immr: u6,
+        n: u1,
+        fixed: u6 = 0b100110,
+        opc: u2,
+        sf: u1,
+    },
+    add_subtract_shifted_register: packed struct {
+        rd: u5,
+        rn: u5,
+        imm6: u6,
+        rm: u5,
+        fixed_1: u1 = 0b0,
+        shift: u2,
+        fixed_2: u5 = 0b01011,
+        s: u1,
+        op: u1,
+        sf: u1,
+    },
+    add_subtract_extended_register: packed struct {
+        rd: u5,
+        rn: u5,
+        imm3: u3,
+        option: u3,
+        rm: u5,
+        fixed: u8 = 0b01011_00_1,
+        s: u1,
+        op: u1,
+        sf: u1,
+    },
+    conditional_branch: struct {
+        cond: u4,
+        o0: u1,
+        imm19: u19,
+        o1: u1,
+        fixed: u7 = 0b0101010,
+    },
+    compare_and_branch: struct {
+        rt: u5,
+        imm19: u19,
+        op: u1,
+        fixed: u6 = 0b011010,
+        sf: u1,
+    },
+    conditional_select: struct {
+        rd: u5,
+        rn: u5,
+        op2: u2,
+        cond: u4,
+        rm: u5,
+        fixed: u8 = 0b11010100,
+        s: u1,
+        op: u1,
+        sf: u1,
+    },
+    data_processing_3_source: packed struct {
+        rd: u5,
+        rn: u5,
+        ra: u5,
+        o0: u1,
+        rm: u5,
+        op31: u3,
+        fixed: u5 = 0b11011,
+        op54: u2,
+        sf: u1,
+    },
+    data_processing_2_source: packed struct {
+        rd: u5,
+        rn: u5,
+        opcode: u6,
+        rm: u5,
+        fixed_1: u8 = 0b11010110,
+        s: u1,
+        fixed_2: u1 = 0b0,
+        sf: u1,
+    },
+
+    pub const Condition = enum(u4) {
+        /// Integer: Equal
+        /// Floating point: Equal
+        eq,
+        /// Integer: Not equal
+        /// Floating point: Not equal or unordered
+        ne,
+        /// Integer: Carry set
+        /// Floating point: Greater than, equal, or unordered
+        cs,
+        /// Integer: Carry clear
+        /// Floating point: Less than
+        cc,
+        /// Integer: Minus, negative
+        /// Floating point: Less than
+        mi,
+        /// Integer: Plus, positive or zero
+        /// Floating point: Greater than, equal, or unordered
+        pl,
+        /// Integer: Overflow
+        /// Floating point: Unordered
+        vs,
+        /// Integer: No overflow
+        /// Floating point: Ordered
+        vc,
+        /// Integer: Unsigned higher
+        /// Floating point: Greater than, or unordered
+        hi,
+        /// Integer: Unsigned lower or same
+        /// Floating point: Less than or equal
+        ls,
+        /// Integer: Signed greater than or equal
+        /// Floating point: Greater than or equal
+        ge,
+        /// Integer: Signed less than
+        /// Floating point: Less than, or unordered
+        lt,
+        /// Integer: Signed greater than
+        /// Floating point: Greater than
+        gt,
+        /// Integer: Signed less than or equal
+        /// Floating point: Less than, equal, or unordered
+        le,
+        /// Integer: Always
+        /// Floating point: Always
+        al,
+        /// Integer: Always
+        /// Floating point: Always
+        nv,
+
+        /// Converts a std.math.CompareOperator into a condition flag,
+        /// i.e. returns the condition that is true iff the result of the
+        /// comparison is true. Assumes signed comparison
+        pub fn fromCompareOperatorSigned(op: std.math.CompareOperator) Condition {
+            return switch (op) {
+                .gte => .ge,
+                .gt => .gt,
+                .neq => .ne,
+                .lt => .lt,
+                .lte => .le,
+                .eq => .eq,
+            };
+        }
+
+        /// Converts a std.math.CompareOperator into a condition flag,
+        /// i.e. returns the condition that is true iff the result of the
+        /// comparison is true. Assumes unsigned comparison
+        pub fn fromCompareOperatorUnsigned(op: std.math.CompareOperator) Condition {
+            return switch (op) {
+                .gte => .cs,
+                .gt => .hi,
+                .neq => .ne,
+                .lt => .cc,
+                .lte => .ls,
+                .eq => .eq,
+            };
+        }
+
+        /// Returns the condition which is true iff the given condition is
+        /// false (if such a condition exists)
+        pub fn negate(cond: Condition) Condition {
+            return switch (cond) {
+                .eq => .ne,
+                .ne => .eq,
+                .cs => .cc,
+                .cc => .cs,
+                .mi => .pl,
+                .pl => .mi,
+                .vs => .vc,
+                .vc => .vs,
+                .hi => .ls,
+                .ls => .hi,
+                .ge => .lt,
+                .lt => .ge,
+                .gt => .le,
+                .le => .gt,
+                .al => unreachable,
+                .nv => unreachable,
+            };
+        }
+    };
+
+    pub fn toU32(self: Instruction) u32 {
+        return switch (self) {
+            .move_wide_immediate => |v| @bitCast(u32, v),
+            .pc_relative_address => |v| @bitCast(u32, v),
+            .load_store_register => |v| @bitCast(u32, v),
+            .load_store_register_pair => |v| @bitCast(u32, v),
+            .load_literal => |v| @bitCast(u32, v),
+            .exception_generation => |v| @bitCast(u32, v),
+            .unconditional_branch_register => |v| @bitCast(u32, v),
+            .unconditional_branch_immediate => |v| @bitCast(u32, v),
+            .no_operation => |v| @bitCast(u32, v),
+            .logical_shifted_register => |v| @bitCast(u32, v),
+            .add_subtract_immediate => |v| @bitCast(u32, v),
+            .logical_immediate => |v| @bitCast(u32, v),
+            .bitfield => |v| @bitCast(u32, v),
+            .add_subtract_shifted_register => |v| @bitCast(u32, v),
+            .add_subtract_extended_register => |v| @bitCast(u32, v),
+            // TODO once packed structs work, this can be refactored
+            .conditional_branch => |v| @as(u32, v.cond) | (@as(u32, v.o0) << 4) | (@as(u32, v.imm19) <
