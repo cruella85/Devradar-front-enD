@@ -1246,4 +1246,307 @@ pub const Instruction = union(enum) {
     }
 
     fn dataProcessing3Source(
-       
+        op54: u2,
+        op31: u3,
+        o0: u1,
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        ra: Register,
+    ) Instruction {
+        return Instruction{
+            .data_processing_3_source = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .ra = ra.enc(),
+                .o0 = o0,
+                .rm = rm.enc(),
+                .op31 = op31,
+                .op54 = op54,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn dataProcessing2Source(
+        s: u1,
+        opcode: u6,
+        rd: Register,
+        rn: Register,
+        rm: Register,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(rd.size() == rm.size());
+
+        return Instruction{
+            .data_processing_2_source = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .opcode = opcode,
+                .rm = rm.enc(),
+                .s = s,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    // Helper functions for assembly syntax functions
+
+    // Move wide (immediate)
+
+    pub fn movn(rd: Register, imm16: u16, shift: u6) Instruction {
+        return moveWideImmediate(0b00, rd, imm16, shift);
+    }
+
+    pub fn movz(rd: Register, imm16: u16, shift: u6) Instruction {
+        return moveWideImmediate(0b10, rd, imm16, shift);
+    }
+
+    pub fn movk(rd: Register, imm16: u16, shift: u6) Instruction {
+        return moveWideImmediate(0b11, rd, imm16, shift);
+    }
+
+    // PC relative address
+
+    pub fn adr(rd: Register, imm21: i21) Instruction {
+        return pcRelativeAddress(rd, imm21, 0b0);
+    }
+
+    pub fn adrp(rd: Register, imm21: i21) Instruction {
+        return pcRelativeAddress(rd, imm21, 0b1);
+    }
+
+    // Load or store register
+
+    pub fn ldrLiteral(rt: Register, literal: u19) Instruction {
+        return loadLiteral(rt, literal);
+    }
+
+    pub fn ldr(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .ldr);
+    }
+
+    pub fn ldrh(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .ldrh);
+    }
+
+    pub fn ldrb(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .ldrb);
+    }
+
+    pub fn ldrsb(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .ldrsb);
+    }
+
+    pub fn ldrsh(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .ldrsh);
+    }
+
+    pub fn ldrsw(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .ldrsw);
+    }
+
+    pub fn str(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .str);
+    }
+
+    pub fn strh(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .strh);
+    }
+
+    pub fn strb(rt: Register, rn: Register, offset: LoadStoreOffset) Instruction {
+        return loadStoreRegister(rt, rn, offset, .strb);
+    }
+
+    // Load or store pair of registers
+
+    pub const LoadStorePairOffset = struct {
+        encoding: enum(u2) {
+            post_index = 0b01,
+            signed = 0b10,
+            pre_index = 0b11,
+        },
+        offset: i9,
+
+        pub fn none() LoadStorePairOffset {
+            return .{ .encoding = .signed, .offset = 0 };
+        }
+
+        pub fn post_index(imm: i9) LoadStorePairOffset {
+            return .{ .encoding = .post_index, .offset = imm };
+        }
+
+        pub fn pre_index(imm: i9) LoadStorePairOffset {
+            return .{ .encoding = .pre_index, .offset = imm };
+        }
+
+        pub fn signed(imm: i9) LoadStorePairOffset {
+            return .{ .encoding = .signed, .offset = imm };
+        }
+    };
+
+    pub fn ldp(rt1: Register, rt2: Register, rn: Register, offset: LoadStorePairOffset) Instruction {
+        return loadStoreRegisterPair(rt1, rt2, rn, offset.offset, @enumToInt(offset.encoding), true);
+    }
+
+    pub fn ldnp(rt1: Register, rt2: Register, rn: Register, offset: i9) Instruction {
+        return loadStoreRegisterPair(rt1, rt2, rn, offset, 0, true);
+    }
+
+    pub fn stp(rt1: Register, rt2: Register, rn: Register, offset: LoadStorePairOffset) Instruction {
+        return loadStoreRegisterPair(rt1, rt2, rn, offset.offset, @enumToInt(offset.encoding), false);
+    }
+
+    pub fn stnp(rt1: Register, rt2: Register, rn: Register, offset: i9) Instruction {
+        return loadStoreRegisterPair(rt1, rt2, rn, offset, 0, false);
+    }
+
+    // Exception generation
+
+    pub fn svc(imm16: u16) Instruction {
+        return exceptionGeneration(0b000, 0b000, 0b01, imm16);
+    }
+
+    pub fn hvc(imm16: u16) Instruction {
+        return exceptionGeneration(0b000, 0b000, 0b10, imm16);
+    }
+
+    pub fn smc(imm16: u16) Instruction {
+        return exceptionGeneration(0b000, 0b000, 0b11, imm16);
+    }
+
+    pub fn brk(imm16: u16) Instruction {
+        return exceptionGeneration(0b001, 0b000, 0b00, imm16);
+    }
+
+    pub fn hlt(imm16: u16) Instruction {
+        return exceptionGeneration(0b010, 0b000, 0b00, imm16);
+    }
+
+    // Unconditional branch (register)
+
+    pub fn br(rn: Register) Instruction {
+        return unconditionalBranchRegister(0b0000, 0b11111, 0b000000, rn, 0b00000);
+    }
+
+    pub fn blr(rn: Register) Instruction {
+        return unconditionalBranchRegister(0b0001, 0b11111, 0b000000, rn, 0b00000);
+    }
+
+    pub fn ret(rn: ?Register) Instruction {
+        return unconditionalBranchRegister(0b0010, 0b11111, 0b000000, rn orelse .x30, 0b00000);
+    }
+
+    // Unconditional branch (immediate)
+
+    pub fn b(offset: i28) Instruction {
+        return unconditionalBranchImmediate(0, offset);
+    }
+
+    pub fn bl(offset: i28) Instruction {
+        return unconditionalBranchImmediate(1, offset);
+    }
+
+    // Nop
+
+    pub fn nop() Instruction {
+        return Instruction{ .no_operation = .{} };
+    }
+
+    // Logical (shifted register)
+
+    pub fn andShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b00, 0b0, rd, rn, rm, shift, amount);
+    }
+
+    pub fn bicShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b00, 0b1, rd, rn, rm, shift, amount);
+    }
+
+    pub fn orrShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b01, 0b0, rd, rn, rm, shift, amount);
+    }
+
+    pub fn ornShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b01, 0b1, rd, rn, rm, shift, amount);
+    }
+
+    pub fn eorShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b10, 0b0, rd, rn, rm, shift, amount);
+    }
+
+    pub fn eonShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b10, 0b1, rd, rn, rm, shift, amount);
+    }
+
+    pub fn andsShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b11, 0b0, rd, rn, rm, shift, amount);
+    }
+
+    pub fn bicsShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        return logicalShiftedRegister(0b11, 0b1, rd, rn, rm, shift, amount);
+    }
+
+    // Add/subtract (immediate)
+
+    pub fn add(rd: Register, rn: Register, imm: u12, shift: bool) Instruction {
+        return addSubtractImmediate(0b0, 0b0, rd, rn, imm, shift);
+    }
+
+    pub fn adds(rd: Register, rn: R
