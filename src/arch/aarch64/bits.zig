@@ -1549,4 +1549,278 @@ pub const Instruction = union(enum) {
         return addSubtractImmediate(0b0, 0b0, rd, rn, imm, shift);
     }
 
-    pub fn adds(rd: Register, rn: R
+    pub fn adds(rd: Register, rn: Register, imm: u12, shift: bool) Instruction {
+        return addSubtractImmediate(0b0, 0b1, rd, rn, imm, shift);
+    }
+
+    pub fn sub(rd: Register, rn: Register, imm: u12, shift: bool) Instruction {
+        return addSubtractImmediate(0b1, 0b0, rd, rn, imm, shift);
+    }
+
+    pub fn subs(rd: Register, rn: Register, imm: u12, shift: bool) Instruction {
+        return addSubtractImmediate(0b1, 0b1, rd, rn, imm, shift);
+    }
+
+    // Logical (immediate)
+
+    pub fn andImmediate(rd: Register, rn: Register, imms: u6, immr: u6, n: u1) Instruction {
+        return logicalImmediate(0b00, rd, rn, imms, immr, n);
+    }
+
+    pub fn orrImmediate(rd: Register, rn: Register, imms: u6, immr: u6, n: u1) Instruction {
+        return logicalImmediate(0b01, rd, rn, imms, immr, n);
+    }
+
+    pub fn eorImmediate(rd: Register, rn: Register, imms: u6, immr: u6, n: u1) Instruction {
+        return logicalImmediate(0b10, rd, rn, imms, immr, n);
+    }
+
+    pub fn andsImmediate(rd: Register, rn: Register, imms: u6, immr: u6, n: u1) Instruction {
+        return logicalImmediate(0b11, rd, rn, imms, immr, n);
+    }
+
+    // Bitfield
+
+    pub fn sbfm(rd: Register, rn: Register, immr: u6, imms: u6) Instruction {
+        const n: u1 = switch (rd.size()) {
+            32 => 0b0,
+            64 => 0b1,
+            else => unreachable, // unexpected register size
+        };
+        return bitfield(0b00, n, rd, rn, immr, imms);
+    }
+
+    pub fn bfm(rd: Register, rn: Register, immr: u6, imms: u6) Instruction {
+        const n: u1 = switch (rd.size()) {
+            32 => 0b0,
+            64 => 0b1,
+            else => unreachable, // unexpected register size
+        };
+        return bitfield(0b01, n, rd, rn, immr, imms);
+    }
+
+    pub fn ubfm(rd: Register, rn: Register, immr: u6, imms: u6) Instruction {
+        const n: u1 = switch (rd.size()) {
+            32 => 0b0,
+            64 => 0b1,
+            else => unreachable, // unexpected register size
+        };
+        return bitfield(0b10, n, rd, rn, immr, imms);
+    }
+
+    pub fn asrImmediate(rd: Register, rn: Register, shift: u6) Instruction {
+        const imms = @intCast(u6, rd.size() - 1);
+        return sbfm(rd, rn, shift, imms);
+    }
+
+    pub fn sbfx(rd: Register, rn: Register, lsb: u6, width: u7) Instruction {
+        return sbfm(rd, rn, lsb, @intCast(u6, lsb + width - 1));
+    }
+
+    pub fn sxtb(rd: Register, rn: Register) Instruction {
+        return sbfm(rd, rn, 0, 7);
+    }
+
+    pub fn sxth(rd: Register, rn: Register) Instruction {
+        return sbfm(rd, rn, 0, 15);
+    }
+
+    pub fn sxtw(rd: Register, rn: Register) Instruction {
+        assert(rd.size() == 64);
+        return sbfm(rd, rn, 0, 31);
+    }
+
+    pub fn lslImmediate(rd: Register, rn: Register, shift: u6) Instruction {
+        const size = @intCast(u6, rd.size() - 1);
+        return ubfm(rd, rn, size - shift + 1, size - shift);
+    }
+
+    pub fn lsrImmediate(rd: Register, rn: Register, shift: u6) Instruction {
+        const imms = @intCast(u6, rd.size() - 1);
+        return ubfm(rd, rn, shift, imms);
+    }
+
+    pub fn ubfx(rd: Register, rn: Register, lsb: u6, width: u7) Instruction {
+        return ubfm(rd, rn, lsb, @intCast(u6, lsb + width - 1));
+    }
+
+    pub fn uxtb(rd: Register, rn: Register) Instruction {
+        return ubfm(rd, rn, 0, 7);
+    }
+
+    pub fn uxth(rd: Register, rn: Register) Instruction {
+        return ubfm(rd, rn, 0, 15);
+    }
+
+    // Add/subtract (shifted register)
+
+    pub fn addShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: AddSubtractShiftedRegisterShift,
+        imm6: u6,
+    ) Instruction {
+        return addSubtractShiftedRegister(0b0, 0b0, shift, rd, rn, rm, imm6);
+    }
+
+    pub fn addsShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: AddSubtractShiftedRegisterShift,
+        imm6: u6,
+    ) Instruction {
+        return addSubtractShiftedRegister(0b0, 0b1, shift, rd, rn, rm, imm6);
+    }
+
+    pub fn subShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: AddSubtractShiftedRegisterShift,
+        imm6: u6,
+    ) Instruction {
+        return addSubtractShiftedRegister(0b1, 0b0, shift, rd, rn, rm, imm6);
+    }
+
+    pub fn subsShiftedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: AddSubtractShiftedRegisterShift,
+        imm6: u6,
+    ) Instruction {
+        return addSubtractShiftedRegister(0b1, 0b1, shift, rd, rn, rm, imm6);
+    }
+
+    // Add/subtract (extended register)
+
+    pub fn addExtendedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        extend: AddSubtractExtendedRegisterOption,
+        imm3: u3,
+    ) Instruction {
+        return addSubtractExtendedRegister(0b0, 0b0, rd, rn, rm, extend, imm3);
+    }
+
+    pub fn addsExtendedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        extend: AddSubtractExtendedRegisterOption,
+        imm3: u3,
+    ) Instruction {
+        return addSubtractExtendedRegister(0b0, 0b1, rd, rn, rm, extend, imm3);
+    }
+
+    pub fn subExtendedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        extend: AddSubtractExtendedRegisterOption,
+        imm3: u3,
+    ) Instruction {
+        return addSubtractExtendedRegister(0b1, 0b0, rd, rn, rm, extend, imm3);
+    }
+
+    pub fn subsExtendedRegister(
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        extend: AddSubtractExtendedRegisterOption,
+        imm3: u3,
+    ) Instruction {
+        return addSubtractExtendedRegister(0b1, 0b1, rd, rn, rm, extend, imm3);
+    }
+
+    // Conditional branch
+
+    pub fn bCond(cond: Condition, offset: i21) Instruction {
+        return conditionalBranch(0b0, 0b0, cond, offset);
+    }
+
+    // Compare and branch
+
+    pub fn cbz(rt: Register, offset: i21) Instruction {
+        return compareAndBranch(0b0, rt, offset);
+    }
+
+    pub fn cbnz(rt: Register, offset: i21) Instruction {
+        return compareAndBranch(0b1, rt, offset);
+    }
+
+    // Conditional select
+
+    pub fn csel(rd: Register, rn: Register, rm: Register, cond: Condition) Instruction {
+        return conditionalSelect(0b00, 0b0, 0b0, rd, rn, rm, cond);
+    }
+
+    pub fn csinc(rd: Register, rn: Register, rm: Register, cond: Condition) Instruction {
+        return conditionalSelect(0b01, 0b0, 0b0, rd, rn, rm, cond);
+    }
+
+    pub fn csinv(rd: Register, rn: Register, rm: Register, cond: Condition) Instruction {
+        return conditionalSelect(0b00, 0b1, 0b0, rd, rn, rm, cond);
+    }
+
+    pub fn csneg(rd: Register, rn: Register, rm: Register, cond: Condition) Instruction {
+        return conditionalSelect(0b01, 0b1, 0b0, rd, rn, rm, cond);
+    }
+
+    // Data processing (3 source)
+
+    pub fn madd(rd: Register, rn: Register, rm: Register, ra: Register) Instruction {
+        return dataProcessing3Source(0b00, 0b000, 0b0, rd, rn, rm, ra);
+    }
+
+    pub fn smaddl(rd: Register, rn: Register, rm: Register, ra: Register) Instruction {
+        assert(rd.size() == 64 and rn.size() == 32 and rm.size() == 32 and ra.size() == 64);
+        return dataProcessing3Source(0b00, 0b001, 0b0, rd, rn, rm, ra);
+    }
+
+    pub fn umaddl(rd: Register, rn: Register, rm: Register, ra: Register) Instruction {
+        assert(rd.size() == 64 and rn.size() == 32 and rm.size() == 32 and ra.size() == 64);
+        return dataProcessing3Source(0b00, 0b101, 0b0, rd, rn, rm, ra);
+    }
+
+    pub fn msub(rd: Register, rn: Register, rm: Register, ra: Register) Instruction {
+        return dataProcessing3Source(0b00, 0b000, 0b1, rd, rn, rm, ra);
+    }
+
+    pub fn mul(rd: Register, rn: Register, rm: Register) Instruction {
+        return madd(rd, rn, rm, .xzr);
+    }
+
+    pub fn smull(rd: Register, rn: Register, rm: Register) Instruction {
+        return smaddl(rd, rn, rm, .xzr);
+    }
+
+    pub fn smulh(rd: Register, rn: Register, rm: Register) Instruction {
+        assert(rd.size() == 64);
+        return dataProcessing3Source(0b00, 0b010, 0b0, rd, rn, rm, .xzr);
+    }
+
+    pub fn umull(rd: Register, rn: Register, rm: Register) Instruction {
+        return umaddl(rd, rn, rm, .xzr);
+    }
+
+    pub fn umulh(rd: Register, rn: Register, rm: Register) Instruction {
+        assert(rd.size() == 64);
+        return dataProcessing3Source(0b00, 0b110, 0b0, rd, rn, rm, .xzr);
+    }
+
+    pub fn mneg(rd: Register, rn: Register, rm: Register) Instruction {
+        return msub(rd, rn, rm, .xzr);
+    }
+
+    // Data processing (2 source)
+
+    pub fn udiv(rd: Register, rn: Register, rm: Register) Instruction {
+        return dataProcessing2Source(0b0, 0b000010, rd, rn, rm);
+    }
+
+    pub fn sdiv(rd: Register, rn: Register, rm: Register) Instruction {
+        return dataProcessing2Source(0b0, 0b0000
