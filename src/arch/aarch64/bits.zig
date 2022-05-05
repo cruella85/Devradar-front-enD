@@ -2040,4 +2040,32 @@ test "serialize instructions" {
         },
         .{ // umull x0, w0, w1
             .inst = Instruction.umull(.x0, .w0, .w1),
-    
+            .expected = 0b1_00_11011_1_01_00001_0_11111_00000_00000,
+        },
+        .{ // smull x0, w0, w1
+            .inst = Instruction.smull(.x0, .w0, .w1),
+            .expected = 0b1_00_11011_0_01_00001_0_11111_00000_00000,
+        },
+        .{ // tst x0, #0xffffffff00000000
+            .inst = Instruction.andsImmediate(.xzr, .x0, 0b011111, 0b100000, 0b1),
+            .expected = 0b1_11_100100_1_100000_011111_00000_11111,
+        },
+        .{ // umulh x0, x1, x2
+            .inst = Instruction.umulh(.x0, .x1, .x2),
+            .expected = 0b1_00_11011_1_10_00010_0_11111_00001_00000,
+        },
+        .{ // smulh x0, x1, x2
+            .inst = Instruction.smulh(.x0, .x1, .x2),
+            .expected = 0b1_00_11011_0_10_00010_0_11111_00001_00000,
+        },
+        .{ // adds x0, x1, x2, sxtx
+            .inst = Instruction.addsExtendedRegister(.x0, .x1, .x2, .sxtx, 0),
+            .expected = 0b1_0_1_01011_00_1_00010_111_000_00001_00000,
+        },
+    };
+
+    for (testcases) |case| {
+        const actual = case.inst.toU32();
+        try testing.expectEqual(case.expected, actual);
+    }
+}
