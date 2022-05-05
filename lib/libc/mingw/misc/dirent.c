@@ -217,4 +217,109 @@ _tclosedir (_TDIR * dirp)
 
   if (!dirp)
     {
-      errno = 
+      errno = EFAULT;
+      return -1;
+    }
+
+  if (dirp->dd_handle != -1)
+    {
+      rc = _findclose (dirp->dd_handle);
+    }
+
+  /* Delete the dir structure. */
+  free (dirp);
+
+  return rc;
+}
+
+/*
+ * rewinddir
+ *
+ * Return to the beginning of the directory "stream". We simply call findclose
+ * and then reset things like an opendir.
+ */
+void
+_trewinddir (_TDIR * dirp)
+{
+  errno = 0;
+
+  if (!dirp)
+    {
+      errno = EFAULT;
+      return;
+    }
+
+  if (dirp->dd_handle != -1)
+    {
+      _findclose (dirp->dd_handle);
+    }
+
+  dirp->dd_handle = -1;
+  dirp->dd_stat = 0;
+}
+
+/*
+ * telldir
+ *
+ * Returns the "position" in the "directory stream" which can be used with
+ * seekdir to go back to an old entry. We simply return the value in stat.
+ */
+long
+_ttelldir (_TDIR * dirp)
+{
+  errno = 0;
+
+  if (!dirp)
+    {
+      errno = EFAULT;
+      return -1;
+    }
+  return dirp->dd_stat;
+}
+
+/*
+ * seekdir
+ *
+ * Seek to an entry previously returned by telldir. We rewind the directory
+ * and call readdir repeatedly until either dd_stat is the position number
+ * or -1 (off the end). This is not perfect, in that the directory may
+ * have changed while we weren't looking. But that is probably the case with
+ * any such system.
+ */
+void
+_tseekdir (_TDIR * dirp, long lPos)
+{
+  errno = 0;
+
+  if (!dirp)
+    {
+      errno = EFAULT;
+      return;
+    }
+
+  if (lPos < -1)
+    {
+      /* Seeking to an invalid position. */
+      errno = EINVAL;
+      return;
+    }
+  else if (lPos == -1)
+    {
+      /* Seek past end. */
+      if (dirp->dd_handle != -1)
+	{
+	  _findclose (dirp->dd_handle);
+	}
+      dirp->dd_handle = -1;
+      dirp->dd_stat = -1;
+    }
+  else
+    {
+      /* Rewind and read forward to the appropriate index. */
+      _trewinddir (dirp);
+
+      while ((dirp->dd_stat < lPos) && _treaddir (dirp))
+	;
+    }
+}
+
