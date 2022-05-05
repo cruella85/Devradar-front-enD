@@ -1823,4 +1823,221 @@ pub const Instruction = union(enum) {
     }
 
     pub fn sdiv(rd: Register, rn: Register, rm: Register) Instruction {
-        return dataProcessing2Source(0b0, 0b0000
+        return dataProcessing2Source(0b0, 0b000011, rd, rn, rm);
+    }
+
+    pub fn lslv(rd: Register, rn: Register, rm: Register) Instruction {
+        return dataProcessing2Source(0b0, 0b001000, rd, rn, rm);
+    }
+
+    pub fn lsrv(rd: Register, rn: Register, rm: Register) Instruction {
+        return dataProcessing2Source(0b0, 0b001001, rd, rn, rm);
+    }
+
+    pub fn asrv(rd: Register, rn: Register, rm: Register) Instruction {
+        return dataProcessing2Source(0b0, 0b001010, rd, rn, rm);
+    }
+
+    pub const asrRegister = asrv;
+    pub const lslRegister = lslv;
+    pub const lsrRegister = lsrv;
+};
+
+test {
+    testing.refAllDecls(@This());
+}
+
+test "serialize instructions" {
+    const Testcase = struct {
+        inst: Instruction,
+        expected: u32,
+    };
+
+    const testcases = [_]Testcase{
+        .{ // orr x0, xzr, x1
+            .inst = Instruction.orrShiftedRegister(.x0, .xzr, .x1, .lsl, 0),
+            .expected = 0b1_01_01010_00_0_00001_000000_11111_00000,
+        },
+        .{ // orn x0, xzr, x1
+            .inst = Instruction.ornShiftedRegister(.x0, .xzr, .x1, .lsl, 0),
+            .expected = 0b1_01_01010_00_1_00001_000000_11111_00000,
+        },
+        .{ // movz x1, #4
+            .inst = Instruction.movz(.x1, 4, 0),
+            .expected = 0b1_10_100101_00_0000000000000100_00001,
+        },
+        .{ // movz x1, #4, lsl 16
+            .inst = Instruction.movz(.x1, 4, 16),
+            .expected = 0b1_10_100101_01_0000000000000100_00001,
+        },
+        .{ // movz x1, #4, lsl 32
+            .inst = Instruction.movz(.x1, 4, 32),
+            .expected = 0b1_10_100101_10_0000000000000100_00001,
+        },
+        .{ // movz x1, #4, lsl 48
+            .inst = Instruction.movz(.x1, 4, 48),
+            .expected = 0b1_10_100101_11_0000000000000100_00001,
+        },
+        .{ // movz w1, #4
+            .inst = Instruction.movz(.w1, 4, 0),
+            .expected = 0b0_10_100101_00_0000000000000100_00001,
+        },
+        .{ // movz w1, #4, lsl 16
+            .inst = Instruction.movz(.w1, 4, 16),
+            .expected = 0b0_10_100101_01_0000000000000100_00001,
+        },
+        .{ // svc #0
+            .inst = Instruction.svc(0),
+            .expected = 0b1101_0100_000_0000000000000000_00001,
+        },
+        .{ // svc #0x80 ; typical on Darwin
+            .inst = Instruction.svc(0x80),
+            .expected = 0b1101_0100_000_0000000010000000_00001,
+        },
+        .{ // ret
+            .inst = Instruction.ret(null),
+            .expected = 0b1101_011_00_10_11111_0000_00_11110_00000,
+        },
+        .{ // bl #0x10
+            .inst = Instruction.bl(0x10),
+            .expected = 0b1_00101_00_0000_0000_0000_0000_0000_0100,
+        },
+        .{ // ldr x2, [x1]
+            .inst = Instruction.ldr(.x2, .x1, Instruction.LoadStoreOffset.none),
+            .expected = 0b11_111_0_01_01_000000000000_00001_00010,
+        },
+        .{ // ldr x2, [x1, #1]!
+            .inst = Instruction.ldr(.x2, .x1, Instruction.LoadStoreOffset.imm_pre_index(1)),
+            .expected = 0b11_111_0_00_01_0_000000001_11_00001_00010,
+        },
+        .{ // ldr x2, [x1], #-1
+            .inst = Instruction.ldr(.x2, .x1, Instruction.LoadStoreOffset.imm_post_index(-1)),
+            .expected = 0b11_111_0_00_01_0_111111111_01_00001_00010,
+        },
+        .{ // ldr x2, [x1], (x3)
+            .inst = Instruction.ldr(.x2, .x1, Instruction.LoadStoreOffset.reg(.x3)),
+            .expected = 0b11_111_0_00_01_1_00011_011_0_10_00001_00010,
+        },
+        .{ // ldr x2, label
+            .inst = Instruction.ldrLiteral(.x2, 0x1),
+            .expected = 0b01_011_0_00_0000000000000000001_00010,
+        },
+        .{ // ldrh x7, [x4], #0xaa
+            .inst = Instruction.ldrh(.x7, .x4, Instruction.LoadStoreOffset.imm_post_index(0xaa)),
+            .expected = 0b01_111_0_00_01_0_010101010_01_00100_00111,
+        },
+        .{ // ldrb x9, [x15, #0xff]!
+            .inst = Instruction.ldrb(.x9, .x15, Instruction.LoadStoreOffset.imm_pre_index(0xff)),
+            .expected = 0b00_111_0_00_01_0_011111111_11_01111_01001,
+        },
+        .{ // str x2, [x1]
+            .inst = Instruction.str(.x2, .x1, Instruction.LoadStoreOffset.none),
+            .expected = 0b11_111_0_01_00_000000000000_00001_00010,
+        },
+        .{ // str x2, [x1], (x3)
+            .inst = Instruction.str(.x2, .x1, Instruction.LoadStoreOffset.reg(.x3)),
+            .expected = 0b11_111_0_00_00_1_00011_011_0_10_00001_00010,
+        },
+        .{ // strh w0, [x1]
+            .inst = Instruction.strh(.w0, .x1, Instruction.LoadStoreOffset.none),
+            .expected = 0b01_111_0_01_00_000000000000_00001_00000,
+        },
+        .{ // strb w8, [x9]
+            .inst = Instruction.strb(.w8, .x9, Instruction.LoadStoreOffset.none),
+            .expected = 0b00_111_0_01_00_000000000000_01001_01000,
+        },
+        .{ // adr x2, #0x8
+            .inst = Instruction.adr(.x2, 0x8),
+            .expected = 0b0_00_10000_0000000000000000010_00010,
+        },
+        .{ // adr x2, -#0x8
+            .inst = Instruction.adr(.x2, -0x8),
+            .expected = 0b0_00_10000_1111111111111111110_00010,
+        },
+        .{ // adrp x2, #0x8
+            .inst = Instruction.adrp(.x2, 0x8),
+            .expected = 0b1_00_10000_0000000000000000010_00010,
+        },
+        .{ // adrp x2, -#0x8
+            .inst = Instruction.adrp(.x2, -0x8),
+            .expected = 0b1_00_10000_1111111111111111110_00010,
+        },
+        .{ // stp x1, x2, [sp, #8]
+            .inst = Instruction.stp(.x1, .x2, .sp, Instruction.LoadStorePairOffset.signed(8)),
+            .expected = 0b10_101_0_010_0_0000001_00010_11111_00001,
+        },
+        .{ // ldp x1, x2, [sp, #8]
+            .inst = Instruction.ldp(.x1, .x2, .sp, Instruction.LoadStorePairOffset.signed(8)),
+            .expected = 0b10_101_0_010_1_0000001_00010_11111_00001,
+        },
+        .{ // stp x1, x2, [sp, #-16]!
+            .inst = Instruction.stp(.x1, .x2, .sp, Instruction.LoadStorePairOffset.pre_index(-16)),
+            .expected = 0b10_101_0_011_0_1111110_00010_11111_00001,
+        },
+        .{ // ldp x1, x2, [sp], #16
+            .inst = Instruction.ldp(.x1, .x2, .sp, Instruction.LoadStorePairOffset.post_index(16)),
+            .expected = 0b10_101_0_001_1_0000010_00010_11111_00001,
+        },
+        .{ // and x0, x4, x2
+            .inst = Instruction.andShiftedRegister(.x0, .x4, .x2, .lsl, 0),
+            .expected = 0b1_00_01010_00_0_00010_000000_00100_00000,
+        },
+        .{ // and x0, x4, x2, lsl #0x8
+            .inst = Instruction.andShiftedRegister(.x0, .x4, .x2, .lsl, 0x8),
+            .expected = 0b1_00_01010_00_0_00010_001000_00100_00000,
+        },
+        .{ // add x0, x10, #10
+            .inst = Instruction.add(.x0, .x10, 10, false),
+            .expected = 0b1_0_0_100010_0_0000_0000_1010_01010_00000,
+        },
+        .{ // subs x0, x5, #11, lsl #12
+            .inst = Instruction.subs(.x0, .x5, 11, true),
+            .expected = 0b1_1_1_100010_1_0000_0000_1011_00101_00000,
+        },
+        .{ // b.hi #-4
+            .inst = Instruction.bCond(.hi, -4),
+            .expected = 0b0101010_0_1111111111111111111_0_1000,
+        },
+        .{ // cbz x10, #40
+            .inst = Instruction.cbz(.x10, 40),
+            .expected = 0b1_011010_0_0000000000000001010_01010,
+        },
+        .{ // add x0, x1, x2, lsl #5
+            .inst = Instruction.addShiftedRegister(.x0, .x1, .x2, .lsl, 5),
+            .expected = 0b1_0_0_01011_00_0_00010_000101_00001_00000,
+        },
+        .{ // csinc x1, x2, x4, eq
+            .inst = Instruction.csinc(.x1, .x2, .x4, .eq),
+            .expected = 0b1_0_0_11010100_00100_0000_0_1_00010_00001,
+        },
+        .{ // mul x1, x4, x9
+            .inst = Instruction.mul(.x1, .x4, .x9),
+            .expected = 0b1_00_11011_000_01001_0_11111_00100_00001,
+        },
+        .{ // eor x3, x5, #1
+            .inst = Instruction.eorImmediate(.x3, .x5, 0b000000, 0b000000, 0b1),
+            .expected = 0b1_10_100100_1_000000_000000_00101_00011,
+        },
+        .{ // lslv x6, x9, x10
+            .inst = Instruction.lslv(.x6, .x9, .x10),
+            .expected = 0b1_0_0_11010110_01010_0010_00_01001_00110,
+        },
+        .{ // lsl x4, x2, #42
+            .inst = Instruction.lslImmediate(.x4, .x2, 42),
+            .expected = 0b1_10_100110_1_010110_010101_00010_00100,
+        },
+        .{ // lsl x4, x2, #63
+            .inst = Instruction.lslImmediate(.x4, .x2, 63),
+            .expected = 0b1_10_100110_1_000001_000000_00010_00100,
+        },
+        .{ // lsr x4, x2, #42
+            .inst = Instruction.lsrImmediate(.x4, .x2, 42),
+            .expected = 0b1_10_100110_1_101010_111111_00010_00100,
+        },
+        .{ // lsr x4, x2, #63
+            .inst = Instruction.lsrImmediate(.x4, .x2, 63),
+            .expected = 0b1_10_100110_1_111111_111111_00010_00100,
+        },
+        .{ // umull x0, w0, w1
+            .inst = Instruction.umull(.x0, .w0, .w1),
+    
