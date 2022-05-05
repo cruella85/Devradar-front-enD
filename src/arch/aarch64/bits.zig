@@ -628,4 +628,283 @@ pub const Instruction = union(enum) {
             .add_subtract_shifted_register => |v| @bitCast(u32, v),
             .add_subtract_extended_register => |v| @bitCast(u32, v),
             // TODO once packed structs work, this can be refactored
-            .conditional_branch => |v| @as(u32, v.cond) | (@as(u32, v.o0) << 4) | (@as(u32, v.imm19) <
+            .conditional_branch => |v| @as(u32, v.cond) | (@as(u32, v.o0) << 4) | (@as(u32, v.imm19) << 5) | (@as(u32, v.o1) << 24) | (@as(u32, v.fixed) << 25),
+            .compare_and_branch => |v| @as(u32, v.rt) | (@as(u32, v.imm19) << 5) | (@as(u32, v.op) << 24) | (@as(u32, v.fixed) << 25) | (@as(u32, v.sf) << 31),
+            .conditional_select => |v| @as(u32, v.rd) | @as(u32, v.rn) << 5 | @as(u32, v.op2) << 10 | @as(u32, v.cond) << 12 | @as(u32, v.rm) << 16 | @as(u32, v.fixed) << 21 | @as(u32, v.s) << 29 | @as(u32, v.op) << 30 | @as(u32, v.sf) << 31,
+            .data_processing_3_source => |v| @bitCast(u32, v),
+            .data_processing_2_source => |v| @bitCast(u32, v),
+        };
+    }
+
+    fn moveWideImmediate(
+        opc: u2,
+        rd: Register,
+        imm16: u16,
+        shift: u6,
+    ) Instruction {
+        assert(shift % 16 == 0);
+        assert(!(rd.size() == 32 and shift > 16));
+        assert(!(rd.size() == 64 and shift > 48));
+
+        return Instruction{
+            .move_wide_immediate = .{
+                .rd = rd.enc(),
+                .imm16 = imm16,
+                .hw = @intCast(u2, shift / 16),
+                .opc = opc,
+                .sf = switch (rd.size()) {
+                    32 => 0,
+                    64 => 1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn pcRelativeAddress(rd: Register, imm21: i21, op: u1) Instruction {
+        assert(rd.size() == 64);
+        const imm21_u = @bitCast(u21, imm21);
+        return Instruction{
+            .pc_relative_address = .{
+                .rd = rd.enc(),
+                .immlo = @truncate(u2, imm21_u),
+                .immhi = @truncate(u19, imm21_u >> 2),
+                .op = op,
+            },
+        };
+    }
+
+    pub const LoadStoreOffsetImmediate = union(enum) {
+        post_index: i9,
+        pre_index: i9,
+        unsigned: u12,
+    };
+
+    pub const LoadStoreOffsetRegister = struct {
+        rm: u5,
+        shift: union(enum) {
+            uxtw: u2,
+            lsl: u2,
+            sxtw: u2,
+            sxtx: u2,
+        },
+    };
+
+    /// Represents the offset operand of a load or store instruction.
+    /// Data can be loaded from memory with either an immediate offset
+    /// or an offset that is stored in some register.
+    pub const LoadStoreOffset = union(enum) {
+        immediate: LoadStoreOffsetImmediate,
+        register: LoadStoreOffsetRegister,
+
+        pub const none = LoadStoreOffset{
+            .immediate = .{ .unsigned = 0 },
+        };
+
+        pub fn toU12(self: LoadStoreOffset) u12 {
+            return switch (self) {
+                .immediate => |imm_type| switch (imm_type) {
+                    .post_index => |v| (@intCast(u12, @bitCast(u9, v)) << 2) + 1,
+                    .pre_index => |v| (@intCast(u12, @bitCast(u9, v)) << 2) + 3,
+                    .unsigned => |v| v,
+                },
+                .register => |r| switch (r.shift) {
+                    .uxtw => |v| (@intCast(u12, r.rm) << 6) + (@intCast(u12, v) << 2) + 16 + 2050,
+                    .lsl => |v| (@intCast(u12, r.rm) << 6) + (@intCast(u12, v) << 2) + 24 + 2050,
+                    .sxtw => |v| (@intCast(u12, r.rm) << 6) + (@intCast(u12, v) << 2) + 48 + 2050,
+                    .sxtx => |v| (@intCast(u12, r.rm) << 6) + (@intCast(u12, v) << 2) + 56 + 2050,
+                },
+            };
+        }
+
+        pub fn imm(offset: u12) LoadStoreOffset {
+            return .{
+                .immediate = .{ .unsigned = offset },
+            };
+        }
+
+        pub fn imm_post_index(offset: i9) LoadStoreOffset {
+            return .{
+                .immediate = .{ .post_index = offset },
+            };
+        }
+
+        pub fn imm_pre_index(offset: i9) LoadStoreOffset {
+            return .{
+                .immediate = .{ .pre_index = offset },
+            };
+        }
+
+        pub fn reg(rm: Register) LoadStoreOffset {
+            return .{
+                .register = .{
+                    .rm = rm.enc(),
+                    .shift = .{
+                        .lsl = 0,
+                    },
+                },
+            };
+        }
+
+        pub fn reg_uxtw(rm: Register, shift: u2) LoadStoreOffset {
+            assert(rm.size() == 32 and (shift == 0 or shift == 2));
+            return .{
+                .register = .{
+                    .rm = rm.enc(),
+                    .shift = .{
+                        .uxtw = shift,
+                    },
+                },
+            };
+        }
+
+        pub fn reg_lsl(rm: Register, shift: u2) LoadStoreOffset {
+            assert(rm.size() == 64 and (shift == 0 or shift == 3));
+            return .{
+                .register = .{
+                    .rm = rm.enc(),
+                    .shift = .{
+                        .lsl = shift,
+                    },
+                },
+            };
+        }
+
+        pub fn reg_sxtw(rm: Register, shift: u2) LoadStoreOffset {
+            assert(rm.size() == 32 and (shift == 0 or shift == 2));
+            return .{
+                .register = .{
+                    .rm = rm.enc(),
+                    .shift = .{
+                        .sxtw = shift,
+                    },
+                },
+            };
+        }
+
+        pub fn reg_sxtx(rm: Register, shift: u2) LoadStoreOffset {
+            assert(rm.size() == 64 and (shift == 0 or shift == 3));
+            return .{
+                .register = .{
+                    .rm = rm.enc(),
+                    .shift = .{
+                        .sxtx = shift,
+                    },
+                },
+            };
+        }
+    };
+
+    /// Which kind of load/store to perform
+    const LoadStoreVariant = enum {
+        /// 32 bits or 64 bits
+        str,
+        /// 8 bits, zero-extended
+        strb,
+        /// 16 bits, zero-extended
+        strh,
+        /// 32 bits or 64 bits
+        ldr,
+        /// 8 bits, zero-extended
+        ldrb,
+        /// 16 bits, zero-extended
+        ldrh,
+        /// 8 bits, sign extended
+        ldrsb,
+        /// 16 bits, sign extended
+        ldrsh,
+        /// 32 bits, sign extended
+        ldrsw,
+    };
+
+    fn loadStoreRegister(
+        rt: Register,
+        rn: Register,
+        offset: LoadStoreOffset,
+        variant: LoadStoreVariant,
+    ) Instruction {
+        assert(rn.size() == 64);
+        assert(rn.id() != Register.xzr.id());
+
+        const off = offset.toU12();
+
+        const op1: u2 = blk: {
+            switch (offset) {
+                .immediate => |imm| switch (imm) {
+                    .unsigned => break :blk 0b01,
+                    else => {},
+                },
+                else => {},
+            }
+            break :blk 0b00;
+        };
+
+        const opc: u2 = blk: {
+            switch (variant) {
+                .ldr, .ldrh, .ldrb => break :blk 0b01,
+                .str, .strh, .strb => break :blk 0b00,
+                .ldrsb,
+                .ldrsh,
+                => switch (rt.size()) {
+                    32 => break :blk 0b11,
+                    64 => break :blk 0b10,
+                    else => unreachable, // unexpected register size
+                },
+                .ldrsw => break :blk 0b10,
+            }
+        };
+
+        const size: u2 = blk: {
+            switch (variant) {
+                .ldr, .str => switch (rt.size()) {
+                    32 => break :blk 0b10,
+                    64 => break :blk 0b11,
+                    else => unreachable, // unexpected register size
+                },
+                .ldrsw => break :blk 0b10,
+                .ldrh, .ldrsh, .strh => break :blk 0b01,
+                .ldrb, .ldrsb, .strb => break :blk 0b00,
+            }
+        };
+
+        return Instruction{
+            .load_store_register = .{
+                .rt = rt.enc(),
+                .rn = rn.enc(),
+                .offset = off,
+                .opc = opc,
+                .op1 = op1,
+                .v = 0,
+                .size = size,
+            },
+        };
+    }
+
+    fn loadStoreRegisterPair(
+        rt1: Register,
+        rt2: Register,
+        rn: Register,
+        offset: i9,
+        encoding: u2,
+        load: bool,
+    ) Instruction {
+        assert(rn.size() == 64);
+        assert(rn.id() != Register.xzr.id());
+
+        switch (rt1.size()) {
+            32 => {
+                assert(-256 <= offset and offset <= 252);
+                const imm7 = @truncate(u7, @bitCast(u9, offset >> 2));
+                return Instruction{
+                    .load_store_register_pair = .{
+                        .rt1 = rt1.enc(),
+                        .rn = rn.enc(),
+                        .rt2 = rt2.enc(),
+                        .imm7 = imm7,
+                        .load = @boolToInt(load),
+                        .encoding = encoding,
+                        .opc = 0b00,
+                    },
+                };
+            },
+          
