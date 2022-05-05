@@ -907,4 +907,343 @@ pub const Instruction = union(enum) {
                     },
                 };
             },
-          
+            64 => {
+                assert(-512 <= offset and offset <= 504);
+                const imm7 = @truncate(u7, @bitCast(u9, offset >> 3));
+                return Instruction{
+                    .load_store_register_pair = .{
+                        .rt1 = rt1.enc(),
+                        .rn = rn.enc(),
+                        .rt2 = rt2.enc(),
+                        .imm7 = imm7,
+                        .load = @boolToInt(load),
+                        .encoding = encoding,
+                        .opc = 0b10,
+                    },
+                };
+            },
+            else => unreachable, // unexpected register size
+        }
+    }
+
+    fn loadLiteral(rt: Register, imm19: u19) Instruction {
+        return Instruction{
+            .load_literal = .{
+                .rt = rt.enc(),
+                .imm19 = imm19,
+                .opc = switch (rt.size()) {
+                    32 => 0b00,
+                    64 => 0b01,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn exceptionGeneration(
+        opc: u3,
+        op2: u3,
+        ll: u2,
+        imm16: u16,
+    ) Instruction {
+        return Instruction{
+            .exception_generation = .{
+                .ll = ll,
+                .op2 = op2,
+                .imm16 = imm16,
+                .opc = opc,
+            },
+        };
+    }
+
+    fn unconditionalBranchRegister(
+        opc: u4,
+        op2: u5,
+        op3: u6,
+        rn: Register,
+        op4: u5,
+    ) Instruction {
+        assert(rn.size() == 64);
+
+        return Instruction{
+            .unconditional_branch_register = .{
+                .op4 = op4,
+                .rn = rn.enc(),
+                .op3 = op3,
+                .op2 = op2,
+                .opc = opc,
+            },
+        };
+    }
+
+    fn unconditionalBranchImmediate(
+        op: u1,
+        offset: i28,
+    ) Instruction {
+        return Instruction{
+            .unconditional_branch_immediate = .{
+                .imm26 = @bitCast(u26, @intCast(i26, offset >> 2)),
+                .op = op,
+            },
+        };
+    }
+
+    pub const LogicalShiftedRegisterShift = enum(u2) { lsl, lsr, asr, ror };
+
+    fn logicalShiftedRegister(
+        opc: u2,
+        n: u1,
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        shift: LogicalShiftedRegisterShift,
+        amount: u6,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(rd.size() == rm.size());
+        if (rd.size() == 32) assert(amount < 32);
+
+        return Instruction{
+            .logical_shifted_register = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .imm6 = amount,
+                .rm = rm.enc(),
+                .n = n,
+                .shift = @enumToInt(shift),
+                .opc = opc,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable,
+                },
+            },
+        };
+    }
+
+    fn addSubtractImmediate(
+        op: u1,
+        s: u1,
+        rd: Register,
+        rn: Register,
+        imm12: u12,
+        shift: bool,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(rn.id() != Register.xzr.id());
+
+        return Instruction{
+            .add_subtract_immediate = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .imm12 = imm12,
+                .sh = @boolToInt(shift),
+                .s = s,
+                .op = op,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn logicalImmediate(
+        opc: u2,
+        rd: Register,
+        rn: Register,
+        imms: u6,
+        immr: u6,
+        n: u1,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(!(rd.size() == 32 and n != 0));
+
+        return Instruction{
+            .logical_immediate = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .imms = imms,
+                .immr = immr,
+                .n = n,
+                .opc = opc,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn bitfield(
+        opc: u2,
+        n: u1,
+        rd: Register,
+        rn: Register,
+        immr: u6,
+        imms: u6,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(!(rd.size() == 64 and n != 1));
+        assert(!(rd.size() == 32 and (n != 0 or immr >> 5 != 0 or immr >> 5 != 0)));
+
+        return Instruction{
+            .bitfield = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .imms = imms,
+                .immr = immr,
+                .n = n,
+                .opc = opc,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    pub const AddSubtractShiftedRegisterShift = enum(u2) { lsl, lsr, asr, _ };
+
+    fn addSubtractShiftedRegister(
+        op: u1,
+        s: u1,
+        shift: AddSubtractShiftedRegisterShift,
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        imm6: u6,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(rd.size() == rm.size());
+
+        return Instruction{
+            .add_subtract_shifted_register = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .imm6 = imm6,
+                .rm = rm.enc(),
+                .shift = @enumToInt(shift),
+                .s = s,
+                .op = op,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    pub const AddSubtractExtendedRegisterOption = enum(u3) {
+        uxtb,
+        uxth,
+        uxtw,
+        uxtx, // serves also as lsl
+        sxtb,
+        sxth,
+        sxtw,
+        sxtx,
+    };
+
+    fn addSubtractExtendedRegister(
+        op: u1,
+        s: u1,
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        extend: AddSubtractExtendedRegisterOption,
+        imm3: u3,
+    ) Instruction {
+        return Instruction{
+            .add_subtract_extended_register = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .imm3 = imm3,
+                .option = @enumToInt(extend),
+                .rm = rm.enc(),
+                .s = s,
+                .op = op,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn conditionalBranch(
+        o0: u1,
+        o1: u1,
+        cond: Condition,
+        offset: i21,
+    ) Instruction {
+        assert(offset & 0b11 == 0b00);
+
+        return Instruction{
+            .conditional_branch = .{
+                .cond = @enumToInt(cond),
+                .o0 = o0,
+                .imm19 = @bitCast(u19, @intCast(i19, offset >> 2)),
+                .o1 = o1,
+            },
+        };
+    }
+
+    fn compareAndBranch(
+        op: u1,
+        rt: Register,
+        offset: i21,
+    ) Instruction {
+        assert(offset & 0b11 == 0b00);
+
+        return Instruction{
+            .compare_and_branch = .{
+                .rt = rt.enc(),
+                .imm19 = @bitCast(u19, @intCast(i19, offset >> 2)),
+                .op = op,
+                .sf = switch (rt.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn conditionalSelect(
+        op2: u2,
+        op: u1,
+        s: u1,
+        rd: Register,
+        rn: Register,
+        rm: Register,
+        cond: Condition,
+    ) Instruction {
+        assert(rd.size() == rn.size());
+        assert(rd.size() == rm.size());
+
+        return Instruction{
+            .conditional_select = .{
+                .rd = rd.enc(),
+                .rn = rn.enc(),
+                .op2 = op2,
+                .cond = @enumToInt(cond),
+                .rm = rm.enc(),
+                .s = s,
+                .op = op,
+                .sf = switch (rd.size()) {
+                    32 => 0b0,
+                    64 => 0b1,
+                    else => unreachable, // unexpected register size
+                },
+            },
+        };
+    }
+
+    fn dataProcessing3Source(
+       
