@@ -228,4 +228,22 @@ union __RequestUnion__clock_subsystem {
 
 #ifndef __ReplyUnion__clock_subsystem__defined
 #define __ReplyUnion__clock_subsystem__defined
-union __ReplyUnio
+union __ReplyUnion__clock_subsystem {
+	__Reply__clock_get_time_t Reply_clock_get_time;
+	__Reply__clock_get_attributes_t Reply_clock_get_attributes;
+	__Reply__clock_alarm_t Reply_clock_alarm;
+};
+#endif /* !__RequestUnion__clock_subsystem__defined */
+
+#ifndef subsystem_to_name_map_clock
+#define subsystem_to_name_map_clock \
+    { "clock_get_time", 1000 },\
+    { "clock_get_attributes", 1001 },\
+    { "clock_alarm", 1002 }
+#endif
+
+#ifdef __AfterMigUserHeader
+__AfterMigUserHeader
+#endif /* __AfterMigUserHeader */
+
+#endif	 /* _clock_user_ */
