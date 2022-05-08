@@ -119,4 +119,274 @@ pub fn genAbbrevLookupByKind(self: DwarfInfo, off: usize, lookup: *AbbrevLookupT
         try lookup.putNoClobber(kind, .{
             .pos = pos,
             .len = next_pos - pos - 2,
-   
+        });
+    }
+}
+
+pub const CompileUnit = struct {
+    cuh: Header,
+    debug_info_off: usize,
+
+    pub const Header = struct {
+        is_64bit: bool,
+        length: u64,
+        version: u16,
+        debug_abbrev_offset: u64,
+        address_size: u8,
+
+        fn read(reader: anytype) !Header {
+            var length: u64 = try reader.readIntLittle(u32);
+
+            const is_64bit = length == 0xffffffff;
+            if (is_64bit) {
+                length = try reader.readIntLittle(u64);
+            }
+
+            const version = try reader.readIntLittle(u16);
+            const debug_abbrev_offset = if (is_64bit)
+                try reader.readIntLittle(u64)
+            else
+                try reader.readIntLittle(u32);
+            const address_size = try reader.readIntLittle(u8);
+
+            return Header{
+                .is_64bit = is_64bit,
+                .length = length,
+                .version = version,
+                .debug_abbrev_offset = debug_abbrev_offset,
+                .address_size = address_size,
+            };
+        }
+    };
+
+    inline fn getDebugInfo(self: CompileUnit, ctx: DwarfInfo) []const u8 {
+        return ctx.debug_info[self.debug_info_off..][0..self.cuh.length];
+    }
+
+    pub fn getAbbrevEntryIterator(self: CompileUnit, ctx: DwarfInfo) AbbrevEntryIterator {
+        return .{ .cu = self, .ctx = ctx };
+    }
+};
+
+const AbbrevEntryIterator = struct {
+    cu: CompileUnit,
+    ctx: DwarfInfo,
+    pos: usize = 0,
+
+    pub fn next(self: *AbbrevEntryIterator, lookup: AbbrevLookupTable) !?AbbrevEntry {
+        if (self.pos + self.cu.debug_info_off >= self.ctx.debug_info.len) return null;
+
+        const debug_info = self.ctx.debug_info[self.pos + self.cu.debug_info_off ..];
+        var stream = std.io.fixedBufferStream(debug_info);
+        var creader = std.io.countingReader(stream.reader());
+        const reader = creader.reader();
+
+        const kind = try leb.readULEB128(u64, reader);
+        self.pos += (math.cast(usize, creader.bytes_read) orelse return error.Overflow);
+
+        if (kind == 0) {
+            return AbbrevEntry.null();
+        }
+
+        const abbrev_pos = lookup.get(kind) orelse return error.MalformedDwarf;
+        const len = try findAbbrevEntrySize(
+            self.ctx,
+            abbrev_pos.pos,
+            abbrev_pos.len,
+            self.pos + self.cu.debug_info_off,
+            self.cu.cuh,
+        );
+        const entry = try getAbbrevEntry(
+            self.ctx,
+            abbrev_pos.pos,
+            abbrev_pos.len,
+            self.pos + self.cu.debug_info_off,
+            len,
+        );
+
+        self.pos += len;
+
+        return entry;
+    }
+};
+
+pub const AbbrevEntry = struct {
+    tag: u64,
+    children: u8,
+    debug_abbrev_off: usize,
+    debug_abbrev_len: usize,
+    debug_info_off: usize,
+    debug_info_len: usize,
+
+    fn @"null"() AbbrevEntry {
+        return .{
+            .tag = 0,
+            .children = dwarf.CHILDREN.no,
+            .debug_abbrev_off = 0,
+            .debug_abbrev_len = 0,
+            .debug_info_off = 0,
+            .debug_info_len = 0,
+        };
+    }
+
+    pub fn hasChildren(self: AbbrevEntry) bool {
+        return self.children == dwarf.CHILDREN.yes;
+    }
+
+    inline fn getDebugInfo(self: AbbrevEntry, ctx: DwarfInfo) []const u8 {
+        return ctx.debug_info[self.debug_info_off..][0..self.debug_info_len];
+    }
+
+    inline fn getDebugAbbrev(self: AbbrevEntry, ctx: DwarfInfo) []const u8 {
+        return ctx.debug_abbrev[self.debug_abbrev_off..][0..self.debug_abbrev_len];
+    }
+
+    pub fn getAttributeIterator(self: AbbrevEntry, ctx: DwarfInfo, cuh: CompileUnit.Header) AttributeIterator {
+        return .{ .entry = self, .ctx = ctx, .cuh = cuh };
+    }
+};
+
+pub const Attribute = struct {
+    name: u64,
+    form: u64,
+    debug_info_off: usize,
+    debug_info_len: usize,
+
+    inline fn getDebugInfo(self: Attribute, ctx: DwarfInfo) []const u8 {
+        return ctx.debug_info[self.debug_info_off..][0..self.debug_info_len];
+    }
+
+    pub fn getString(self: Attribute, ctx: DwarfInfo, cuh: CompileUnit.Header) ?[]const u8 {
+        const debug_info = self.getDebugInfo(ctx);
+
+        switch (self.form) {
+            dwarf.FORM.string => {
+                return mem.sliceTo(@ptrCast([*:0]const u8, debug_info.ptr), 0);
+            },
+            dwarf.FORM.strp => {
+                const off = if (cuh.is_64bit)
+                    mem.readIntLittle(u64, debug_info[0..8])
+                else
+                    mem.readIntLittle(u32, debug_info[0..4]);
+                return ctx.getString(off);
+            },
+            else => return null,
+        }
+    }
+
+    pub fn getConstant(self: Attribute, ctx: DwarfInfo) !?i128 {
+        const debug_info = self.getDebugInfo(ctx);
+        var stream = std.io.fixedBufferStream(debug_info);
+        const reader = stream.reader();
+
+        return switch (self.form) {
+            dwarf.FORM.data1 => debug_info[0],
+            dwarf.FORM.data2 => mem.readIntLittle(u16, debug_info[0..2]),
+            dwarf.FORM.data4 => mem.readIntLittle(u32, debug_info[0..4]),
+            dwarf.FORM.data8 => mem.readIntLittle(u64, debug_info[0..8]),
+            dwarf.FORM.udata => try leb.readULEB128(u64, reader),
+            dwarf.FORM.sdata => try leb.readILEB128(i64, reader),
+            else => null,
+        };
+    }
+
+    pub fn getReference(self: Attribute, ctx: DwarfInfo) !?u64 {
+        const debug_info = self.getDebugInfo(ctx);
+        var stream = std.io.fixedBufferStream(debug_info);
+        const reader = stream.reader();
+
+        return switch (self.form) {
+            dwarf.FORM.ref1 => debug_info[0],
+            dwarf.FORM.ref2 => mem.readIntLittle(u16, debug_info[0..2]),
+            dwarf.FORM.ref4 => mem.readIntLittle(u32, debug_info[0..4]),
+            dwarf.FORM.ref8 => mem.readIntLittle(u64, debug_info[0..8]),
+            dwarf.FORM.ref_udata => try leb.readULEB128(u64, reader),
+            else => null,
+        };
+    }
+
+    pub fn getAddr(self: Attribute, ctx: DwarfInfo, cuh: CompileUnit.Header) ?u64 {
+        if (self.form != dwarf.FORM.addr) return null;
+        const debug_info = self.getDebugInfo(ctx);
+        return switch (cuh.address_size) {
+            1 => debug_info[0],
+            2 => mem.readIntLittle(u16, debug_info[0..2]),
+            4 => mem.readIntLittle(u32, debug_info[0..4]),
+            8 => mem.readIntLittle(u64, debug_info[0..8]),
+            else => unreachable,
+        };
+    }
+};
+
+const AttributeIterator = struct {
+    entry: AbbrevEntry,
+    ctx: DwarfInfo,
+    cuh: CompileUnit.Header,
+    debug_abbrev_pos: usize = 0,
+    debug_info_pos: usize = 0,
+
+    pub fn next(self: *AttributeIterator) !?Attribute {
+        const debug_abbrev = self.entry.getDebugAbbrev(self.ctx);
+        if (self.debug_abbrev_pos >= debug_abbrev.len) return null;
+
+        var stream = std.io.fixedBufferStream(debug_abbrev[self.debug_abbrev_pos..]);
+        var creader = std.io.countingReader(stream.reader());
+        const reader = creader.reader();
+
+        const name = try leb.readULEB128(u64, reader);
+        const form = try leb.readULEB128(u64, reader);
+
+        self.debug_abbrev_pos += (math.cast(usize, creader.bytes_read) orelse return error.Overflow);
+
+        const len = try findFormSize(
+            self.ctx,
+            form,
+            self.debug_info_pos + self.entry.debug_info_off,
+            self.cuh,
+        );
+        const attr = Attribute{
+            .name = name,
+            .form = form,
+            .debug_info_off = self.debug_info_pos + self.entry.debug_info_off,
+            .debug_info_len = len,
+        };
+
+        self.debug_info_pos += len;
+
+        return attr;
+    }
+};
+
+fn getAbbrevEntry(self: DwarfInfo, da_off: usize, da_len: usize, di_off: usize, di_len: usize) !AbbrevEntry {
+    const debug_abbrev = self.debug_abbrev[da_off..][0..da_len];
+    var stream = std.io.fixedBufferStream(debug_abbrev);
+    var creader = std.io.countingReader(stream.reader());
+    const reader = creader.reader();
+
+    const tag = try leb.readULEB128(u64, reader);
+    const children = switch (tag) {
+        std.dwarf.TAG.const_type,
+        std.dwarf.TAG.packed_type,
+        std.dwarf.TAG.pointer_type,
+        std.dwarf.TAG.reference_type,
+        std.dwarf.TAG.restrict_type,
+        std.dwarf.TAG.rvalue_reference_type,
+        std.dwarf.TAG.shared_type,
+        std.dwarf.TAG.volatile_type,
+        => if (creader.bytes_read == da_len) std.dwarf.CHILDREN.no else try reader.readByte(),
+        else => try reader.readByte(),
+    };
+
+    const pos = math.cast(usize, creader.bytes_read) orelse return error.Overflow;
+
+    return AbbrevEntry{
+        .tag = tag,
+        .children = children,
+        .debug_abbrev_off = pos + da_off,
+        .debug_abbrev_len = da_len - pos,
+        .debug_info_off = di_off,
+        .debug_info_len = di_len,
+    };
+}
+
+fn findFormSize(self: DwarfInfo, form:
