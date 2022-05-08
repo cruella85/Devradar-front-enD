@@ -389,4 +389,130 @@ fn getAbbrevEntry(self: DwarfInfo, da_off: usize, da_len: usize, di_off: usize, 
     };
 }
 
-fn findFormSize(self: DwarfInfo, form:
+fn findFormSize(self: DwarfInfo, form: u64, di_off: usize, cuh: CompileUnit.Header) !usize {
+    const debug_info = self.debug_info[di_off..];
+    var stream = std.io.fixedBufferStream(debug_info);
+    var creader = std.io.countingReader(stream.reader());
+    const reader = creader.reader();
+
+    switch (form) {
+        dwarf.FORM.strp,
+        dwarf.FORM.sec_offset,
+        dwarf.FORM.ref_addr,
+        => return if (cuh.is_64bit) @sizeOf(u64) else @sizeOf(u32),
+
+        dwarf.FORM.addr => return cuh.address_size,
+
+        dwarf.FORM.block1,
+        dwarf.FORM.block2,
+        dwarf.FORM.block4,
+        dwarf.FORM.block,
+        => {
+            const len: u64 = switch (form) {
+                dwarf.FORM.block1 => try reader.readIntLittle(u8),
+                dwarf.FORM.block2 => try reader.readIntLittle(u16),
+                dwarf.FORM.block4 => try reader.readIntLittle(u32),
+                dwarf.FORM.block => try leb.readULEB128(u64, reader),
+                else => unreachable,
+            };
+            var i: u64 = 0;
+            while (i < len) : (i += 1) {
+                _ = try reader.readByte();
+            }
+            return math.cast(usize, creader.bytes_read) orelse error.Overflow;
+        },
+
+        dwarf.FORM.exprloc => {
+            const expr_len = try leb.readULEB128(u64, reader);
+            var i: u64 = 0;
+            while (i < expr_len) : (i += 1) {
+                _ = try reader.readByte();
+            }
+            return math.cast(usize, creader.bytes_read) orelse error.Overflow;
+        },
+        dwarf.FORM.flag_present => return 0,
+
+        dwarf.FORM.data1,
+        dwarf.FORM.ref1,
+        dwarf.FORM.flag,
+        => return @sizeOf(u8),
+
+        dwarf.FORM.data2,
+        dwarf.FORM.ref2,
+        => return @sizeOf(u16),
+
+        dwarf.FORM.data4,
+        dwarf.FORM.ref4,
+        => return @sizeOf(u32),
+
+        dwarf.FORM.data8,
+        dwarf.FORM.ref8,
+        dwarf.FORM.ref_sig8,
+        => return @sizeOf(u64),
+
+        dwarf.FORM.udata,
+        dwarf.FORM.ref_udata,
+        => {
+            _ = try leb.readULEB128(u64, reader);
+            return math.cast(usize, creader.bytes_read) orelse error.Overflow;
+        },
+
+        dwarf.FORM.sdata => {
+            _ = try leb.readILEB128(i64, reader);
+            return math.cast(usize, creader.bytes_read) orelse error.Overflow;
+        },
+
+        dwarf.FORM.string => {
+            var count: usize = 0;
+            while (true) {
+                const byte = try reader.readByte();
+                count += 1;
+                if (byte == 0x0) break;
+            }
+            return count;
+        },
+
+        else => {
+            log.err("unhandled DW_FORM_* value with identifier {x}", .{form});
+            return error.UnhandledDwFormValue;
+        },
+    }
+}
+
+fn findAbbrevEntrySize(self: DwarfInfo, da_off: usize, da_len: usize, di_off: usize, cuh: CompileUnit.Header) !usize {
+    const debug_abbrev = self.debug_abbrev[da_off..][0..da_len];
+    var stream = std.io.fixedBufferStream(debug_abbrev);
+    var creader = std.io.countingReader(stream.reader());
+    const reader = creader.reader();
+
+    const tag = try leb.readULEB128(u64, reader);
+    switch (tag) {
+        std.dwarf.TAG.const_type,
+        std.dwarf.TAG.packed_type,
+        std.dwarf.TAG.pointer_type,
+        std.dwarf.TAG.reference_type,
+        std.dwarf.TAG.restrict_type,
+        std.dwarf.TAG.rvalue_reference_type,
+        std.dwarf.TAG.shared_type,
+        std.dwarf.TAG.volatile_type,
+        => if (creader.bytes_read != da_len) {
+            _ = try reader.readByte();
+        },
+        else => _ = try reader.readByte(),
+    }
+
+    var len: usize = 0;
+    while (creader.bytes_read < debug_abbrev.len) {
+        _ = try leb.readULEB128(u64, reader);
+        const form = try leb.readULEB128(u64, reader);
+        const form_len = try self.findFormSize(form, di_off + len, cuh);
+        len += form_len;
+    }
+
+    return len;
+}
+
+fn getString(self: DwarfInfo, off: u64) []const u8 {
+    assert(off < self.debug_str.len);
+    return mem.sliceTo(@ptrCast([*:0]const u8, self.debug_str.ptr + @intCast(usize, off)), 0);
+}
