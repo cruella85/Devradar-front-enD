@@ -1218,3 +1218,478 @@ typedef struct IWbemHiPerfProviderVtbl {
         IWbemServices *pNamespace,
         LONG lFlags,
         IWbemRefresher **ppRefresher);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRefreshableObject)(
+        IWbemHiPerfProvider *This,
+        IWbemServices *pNamespace,
+        IWbemObjectAccess *pTemplate,
+        IWbemRefresher *pRefresher,
+        LONG lFlags,
+        IWbemContext *pContext,
+        IWbemObjectAccess **ppRefreshable,
+        LONG *plId);
+
+    HRESULT (STDMETHODCALLTYPE *StopRefreshing)(
+        IWbemHiPerfProvider *This,
+        IWbemRefresher *pRefresher,
+        LONG lId,
+        LONG lFlags);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRefreshableEnum)(
+        IWbemHiPerfProvider *This,
+        IWbemServices *pNamespace,
+        LPCWSTR wszClass,
+        IWbemRefresher *pRefresher,
+        LONG lFlags,
+        IWbemContext *pContext,
+        IWbemHiPerfEnum *pHiPerfEnum,
+        LONG *plId);
+
+    HRESULT (STDMETHODCALLTYPE *GetObjects)(
+        IWbemHiPerfProvider *This,
+        IWbemServices *pNamespace,
+        LONG lNumObjects,
+        IWbemObjectAccess **apObj,
+        LONG lFlags,
+        IWbemContext *pContext);
+
+    END_INTERFACE
+} IWbemHiPerfProviderVtbl;
+
+interface IWbemHiPerfProvider {
+    CONST_VTBL IWbemHiPerfProviderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWbemHiPerfProvider_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWbemHiPerfProvider_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWbemHiPerfProvider_Release(This) (This)->lpVtbl->Release(This)
+/*** IWbemHiPerfProvider methods ***/
+#define IWbemHiPerfProvider_QueryInstances(This,pNamespace,wszClass,lFlags,pCtx,pSink) (This)->lpVtbl->QueryInstances(This,pNamespace,wszClass,lFlags,pCtx,pSink)
+#define IWbemHiPerfProvider_CreateRefresher(This,pNamespace,lFlags,ppRefresher) (This)->lpVtbl->CreateRefresher(This,pNamespace,lFlags,ppRefresher)
+#define IWbemHiPerfProvider_CreateRefreshableObject(This,pNamespace,pTemplate,pRefresher,lFlags,pContext,ppRefreshable,plId) (This)->lpVtbl->CreateRefreshableObject(This,pNamespace,pTemplate,pRefresher,lFlags,pContext,ppRefreshable,plId)
+#define IWbemHiPerfProvider_StopRefreshing(This,pRefresher,lId,lFlags) (This)->lpVtbl->StopRefreshing(This,pRefresher,lId,lFlags)
+#define IWbemHiPerfProvider_CreateRefreshableEnum(This,pNamespace,wszClass,pRefresher,lFlags,pContext,pHiPerfEnum,plId) (This)->lpVtbl->CreateRefreshableEnum(This,pNamespace,wszClass,pRefresher,lFlags,pContext,pHiPerfEnum,plId)
+#define IWbemHiPerfProvider_GetObjects(This,pNamespace,lNumObjects,apObj,lFlags,pContext) (This)->lpVtbl->GetObjects(This,pNamespace,lNumObjects,apObj,lFlags,pContext)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWbemHiPerfProvider_QueryInterface(IWbemHiPerfProvider* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWbemHiPerfProvider_AddRef(IWbemHiPerfProvider* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWbemHiPerfProvider_Release(IWbemHiPerfProvider* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWbemHiPerfProvider methods ***/
+static FORCEINLINE HRESULT IWbemHiPerfProvider_QueryInstances(IWbemHiPerfProvider* This,IWbemServices *pNamespace,WCHAR *wszClass,LONG lFlags,IWbemContext *pCtx,IWbemObjectSink *pSink) {
+    return This->lpVtbl->QueryInstances(This,pNamespace,wszClass,lFlags,pCtx,pSink);
+}
+static FORCEINLINE HRESULT IWbemHiPerfProvider_CreateRefresher(IWbemHiPerfProvider* This,IWbemServices *pNamespace,LONG lFlags,IWbemRefresher **ppRefresher) {
+    return This->lpVtbl->CreateRefresher(This,pNamespace,lFlags,ppRefresher);
+}
+static FORCEINLINE HRESULT IWbemHiPerfProvider_CreateRefreshableObject(IWbemHiPerfProvider* This,IWbemServices *pNamespace,IWbemObjectAccess *pTemplate,IWbemRefresher *pRefresher,LONG lFlags,IWbemContext *pContext,IWbemObjectAccess **ppRefreshable,LONG *plId) {
+    return This->lpVtbl->CreateRefreshableObject(This,pNamespace,pTemplate,pRefresher,lFlags,pContext,ppRefreshable,plId);
+}
+static FORCEINLINE HRESULT IWbemHiPerfProvider_StopRefreshing(IWbemHiPerfProvider* This,IWbemRefresher *pRefresher,LONG lId,LONG lFlags) {
+    return This->lpVtbl->StopRefreshing(This,pRefresher,lId,lFlags);
+}
+static FORCEINLINE HRESULT IWbemHiPerfProvider_CreateRefreshableEnum(IWbemHiPerfProvider* This,IWbemServices *pNamespace,LPCWSTR wszClass,IWbemRefresher *pRefresher,LONG lFlags,IWbemContext *pContext,IWbemHiPerfEnum *pHiPerfEnum,LONG *plId) {
+    return This->lpVtbl->CreateRefreshableEnum(This,pNamespace,wszClass,pRefresher,lFlags,pContext,pHiPerfEnum,plId);
+}
+static FORCEINLINE HRESULT IWbemHiPerfProvider_GetObjects(IWbemHiPerfProvider* This,IWbemServices *pNamespace,LONG lNumObjects,IWbemObjectAccess **apObj,LONG lFlags,IWbemContext *pContext) {
+    return This->lpVtbl->GetObjects(This,pNamespace,lNumObjects,apObj,lFlags,pContext);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWbemHiPerfProvider_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWbemDecoupledRegistrar interface
+ */
+#ifndef __IWbemDecoupledRegistrar_INTERFACE_DEFINED__
+#define __IWbemDecoupledRegistrar_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWbemDecoupledRegistrar, 0x1005cbcf, 0xe64f, 0x4646, 0xbc,0xd3, 0x3a,0x08,0x9d,0x8a,0x84,0xb4);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("1005cbcf-e64f-4646-bcd3-3a089d8a84b4")
+IWbemDecoupledRegistrar : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Register(
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        LPCWSTR a_User,
+        LPCWSTR a_Locale,
+        LPCWSTR a_Scope,
+        LPCWSTR a_Registration,
+        IUnknown *pIUnknown) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE UnRegister(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWbemDecoupledRegistrar, 0x1005cbcf, 0xe64f, 0x4646, 0xbc,0xd3, 0x3a,0x08,0x9d,0x8a,0x84,0xb4)
+#endif
+#else
+typedef struct IWbemDecoupledRegistrarVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWbemDecoupledRegistrar *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWbemDecoupledRegistrar *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWbemDecoupledRegistrar *This);
+
+    /*** IWbemDecoupledRegistrar methods ***/
+    HRESULT (STDMETHODCALLTYPE *Register)(
+        IWbemDecoupledRegistrar *This,
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        LPCWSTR a_User,
+        LPCWSTR a_Locale,
+        LPCWSTR a_Scope,
+        LPCWSTR a_Registration,
+        IUnknown *pIUnknown);
+
+    HRESULT (STDMETHODCALLTYPE *UnRegister)(
+        IWbemDecoupledRegistrar *This);
+
+    END_INTERFACE
+} IWbemDecoupledRegistrarVtbl;
+
+interface IWbemDecoupledRegistrar {
+    CONST_VTBL IWbemDecoupledRegistrarVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWbemDecoupledRegistrar_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWbemDecoupledRegistrar_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWbemDecoupledRegistrar_Release(This) (This)->lpVtbl->Release(This)
+/*** IWbemDecoupledRegistrar methods ***/
+#define IWbemDecoupledRegistrar_Register(This,a_Flags,a_Context,a_User,a_Locale,a_Scope,a_Registration,pIUnknown) (This)->lpVtbl->Register(This,a_Flags,a_Context,a_User,a_Locale,a_Scope,a_Registration,pIUnknown)
+#define IWbemDecoupledRegistrar_UnRegister(This) (This)->lpVtbl->UnRegister(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWbemDecoupledRegistrar_QueryInterface(IWbemDecoupledRegistrar* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWbemDecoupledRegistrar_AddRef(IWbemDecoupledRegistrar* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWbemDecoupledRegistrar_Release(IWbemDecoupledRegistrar* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWbemDecoupledRegistrar methods ***/
+static FORCEINLINE HRESULT IWbemDecoupledRegistrar_Register(IWbemDecoupledRegistrar* This,LONG a_Flags,IWbemContext *a_Context,LPCWSTR a_User,LPCWSTR a_Locale,LPCWSTR a_Scope,LPCWSTR a_Registration,IUnknown *pIUnknown) {
+    return This->lpVtbl->Register(This,a_Flags,a_Context,a_User,a_Locale,a_Scope,a_Registration,pIUnknown);
+}
+static FORCEINLINE HRESULT IWbemDecoupledRegistrar_UnRegister(IWbemDecoupledRegistrar* This) {
+    return This->lpVtbl->UnRegister(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWbemDecoupledRegistrar_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWbemDecoupledBasicEventProvider interface
+ */
+#ifndef __IWbemDecoupledBasicEventProvider_INTERFACE_DEFINED__
+#define __IWbemDecoupledBasicEventProvider_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWbemDecoupledBasicEventProvider, 0x86336d20, 0xca11, 0x4786, 0x9e,0xf1, 0xbc,0x8a,0x94,0x6b,0x42,0xfc);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("86336d20-ca11-4786-9ef1-bc8a946b42fc")
+IWbemDecoupledBasicEventProvider : public IWbemDecoupledRegistrar
+{
+    virtual HRESULT STDMETHODCALLTYPE GetSink(
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        IWbemObjectSink **a_Sink) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetService(
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        IWbemServices **a_Service) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWbemDecoupledBasicEventProvider, 0x86336d20, 0xca11, 0x4786, 0x9e,0xf1, 0xbc,0x8a,0x94,0x6b,0x42,0xfc)
+#endif
+#else
+typedef struct IWbemDecoupledBasicEventProviderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWbemDecoupledBasicEventProvider *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWbemDecoupledBasicEventProvider *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWbemDecoupledBasicEventProvider *This);
+
+    /*** IWbemDecoupledRegistrar methods ***/
+    HRESULT (STDMETHODCALLTYPE *Register)(
+        IWbemDecoupledBasicEventProvider *This,
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        LPCWSTR a_User,
+        LPCWSTR a_Locale,
+        LPCWSTR a_Scope,
+        LPCWSTR a_Registration,
+        IUnknown *pIUnknown);
+
+    HRESULT (STDMETHODCALLTYPE *UnRegister)(
+        IWbemDecoupledBasicEventProvider *This);
+
+    /*** IWbemDecoupledBasicEventProvider methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetSink)(
+        IWbemDecoupledBasicEventProvider *This,
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        IWbemObjectSink **a_Sink);
+
+    HRESULT (STDMETHODCALLTYPE *GetService)(
+        IWbemDecoupledBasicEventProvider *This,
+        LONG a_Flags,
+        IWbemContext *a_Context,
+        IWbemServices **a_Service);
+
+    END_INTERFACE
+} IWbemDecoupledBasicEventProviderVtbl;
+
+interface IWbemDecoupledBasicEventProvider {
+    CONST_VTBL IWbemDecoupledBasicEventProviderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWbemDecoupledBasicEventProvider_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWbemDecoupledBasicEventProvider_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWbemDecoupledBasicEventProvider_Release(This) (This)->lpVtbl->Release(This)
+/*** IWbemDecoupledRegistrar methods ***/
+#define IWbemDecoupledBasicEventProvider_Register(This,a_Flags,a_Context,a_User,a_Locale,a_Scope,a_Registration,pIUnknown) (This)->lpVtbl->Register(This,a_Flags,a_Context,a_User,a_Locale,a_Scope,a_Registration,pIUnknown)
+#define IWbemDecoupledBasicEventProvider_UnRegister(This) (This)->lpVtbl->UnRegister(This)
+/*** IWbemDecoupledBasicEventProvider methods ***/
+#define IWbemDecoupledBasicEventProvider_GetSink(This,a_Flags,a_Context,a_Sink) (This)->lpVtbl->GetSink(This,a_Flags,a_Context,a_Sink)
+#define IWbemDecoupledBasicEventProvider_GetService(This,a_Flags,a_Context,a_Service) (This)->lpVtbl->GetService(This,a_Flags,a_Context,a_Service)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWbemDecoupledBasicEventProvider_QueryInterface(IWbemDecoupledBasicEventProvider* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWbemDecoupledBasicEventProvider_AddRef(IWbemDecoupledBasicEventProvider* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWbemDecoupledBasicEventProvider_Release(IWbemDecoupledBasicEventProvider* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWbemDecoupledRegistrar methods ***/
+static FORCEINLINE HRESULT IWbemDecoupledBasicEventProvider_Register(IWbemDecoupledBasicEventProvider* This,LONG a_Flags,IWbemContext *a_Context,LPCWSTR a_User,LPCWSTR a_Locale,LPCWSTR a_Scope,LPCWSTR a_Registration,IUnknown *pIUnknown) {
+    return This->lpVtbl->Register(This,a_Flags,a_Context,a_User,a_Locale,a_Scope,a_Registration,pIUnknown);
+}
+static FORCEINLINE HRESULT IWbemDecoupledBasicEventProvider_UnRegister(IWbemDecoupledBasicEventProvider* This) {
+    return This->lpVtbl->UnRegister(This);
+}
+/*** IWbemDecoupledBasicEventProvider methods ***/
+static FORCEINLINE HRESULT IWbemDecoupledBasicEventProvider_GetSink(IWbemDecoupledBasicEventProvider* This,LONG a_Flags,IWbemContext *a_Context,IWbemObjectSink **a_Sink) {
+    return This->lpVtbl->GetSink(This,a_Flags,a_Context,a_Sink);
+}
+static FORCEINLINE HRESULT IWbemDecoupledBasicEventProvider_GetService(IWbemDecoupledBasicEventProvider* This,LONG a_Flags,IWbemContext *a_Context,IWbemServices **a_Service) {
+    return This->lpVtbl->GetService(This,a_Flags,a_Context,a_Service);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWbemDecoupledBasicEventProvider_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IWbemEventSink interface
+ */
+#ifndef __IWbemEventSink_INTERFACE_DEFINED__
+#define __IWbemEventSink_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IWbemEventSink, 0x3ae0080a, 0x7e3a, 0x4366, 0xbf,0x89, 0x0f,0xee,0xdc,0x93,0x16,0x59);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3ae0080a-7e3a-4366-bf89-0feedc931659")
+IWbemEventSink : public IWbemObjectSink
+{
+    virtual HRESULT STDMETHODCALLTYPE SetSinkSecurity(
+        LONG lSDLength,
+        BYTE *pSD) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IsActive(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetRestrictedSink(
+        LONG lNumQueries,
+        const LPCWSTR *awszQueries,
+        IUnknown *pCallback,
+        IWbemEventSink **ppSink) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetBatchingParameters(
+        LONG lFlags,
+        DWORD dwMaxBufferSize,
+        DWORD dwMaxSendLatency) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IWbemEventSink, 0x3ae0080a, 0x7e3a, 0x4366, 0xbf,0x89, 0x0f,0xee,0xdc,0x93,0x16,0x59)
+#endif
+#else
+typedef struct IWbemEventSinkVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IWbemEventSink *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IWbemEventSink *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IWbemEventSink *This);
+
+    /*** IWbemObjectSink methods ***/
+    HRESULT (STDMETHODCALLTYPE *Indicate)(
+        IWbemEventSink *This,
+        LONG lObjectCount,
+        IWbemClassObject **apObjArray);
+
+    HRESULT (STDMETHODCALLTYPE *SetStatus)(
+        IWbemEventSink *This,
+        LONG lFlags,
+        HRESULT hResult,
+        BSTR strParam,
+        IWbemClassObject *pObjParam);
+
+    /*** IWbemEventSink methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetSinkSecurity)(
+        IWbemEventSink *This,
+        LONG lSDLength,
+        BYTE *pSD);
+
+    HRESULT (STDMETHODCALLTYPE *IsActive)(
+        IWbemEventSink *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetRestrictedSink)(
+        IWbemEventSink *This,
+        LONG lNumQueries,
+        const LPCWSTR *awszQueries,
+        IUnknown *pCallback,
+        IWbemEventSink **ppSink);
+
+    HRESULT (STDMETHODCALLTYPE *SetBatchingParameters)(
+        IWbemEventSink *This,
+        LONG lFlags,
+        DWORD dwMaxBufferSize,
+        DWORD dwMaxSendLatency);
+
+    END_INTERFACE
+} IWbemEventSinkVtbl;
+
+interface IWbemEventSink {
+    CONST_VTBL IWbemEventSinkVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IWbemEventSink_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IWbemEventSink_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IWbemEventSink_Release(This) (This)->lpVtbl->Release(This)
+/*** IWbemObjectSink methods ***/
+#define IWbemEventSink_Indicate(This,lObjectCount,apObjArray) (This)->lpVtbl->Indicate(This,lObjectCount,apObjArray)
+#define IWbemEventSink_SetStatus(This,lFlags,hResult,strParam,pObjParam) (This)->lpVtbl->SetStatus(This,lFlags,hResult,strParam,pObjParam)
+/*** IWbemEventSink methods ***/
+#define IWbemEventSink_SetSinkSecurity(This,lSDLength,pSD) (This)->lpVtbl->SetSinkSecurity(This,lSDLength,pSD)
+#define IWbemEventSink_IsActive(This) (This)->lpVtbl->IsActive(This)
+#define IWbemEventSink_GetRestrictedSink(This,lNumQueries,awszQueries,pCallback,ppSink) (This)->lpVtbl->GetRestrictedSink(This,lNumQueries,awszQueries,pCallback,ppSink)
+#define IWbemEventSink_SetBatchingParameters(This,lFlags,dwMaxBufferSize,dwMaxSendLatency) (This)->lpVtbl->SetBatchingParameters(This,lFlags,dwMaxBufferSize,dwMaxSendLatency)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IWbemEventSink_QueryInterface(IWbemEventSink* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IWbemEventSink_AddRef(IWbemEventSink* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IWbemEventSink_Release(IWbemEventSink* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IWbemObjectSink methods ***/
+static FORCEINLINE HRESULT IWbemEventSink_Indicate(IWbemEventSink* This,LONG lObjectCount,IWbemClassObject **apObjArray) {
+    return This->lpVtbl->Indicate(This,lObjectCount,apObjArray);
+}
+static FORCEINLINE HRESULT IWbemEventSink_SetStatus(IWbemEventSink* This,LONG lFlags,HRESULT hResult,BSTR strParam,IWbemClassObject *pObjParam) {
+    return This->lpVtbl->SetStatus(This,lFlags,hResult,strParam,pObjParam);
+}
+/*** IWbemEventSink methods ***/
+static FORCEINLINE HRESULT IWbemEventSink_SetSinkSecurity(IWbemEventSink* This,LONG lSDLength,BYTE *pSD) {
+    return This->lpVtbl->SetSinkSecurity(This,lSDLength,pSD);
+}
+static FORCEINLINE HRESULT IWbemEventSink_IsActive(IWbemEventSink* This) {
+    return This->lpVtbl->IsActive(This);
+}
+static FORCEINLINE HRESULT IWbemEventSink_GetRestrictedSink(IWbemEventSink* This,LONG lNumQueries,const LPCWSTR *awszQueries,IUnknown *pCallback,IWbemEventSink **ppSink) {
+    return This->lpVtbl->GetRestrictedSink(This,lNumQueries,awszQueries,pCallback,ppSink);
+}
+static FORCEINLINE HRESULT IWbemEventSink_SetBatchingParameters(IWbemEventSink* This,LONG lFlags,DWORD dwMaxBufferSize,DWORD dwMaxSendLatency) {
+    return This->lpVtbl->SetBatchingParameters(This,lFlags,dwMaxBufferSize,dwMaxSendLatency);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IWbemEventSink_INTERFACE_DEFINED__ */
+
+#endif
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER VARIANT_UserSize     (ULONG *, ULONG, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserMarshal  (ULONG *, unsigned char *, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserUnmarshal(ULONG *, unsigned char *, VARIANT *);
+void            __RPC_USER VARIANT_UserFree     (ULONG *, VARIANT *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __wbemprov_h__ */
