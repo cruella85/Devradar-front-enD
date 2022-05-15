@@ -15591,3 +15591,4115 @@ typedef struct ISpeechTextSelectionInformationVtbl {
     /*** IUnknown methods ***/
     HRESULT (STDMETHODCALLTYPE *QueryInterface)(
         ISpeechTextSelectionInformation *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechTextSelectionInformation *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechTextSelectionInformation *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechTextSelectionInformation *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechTextSelectionInformation *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechTextSelectionInformation *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechTextSelectionInformation *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechTextSelectionInformation methods ***/
+    HRESULT (STDMETHODCALLTYPE *put_ActiveOffset)(
+        ISpeechTextSelectionInformation *This,
+        LONG ActiveOffset);
+
+    HRESULT (STDMETHODCALLTYPE *get_ActiveOffset)(
+        ISpeechTextSelectionInformation *This,
+        LONG *ActiveOffset);
+
+    HRESULT (STDMETHODCALLTYPE *put_ActiveLength)(
+        ISpeechTextSelectionInformation *This,
+        LONG ActiveLength);
+
+    HRESULT (STDMETHODCALLTYPE *get_ActiveLength)(
+        ISpeechTextSelectionInformation *This,
+        LONG *ActiveLength);
+
+    HRESULT (STDMETHODCALLTYPE *put_SelectionOffset)(
+        ISpeechTextSelectionInformation *This,
+        LONG SelectionOffset);
+
+    HRESULT (STDMETHODCALLTYPE *get_SelectionOffset)(
+        ISpeechTextSelectionInformation *This,
+        LONG *SelectionOffset);
+
+    HRESULT (STDMETHODCALLTYPE *put_SelectionLength)(
+        ISpeechTextSelectionInformation *This,
+        LONG SelectionLength);
+
+    HRESULT (STDMETHODCALLTYPE *get_SelectionLength)(
+        ISpeechTextSelectionInformation *This,
+        LONG *SelectionLength);
+
+    END_INTERFACE
+} ISpeechTextSelectionInformationVtbl;
+
+interface ISpeechTextSelectionInformation {
+    CONST_VTBL ISpeechTextSelectionInformationVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechTextSelectionInformation_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechTextSelectionInformation_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechTextSelectionInformation_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechTextSelectionInformation_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechTextSelectionInformation_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechTextSelectionInformation_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechTextSelectionInformation_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechTextSelectionInformation methods ***/
+#define ISpeechTextSelectionInformation_put_ActiveOffset(This,ActiveOffset) (This)->lpVtbl->put_ActiveOffset(This,ActiveOffset)
+#define ISpeechTextSelectionInformation_get_ActiveOffset(This,ActiveOffset) (This)->lpVtbl->get_ActiveOffset(This,ActiveOffset)
+#define ISpeechTextSelectionInformation_put_ActiveLength(This,ActiveLength) (This)->lpVtbl->put_ActiveLength(This,ActiveLength)
+#define ISpeechTextSelectionInformation_get_ActiveLength(This,ActiveLength) (This)->lpVtbl->get_ActiveLength(This,ActiveLength)
+#define ISpeechTextSelectionInformation_put_SelectionOffset(This,SelectionOffset) (This)->lpVtbl->put_SelectionOffset(This,SelectionOffset)
+#define ISpeechTextSelectionInformation_get_SelectionOffset(This,SelectionOffset) (This)->lpVtbl->get_SelectionOffset(This,SelectionOffset)
+#define ISpeechTextSelectionInformation_put_SelectionLength(This,SelectionLength) (This)->lpVtbl->put_SelectionLength(This,SelectionLength)
+#define ISpeechTextSelectionInformation_get_SelectionLength(This,SelectionLength) (This)->lpVtbl->get_SelectionLength(This,SelectionLength)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_QueryInterface(ISpeechTextSelectionInformation* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechTextSelectionInformation_AddRef(ISpeechTextSelectionInformation* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechTextSelectionInformation_Release(ISpeechTextSelectionInformation* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_GetTypeInfoCount(ISpeechTextSelectionInformation* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_GetTypeInfo(ISpeechTextSelectionInformation* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_GetIDsOfNames(ISpeechTextSelectionInformation* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_Invoke(ISpeechTextSelectionInformation* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechTextSelectionInformation methods ***/
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_put_ActiveOffset(ISpeechTextSelectionInformation* This,LONG ActiveOffset) {
+    return This->lpVtbl->put_ActiveOffset(This,ActiveOffset);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_get_ActiveOffset(ISpeechTextSelectionInformation* This,LONG *ActiveOffset) {
+    return This->lpVtbl->get_ActiveOffset(This,ActiveOffset);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_put_ActiveLength(ISpeechTextSelectionInformation* This,LONG ActiveLength) {
+    return This->lpVtbl->put_ActiveLength(This,ActiveLength);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_get_ActiveLength(ISpeechTextSelectionInformation* This,LONG *ActiveLength) {
+    return This->lpVtbl->get_ActiveLength(This,ActiveLength);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_put_SelectionOffset(ISpeechTextSelectionInformation* This,LONG SelectionOffset) {
+    return This->lpVtbl->put_SelectionOffset(This,SelectionOffset);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_get_SelectionOffset(ISpeechTextSelectionInformation* This,LONG *SelectionOffset) {
+    return This->lpVtbl->get_SelectionOffset(This,SelectionOffset);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_put_SelectionLength(ISpeechTextSelectionInformation* This,LONG SelectionLength) {
+    return This->lpVtbl->put_SelectionLength(This,SelectionLength);
+}
+static FORCEINLINE HRESULT ISpeechTextSelectionInformation_get_SelectionLength(ISpeechTextSelectionInformation* This,LONG *SelectionLength) {
+    return This->lpVtbl->get_SelectionLength(This,SelectionLength);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechTextSelectionInformation_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechRecoResult interface
+ */
+#ifndef __ISpeechRecoResult_INTERFACE_DEFINED__
+#define __ISpeechRecoResult_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechRecoResult, 0xed2879cf, 0xced9, 0x4ee6, 0xa5,0x34, 0xde,0x01,0x91,0xd5,0x46,0x8d);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("ed2879cf-ced9-4ee6-a534-de0191d5468d")
+ISpeechRecoResult : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_RecoContext(
+        ISpeechRecoContext **RecoContext) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Times(
+        ISpeechRecoResultTimes **Times) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE putref_AudioFormat(
+        ISpeechAudioFormat *Format) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioFormat(
+        ISpeechAudioFormat **Format) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_PhraseInfo(
+        ISpeechPhraseInfo **PhraseInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Alternates(
+        LONG RequestCount,
+        LONG StartElement,
+        LONG Elements,
+        ISpeechPhraseAlternates **Alternates) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Audio(
+        LONG StartElement,
+        LONG Elements,
+        ISpeechMemoryStream **Stream) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SpeakAudio(
+        LONG StartElement,
+        LONG Elements,
+        SpeechVoiceSpeakFlags Flags,
+        LONG *StreamNumber) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SaveToMemory(
+        VARIANT *ResultBlock) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE DiscardResultInfo(
+        SpeechDiscardType ValueTypes) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechRecoResult, 0xed2879cf, 0xced9, 0x4ee6, 0xa5,0x34, 0xde,0x01,0x91,0xd5,0x46,0x8d)
+#endif
+#else
+typedef struct ISpeechRecoResultVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechRecoResult *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechRecoResult *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechRecoResult *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechRecoResult *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechRecoResult *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechRecoResult *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechRecoResult *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechRecoResult methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_RecoContext)(
+        ISpeechRecoResult *This,
+        ISpeechRecoContext **RecoContext);
+
+    HRESULT (STDMETHODCALLTYPE *get_Times)(
+        ISpeechRecoResult *This,
+        ISpeechRecoResultTimes **Times);
+
+    HRESULT (STDMETHODCALLTYPE *putref_AudioFormat)(
+        ISpeechRecoResult *This,
+        ISpeechAudioFormat *Format);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioFormat)(
+        ISpeechRecoResult *This,
+        ISpeechAudioFormat **Format);
+
+    HRESULT (STDMETHODCALLTYPE *get_PhraseInfo)(
+        ISpeechRecoResult *This,
+        ISpeechPhraseInfo **PhraseInfo);
+
+    HRESULT (STDMETHODCALLTYPE *Alternates)(
+        ISpeechRecoResult *This,
+        LONG RequestCount,
+        LONG StartElement,
+        LONG Elements,
+        ISpeechPhraseAlternates **Alternates);
+
+    HRESULT (STDMETHODCALLTYPE *Audio)(
+        ISpeechRecoResult *This,
+        LONG StartElement,
+        LONG Elements,
+        ISpeechMemoryStream **Stream);
+
+    HRESULT (STDMETHODCALLTYPE *SpeakAudio)(
+        ISpeechRecoResult *This,
+        LONG StartElement,
+        LONG Elements,
+        SpeechVoiceSpeakFlags Flags,
+        LONG *StreamNumber);
+
+    HRESULT (STDMETHODCALLTYPE *SaveToMemory)(
+        ISpeechRecoResult *This,
+        VARIANT *ResultBlock);
+
+    HRESULT (STDMETHODCALLTYPE *DiscardResultInfo)(
+        ISpeechRecoResult *This,
+        SpeechDiscardType ValueTypes);
+
+    END_INTERFACE
+} ISpeechRecoResultVtbl;
+
+interface ISpeechRecoResult {
+    CONST_VTBL ISpeechRecoResultVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechRecoResult_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechRecoResult_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechRecoResult_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechRecoResult_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechRecoResult_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechRecoResult_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechRecoResult_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechRecoResult methods ***/
+#define ISpeechRecoResult_get_RecoContext(This,RecoContext) (This)->lpVtbl->get_RecoContext(This,RecoContext)
+#define ISpeechRecoResult_get_Times(This,Times) (This)->lpVtbl->get_Times(This,Times)
+#define ISpeechRecoResult_putref_AudioFormat(This,Format) (This)->lpVtbl->putref_AudioFormat(This,Format)
+#define ISpeechRecoResult_get_AudioFormat(This,Format) (This)->lpVtbl->get_AudioFormat(This,Format)
+#define ISpeechRecoResult_get_PhraseInfo(This,PhraseInfo) (This)->lpVtbl->get_PhraseInfo(This,PhraseInfo)
+#define ISpeechRecoResult_Alternates(This,RequestCount,StartElement,Elements,Alternates) (This)->lpVtbl->Alternates(This,RequestCount,StartElement,Elements,Alternates)
+#define ISpeechRecoResult_Audio(This,StartElement,Elements,Stream) (This)->lpVtbl->Audio(This,StartElement,Elements,Stream)
+#define ISpeechRecoResult_SpeakAudio(This,StartElement,Elements,Flags,StreamNumber) (This)->lpVtbl->SpeakAudio(This,StartElement,Elements,Flags,StreamNumber)
+#define ISpeechRecoResult_SaveToMemory(This,ResultBlock) (This)->lpVtbl->SaveToMemory(This,ResultBlock)
+#define ISpeechRecoResult_DiscardResultInfo(This,ValueTypes) (This)->lpVtbl->DiscardResultInfo(This,ValueTypes)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechRecoResult_QueryInterface(ISpeechRecoResult* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechRecoResult_AddRef(ISpeechRecoResult* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechRecoResult_Release(ISpeechRecoResult* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechRecoResult_GetTypeInfoCount(ISpeechRecoResult* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_GetTypeInfo(ISpeechRecoResult* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_GetIDsOfNames(ISpeechRecoResult* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_Invoke(ISpeechRecoResult* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechRecoResult methods ***/
+static FORCEINLINE HRESULT ISpeechRecoResult_get_RecoContext(ISpeechRecoResult* This,ISpeechRecoContext **RecoContext) {
+    return This->lpVtbl->get_RecoContext(This,RecoContext);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_get_Times(ISpeechRecoResult* This,ISpeechRecoResultTimes **Times) {
+    return This->lpVtbl->get_Times(This,Times);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_putref_AudioFormat(ISpeechRecoResult* This,ISpeechAudioFormat *Format) {
+    return This->lpVtbl->putref_AudioFormat(This,Format);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_get_AudioFormat(ISpeechRecoResult* This,ISpeechAudioFormat **Format) {
+    return This->lpVtbl->get_AudioFormat(This,Format);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_get_PhraseInfo(ISpeechRecoResult* This,ISpeechPhraseInfo **PhraseInfo) {
+    return This->lpVtbl->get_PhraseInfo(This,PhraseInfo);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_Alternates(ISpeechRecoResult* This,LONG RequestCount,LONG StartElement,LONG Elements,ISpeechPhraseAlternates **Alternates) {
+    return This->lpVtbl->Alternates(This,RequestCount,StartElement,Elements,Alternates);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_Audio(ISpeechRecoResult* This,LONG StartElement,LONG Elements,ISpeechMemoryStream **Stream) {
+    return This->lpVtbl->Audio(This,StartElement,Elements,Stream);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_SpeakAudio(ISpeechRecoResult* This,LONG StartElement,LONG Elements,SpeechVoiceSpeakFlags Flags,LONG *StreamNumber) {
+    return This->lpVtbl->SpeakAudio(This,StartElement,Elements,Flags,StreamNumber);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_SaveToMemory(ISpeechRecoResult* This,VARIANT *ResultBlock) {
+    return This->lpVtbl->SaveToMemory(This,ResultBlock);
+}
+static FORCEINLINE HRESULT ISpeechRecoResult_DiscardResultInfo(ISpeechRecoResult* This,SpeechDiscardType ValueTypes) {
+    return This->lpVtbl->DiscardResultInfo(This,ValueTypes);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechRecoResult_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseInfoBuilder interface
+ */
+#ifndef __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__
+#define __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseInfoBuilder, 0x3b151836, 0xdf3a, 0x4e0a, 0x84,0x6c, 0xd2,0xad,0xc9,0x33,0x43,0x33);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3b151836-df3a-4e0a-846c-d2adc9334333")
+ISpeechPhraseInfoBuilder : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE RestorePhraseFromMemory(
+        VARIANT *PhraseInMemory,
+        ISpeechPhraseInfo **PhraseInfo) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseInfoBuilder, 0x3b151836, 0xdf3a, 0x4e0a, 0x84,0x6c, 0xd2,0xad,0xc9,0x33,0x43,0x33)
+#endif
+#else
+typedef struct ISpeechPhraseInfoBuilderVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseInfoBuilder *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseInfoBuilder *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseInfoBuilder *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseInfoBuilder *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseInfoBuilder *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseInfoBuilder *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseInfoBuilder *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseInfoBuilder methods ***/
+    HRESULT (STDMETHODCALLTYPE *RestorePhraseFromMemory)(
+        ISpeechPhraseInfoBuilder *This,
+        VARIANT *PhraseInMemory,
+        ISpeechPhraseInfo **PhraseInfo);
+
+    END_INTERFACE
+} ISpeechPhraseInfoBuilderVtbl;
+
+interface ISpeechPhraseInfoBuilder {
+    CONST_VTBL ISpeechPhraseInfoBuilderVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseInfoBuilder_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseInfoBuilder_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseInfoBuilder_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseInfoBuilder_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseInfoBuilder_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseInfoBuilder_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseInfoBuilder_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseInfoBuilder methods ***/
+#define ISpeechPhraseInfoBuilder_RestorePhraseFromMemory(This,PhraseInMemory,PhraseInfo) (This)->lpVtbl->RestorePhraseFromMemory(This,PhraseInMemory,PhraseInfo)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseInfoBuilder_QueryInterface(ISpeechPhraseInfoBuilder* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseInfoBuilder_AddRef(ISpeechPhraseInfoBuilder* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseInfoBuilder_Release(ISpeechPhraseInfoBuilder* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseInfoBuilder_GetTypeInfoCount(ISpeechPhraseInfoBuilder* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfoBuilder_GetTypeInfo(ISpeechPhraseInfoBuilder* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfoBuilder_GetIDsOfNames(ISpeechPhraseInfoBuilder* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfoBuilder_Invoke(ISpeechPhraseInfoBuilder* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseInfoBuilder methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseInfoBuilder_RestorePhraseFromMemory(ISpeechPhraseInfoBuilder* This,VARIANT *PhraseInMemory,ISpeechPhraseInfo **PhraseInfo) {
+    return This->lpVtbl->RestorePhraseFromMemory(This,PhraseInMemory,PhraseInfo);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseInfoBuilder_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechRecoResultTimes interface
+ */
+#ifndef __ISpeechRecoResultTimes_INTERFACE_DEFINED__
+#define __ISpeechRecoResultTimes_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechRecoResultTimes, 0x62b3b8fb, 0xf6e7, 0x41be, 0xbd,0xcb, 0x05,0x6b,0x1c,0x29,0xef,0xc0);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("62b3b8fb-f6e7-41be-bdcb-056b1c29efc0")
+ISpeechRecoResultTimes : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_StreamTime(
+        VARIANT *Time) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Length(
+        VARIANT *Length) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_TickCount(
+        LONG *TickCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_OffsetFromStart(
+        VARIANT *OffsetFromStart) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechRecoResultTimes, 0x62b3b8fb, 0xf6e7, 0x41be, 0xbd,0xcb, 0x05,0x6b,0x1c,0x29,0xef,0xc0)
+#endif
+#else
+typedef struct ISpeechRecoResultTimesVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechRecoResultTimes *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechRecoResultTimes *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechRecoResultTimes *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechRecoResultTimes *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechRecoResultTimes *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechRecoResultTimes *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechRecoResultTimes *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechRecoResultTimes methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_StreamTime)(
+        ISpeechRecoResultTimes *This,
+        VARIANT *Time);
+
+    HRESULT (STDMETHODCALLTYPE *get_Length)(
+        ISpeechRecoResultTimes *This,
+        VARIANT *Length);
+
+    HRESULT (STDMETHODCALLTYPE *get_TickCount)(
+        ISpeechRecoResultTimes *This,
+        LONG *TickCount);
+
+    HRESULT (STDMETHODCALLTYPE *get_OffsetFromStart)(
+        ISpeechRecoResultTimes *This,
+        VARIANT *OffsetFromStart);
+
+    END_INTERFACE
+} ISpeechRecoResultTimesVtbl;
+
+interface ISpeechRecoResultTimes {
+    CONST_VTBL ISpeechRecoResultTimesVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechRecoResultTimes_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechRecoResultTimes_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechRecoResultTimes_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechRecoResultTimes_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechRecoResultTimes_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechRecoResultTimes_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechRecoResultTimes_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechRecoResultTimes methods ***/
+#define ISpeechRecoResultTimes_get_StreamTime(This,Time) (This)->lpVtbl->get_StreamTime(This,Time)
+#define ISpeechRecoResultTimes_get_Length(This,Length) (This)->lpVtbl->get_Length(This,Length)
+#define ISpeechRecoResultTimes_get_TickCount(This,TickCount) (This)->lpVtbl->get_TickCount(This,TickCount)
+#define ISpeechRecoResultTimes_get_OffsetFromStart(This,OffsetFromStart) (This)->lpVtbl->get_OffsetFromStart(This,OffsetFromStart)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_QueryInterface(ISpeechRecoResultTimes* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechRecoResultTimes_AddRef(ISpeechRecoResultTimes* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechRecoResultTimes_Release(ISpeechRecoResultTimes* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_GetTypeInfoCount(ISpeechRecoResultTimes* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_GetTypeInfo(ISpeechRecoResultTimes* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_GetIDsOfNames(ISpeechRecoResultTimes* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_Invoke(ISpeechRecoResultTimes* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechRecoResultTimes methods ***/
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_get_StreamTime(ISpeechRecoResultTimes* This,VARIANT *Time) {
+    return This->lpVtbl->get_StreamTime(This,Time);
+}
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_get_Length(ISpeechRecoResultTimes* This,VARIANT *Length) {
+    return This->lpVtbl->get_Length(This,Length);
+}
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_get_TickCount(ISpeechRecoResultTimes* This,LONG *TickCount) {
+    return This->lpVtbl->get_TickCount(This,TickCount);
+}
+static FORCEINLINE HRESULT ISpeechRecoResultTimes_get_OffsetFromStart(ISpeechRecoResultTimes* This,VARIANT *OffsetFromStart) {
+    return This->lpVtbl->get_OffsetFromStart(This,OffsetFromStart);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechRecoResultTimes_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseAlternate interface
+ */
+#ifndef __ISpeechPhraseAlternate_INTERFACE_DEFINED__
+#define __ISpeechPhraseAlternate_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseAlternate, 0x27864a2a, 0x2b9f, 0x4cb8, 0x92,0xd3, 0x0d,0x27,0x22,0xfd,0x1e,0x73);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("27864a2a-2b9f-4cb8-92d3-0d2722fd1e73")
+ISpeechPhraseAlternate : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_RecoResult(
+        ISpeechRecoResult **RecoResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_StartElementInResult(
+        LONG *StartElement) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_NumberOfElementsInResult(
+        LONG *NumberOfElements) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_PhraseInfo(
+        ISpeechPhraseInfo **PhraseInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Commit(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseAlternate, 0x27864a2a, 0x2b9f, 0x4cb8, 0x92,0xd3, 0x0d,0x27,0x22,0xfd,0x1e,0x73)
+#endif
+#else
+typedef struct ISpeechPhraseAlternateVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseAlternate *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseAlternate *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseAlternate *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseAlternate *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseAlternate *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseAlternate *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseAlternate *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseAlternate methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_RecoResult)(
+        ISpeechPhraseAlternate *This,
+        ISpeechRecoResult **RecoResult);
+
+    HRESULT (STDMETHODCALLTYPE *get_StartElementInResult)(
+        ISpeechPhraseAlternate *This,
+        LONG *StartElement);
+
+    HRESULT (STDMETHODCALLTYPE *get_NumberOfElementsInResult)(
+        ISpeechPhraseAlternate *This,
+        LONG *NumberOfElements);
+
+    HRESULT (STDMETHODCALLTYPE *get_PhraseInfo)(
+        ISpeechPhraseAlternate *This,
+        ISpeechPhraseInfo **PhraseInfo);
+
+    HRESULT (STDMETHODCALLTYPE *Commit)(
+        ISpeechPhraseAlternate *This);
+
+    END_INTERFACE
+} ISpeechPhraseAlternateVtbl;
+
+interface ISpeechPhraseAlternate {
+    CONST_VTBL ISpeechPhraseAlternateVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseAlternate_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseAlternate_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseAlternate_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseAlternate_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseAlternate_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseAlternate_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseAlternate_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseAlternate methods ***/
+#define ISpeechPhraseAlternate_get_RecoResult(This,RecoResult) (This)->lpVtbl->get_RecoResult(This,RecoResult)
+#define ISpeechPhraseAlternate_get_StartElementInResult(This,StartElement) (This)->lpVtbl->get_StartElementInResult(This,StartElement)
+#define ISpeechPhraseAlternate_get_NumberOfElementsInResult(This,NumberOfElements) (This)->lpVtbl->get_NumberOfElementsInResult(This,NumberOfElements)
+#define ISpeechPhraseAlternate_get_PhraseInfo(This,PhraseInfo) (This)->lpVtbl->get_PhraseInfo(This,PhraseInfo)
+#define ISpeechPhraseAlternate_Commit(This) (This)->lpVtbl->Commit(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_QueryInterface(ISpeechPhraseAlternate* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseAlternate_AddRef(ISpeechPhraseAlternate* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseAlternate_Release(ISpeechPhraseAlternate* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_GetTypeInfoCount(ISpeechPhraseAlternate* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_GetTypeInfo(ISpeechPhraseAlternate* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_GetIDsOfNames(ISpeechPhraseAlternate* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_Invoke(ISpeechPhraseAlternate* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseAlternate methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_get_RecoResult(ISpeechPhraseAlternate* This,ISpeechRecoResult **RecoResult) {
+    return This->lpVtbl->get_RecoResult(This,RecoResult);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_get_StartElementInResult(ISpeechPhraseAlternate* This,LONG *StartElement) {
+    return This->lpVtbl->get_StartElementInResult(This,StartElement);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_get_NumberOfElementsInResult(ISpeechPhraseAlternate* This,LONG *NumberOfElements) {
+    return This->lpVtbl->get_NumberOfElementsInResult(This,NumberOfElements);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_get_PhraseInfo(ISpeechPhraseAlternate* This,ISpeechPhraseInfo **PhraseInfo) {
+    return This->lpVtbl->get_PhraseInfo(This,PhraseInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternate_Commit(ISpeechPhraseAlternate* This) {
+    return This->lpVtbl->Commit(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseAlternate_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseAlternates interface
+ */
+#ifndef __ISpeechPhraseAlternates_INTERFACE_DEFINED__
+#define __ISpeechPhraseAlternates_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseAlternates, 0xb238b6d5, 0xf276, 0x4c3d, 0xa6,0xc1, 0x29,0x74,0x80,0x1c,0x3c,0xc2);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b238b6d5-f276-4c3d-a6c1-2974801c3cc2")
+ISpeechPhraseAlternates : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechPhraseAlternate **PhraseAlternate) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseAlternates, 0xb238b6d5, 0xf276, 0x4c3d, 0xa6,0xc1, 0x29,0x74,0x80,0x1c,0x3c,0xc2)
+#endif
+#else
+typedef struct ISpeechPhraseAlternatesVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseAlternates *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseAlternates *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseAlternates *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseAlternates *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseAlternates *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseAlternates *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseAlternates *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseAlternates methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechPhraseAlternates *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechPhraseAlternates *This,
+        LONG Index,
+        ISpeechPhraseAlternate **PhraseAlternate);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechPhraseAlternates *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechPhraseAlternatesVtbl;
+
+interface ISpeechPhraseAlternates {
+    CONST_VTBL ISpeechPhraseAlternatesVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseAlternates_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseAlternates_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseAlternates_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseAlternates_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseAlternates_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseAlternates_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseAlternates_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseAlternates methods ***/
+#define ISpeechPhraseAlternates_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechPhraseAlternates_Item(This,Index,PhraseAlternate) (This)->lpVtbl->Item(This,Index,PhraseAlternate)
+#define ISpeechPhraseAlternates_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_QueryInterface(ISpeechPhraseAlternates* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseAlternates_AddRef(ISpeechPhraseAlternates* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseAlternates_Release(ISpeechPhraseAlternates* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_GetTypeInfoCount(ISpeechPhraseAlternates* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_GetTypeInfo(ISpeechPhraseAlternates* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_GetIDsOfNames(ISpeechPhraseAlternates* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_Invoke(ISpeechPhraseAlternates* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseAlternates methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_get_Count(ISpeechPhraseAlternates* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_Item(ISpeechPhraseAlternates* This,LONG Index,ISpeechPhraseAlternate **PhraseAlternate) {
+    return This->lpVtbl->Item(This,Index,PhraseAlternate);
+}
+static FORCEINLINE HRESULT ISpeechPhraseAlternates_get__NewEnum(ISpeechPhraseAlternates* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseAlternates_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseInfo interface
+ */
+#ifndef __ISpeechPhraseInfo_INTERFACE_DEFINED__
+#define __ISpeechPhraseInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseInfo, 0x961559cf, 0x4e67, 0x4662, 0x8b,0xf0, 0xd9,0x3f,0x1f,0xcd,0x61,0xb3);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("961559cf-4e67-4662-8bf0-d93f1fcd61b3")
+ISpeechPhraseInfo : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_LanguageId(
+        LONG *LanguageId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_GrammarId(
+        VARIANT *GrammarId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_StartTime(
+        VARIANT *StartTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioStreamPosition(
+        VARIANT *AudioStreamPosition) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioSizeBytes(
+        LONG *pAudioSizeBytes) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_RetainedSizeBytes(
+        LONG *RetainedSizeBytes) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioSizeTime(
+        LONG *AudioSizeTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Rule(
+        ISpeechPhraseRule **Rule) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Properties(
+        ISpeechPhraseProperties **Properties) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Elements(
+        ISpeechPhraseElements **Elements) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Replacements(
+        ISpeechPhraseReplacements **Replacements) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_EngineId(
+        BSTR *EngineIdGuid) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_EnginePrivateData(
+        VARIANT *PrivateData) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SaveToMemory(
+        VARIANT *PhraseBlock) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetText(
+        LONG StartElement,
+        LONG Elements,
+        VARIANT_BOOL UseReplacements,
+        BSTR *Text) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDisplayAttributes(
+        LONG StartElement,
+        LONG Elements,
+        VARIANT_BOOL UseReplacements,
+        SpeechDisplayAttributes *DisplayAttributes) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseInfo, 0x961559cf, 0x4e67, 0x4662, 0x8b,0xf0, 0xd9,0x3f,0x1f,0xcd,0x61,0xb3)
+#endif
+#else
+typedef struct ISpeechPhraseInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseInfo *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseInfo *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseInfo *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseInfo *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseInfo *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_LanguageId)(
+        ISpeechPhraseInfo *This,
+        LONG *LanguageId);
+
+    HRESULT (STDMETHODCALLTYPE *get_GrammarId)(
+        ISpeechPhraseInfo *This,
+        VARIANT *GrammarId);
+
+    HRESULT (STDMETHODCALLTYPE *get_StartTime)(
+        ISpeechPhraseInfo *This,
+        VARIANT *StartTime);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioStreamPosition)(
+        ISpeechPhraseInfo *This,
+        VARIANT *AudioStreamPosition);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioSizeBytes)(
+        ISpeechPhraseInfo *This,
+        LONG *pAudioSizeBytes);
+
+    HRESULT (STDMETHODCALLTYPE *get_RetainedSizeBytes)(
+        ISpeechPhraseInfo *This,
+        LONG *RetainedSizeBytes);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioSizeTime)(
+        ISpeechPhraseInfo *This,
+        LONG *AudioSizeTime);
+
+    HRESULT (STDMETHODCALLTYPE *get_Rule)(
+        ISpeechPhraseInfo *This,
+        ISpeechPhraseRule **Rule);
+
+    HRESULT (STDMETHODCALLTYPE *get_Properties)(
+        ISpeechPhraseInfo *This,
+        ISpeechPhraseProperties **Properties);
+
+    HRESULT (STDMETHODCALLTYPE *get_Elements)(
+        ISpeechPhraseInfo *This,
+        ISpeechPhraseElements **Elements);
+
+    HRESULT (STDMETHODCALLTYPE *get_Replacements)(
+        ISpeechPhraseInfo *This,
+        ISpeechPhraseReplacements **Replacements);
+
+    HRESULT (STDMETHODCALLTYPE *get_EngineId)(
+        ISpeechPhraseInfo *This,
+        BSTR *EngineIdGuid);
+
+    HRESULT (STDMETHODCALLTYPE *get_EnginePrivateData)(
+        ISpeechPhraseInfo *This,
+        VARIANT *PrivateData);
+
+    HRESULT (STDMETHODCALLTYPE *SaveToMemory)(
+        ISpeechPhraseInfo *This,
+        VARIANT *PhraseBlock);
+
+    HRESULT (STDMETHODCALLTYPE *GetText)(
+        ISpeechPhraseInfo *This,
+        LONG StartElement,
+        LONG Elements,
+        VARIANT_BOOL UseReplacements,
+        BSTR *Text);
+
+    HRESULT (STDMETHODCALLTYPE *GetDisplayAttributes)(
+        ISpeechPhraseInfo *This,
+        LONG StartElement,
+        LONG Elements,
+        VARIANT_BOOL UseReplacements,
+        SpeechDisplayAttributes *DisplayAttributes);
+
+    END_INTERFACE
+} ISpeechPhraseInfoVtbl;
+
+interface ISpeechPhraseInfo {
+    CONST_VTBL ISpeechPhraseInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseInfo_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseInfo_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseInfo_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseInfo_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseInfo methods ***/
+#define ISpeechPhraseInfo_get_LanguageId(This,LanguageId) (This)->lpVtbl->get_LanguageId(This,LanguageId)
+#define ISpeechPhraseInfo_get_GrammarId(This,GrammarId) (This)->lpVtbl->get_GrammarId(This,GrammarId)
+#define ISpeechPhraseInfo_get_StartTime(This,StartTime) (This)->lpVtbl->get_StartTime(This,StartTime)
+#define ISpeechPhraseInfo_get_AudioStreamPosition(This,AudioStreamPosition) (This)->lpVtbl->get_AudioStreamPosition(This,AudioStreamPosition)
+#define ISpeechPhraseInfo_get_AudioSizeBytes(This,pAudioSizeBytes) (This)->lpVtbl->get_AudioSizeBytes(This,pAudioSizeBytes)
+#define ISpeechPhraseInfo_get_RetainedSizeBytes(This,RetainedSizeBytes) (This)->lpVtbl->get_RetainedSizeBytes(This,RetainedSizeBytes)
+#define ISpeechPhraseInfo_get_AudioSizeTime(This,AudioSizeTime) (This)->lpVtbl->get_AudioSizeTime(This,AudioSizeTime)
+#define ISpeechPhraseInfo_get_Rule(This,Rule) (This)->lpVtbl->get_Rule(This,Rule)
+#define ISpeechPhraseInfo_get_Properties(This,Properties) (This)->lpVtbl->get_Properties(This,Properties)
+#define ISpeechPhraseInfo_get_Elements(This,Elements) (This)->lpVtbl->get_Elements(This,Elements)
+#define ISpeechPhraseInfo_get_Replacements(This,Replacements) (This)->lpVtbl->get_Replacements(This,Replacements)
+#define ISpeechPhraseInfo_get_EngineId(This,EngineIdGuid) (This)->lpVtbl->get_EngineId(This,EngineIdGuid)
+#define ISpeechPhraseInfo_get_EnginePrivateData(This,PrivateData) (This)->lpVtbl->get_EnginePrivateData(This,PrivateData)
+#define ISpeechPhraseInfo_SaveToMemory(This,PhraseBlock) (This)->lpVtbl->SaveToMemory(This,PhraseBlock)
+#define ISpeechPhraseInfo_GetText(This,StartElement,Elements,UseReplacements,Text) (This)->lpVtbl->GetText(This,StartElement,Elements,UseReplacements,Text)
+#define ISpeechPhraseInfo_GetDisplayAttributes(This,StartElement,Elements,UseReplacements,DisplayAttributes) (This)->lpVtbl->GetDisplayAttributes(This,StartElement,Elements,UseReplacements,DisplayAttributes)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseInfo_QueryInterface(ISpeechPhraseInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseInfo_AddRef(ISpeechPhraseInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseInfo_Release(ISpeechPhraseInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseInfo_GetTypeInfoCount(ISpeechPhraseInfo* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_GetTypeInfo(ISpeechPhraseInfo* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_GetIDsOfNames(ISpeechPhraseInfo* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_Invoke(ISpeechPhraseInfo* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseInfo methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_LanguageId(ISpeechPhraseInfo* This,LONG *LanguageId) {
+    return This->lpVtbl->get_LanguageId(This,LanguageId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_GrammarId(ISpeechPhraseInfo* This,VARIANT *GrammarId) {
+    return This->lpVtbl->get_GrammarId(This,GrammarId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_StartTime(ISpeechPhraseInfo* This,VARIANT *StartTime) {
+    return This->lpVtbl->get_StartTime(This,StartTime);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_AudioStreamPosition(ISpeechPhraseInfo* This,VARIANT *AudioStreamPosition) {
+    return This->lpVtbl->get_AudioStreamPosition(This,AudioStreamPosition);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_AudioSizeBytes(ISpeechPhraseInfo* This,LONG *pAudioSizeBytes) {
+    return This->lpVtbl->get_AudioSizeBytes(This,pAudioSizeBytes);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_RetainedSizeBytes(ISpeechPhraseInfo* This,LONG *RetainedSizeBytes) {
+    return This->lpVtbl->get_RetainedSizeBytes(This,RetainedSizeBytes);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_AudioSizeTime(ISpeechPhraseInfo* This,LONG *AudioSizeTime) {
+    return This->lpVtbl->get_AudioSizeTime(This,AudioSizeTime);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_Rule(ISpeechPhraseInfo* This,ISpeechPhraseRule **Rule) {
+    return This->lpVtbl->get_Rule(This,Rule);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_Properties(ISpeechPhraseInfo* This,ISpeechPhraseProperties **Properties) {
+    return This->lpVtbl->get_Properties(This,Properties);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_Elements(ISpeechPhraseInfo* This,ISpeechPhraseElements **Elements) {
+    return This->lpVtbl->get_Elements(This,Elements);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_Replacements(ISpeechPhraseInfo* This,ISpeechPhraseReplacements **Replacements) {
+    return This->lpVtbl->get_Replacements(This,Replacements);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_EngineId(ISpeechPhraseInfo* This,BSTR *EngineIdGuid) {
+    return This->lpVtbl->get_EngineId(This,EngineIdGuid);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_get_EnginePrivateData(ISpeechPhraseInfo* This,VARIANT *PrivateData) {
+    return This->lpVtbl->get_EnginePrivateData(This,PrivateData);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_SaveToMemory(ISpeechPhraseInfo* This,VARIANT *PhraseBlock) {
+    return This->lpVtbl->SaveToMemory(This,PhraseBlock);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_GetText(ISpeechPhraseInfo* This,LONG StartElement,LONG Elements,VARIANT_BOOL UseReplacements,BSTR *Text) {
+    return This->lpVtbl->GetText(This,StartElement,Elements,UseReplacements,Text);
+}
+static FORCEINLINE HRESULT ISpeechPhraseInfo_GetDisplayAttributes(ISpeechPhraseInfo* This,LONG StartElement,LONG Elements,VARIANT_BOOL UseReplacements,SpeechDisplayAttributes *DisplayAttributes) {
+    return This->lpVtbl->GetDisplayAttributes(This,StartElement,Elements,UseReplacements,DisplayAttributes);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseInfo_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseElement interface
+ */
+#ifndef __ISpeechPhraseElement_INTERFACE_DEFINED__
+#define __ISpeechPhraseElement_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseElement, 0xe6176f96, 0xe373, 0x4801, 0xb2,0x23, 0x3b,0x62,0xc0,0x68,0xc0,0xb4);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("e6176f96-e373-4801-b223-3b62c068c0b4")
+ISpeechPhraseElement : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_AudioTimeOffset(
+        LONG *AudioTimeOffset) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioSizeTime(
+        LONG *AudioSizeTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioStreamOffset(
+        LONG *AudioStreamOffset) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_AudioSizeBytes(
+        LONG *AudioSizeBytes) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_RetainedStreamOffset(
+        LONG *RetainedStreamOffset) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_RetainedSizeBytes(
+        LONG *RetainedSizeBytes) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_DisplayText(
+        BSTR *DisplayText) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_LexicalForm(
+        BSTR *LexicalForm) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Pronunciation(
+        VARIANT *Pronunciation) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_DisplayAttributes(
+        SpeechDisplayAttributes *DisplayAttributes) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_RequiredConfidence(
+        SpeechEngineConfidence *RequiredConfidence) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_ActualConfidence(
+        SpeechEngineConfidence *ActualConfidence) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_EngineConfidence(
+        float *EngineConfidence) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseElement, 0xe6176f96, 0xe373, 0x4801, 0xb2,0x23, 0x3b,0x62,0xc0,0x68,0xc0,0xb4)
+#endif
+#else
+typedef struct ISpeechPhraseElementVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseElement *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseElement *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseElement *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseElement *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseElement *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseElement *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseElement *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseElement methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_AudioTimeOffset)(
+        ISpeechPhraseElement *This,
+        LONG *AudioTimeOffset);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioSizeTime)(
+        ISpeechPhraseElement *This,
+        LONG *AudioSizeTime);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioStreamOffset)(
+        ISpeechPhraseElement *This,
+        LONG *AudioStreamOffset);
+
+    HRESULT (STDMETHODCALLTYPE *get_AudioSizeBytes)(
+        ISpeechPhraseElement *This,
+        LONG *AudioSizeBytes);
+
+    HRESULT (STDMETHODCALLTYPE *get_RetainedStreamOffset)(
+        ISpeechPhraseElement *This,
+        LONG *RetainedStreamOffset);
+
+    HRESULT (STDMETHODCALLTYPE *get_RetainedSizeBytes)(
+        ISpeechPhraseElement *This,
+        LONG *RetainedSizeBytes);
+
+    HRESULT (STDMETHODCALLTYPE *get_DisplayText)(
+        ISpeechPhraseElement *This,
+        BSTR *DisplayText);
+
+    HRESULT (STDMETHODCALLTYPE *get_LexicalForm)(
+        ISpeechPhraseElement *This,
+        BSTR *LexicalForm);
+
+    HRESULT (STDMETHODCALLTYPE *get_Pronunciation)(
+        ISpeechPhraseElement *This,
+        VARIANT *Pronunciation);
+
+    HRESULT (STDMETHODCALLTYPE *get_DisplayAttributes)(
+        ISpeechPhraseElement *This,
+        SpeechDisplayAttributes *DisplayAttributes);
+
+    HRESULT (STDMETHODCALLTYPE *get_RequiredConfidence)(
+        ISpeechPhraseElement *This,
+        SpeechEngineConfidence *RequiredConfidence);
+
+    HRESULT (STDMETHODCALLTYPE *get_ActualConfidence)(
+        ISpeechPhraseElement *This,
+        SpeechEngineConfidence *ActualConfidence);
+
+    HRESULT (STDMETHODCALLTYPE *get_EngineConfidence)(
+        ISpeechPhraseElement *This,
+        float *EngineConfidence);
+
+    END_INTERFACE
+} ISpeechPhraseElementVtbl;
+
+interface ISpeechPhraseElement {
+    CONST_VTBL ISpeechPhraseElementVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseElement_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseElement_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseElement_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseElement_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseElement_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseElement_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseElement_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseElement methods ***/
+#define ISpeechPhraseElement_get_AudioTimeOffset(This,AudioTimeOffset) (This)->lpVtbl->get_AudioTimeOffset(This,AudioTimeOffset)
+#define ISpeechPhraseElement_get_AudioSizeTime(This,AudioSizeTime) (This)->lpVtbl->get_AudioSizeTime(This,AudioSizeTime)
+#define ISpeechPhraseElement_get_AudioStreamOffset(This,AudioStreamOffset) (This)->lpVtbl->get_AudioStreamOffset(This,AudioStreamOffset)
+#define ISpeechPhraseElement_get_AudioSizeBytes(This,AudioSizeBytes) (This)->lpVtbl->get_AudioSizeBytes(This,AudioSizeBytes)
+#define ISpeechPhraseElement_get_RetainedStreamOffset(This,RetainedStreamOffset) (This)->lpVtbl->get_RetainedStreamOffset(This,RetainedStreamOffset)
+#define ISpeechPhraseElement_get_RetainedSizeBytes(This,RetainedSizeBytes) (This)->lpVtbl->get_RetainedSizeBytes(This,RetainedSizeBytes)
+#define ISpeechPhraseElement_get_DisplayText(This,DisplayText) (This)->lpVtbl->get_DisplayText(This,DisplayText)
+#define ISpeechPhraseElement_get_LexicalForm(This,LexicalForm) (This)->lpVtbl->get_LexicalForm(This,LexicalForm)
+#define ISpeechPhraseElement_get_Pronunciation(This,Pronunciation) (This)->lpVtbl->get_Pronunciation(This,Pronunciation)
+#define ISpeechPhraseElement_get_DisplayAttributes(This,DisplayAttributes) (This)->lpVtbl->get_DisplayAttributes(This,DisplayAttributes)
+#define ISpeechPhraseElement_get_RequiredConfidence(This,RequiredConfidence) (This)->lpVtbl->get_RequiredConfidence(This,RequiredConfidence)
+#define ISpeechPhraseElement_get_ActualConfidence(This,ActualConfidence) (This)->lpVtbl->get_ActualConfidence(This,ActualConfidence)
+#define ISpeechPhraseElement_get_EngineConfidence(This,EngineConfidence) (This)->lpVtbl->get_EngineConfidence(This,EngineConfidence)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseElement_QueryInterface(ISpeechPhraseElement* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseElement_AddRef(ISpeechPhraseElement* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseElement_Release(ISpeechPhraseElement* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseElement_GetTypeInfoCount(ISpeechPhraseElement* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_GetTypeInfo(ISpeechPhraseElement* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_GetIDsOfNames(ISpeechPhraseElement* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_Invoke(ISpeechPhraseElement* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseElement methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_AudioTimeOffset(ISpeechPhraseElement* This,LONG *AudioTimeOffset) {
+    return This->lpVtbl->get_AudioTimeOffset(This,AudioTimeOffset);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_AudioSizeTime(ISpeechPhraseElement* This,LONG *AudioSizeTime) {
+    return This->lpVtbl->get_AudioSizeTime(This,AudioSizeTime);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_AudioStreamOffset(ISpeechPhraseElement* This,LONG *AudioStreamOffset) {
+    return This->lpVtbl->get_AudioStreamOffset(This,AudioStreamOffset);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_AudioSizeBytes(ISpeechPhraseElement* This,LONG *AudioSizeBytes) {
+    return This->lpVtbl->get_AudioSizeBytes(This,AudioSizeBytes);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_RetainedStreamOffset(ISpeechPhraseElement* This,LONG *RetainedStreamOffset) {
+    return This->lpVtbl->get_RetainedStreamOffset(This,RetainedStreamOffset);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_RetainedSizeBytes(ISpeechPhraseElement* This,LONG *RetainedSizeBytes) {
+    return This->lpVtbl->get_RetainedSizeBytes(This,RetainedSizeBytes);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_DisplayText(ISpeechPhraseElement* This,BSTR *DisplayText) {
+    return This->lpVtbl->get_DisplayText(This,DisplayText);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_LexicalForm(ISpeechPhraseElement* This,BSTR *LexicalForm) {
+    return This->lpVtbl->get_LexicalForm(This,LexicalForm);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_Pronunciation(ISpeechPhraseElement* This,VARIANT *Pronunciation) {
+    return This->lpVtbl->get_Pronunciation(This,Pronunciation);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_DisplayAttributes(ISpeechPhraseElement* This,SpeechDisplayAttributes *DisplayAttributes) {
+    return This->lpVtbl->get_DisplayAttributes(This,DisplayAttributes);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_RequiredConfidence(ISpeechPhraseElement* This,SpeechEngineConfidence *RequiredConfidence) {
+    return This->lpVtbl->get_RequiredConfidence(This,RequiredConfidence);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_ActualConfidence(ISpeechPhraseElement* This,SpeechEngineConfidence *ActualConfidence) {
+    return This->lpVtbl->get_ActualConfidence(This,ActualConfidence);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElement_get_EngineConfidence(ISpeechPhraseElement* This,float *EngineConfidence) {
+    return This->lpVtbl->get_EngineConfidence(This,EngineConfidence);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseElement_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseElements interface
+ */
+#ifndef __ISpeechPhraseElements_INTERFACE_DEFINED__
+#define __ISpeechPhraseElements_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseElements, 0x0626b328, 0x3478, 0x467d, 0xa0,0xb3, 0xd0,0x85,0x3b,0x93,0xdd,0xa3);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("0626b328-3478-467d-a0b3-d0853b93dda3")
+ISpeechPhraseElements : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechPhraseElement **Element) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseElements, 0x0626b328, 0x3478, 0x467d, 0xa0,0xb3, 0xd0,0x85,0x3b,0x93,0xdd,0xa3)
+#endif
+#else
+typedef struct ISpeechPhraseElementsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseElements *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseElements *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseElements *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseElements *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseElements *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseElements *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseElements *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseElements methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechPhraseElements *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechPhraseElements *This,
+        LONG Index,
+        ISpeechPhraseElement **Element);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechPhraseElements *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechPhraseElementsVtbl;
+
+interface ISpeechPhraseElements {
+    CONST_VTBL ISpeechPhraseElementsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseElements_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseElements_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseElements_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseElements_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseElements_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseElements_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseElements_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseElements methods ***/
+#define ISpeechPhraseElements_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechPhraseElements_Item(This,Index,Element) (This)->lpVtbl->Item(This,Index,Element)
+#define ISpeechPhraseElements_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseElements_QueryInterface(ISpeechPhraseElements* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseElements_AddRef(ISpeechPhraseElements* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseElements_Release(ISpeechPhraseElements* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseElements_GetTypeInfoCount(ISpeechPhraseElements* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElements_GetTypeInfo(ISpeechPhraseElements* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElements_GetIDsOfNames(ISpeechPhraseElements* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElements_Invoke(ISpeechPhraseElements* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseElements methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseElements_get_Count(ISpeechPhraseElements* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElements_Item(ISpeechPhraseElements* This,LONG Index,ISpeechPhraseElement **Element) {
+    return This->lpVtbl->Item(This,Index,Element);
+}
+static FORCEINLINE HRESULT ISpeechPhraseElements_get__NewEnum(ISpeechPhraseElements* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseElements_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseReplacement interface
+ */
+#ifndef __ISpeechPhraseReplacement_INTERFACE_DEFINED__
+#define __ISpeechPhraseReplacement_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseReplacement, 0x2890a410, 0x53a7, 0x4fb5, 0x94,0xec, 0x06,0xd4,0x99,0x8e,0x3d,0x02);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("2890a410-53a7-4fb5-94ec-06d4998e3d02")
+ISpeechPhraseReplacement : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_DisplayAttributes(
+        SpeechDisplayAttributes *DisplayAttributes) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Text(
+        BSTR *Text) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_FirstElement(
+        LONG *FirstElement) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_NumberOfElements(
+        LONG *NumberOfElements) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseReplacement, 0x2890a410, 0x53a7, 0x4fb5, 0x94,0xec, 0x06,0xd4,0x99,0x8e,0x3d,0x02)
+#endif
+#else
+typedef struct ISpeechPhraseReplacementVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseReplacement *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseReplacement *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseReplacement *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseReplacement *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseReplacement *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseReplacement *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseReplacement *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseReplacement methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_DisplayAttributes)(
+        ISpeechPhraseReplacement *This,
+        SpeechDisplayAttributes *DisplayAttributes);
+
+    HRESULT (STDMETHODCALLTYPE *get_Text)(
+        ISpeechPhraseReplacement *This,
+        BSTR *Text);
+
+    HRESULT (STDMETHODCALLTYPE *get_FirstElement)(
+        ISpeechPhraseReplacement *This,
+        LONG *FirstElement);
+
+    HRESULT (STDMETHODCALLTYPE *get_NumberOfElements)(
+        ISpeechPhraseReplacement *This,
+        LONG *NumberOfElements);
+
+    END_INTERFACE
+} ISpeechPhraseReplacementVtbl;
+
+interface ISpeechPhraseReplacement {
+    CONST_VTBL ISpeechPhraseReplacementVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseReplacement_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseReplacement_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseReplacement_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseReplacement_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseReplacement_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseReplacement_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseReplacement_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseReplacement methods ***/
+#define ISpeechPhraseReplacement_get_DisplayAttributes(This,DisplayAttributes) (This)->lpVtbl->get_DisplayAttributes(This,DisplayAttributes)
+#define ISpeechPhraseReplacement_get_Text(This,Text) (This)->lpVtbl->get_Text(This,Text)
+#define ISpeechPhraseReplacement_get_FirstElement(This,FirstElement) (This)->lpVtbl->get_FirstElement(This,FirstElement)
+#define ISpeechPhraseReplacement_get_NumberOfElements(This,NumberOfElements) (This)->lpVtbl->get_NumberOfElements(This,NumberOfElements)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_QueryInterface(ISpeechPhraseReplacement* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseReplacement_AddRef(ISpeechPhraseReplacement* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseReplacement_Release(ISpeechPhraseReplacement* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_GetTypeInfoCount(ISpeechPhraseReplacement* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_GetTypeInfo(ISpeechPhraseReplacement* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_GetIDsOfNames(ISpeechPhraseReplacement* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_Invoke(ISpeechPhraseReplacement* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseReplacement methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_get_DisplayAttributes(ISpeechPhraseReplacement* This,SpeechDisplayAttributes *DisplayAttributes) {
+    return This->lpVtbl->get_DisplayAttributes(This,DisplayAttributes);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_get_Text(ISpeechPhraseReplacement* This,BSTR *Text) {
+    return This->lpVtbl->get_Text(This,Text);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_get_FirstElement(ISpeechPhraseReplacement* This,LONG *FirstElement) {
+    return This->lpVtbl->get_FirstElement(This,FirstElement);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacement_get_NumberOfElements(ISpeechPhraseReplacement* This,LONG *NumberOfElements) {
+    return This->lpVtbl->get_NumberOfElements(This,NumberOfElements);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseReplacement_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseReplacements interface
+ */
+#ifndef __ISpeechPhraseReplacements_INTERFACE_DEFINED__
+#define __ISpeechPhraseReplacements_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseReplacements, 0x38bc662f, 0x2257, 0x4525, 0x95,0x9e, 0x20,0x69,0xd2,0x59,0x6c,0x05);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("38bc662f-2257-4525-959e-2069d2596c05")
+ISpeechPhraseReplacements : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechPhraseReplacement **Reps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseReplacements, 0x38bc662f, 0x2257, 0x4525, 0x95,0x9e, 0x20,0x69,0xd2,0x59,0x6c,0x05)
+#endif
+#else
+typedef struct ISpeechPhraseReplacementsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseReplacements *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseReplacements *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseReplacements *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseReplacements *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseReplacements *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseReplacements *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseReplacements *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseReplacements methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechPhraseReplacements *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechPhraseReplacements *This,
+        LONG Index,
+        ISpeechPhraseReplacement **Reps);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechPhraseReplacements *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechPhraseReplacementsVtbl;
+
+interface ISpeechPhraseReplacements {
+    CONST_VTBL ISpeechPhraseReplacementsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseReplacements_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseReplacements_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseReplacements_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseReplacements_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseReplacements_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseReplacements_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseReplacements_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseReplacements methods ***/
+#define ISpeechPhraseReplacements_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechPhraseReplacements_Item(This,Index,Reps) (This)->lpVtbl->Item(This,Index,Reps)
+#define ISpeechPhraseReplacements_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_QueryInterface(ISpeechPhraseReplacements* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseReplacements_AddRef(ISpeechPhraseReplacements* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseReplacements_Release(ISpeechPhraseReplacements* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_GetTypeInfoCount(ISpeechPhraseReplacements* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_GetTypeInfo(ISpeechPhraseReplacements* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_GetIDsOfNames(ISpeechPhraseReplacements* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_Invoke(ISpeechPhraseReplacements* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseReplacements methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_get_Count(ISpeechPhraseReplacements* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_Item(ISpeechPhraseReplacements* This,LONG Index,ISpeechPhraseReplacement **Reps) {
+    return This->lpVtbl->Item(This,Index,Reps);
+}
+static FORCEINLINE HRESULT ISpeechPhraseReplacements_get__NewEnum(ISpeechPhraseReplacements* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseReplacements_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseProperty interface
+ */
+#ifndef __ISpeechPhraseProperty_INTERFACE_DEFINED__
+#define __ISpeechPhraseProperty_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseProperty, 0xce563d48, 0x961e, 0x4732, 0xa2,0xe1, 0x37,0x8a,0x42,0xb4,0x30,0xbe);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("ce563d48-961e-4732-a2e1-378a42b430be")
+ISpeechPhraseProperty : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Name(
+        BSTR *Name) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Id(
+        LONG *Id) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Value(
+        VARIANT *Value) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_FirstElement(
+        LONG *FirstElement) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_NumberOfElements(
+        LONG *NumberOfElements) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_EngineConfidence(
+        float *Confidence) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Confidence(
+        SpeechEngineConfidence *Confidence) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Parent(
+        ISpeechPhraseProperty **ParentProperty) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Children(
+        ISpeechPhraseProperties **Children) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseProperty, 0xce563d48, 0x961e, 0x4732, 0xa2,0xe1, 0x37,0x8a,0x42,0xb4,0x30,0xbe)
+#endif
+#else
+typedef struct ISpeechPhrasePropertyVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseProperty *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseProperty *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseProperty *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseProperty *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseProperty *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseProperty *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseProperty *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseProperty methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Name)(
+        ISpeechPhraseProperty *This,
+        BSTR *Name);
+
+    HRESULT (STDMETHODCALLTYPE *get_Id)(
+        ISpeechPhraseProperty *This,
+        LONG *Id);
+
+    HRESULT (STDMETHODCALLTYPE *get_Value)(
+        ISpeechPhraseProperty *This,
+        VARIANT *Value);
+
+    HRESULT (STDMETHODCALLTYPE *get_FirstElement)(
+        ISpeechPhraseProperty *This,
+        LONG *FirstElement);
+
+    HRESULT (STDMETHODCALLTYPE *get_NumberOfElements)(
+        ISpeechPhraseProperty *This,
+        LONG *NumberOfElements);
+
+    HRESULT (STDMETHODCALLTYPE *get_EngineConfidence)(
+        ISpeechPhraseProperty *This,
+        float *Confidence);
+
+    HRESULT (STDMETHODCALLTYPE *get_Confidence)(
+        ISpeechPhraseProperty *This,
+        SpeechEngineConfidence *Confidence);
+
+    HRESULT (STDMETHODCALLTYPE *get_Parent)(
+        ISpeechPhraseProperty *This,
+        ISpeechPhraseProperty **ParentProperty);
+
+    HRESULT (STDMETHODCALLTYPE *get_Children)(
+        ISpeechPhraseProperty *This,
+        ISpeechPhraseProperties **Children);
+
+    END_INTERFACE
+} ISpeechPhrasePropertyVtbl;
+
+interface ISpeechPhraseProperty {
+    CONST_VTBL ISpeechPhrasePropertyVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseProperty_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseProperty_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseProperty_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseProperty_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseProperty_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseProperty_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseProperty_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseProperty methods ***/
+#define ISpeechPhraseProperty_get_Name(This,Name) (This)->lpVtbl->get_Name(This,Name)
+#define ISpeechPhraseProperty_get_Id(This,Id) (This)->lpVtbl->get_Id(This,Id)
+#define ISpeechPhraseProperty_get_Value(This,Value) (This)->lpVtbl->get_Value(This,Value)
+#define ISpeechPhraseProperty_get_FirstElement(This,FirstElement) (This)->lpVtbl->get_FirstElement(This,FirstElement)
+#define ISpeechPhraseProperty_get_NumberOfElements(This,NumberOfElements) (This)->lpVtbl->get_NumberOfElements(This,NumberOfElements)
+#define ISpeechPhraseProperty_get_EngineConfidence(This,Confidence) (This)->lpVtbl->get_EngineConfidence(This,Confidence)
+#define ISpeechPhraseProperty_get_Confidence(This,Confidence) (This)->lpVtbl->get_Confidence(This,Confidence)
+#define ISpeechPhraseProperty_get_Parent(This,ParentProperty) (This)->lpVtbl->get_Parent(This,ParentProperty)
+#define ISpeechPhraseProperty_get_Children(This,Children) (This)->lpVtbl->get_Children(This,Children)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseProperty_QueryInterface(ISpeechPhraseProperty* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseProperty_AddRef(ISpeechPhraseProperty* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseProperty_Release(ISpeechPhraseProperty* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseProperty_GetTypeInfoCount(ISpeechPhraseProperty* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_GetTypeInfo(ISpeechPhraseProperty* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_GetIDsOfNames(ISpeechPhraseProperty* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_Invoke(ISpeechPhraseProperty* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseProperty methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_Name(ISpeechPhraseProperty* This,BSTR *Name) {
+    return This->lpVtbl->get_Name(This,Name);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_Id(ISpeechPhraseProperty* This,LONG *Id) {
+    return This->lpVtbl->get_Id(This,Id);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_Value(ISpeechPhraseProperty* This,VARIANT *Value) {
+    return This->lpVtbl->get_Value(This,Value);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_FirstElement(ISpeechPhraseProperty* This,LONG *FirstElement) {
+    return This->lpVtbl->get_FirstElement(This,FirstElement);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_NumberOfElements(ISpeechPhraseProperty* This,LONG *NumberOfElements) {
+    return This->lpVtbl->get_NumberOfElements(This,NumberOfElements);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_EngineConfidence(ISpeechPhraseProperty* This,float *Confidence) {
+    return This->lpVtbl->get_EngineConfidence(This,Confidence);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_Confidence(ISpeechPhraseProperty* This,SpeechEngineConfidence *Confidence) {
+    return This->lpVtbl->get_Confidence(This,Confidence);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_Parent(ISpeechPhraseProperty* This,ISpeechPhraseProperty **ParentProperty) {
+    return This->lpVtbl->get_Parent(This,ParentProperty);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperty_get_Children(ISpeechPhraseProperty* This,ISpeechPhraseProperties **Children) {
+    return This->lpVtbl->get_Children(This,Children);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseProperty_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseProperties interface
+ */
+#ifndef __ISpeechPhraseProperties_INTERFACE_DEFINED__
+#define __ISpeechPhraseProperties_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseProperties, 0x08166b47, 0x102e, 0x4b23, 0xa5,0x99, 0xbd,0xb9,0x8d,0xbf,0xd1,0xf4);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("08166b47-102e-4b23-a599-bdb98dbfd1f4")
+ISpeechPhraseProperties : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechPhraseProperty **Property) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseProperties, 0x08166b47, 0x102e, 0x4b23, 0xa5,0x99, 0xbd,0xb9,0x8d,0xbf,0xd1,0xf4)
+#endif
+#else
+typedef struct ISpeechPhrasePropertiesVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseProperties *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseProperties *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseProperties *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseProperties *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseProperties *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseProperties *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseProperties *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseProperties methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechPhraseProperties *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechPhraseProperties *This,
+        LONG Index,
+        ISpeechPhraseProperty **Property);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechPhraseProperties *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechPhrasePropertiesVtbl;
+
+interface ISpeechPhraseProperties {
+    CONST_VTBL ISpeechPhrasePropertiesVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseProperties_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseProperties_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseProperties_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseProperties_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseProperties_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseProperties_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseProperties_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseProperties methods ***/
+#define ISpeechPhraseProperties_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechPhraseProperties_Item(This,Index,Property) (This)->lpVtbl->Item(This,Index,Property)
+#define ISpeechPhraseProperties_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseProperties_QueryInterface(ISpeechPhraseProperties* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseProperties_AddRef(ISpeechPhraseProperties* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseProperties_Release(ISpeechPhraseProperties* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseProperties_GetTypeInfoCount(ISpeechPhraseProperties* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperties_GetTypeInfo(ISpeechPhraseProperties* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperties_GetIDsOfNames(ISpeechPhraseProperties* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperties_Invoke(ISpeechPhraseProperties* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseProperties methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseProperties_get_Count(ISpeechPhraseProperties* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperties_Item(ISpeechPhraseProperties* This,LONG Index,ISpeechPhraseProperty **Property) {
+    return This->lpVtbl->Item(This,Index,Property);
+}
+static FORCEINLINE HRESULT ISpeechPhraseProperties_get__NewEnum(ISpeechPhraseProperties* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseProperties_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseRule interface
+ */
+#ifndef __ISpeechPhraseRule_INTERFACE_DEFINED__
+#define __ISpeechPhraseRule_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseRule, 0xa7bfe112, 0xa4a0, 0x48d9, 0xb6,0x02, 0xc3,0x13,0x84,0x3f,0x69,0x64);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a7bfe112-a4a0-48d9-b602-c313843f6964")
+ISpeechPhraseRule : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Name(
+        BSTR *Name) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Id(
+        LONG *Id) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_FirstElement(
+        LONG *FirstElement) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_NumberOfElements(
+        LONG *NumberOfElements) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Parent(
+        ISpeechPhraseRule **Parent) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Children(
+        ISpeechPhraseRules **Children) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Confidence(
+        SpeechEngineConfidence *ActualConfidence) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_EngineConfidence(
+        float *EngineConfidence) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseRule, 0xa7bfe112, 0xa4a0, 0x48d9, 0xb6,0x02, 0xc3,0x13,0x84,0x3f,0x69,0x64)
+#endif
+#else
+typedef struct ISpeechPhraseRuleVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseRule *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseRule *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseRule *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseRule *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseRule *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseRule *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseRule *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseRule methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Name)(
+        ISpeechPhraseRule *This,
+        BSTR *Name);
+
+    HRESULT (STDMETHODCALLTYPE *get_Id)(
+        ISpeechPhraseRule *This,
+        LONG *Id);
+
+    HRESULT (STDMETHODCALLTYPE *get_FirstElement)(
+        ISpeechPhraseRule *This,
+        LONG *FirstElement);
+
+    HRESULT (STDMETHODCALLTYPE *get_NumberOfElements)(
+        ISpeechPhraseRule *This,
+        LONG *NumberOfElements);
+
+    HRESULT (STDMETHODCALLTYPE *get_Parent)(
+        ISpeechPhraseRule *This,
+        ISpeechPhraseRule **Parent);
+
+    HRESULT (STDMETHODCALLTYPE *get_Children)(
+        ISpeechPhraseRule *This,
+        ISpeechPhraseRules **Children);
+
+    HRESULT (STDMETHODCALLTYPE *get_Confidence)(
+        ISpeechPhraseRule *This,
+        SpeechEngineConfidence *ActualConfidence);
+
+    HRESULT (STDMETHODCALLTYPE *get_EngineConfidence)(
+        ISpeechPhraseRule *This,
+        float *EngineConfidence);
+
+    END_INTERFACE
+} ISpeechPhraseRuleVtbl;
+
+interface ISpeechPhraseRule {
+    CONST_VTBL ISpeechPhraseRuleVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseRule_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseRule_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseRule_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseRule_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseRule_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseRule_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseRule_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseRule methods ***/
+#define ISpeechPhraseRule_get_Name(This,Name) (This)->lpVtbl->get_Name(This,Name)
+#define ISpeechPhraseRule_get_Id(This,Id) (This)->lpVtbl->get_Id(This,Id)
+#define ISpeechPhraseRule_get_FirstElement(This,FirstElement) (This)->lpVtbl->get_FirstElement(This,FirstElement)
+#define ISpeechPhraseRule_get_NumberOfElements(This,NumberOfElements) (This)->lpVtbl->get_NumberOfElements(This,NumberOfElements)
+#define ISpeechPhraseRule_get_Parent(This,Parent) (This)->lpVtbl->get_Parent(This,Parent)
+#define ISpeechPhraseRule_get_Children(This,Children) (This)->lpVtbl->get_Children(This,Children)
+#define ISpeechPhraseRule_get_Confidence(This,ActualConfidence) (This)->lpVtbl->get_Confidence(This,ActualConfidence)
+#define ISpeechPhraseRule_get_EngineConfidence(This,EngineConfidence) (This)->lpVtbl->get_EngineConfidence(This,EngineConfidence)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseRule_QueryInterface(ISpeechPhraseRule* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseRule_AddRef(ISpeechPhraseRule* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseRule_Release(ISpeechPhraseRule* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseRule_GetTypeInfoCount(ISpeechPhraseRule* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_GetTypeInfo(ISpeechPhraseRule* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_GetIDsOfNames(ISpeechPhraseRule* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_Invoke(ISpeechPhraseRule* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseRule methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_Name(ISpeechPhraseRule* This,BSTR *Name) {
+    return This->lpVtbl->get_Name(This,Name);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_Id(ISpeechPhraseRule* This,LONG *Id) {
+    return This->lpVtbl->get_Id(This,Id);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_FirstElement(ISpeechPhraseRule* This,LONG *FirstElement) {
+    return This->lpVtbl->get_FirstElement(This,FirstElement);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_NumberOfElements(ISpeechPhraseRule* This,LONG *NumberOfElements) {
+    return This->lpVtbl->get_NumberOfElements(This,NumberOfElements);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_Parent(ISpeechPhraseRule* This,ISpeechPhraseRule **Parent) {
+    return This->lpVtbl->get_Parent(This,Parent);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_Children(ISpeechPhraseRule* This,ISpeechPhraseRules **Children) {
+    return This->lpVtbl->get_Children(This,Children);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_Confidence(ISpeechPhraseRule* This,SpeechEngineConfidence *ActualConfidence) {
+    return This->lpVtbl->get_Confidence(This,ActualConfidence);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRule_get_EngineConfidence(ISpeechPhraseRule* This,float *EngineConfidence) {
+    return This->lpVtbl->get_EngineConfidence(This,EngineConfidence);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseRule_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhraseRules interface
+ */
+#ifndef __ISpeechPhraseRules_INTERFACE_DEFINED__
+#define __ISpeechPhraseRules_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhraseRules, 0x9047d593, 0x01dd, 0x4b72, 0x81,0xa3, 0xe4,0xa0,0xca,0x69,0xf4,0x07);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9047d593-01dd-4b72-81a3-e4a0ca69f407")
+ISpeechPhraseRules : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechPhraseRule **Rule) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhraseRules, 0x9047d593, 0x01dd, 0x4b72, 0x81,0xa3, 0xe4,0xa0,0xca,0x69,0xf4,0x07)
+#endif
+#else
+typedef struct ISpeechPhraseRulesVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhraseRules *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhraseRules *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhraseRules *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhraseRules *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhraseRules *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhraseRules *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhraseRules *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhraseRules methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechPhraseRules *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechPhraseRules *This,
+        LONG Index,
+        ISpeechPhraseRule **Rule);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechPhraseRules *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechPhraseRulesVtbl;
+
+interface ISpeechPhraseRules {
+    CONST_VTBL ISpeechPhraseRulesVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhraseRules_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhraseRules_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhraseRules_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhraseRules_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhraseRules_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhraseRules_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhraseRules_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhraseRules methods ***/
+#define ISpeechPhraseRules_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechPhraseRules_Item(This,Index,Rule) (This)->lpVtbl->Item(This,Index,Rule)
+#define ISpeechPhraseRules_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseRules_QueryInterface(ISpeechPhraseRules* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhraseRules_AddRef(ISpeechPhraseRules* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhraseRules_Release(ISpeechPhraseRules* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseRules_GetTypeInfoCount(ISpeechPhraseRules* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRules_GetTypeInfo(ISpeechPhraseRules* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRules_GetIDsOfNames(ISpeechPhraseRules* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRules_Invoke(ISpeechPhraseRules* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhraseRules methods ***/
+static FORCEINLINE HRESULT ISpeechPhraseRules_get_Count(ISpeechPhraseRules* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRules_Item(ISpeechPhraseRules* This,LONG Index,ISpeechPhraseRule **Rule) {
+    return This->lpVtbl->Item(This,Index,Rule);
+}
+static FORCEINLINE HRESULT ISpeechPhraseRules_get__NewEnum(ISpeechPhraseRules* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhraseRules_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechLexiconWords interface
+ */
+#ifndef __ISpeechLexiconWords_INTERFACE_DEFINED__
+#define __ISpeechLexiconWords_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechLexiconWords, 0x8d199862, 0x415e, 0x47d5, 0xac,0x4f, 0xfa,0xa6,0x08,0xb4,0x24,0xe6);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("8d199862-415e-47d5-ac4f-faa608b424e6")
+ISpeechLexiconWords : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechLexiconWord **Word) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechLexiconWords, 0x8d199862, 0x415e, 0x47d5, 0xac,0x4f, 0xfa,0xa6,0x08,0xb4,0x24,0xe6)
+#endif
+#else
+typedef struct ISpeechLexiconWordsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechLexiconWords *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechLexiconWords *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechLexiconWords *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechLexiconWords *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechLexiconWords *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechLexiconWords *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechLexiconWords *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechLexiconWords methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechLexiconWords *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechLexiconWords *This,
+        LONG Index,
+        ISpeechLexiconWord **Word);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechLexiconWords *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechLexiconWordsVtbl;
+
+interface ISpeechLexiconWords {
+    CONST_VTBL ISpeechLexiconWordsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechLexiconWords_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechLexiconWords_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechLexiconWords_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechLexiconWords_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechLexiconWords_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechLexiconWords_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechLexiconWords_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechLexiconWords methods ***/
+#define ISpeechLexiconWords_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechLexiconWords_Item(This,Index,Word) (This)->lpVtbl->Item(This,Index,Word)
+#define ISpeechLexiconWords_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconWords_QueryInterface(ISpeechLexiconWords* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechLexiconWords_AddRef(ISpeechLexiconWords* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechLexiconWords_Release(ISpeechLexiconWords* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconWords_GetTypeInfoCount(ISpeechLexiconWords* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWords_GetTypeInfo(ISpeechLexiconWords* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWords_GetIDsOfNames(ISpeechLexiconWords* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWords_Invoke(ISpeechLexiconWords* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechLexiconWords methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconWords_get_Count(ISpeechLexiconWords* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWords_Item(ISpeechLexiconWords* This,LONG Index,ISpeechLexiconWord **Word) {
+    return This->lpVtbl->Item(This,Index,Word);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWords_get__NewEnum(ISpeechLexiconWords* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechLexiconWords_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechLexicon interface
+ */
+#ifndef __ISpeechLexicon_INTERFACE_DEFINED__
+#define __ISpeechLexicon_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechLexicon, 0x3da7627a, 0xc7ae, 0x4b23, 0x87,0x08, 0x63,0x8c,0x50,0x36,0x2c,0x25);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3da7627a-c7ae-4b23-8708-638c50362c25")
+ISpeechLexicon : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_GenerationId(
+        LONG *GenerationId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetWords(
+        SpeechLexiconType Flags,
+        LONG *GenerationID,
+        ISpeechLexiconWords **Words) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AddPronunciation(
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+        BSTR bstrPronunciation = L"") = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AddPronunciationByPhoneIds(
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+        VARIANT *PhoneIds = 0) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE RemovePronunciation(
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+        BSTR bstrPronunciation = L"") = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE RemovePronunciationByPhoneIds(
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech = SPSUnknown,
+        VARIANT *PhoneIds = 0) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPronunciations(
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechLexiconType TypeFlags,
+        ISpeechLexiconPronunciations **ppPronunciations) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetGenerationChange(
+        LONG *GenerationID,
+        ISpeechLexiconWords **ppWords) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechLexicon, 0x3da7627a, 0xc7ae, 0x4b23, 0x87,0x08, 0x63,0x8c,0x50,0x36,0x2c,0x25)
+#endif
+#else
+typedef struct ISpeechLexiconVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechLexicon *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechLexicon *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechLexicon *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechLexicon *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechLexicon *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechLexicon *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechLexicon *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechLexicon methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_GenerationId)(
+        ISpeechLexicon *This,
+        LONG *GenerationId);
+
+    HRESULT (STDMETHODCALLTYPE *GetWords)(
+        ISpeechLexicon *This,
+        SpeechLexiconType Flags,
+        LONG *GenerationID,
+        ISpeechLexiconWords **Words);
+
+    HRESULT (STDMETHODCALLTYPE *AddPronunciation)(
+        ISpeechLexicon *This,
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech,
+        BSTR bstrPronunciation);
+
+    HRESULT (STDMETHODCALLTYPE *AddPronunciationByPhoneIds)(
+        ISpeechLexicon *This,
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech,
+        VARIANT *PhoneIds);
+
+    HRESULT (STDMETHODCALLTYPE *RemovePronunciation)(
+        ISpeechLexicon *This,
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech,
+        BSTR bstrPronunciation);
+
+    HRESULT (STDMETHODCALLTYPE *RemovePronunciationByPhoneIds)(
+        ISpeechLexicon *This,
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechPartOfSpeech PartOfSpeech,
+        VARIANT *PhoneIds);
+
+    HRESULT (STDMETHODCALLTYPE *GetPronunciations)(
+        ISpeechLexicon *This,
+        BSTR bstrWord,
+        SpeechLanguageId LangId,
+        SpeechLexiconType TypeFlags,
+        ISpeechLexiconPronunciations **ppPronunciations);
+
+    HRESULT (STDMETHODCALLTYPE *GetGenerationChange)(
+        ISpeechLexicon *This,
+        LONG *GenerationID,
+        ISpeechLexiconWords **ppWords);
+
+    END_INTERFACE
+} ISpeechLexiconVtbl;
+
+interface ISpeechLexicon {
+    CONST_VTBL ISpeechLexiconVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechLexicon_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechLexicon_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechLexicon_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechLexicon_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechLexicon_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechLexicon_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechLexicon_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechLexicon methods ***/
+#define ISpeechLexicon_get_GenerationId(This,GenerationId) (This)->lpVtbl->get_GenerationId(This,GenerationId)
+#define ISpeechLexicon_GetWords(This,Flags,GenerationID,Words) (This)->lpVtbl->GetWords(This,Flags,GenerationID,Words)
+#define ISpeechLexicon_AddPronunciation(This,bstrWord,LangId,PartOfSpeech,bstrPronunciation) (This)->lpVtbl->AddPronunciation(This,bstrWord,LangId,PartOfSpeech,bstrPronunciation)
+#define ISpeechLexicon_AddPronunciationByPhoneIds(This,bstrWord,LangId,PartOfSpeech,PhoneIds) (This)->lpVtbl->AddPronunciationByPhoneIds(This,bstrWord,LangId,PartOfSpeech,PhoneIds)
+#define ISpeechLexicon_RemovePronunciation(This,bstrWord,LangId,PartOfSpeech,bstrPronunciation) (This)->lpVtbl->RemovePronunciation(This,bstrWord,LangId,PartOfSpeech,bstrPronunciation)
+#define ISpeechLexicon_RemovePronunciationByPhoneIds(This,bstrWord,LangId,PartOfSpeech,PhoneIds) (This)->lpVtbl->RemovePronunciationByPhoneIds(This,bstrWord,LangId,PartOfSpeech,PhoneIds)
+#define ISpeechLexicon_GetPronunciations(This,bstrWord,LangId,TypeFlags,ppPronunciations) (This)->lpVtbl->GetPronunciations(This,bstrWord,LangId,TypeFlags,ppPronunciations)
+#define ISpeechLexicon_GetGenerationChange(This,GenerationID,ppWords) (This)->lpVtbl->GetGenerationChange(This,GenerationID,ppWords)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechLexicon_QueryInterface(ISpeechLexicon* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechLexicon_AddRef(ISpeechLexicon* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechLexicon_Release(ISpeechLexicon* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechLexicon_GetTypeInfoCount(ISpeechLexicon* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_GetTypeInfo(ISpeechLexicon* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_GetIDsOfNames(ISpeechLexicon* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_Invoke(ISpeechLexicon* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechLexicon methods ***/
+static FORCEINLINE HRESULT ISpeechLexicon_get_GenerationId(ISpeechLexicon* This,LONG *GenerationId) {
+    return This->lpVtbl->get_GenerationId(This,GenerationId);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_GetWords(ISpeechLexicon* This,SpeechLexiconType Flags,LONG *GenerationID,ISpeechLexiconWords **Words) {
+    return This->lpVtbl->GetWords(This,Flags,GenerationID,Words);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_AddPronunciation(ISpeechLexicon* This,BSTR bstrWord,SpeechLanguageId LangId,SpeechPartOfSpeech PartOfSpeech,BSTR bstrPronunciation) {
+    return This->lpVtbl->AddPronunciation(This,bstrWord,LangId,PartOfSpeech,bstrPronunciation);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_AddPronunciationByPhoneIds(ISpeechLexicon* This,BSTR bstrWord,SpeechLanguageId LangId,SpeechPartOfSpeech PartOfSpeech,VARIANT *PhoneIds) {
+    return This->lpVtbl->AddPronunciationByPhoneIds(This,bstrWord,LangId,PartOfSpeech,PhoneIds);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_RemovePronunciation(ISpeechLexicon* This,BSTR bstrWord,SpeechLanguageId LangId,SpeechPartOfSpeech PartOfSpeech,BSTR bstrPronunciation) {
+    return This->lpVtbl->RemovePronunciation(This,bstrWord,LangId,PartOfSpeech,bstrPronunciation);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_RemovePronunciationByPhoneIds(ISpeechLexicon* This,BSTR bstrWord,SpeechLanguageId LangId,SpeechPartOfSpeech PartOfSpeech,VARIANT *PhoneIds) {
+    return This->lpVtbl->RemovePronunciationByPhoneIds(This,bstrWord,LangId,PartOfSpeech,PhoneIds);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_GetPronunciations(ISpeechLexicon* This,BSTR bstrWord,SpeechLanguageId LangId,SpeechLexiconType TypeFlags,ISpeechLexiconPronunciations **ppPronunciations) {
+    return This->lpVtbl->GetPronunciations(This,bstrWord,LangId,TypeFlags,ppPronunciations);
+}
+static FORCEINLINE HRESULT ISpeechLexicon_GetGenerationChange(ISpeechLexicon* This,LONG *GenerationID,ISpeechLexiconWords **ppWords) {
+    return This->lpVtbl->GetGenerationChange(This,GenerationID,ppWords);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechLexicon_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechLexiconWord interface
+ */
+#ifndef __ISpeechLexiconWord_INTERFACE_DEFINED__
+#define __ISpeechLexiconWord_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechLexiconWord, 0x4e5b933c, 0xc9be, 0x48ed, 0x88,0x42, 0x1e,0xe5,0x1b,0xb1,0xd4,0xff);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("4e5b933c-c9be-48ed-8842-1ee51bb1d4ff")
+ISpeechLexiconWord : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_LangId(
+        SpeechLanguageId *LangId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Type(
+        SpeechWordType *WordType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Word(
+        BSTR *Word) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Pronunciations(
+        ISpeechLexiconPronunciations **Pronunciations) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechLexiconWord, 0x4e5b933c, 0xc9be, 0x48ed, 0x88,0x42, 0x1e,0xe5,0x1b,0xb1,0xd4,0xff)
+#endif
+#else
+typedef struct ISpeechLexiconWordVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechLexiconWord *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechLexiconWord *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechLexiconWord *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechLexiconWord *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechLexiconWord *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechLexiconWord *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechLexiconWord *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechLexiconWord methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_LangId)(
+        ISpeechLexiconWord *This,
+        SpeechLanguageId *LangId);
+
+    HRESULT (STDMETHODCALLTYPE *get_Type)(
+        ISpeechLexiconWord *This,
+        SpeechWordType *WordType);
+
+    HRESULT (STDMETHODCALLTYPE *get_Word)(
+        ISpeechLexiconWord *This,
+        BSTR *Word);
+
+    HRESULT (STDMETHODCALLTYPE *get_Pronunciations)(
+        ISpeechLexiconWord *This,
+        ISpeechLexiconPronunciations **Pronunciations);
+
+    END_INTERFACE
+} ISpeechLexiconWordVtbl;
+
+interface ISpeechLexiconWord {
+    CONST_VTBL ISpeechLexiconWordVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechLexiconWord_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechLexiconWord_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechLexiconWord_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechLexiconWord_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechLexiconWord_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechLexiconWord_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechLexiconWord_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechLexiconWord methods ***/
+#define ISpeechLexiconWord_get_LangId(This,LangId) (This)->lpVtbl->get_LangId(This,LangId)
+#define ISpeechLexiconWord_get_Type(This,WordType) (This)->lpVtbl->get_Type(This,WordType)
+#define ISpeechLexiconWord_get_Word(This,Word) (This)->lpVtbl->get_Word(This,Word)
+#define ISpeechLexiconWord_get_Pronunciations(This,Pronunciations) (This)->lpVtbl->get_Pronunciations(This,Pronunciations)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconWord_QueryInterface(ISpeechLexiconWord* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechLexiconWord_AddRef(ISpeechLexiconWord* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechLexiconWord_Release(ISpeechLexiconWord* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconWord_GetTypeInfoCount(ISpeechLexiconWord* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWord_GetTypeInfo(ISpeechLexiconWord* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWord_GetIDsOfNames(ISpeechLexiconWord* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWord_Invoke(ISpeechLexiconWord* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechLexiconWord methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconWord_get_LangId(ISpeechLexiconWord* This,SpeechLanguageId *LangId) {
+    return This->lpVtbl->get_LangId(This,LangId);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWord_get_Type(ISpeechLexiconWord* This,SpeechWordType *WordType) {
+    return This->lpVtbl->get_Type(This,WordType);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWord_get_Word(ISpeechLexiconWord* This,BSTR *Word) {
+    return This->lpVtbl->get_Word(This,Word);
+}
+static FORCEINLINE HRESULT ISpeechLexiconWord_get_Pronunciations(ISpeechLexiconWord* This,ISpeechLexiconPronunciations **Pronunciations) {
+    return This->lpVtbl->get_Pronunciations(This,Pronunciations);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechLexiconWord_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechLexiconPronunciations interface
+ */
+#ifndef __ISpeechLexiconPronunciations_INTERFACE_DEFINED__
+#define __ISpeechLexiconPronunciations_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechLexiconPronunciations, 0x72829128, 0x5682, 0x4704, 0xa0,0xd4, 0x3e,0x2b,0xb6,0xf2,0xea,0xd3);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("72829128-5682-4704-a0d4-3e2bb6f2ead3")
+ISpeechLexiconPronunciations : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Count(
+        LONG *Count) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Item(
+        LONG Index,
+        ISpeechLexiconPronunciation **Pronunciation) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get__NewEnum(
+        IUnknown **EnumVARIANT) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechLexiconPronunciations, 0x72829128, 0x5682, 0x4704, 0xa0,0xd4, 0x3e,0x2b,0xb6,0xf2,0xea,0xd3)
+#endif
+#else
+typedef struct ISpeechLexiconPronunciationsVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechLexiconPronunciations *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechLexiconPronunciations *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechLexiconPronunciations *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechLexiconPronunciations *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechLexiconPronunciations *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechLexiconPronunciations *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechLexiconPronunciations *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechLexiconPronunciations methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Count)(
+        ISpeechLexiconPronunciations *This,
+        LONG *Count);
+
+    HRESULT (STDMETHODCALLTYPE *Item)(
+        ISpeechLexiconPronunciations *This,
+        LONG Index,
+        ISpeechLexiconPronunciation **Pronunciation);
+
+    HRESULT (STDMETHODCALLTYPE *get__NewEnum)(
+        ISpeechLexiconPronunciations *This,
+        IUnknown **EnumVARIANT);
+
+    END_INTERFACE
+} ISpeechLexiconPronunciationsVtbl;
+
+interface ISpeechLexiconPronunciations {
+    CONST_VTBL ISpeechLexiconPronunciationsVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechLexiconPronunciations_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechLexiconPronunciations_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechLexiconPronunciations_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechLexiconPronunciations_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechLexiconPronunciations_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechLexiconPronunciations_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechLexiconPronunciations_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechLexiconPronunciations methods ***/
+#define ISpeechLexiconPronunciations_get_Count(This,Count) (This)->lpVtbl->get_Count(This,Count)
+#define ISpeechLexiconPronunciations_Item(This,Index,Pronunciation) (This)->lpVtbl->Item(This,Index,Pronunciation)
+#define ISpeechLexiconPronunciations_get__NewEnum(This,EnumVARIANT) (This)->lpVtbl->get__NewEnum(This,EnumVARIANT)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_QueryInterface(ISpeechLexiconPronunciations* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechLexiconPronunciations_AddRef(ISpeechLexiconPronunciations* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechLexiconPronunciations_Release(ISpeechLexiconPronunciations* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_GetTypeInfoCount(ISpeechLexiconPronunciations* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_GetTypeInfo(ISpeechLexiconPronunciations* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_GetIDsOfNames(ISpeechLexiconPronunciations* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_Invoke(ISpeechLexiconPronunciations* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechLexiconPronunciations methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_get_Count(ISpeechLexiconPronunciations* This,LONG *Count) {
+    return This->lpVtbl->get_Count(This,Count);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_Item(ISpeechLexiconPronunciations* This,LONG Index,ISpeechLexiconPronunciation **Pronunciation) {
+    return This->lpVtbl->Item(This,Index,Pronunciation);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciations_get__NewEnum(ISpeechLexiconPronunciations* This,IUnknown **EnumVARIANT) {
+    return This->lpVtbl->get__NewEnum(This,EnumVARIANT);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechLexiconPronunciations_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechLexiconPronunciation interface
+ */
+#ifndef __ISpeechLexiconPronunciation_INTERFACE_DEFINED__
+#define __ISpeechLexiconPronunciation_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechLexiconPronunciation, 0x95252c5d, 0x9e43, 0x4f4a, 0x98,0x99, 0x48,0xee,0x73,0x35,0x2f,0x9f);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("95252c5d-9e43-4f4a-9899-48ee73352f9f")
+ISpeechLexiconPronunciation : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Type(
+        SpeechLexiconType *LexiconType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_LangId(
+        SpeechLanguageId *LangId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_PartOfSpeech(
+        SpeechPartOfSpeech *PartOfSpeech) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_PhoneIds(
+        VARIANT *PhoneIds) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Symbolic(
+        BSTR *Symbolic) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechLexiconPronunciation, 0x95252c5d, 0x9e43, 0x4f4a, 0x98,0x99, 0x48,0xee,0x73,0x35,0x2f,0x9f)
+#endif
+#else
+typedef struct ISpeechLexiconPronunciationVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechLexiconPronunciation *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechLexiconPronunciation *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechLexiconPronunciation *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechLexiconPronunciation *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechLexiconPronunciation *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechLexiconPronunciation *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechLexiconPronunciation *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechLexiconPronunciation methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Type)(
+        ISpeechLexiconPronunciation *This,
+        SpeechLexiconType *LexiconType);
+
+    HRESULT (STDMETHODCALLTYPE *get_LangId)(
+        ISpeechLexiconPronunciation *This,
+        SpeechLanguageId *LangId);
+
+    HRESULT (STDMETHODCALLTYPE *get_PartOfSpeech)(
+        ISpeechLexiconPronunciation *This,
+        SpeechPartOfSpeech *PartOfSpeech);
+
+    HRESULT (STDMETHODCALLTYPE *get_PhoneIds)(
+        ISpeechLexiconPronunciation *This,
+        VARIANT *PhoneIds);
+
+    HRESULT (STDMETHODCALLTYPE *get_Symbolic)(
+        ISpeechLexiconPronunciation *This,
+        BSTR *Symbolic);
+
+    END_INTERFACE
+} ISpeechLexiconPronunciationVtbl;
+
+interface ISpeechLexiconPronunciation {
+    CONST_VTBL ISpeechLexiconPronunciationVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechLexiconPronunciation_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechLexiconPronunciation_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechLexiconPronunciation_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechLexiconPronunciation_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechLexiconPronunciation_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechLexiconPronunciation_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechLexiconPronunciation_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechLexiconPronunciation methods ***/
+#define ISpeechLexiconPronunciation_get_Type(This,LexiconType) (This)->lpVtbl->get_Type(This,LexiconType)
+#define ISpeechLexiconPronunciation_get_LangId(This,LangId) (This)->lpVtbl->get_LangId(This,LangId)
+#define ISpeechLexiconPronunciation_get_PartOfSpeech(This,PartOfSpeech) (This)->lpVtbl->get_PartOfSpeech(This,PartOfSpeech)
+#define ISpeechLexiconPronunciation_get_PhoneIds(This,PhoneIds) (This)->lpVtbl->get_PhoneIds(This,PhoneIds)
+#define ISpeechLexiconPronunciation_get_Symbolic(This,Symbolic) (This)->lpVtbl->get_Symbolic(This,Symbolic)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_QueryInterface(ISpeechLexiconPronunciation* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechLexiconPronunciation_AddRef(ISpeechLexiconPronunciation* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechLexiconPronunciation_Release(ISpeechLexiconPronunciation* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_GetTypeInfoCount(ISpeechLexiconPronunciation* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_GetTypeInfo(ISpeechLexiconPronunciation* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_GetIDsOfNames(ISpeechLexiconPronunciation* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_Invoke(ISpeechLexiconPronunciation* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechLexiconPronunciation methods ***/
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_get_Type(ISpeechLexiconPronunciation* This,SpeechLexiconType *LexiconType) {
+    return This->lpVtbl->get_Type(This,LexiconType);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_get_LangId(ISpeechLexiconPronunciation* This,SpeechLanguageId *LangId) {
+    return This->lpVtbl->get_LangId(This,LangId);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_get_PartOfSpeech(ISpeechLexiconPronunciation* This,SpeechPartOfSpeech *PartOfSpeech) {
+    return This->lpVtbl->get_PartOfSpeech(This,PartOfSpeech);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_get_PhoneIds(ISpeechLexiconPronunciation* This,VARIANT *PhoneIds) {
+    return This->lpVtbl->get_PhoneIds(This,PhoneIds);
+}
+static FORCEINLINE HRESULT ISpeechLexiconPronunciation_get_Symbolic(ISpeechLexiconPronunciation* This,BSTR *Symbolic) {
+    return This->lpVtbl->get_Symbolic(This,Symbolic);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechLexiconPronunciation_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISpeechPhoneConverter interface
+ */
+#ifndef __ISpeechPhoneConverter_INTERFACE_DEFINED__
+#define __ISpeechPhoneConverter_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISpeechPhoneConverter, 0xc3e4f353, 0x433f, 0x43d6, 0x89,0xa1, 0x6a,0x62,0xa7,0x05,0x4c,0x3d);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c3e4f353-433f-43d6-89a1-6a62a7054c3d")
+ISpeechPhoneConverter : public IDispatch
+{
+    virtual HRESULT STDMETHODCALLTYPE get_LanguageId(
+        SpeechLanguageId *LanguageId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_LanguageId(
+        SpeechLanguageId LanguageId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE PhoneToId(
+        const BSTR Phonemes,
+        VARIANT *IdArray) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IdToPhone(
+        const VARIANT IdArray,
+        BSTR *Phonemes) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISpeechPhoneConverter, 0xc3e4f353, 0x433f, 0x43d6, 0x89,0xa1, 0x6a,0x62,0xa7,0x05,0x4c,0x3d)
+#endif
+#else
+typedef struct ISpeechPhoneConverterVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISpeechPhoneConverter *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISpeechPhoneConverter *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISpeechPhoneConverter *This);
+
+    /*** IDispatch methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfoCount)(
+        ISpeechPhoneConverter *This,
+        UINT *pctinfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeInfo)(
+        ISpeechPhoneConverter *This,
+        UINT iTInfo,
+        LCID lcid,
+        ITypeInfo **ppTInfo);
+
+    HRESULT (STDMETHODCALLTYPE *GetIDsOfNames)(
+        ISpeechPhoneConverter *This,
+        REFIID riid,
+        LPOLESTR *rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID *rgDispId);
+
+    HRESULT (STDMETHODCALLTYPE *Invoke)(
+        ISpeechPhoneConverter *This,
+        DISPID dispIdMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS *pDispParams,
+        VARIANT *pVarResult,
+        EXCEPINFO *pExcepInfo,
+        UINT *puArgErr);
+
+    /*** ISpeechPhoneConverter methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_LanguageId)(
+        ISpeechPhoneConverter *This,
+        SpeechLanguageId *LanguageId);
+
+    HRESULT (STDMETHODCALLTYPE *put_LanguageId)(
+        ISpeechPhoneConverter *This,
+        SpeechLanguageId LanguageId);
+
+    HRESULT (STDMETHODCALLTYPE *PhoneToId)(
+        ISpeechPhoneConverter *This,
+        const BSTR Phonemes,
+        VARIANT *IdArray);
+
+    HRESULT (STDMETHODCALLTYPE *IdToPhone)(
+        ISpeechPhoneConverter *This,
+        const VARIANT IdArray,
+        BSTR *Phonemes);
+
+    END_INTERFACE
+} ISpeechPhoneConverterVtbl;
+
+interface ISpeechPhoneConverter {
+    CONST_VTBL ISpeechPhoneConverterVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISpeechPhoneConverter_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISpeechPhoneConverter_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISpeechPhoneConverter_Release(This) (This)->lpVtbl->Release(This)
+/*** IDispatch methods ***/
+#define ISpeechPhoneConverter_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define ISpeechPhoneConverter_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define ISpeechPhoneConverter_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define ISpeechPhoneConverter_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+/*** ISpeechPhoneConverter methods ***/
+#define ISpeechPhoneConverter_get_LanguageId(This,LanguageId) (This)->lpVtbl->get_LanguageId(This,LanguageId)
+#define ISpeechPhoneConverter_put_LanguageId(This,LanguageId) (This)->lpVtbl->put_LanguageId(This,LanguageId)
+#define ISpeechPhoneConverter_PhoneToId(This,Phonemes,IdArray) (This)->lpVtbl->PhoneToId(This,Phonemes,IdArray)
+#define ISpeechPhoneConverter_IdToPhone(This,IdArray,Phonemes) (This)->lpVtbl->IdToPhone(This,IdArray,Phonemes)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISpeechPhoneConverter_QueryInterface(ISpeechPhoneConverter* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISpeechPhoneConverter_AddRef(ISpeechPhoneConverter* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISpeechPhoneConverter_Release(ISpeechPhoneConverter* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDispatch methods ***/
+static FORCEINLINE HRESULT ISpeechPhoneConverter_GetTypeInfoCount(ISpeechPhoneConverter* This,UINT *pctinfo) {
+    return This->lpVtbl->GetTypeInfoCount(This,pctinfo);
+}
+static FORCEINLINE HRESULT ISpeechPhoneConverter_GetTypeInfo(ISpeechPhoneConverter* This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo) {
+    return This->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo);
+}
+static FORCEINLINE HRESULT ISpeechPhoneConverter_GetIDsOfNames(ISpeechPhoneConverter* This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId) {
+    return This->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId);
+}
+static FORCEINLINE HRESULT ISpeechPhoneConverter_Invoke(ISpeechPhoneConverter* This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr) {
+    return This->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr);
+}
+/*** ISpeechPhoneConverter methods ***/
+static FORCEINLINE HRESULT ISpeechPhoneConverter_get_LanguageId(ISpeechPhoneConverter* This,SpeechLanguageId *LanguageId) {
+    return This->lpVtbl->get_LanguageId(This,LanguageId);
+}
+static FORCEINLINE HRESULT ISpeechPhoneConverter_put_LanguageId(ISpeechPhoneConverter* This,SpeechLanguageId LanguageId) {
+    return This->lpVtbl->put_LanguageId(This,LanguageId);
+}
+static FORCEINLINE HRESULT ISpeechPhoneConverter_PhoneToId(ISpeechPhoneConverter* This,const BSTR Phonemes,VARIANT *IdArray) {
+    return This->lpVtbl->PhoneToId(This,Phonemes,IdArray);
+}
+static FORCEINLINE HRESULT ISpeechPhoneConverter_IdToPhone(ISpeechPhoneConverter* This,const VARIANT IdArray,BSTR *Phonemes) {
+    return This->lpVtbl->IdToPhone(This,IdArray,Phonemes);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISpeechPhoneConverter_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * SpNotifyTranslator coclass
+ */
+
+DEFINE_GUID(CLSID_SpNotifyTranslator, 0xe2ae5372, 0x5d40, 0x11d2, 0x96,0x0e, 0x00,0xc0,0x4f,0x8e,0xe6,0x28);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("e2ae5372-5d40-11d2-960e-00c04f8ee628") SpNotifyTranslator;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpNotifyTranslator, 0xe2ae5372, 0x5d40, 0x11d2, 0x96,0x0e, 0x00,0xc0,0x4f,0x8e,0xe6,0x28)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpObjectTokenCategory coclass
+ */
+
+DEFINE_GUID(CLSID_SpObjectTokenCategory, 0xa910187f, 0x0c7a, 0x45ac, 0x92,0xcc, 0x59,0xed,0xaf,0xb7,0x7b,0x53);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("a910187f-0c7a-45ac-92cc-59edafb77b53") SpObjectTokenCategory;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpObjectTokenCategory, 0xa910187f, 0x0c7a, 0x45ac, 0x92,0xcc, 0x59,0xed,0xaf,0xb7,0x7b,0x53)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpObjectToken coclass
+ */
+
+DEFINE_GUID(CLSID_SpObjectToken, 0xef411752, 0x3736, 0x4cb4, 0x9c,0x8c, 0x8e,0xf4,0xcc,0xb5,0x8e,0xfe);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("ef411752-3736-4cb4-9c8c-8ef4ccb58efe") SpObjectToken;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpObjectToken, 0xef411752, 0x3736, 0x4cb4, 0x9c,0x8c, 0x8e,0xf4,0xcc,0xb5,0x8e,0xfe)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpResourceManager coclass
+ */
+
+DEFINE_GUID(CLSID_SpResourceManager, 0x96749373, 0x3391, 0x11d2, 0x9e,0xe3, 0x00,0xc0,0x4f,0x79,0x73,0x96);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("96749373-3391-11d2-9ee3-00c04f797396") SpResourceManager;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpResourceManager, 0x96749373, 0x3391, 0x11d2, 0x9e,0xe3, 0x00,0xc0,0x4f,0x79,0x73,0x96)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpStreamFormatConverter coclass
+ */
+
+DEFINE_GUID(CLSID_SpStreamFormatConverter, 0x7013943a, 0xe2ec, 0x11d2, 0xa0,0x86, 0x00,0xc0,0x4f,0x8e,0xf9,0xb5);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("7013943a-e2ec-11d2-a086-00c04f8ef9b5") SpStreamFormatConverter;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpStreamFormatConverter, 0x7013943a, 0xe2ec, 0x11d2, 0xa0,0x86, 0x00,0xc0,0x4f,0x8e,0xf9,0xb5)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpMMAudioEnum coclass
+ */
+
+DEFINE_GUID(CLSID_SpMMAudioEnum, 0xab1890a0, 0xe91f, 0x11d2, 0xbb,0x91, 0x00,0xc0,0x4f,0x8e,0xe6,0xc0);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("ab1890a0-e91f-11d2-bb91-00c04f8ee6c0") SpMMAudioEnum;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpMMAudioEnum, 0xab1890a0, 0xe91f, 0x11d2, 0xbb,0x91, 0x00,0xc0,0x4f,0x8e,0xe6,0xc0)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpMMAudioIn coclass
+ */
+
+DEFINE_GUID(CLSID_SpMMAudioIn, 0xcf3d2e50, 0x53f2, 0x11d2, 0x96,0x0c, 0x00,0xc0,0x4f,0x8e,0xe6,0x28);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("cf3d2e50-53f2-11d2-960c-00c04f8ee628") SpMMAudioIn;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpMMAudioIn, 0xcf3d2e50, 0x53f2, 0x11d2, 0x96,0x0c, 0x00,0xc0,0x4f,0x8e,0xe6,0x28)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpMMAudioOut coclass
+ */
+
+DEFINE_GUID(CLSID_SpMMAudioOut, 0xa8c680eb, 0x3d32, 0x11d2, 0x9e,0xe7, 0x00,0xc0,0x4f,0x79,0x73,0x96);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("a8c680eb-3d32-11d2-9ee7-00c04f797396") SpMMAudioOut;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpMMAudioOut, 0xa8c680eb, 0x3d32, 0x11d2, 0x9e,0xe7, 0x00,0xc0,0x4f,0x79,0x73,0x96)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpStream coclass
+ */
+
+DEFINE_GUID(CLSID_SpStream, 0x715d9c59, 0x4442, 0x11d2, 0x96,0x05, 0x00,0xc0,0x4f,0x8e,0xe6,0x28);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("715d9c59-4442-11d2-9605-00c04f8ee628") SpStream;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpStream, 0x715d9c59, 0x4442, 0x11d2, 0x96,0x05, 0x00,0xc0,0x4f,0x8e,0xe6,0x28)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpVoice coclass
+ */
+
+DEFINE_GUID(CLSID_SpVoice, 0x96749377, 0x3391, 0x11d2, 0x9e,0xe3, 0x00,0xc0,0x4f,0x79,0x73,0x96);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("96749377-3391-11d2-9ee3-00c04f797396") SpVoice;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpVoice, 0x96749377, 0x3391, 0x11d2, 0x9e,0xe3, 0x00,0xc0,0x4f,0x79,0x73,0x96)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpSharedRecoContext coclass
+ */
+
+DEFINE_GUID(CLSID_SpSharedRecoContext, 0x47206204, 0x5eca, 0x11d2, 0x96,0x0f, 0x00,0xc0,0x4f,0x8e,0xe6,0x28);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("47206204-5eca-11d2-960f-00c04f8ee628") SpSharedRecoContext;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpSharedRecoContext, 0x47206204, 0x5eca, 0x11d2, 0x96,0x0f, 0x00,0xc0,0x4f,0x8e,0xe6,0x28)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpInprocRecognizer coclass
+ */
+
+DEFINE_GUID(CLSID_SpInprocRecognizer, 0x41b89b6b, 0x9399, 0x11d2, 0x96,0x23, 0x00,0xc0,0x4f,0x8e,0xe6,0x28);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("41b89b6b-9399-11d2-9623-00c04f8ee628") SpInprocRecognizer;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpInprocRecognizer, 0x41b89b6b, 0x9399, 0x11d2, 0x96,0x23, 0x00,0xc0,0x4f,0x8e,0xe6,0x28)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpSharedRecognizer coclass
+ */
+
+DEFINE_GUID(CLSID_SpSharedRecognizer, 0x3bee4890, 0x4fe9, 0x4a37, 0x8c,0x1e, 0x5e,0x7e,0x12,0x79,0x1c,0x1f);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("3bee4890-4fe9-4a37-8c1e-5e7e12791c1f") SpSharedRecognizer;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpSharedRecognizer, 0x3bee4890, 0x4fe9, 0x4a37, 0x8c,0x1e, 0x5e,0x7e,0x12,0x79,0x1c,0x1f)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpLexicon coclass
+ */
+
+DEFINE_GUID(CLSID_SpLexicon, 0x0655e396, 0x25d0, 0x11d3, 0x9c,0x26, 0x00,0xc0,0x4f,0x8e,0xf8,0x7c);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("0655e396-25d0-11d3-9c26-00c04f8ef87c") SpLexicon;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpLexicon, 0x0655e396, 0x25d0, 0x11d3, 0x9c,0x26, 0x00,0xc0,0x4f,0x8e,0xf8,0x7c)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpUnCompressedLexicon coclass
+ */
+
+DEFINE_GUID(CLSID_SpUnCompressedLexicon, 0xc9e37c15, 0xdf92, 0x4727, 0x85,0xd6, 0x72,0xe5,0xee,0xb6,0x99,0x5a);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("c9e37c15-df92-4727-85d6-72e5eeb6995a") SpUnCompressedLexicon;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpUnCompressedLexicon, 0xc9e37c15, 0xdf92, 0x4727, 0x85,0xd6, 0x72,0xe5,0xee,0xb6,0x99,0x5a)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpCompressedLexicon coclass
+ */
+
+DEFINE_GUID(CLSID_SpCompressedLexicon, 0x90903716, 0x2f42, 0x11d3, 0x9c,0x26, 0x00,0xc0,0x4f,0x8e,0xf8,0x7c);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("90903716-2f42-11d3-9c26-00c04f8ef87c") SpCompressedLexicon;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpCompressedLexicon, 0x90903716, 0x2f42, 0x11d3, 0x9c,0x26, 0x00,0xc0,0x4f,0x8e,0xf8,0x7c)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpPhoneConverter coclass
+ */
+
+DEFINE_GUID(CLSID_SpPhoneConverter, 0x9185f743, 0x1143, 0x4c28, 0x86,0xb5, 0xbf,0xf1,0x4f,0x20,0xe5,0xc8);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("9185f743-1143-4c28-86b5-bff14f20e5c8") SpPhoneConverter;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpPhoneConverter, 0x9185f743, 0x1143, 0x4c28, 0x86,0xb5, 0xbf,0xf1,0x4f,0x20,0xe5,0xc8)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpNullPhoneConverter coclass
+ */
+
+DEFINE_GUID(CLSID_SpNullPhoneConverter, 0x455f24e9, 0x7396, 0x4a16, 0x97,0x15, 0x7c,0x0f,0xdb,0xe3,0xef,0xe3);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("455f24e9-7396-4a16-9715-7c0fdbe3efe3") SpNullPhoneConverter;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpNullPhoneConverter, 0x455f24e9, 0x7396, 0x4a16, 0x97,0x15, 0x7c,0x0f,0xdb,0xe3,0xef,0xe3)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpTextSelectionInformation coclass
+ */
+
+DEFINE_GUID(CLSID_SpTextSelectionInformation, 0x0f92030a, 0xcbfd, 0x4ab8, 0xa1,0x64, 0xff,0x59,0x85,0x54,0x7f,0xf6);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("0f92030a-cbfd-4ab8-a164-ff5985547ff6") SpTextSelectionInformation;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpTextSelectionInformation, 0x0f92030a, 0xcbfd, 0x4ab8, 0xa1,0x64, 0xff,0x59,0x85,0x54,0x7f,0xf6)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpPhraseInfoBuilder coclass
+ */
+
+DEFINE_GUID(CLSID_SpPhraseInfoBuilder, 0xc23fc28d, 0xc55f, 0x4720, 0x8b,0x32, 0x91,0xf7,0x3c,0x2b,0xd5,0xd1);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("c23fc28d-c55f-4720-8b32-91f73c2bd5d1") SpPhraseInfoBuilder;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpPhraseInfoBuilder, 0xc23fc28d, 0xc55f, 0x4720, 0x8b,0x32, 0x91,0xf7,0x3c,0x2b,0xd5,0xd1)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpAudioFormat coclass
+ */
+
+DEFINE_GUID(CLSID_SpAudioFormat, 0x9ef96870, 0xe160, 0x4792, 0x82,0x0d, 0x48,0xcf,0x06,0x49,0xe4,0xec);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("9ef96870-e160-4792-820d-48cf0649e4ec") SpAudioFormat;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpAudioFormat, 0x9ef96870, 0xe160, 0x4792, 0x82,0x0d, 0x48,0xcf,0x06,0x49,0xe4,0xec)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpWaveFormatEx coclass
+ */
+
+DEFINE_GUID(CLSID_SpWaveFormatEx, 0xc79a574c, 0x63be, 0x44b9, 0x80,0x1f, 0x28,0x3f,0x87,0xf8,0x98,0xbe);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("c79a574c-63be-44b9-801f-283f87f898be") SpWaveFormatEx;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpWaveFormatEx, 0xc79a574c, 0x63be, 0x44b9, 0x80,0x1f, 0x28,0x3f,0x87,0xf8,0x98,0xbe)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpInProcRecoContext coclass
+ */
+
+DEFINE_GUID(CLSID_SpInProcRecoContext, 0x73ad6842, 0xace0, 0x45e8, 0xa4,0xdd, 0x87,0x95,0x88,0x1a,0x2c,0x2a);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("73ad6842-ace0-45e8-a4dd-8795881a2c2a") SpInProcRecoContext;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpInProcRecoContext, 0x73ad6842, 0xace0, 0x45e8, 0xa4,0xdd, 0x87,0x95,0x88,0x1a,0x2c,0x2a)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpCustomStream coclass
+ */
+
+DEFINE_GUID(CLSID_SpCustomStream, 0x8dbef13f, 0x1948, 0x4aa8, 0x8c,0xf0, 0x04,0x8e,0xeb,0xed,0x95,0xd8);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("8dbef13f-1948-4aa8-8cf0-048eebed95d8") SpCustomStream;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpCustomStream, 0x8dbef13f, 0x1948, 0x4aa8, 0x8c,0xf0, 0x04,0x8e,0xeb,0xed,0x95,0xd8)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpFileStream coclass
+ */
+
+DEFINE_GUID(CLSID_SpFileStream, 0x947812b3, 0x2ae1, 0x4644, 0xba,0x86, 0x9e,0x90,0xde,0xd7,0xec,0x91);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("947812b3-2ae1-4644-ba86-9e90ded7ec91") SpFileStream;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpFileStream, 0x947812b3, 0x2ae1, 0x4644, 0xba,0x86, 0x9e,0x90,0xde,0xd7,0xec,0x91)
+#endif
+#endif
+
+/*****************************************************************************
+ * SpMemoryStream coclass
+ */
+
+DEFINE_GUID(CLSID_SpMemoryStream, 0x5fb7ef7d, 0xdff4, 0x468a, 0xb6,0xb7, 0x2f,0xcb,0xd1,0x88,0xf9,0x94);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("5fb7ef7d-dff4-468a-b6b7-2fcbd188f994") SpMemoryStream;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SpMemoryStream, 0x5fb7ef7d, 0xdff4, 0x468a, 0xb6,0xb7, 0x2f,0xcb,0xd1,0x88,0xf9,0x94)
+#endif
+#endif
+
+#endif /* __SpeechLib_LIBRARY_DEFINED__ */
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER HWND_UserSize     (ULONG *, ULONG, HWND *);
+unsigned char * __RPC_USER HWND_UserMarshal  (ULONG *, unsigned char *, HWND *);
+unsigned char * __RPC_USER HWND_UserUnmarshal(ULONG *, unsigned char *, HWND *);
+void            __RPC_USER HWND_UserFree     (ULONG *, HWND *);
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER VARIANT_UserSize     (ULONG *, ULONG, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserMarshal  (ULONG *, unsigned char *, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserUnmarshal(ULONG *, unsigned char *, VARIANT *);
+void            __RPC_USER VARIANT_UserFree     (ULONG *, VARIANT *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __sapi51_h__ */
