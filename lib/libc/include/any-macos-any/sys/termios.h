@@ -316,3 +316,52 @@ struct termios {
 #define EXTA    19200
 #define EXTB    38400
 #endif  /* (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
+
+
+#define TCIFLUSH        1
+#define TCOFLUSH        2
+#define TCIOFLUSH       3
+#define TCOOFF          1
+#define TCOON           2
+#define TCIOFF          3
+#define TCION           4
+
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+speed_t cfgetispeed(const struct termios *);
+speed_t cfgetospeed(const struct termios *);
+int     cfsetispeed(struct termios *, speed_t);
+int     cfsetospeed(struct termios *, speed_t);
+int     tcgetattr(int, struct termios *);
+int     tcsetattr(int, int, const struct termios *);
+int     tcdrain(int) __DARWIN_ALIAS_C(tcdrain);
+int     tcflow(int, int);
+int     tcflush(int, int);
+int     tcsendbreak(int, int);
+
+#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
+void    cfmakeraw(struct termios *);
+int     cfsetspeed(struct termios *, speed_t);
+#endif /* (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
+__END_DECLS
+
+
+#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
+
+/*
+ * Include tty ioctl's that aren't just for backwards compatibility
+ * with the old tty driver.  These ioctl definitions were previously
+ * in <sys/ioctl.h>.
+ */
+#include <sys/ttycom.h>
+#endif
+
+/*
+ * END OF PROTECTED INCLUDE.
+ */
+#endif /* !_SYS_TERMIOS_H_ */
+
+#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
+#include <sys/ttydefaults.h>
+#endif
