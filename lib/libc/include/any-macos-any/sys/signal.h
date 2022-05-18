@@ -385,3 +385,9 @@ struct  sigstack {
 
 /*
  * For historical reasons; programs expect signal's return value to be
+ * defined by <sys/signal.h>.
+ */
+__BEGIN_DECLS
+    void(*signal(int, void (*)(int)))(int);
+__END_DECLS
+#endif  /* !_SYS_SIGNAL_H_ */
