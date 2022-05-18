@@ -92,4 +92,13 @@ SspiExcludePackage@12
 SspiFreeAuthIdentity@4
 SspiGetComputerNameForSPN@8
 SspiGetTargetHostName@8
-SspiI
+SspiIsAuthIdentityEncrypted@4
+SspiLocalFree@4
+SspiMarshalAuthIdentity@12
+SspiPrepareForCredRead@16
+SspiPrepareForCredWrite@28
+SspiUnmarshalAuthIdentity@12
+SspiValidateAuthIdentity@4
+SspiZeroAuthIdentity@4
+UnsealMessage@16
+VerifySignature@16
