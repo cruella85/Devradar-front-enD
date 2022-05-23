@@ -302,4 +302,247 @@ typedef struct IAdapterInfoVtbl {
         ALG_ADAPTER_TYPE *pAdapterType);
 
     HRESULT (STDMETHODCALLTYPE *GetAdapterAddresses)(
-  
+        IAdapterInfo *This,
+        ULONG *pulAddressCount,
+        ULONG **prgAddresses);
+
+    END_INTERFACE
+} IAdapterInfoVtbl;
+
+interface IAdapterInfo {
+    CONST_VTBL IAdapterInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAdapterInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAdapterInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAdapterInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IAdapterInfo methods ***/
+#define IAdapterInfo_GetAdapterIndex(This,pulIndex) (This)->lpVtbl->GetAdapterIndex(This,pulIndex)
+#define IAdapterInfo_GetAdapterType(This,pAdapterType) (This)->lpVtbl->GetAdapterType(This,pAdapterType)
+#define IAdapterInfo_GetAdapterAddresses(This,pulAddressCount,prgAddresses) (This)->lpVtbl->GetAdapterAddresses(This,pulAddressCount,prgAddresses)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAdapterInfo_QueryInterface(IAdapterInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAdapterInfo_AddRef(IAdapterInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAdapterInfo_Release(IAdapterInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAdapterInfo methods ***/
+static FORCEINLINE HRESULT IAdapterInfo_GetAdapterIndex(IAdapterInfo* This,ULONG *pulIndex) {
+    return This->lpVtbl->GetAdapterIndex(This,pulIndex);
+}
+static FORCEINLINE HRESULT IAdapterInfo_GetAdapterType(IAdapterInfo* This,ALG_ADAPTER_TYPE *pAdapterType) {
+    return This->lpVtbl->GetAdapterType(This,pAdapterType);
+}
+static FORCEINLINE HRESULT IAdapterInfo_GetAdapterAddresses(IAdapterInfo* This,ULONG *pulAddressCount,ULONG **prgAddresses) {
+    return This->lpVtbl->GetAdapterAddresses(This,pulAddressCount,prgAddresses);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAdapterInfo_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IPendingProxyConnection interface
+ */
+#ifndef __IPendingProxyConnection_INTERFACE_DEFINED__
+#define __IPendingProxyConnection_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPendingProxyConnection, 0xb68e5043, 0x3e3d, 0x4cc2, 0xb9,0xc1, 0x5f,0x8f,0x88,0xfe,0xe8,0x1c);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b68e5043-3e3d-4cc2-b9c1-5f8f88fee81c")
+IPendingProxyConnection : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Cancel(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPendingProxyConnection, 0xb68e5043, 0x3e3d, 0x4cc2, 0xb9,0xc1, 0x5f,0x8f,0x88,0xfe,0xe8,0x1c)
+#endif
+#else
+typedef struct IPendingProxyConnectionVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPendingProxyConnection *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPendingProxyConnection *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPendingProxyConnection *This);
+
+    /*** IPendingProxyConnection methods ***/
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        IPendingProxyConnection *This);
+
+    END_INTERFACE
+} IPendingProxyConnectionVtbl;
+
+interface IPendingProxyConnection {
+    CONST_VTBL IPendingProxyConnectionVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPendingProxyConnection_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPendingProxyConnection_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPendingProxyConnection_Release(This) (This)->lpVtbl->Release(This)
+/*** IPendingProxyConnection methods ***/
+#define IPendingProxyConnection_Cancel(This) (This)->lpVtbl->Cancel(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPendingProxyConnection_QueryInterface(IPendingProxyConnection* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPendingProxyConnection_AddRef(IPendingProxyConnection* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPendingProxyConnection_Release(IPendingProxyConnection* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPendingProxyConnection methods ***/
+static FORCEINLINE HRESULT IPendingProxyConnection_Cancel(IPendingProxyConnection* This) {
+    return This->lpVtbl->Cancel(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPendingProxyConnection_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDataChannel interface
+ */
+#ifndef __IDataChannel_INTERFACE_DEFINED__
+#define __IDataChannel_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDataChannel, 0xad42d12a, 0x4ad0, 0x4856, 0x91,0x9e, 0xe8,0x54,0xc9,0x1d,0x18,0x56);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("ad42d12a-4ad0-4856-919e-e854c91d1856")
+IDataChannel : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Cancel(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetChannelProperties(
+        ALG_DATA_CHANNEL_PROPERTIES **ppProperties) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSessionCreationEventHandle(
+        HANDLE *pHandle) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSessionDeletionEventHandle(
+        HANDLE *pHandle) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDataChannel, 0xad42d12a, 0x4ad0, 0x4856, 0x91,0x9e, 0xe8,0x54,0xc9,0x1d,0x18,0x56)
+#endif
+#else
+typedef struct IDataChannelVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDataChannel *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDataChannel *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDataChannel *This);
+
+    /*** IDataChannel methods ***/
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        IDataChannel *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelProperties)(
+        IDataChannel *This,
+        ALG_DATA_CHANNEL_PROPERTIES **ppProperties);
+
+    HRESULT (STDMETHODCALLTYPE *GetSessionCreationEventHandle)(
+        IDataChannel *This,
+        HANDLE *pHandle);
+
+    HRESULT (STDMETHODCALLTYPE *GetSessionDeletionEventHandle)(
+        IDataChannel *This,
+        HANDLE *pHandle);
+
+    END_INTERFACE
+} IDataChannelVtbl;
+
+interface IDataChannel {
+    CONST_VTBL IDataChannelVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDataChannel_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDataChannel_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDataChannel_Release(This) (This)->lpVtbl->Release(This)
+/*** IDataChannel methods ***/
+#define IDataChannel_Cancel(This) (This)->lpVtbl->Cancel(This)
+#define IDataChannel_GetChannelProperties(This,ppProperties) (This)->lpVtbl->GetChannelProperties(This,ppProperties)
+#define IDataChannel_GetSessionCreationEventHandle(This,pHandle) (This)->lpVtbl->GetSessionCreationEventHandle(This,pHandle)
+#define IDataChannel_GetSessionDeletionEventHandle(This,pHandle) (This)->lpVtbl->GetSessionDeletionEventHandle(This,pHandle)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDataChannel_QueryInterface(IDataChannel* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDataChannel_AddRef(IDataChannel* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDataChannel_Release(IDataChannel* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDataChannel methods ***/
+static FORCEINLINE HRESULT IDataChannel_Cancel(IDataChannel* This) {
+    return This->lpVtbl->Cancel(This);
+}
+static FORCEINLINE HRESULT IDataChannel_GetChannelProperties(IDataChannel* This,ALG_DATA_CHANNEL_PROPERTIES **ppProperties) {
+    return This->lpVtbl->GetChannelProperties(This,ppProperties);
+}
+static FORCEINLINE HRESULT IDataChannel_GetSessionCreationEventHandle(IDataChannel* This,HANDLE *pHandle) {
+    return This->lpVtbl->GetSessionCreationEventHandle(This,pHandle);
+}
+static FORCEINLINE HRESULT IDataChannel_GetSessionDeletionEventHandle(IDataChannel* This,HANDLE *pHandle) {
+    return This->lpVtbl->GetSessionDeletionEventHandle(This,pHandle);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDataChannel_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IPersistentDataChannel interface
+ */
+#ifndef __IPersistentDataChannel_INTERFACE_DEFINED__
+#define __IPersistentDataChannel_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPersistentDataChannel, 0xa180e934, 0xd92a, 0x415d, 0x91,0x44, 0x75,0x9f,0x80,0x54,0xe8,0xf6);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a180e9
