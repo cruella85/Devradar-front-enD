@@ -545,4 +545,226 @@ static FORCEINLINE HRESULT IDataChannel_GetSessionDeletionEventHandle(IDataChann
 
 DEFINE_GUID(IID_IPersistentDataChannel, 0xa180e934, 0xd92a, 0x415d, 0x91,0x44, 0x75,0x9f,0x80,0x54,0xe8,0xf6);
 #if defined(__cplusplus) && !defined(CINTERFACE)
-MIDL_INTERFACE("a180e9
+MIDL_INTERFACE("a180e934-d92a-415d-9144-759f8054e8f6")
+IPersistentDataChannel : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Cancel(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetChannelProperties(
+        ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPersistentDataChannel, 0xa180e934, 0xd92a, 0x415d, 0x91,0x44, 0x75,0x9f,0x80,0x54,0xe8,0xf6)
+#endif
+#else
+typedef struct IPersistentDataChannelVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPersistentDataChannel *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPersistentDataChannel *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPersistentDataChannel *This);
+
+    /*** IPersistentDataChannel methods ***/
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        IPersistentDataChannel *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelProperties)(
+        IPersistentDataChannel *This,
+        ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties);
+
+    END_INTERFACE
+} IPersistentDataChannelVtbl;
+
+interface IPersistentDataChannel {
+    CONST_VTBL IPersistentDataChannelVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPersistentDataChannel_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPersistentDataChannel_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPersistentDataChannel_Release(This) (This)->lpVtbl->Release(This)
+/*** IPersistentDataChannel methods ***/
+#define IPersistentDataChannel_Cancel(This) (This)->lpVtbl->Cancel(This)
+#define IPersistentDataChannel_GetChannelProperties(This,ppProperties) (This)->lpVtbl->GetChannelProperties(This,ppProperties)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPersistentDataChannel_QueryInterface(IPersistentDataChannel* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPersistentDataChannel_AddRef(IPersistentDataChannel* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPersistentDataChannel_Release(IPersistentDataChannel* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPersistentDataChannel methods ***/
+static FORCEINLINE HRESULT IPersistentDataChannel_Cancel(IPersistentDataChannel* This) {
+    return This->lpVtbl->Cancel(This);
+}
+static FORCEINLINE HRESULT IPersistentDataChannel_GetChannelProperties(IPersistentDataChannel* This,ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties) {
+    return This->lpVtbl->GetChannelProperties(This,ppProperties);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPersistentDataChannel_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IPrimaryControlChannel interface
+ */
+#ifndef __IPrimaryControlChannel_INTERFACE_DEFINED__
+#define __IPrimaryControlChannel_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPrimaryControlChannel, 0x1a2e8b62, 0x9012, 0x4be6, 0x84,0xae, 0x32,0xbd,0x66,0xba,0x65,0x7a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("1a2e8b62-9012-4be6-84ae-32bd66ba657a")
+IPrimaryControlChannel : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Cancel(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetChannelProperties(
+        ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOriginalDestinationInformation(
+        ULONG ulSourceAddress,
+        USHORT usSourcePort,
+        ULONG *pulOriginalDestinationAddress,
+        USHORT *pusOriginalDestinationPort,
+        ULONG *pulRemapDestinationAddress,
+        USHORT *pulRemapDestinationPort,
+        IAdapterInfo **ppReceiveAdapter) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPrimaryControlChannel, 0x1a2e8b62, 0x9012, 0x4be6, 0x84,0xae, 0x32,0xbd,0x66,0xba,0x65,0x7a)
+#endif
+#else
+typedef struct IPrimaryControlChannelVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPrimaryControlChannel *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPrimaryControlChannel *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPrimaryControlChannel *This);
+
+    /*** IPrimaryControlChannel methods ***/
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        IPrimaryControlChannel *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelProperties)(
+        IPrimaryControlChannel *This,
+        ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties);
+
+    HRESULT (STDMETHODCALLTYPE *GetOriginalDestinationInformation)(
+        IPrimaryControlChannel *This,
+        ULONG ulSourceAddress,
+        USHORT usSourcePort,
+        ULONG *pulOriginalDestinationAddress,
+        USHORT *pusOriginalDestinationPort,
+        ULONG *pulRemapDestinationAddress,
+        USHORT *pulRemapDestinationPort,
+        IAdapterInfo **ppReceiveAdapter);
+
+    END_INTERFACE
+} IPrimaryControlChannelVtbl;
+
+interface IPrimaryControlChannel {
+    CONST_VTBL IPrimaryControlChannelVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPrimaryControlChannel_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPrimaryControlChannel_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPrimaryControlChannel_Release(This) (This)->lpVtbl->Release(This)
+/*** IPrimaryControlChannel methods ***/
+#define IPrimaryControlChannel_Cancel(This) (This)->lpVtbl->Cancel(This)
+#define IPrimaryControlChannel_GetChannelProperties(This,ppProperties) (This)->lpVtbl->GetChannelProperties(This,ppProperties)
+#define IPrimaryControlChannel_GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,pulRemapDestinationAddress,pulRemapDestinationPort,ppReceiveAdapter) (This)->lpVtbl->GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,pulRemapDestinationAddress,pulRemapDestinationPort,ppReceiveAdapter)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPrimaryControlChannel_QueryInterface(IPrimaryControlChannel* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPrimaryControlChannel_AddRef(IPrimaryControlChannel* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPrimaryControlChannel_Release(IPrimaryControlChannel* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPrimaryControlChannel methods ***/
+static FORCEINLINE HRESULT IPrimaryControlChannel_Cancel(IPrimaryControlChannel* This) {
+    return This->lpVtbl->Cancel(This);
+}
+static FORCEINLINE HRESULT IPrimaryControlChannel_GetChannelProperties(IPrimaryControlChannel* This,ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties) {
+    return This->lpVtbl->GetChannelProperties(This,ppProperties);
+}
+static FORCEINLINE HRESULT IPrimaryControlChannel_GetOriginalDestinationInformation(IPrimaryControlChannel* This,ULONG ulSourceAddress,USHORT usSourcePort,ULONG *pulOriginalDestinationAddress,USHORT *pusOriginalDestinationPort,ULONG *pulRemapDestinationAddress,USHORT *pulRemapDestinationPort,IAdapterInfo **ppReceiveAdapter) {
+    return This->lpVtbl->GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,pulRemapDestinationAddress,pulRemapDestinationPort,ppReceiveAdapter);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPrimaryControlChannel_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISecondaryControlChannel interface
+ */
+#ifndef __ISecondaryControlChannel_INTERFACE_DEFINED__
+#define __ISecondaryControlChannel_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISecondaryControlChannel, 0xa23f9d10, 0x714c, 0x41fe, 0x84,0x71, 0xff,0xb1,0x9b,0xc2,0x84,0x54);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a23f9d10-714c-41fe-8471-ffb19bc28454")
+ISecondaryControlChannel : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Cancel(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetChannelProperties(
+        ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOriginalDestinationInformation(
+        ULONG ulSourceAddress,
+        USHORT usSourcePort,
+        ULONG *pulOriginalDestinationAddress,
+        USHORT *pusOriginalDestinationPort,
+        IAdapterInfo **ppReceiveAdapter) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISecondaryControlChannel, 0xa23f9d10, 0x714c, 0x41fe, 0x84,0x71, 0xff,0xb1,0x9b,0xc2,0x84,0x54)
+#endif
+#else
+typedef struct ISecondaryControlChannelVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (ST
