@@ -767,4 +767,239 @@ typedef struct ISecondaryControlChannelVtbl {
     BEGIN_INTERFACE
 
     /*** IUnknown methods ***/
-    HRESULT (ST
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISecondaryControlChannel *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISecondaryControlChannel *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISecondaryControlChannel *This);
+
+    /*** ISecondaryControlChannel methods ***/
+    HRESULT (STDMETHODCALLTYPE *Cancel)(
+        ISecondaryControlChannel *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetChannelProperties)(
+        ISecondaryControlChannel *This,
+        ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties);
+
+    HRESULT (STDMETHODCALLTYPE *GetOriginalDestinationInformation)(
+        ISecondaryControlChannel *This,
+        ULONG ulSourceAddress,
+        USHORT usSourcePort,
+        ULONG *pulOriginalDestinationAddress,
+        USHORT *pusOriginalDestinationPort,
+        IAdapterInfo **ppReceiveAdapter);
+
+    END_INTERFACE
+} ISecondaryControlChannelVtbl;
+
+interface ISecondaryControlChannel {
+    CONST_VTBL ISecondaryControlChannelVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISecondaryControlChannel_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISecondaryControlChannel_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISecondaryControlChannel_Release(This) (This)->lpVtbl->Release(This)
+/*** ISecondaryControlChannel methods ***/
+#define ISecondaryControlChannel_Cancel(This) (This)->lpVtbl->Cancel(This)
+#define ISecondaryControlChannel_GetChannelProperties(This,ppProperties) (This)->lpVtbl->GetChannelProperties(This,ppProperties)
+#define ISecondaryControlChannel_GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter) (This)->lpVtbl->GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISecondaryControlChannel_QueryInterface(ISecondaryControlChannel* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISecondaryControlChannel_AddRef(ISecondaryControlChannel* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISecondaryControlChannel_Release(ISecondaryControlChannel* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ISecondaryControlChannel methods ***/
+static FORCEINLINE HRESULT ISecondaryControlChannel_Cancel(ISecondaryControlChannel* This) {
+    return This->lpVtbl->Cancel(This);
+}
+static FORCEINLINE HRESULT ISecondaryControlChannel_GetChannelProperties(ISecondaryControlChannel* This,ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties) {
+    return This->lpVtbl->GetChannelProperties(This,ppProperties);
+}
+static FORCEINLINE HRESULT ISecondaryControlChannel_GetOriginalDestinationInformation(ISecondaryControlChannel* This,ULONG ulSourceAddress,USHORT usSourcePort,ULONG *pulOriginalDestinationAddress,USHORT *pusOriginalDestinationPort,IAdapterInfo **ppReceiveAdapter) {
+    return This->lpVtbl->GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISecondaryControlChannel_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IEnumAdapterInfo interface
+ */
+#ifndef __IEnumAdapterInfo_INTERFACE_DEFINED__
+#define __IEnumAdapterInfo_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IEnumAdapterInfo, 0xa23f9d11, 0x714c, 0x41fe, 0x84,0x71, 0xff,0xb1,0x9b,0xc2,0x84,0x54);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a23f9d11-714c-41fe-8471-ffb19bc28454")
+IEnumAdapterInfo : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Next(
+        ULONG celt,
+        IAdapterInfo **rgAI,
+        ULONG *pCeltFetched) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Skip(
+        ULONG celt) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Reset(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Clone(
+        IEnumAdapterInfo **ppEnum) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IEnumAdapterInfo, 0xa23f9d11, 0x714c, 0x41fe, 0x84,0x71, 0xff,0xb1,0x9b,0xc2,0x84,0x54)
+#endif
+#else
+typedef struct IEnumAdapterInfoVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IEnumAdapterInfo *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IEnumAdapterInfo *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IEnumAdapterInfo *This);
+
+    /*** IEnumAdapterInfo methods ***/
+    HRESULT (STDMETHODCALLTYPE *Next)(
+        IEnumAdapterInfo *This,
+        ULONG celt,
+        IAdapterInfo **rgAI,
+        ULONG *pCeltFetched);
+
+    HRESULT (STDMETHODCALLTYPE *Skip)(
+        IEnumAdapterInfo *This,
+        ULONG celt);
+
+    HRESULT (STDMETHODCALLTYPE *Reset)(
+        IEnumAdapterInfo *This);
+
+    HRESULT (STDMETHODCALLTYPE *Clone)(
+        IEnumAdapterInfo *This,
+        IEnumAdapterInfo **ppEnum);
+
+    END_INTERFACE
+} IEnumAdapterInfoVtbl;
+
+interface IEnumAdapterInfo {
+    CONST_VTBL IEnumAdapterInfoVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IEnumAdapterInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IEnumAdapterInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IEnumAdapterInfo_Release(This) (This)->lpVtbl->Release(This)
+/*** IEnumAdapterInfo methods ***/
+#define IEnumAdapterInfo_Next(This,celt,rgAI,pCeltFetched) (This)->lpVtbl->Next(This,celt,rgAI,pCeltFetched)
+#define IEnumAdapterInfo_Skip(This,celt) (This)->lpVtbl->Skip(This,celt)
+#define IEnumAdapterInfo_Reset(This) (This)->lpVtbl->Reset(This)
+#define IEnumAdapterInfo_Clone(This,ppEnum) (This)->lpVtbl->Clone(This,ppEnum)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IEnumAdapterInfo_QueryInterface(IEnumAdapterInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IEnumAdapterInfo_AddRef(IEnumAdapterInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IEnumAdapterInfo_Release(IEnumAdapterInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IEnumAdapterInfo methods ***/
+static FORCEINLINE HRESULT IEnumAdapterInfo_Next(IEnumAdapterInfo* This,ULONG celt,IAdapterInfo **rgAI,ULONG *pCeltFetched) {
+    return This->lpVtbl->Next(This,celt,rgAI,pCeltFetched);
+}
+static FORCEINLINE HRESULT IEnumAdapterInfo_Skip(IEnumAdapterInfo* This,ULONG celt) {
+    return This->lpVtbl->Skip(This,celt);
+}
+static FORCEINLINE HRESULT IEnumAdapterInfo_Reset(IEnumAdapterInfo* This) {
+    return This->lpVtbl->Reset(This);
+}
+static FORCEINLINE HRESULT IEnumAdapterInfo_Clone(IEnumAdapterInfo* This,IEnumAdapterInfo **ppEnum) {
+    return This->lpVtbl->Clone(This,ppEnum);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IEnumAdapterInfo_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IAdapterNotificationSink interface
+ */
+#ifndef __IAdapterNotificationSink_INTERFACE_DEFINED__
+#define __IAdapterNotificationSink_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAdapterNotificationSink, 0x44ab2dc3, 0x23b2, 0x47de, 0x82,0x28, 0x2e,0x1c,0xce,0xeb,0x99,0x11);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("44ab2dc3-23b2-47de-8228-2e1cceeb9911")
+IAdapterNotificationSink : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE AdapterAdded(
+        IAdapterInfo *pAdapter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AdapterRemoved(
+        IAdapterInfo *pAdapter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AdapterModified(
+        IAdapterInfo *pAdapter) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AdapterUpdatePortMapping(
+        IAdapterInfo *pAdapter) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAdapterNotificationSink, 0x44ab2dc3, 0x23b2, 0x47de, 0x82,0x28, 0x2e,0x1c,0xce,0xeb,0x99,0x11)
+#endif
+#else
+typedef struct IAdapterNotificationSinkVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAdapterNotificationSink *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAdapterNotificationSink *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAdapterNotificationSink *This);
+
+    /*** IAdapterNotificationSink methods ***/
+    HRESULT (STDMETHODCALLTYPE *AdapterAdded)(
+        IAdapterNotificationSink *This,
+        IAdapterInfo *pAdapter);
+
+    HRESULT (STDMETHODCALLTYPE *AdapterRemoved)(
+        IAdapterNotif
