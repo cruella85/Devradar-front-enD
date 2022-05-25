@@ -1002,4 +1002,246 @@ typedef struct IAdapterNotificationSinkVtbl {
         IAdapterInfo *pAdapter);
 
     HRESULT (STDMETHODCALLTYPE *AdapterRemoved)(
-        IAdapterNotif
+        IAdapterNotificationSink *This,
+        IAdapterInfo *pAdapter);
+
+    HRESULT (STDMETHODCALLTYPE *AdapterModified)(
+        IAdapterNotificationSink *This,
+        IAdapterInfo *pAdapter);
+
+    HRESULT (STDMETHODCALLTYPE *AdapterUpdatePortMapping)(
+        IAdapterNotificationSink *This,
+        IAdapterInfo *pAdapter);
+
+    END_INTERFACE
+} IAdapterNotificationSinkVtbl;
+
+interface IAdapterNotificationSink {
+    CONST_VTBL IAdapterNotificationSinkVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAdapterNotificationSink_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAdapterNotificationSink_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAdapterNotificationSink_Release(This) (This)->lpVtbl->Release(This)
+/*** IAdapterNotificationSink methods ***/
+#define IAdapterNotificationSink_AdapterAdded(This,pAdapter) (This)->lpVtbl->AdapterAdded(This,pAdapter)
+#define IAdapterNotificationSink_AdapterRemoved(This,pAdapter) (This)->lpVtbl->AdapterRemoved(This,pAdapter)
+#define IAdapterNotificationSink_AdapterModified(This,pAdapter) (This)->lpVtbl->AdapterModified(This,pAdapter)
+#define IAdapterNotificationSink_AdapterUpdatePortMapping(This,pAdapter) (This)->lpVtbl->AdapterUpdatePortMapping(This,pAdapter)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAdapterNotificationSink_QueryInterface(IAdapterNotificationSink* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAdapterNotificationSink_AddRef(IAdapterNotificationSink* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAdapterNotificationSink_Release(IAdapterNotificationSink* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAdapterNotificationSink methods ***/
+static FORCEINLINE HRESULT IAdapterNotificationSink_AdapterAdded(IAdapterNotificationSink* This,IAdapterInfo *pAdapter) {
+    return This->lpVtbl->AdapterAdded(This,pAdapter);
+}
+static FORCEINLINE HRESULT IAdapterNotificationSink_AdapterRemoved(IAdapterNotificationSink* This,IAdapterInfo *pAdapter) {
+    return This->lpVtbl->AdapterRemoved(This,pAdapter);
+}
+static FORCEINLINE HRESULT IAdapterNotificationSink_AdapterModified(IAdapterNotificationSink* This,IAdapterInfo *pAdapter) {
+    return This->lpVtbl->AdapterModified(This,pAdapter);
+}
+static FORCEINLINE HRESULT IAdapterNotificationSink_AdapterUpdatePortMapping(IAdapterNotificationSink* This,IAdapterInfo *pAdapter) {
+    return This->lpVtbl->AdapterUpdatePortMapping(This,pAdapter);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAdapterNotificationSink_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IApplicationGatewayServices interface
+ */
+#ifndef __IApplicationGatewayServices_INTERFACE_DEFINED__
+#define __IApplicationGatewayServices_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IApplicationGatewayServices, 0x5134842a, 0xfdce, 0x485d, 0x93,0xcd, 0xde,0x16,0x40,0x64,0x3b,0xbe);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("5134842a-fdce-485d-93cd-de1640643bbe")
+IApplicationGatewayServices : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE CreatePrimaryControlChannel(
+        ULONG uAdapterIndex,
+        ALG_PROTOCOL eProtocol,
+        USHORT usPortToCapture,
+        ALG_CAPTURE eCaptureType,
+        WINBOOL fCaptureInbound,
+        ULONG ulListenAddress,
+        USHORT usListenPort,
+        IPrimaryControlChannel **ppIControlChannel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateSecondaryControlChannel(
+        ALG_PROTOCOL eProtocol,
+        ULONG ulPrivateAddress,
+        USHORT usPrivatePort,
+        ULONG ulPublicAddress,
+        USHORT usPublicPort,
+        ULONG ulRemoteAddress,
+        USHORT usRemotePort,
+        ULONG ulListenAddress,
+        USHORT usListenPort,
+        ALG_DIRECTION eDirection,
+        WINBOOL fPersistent,
+        ISecondaryControlChannel **ppControlChannel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetBestSourceAddressForDestinationAddress(
+        ULONG ulDstAddress,
+        WINBOOL fDemandDial,
+        ULONG *pulBestSrcAddress) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE PrepareProxyConnection(
+        ALG_PROTOCOL eProtocol,
+        ULONG ulSrcAddress,
+        USHORT usSrcPort,
+        ULONG ulDstAddress,
+        USHORT usDstPort,
+        WINBOOL fNoTimeout,
+        IPendingProxyConnection **ppPendingConnection) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE PrepareSourceModifiedProxyConnection(
+        ALG_PROTOCOL eProtocol,
+        ULONG ulSrcAddress,
+        USHORT usSrcPort,
+        ULONG ulDstAddress,
+        USHORT usDstPort,
+        ULONG ulNewSrcAddress,
+        USHORT usNewSourcePort,
+        IPendingProxyConnection **ppPendingConnection) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateDataChannel(
+        ALG_PROTOCOL eProtocol,
+        ULONG ulPrivateAddress,
+        USHORT usPrivatePort,
+        ULONG ulPublicAddress,
+        USHORT usPublicPort,
+        ULONG ulRemoteAddress,
+        USHORT usRemotePort,
+        ALG_DIRECTION eDirection,
+        ALG_NOTIFICATION eDesiredNotification,
+        WINBOOL fNoTimeout,
+        IDataChannel **ppDataChannel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreatePersistentDataChannel(
+        ALG_PROTOCOL eProtocol,
+        ULONG ulPrivateAddress,
+        USHORT usPrivatePort,
+        ULONG ulPublicAddress,
+        USHORT usPublicPort,
+        ULONG ulRemoteAddress,
+        USHORT usRemotePort,
+        ALG_DIRECTION eDirection,
+        IPersistentDataChannel **ppIPersistentDataChannel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ReservePort(
+        USHORT usPortCount,
+        USHORT *pusReservedPort) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ReleaseReservedPort(
+        USHORT usReservedPortBase,
+        USHORT usPortCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE EnumerateAdapters(
+        IEnumAdapterInfo **ppIEnumAdapterInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE StartAdapterNotifications(
+        IAdapterNotificationSink *pSink,
+        DWORD *pdwCookie) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE StopAdapterNotifications(
+        DWORD dwCookieOfSink) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE LookupAdapterPortMapping(
+        ULONG ulAdapterIndex,
+        UCHAR Protocol,
+        ULONG ulDestinationAddress,
+        USHORT usDestinationPort,
+        ULONG *pulRemapAddress,
+        USHORT *pusRemapPort) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IApplicationGatewayServices, 0x5134842a, 0xfdce, 0x485d, 0x93,0xcd, 0xde,0x16,0x40,0x64,0x3b,0xbe)
+#endif
+#else
+typedef struct IApplicationGatewayServicesVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IApplicationGatewayServices *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IApplicationGatewayServices *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IApplicationGatewayServices *This);
+
+    /*** IApplicationGatewayServices methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreatePrimaryControlChannel)(
+        IApplicationGatewayServices *This,
+        ULONG uAdapterIndex,
+        ALG_PROTOCOL eProtocol,
+        USHORT usPortToCapture,
+        ALG_CAPTURE eCaptureType,
+        WINBOOL fCaptureInbound,
+        ULONG ulListenAddress,
+        USHORT usListenPort,
+        IPrimaryControlChannel **ppIControlChannel);
+
+    HRESULT (STDMETHODCALLTYPE *CreateSecondaryControlChannel)(
+        IApplicationGatewayServices *This,
+        ALG_PROTOCOL eProtocol,
+        ULONG ulPrivateAddress,
+        USHORT usPrivatePort,
+        ULONG ulPublicAddress,
+        USHORT usPublicPort,
+        ULONG ulRemoteAddress,
+        USHORT usRemotePort,
+        ULONG ulListenAddress,
+        USHORT usListenPort,
+        ALG_DIRECTION eDirection,
+        WINBOOL fPersistent,
+        ISecondaryControlChannel **ppControlChannel);
+
+    HRESULT (STDMETHODCALLTYPE *GetBestSourceAddressForDestinationAddress)(
+        IApplicationGatewayServices *This,
+        ULONG ulDstAddress,
+        WINBOOL fDemandDial,
+        ULONG *pulBestSrcAddress);
+
+    HRESULT (STDMETHODCALLTYPE *PrepareProxyConnection)(
+        IApplicationGatewayServices *This,
+        ALG_PROTOCOL eProtocol,
+        ULONG ulSrcAddress,
+        USHORT usSrcPort,
+        ULONG ulDstAddress,
+        USHORT usDstPort,
+        WINBOOL fNoTimeout,
+        IPendingProxyConnection **ppPendingConnection);
+
+    HRESULT (STDMETHODCALLTYPE *PrepareSourceModifiedProxyConnection)(
+        IApplicationGatewayServices *This,
+        ALG_PROTOCOL eProtocol,
+        ULONG ulSrcAddress,
+        USHORT usSrcPort,
+        ULONG ulDstAddress,
+        USHORT usDstPort,
+        ULONG ulNewSrcAddress,
+        USHORT usNewSourcePort,
+        IPendingProxyConnection 
