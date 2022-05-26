@@ -1244,4 +1244,116 @@ typedef struct IApplicationGatewayServicesVtbl {
         USHORT usDstPort,
         ULONG ulNewSrcAddress,
         USHORT usNewSourcePort,
-        IPendingProxyConnection 
+        IPendingProxyConnection **ppPendingConnection);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDataChannel)(
+        IApplicationGatewayServices *This,
+        ALG_PROTOCOL eProtocol,
+        ULONG ulPrivateAddress,
+        USHORT usPrivatePort,
+        ULONG ulPublicAddress,
+        USHORT usPublicPort,
+        ULONG ulRemoteAddress,
+        USHORT usRemotePort,
+        ALG_DIRECTION eDirection,
+        ALG_NOTIFICATION eDesiredNotification,
+        WINBOOL fNoTimeout,
+        IDataChannel **ppDataChannel);
+
+    HRESULT (STDMETHODCALLTYPE *CreatePersistentDataChannel)(
+        IApplicationGatewayServices *This,
+        ALG_PROTOCOL eProtocol,
+        ULONG ulPrivateAddress,
+        USHORT usPrivatePort,
+        ULONG ulPublicAddress,
+        USHORT usPublicPort,
+        ULONG ulRemoteAddress,
+        USHORT usRemotePort,
+        ALG_DIRECTION eDirection,
+        IPersistentDataChannel **ppIPersistentDataChannel);
+
+    HRESULT (STDMETHODCALLTYPE *ReservePort)(
+        IApplicationGatewayServices *This,
+        USHORT usPortCount,
+        USHORT *pusReservedPort);
+
+    HRESULT (STDMETHODCALLTYPE *ReleaseReservedPort)(
+        IApplicationGatewayServices *This,
+        USHORT usReservedPortBase,
+        USHORT usPortCount);
+
+    HRESULT (STDMETHODCALLTYPE *EnumerateAdapters)(
+        IApplicationGatewayServices *This,
+        IEnumAdapterInfo **ppIEnumAdapterInfo);
+
+    HRESULT (STDMETHODCALLTYPE *StartAdapterNotifications)(
+        IApplicationGatewayServices *This,
+        IAdapterNotificationSink *pSink,
+        DWORD *pdwCookie);
+
+    HRESULT (STDMETHODCALLTYPE *StopAdapterNotifications)(
+        IApplicationGatewayServices *This,
+        DWORD dwCookieOfSink);
+
+    HRESULT (STDMETHODCALLTYPE *LookupAdapterPortMapping)(
+        IApplicationGatewayServices *This,
+        ULONG ulAdapterIndex,
+        UCHAR Protocol,
+        ULONG ulDestinationAddress,
+        USHORT usDestinationPort,
+        ULONG *pulRemapAddress,
+        USHORT *pusRemapPort);
+
+    END_INTERFACE
+} IApplicationGatewayServicesVtbl;
+
+interface IApplicationGatewayServices {
+    CONST_VTBL IApplicationGatewayServicesVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IApplicationGatewayServices_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IApplicationGatewayServices_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IApplicationGatewayServices_Release(This) (This)->lpVtbl->Release(This)
+/*** IApplicationGatewayServices methods ***/
+#define IApplicationGatewayServices_CreatePrimaryControlChannel(This,uAdapterIndex,eProtocol,usPortToCapture,eCaptureType,fCaptureInbound,ulListenAddress,usListenPort,ppIControlChannel) (This)->lpVtbl->CreatePrimaryControlChannel(This,uAdapterIndex,eProtocol,usPortToCapture,eCaptureType,fCaptureInbound,ulListenAddress,usListenPort,ppIControlChannel)
+#define IApplicationGatewayServices_CreateSecondaryControlChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,ulListenAddress,usListenPort,eDirection,fPersistent,ppControlChannel) (This)->lpVtbl->CreateSecondaryControlChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,ulListenAddress,usListenPort,eDirection,fPersistent,ppControlChannel)
+#define IApplicationGatewayServices_GetBestSourceAddressForDestinationAddress(This,ulDstAddress,fDemandDial,pulBestSrcAddress) (This)->lpVtbl->GetBestSourceAddressForDestinationAddress(This,ulDstAddress,fDemandDial,pulBestSrcAddress)
+#define IApplicationGatewayServices_PrepareProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,fNoTimeout,ppPendingConnection) (This)->lpVtbl->PrepareProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,fNoTimeout,ppPendingConnection)
+#define IApplicationGatewayServices_PrepareSourceModifiedProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,ulNewSrcAddress,usNewSourcePort,ppPendingConnection) (This)->lpVtbl->PrepareSourceModifiedProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,ulNewSrcAddress,usNewSourcePort,ppPendingConnection)
+#define IApplicationGatewayServices_CreateDataChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,eDirection,eDesiredNotification,fNoTimeout,ppDataChannel) (This)->lpVtbl->CreateDataChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,eDirection,eDesiredNotification,fNoTimeout,ppDataChannel)
+#define IApplicationGatewayServices_CreatePersistentDataChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,eDirection,ppIPersistentDataChannel) (This)->lpVtbl->CreatePersistentDataChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,eDirection,ppIPersistentDataChannel)
+#define IApplicationGatewayServices_ReservePort(This,usPortCount,pusReservedPort) (This)->lpVtbl->ReservePort(This,usPortCount,pusReservedPort)
+#define IApplicationGatewayServices_ReleaseReservedPort(This,usReservedPortBase,usPortCount) (This)->lpVtbl->ReleaseReservedPort(This,usReservedPortBase,usPortCount)
+#define IApplicationGatewayServices_EnumerateAdapters(This,ppIEnumAdapterInfo) (This)->lpVtbl->EnumerateAdapters(This,ppIEnumAdapterInfo)
+#define IApplicationGatewayServices_StartAdapterNotifications(This,pSink,pdwCookie) (This)->lpVtbl->StartAdapterNotifications(This,pSink,pdwCookie)
+#define IApplicationGatewayServices_StopAdapterNotifications(This,dwCookieOfSink) (This)->lpVtbl->StopAdapterNotifications(This,dwCookieOfSink)
+#define IApplicationGatewayServices_LookupAdapterPortMapping(This,ulAdapterIndex,Protocol,ulDestinationAddress,usDestinationPort,pulRemapAddress,pusRemapPort) (This)->lpVtbl->LookupAdapterPortMapping(This,ulAdapterIndex,Protocol,ulDestinationAddress,usDestinationPort,pulRemapAddress,pusRemapPort)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IApplicationGatewayServices_QueryInterface(IApplicationGatewayServices* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IApplicationGatewayServices_AddRef(IApplicationGatewayServices* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IApplicationGatewayServices_Release(IApplicationGatewayServices* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IApplicationGatewayServices methods ***/
+static FORCEINLINE HRESULT IApplicationGatewayServices_CreatePrimaryControlChannel(IApplicationGatewayServices* This,ULONG uAdapterIndex,ALG_PROTOCOL eProtocol,USHORT usPortToCapture,ALG_CAPTURE eCaptureType,WINBOOL fCaptureInbound,ULONG ulListenAddress,USHORT usListenPort,IPrimaryControlChannel **ppIControlChannel) {
+    return This->lpVtbl->CreatePrimaryControlChannel(This,uAdapterIndex,eProtocol,usPortToCapture,eCaptureType,fCaptureInbound,ulListenAddress,usListenPort,ppIControlChannel);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_CreateSecondaryControlChannel(IApplicationGatewayServices* This,ALG_PROTOCOL eProtocol,ULONG ulPrivateAddress,USHORT usPrivatePort,ULONG ulPublicAddress,USHORT usPublicPort,ULONG ulRemoteAddress,USHORT usRemotePort,ULONG ulListenAddress,USHORT usListenPort,ALG_DIRECTION eDirection,WINBOOL fPersistent,ISecondaryControlChannel **ppControlChannel) {
+    return This->lpVtbl->CreateSecondaryControlChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,ulListenAddress,usListenPort,eDirection,fPersistent,ppControlChannel);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_GetBestSourceAddressForDestinationAddress(IApplicationGatewayServices* This,ULONG ulDstAddress,WINBOOL fDemandDial,ULONG *pulBestSrcAddress) {
+    return This->lpVtbl->GetBestSourceAddressForDestinationAddress(This,ulDstAddress,fDemandDial,pulBestSrcAddress);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_PrepareProxyConnection(IApplicationGatewayServices* This,ALG_PROTOCOL eProtocol,ULONG ulSrcAddress,USHORT usSrcPort,ULONG ulDstAddress,USHORT usDstPort,WINBOOL fNoTimeout,IPendingProxyConnection **ppPendingConnection) {
+    return This->lpVtbl->PrepareProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,fNoTimeout,ppPendingConnection);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_PrepareSourceModifiedProxyConnection(IApplicationGatewayServices* This,ALG_PROTOCOL eProtocol,ULONG ulSrcAddress,USHORT usSrcPort,ULONG ulDstAddress,USHORT usDstPort,ULONG ulNewSrcAddress,USHORT usNewSourcePort,IPendingProxyConnection **ppPendingConnection) {
+    return This->lpVtbl->PrepareSourceModifiedProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,ulNewSrcAddress,usNewSourc
