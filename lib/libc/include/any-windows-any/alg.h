@@ -1356,4 +1356,212 @@ static FORCEINLINE HRESULT IApplicationGatewayServices_PrepareProxyConnection(IA
     return This->lpVtbl->PrepareProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,fNoTimeout,ppPendingConnection);
 }
 static FORCEINLINE HRESULT IApplicationGatewayServices_PrepareSourceModifiedProxyConnection(IApplicationGatewayServices* This,ALG_PROTOCOL eProtocol,ULONG ulSrcAddress,USHORT usSrcPort,ULONG ulDstAddress,USHORT usDstPort,ULONG ulNewSrcAddress,USHORT usNewSourcePort,IPendingProxyConnection **ppPendingConnection) {
-    return This->lpVtbl->PrepareSourceModifiedProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,ulNewSrcAddress,usNewSourc
+    return This->lpVtbl->PrepareSourceModifiedProxyConnection(This,eProtocol,ulSrcAddress,usSrcPort,ulDstAddress,usDstPort,ulNewSrcAddress,usNewSourcePort,ppPendingConnection);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_CreateDataChannel(IApplicationGatewayServices* This,ALG_PROTOCOL eProtocol,ULONG ulPrivateAddress,USHORT usPrivatePort,ULONG ulPublicAddress,USHORT usPublicPort,ULONG ulRemoteAddress,USHORT usRemotePort,ALG_DIRECTION eDirection,ALG_NOTIFICATION eDesiredNotification,WINBOOL fNoTimeout,IDataChannel **ppDataChannel) {
+    return This->lpVtbl->CreateDataChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,eDirection,eDesiredNotification,fNoTimeout,ppDataChannel);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_CreatePersistentDataChannel(IApplicationGatewayServices* This,ALG_PROTOCOL eProtocol,ULONG ulPrivateAddress,USHORT usPrivatePort,ULONG ulPublicAddress,USHORT usPublicPort,ULONG ulRemoteAddress,USHORT usRemotePort,ALG_DIRECTION eDirection,IPersistentDataChannel **ppIPersistentDataChannel) {
+    return This->lpVtbl->CreatePersistentDataChannel(This,eProtocol,ulPrivateAddress,usPrivatePort,ulPublicAddress,usPublicPort,ulRemoteAddress,usRemotePort,eDirection,ppIPersistentDataChannel);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_ReservePort(IApplicationGatewayServices* This,USHORT usPortCount,USHORT *pusReservedPort) {
+    return This->lpVtbl->ReservePort(This,usPortCount,pusReservedPort);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_ReleaseReservedPort(IApplicationGatewayServices* This,USHORT usReservedPortBase,USHORT usPortCount) {
+    return This->lpVtbl->ReleaseReservedPort(This,usReservedPortBase,usPortCount);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_EnumerateAdapters(IApplicationGatewayServices* This,IEnumAdapterInfo **ppIEnumAdapterInfo) {
+    return This->lpVtbl->EnumerateAdapters(This,ppIEnumAdapterInfo);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_StartAdapterNotifications(IApplicationGatewayServices* This,IAdapterNotificationSink *pSink,DWORD *pdwCookie) {
+    return This->lpVtbl->StartAdapterNotifications(This,pSink,pdwCookie);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_StopAdapterNotifications(IApplicationGatewayServices* This,DWORD dwCookieOfSink) {
+    return This->lpVtbl->StopAdapterNotifications(This,dwCookieOfSink);
+}
+static FORCEINLINE HRESULT IApplicationGatewayServices_LookupAdapterPortMapping(IApplicationGatewayServices* This,ULONG ulAdapterIndex,UCHAR Protocol,ULONG ulDestinationAddress,USHORT usDestinationPort,ULONG *pulRemapAddress,USHORT *pusRemapPort) {
+    return This->lpVtbl->LookupAdapterPortMapping(This,ulAdapterIndex,Protocol,ulDestinationAddress,usDestinationPort,pulRemapAddress,pusRemapPort);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IApplicationGatewayServices_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IApplicationGateway interface
+ */
+#ifndef __IApplicationGateway_INTERFACE_DEFINED__
+#define __IApplicationGateway_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IApplicationGateway, 0x5134842b, 0xfdce, 0x485d, 0x93,0xcd, 0xde,0x16,0x40,0x64,0x3b,0xbe);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("5134842b-fdce-485d-93cd-de1640643bbe")
+IApplicationGateway : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Initialize(
+        IApplicationGatewayServices *pAlgServices) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Stop(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IApplicationGateway, 0x5134842b, 0xfdce, 0x485d, 0x93,0xcd, 0xde,0x16,0x40,0x64,0x3b,0xbe)
+#endif
+#else
+typedef struct IApplicationGatewayVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IApplicationGateway *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IApplicationGateway *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IApplicationGateway *This);
+
+    /*** IApplicationGateway methods ***/
+    HRESULT (STDMETHODCALLTYPE *Initialize)(
+        IApplicationGateway *This,
+        IApplicationGatewayServices *pAlgServices);
+
+    HRESULT (STDMETHODCALLTYPE *Stop)(
+        IApplicationGateway *This);
+
+    END_INTERFACE
+} IApplicationGatewayVtbl;
+
+interface IApplicationGateway {
+    CONST_VTBL IApplicationGatewayVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IApplicationGateway_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IApplicationGateway_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IApplicationGateway_Release(This) (This)->lpVtbl->Release(This)
+/*** IApplicationGateway methods ***/
+#define IApplicationGateway_Initialize(This,pAlgServices) (This)->lpVtbl->Initialize(This,pAlgServices)
+#define IApplicationGateway_Stop(This) (This)->lpVtbl->Stop(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IApplicationGateway_QueryInterface(IApplicationGateway* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IApplicationGateway_AddRef(IApplicationGateway* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IApplicationGateway_Release(IApplicationGateway* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IApplicationGateway methods ***/
+static FORCEINLINE HRESULT IApplicationGateway_Initialize(IApplicationGateway* This,IApplicationGatewayServices *pAlgServices) {
+    return This->lpVtbl->Initialize(This,pAlgServices);
+}
+static FORCEINLINE HRESULT IApplicationGateway_Stop(IApplicationGateway* This) {
+    return This->lpVtbl->Stop(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IApplicationGateway_INTERFACE_DEFINED__ */
+
+#ifndef __ALGLib_LIBRARY_DEFINED__
+#define __ALGLib_LIBRARY_DEFINED__
+
+DEFINE_GUID(LIBID_ALGLib, 0xb6d1d098, 0xe235, 0x4b99, 0xba,0x98, 0x7c,0x62,0x4f,0xd8,0x75,0xdb);
+
+/*****************************************************************************
+ * ApplicationGatewayServices coclass
+ */
+
+DEFINE_GUID(CLSID_ApplicationGatewayServices, 0xf8ade1d3, 0x49df, 0x4b75, 0x90,0x05, 0xef,0x95,0x08,0xe6,0xa3,0x37);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("f8ade1d3-49df-4b75-9005-ef9508e6a337") ApplicationGatewayServices;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ApplicationGatewayServices, 0xf8ade1d3, 0x49df, 0x4b75, 0x90,0x05, 0xef,0x95,0x08,0xe6,0xa3,0x37)
+#endif
+#endif
+
+/*****************************************************************************
+ * PrimaryControlChannel coclass
+ */
+
+DEFINE_GUID(CLSID_PrimaryControlChannel, 0x3ceb5509, 0xc1cd, 0x432f, 0x9d,0x8f, 0x65,0xd1,0xe2,0x86,0xaa,0x80);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("3ceb5509-c1cd-432f-9d8f-65d1e286aa80") PrimaryControlChannel;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(PrimaryControlChannel, 0x3ceb5509, 0xc1cd, 0x432f, 0x9d,0x8f, 0x65,0xd1,0xe2,0x86,0xaa,0x80)
+#endif
+#endif
+
+/*****************************************************************************
+ * SecondaryControlChannel coclass
+ */
+
+DEFINE_GUID(CLSID_SecondaryControlChannel, 0x7b3181a0, 0xc92f, 0x4567, 0xb0,0xfa, 0xcd,0x9a,0x10,0xec,0xd7,0xd1);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("7b3181a0-c92f-4567-b0fa-cd9a10ecd7d1") SecondaryControlChannel;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(SecondaryControlChannel, 0x7b3181a0, 0xc92f, 0x4567, 0xb0,0xfa, 0xcd,0x9a,0x10,0xec,0xd7,0xd1)
+#endif
+#endif
+
+/*****************************************************************************
+ * AdapterInfo coclass
+ */
+
+DEFINE_GUID(CLSID_AdapterInfo, 0x6f9942c9, 0xc1b1, 0x4ab5, 0x93,0xda, 0x60,0x58,0x99,0x1d,0xc8,0xf3);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("6f9942c9-c1b1-4ab5-93da-6058991dc8f3") AdapterInfo;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(AdapterInfo, 0x6f9942c9, 0xc1b1, 0x4ab5, 0x93,0xda, 0x60,0x58,0x99,0x1d,0xc8,0xf3)
+#endif
+#endif
+
+/*****************************************************************************
+ * EnumAdapterInfo coclass
+ */
+
+DEFINE_GUID(CLSID_EnumAdapterInfo, 0x6f9942ca, 0xc1b1, 0x4ab5, 0x93,0xda, 0x60,0x58,0x99,0x1d,0xc8,0xf3);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("6f9942ca-c1b1-4ab5-93da-6058991dc8f3") EnumAdapterInfo;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(EnumAdapterInfo, 0x6f9942ca, 0xc1b1, 0x4ab5, 0x93,0xda, 0x60,0x58,0x99,0x1d,0xc8,0xf3)
+#endif
+#endif
+
+/*****************************************************************************
+ * PendingProxyConnection coclass
+ */
+
+DEFINE_GUID(CLSID_PendingProxyConnection, 0xd8a68e5e, 0x2b37, 0x426c, 0xa3,0x29, 0xc1,0x17,0xc1,0x4c,0x42,0x9e);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("d8a68e5e-2b37-426c-a329-c117c14c429e") PendingProxyConnection;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(PendingProxyConnection, 0xd8a68e5e, 0x2b37, 0x426c, 0xa3,0x29, 0xc1,0x17,0xc1,0x4c,0x42,0x9e)
+#endif
+#endif
+
+/*****************************************************************************
+ * DataChannel coclass
+ */
+
+DEFINE_GUID(CLSID_DataChannel, 0xbbb36f15, 0x408d, 0x4056, 0x8c,0x27, 0x92,0x08,0
