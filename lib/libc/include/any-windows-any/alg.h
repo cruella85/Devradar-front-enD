@@ -1564,4 +1564,37 @@ __CRT_UUID_DECL(PendingProxyConnection, 0xd8a68e5e, 0x2b37, 0x426c, 0xa3,0x29, 0
  * DataChannel coclass
  */
 
-DEFINE_GUID(CLSID_DataChannel, 0xbbb36f15, 0x408d, 0x4056, 0x8c,0x27, 0x92,0x08,0
+DEFINE_GUID(CLSID_DataChannel, 0xbbb36f15, 0x408d, 0x4056, 0x8c,0x27, 0x92,0x08,0x43,0xd4,0x0b,0xe5);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("bbb36f15-408d-4056-8c27-920843d40be5") DataChannel;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(DataChannel, 0xbbb36f15, 0x408d, 0x4056, 0x8c,0x27, 0x92,0x08,0x43,0xd4,0x0b,0xe5)
+#endif
+#endif
+
+/*****************************************************************************
+ * PersistentDataChannel coclass
+ */
+
+DEFINE_GUID(CLSID_PersistentDataChannel, 0xbc9b54ab, 0x7883, 0x4c13, 0x90,0x9f, 0x03,0x3d,0x03,0x26,0x79,0x90);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("bc9b54ab-7883-4c13-909f-033d03267990") PersistentDataChannel;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(PersistentDataChannel, 0xbc9b54ab, 0x7883, 0x4c13, 0x90,0x9f, 0x03,0x3d,0x03,0x26,0x79,0x90)
+#endif
+#endif
+
+#endif /* __ALGLib_LIBRARY_DEFINED__ */
+#endif
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __alg_h__ */
