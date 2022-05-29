@@ -13675,3 +13675,3524 @@ NTAPI
 ExAcquireResourceExclusiveLite(
   IN OUT PERESOURCE Resource,
   IN BOOLEAN Wait);
+
+NTKERNELAPI
+BOOLEAN
+NTAPI
+ExAcquireResourceSharedLite(
+  IN OUT PERESOURCE Resource,
+  IN BOOLEAN Wait);
+
+NTKERNELAPI
+BOOLEAN
+NTAPI
+ExAcquireSharedStarveExclusive(
+  IN OUT PERESOURCE Resource,
+  IN BOOLEAN Wait);
+
+NTKERNELAPI
+BOOLEAN
+NTAPI
+ExAcquireSharedWaitForExclusive(
+  IN OUT PERESOURCE Resource,
+  IN BOOLEAN Wait);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExAllocatePool(
+  IN POOL_TYPE PoolType,
+  IN SIZE_T NumberOfBytes);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExAllocatePoolWithQuota(
+  IN POOL_TYPE PoolType,
+  IN SIZE_T NumberOfBytes);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExAllocatePoolWithQuotaTag(
+  IN POOL_TYPE PoolType,
+  IN SIZE_T NumberOfBytes,
+  IN ULONG Tag);
+
+#ifndef POOL_TAGGING
+#define ExAllocatePoolWithQuotaTag(a,b,c) ExAllocatePoolWithQuota(a,b)
+#endif
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExAllocatePoolWithTag(
+  IN POOL_TYPE PoolType,
+  IN SIZE_T NumberOfBytes,
+  IN ULONG Tag);
+
+#ifndef POOL_TAGGING
+#define ExAllocatePoolWithTag(a,b,c) ExAllocatePool(a,b)
+#endif
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExAllocatePoolWithTagPriority(
+  IN POOL_TYPE PoolType,
+  IN SIZE_T NumberOfBytes,
+  IN ULONG Tag,
+  IN EX_POOL_PRIORITY Priority);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExConvertExclusiveToSharedLite(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ExCreateCallback(
+  OUT PCALLBACK_OBJECT *CallbackObject,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN BOOLEAN Create,
+  IN BOOLEAN AllowMultipleCallbacks);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExDeleteNPagedLookasideList(
+  IN OUT PNPAGED_LOOKASIDE_LIST Lookaside);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExDeletePagedLookasideList(
+  IN PPAGED_LOOKASIDE_LIST Lookaside);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ExDeleteResourceLite(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExFreePool(
+  IN PVOID P);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExFreePoolWithTag(
+  IN PVOID P,
+  IN ULONG Tag);
+
+NTKERNELAPI
+ULONG
+NTAPI
+ExGetExclusiveWaiterCount(
+  IN PERESOURCE Resource);
+
+NTKERNELAPI
+KPROCESSOR_MODE
+NTAPI
+ExGetPreviousMode(VOID);
+
+NTKERNELAPI
+ULONG
+NTAPI
+ExGetSharedWaiterCount(
+  IN PERESOURCE Resource);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExInitializeNPagedLookasideList(
+  IN PNPAGED_LOOKASIDE_LIST Lookaside,
+  IN PALLOCATE_FUNCTION Allocate OPTIONAL,
+  IN PFREE_FUNCTION Free OPTIONAL,
+  IN ULONG Flags,
+  IN SIZE_T Size,
+  IN ULONG Tag,
+  IN USHORT Depth);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExInitializePagedLookasideList(
+  IN PPAGED_LOOKASIDE_LIST Lookaside,
+  IN PALLOCATE_FUNCTION Allocate OPTIONAL,
+  IN PFREE_FUNCTION Free OPTIONAL,
+  IN ULONG Flags,
+  IN SIZE_T Size,
+  IN ULONG Tag,
+  IN USHORT Depth);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ExInitializeResourceLite(
+  OUT PERESOURCE Resource);
+
+NTKERNELAPI
+LARGE_INTEGER
+NTAPI
+ExInterlockedAddLargeInteger(
+  IN PLARGE_INTEGER Addend,
+  IN LARGE_INTEGER Increment,
+  IN PKSPIN_LOCK Lock);
+
+#if defined(_WIN64)
+#define ExInterlockedAddLargeStatistic(Addend, Increment) \
+    (VOID)InterlockedAdd64(&(Addend)->QuadPart, Increment)
+#else
+#define ExInterlockedAddLargeStatistic(Addend, Increment) \
+    _InterlockedAddLargeStatistic((PLONGLONG)&(Addend)->QuadPart, Increment)
+#endif
+
+NTKERNELAPI
+ULONG
+FASTCALL
+ExInterlockedAddUlong(
+  IN PULONG Addend,
+  IN ULONG Increment,
+  IN OUT PKSPIN_LOCK Lock);
+
+#if defined(_AMD64_) || defined(_IA64_)
+
+#define ExInterlockedCompareExchange64(Destination, Exchange, Comperand, Lock) \
+    InterlockedCompareExchange64(Destination, *(Exchange), *(Comperand))
+
+#elif defined(_X86_)
+
+NTKERNELAPI
+LONGLONG
+FASTCALL
+ExfInterlockedCompareExchange64(
+  IN OUT LONGLONG volatile *Destination,
+  IN PLONGLONG Exchange,
+  IN PLONGLONG Comperand);
+
+#define ExInterlockedCompareExchange64(Destination, Exchange, Comperand, Lock) \
+    ExfInterlockedCompareExchange64(Destination, Exchange, Comperand)
+
+#else
+
+NTKERNELAPI
+LONGLONG
+FASTCALL
+ExInterlockedCompareExchange64(
+  IN OUT LONGLONG volatile *Destination,
+  IN PLONGLONG Exchange,
+  IN PLONGLONG Comparand,
+  IN PKSPIN_LOCK Lock);
+
+#endif /* defined(_AMD64_) || defined(_IA64_) */
+
+NTKERNELAPI
+PLIST_ENTRY
+FASTCALL
+ExInterlockedInsertHeadList(
+  IN OUT PLIST_ENTRY ListHead,
+  IN OUT PLIST_ENTRY ListEntry,
+  IN OUT PKSPIN_LOCK Lock);
+
+NTKERNELAPI
+PLIST_ENTRY
+FASTCALL
+ExInterlockedInsertTailList(
+  IN OUT PLIST_ENTRY ListHead,
+  IN OUT PLIST_ENTRY ListEntry,
+  IN OUT PKSPIN_LOCK Lock);
+
+NTKERNELAPI
+PSINGLE_LIST_ENTRY
+FASTCALL
+ExInterlockedPopEntryList(
+  IN OUT PSINGLE_LIST_ENTRY ListHead,
+  IN OUT PKSPIN_LOCK Lock);
+
+NTKERNELAPI
+PSINGLE_LIST_ENTRY
+FASTCALL
+ExInterlockedPushEntryList(
+  IN OUT PSINGLE_LIST_ENTRY ListHead,
+  IN OUT PSINGLE_LIST_ENTRY ListEntry,
+  IN OUT PKSPIN_LOCK Lock);
+
+NTKERNELAPI
+PLIST_ENTRY
+FASTCALL
+ExInterlockedRemoveHeadList(
+  IN OUT PLIST_ENTRY ListHead,
+  IN OUT PKSPIN_LOCK Lock);
+
+NTKERNELAPI
+BOOLEAN
+NTAPI
+ExIsProcessorFeaturePresent(
+  IN ULONG ProcessorFeature);
+
+NTKERNELAPI
+BOOLEAN
+NTAPI
+ExIsResourceAcquiredExclusiveLite(
+  IN PERESOURCE Resource);
+
+NTKERNELAPI
+ULONG
+NTAPI
+ExIsResourceAcquiredSharedLite(
+  IN PERESOURCE Resource);
+
+#define ExIsResourceAcquiredLite ExIsResourceAcquiredSharedLite
+
+NTKERNELAPI
+VOID
+NTAPI
+ExLocalTimeToSystemTime(
+  IN PLARGE_INTEGER LocalTime,
+  OUT PLARGE_INTEGER SystemTime);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExNotifyCallback(
+  IN PCALLBACK_OBJECT CallbackObject,
+  IN PVOID Argument1 OPTIONAL,
+  IN PVOID Argument2 OPTIONAL);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExQueueWorkItem(
+  IN OUT PWORK_QUEUE_ITEM WorkItem,
+  IN WORK_QUEUE_TYPE QueueType);
+
+NTKERNELAPI
+DECLSPEC_NORETURN
+VOID
+NTAPI
+ExRaiseStatus(
+  IN NTSTATUS Status);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExRegisterCallback(
+  IN PCALLBACK_OBJECT CallbackObject,
+  IN PCALLBACK_FUNCTION CallbackFunction,
+  IN PVOID CallbackContext OPTIONAL);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ExReinitializeResourceLite(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExReleaseResourceForThreadLite(
+  IN OUT PERESOURCE Resource,
+  IN ERESOURCE_THREAD ResourceThreadId);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReleaseResourceLite(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExSetResourceOwnerPointer(
+  IN OUT PERESOURCE Resource,
+  IN PVOID OwnerPointer);
+
+NTKERNELAPI
+ULONG
+NTAPI
+ExSetTimerResolution(
+  IN ULONG DesiredTime,
+  IN BOOLEAN SetResolution);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExSystemTimeToLocalTime(
+  IN PLARGE_INTEGER SystemTime,
+  OUT PLARGE_INTEGER LocalTime);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExUnregisterCallback(
+  IN OUT PVOID CbRegistration);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
+
+#if (NTDDI_VERSION >= NTDDI_WINXP)
+
+NTKERNELAPI
+BOOLEAN
+FASTCALL
+ExAcquireRundownProtection(
+  IN OUT PEX_RUNDOWN_REF RunRef);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExInitializeRundownProtection(
+  OUT PEX_RUNDOWN_REF RunRef);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReInitializeRundownProtection(
+  IN OUT PEX_RUNDOWN_REF RunRef);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReleaseRundownProtection(
+  IN OUT PEX_RUNDOWN_REF RunRef);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExRundownCompleted(
+  OUT PEX_RUNDOWN_REF RunRef);
+
+NTKERNELAPI
+BOOLEAN
+NTAPI
+ExVerifySuite(
+  IN SUITE_TYPE SuiteType);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExWaitForRundownProtectionRelease(
+  IN OUT PEX_RUNDOWN_REF RunRef);
+#endif /* (NTDDI_VERSION >= NTDDI_WINXP) */
+
+#if (NTDDI_VERSION >= NTDDI_WINXPSP2)
+
+NTKERNELAPI
+BOOLEAN
+FASTCALL
+ExAcquireRundownProtectionEx(
+  IN OUT PEX_RUNDOWN_REF RunRef,
+  IN ULONG Count);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReleaseRundownProtectionEx(
+  IN OUT PEX_RUNDOWN_REF RunRef,
+  IN ULONG Count);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WINXPSP2) */
+
+#if (NTDDI_VERSION >= NTDDI_WS03SP1)
+
+NTKERNELAPI
+PEX_RUNDOWN_REF_CACHE_AWARE
+NTAPI
+ExAllocateCacheAwareRundownProtection(
+  IN POOL_TYPE PoolType,
+  IN ULONG PoolTag);
+
+NTKERNELAPI
+SIZE_T
+NTAPI
+ExSizeOfRundownProtectionCacheAware(VOID);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExEnterCriticalRegionAndAcquireResourceShared(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExEnterCriticalRegionAndAcquireResourceExclusive(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+PVOID
+NTAPI
+ExEnterCriticalRegionAndAcquireSharedWaitForExclusive(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReleaseResourceAndLeaveCriticalRegion(
+  IN OUT PERESOURCE Resource);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExInitializeRundownProtectionCacheAware(
+  OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware,
+  IN SIZE_T RunRefSize);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExFreeCacheAwareRundownProtection(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware);
+
+NTKERNELAPI
+BOOLEAN
+FASTCALL
+ExAcquireRundownProtectionCacheAware(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReleaseRundownProtectionCacheAware(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware);
+
+NTKERNELAPI
+BOOLEAN
+FASTCALL
+ExAcquireRundownProtectionCacheAwareEx(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware,
+  IN ULONG Count);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReleaseRundownProtectionCacheAwareEx(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRef,
+  IN ULONG Count);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExWaitForRundownProtectionReleaseCacheAware(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRef);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExReInitializeRundownProtectionCacheAware(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware);
+
+NTKERNELAPI
+VOID
+FASTCALL
+ExRundownCompletedCacheAware(
+  IN OUT PEX_RUNDOWN_REF_CACHE_AWARE RunRefCacheAware);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WS03SP1) */
+
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ExInitializeLookasideListEx(
+  OUT PLOOKASIDE_LIST_EX Lookaside,
+  IN PALLOCATE_FUNCTION_EX Allocate OPTIONAL,
+  IN PFREE_FUNCTION_EX Free OPTIONAL,
+  IN POOL_TYPE PoolType,
+  IN ULONG Flags,
+  IN SIZE_T Size,
+  IN ULONG Tag,
+  IN USHORT Depth);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExDeleteLookasideListEx(
+  IN OUT PLOOKASIDE_LIST_EX Lookaside);
+
+NTKERNELAPI
+VOID
+NTAPI
+ExFlushLookasideListEx(
+  IN OUT PLOOKASIDE_LIST_EX Lookaside);
+
+FORCEINLINE
+PVOID
+ExAllocateFromLookasideListEx(
+  IN OUT PLOOKASIDE_LIST_EX Lookaside)
+{
+  PVOID Entry;
+
+  Lookaside->L.TotalAllocates += 1;
+#ifdef NONAMELESSUNION
+  Entry = InterlockedPopEntrySList(&Lookaside->L.u.ListHead);
+  if (Entry == NULL) {
+    Lookaside->L.u2.AllocateMisses += 1;
+    Entry = (Lookaside->L.u4.AllocateEx)(Lookaside->L.Type,
+                                         Lookaside->L.Size,
+                                         Lookaside->L.Tag,
+                                         Lookaside);
+  }
+#else /* NONAMELESSUNION */
+  Entry = InterlockedPopEntrySList(&Lookaside->L.ListHead);
+  if (Entry == NULL) {
+    Lookaside->L.AllocateMisses += 1;
+    Entry = (Lookaside->L.AllocateEx)(Lookaside->L.Type,
+                                      Lookaside->L.Size,
+                                      Lookaside->L.Tag,
+                                      Lookaside);
+  }
+#endif /* NONAMELESSUNION */
+  return Entry;
+}
+
+FORCEINLINE
+VOID
+ExFreeToLookasideListEx(
+  IN OUT PLOOKASIDE_LIST_EX Lookaside,
+  IN PVOID Entry)
+{
+  Lookaside->L.TotalFrees += 1;
+  if (ExQueryDepthSList(&Lookaside->L.ListHead) >= Lookaside->L.Depth) {
+    Lookaside->L.FreeMisses += 1;
+    (Lookaside->L.FreeEx)(Entry, Lookaside);
+  } else {
+    InterlockedPushEntrySList(&Lookaside->L.ListHead, (PSLIST_ENTRY)Entry);
+  }
+  return;
+}
+
+#endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
+
+#if (NTDDI_VERSION >= NTDDI_WIN7)
+
+typedef struct _EXT_SET_PARAMETERS_V0
+{
+    ULONG Version;
+    ULONG Reserved;
+    LONGLONG NoWakeTolerance;
+} EXT_SET_PARAMETERS, *PEXT_SET_PARAMETERS, KT2_SET_PARAMETERS, *PKT2_SET_PARAMETERS;
+
+NTKERNELAPI
+VOID
+NTAPI
+ExSetResourceOwnerPointerEx(
+  IN OUT PERESOURCE Resource,
+  IN PVOID OwnerPointer,
+  IN ULONG Flags);
+
+#define FLAG_OWNER_POINTER_IS_THREAD 0x1
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN7) */
+
+#if NTDDI_VERSION >= NTDDI_WINBLUE
+
+#define EX_TIMER_HIGH_RESOLUTION 4
+#define EX_TIMER_NO_WAKE 8
+#define EX_TIMER_UNLIMITED_TOLERANCE ((LONGLONG)-1)
+#define EX_TIMER_NOTIFICATION (1ul << 31)
+
+NTKERNELAPI PEX_TIMER NTAPI ExAllocateTimer(PEXT_CALLBACK callback, void *context, ULONG attr);
+NTKERNELAPI BOOLEAN NTAPI ExCancelTimer(PEX_TIMER timer, PEXT_CANCEL_PARAMETERS params);
+NTKERNELAPI BOOLEAN NTAPI ExDeleteTimer(PEX_TIMER timer, BOOLEAN cancel, BOOLEAN wait, PEXT_DELETE_PARAMETERS params);
+NTKERNELAPI BOOLEAN NTAPI ExSetTimer(PEX_TIMER timer, LONGLONG due, LONGLONG period, EXT_SET_PARAMETERS *params);
+
+FORCEINLINE void KeInitializeTimer2SetParameters(KT2_SET_PARAMETERS *params)
+{
+    memset(params, 0, sizeof(*params));
+}
+
+FORCEINLINE void ExInitializeSetTimerParameters(EXT_SET_PARAMETERS *params)
+{
+    KeInitializeTimer2SetParameters(params);
+}
+
+#endif
+
+static __inline PVOID
+ExAllocateFromNPagedLookasideList(
+  IN OUT PNPAGED_LOOKASIDE_LIST Lookaside)
+{
+  PVOID Entry;
+
+  Lookaside->L.TotalAllocates++;
+#ifdef NONAMELESSUNION
+#if defined(_WIN2K_COMPAT_SLIST_USAGE) && defined(_X86_)
+  Entry = ExInterlockedPopEntrySList(&Lookaside->L.u.ListHead,
+                                     &Lookaside->Lock__ObsoleteButDoNotDelete);
+#else
+  Entry = InterlockedPopEntrySList(&Lookaside->L.u.ListHead);
+#endif
+  if (Entry == NULL) {
+    Lookaside->L.u2.AllocateMisses++;
+    Entry = (Lookaside->L.u4.Allocate)(Lookaside->L.Type,
+                                       Lookaside->L.Size,
+                                       Lookaside->L.Tag);
+  }
+#else /* NONAMELESSUNION */
+#if defined(_WIN2K_COMPAT_SLIST_USAGE) && defined(_X86_)
+  Entry = ExInterlockedPopEntrySList(&Lookaside->L.ListHead,
+                                     &Lookaside->Lock__ObsoleteButDoNotDelete);
+#else
+  Entry = InterlockedPopEntrySList(&Lookaside->L.ListHead);
+#endif
+  if (Entry == NULL) {
+    Lookaside->L.AllocateMisses++;
+    Entry = (Lookaside->L.Allocate)(Lookaside->L.Type,
+                                    Lookaside->L.Size,
+                                    Lookaside->L.Tag);
+  }
+#endif /* NONAMELESSUNION */
+  return Entry;
+}
+
+static __inline VOID
+ExFreeToNPagedLookasideList(
+  IN OUT PNPAGED_LOOKASIDE_LIST Lookaside,
+  IN PVOID Entry)
+{
+  Lookaside->L.TotalFrees++;
+#ifdef NONAMELESSUNION
+  if (ExQueryDepthSList(&Lookaside->L.u.ListHead) >= Lookaside->L.Depth) {
+    Lookaside->L.u3.FreeMisses++;
+    (Lookaside->L.u5.Free)(Entry);
+  } else {
+#if defined(_WIN2K_COMPAT_SLIST_USAGE) && defined(_X86_)
+      ExInterlockedPushEntrySList(&Lookaside->L.u.ListHead,
+                                  (PSLIST_ENTRY)Entry,
+                                  &Lookaside->Lock__ObsoleteButDoNotDelete);
+#else
+      InterlockedPushEntrySList(&Lookaside->L.u.ListHead, (PSLIST_ENTRY)Entry);
+#endif
+   }
+#else /* NONAMELESSUNION */
+  if (ExQueryDepthSList(&Lookaside->L.ListHead) >= Lookaside->L.Depth) {
+    Lookaside->L.FreeMisses++;
+    (Lookaside->L.Free)(Entry);
+  } else {
+#if defined(_WIN2K_COMPAT_SLIST_USAGE) && defined(_X86_)
+      ExInterlockedPushEntrySList(&Lookaside->L.ListHead,
+                                  (PSLIST_ENTRY)Entry,
+                                  &Lookaside->Lock__ObsoleteButDoNotDelete);
+#else
+      InterlockedPushEntrySList(&Lookaside->L.ListHead, (PSLIST_ENTRY)Entry);
+#endif
+   }
+#endif /* NONAMELESSUNION */
+}
+
+/******************************************************************************
+ *                          Object Manager Functions                          *
+ ******************************************************************************/
+
+#if (NTDDI_VERSION >= NTDDI_WIN2K)
+NTKERNELAPI
+LONG_PTR
+FASTCALL
+ObfDereferenceObject(
+  IN PVOID Object);
+#define ObDereferenceObject ObfDereferenceObject
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ObGetObjectSecurity(
+  IN PVOID Object,
+  OUT PSECURITY_DESCRIPTOR *SecurityDescriptor,
+  OUT PBOOLEAN MemoryAllocated);
+
+NTKERNELAPI
+LONG_PTR
+FASTCALL
+ObfReferenceObject(
+  IN PVOID Object);
+#define ObReferenceObject ObfReferenceObject
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ObReferenceObjectByHandle(
+  IN HANDLE Handle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_TYPE ObjectType OPTIONAL,
+  IN KPROCESSOR_MODE AccessMode,
+  OUT PVOID *Object,
+  OUT POBJECT_HANDLE_INFORMATION HandleInformation OPTIONAL);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ObReferenceObjectByPointer(
+  IN PVOID Object,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_TYPE ObjectType OPTIONAL,
+  IN KPROCESSOR_MODE AccessMode);
+
+NTKERNELAPI
+VOID
+NTAPI
+ObReleaseObjectSecurity(
+  IN PSECURITY_DESCRIPTOR SecurityDescriptor,
+  IN BOOLEAN MemoryAllocated);
+#endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
+
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+NTKERNELAPI
+VOID
+NTAPI
+ObDereferenceObjectDeferDelete(
+  IN PVOID Object);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_VISTASP1)
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ObRegisterCallbacks(
+  IN POB_CALLBACK_REGISTRATION CallbackRegistration,
+  OUT PVOID *RegistrationHandle);
+
+NTKERNELAPI
+VOID
+NTAPI
+ObUnRegisterCallbacks(
+  IN PVOID RegistrationHandle);
+
+NTKERNELAPI
+USHORT
+NTAPI
+ObGetFilterVersion(VOID);
+
+#endif /* (NTDDI_VERSION >= NTDDI_VISTASP1) */
+
+#if (NTDDI_VERSION >= NTDDI_WIN7)
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ObReferenceObjectByHandleWithTag(
+  IN HANDLE Handle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_TYPE ObjectType OPTIONAL,
+  IN KPROCESSOR_MODE AccessMode,
+  IN ULONG Tag,
+  OUT PVOID *Object,
+  OUT POBJECT_HANDLE_INFORMATION HandleInformation OPTIONAL);
+
+NTKERNELAPI
+LONG_PTR
+FASTCALL
+ObfReferenceObjectWithTag(
+  IN PVOID Object,
+  IN ULONG Tag);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+ObReferenceObjectByPointerWithTag(
+  IN PVOID Object,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_TYPE ObjectType OPTIONAL,
+  IN KPROCESSOR_MODE AccessMode,
+  IN ULONG Tag);
+
+NTKERNELAPI
+LONG_PTR
+FASTCALL
+ObfDereferenceObjectWithTag(
+  IN PVOID Object,
+  IN ULONG Tag);
+
+NTKERNELAPI
+VOID
+NTAPI
+ObDereferenceObjectDeferDeleteWithTag(
+  IN PVOID Object,
+  IN ULONG Tag);
+
+#define ObDereferenceObject ObfDereferenceObject
+#define ObReferenceObject ObfReferenceObject
+#define ObDereferenceObjectWithTag ObfDereferenceObjectWithTag
+#define ObReferenceObjectWithTag ObfReferenceObjectWithTag
+#endif /* (NTDDI_VERSION >= NTDDI_WIN7) */
+
+/******************************************************************************
+ *                          Process Manager Functions                         *
+ ******************************************************************************/
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+PsWrapApcWow64Thread(
+  IN OUT PVOID *ApcContext,
+  IN OUT PVOID *ApcRoutine);
+
+/*
+ * PEPROCESS
+ * PsGetCurrentProcess(VOID)
+ */
+#define PsGetCurrentProcess IoGetCurrentProcess
+
+#if !defined(_PSGETCURRENTTHREAD_)
+#define _PSGETCURRENTTHREAD_
+FORCEINLINE
+PETHREAD
+NTAPI
+PsGetCurrentThread(VOID)
+{
+  return (PETHREAD)KeGetCurrentThread();
+}
+#endif /* !_PSGETCURRENTTHREAD_ */
+
+
+#if (NTDDI_VERSION >= NTDDI_WIN2K)
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+PsCreateSystemThread(
+  OUT PHANDLE ThreadHandle,
+  IN ULONG DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN HANDLE ProcessHandle OPTIONAL,
+  OUT PCLIENT_ID ClientId OPTIONAL,
+  IN PKSTART_ROUTINE StartRoutine,
+  IN PVOID StartContext OPTIONAL);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+PsTerminateSystemThread(
+  IN NTSTATUS ExitStatus);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
+
+
+/******************************************************************************
+ *                          WMI Library Support Functions                     *
+ ******************************************************************************/
+
+#ifdef RUN_WPP
+#if (NTDDI_VERSION >= NTDDI_WINXP)
+NTKERNELAPI
+NTSTATUS
+__cdecl
+WmiTraceMessage(
+  IN TRACEHANDLE LoggerHandle,
+  IN ULONG MessageFlags,
+  IN LPGUID MessageGuid,
+  IN USHORT MessageNumber,
+  IN ...);
+#endif
+#endif /* RUN_WPP */
+
+#if (NTDDI_VERSION >= NTDDI_WINXP)
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+WmiQueryTraceInformation(
+  IN TRACE_INFORMATION_CLASS TraceInformationClass,
+  OUT PVOID TraceInformation,
+  IN ULONG TraceInformationLength,
+  OUT PULONG RequiredLength OPTIONAL,
+  IN PVOID Buffer OPTIONAL);
+
+#if 0
+/* FIXME: Get va_list from where? */
+NTKERNELAPI
+NTSTATUS
+NTAPI
+WmiTraceMessageVa(
+  IN TRACEHANDLE LoggerHandle,
+  IN ULONG MessageFlags,
+  IN LPGUID MessageGuid,
+  IN USHORT MessageNumber,
+  IN va_list MessageArgList);
+#endif
+
+#endif /* (NTDDI_VERSION >= NTDDI_WINXP) */
+
+#ifndef TRACE_INFORMATION_CLASS_DEFINE
+
+#if (NTDDI_VERSION >= NTDDI_WINXP)
+NTKERNELAPI
+NTSTATUS
+NTAPI
+WmiQueryTraceInformation(
+  IN TRACE_INFORMATION_CLASS TraceInformationClass,
+  OUT PVOID TraceInformation,
+  IN ULONG TraceInformationLength,
+  OUT PULONG RequiredLength OPTIONAL,
+  IN PVOID Buffer OPTIONAL);
+#endif
+
+#define TRACE_INFORMATION_CLASS_DEFINE
+
+#endif /* TRACE_INFOPRMATION_CLASS_DEFINE */
+
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwRegister(
+  IN LPCGUID ProviderId,
+  IN PETWENABLECALLBACK EnableCallback OPTIONAL,
+  IN PVOID CallbackContext OPTIONAL,
+  OUT PREGHANDLE RegHandle);
+
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwUnregister(
+  IN REGHANDLE RegHandle);
+
+BOOLEAN
+NTKERNELAPI
+NTAPI
+EtwEventEnabled(
+  IN REGHANDLE RegHandle,
+  IN PCEVENT_DESCRIPTOR EventDescriptor);
+
+BOOLEAN
+NTKERNELAPI
+NTAPI
+EtwProviderEnabled(
+  IN REGHANDLE RegHandle,
+  IN UCHAR Level,
+  IN ULONGLONG Keyword);
+
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwActivityIdControl(
+  IN ULONG ControlCode,
+  IN OUT LPGUID ActivityId);
+
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwWrite(
+  IN REGHANDLE RegHandle,
+  IN PCEVENT_DESCRIPTOR EventDescriptor,
+  IN LPCGUID ActivityId OPTIONAL,
+  IN ULONG UserDataCount,
+  IN PEVENT_DATA_DESCRIPTOR  UserData OPTIONAL);
+
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwWriteTransfer(
+  IN REGHANDLE RegHandle,
+  IN PCEVENT_DESCRIPTOR EventDescriptor,
+  IN LPCGUID ActivityId OPTIONAL,
+  IN LPCGUID RelatedActivityId OPTIONAL,
+  IN ULONG UserDataCount,
+  IN PEVENT_DATA_DESCRIPTOR UserData OPTIONAL);
+
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwWriteString(
+  IN REGHANDLE RegHandle,
+  IN UCHAR Level,
+  IN ULONGLONG Keyword,
+  IN LPCGUID ActivityId OPTIONAL,
+  IN PCWSTR String);
+
+#endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
+
+#if (NTDDI_VERSION >= NTDDI_WIN7)
+NTSTATUS
+NTKERNELAPI
+NTAPI
+EtwWriteEx(
+  IN REGHANDLE RegHandle,
+  IN PCEVENT_DESCRIPTOR EventDescriptor,
+  IN ULONG64 Filter,
+  IN ULONG Flags,
+  IN LPCGUID ActivityId OPTIONAL,
+  IN LPCGUID RelatedActivityId OPTIONAL,
+  IN ULONG UserDataCount,
+  IN PEVENT_DATA_DESCRIPTOR UserData OPTIONAL);
+#endif
+
+
+
+/******************************************************************************
+ *                          Kernel Debugger Functions                         *
+ ******************************************************************************/
+
+#ifndef _DBGNT_
+
+ULONG
+__cdecl
+DbgPrint(
+  IN PCSTR Format,
+  IN ...);
+
+#if (NTDDI_VERSION >= NTDDI_WIN2K)
+NTSYSAPI
+ULONG
+__cdecl
+DbgPrintReturnControlC(
+  IN PCCH Format,
+  IN ...);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WINXP)
+
+NTSYSAPI
+ULONG
+__cdecl
+DbgPrintEx(
+  IN ULONG ComponentId,
+  IN ULONG Level,
+  IN PCSTR Format,
+  IN ...);
+
+#ifdef _VA_LIST_DEFINED
+
+NTSYSAPI
+ULONG
+NTAPI
+vDbgPrintEx(
+  IN ULONG ComponentId,
+  IN ULONG Level,
+  IN PCCH Format,
+  IN va_list ap);
+
+NTSYSAPI
+ULONG
+NTAPI
+vDbgPrintExWithPrefix(
+  IN PCCH Prefix,
+  IN ULONG ComponentId,
+  IN ULONG Level,
+  IN PCCH Format,
+  IN va_list ap);
+
+#endif /* _VA_LIST_DEFINED */
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+DbgQueryDebugFilterState(
+  IN ULONG ComponentId,
+  IN ULONG Level);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+DbgSetDebugFilterState(
+  IN ULONG ComponentId,
+  IN ULONG Level,
+  IN BOOLEAN State);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WINXP) */
+
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+
+typedef VOID
+(*PDEBUG_PRINT_CALLBACK)(
+  IN PSTRING Output,
+  IN ULONG ComponentId,
+  IN ULONG Level);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+DbgSetDebugPrintCallback(
+  IN PDEBUG_PRINT_CALLBACK DebugPrintCallback,
+  IN BOOLEAN Enable);
+
+#endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
+
+#endif /* _DBGNT_ */
+
+#if DBG
+
+#define KdPrint(_x_) DbgPrint _x_
+#define KdPrintEx(_x_) DbgPrintEx _x_
+#define vKdPrintEx(_x_) vDbgPrintEx _x_
+#define vKdPrintExWithPrefix(_x_) vDbgPrintExWithPrefix _x_
+#define KdBreakPoint() DbgBreakPoint()
+#define KdBreakPointWithStatus(s) DbgBreakPointWithStatus(s)
+
+#else /* !DBG */
+
+#define KdPrint(_x_)
+#define KdPrintEx(_x_)
+#define vKdPrintEx(_x_)
+#define vKdPrintExWithPrefix(_x_)
+#define KdBreakPoint()
+#define KdBreakPointWithStatus(s)
+
+#endif /* !DBG */
+
+#if defined(__GNUC__)
+
+extern NTKERNELAPI BOOLEAN KdDebuggerNotPresent;
+extern NTKERNELAPI BOOLEAN KdDebuggerEnabled;
+#define KD_DEBUGGER_ENABLED KdDebuggerEnabled
+#define KD_DEBUGGER_NOT_PRESENT KdDebuggerNotPresent
+
+#elif defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || defined(_WDMDDK_) || defined(_NTOSP_)
+
+extern NTKERNELAPI PBOOLEAN KdDebuggerNotPresent;
+extern NTKERNELAPI PBOOLEAN KdDebuggerEnabled;
+#define KD_DEBUGGER_ENABLED *KdDebuggerEnabled
+#define KD_DEBUGGER_NOT_PRESENT *KdDebuggerNotPresent
+
+#else
+
+extern BOOLEAN KdDebuggerNotPresent;
+extern BOOLEAN KdDebuggerEnabled;
+#define KD_DEBUGGER_ENABLED KdDebuggerEnabled
+#define KD_DEBUGGER_NOT_PRESENT KdDebuggerNotPresent
+
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN2K)
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+KdDisableDebugger(VOID);
+
+NTKERNELAPI
+NTSTATUS
+NTAPI
+KdEnableDebugger(VOID);
+
+#if (_MSC_FULL_VER >= 150030729) && !defined(IMPORT_NATIVE_DBG_BREAK)
+#define DbgBreakPoint __debugbreak
+#else
+VOID
+NTAPI
+DbgBreakPoint(VOID);
+#endif
+
+NTSYSAPI
+VOID
+NTAPI
+DbgBreakPointWithStatus(
+  IN ULONG Status);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
+
+#if (NTDDI_VERSION >= NTDDI_WS03)
+NTKERNELAPI
+BOOLEAN
+NTAPI
+KdRefreshDebuggerNotPresent(VOID);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WS03SP1)
+NTKERNELAPI
+NTSTATUS
+NTAPI
+KdChangeOption(
+  IN KD_OPTION Option,
+  IN ULONG InBufferBytes OPTIONAL,
+  IN PVOID InBuffer,
+  IN ULONG OutBufferBytes OPTIONAL,
+  OUT PVOID OutBuffer,
+  OUT PULONG OutBufferNeeded OPTIONAL);
+#endif
+/* Hardware Abstraction Layer Functions */
+
+#if (NTDDI_VERSION >= NTDDI_WIN2K)
+
+#if defined(USE_DMA_MACROS) && !defined(_NTHAL_) && (defined(_NTDDK_) || defined(_NTDRIVER_)) || defined(_WDM_INCLUDED_)
+
+FORCEINLINE
+PVOID
+NTAPI
+HalAllocateCommonBuffer(
+  IN PDMA_ADAPTER DmaAdapter,
+  IN ULONG Length,
+  OUT PPHYSICAL_ADDRESS LogicalAddress,
+  IN BOOLEAN CacheEnabled)
+{
+  PALLOCATE_COMMON_BUFFER allocateCommonBuffer;
+  PVOID commonBuffer;
+
+  allocateCommonBuffer = *(DmaAdapter)->DmaOperations->AllocateCommonBuffer;
+  ASSERT( allocateCommonBuffer != NULL );
+  commonBuffer = allocateCommonBuffer( DmaAdapter, Length, LogicalAddress, CacheEnabled );
+  return commonBuffer;
+}
+
+FORCEINLINE
+VOID
+NTAPI
+HalFreeCommonBuffer(
+  IN PDMA_ADAPTER DmaAdapter,
+  IN ULONG Length,
+  IN PHYSICAL_ADDRESS LogicalAddress,
+  IN PVOID VirtualAddress,
+  IN BOOLEAN CacheEnabled)
+{
+  PFREE_COMMON_BUFFER freeCommonBuffer;
+
+  freeCommonBuffer = *(DmaAdapter)->DmaOperations->FreeCommonBuffer;
+  ASSERT( freeCommonBuffer != NULL );
+  freeCommonBuffer( DmaAdapter, Length, LogicalAddress, VirtualAddress, CacheEnabled );
+}
+
+FORCEINLINE
+ULONG
+NTAPI
+HalReadDmaCounter(
+  IN PDMA_ADAPTER DmaAdapter)
+{
+  PREAD_DMA_COUNTER readDmaCounter;
+  ULONG counter;
+
+  readDmaCounter = *(DmaAdapter)->DmaOperations->ReadDmaCounter;
+  ASSERT( readDmaCounter != NULL );
+  counter = readDmaCounter( DmaAdapter );
+  return counter;
+}
+
+FORCEINLINE
+ULONG
+HalGetDmaAlignment(
+  IN PDMA_ADAPTER DmaAdapter)
+{
+  PGET_DMA_ALIGNMENT getDmaAlignment;
+  ULONG alignment;
+
+  getDmaAlignment = *(DmaAdapter)->DmaOperations->GetDmaAlignment;
+  ASSERT( getDmaAlignment != NULL );
+  alignment = getDmaAlignment( DmaAdapter );
+  return alignment;
+}
+
+#endif /* USE_DMA_MACROS ... */
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
+
+#ifndef _NTTMAPI_
+#define _NTTMAPI_
+
+#include <ktmtypes.h>
+
+#define TRANSACTIONMANAGER_QUERY_INFORMATION     (0x0001)
+#define TRANSACTIONMANAGER_SET_INFORMATION       (0x0002)
+#define TRANSACTIONMANAGER_RECOVER               (0x0004)
+#define TRANSACTIONMANAGER_RENAME                (0x0008)
+#define TRANSACTIONMANAGER_CREATE_RM             (0x0010)
+#define TRANSACTIONMANAGER_BIND_TRANSACTION      (0x0020)
+
+#define TRANSACTIONMANAGER_GENERIC_READ            (STANDARD_RIGHTS_READ            |\
+                                                    TRANSACTIONMANAGER_QUERY_INFORMATION)
+
+#define TRANSACTIONMANAGER_GENERIC_WRITE           (STANDARD_RIGHTS_WRITE           |\
+                                                    TRANSACTIONMANAGER_SET_INFORMATION     |\
+                                                    TRANSACTIONMANAGER_RECOVER             |\
+                                                    TRANSACTIONMANAGER_RENAME              |\
+                                                    TRANSACTIONMANAGER_CREATE_RM)
+
+#define TRANSACTIONMANAGER_GENERIC_EXECUTE         (STANDARD_RIGHTS_EXECUTE)
+
+#define TRANSACTIONMANAGER_ALL_ACCESS              (STANDARD_RIGHTS_REQUIRED        |\
+                                                    TRANSACTIONMANAGER_GENERIC_READ        |\
+                                                    TRANSACTIONMANAGER_GENERIC_WRITE       |\
+                                                    TRANSACTIONMANAGER_GENERIC_EXECUTE     |\
+                                                    TRANSACTIONMANAGER_BIND_TRANSACTION)
+
+#define TRANSACTION_QUERY_INFORMATION     (0x0001)
+#define TRANSACTION_SET_INFORMATION       (0x0002)
+#define TRANSACTION_ENLIST                (0x0004)
+#define TRANSACTION_COMMIT                (0x0008)
+#define TRANSACTION_ROLLBACK              (0x0010)
+#define TRANSACTION_PROPAGATE             (0x0020)
+#define TRANSACTION_RIGHT_RESERVED1       (0x0040)
+
+#define TRANSACTION_GENERIC_READ            (STANDARD_RIGHTS_READ            |\
+                                             TRANSACTION_QUERY_INFORMATION   |\
+                                             SYNCHRONIZE)
+
+#define TRANSACTION_GENERIC_WRITE           (STANDARD_RIGHTS_WRITE           |\
+                                             TRANSACTION_SET_INFORMATION     |\
+                                             TRANSACTION_COMMIT              |\
+                                             TRANSACTION_ENLIST              |\
+                                             TRANSACTION_ROLLBACK            |\
+                                             TRANSACTION_PROPAGATE           |\
+                                             SYNCHRONIZE)
+
+#define TRANSACTION_GENERIC_EXECUTE         (STANDARD_RIGHTS_EXECUTE         |\
+                                             TRANSACTION_COMMIT              |\
+                                             TRANSACTION_ROLLBACK            |\
+                                             SYNCHRONIZE)
+
+#define TRANSACTION_ALL_ACCESS              (STANDARD_RIGHTS_REQUIRED        |\
+                                             TRANSACTION_GENERIC_READ        |\
+                                             TRANSACTION_GENERIC_WRITE       |\
+                                             TRANSACTION_GENERIC_EXECUTE)
+
+#define TRANSACTION_RESOURCE_MANAGER_RIGHTS (TRANSACTION_GENERIC_READ        |\
+                                             STANDARD_RIGHTS_WRITE           |\
+                                             TRANSACTION_SET_INFORMATION     |\
+                                             TRANSACTION_ENLIST              |\
+                                             TRANSACTION_ROLLBACK            |\
+                                             TRANSACTION_PROPAGATE           |\
+                                             SYNCHRONIZE)
+
+#define RESOURCEMANAGER_QUERY_INFORMATION        (0x0001)
+#define RESOURCEMANAGER_SET_INFORMATION          (0x0002)
+#define RESOURCEMANAGER_RECOVER                  (0x0004)
+#define RESOURCEMANAGER_ENLIST                   (0x0008)
+#define RESOURCEMANAGER_GET_NOTIFICATION         (0x0010)
+#define RESOURCEMANAGER_REGISTER_PROTOCOL        (0x0020)
+#define RESOURCEMANAGER_COMPLETE_PROPAGATION     (0x0040)
+
+#define RESOURCEMANAGER_GENERIC_READ        (STANDARD_RIGHTS_READ                 |\
+                                             RESOURCEMANAGER_QUERY_INFORMATION    |\
+                                             SYNCHRONIZE)
+
+#define RESOURCEMANAGER_GENERIC_WRITE       (STANDARD_RIGHTS_WRITE                |\
+                                             RESOURCEMANAGER_SET_INFORMATION      |\
+                                             RESOURCEMANAGER_RECOVER              |\
+                                             RESOURCEMANAGER_ENLIST               |\
+                                             RESOURCEMANAGER_GET_NOTIFICATION     |\
+                                             RESOURCEMANAGER_REGISTER_PROTOCOL    |\
+                                             RESOURCEMANAGER_COMPLETE_PROPAGATION |\
+                                             SYNCHRONIZE)
+
+#define RESOURCEMANAGER_GENERIC_EXECUTE     (STANDARD_RIGHTS_EXECUTE              |\
+                                             RESOURCEMANAGER_RECOVER              |\
+                                             RESOURCEMANAGER_ENLIST               |\
+                                             RESOURCEMANAGER_GET_NOTIFICATION     |\
+                                             RESOURCEMANAGER_COMPLETE_PROPAGATION |\
+                                             SYNCHRONIZE)
+
+#define RESOURCEMANAGER_ALL_ACCESS          (STANDARD_RIGHTS_REQUIRED             |\
+                                             RESOURCEMANAGER_GENERIC_READ         |\
+                                             RESOURCEMANAGER_GENERIC_WRITE        |\
+                                             RESOURCEMANAGER_GENERIC_EXECUTE)
+
+#define ENLISTMENT_QUERY_INFORMATION             (0x0001)
+#define ENLISTMENT_SET_INFORMATION               (0x0002)
+#define ENLISTMENT_RECOVER                       (0x0004)
+#define ENLISTMENT_SUBORDINATE_RIGHTS            (0x0008)
+#define ENLISTMENT_SUPERIOR_RIGHTS               (0x0010)
+
+#define ENLISTMENT_GENERIC_READ        (STANDARD_RIGHTS_READ           |\
+                                        ENLISTMENT_QUERY_INFORMATION)
+
+#define ENLISTMENT_GENERIC_WRITE       (STANDARD_RIGHTS_WRITE          |\
+                                        ENLISTMENT_SET_INFORMATION     |\
+                                        ENLISTMENT_RECOVER             |\
+                                        ENLISTMENT_SUBORDINATE_RIGHTS  |\
+                                        ENLISTMENT_SUPERIOR_RIGHTS)
+
+#define ENLISTMENT_GENERIC_EXECUTE     (STANDARD_RIGHTS_EXECUTE        |\
+                                        ENLISTMENT_RECOVER             |\
+                                        ENLISTMENT_SUBORDINATE_RIGHTS  |\
+                                        ENLISTMENT_SUPERIOR_RIGHTS)
+
+#define ENLISTMENT_ALL_ACCESS          (STANDARD_RIGHTS_REQUIRED       |\
+                                        ENLISTMENT_GENERIC_READ        |\
+                                        ENLISTMENT_GENERIC_WRITE       |\
+                                        ENLISTMENT_GENERIC_EXECUTE)
+
+typedef enum _TRANSACTION_OUTCOME {
+  TransactionOutcomeUndetermined = 1,
+  TransactionOutcomeCommitted,
+  TransactionOutcomeAborted,
+} TRANSACTION_OUTCOME;
+
+
+typedef enum _TRANSACTION_STATE {
+  TransactionStateNormal = 1,
+  TransactionStateIndoubt,
+  TransactionStateCommittedNotify,
+} TRANSACTION_STATE;
+
+
+typedef struct _TRANSACTION_BASIC_INFORMATION {
+  GUID TransactionId;
+  ULONG State;
+  ULONG Outcome;
+} TRANSACTION_BASIC_INFORMATION, *PTRANSACTION_BASIC_INFORMATION;
+
+typedef struct _TRANSACTIONMANAGER_BASIC_INFORMATION {
+  GUID TmIdentity;
+  LARGE_INTEGER VirtualClock;
+} TRANSACTIONMANAGER_BASIC_INFORMATION, *PTRANSACTIONMANAGER_BASIC_INFORMATION;
+
+typedef struct _TRANSACTIONMANAGER_LOG_INFORMATION {
+  GUID LogIdentity;
+} TRANSACTIONMANAGER_LOG_INFORMATION, *PTRANSACTIONMANAGER_LOG_INFORMATION;
+
+typedef struct _TRANSACTIONMANAGER_LOGPATH_INFORMATION {
+  ULONG LogPathLength;
+  WCHAR LogPath[1];
+} TRANSACTIONMANAGER_LOGPATH_INFORMATION, *PTRANSACTIONMANAGER_LOGPATH_INFORMATION;
+
+typedef struct _TRANSACTIONMANAGER_RECOVERY_INFORMATION {
+  ULONGLONG LastRecoveredLsn;
+} TRANSACTIONMANAGER_RECOVERY_INFORMATION, *PTRANSACTIONMANAGER_RECOVERY_INFORMATION;
+
+typedef struct _TRANSACTION_PROPERTIES_INFORMATION {
+  ULONG IsolationLevel;
+  ULONG IsolationFlags;
+  LARGE_INTEGER Timeout;
+  ULONG Outcome;
+  ULONG DescriptionLength;
+  WCHAR Description[1];
+} TRANSACTION_PROPERTIES_INFORMATION, *PTRANSACTION_PROPERTIES_INFORMATION;
+
+typedef struct _TRANSACTION_BIND_INFORMATION {
+  HANDLE TmHandle;
+} TRANSACTION_BIND_INFORMATION, *PTRANSACTION_BIND_INFORMATION;
+
+typedef struct _TRANSACTION_ENLISTMENT_PAIR {
+  GUID EnlistmentId;
+  GUID ResourceManagerId;
+} TRANSACTION_ENLISTMENT_PAIR, *PTRANSACTION_ENLISTMENT_PAIR;
+
+typedef struct _TRANSACTION_ENLISTMENTS_INFORMATION {
+  ULONG NumberOfEnlistments;
+  TRANSACTION_ENLISTMENT_PAIR EnlistmentPair[1];
+} TRANSACTION_ENLISTMENTS_INFORMATION, *PTRANSACTION_ENLISTMENTS_INFORMATION;
+
+typedef struct _TRANSACTION_SUPERIOR_ENLISTMENT_INFORMATION {
+  TRANSACTION_ENLISTMENT_PAIR SuperiorEnlistmentPair;
+} TRANSACTION_SUPERIOR_ENLISTMENT_INFORMATION, *PTRANSACTION_SUPERIOR_ENLISTMENT_INFORMATION;
+
+typedef struct _RESOURCEMANAGER_BASIC_INFORMATION {
+  GUID ResourceManagerId;
+  ULONG DescriptionLength;
+  WCHAR Description[1];
+} RESOURCEMANAGER_BASIC_INFORMATION, *PRESOURCEMANAGER_BASIC_INFORMATION;
+
+typedef struct _RESOURCEMANAGER_COMPLETION_INFORMATION {
+  HANDLE IoCompletionPortHandle;
+  ULONG_PTR CompletionKey;
+} RESOURCEMANAGER_COMPLETION_INFORMATION, *PRESOURCEMANAGER_COMPLETION_INFORMATION;
+
+typedef enum _KTMOBJECT_TYPE {
+  KTMOBJECT_TRANSACTION,
+  KTMOBJECT_TRANSACTION_MANAGER,
+  KTMOBJECT_RESOURCE_MANAGER,
+  KTMOBJECT_ENLISTMENT,
+  KTMOBJECT_INVALID
+} KTMOBJECT_TYPE, *PKTMOBJECT_TYPE;
+
+typedef struct _KTMOBJECT_CURSOR {
+  GUID LastQuery;
+  ULONG ObjectIdCount;
+  GUID ObjectIds[1];
+} KTMOBJECT_CURSOR, *PKTMOBJECT_CURSOR;
+
+typedef enum _TRANSACTION_INFORMATION_CLASS {
+  TransactionBasicInformation,
+  TransactionPropertiesInformation,
+  TransactionEnlistmentInformation,
+  TransactionSuperiorEnlistmentInformation
+} TRANSACTION_INFORMATION_CLASS;
+
+typedef enum _TRANSACTIONMANAGER_INFORMATION_CLASS {
+  TransactionManagerBasicInformation,
+  TransactionManagerLogInformation,
+  TransactionManagerLogPathInformation,
+  TransactionManagerRecoveryInformation = 4
+} TRANSACTIONMANAGER_INFORMATION_CLASS;
+
+typedef enum _RESOURCEMANAGER_INFORMATION_CLASS {
+  ResourceManagerBasicInformation,
+  ResourceManagerCompletionInformation,
+} RESOURCEMANAGER_INFORMATION_CLASS;
+
+typedef struct _ENLISTMENT_BASIC_INFORMATION {
+  GUID EnlistmentId;
+  GUID TransactionId;
+  GUID ResourceManagerId;
+} ENLISTMENT_BASIC_INFORMATION, *PENLISTMENT_BASIC_INFORMATION;
+
+typedef struct _ENLISTMENT_CRM_INFORMATION {
+  GUID CrmTransactionManagerId;
+  GUID CrmResourceManagerId;
+  GUID CrmEnlistmentId;
+} ENLISTMENT_CRM_INFORMATION, *PENLISTMENT_CRM_INFORMATION;
+
+typedef enum _ENLISTMENT_INFORMATION_CLASS {
+  EnlistmentBasicInformation,
+  EnlistmentRecoveryInformation,
+  EnlistmentCrmInformation
+} ENLISTMENT_INFORMATION_CLASS;
+
+typedef struct _TRANSACTION_LIST_ENTRY {
+/* UOW is typedef'ed as GUID just above.  Changed type of UOW
+ * member from UOW to GUID for C++ compat.  Using ::UOW for C++
+ * works too but we were reported some problems in corner cases
+ */
+  GUID UOW;
+} TRANSACTION_LIST_ENTRY, *PTRANSACTION_LIST_ENTRY;
+
+typedef struct _TRANSACTION_LIST_INFORMATION {
+  ULONG NumberOfTransactions;
+  TRANSACTION_LIST_ENTRY TransactionInformation[1];
+} TRANSACTION_LIST_INFORMATION, *PTRANSACTION_LIST_INFORMATION;
+
+typedef NTSTATUS
+(NTAPI *PFN_NT_CREATE_TRANSACTION)(
+  OUT PHANDLE TransactionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN LPGUID Uow OPTIONAL,
+  IN HANDLE TmHandle OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN ULONG IsolationLevel OPTIONAL,
+  IN ULONG IsolationFlags OPTIONAL,
+  IN PLARGE_INTEGER Timeout OPTIONAL,
+  IN PUNICODE_STRING Description OPTIONAL);
+
+typedef NTSTATUS
+(NTAPI *PFN_NT_OPEN_TRANSACTION)(
+  OUT PHANDLE TransactionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN LPGUID Uow OPTIONAL,
+  IN HANDLE TmHandle OPTIONAL);
+
+typedef NTSTATUS
+(NTAPI *PFN_NT_QUERY_INFORMATION_TRANSACTION)(
+  IN HANDLE TransactionHandle,
+  IN TRANSACTION_INFORMATION_CLASS TransactionInformationClass,
+  OUT PVOID TransactionInformation,
+  IN ULONG TransactionInformationLength,
+  OUT PULONG ReturnLength OPTIONAL);
+
+typedef NTSTATUS
+(NTAPI *PFN_NT_SET_INFORMATION_TRANSACTION)(
+  IN HANDLE TransactionHandle,
+  IN TRANSACTION_INFORMATION_CLASS TransactionInformationClass,
+  IN PVOID TransactionInformation,
+  IN ULONG TransactionInformationLength);
+
+typedef NTSTATUS
+(NTAPI *PFN_NT_COMMIT_TRANSACTION)(
+  IN HANDLE TransactionHandle,
+  IN BOOLEAN Wait);
+
+typedef NTSTATUS
+(NTAPI *PFN_NT_ROLLBACK_TRANSACTION)(
+  IN HANDLE TransactionHandle,
+  IN BOOLEAN Wait);
+
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCreateTransactionManager(
+  OUT PHANDLE TmHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN PUNICODE_STRING LogFileName OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN ULONG CommitStrength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtOpenTransactionManager(
+  OUT PHANDLE TmHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN PUNICODE_STRING LogFileName OPTIONAL,
+  IN LPGUID TmIdentity OPTIONAL,
+  IN ULONG OpenOptions OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRenameTransactionManager(
+  IN PUNICODE_STRING LogFileName,
+  IN LPGUID ExistingTransactionManagerGuid);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRollforwardTransactionManager(
+  IN HANDLE TransactionManagerHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRecoverTransactionManager(
+  IN HANDLE TransactionManagerHandle);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtQueryInformationTransactionManager(
+  IN HANDLE TransactionManagerHandle,
+  IN TRANSACTIONMANAGER_INFORMATION_CLASS TransactionManagerInformationClass,
+  OUT PVOID TransactionManagerInformation,
+  IN ULONG TransactionManagerInformationLength,
+  OUT PULONG ReturnLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtSetInformationTransactionManager(
+  IN HANDLE TmHandle OPTIONAL,
+  IN TRANSACTIONMANAGER_INFORMATION_CLASS TransactionManagerInformationClass,
+  IN PVOID TransactionManagerInformation,
+  IN ULONG TransactionManagerInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtEnumerateTransactionObject(
+  IN HANDLE RootObjectHandle OPTIONAL,
+  IN KTMOBJECT_TYPE QueryType,
+  IN OUT PKTMOBJECT_CURSOR ObjectCursor,
+  IN ULONG ObjectCursorLength,
+  OUT PULONG ReturnLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCreateTransaction(
+  OUT PHANDLE TransactionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN LPGUID Uow OPTIONAL,
+  IN HANDLE TmHandle OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN ULONG IsolationLevel OPTIONAL,
+  IN ULONG IsolationFlags OPTIONAL,
+  IN PLARGE_INTEGER Timeout OPTIONAL,
+  IN PUNICODE_STRING Description OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtOpenTransaction(
+  OUT PHANDLE TransactionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN LPGUID Uow,
+  IN HANDLE TmHandle OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtQueryInformationTransaction(
+  IN HANDLE TransactionHandle,
+  IN TRANSACTION_INFORMATION_CLASS TransactionInformationClass,
+  OUT PVOID TransactionInformation,
+  IN ULONG TransactionInformationLength,
+  OUT PULONG ReturnLength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtSetInformationTransaction(
+  IN HANDLE TransactionHandle,
+  IN TRANSACTION_INFORMATION_CLASS TransactionInformationClass,
+  IN PVOID TransactionInformation,
+  IN ULONG TransactionInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCommitTransaction(
+  IN HANDLE TransactionHandle,
+  IN BOOLEAN Wait);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRollbackTransaction(
+  IN HANDLE TransactionHandle,
+  IN BOOLEAN Wait);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCreateEnlistment(
+  OUT PHANDLE EnlistmentHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE ResourceManagerHandle,
+  IN HANDLE TransactionHandle,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN NOTIFICATION_MASK NotificationMask,
+  IN PVOID EnlistmentKey OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtOpenEnlistment(
+  OUT PHANDLE EnlistmentHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE ResourceManagerHandle,
+  IN LPGUID EnlistmentGuid,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtQueryInformationEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN ENLISTMENT_INFORMATION_CLASS EnlistmentInformationClass,
+  OUT PVOID EnlistmentInformation,
+  IN ULONG EnlistmentInformationLength,
+  OUT PULONG ReturnLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtSetInformationEnlistment(
+  IN HANDLE EnlistmentHandle OPTIONAL,
+  IN ENLISTMENT_INFORMATION_CLASS EnlistmentInformationClass,
+  IN PVOID EnlistmentInformation,
+  IN ULONG EnlistmentInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRecoverEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PVOID EnlistmentKey OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPrePrepareEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPrepareEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCommitEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRollbackEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPrePrepareComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPrepareComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCommitComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtReadOnlyEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRollbackComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtSinglePhaseReject(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtCreateResourceManager(
+  OUT PHANDLE ResourceManagerHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE TmHandle,
+  IN LPGUID RmGuid,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN PUNICODE_STRING Description OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtOpenResourceManager(
+  OUT PHANDLE ResourceManagerHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE TmHandle,
+  IN LPGUID ResourceManagerGuid OPTIONAL,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRecoverResourceManager(
+  IN HANDLE ResourceManagerHandle);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtGetNotificationResourceManager(
+  IN HANDLE ResourceManagerHandle,
+  OUT PTRANSACTION_NOTIFICATION TransactionNotification,
+  IN ULONG NotificationLength,
+  IN PLARGE_INTEGER Timeout OPTIONAL,
+  OUT PULONG ReturnLength OPTIONAL,
+  IN ULONG Asynchronous,
+  IN ULONG_PTR AsynchronousContext OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtQueryInformationResourceManager(
+  IN HANDLE ResourceManagerHandle,
+  IN RESOURCEMANAGER_INFORMATION_CLASS ResourceManagerInformationClass,
+  OUT PVOID ResourceManagerInformation,
+  IN ULONG ResourceManagerInformationLength,
+  OUT PULONG ReturnLength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtSetInformationResourceManager(
+  IN HANDLE ResourceManagerHandle,
+  IN RESOURCEMANAGER_INFORMATION_CLASS ResourceManagerInformationClass,
+  IN PVOID ResourceManagerInformation,
+  IN ULONG ResourceManagerInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtRegisterProtocolAddressInformation(
+  IN HANDLE ResourceManager,
+  IN PCRM_PROTOCOL_ID ProtocolId,
+  IN ULONG ProtocolInformationSize,
+  IN PVOID ProtocolInformation,
+  IN ULONG CreateOptions OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPropagationComplete(
+  IN HANDLE ResourceManagerHandle,
+  IN ULONG RequestCookie,
+  IN ULONG BufferLength,
+  IN PVOID Buffer);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPropagationFailed(
+  IN HANDLE ResourceManagerHandle,
+  IN ULONG RequestCookie,
+  IN NTSTATUS PropStatus);
+
+#endif /* NTDDI_VERSION >= NTDDI_VISTA */
+
+#endif /* !_NTTMAPI_ */
+
+/******************************************************************************
+ *                            ZwXxx Functions                                 *
+ ******************************************************************************/
+
+/* Constants */
+#define NtCurrentProcess() ( (HANDLE)(LONG_PTR) -1 )
+#define ZwCurrentProcess() NtCurrentProcess()
+#define NtCurrentThread() ( (HANDLE)(LONG_PTR) -2 )
+#define ZwCurrentThread() NtCurrentThread()
+
+
+#if (NTDDI_VERSION >= NTDDI_WIN2K)
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwClose(
+  IN HANDLE Handle);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwCreateDirectoryObject(
+  OUT PHANDLE DirectoryHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwCreateFile(
+  OUT PHANDLE FileHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  IN PLARGE_INTEGER AllocationSize OPTIONAL,
+  IN ULONG FileAttributes,
+  IN ULONG ShareAccess,
+  IN ULONG CreateDisposition,
+  IN ULONG CreateOptions,
+  IN PVOID EaBuffer OPTIONAL,
+  IN ULONG EaLength);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwCreateKey(
+  OUT PHANDLE KeyHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN ULONG TitleIndex,
+  IN PUNICODE_STRING Class OPTIONAL,
+  IN ULONG CreateOptions,
+  OUT PULONG Disposition OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwCreateSection(
+  OUT PHANDLE SectionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN PLARGE_INTEGER MaximumSize OPTIONAL,
+  IN ULONG SectionPageProtection,
+  IN ULONG AllocationAttributes,
+  IN HANDLE FileHandle OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwDeleteKey(
+  IN HANDLE KeyHandle);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwDeleteValueKey(
+  IN HANDLE KeyHandle,
+  IN PUNICODE_STRING ValueName);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwEnumerateKey(
+  IN HANDLE KeyHandle,
+  IN ULONG Index,
+  IN KEY_INFORMATION_CLASS KeyInformationClass,
+  OUT PVOID KeyInformation OPTIONAL,
+  IN ULONG Length,
+  OUT PULONG ResultLength);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwEnumerateValueKey(
+  IN HANDLE KeyHandle,
+  IN ULONG Index,
+  IN KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass,
+  OUT PVOID KeyValueInformation OPTIONAL,
+  IN ULONG Length,
+  OUT PULONG ResultLength);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwFlushKey(
+  IN HANDLE KeyHandle);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwLoadDriver(
+  IN PUNICODE_STRING DriverServiceName);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwMakeTemporaryObject(
+  IN HANDLE Handle);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwMapViewOfSection(
+  IN HANDLE SectionHandle,
+  IN HANDLE ProcessHandle,
+  IN OUT PVOID *BaseAddress,
+  IN ULONG_PTR ZeroBits,
+  IN SIZE_T CommitSize,
+  IN OUT PLARGE_INTEGER SectionOffset OPTIONAL,
+  IN OUT PSIZE_T ViewSize,
+  IN SECTION_INHERIT InheritDisposition,
+  IN ULONG AllocationType,
+  IN ULONG Protect);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenFile(
+  OUT PHANDLE FileHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  IN ULONG ShareAccess,
+  IN ULONG OpenOptions);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenKey(
+  OUT PHANDLE KeyHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenSection(
+  OUT PHANDLE SectionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenSymbolicLinkObject(
+  OUT PHANDLE LinkHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwQueryInformationFile(
+  IN HANDLE FileHandle,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  OUT PVOID FileInformation,
+  IN ULONG Length,
+  IN FILE_INFORMATION_CLASS FileInformationClass);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwQueryKey(
+  IN HANDLE KeyHandle,
+  IN KEY_INFORMATION_CLASS KeyInformationClass,
+  OUT PVOID KeyInformation OPTIONAL,
+  IN ULONG Length,
+  OUT PULONG ResultLength);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwQuerySymbolicLinkObject(
+  IN HANDLE LinkHandle,
+  IN OUT PUNICODE_STRING LinkTarget,
+  OUT PULONG ReturnedLength OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwQueryValueKey(
+  IN HANDLE KeyHandle,
+  IN PUNICODE_STRING ValueName,
+  IN KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass,
+  OUT PVOID KeyValueInformation OPTIONAL,
+  IN ULONG Length,
+  OUT PULONG ResultLength);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwReadFile(
+  IN HANDLE FileHandle,
+  IN HANDLE Event OPTIONAL,
+  IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
+  IN PVOID ApcContext OPTIONAL,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  OUT PVOID Buffer,
+  IN ULONG Length,
+  IN PLARGE_INTEGER ByteOffset OPTIONAL,
+  IN PULONG Key OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwSetInformationFile(
+  IN HANDLE FileHandle,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  IN PVOID FileInformation,
+  IN ULONG Length,
+  IN FILE_INFORMATION_CLASS FileInformationClass);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwSetValueKey(
+  IN HANDLE KeyHandle,
+  IN PUNICODE_STRING ValueName,
+  IN ULONG TitleIndex OPTIONAL,
+  IN ULONG Type,
+  IN PVOID Data OPTIONAL,
+  IN ULONG DataSize);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwUnloadDriver(
+  IN PUNICODE_STRING DriverServiceName);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwUnmapViewOfSection(
+  IN HANDLE ProcessHandle,
+  IN PVOID BaseAddress OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwWriteFile(
+  IN HANDLE FileHandle,
+  IN HANDLE Event OPTIONAL,
+  IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
+  IN PVOID ApcContext OPTIONAL,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  IN PVOID Buffer,
+  IN ULONG Length,
+  IN PLARGE_INTEGER ByteOffset OPTIONAL,
+  IN PULONG Key OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwQueryFullAttributesFile(
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  OUT PFILE_NETWORK_OPEN_INFORMATION FileInformation);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN2K) */
+
+
+#if (NTDDI_VERSION >= NTDDI_WS03)
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwOpenEvent(
+  OUT PHANDLE EventHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes);
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+
+NTSYSAPI
+NTSTATUS
+ZwCreateKeyTransacted(
+  OUT PHANDLE KeyHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN ULONG TitleIndex,
+  IN PUNICODE_STRING Class OPTIONAL,
+  IN ULONG CreateOptions,
+  IN HANDLE TransactionHandle,
+  OUT PULONG Disposition OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenKeyTransacted(
+  OUT PHANDLE KeyHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN HANDLE TransactionHandle);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateTransactionManager(
+  OUT PHANDLE TmHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN PUNICODE_STRING LogFileName OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN ULONG CommitStrength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwOpenTransactionManager(
+  OUT PHANDLE TmHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN PUNICODE_STRING LogFileName OPTIONAL,
+  IN LPGUID TmIdentity OPTIONAL,
+  IN ULONG OpenOptions OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRollforwardTransactionManager(
+  IN HANDLE TransactionManagerHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRecoverTransactionManager(
+  IN HANDLE TransactionManagerHandle);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwQueryInformationTransactionManager(
+  IN HANDLE TransactionManagerHandle,
+  IN TRANSACTIONMANAGER_INFORMATION_CLASS TransactionManagerInformationClass,
+  OUT PVOID TransactionManagerInformation,
+  IN ULONG TransactionManagerInformationLength,
+  OUT PULONG ReturnLength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwSetInformationTransactionManager(
+  IN HANDLE TmHandle,
+  IN TRANSACTIONMANAGER_INFORMATION_CLASS TransactionManagerInformationClass,
+  IN PVOID TransactionManagerInformation,
+  IN ULONG TransactionManagerInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwEnumerateTransactionObject(
+  IN HANDLE RootObjectHandle OPTIONAL,
+  IN KTMOBJECT_TYPE QueryType,
+  IN OUT PKTMOBJECT_CURSOR ObjectCursor,
+  IN ULONG ObjectCursorLength,
+  OUT PULONG ReturnLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateTransaction(
+  OUT PHANDLE TransactionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN LPGUID Uow OPTIONAL,
+  IN HANDLE TmHandle OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN ULONG IsolationLevel OPTIONAL,
+  IN ULONG IsolationFlags OPTIONAL,
+  IN PLARGE_INTEGER Timeout OPTIONAL,
+  IN PUNICODE_STRING Description OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwOpenTransaction(
+  OUT PHANDLE TransactionHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN LPGUID Uow,
+  IN HANDLE TmHandle OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwQueryInformationTransaction(
+  IN HANDLE TransactionHandle,
+  IN TRANSACTION_INFORMATION_CLASS TransactionInformationClass,
+  OUT PVOID TransactionInformation,
+  IN ULONG TransactionInformationLength,
+  OUT PULONG ReturnLength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwSetInformationTransaction(
+  IN HANDLE TransactionHandle,
+  IN TRANSACTION_INFORMATION_CLASS TransactionInformationClass,
+  IN PVOID TransactionInformation,
+  IN ULONG TransactionInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCommitTransaction(
+  IN HANDLE TransactionHandle,
+  IN BOOLEAN Wait);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRollbackTransaction(
+  IN HANDLE TransactionHandle,
+  IN BOOLEAN Wait);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateResourceManager(
+  OUT PHANDLE ResourceManagerHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE TmHandle,
+  IN LPGUID ResourceManagerGuid OPTIONAL,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN PUNICODE_STRING Description OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwOpenResourceManager(
+  OUT PHANDLE ResourceManagerHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE TmHandle,
+  IN LPGUID ResourceManagerGuid,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRecoverResourceManager(
+  IN HANDLE ResourceManagerHandle);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwGetNotificationResourceManager(
+  IN HANDLE ResourceManagerHandle,
+  OUT PTRANSACTION_NOTIFICATION TransactionNotification,
+  IN ULONG NotificationLength,
+  IN PLARGE_INTEGER Timeout,
+  IN PULONG ReturnLength OPTIONAL,
+  IN ULONG Asynchronous,
+  IN ULONG_PTR AsynchronousContext OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwQueryInformationResourceManager(
+  IN HANDLE ResourceManagerHandle,
+  IN RESOURCEMANAGER_INFORMATION_CLASS ResourceManagerInformationClass,
+  OUT PVOID ResourceManagerInformation,
+  IN ULONG ResourceManagerInformationLength,
+  IN PULONG ReturnLength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwSetInformationResourceManager(
+  IN HANDLE ResourceManagerHandle,
+  IN RESOURCEMANAGER_INFORMATION_CLASS ResourceManagerInformationClass,
+  IN PVOID ResourceManagerInformation,
+  IN ULONG ResourceManagerInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCreateEnlistment(
+  OUT PHANDLE EnlistmentHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE ResourceManagerHandle,
+  IN HANDLE TransactionHandle,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+  IN ULONG CreateOptions OPTIONAL,
+  IN NOTIFICATION_MASK NotificationMask,
+  IN PVOID EnlistmentKey OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwOpenEnlistment(
+  OUT PHANDLE EnlistmentHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN HANDLE RmHandle,
+  IN LPGUID EnlistmentGuid,
+  IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwQueryInformationEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN ENLISTMENT_INFORMATION_CLASS EnlistmentInformationClass,
+  OUT PVOID EnlistmentInformation,
+  IN ULONG EnlistmentInformationLength,
+  IN PULONG ReturnLength OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwSetInformationEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN ENLISTMENT_INFORMATION_CLASS EnlistmentInformationClass,
+  IN PVOID EnlistmentInformation,
+  IN ULONG EnlistmentInformationLength);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRecoverEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PVOID EnlistmentKey OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwPrePrepareEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwPrepareEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCommitEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRollbackEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwPrePrepareComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwPrepareComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwCommitComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwReadOnlyEnlistment(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwRollbackComplete(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+
+NTSYSCALLAPI
+NTSTATUS
+NTAPI
+ZwSinglePhaseReject(
+  IN HANDLE EnlistmentHandle,
+  IN PLARGE_INTEGER TmVirtualClock OPTIONAL);
+#endif /* (NTDDI_VERSION >= NTDDI_VISTA) */
+
+#if (NTDDI_VERSION >= NTDDI_WIN7)
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenKeyEx(
+  OUT PHANDLE KeyHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN ULONG OpenOptions);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwOpenKeyTransactedEx(
+  OUT PHANDLE KeyHandle,
+  IN ACCESS_MASK DesiredAccess,
+  IN POBJECT_ATTRIBUTES ObjectAttributes,
+  IN ULONG OpenOptions,
+  IN HANDLE TransactionHandle);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwNotifyChangeMultipleKeys(
+  IN HANDLE MasterKeyHandle,
+  IN ULONG Count OPTIONAL,
+  IN OBJECT_ATTRIBUTES SubordinateObjects[] OPTIONAL,
+  IN HANDLE Event OPTIONAL,
+  IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
+  IN PVOID ApcContext OPTIONAL,
+  OUT PIO_STATUS_BLOCK IoStatusBlock,
+  IN ULONG CompletionFilter,
+  IN BOOLEAN WatchTree,
+  OUT PVOID Buffer OPTIONAL,
+  IN ULONG BufferSize,
+  IN BOOLEAN Asynchronous);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwQueryMultipleValueKey(
+  IN HANDLE KeyHandle,
+  IN OUT PKEY_VALUE_ENTRY ValueEntries,
+  IN ULONG EntryCount,
+  OUT PVOID ValueBuffer,
+  IN OUT PULONG BufferLength,
+  OUT PULONG RequiredBufferLength OPTIONAL);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwRenameKey(
+  IN HANDLE KeyHandle,
+  IN PUNICODE_STRING NewName);
+
+NTSYSAPI
+NTSTATUS
+NTAPI
+ZwSetInformationKey(
+  IN HANDLE KeyHandle,
+  IN KEY_SET_INFORMATION_CLASS KeySetInformationClass,
+  IN PVOID KeySetInformation,
+  IN ULONG KeySetInformationLength);
+
+#endif /* (NTDDI_VERSION >= NTDDI_WIN7) */
+
+#ifndef _CLFS_PUBLIC_H_
+#define _CLFS_PUBLIC_H_
+
+#ifndef CLFSUSER_API
+#ifdef __CLFSUSER_EXPORTS__
+#define CLFSUSER_API
+#else
+#define CLFSUSER_API __declspec(dllimport)
+#endif
+#endif
+
+#if NTDDI_VERSION >= NTDDI_WS03SP1 || _WIN32_WINNT >= _WIN32_WINNT_WS03
+
+#define FILE_ATTRIBUTE_DEDICATED                  FILE_ATTRIBUTE_TEMPORARY
+#define EA_CONTAINER_NAME                         "ContainerName"
+#define EA_CONTAINER_SIZE                         "ContainerSize"
+#define CLFS_BASELOG_EXTENSION                    L".blf"
+#define CLFS_FLAG_NO_FLAGS                        0x00000000
+#define CLFS_FLAG_FORCE_APPEND                    0x00000001
+#define CLFS_FLAG_FORCE_FLUSH                     0x00000002
+#define CLFS_FLAG_USE_RESERVATION                 0x00000004
+#define CLFS_FLAG_REENTRANT_FILE_SYSTEM           0x00000008
+#define CLFS_FLAG_NON_REENTRANT_FILTER            0x00000010
+#define CLFS_FLAG_REENTRANT_FILTER                0x00000020
+#define CLFS_FLAG_IGNORE_SHARE_ACCESS             0x00000040
+#define CLFS_FLAG_READ_IN_PROGRESS                0x00000080
+#define CLFS_FLAG_MINIFILTER_LEVEL                0x00000100
+#define CLFS_FLAG_HIDDEN_SYSTEM_LOG               0x00000200
+#define CLFS_FLAG_FILTER_INTERMEDIATE_LEVEL       CLFS_FLAG_NON_REENTRANT_FILTER
+#define CLFS_FLAG_FILTER_TOP_LEVEL                CLFS_FLAG_REENTRANT_FILTER
+#define CLFS_MARSHALLING_FLAG_NONE                0x00000000
+#define CLFS_MARSHALLING_FLAG_DISABLE_BUFF_INIT   0x00000001
+
+typedef ULONG CLFS_CONTAINER_ID, *PCLFS_CONTAINER_ID, **PPCLFS_CONTAINER_ID;
+
+typedef struct _CLS_LSN {
+  ULONGLONG Internal;
+} CLS_LSN, *PCLS_LSN, **PPCLS_LSN;
+
+typedef CLS_LSN CLFS_LSN, *PCLFS_LSN, **PPCLFS_LSN;
+
+extern __declspec(dllimport) const CLFS_LSN CLFS_LSN_INVALID;
+extern __declspec(dllimport) const CLFS_LSN CLFS_LSN_NULL;
+
+#define ClfsNullRecord      0x00
+#define ClfsDataRecord      0x01
+#define ClfsRestartRecord   0x02
+#define ClfsClientRecord (ClfsDataRecord | ClfsRestartRecord)
+
+#define CLFS_CONTAINER_STREAM_PREFIX        L"%BLF%:"
+#define CLFS_CONTAINER_RELATIVE_PREFIX      L"%BLF%\\"
+
+typedef UCHAR CLS_RECORD_TYPE, *PCLS_RECORD_TYPE, **PPCLS_RECORD_TYPE;
+typedef CLS_RECORD_TYPE CLFS_RECORD_TYPE, *PCLFS_RECORD_TYPE, **PPCLFS_RECORD_TYPE;
+
+typedef enum _CLS_CONTEXT_MODE {
+  ClsContextNone,
+  ClsContextUndoNext,
+  ClsContextPrevious,
+  ClsContextForward
+} CLS_CONTEXT_MODE, *PCLS_CONTEXT_MODE, **PPCLS_CONTEXT_MODE;
+
+typedef enum _CLFS_CONTEXT_MODE {
+  ClfsContextNone,
+  ClfsContextUndoNext,
+  ClfsContextPrevious,
+  ClfsContextForward
+} CLFS_CONTEXT_MODE, *PCLFS_CONTEXT_MODE, **PPCLFS_CONTEXT_MODE;
+
+typedef struct _CLFS_NODE_ID {
+  ULONG cType;
+  ULONG cbNode;
+} CLFS_NODE_ID, *PCLFS_NODE_ID;
+
+typedef struct _CLS_WRITE_ENTRY {
+  PVOID Buffer;
+  ULONG ByteLength;
+} CLS_WRITE_ENTRY, *PCLS_WRITE_ENTRY, **PPCLS_WRITE_ENTRY;
+
+typedef CLS_WRITE_ENTRY CLFS_WRITE_ENTRY, *PCLFS_WRITE_ENTRY, **PPCLFS_WRITE_ENTRY;
+
+typedef GUID CLFS_LOG_ID;
+
+typedef struct _CLS_INFORMATION {
+  LONGLONG TotalAvailable;
+  LONGLONG CurrentAvailable;
+  LONGLONG TotalReservation;
+  ULONGLONG BaseFileSize;
+  ULONGLONG ContainerSize;
+  ULONG TotalContainers;
+  ULONG FreeContainers;
+  ULONG TotalClients;
+  ULONG Attributes;
+  ULONG FlushThreshold;
+  ULONG SectorSize;
+  CLS_LSN MinArchiveTailLsn;
+  CLS_LSN BaseLsn;
+  CLS_LSN LastFlushedLsn;
+  CLS_LSN LastLsn;
+  CLS_LSN RestartLsn;
+  GUID Identity;
+} CLS_INFORMATION, *PCLS_INFORMATION, *PPCLS_INFORMATION;
+
+typedef CLS_INFORMATION CLFS_INFORMATION, *PCLFS_INFORMATION, *PPCLFS_INFORMATION;
+
+typedef struct _CLFS_LOG_NAME_INFORMATION {
+  USHORT NameLengthInBytes;
+  WCHAR Name[1];
+} CLFS_LOG_NAME_INFORMATION, *PCLFS_LOG_NAME_INFORMATION, **PPCLFS_LOG_NAME_INFORMATION;
+
+typedef struct _CLFS_STREAM_ID_INFORMATION {
+  UCHAR StreamIdentifier;
+} CLFS_STREAM_ID_INFORMATION, *PCLFS_STREAM_ID_INFORMATION, **PPCLFS_STREAM_ID_INFORMATION;
+
+typedef UINT32 CLS_CONTAINER_STATE, *PCLS_CONTAINER_STATE, *PPCLS_CONTAINER_STATE;
+typedef CLS_CONTAINER_STATE CLFS_CONTAINER_STATE, *PCLFS_CONTAINER_STATE, *PPCLFS_CONTAINER_STATE;
+
+#define ClsContainerInitializing              0x01
+#define ClsContainerInactive                  0x02
+#define ClsContainerActive                    0x04
+#define ClsContainerActivePendingDelete       0x08
+#define ClsContainerPendingArchive            0x10
+#define ClsContainerPendingArchiveAndDelete   0x20
+
+#define ClfsContainerInitializing             0x01
+#define ClfsContainerInactive                 0x02
+#define ClfsContainerActive                   0x04
+#define ClfsContainerActivePendingDelete      0x08
+#define ClfsContainerPendingArchive           0x10
+#define ClfsContainerPendingArchiveAndDelete  0x20
+
+#define CLFS_MAX_CONTAINER_INFO 256
+
+typedef struct _CLS_CONTAINER_INFORMATION {
+  ULONG FileAttributes;
+  ULONGLONG CreationTime;
+  ULONGLONG LastAccessTime;
+  ULONGLONG LastWriteTime;
+  LONGLONG ContainerSize;
+  ULONG FileNameActualLength;
+  ULONG FileNameLength;
+  WCHAR FileName[CLFS_MAX_CONTAINER_INFO];
+  CLFS_CONTAINER_STATE State;
+  CLFS_CONTAINER_ID PhysicalContainerId;
+  CLFS_CONTAINER_ID LogicalContainerId;
+} CLS_CONTAINER_INFORMATION, *PCLS_CONTAINER_INFORMATION, **PPCLS_CONTAINER_INFORMATION;
+
+typedef CLS_CONTAINER_INFORMATION CLFS_CONTAINER_INFORMATION, *PCLFS_CONTAINER_INFORMATION, **PPCLFS_CONTAINER_INFORMATION;
+
+typedef enum _CLS_LOG_INFORMATION_CLASS {
+  ClfsLogBasicInformation,
+  ClfsLogBasicInformationPhysical,
+  ClfsLogPhysicalNameInformation,
+  ClfsLogStreamIdentifierInformation,
+#if NTDDI_VERSION >= NTDDI_VISTA || _WIN32_WINNT >= _WIN32_WINNT_VISTA
+  ClfsLogSystemMarkingInformation,
+  ClfsLogPhysicalLsnInformation
+#endif
+} CLS_LOG_INFORMATION_CLASS, *PCLS_LOG_INFORMATION_CLASS, **PPCLS_LOG_INFORMATION_CLASS;
+
+typedef CLS_LOG_INFORMATION_CLASS CLFS_LOG_INFORMATION_CLASS, *PCLFS_LOG_INFORMATION_CLASS, **PPCLFS_LOG_INFORMATION_CLASS;
+
+typedef enum _CLS_IOSTATS_CLASS {
+  ClsIoStatsDefault = 0x0000,
+  ClsIoStatsMax = 0xffff
+} CLS_IOSTATS_CLASS, *PCLS_IOSTATS_CLASS, **PPCLS_IOSTATS_CLASS;
+
+typedef enum _CLFS_IOSTATS_CLASS {
+  ClfsIoStatsDefault = 0x0000,
+  ClfsIoStatsMax = 0xffff
+} CLFS_IOSTATS_CLASS, *PCLFS_IOSTATS_CLASS, **PPCLFS_IOSTATS_CLASS;
+
+typedef struct _CLS_IO_STATISTICS_HEADER {
+  UCHAR ubMajorVersion;
+  UCHAR ubMinorVersion;
+  CLFS_IOSTATS_CLASS eStatsClass;
+  USHORT cbLength;
+  ULONG coffData;
+} CLS_IO_STATISTICS_HEADER, *PCLS_IO_STATISTICS_HEADER, **PPCLS_IO_STATISTICS_HEADER;
+
+typedef CLS_IO_STATISTICS_HEADER CLFS_IO_STATISTICS_HEADER, *PCLFS_IO_STATISTICS_HEADER, **PPCLFS_IO_STATISTICS_HEADER;
+
+typedef struct _CLS_IO_STATISTICS {
+  CLS_IO_STATISTICS_HEADER hdrIoStats;
+  ULONGLONG cFlush;
+  ULONGLONG cbFlush;
+  ULONGLONG cMetaFlush;
+  ULONGLONG cbMetaFlush;
+} CLS_IO_STATISTICS, *PCLS_IO_STATISTICS, **PPCLS_IO_STATISTICS;
+
+typedef CLS_IO_STATISTICS CLFS_IO_STATISTICS, *PCLFS_IO_STATISTICS, **PPCLFS_IO_STATISTICS;
+
+#define CLFS_SCAN_INIT          0x01
+#define CLFS_SCAN_FORWARD       0x02
+#define CLFS_SCAN_BACKWARD      0x04
+#define CLFS_SCAN_CLOSE         0x08
+#define CLFS_SCAN_INITIALIZED   0x10
+#define CLFS_SCAN_BUFFERED      0x20
+
+typedef UCHAR CLFS_SCAN_MODE, *PCLFS_SCAN_MODE;
+
+typedef FILE_OBJECT LOG_FILE_OBJECT, *PLOG_FILE_OBJECT, **PPLOG_FILE_OBJECT;
+
+typedef struct _CLS_SCAN_CONTEXT {
+  CLFS_NODE_ID cidNode;
+  PLOG_FILE_OBJECT plfoLog;
+  ULONG cIndex __attribute__((aligned(8)));
+  ULONG cContainers __attribute__((aligned(8)));
+  ULONG cContainersReturned __attribute__((aligned(8)));
+  CLFS_SCAN_MODE eScanMode __attribute__((aligned(8)));
+  PCLS_CONTAINER_INFORMATION pinfoContainer __attribute__((aligned(8)));
+} CLS_SCAN_CONTEXT, *PCLS_SCAN_CONTEXT, **PPCLS_SCAN_CONTEXT;
+
+typedef CLS_SCAN_CONTEXT CLFS_SCAN_CONTEXT, *PCLFS_SCAN_CONTEXT, **PPCLFS_SCAN_CONTEXT;
+
+typedef struct _CLS_ARCHIVE_DESCRIPTOR {
+  ULONGLONG coffLow;
+  ULONGLONG coffHigh;
+  CLS_CONTAINER_INFORMATION infoContainer;
+} CLS_ARCHIVE_DESCRIPTOR, *PCLS_ARCHIVE_DESCRIPTOR, **PPCLS_ARCHIVE_DESCRIPTOR;
+
+typedef CLS_ARCHIVE_DESCRIPTOR CLFS_ARCHIVE_DESCRIPTOR, *PCLFS_ARCHIVE_DESCRIPTOR, **PPCLFS_ARCHIVE_DESCRIPTOR;
+
+typedef PVOID (*CLFS_BLOCK_ALLOCATION)(ULONG cbBufferLength, PVOID pvUserContext);
+typedef void (*CLFS_BLOCK_DEALLOCATION)(PVOID pvBuffer, PVOID pvUserContext);
+
+typedef enum _CLFS_LOG_ARCHIVE_MODE {
+  ClfsLogArchiveEnabled = 1,
+  ClfsLogArchiveDisabled = 2
+} CLFS_LOG_ARCHIVE_MODE, *PCLFS_LOG_ARCHIVE_MODE;
+
+CLFSUSER_API
+BOOLEAN
+NTAPI
+ClfsLsnEqual(
+  const CLFS_LSN* plsn1,
+  const CLFS_LSN* plsn2);
+
+CLFSUSER_API
+BOOLEAN
+NTAPI
+ClfsLsnLess(
+  const CLFS_LSN* plsn1,
+  const CLFS_LSN* plsn2);
+
+CLFSUSER_API
+BOOLEAN
+NTAPI
+ClfsLsnGreater(
+  const CLFS_LSN* plsn1,
+  const CLFS_LSN* plsn2);
+
+CLFSUSER_API
+BOOLEAN
+NTAPI
+ClfsLsnNull(
+  const CLFS_LSN* plsn);
+
+CLFSUSER_API
+CLFS_CONTAINER_ID
+NTAPI
+ClfsLsnContainer(
+  const CLFS_LSN* plsn);
+
+CLFSUSER_API
+CLFS_LSN
+NTAPI
+ClfsLsnCreate(
+  CLFS_CONTAINER_ID cidContainer,
+  ULONG offBlock,
+  ULONG cRecord);
+
+CLFSUSER_API
+ULONG
+NTAPI
+ClfsLsnBlockOffset(
+  const CLFS_LSN* plsn);
+
+CLFSUSER_API
+ULONG
+NTAPI
+ClfsLsnRecordSequence(
+  const CLFS_LSN* plsn);
+
+CLFSUSER_API
+BOOLEAN
+NTAPI
+ClfsLsnInvalid(
+  const CLFS_LSN* plsn);
+
+CLFSUSER_API
+CLFS_LSN
+NTAPI
+ClfsLsnIncrement(
+  PCLFS_LSN  plsn);
+
+#ifdef __cplusplus
+#ifdef CLFS_OPERATORS
+
+inline CLFS_LSN operator++(CLFS_LSN& refLsn) {
+  refLsn = ClfsLsnIncrement (&refLsn);
+  return refLsn;
+}
+
+inline BOOLEAN operator<(const CLFS_LSN& refLsn1, const CLFS_LSN& refLsn2) {
+  return ClfsLsnLess(&refLsn1, &refLsn2);
+}
+
+inline BOOLEAN operator>(const CLFS_LSN& refLsn1, const CLFS_LSN& refLsn2) {
+  return ClfsLsnGreater(&refLsn1, &refLsn2);
+}
+
+inline BOOLEAN operator==(const CLFS_LSN& refLsn1, const CLFS_LSN& refLsn2) {
+  return ClfsLsnEqual(&refLsn1, &refLsn2);
+}
+
+inline BOOLEAN operator!=(const CLFS_LSN& refLsn1, const CLFS_LSN& refLsn2) {
+  return !ClfsLsnEqual(&refLsn1, &refLsn2);
+}
+
+inline BOOLEAN operator<=(const CLFS_LSN& refLsn1, const CLFS_LSN& refLsn2) {
+  return !ClfsLsnGreater(&refLsn1, &refLsn2);
+}
+
+inline BOOLEAN operator>=(const CLFS_LSN& refLsn1, const CLFS_LSN& refLsn2) {
+  return !ClfsLsnLess(&refLsn1, &refLsn2);
+}
+
+#endif
+#endif
+#endif
+
+#if NTDDI_VERSION >= NTDDI_VISTA || _WIN32_WINNT >= _WIN32_WINNT_VISTA
+
+#pragma pack(push,8)
+
+typedef struct _CLFS_PHYSICAL_LSN_INFORMATION {
+  UCHAR StreamIdentifier;
+  CLFS_LSN VirtualLsn;
+  CLFS_LSN PhysicalLsn;
+} CLFS_PHYSICAL_LSN_INFORMATION, *PCLFS_PHYSICAL_LSN_INFORMATION;
+
+#pragma pack(pop)
+
+#endif
+
+#endif /* _CLFS_PUBLIC_H_ */
+
+#if NTDDI_VERSION >= NTDDI_WS03SP1 || _WIN32_WINNT >= _WIN32_WINNT_WS03
+
+typedef enum _CLFS_MGMT_POLICY_TYPE {
+  ClfsMgmtPolicyMaximumSize,
+  ClfsMgmtPolicyMinimumSize,
+  ClfsMgmtPolicyNewContainerSize,
+  ClfsMgmtPolicyGrowthRate,
+  ClfsMgmtPolicyLogTail,
+  ClfsMgmtPolicyAutoShrink,
+  ClfsMgmtPolicyAutoGrow,
+  ClfsMgmtPolicyNewContainerPrefix,
+  ClfsMgmtPolicyNewContainerSuffix,
+  ClfsMgmtPolicyNewContainerExtension,
+  ClfsMgmtPolicyInvalid
+} CLFS_MGMT_POLICY_TYPE, *PCLFS_MGMT_POLICY_TYPE;
+
+#define CLFS_MGMT_NUM_POLICIES (ULONG)ClfsMgmtPolicyInvalid
+
+#define CLFS_LOG_SIZE_MINIMUM (ULONGLONG)0
+#define CLFS_LOG_SIZE_MAXIMUM (ULONGLONG)-1
+
+#define CLFS_MGMT_POLICY_VERSION  1
+
+#define LOG_POLICY_OVERWRITE      0x01
+#define LOG_POLICY_PERSIST        0x02
+
+typedef struct _CLFS_MGMT_POLICY {
+  ULONG Version;
+  ULONG LengthInBytes;
+  ULONG PolicyFlags;
+  CLFS_MGMT_POLICY_TYPE PolicyType;
+  union {
+    struct {
+      ULONG Containers;
+    } MaximumSize;
+    struct {
+      ULONG Containers;
+    } MinimumSize;
+    struct {
+      ULONG SizeInBytes;
+    } NewContainerSize;
+    struct {
+      ULONG AbsoluteGrowthInContainers;
+      ULONG RelativeGrowthPercentage;
+    } GrowthRate;
+    struct {
+      ULONG MinimumAvailablePercentage;
+      ULONG MinimumAvailableContainers;
+    } LogTail;
+    struct {
+      ULONG Percentage;
+    } AutoShrink;
+    struct {
+      ULONG Enabled;
+    } AutoGrow;
+    struct {
+      USHORT PrefixLengthInBytes;
+      WCHAR PrefixString[1];
+    } NewContainerPrefix;
+    struct {
+      ULONGLONG NextContainerSuffix;
+    } NewContainerSuffix;
+    struct {
+      USHORT ExtensionLengthInBytes;
+      WCHAR ExtensionString[1];
+    } NewContainerExtension;
+  } PolicyParameters;
+} CLFS_MGMT_POLICY, *PCLFS_MGMT_POLICY;
+
+typedef enum _CLFS_MGMT_NOTIFICATION_TYPE {
+  ClfsMgmtAdvanceTailNotification,
+  ClfsMgmtLogFullHandlerNotification,
+  ClfsMgmtLogUnpinnedNotification,
+  ClfsMgmtLogWriteNotification
+} CLFS_MGMT_NOTIFICATION_TYPE, *PCLFS_MGMT_NOTIFICATION_TYPE;
+
+typedef struct _CLFS_MGMT_NOTIFICATION {
+  CLFS_MGMT_NOTIFICATION_TYPE Notification;
+  CLFS_LSN Lsn;
+  USHORT LogIsPinned;
+} CLFS_MGMT_NOTIFICATION, *PCLFS_MGMT_NOTIFICATION;
+
+typedef NTSTATUS (*PCLFS_CLIENT_ADVANCE_TAIL_CALLBACK)(
+  PLOG_FILE_OBJECT LogFile,
+  PCLFS_LSN TargetLsn,
+  PVOID ClientData);
+
+typedef VOID (*PCLFS_CLIENT_LFF_HANDLER_COMPLETE_CALLBACK)(
+  PLOG_FILE_OBJECT LogFile,
+  NTSTATUS OperationStatus,
+  BOOLEAN LogIsPinned,
+  PVOID ClientData);
+
+typedef VOID (*PCLFS_CLIENT_LOG_UNPINNED_CALLBACK)(
+  PLOG_FILE_OBJECT LogFile,
+  PVOID ClientData);
+
+typedef VOID (*PCLFS_SET_LOG_SIZE_COMPLETE_CALLBACK)(
+  PLOG_FILE_OBJECT LogFile,
+  NTSTATUS OperationStatus,
+  PVOID ClientData);
+
+#define CLFS_MGMT_CLIENT_REGISTRATION_VERSION 1
+
+typedef struct _CLFS_MGMT_CLIENT_REGISTRATION {
+  ULONG Version;
+  PCLFS_CLIENT_ADVANCE_TAIL_CALLBACK AdvanceTailCallback;
+  PVOID AdvanceTailCallbackData;
+  PCLFS_CLIENT_LFF_HANDLER_COMPLETE_CALLBACK LogGrowthCompleteCallback;
+  PVOID LogGrowthCompleteCallbackData;
+  PCLFS_CLIENT_LOG_UNPINNED_CALLBACK LogUnpinnedCallback;
+  PVOID LogUnpinnedCallbackData;
+} CLFS_MGMT_CLIENT_REGISTRATION, *PCLFS_MGMT_CLIENT_REGISTRATION;
+
+typedef PVOID CLFS_MGMT_CLIENT, *PCLFS_MGMT_CLIENT;
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtRegisterManagedClient(
+  PLOG_FILE_OBJECT LogFile,
+  PCLFS_MGMT_CLIENT_REGISTRATION RegistrationData,
+  PCLFS_MGMT_CLIENT ClientCookie);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtDeregisterManagedClient(
+  CLFS_MGMT_CLIENT ClientCookie);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtTailAdvanceFailure(
+  CLFS_MGMT_CLIENT Client,
+  NTSTATUS Reason);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtHandleLogFileFull(
+  CLFS_MGMT_CLIENT Client);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtInstallPolicy(
+  PLOG_FILE_OBJECT LogFile,
+  PCLFS_MGMT_POLICY Policy,
+  ULONG PolicyLength);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtQueryPolicy(
+  PLOG_FILE_OBJECT LogFile,
+  CLFS_MGMT_POLICY_TYPE PolicyType,
+  PCLFS_MGMT_POLICY Policy,
+  PULONG PolicyLength);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtRemovePolicy(
+  PLOG_FILE_OBJECT LogFile,
+  CLFS_MGMT_POLICY_TYPE PolicyType);
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtSetLogFileSize(
+  PLOG_FILE_OBJECT LogFile,
+  PULONGLONG NewSizeInContainers,
+  PULONGLONG ResultingSizeInContainers,
+  PCLFS_SET_LOG_SIZE_COMPLETE_CALLBACK CompletionRoutine,
+  PVOID CompletionRoutineData);
+
+#endif
+
+#if NTDDI_VERSION >= NTDDI_VISTA || _WIN32_WINNT >= _WIN32_WINNT_VISTA
+
+CLFSUSER_API
+NTSTATUS
+ClfsMgmtSetLogFileSizeAsClient(
+  PLOG_FILE_OBJECT LogFile,
+  PCLFS_MGMT_CLIENT ClientCookie,
+  PULONGLONG NewSizeInContainers,
+  PULONGLONG ResultingSizeInContainers,
+  PCLFS_SET_LOG_SIZE_COMPLETE_CALLBACK CompletionRoutine,
+  PVOID CompletionRoutineData);
+
+#endif
+
+#ifndef __CLFSPROC_H__
+#define __CLFSPROC_H__
+
+#if NTDDI_VERSION >= NTDDI_WS03SP1
+
+CLFSUSER_API NTSTATUS ClfsInitialize(void);
+
+CLFSUSER_API void ClfsFinalize(void);
+
+CLFSUSER_API
+NTSTATUS
+ClfsCreateLogFile(
+  PPLOG_FILE_OBJECT pplfoLog,
+  PUNICODE_STRING puszLogFileName,
+  ACCESS_MASK fDesiredAccess,
+  ULONG dwShareMode,
+  PSECURITY_DESCRIPTOR psdLogFile,
+  ULONG fCreateDisposition,
+  ULONG fCreateOptions,
+  ULONG fFlagsAndAttributes,
+  ULONG fLogOptionFlag,
+  PVOID pvContext,
+  ULONG cbContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsDeleteLogByPointer(
+  PLOG_FILE_OBJECT plfoLog);
+
+CLFSUSER_API
+NTSTATUS
+ClfsDeleteLogFile(
+  PUNICODE_STRING puszLogFileName,
+  PVOID pvReserved,
+  ULONG fLogOptionFlag,
+  PVOID pvContext,
+  ULONG cbContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsAddLogContainer(
+  PLOG_FILE_OBJECT plfoLog,
+  PULONGLONG pcbContainer,
+  PUNICODE_STRING puszContainerPath);
+
+CLFSUSER_API
+NTSTATUS
+ClfsAddLogContainerSet(
+  PLOG_FILE_OBJECT plfoLog,
+  USHORT cContainers,
+  PULONGLONG pcbContainer,
+  PUNICODE_STRING rguszContainerPath);
+
+CLFSUSER_API
+NTSTATUS
+ClfsRemoveLogContainer(
+  PLOG_FILE_OBJECT plfoLog,
+  PUNICODE_STRING puszContainerPath,
+  BOOLEAN fForce);
+
+CLFSUSER_API
+NTSTATUS
+ClfsRemoveLogContainerSet(
+  PLOG_FILE_OBJECT plfoLog,
+  USHORT cContainers,
+  PUNICODE_STRING rgwszContainerPath,
+  BOOLEAN fForce);
+
+CLFSUSER_API
+NTSTATUS
+ClfsSetArchiveTail(
+  PLOG_FILE_OBJECT plfoLog,
+  PCLFS_LSN plsnArchiveTail);
+
+CLFSUSER_API
+NTSTATUS
+ClfsSetEndOfLog(
+  PLOG_FILE_OBJECT plfoLog,
+  PCLFS_LSN plsnEnd);
+
+CLFSUSER_API
+NTSTATUS
+ClfsCreateScanContext(
+  PLOG_FILE_OBJECT plfoLog,
+  ULONG cFromContainer,
+  ULONG cContainers,
+  CLFS_SCAN_MODE eScanMode,
+  PCLFS_SCAN_CONTEXT pcxScan);
+
+CLFSUSER_API
+NTSTATUS
+ClfsScanLogContainers(
+  PCLFS_SCAN_CONTEXT pcxScan,
+  CLFS_SCAN_MODE eScanMode);
+
+CLFSUSER_API
+NTSTATUS
+ClfsGetContainerName(
+  PLOG_FILE_OBJECT plfoLog,
+  CLFS_CONTAINER_ID cidLogicalContainer,
+  PUNICODE_STRING puszContainerName,
+  PULONG pcActualLenContainerName);
+
+CLFSUSER_API
+NTSTATUS
+ClfsGetLogFileInformation(
+  PLOG_FILE_OBJECT plfoLog,
+  PCLFS_INFORMATION pinfoBuffer,
+  PULONG pcbInfoBuffer);
+
+CLFSUSER_API
+NTSTATUS
+ClfsSetLogFileInformation(
+  PLOG_FILE_OBJECT plfoLog,
+  CLFS_LOG_INFORMATION_CLASS eInformationClass,
+  PVOID pinfoBuffer,
+  ULONG cbBuffer);
+
+CLFSUSER_API
+NTSTATUS
+ClfsReadRestartArea(
+  PVOID pvMarshalContext,
+  PVOID* ppvRestartBuffer,
+  PULONG pcbRestartBuffer,
+  PCLFS_LSN plsn,
+  PVOID* ppvReadContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsReadPreviousRestartArea(
+  PVOID pvReadContext,
+  PVOID* ppvRestartBuffer,
+  PULONG pcbRestartBuffer,
+  PCLFS_LSN plsnRestart);
+
+CLFSUSER_API
+NTSTATUS
+ClfsWriteRestartArea(
+  PVOID pvMarshalContext,
+  PVOID pvRestartBuffer,
+  ULONG cbRestartBuffer,
+  PCLFS_LSN plsnBase,
+  ULONG fFlags,
+  PULONG pcbWritten,
+  PCLFS_LSN plsnNext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsAdvanceLogBase(
+  PVOID pvMarshalContext,
+  PCLFS_LSN plsnBase,
+  ULONG fFlags);
+
+CLFSUSER_API
+NTSTATUS
+ClfsCloseAndResetLogFile(
+  PLOG_FILE_OBJECT plfoLog);
+
+CLFSUSER_API
+NTSTATUS
+ClfsCloseLogFileObject(
+  PLOG_FILE_OBJECT plfoLog);
+
+CLFSUSER_API
+NTSTATUS
+ClfsCreateMarshallingArea(
+  PLOG_FILE_OBJECT plfoLog,
+  POOL_TYPE ePoolType,
+  PALLOCATE_FUNCTION pfnAllocBuffer,
+  PFREE_FUNCTION pfnFreeBuffer,
+  ULONG cbMarshallingBuffer,
+  ULONG cMaxWriteBuffers,
+  ULONG cMaxReadBuffers,
+  PVOID* ppvMarshalContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsDeleteMarshallingArea(
+  PVOID pvMarshalContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsReserveAndAppendLog(
+  PVOID pvMarshalContext,
+  PCLFS_WRITE_ENTRY rgWriteEntries,
+  ULONG cWriteEntries,
+  PCLFS_LSN plsnUndoNext,
+  PCLFS_LSN plsnPrevious,
+  ULONG cReserveRecords,
+  PLONGLONG rgcbReservation,
+  ULONG fFlags,
+  PCLFS_LSN plsn);
+
+CLFSUSER_API
+NTSTATUS
+ClfsReserveAndAppendLogAligned(
+  PVOID pvMarshalContext,
+  PCLFS_WRITE_ENTRY rgWriteEntries,
+  ULONG cWriteEntries,
+  ULONG cbEntryAlignment,
+  PCLFS_LSN plsnUndoNext,
+  PCLFS_LSN plsnPrevious,
+  ULONG cReserveRecords,
+  PLONGLONG rgcbReservation,
+  ULONG fFlags,
+  PCLFS_LSN plsn);
+
+CLFSUSER_API
+NTSTATUS
+ClfsAlignReservedLog(
+  PVOID pvMarshalContext,
+  ULONG cRecords,
+  LONGLONG rgcbReservation[],
+  PLONGLONG pcbAlignReservation);
+
+CLFSUSER_API
+NTSTATUS
+ClfsAllocReservedLog(
+  PVOID pvMarshalContext,
+  ULONG cRecords,
+  PLONGLONG pcbAdjustment);
+
+CLFSUSER_API
+NTSTATUS
+ClfsFreeReservedLog(
+  PVOID pvMarshalContext,
+  ULONG cRecords,
+  PLONGLONG pcbAdjustment);
+
+CLFSUSER_API
+NTSTATUS
+ClfsFlushBuffers(
+  PVOID pvMarshalContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsFlushToLsn(
+  PVOID pvMarshalContext,
+  PCLFS_LSN plsnFlush,
+  PCLFS_LSN plsnLastFlushed);
+
+CLFSUSER_API
+NTSTATUS
+ClfsReadLogRecord(
+  PVOID pvMarshalContext,
+  PCLFS_LSN plsnFirst,
+  CLFS_CONTEXT_MODE peContextMode,
+  PVOID* ppvReadBuffer,
+  PULONG pcbReadBuffer,
+  PCLFS_RECORD_TYPE peRecordType,
+  PCLFS_LSN plsnUndoNext,
+  PCLFS_LSN plsnPrevious,
+  PVOID* ppvReadContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsReadNextLogRecord(
+  PVOID pvReadContext,
+  PVOID* ppvBuffer,
+  PULONG pcbBuffer,
+  PCLFS_RECORD_TYPE peRecordType,
+  PCLFS_LSN plsnUser,
+  PCLFS_LSN plsnUndoNext,
+  PCLFS_LSN plsnPrevious,
+  PCLFS_LSN plsnRecord);
+
+CLFSUSER_API
+NTSTATUS
+ClfsTerminateReadLog(
+  PVOID pvCursorContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsGetLastLsn(
+  PLOG_FILE_OBJECT plfoLog,
+  PCLFS_LSN plsnLast);
+
+CLFSUSER_API
+NTSTATUS
+ClfsGetIoStatistics(
+  PLOG_FILE_OBJECT plfoLog,
+  PVOID pvStatsBuffer,
+  ULONG cbStatsBuffer,
+  CLFS_IOSTATS_CLASS eStatsClass,
+  PULONG pcbStatsWritten);
+
+CLFSUSER_API
+CLFS_LSN
+ClfsLaterLsn(
+  PCLFS_LSN plsn);
+
+CLFSUSER_API
+CLFS_LSN
+ClfsEarlierLsn(
+  PCLFS_LSN plsn);
+
+CLFSUSER_API
+NTSTATUS
+ClfsLsnDifference(
+  PCLFS_LSN plsnStart,
+  PCLFS_LSN plsnFinish,
+  ULONG cbContainer,
+  ULONG cbMaxBlock,
+  PLONGLONG pcbDifference);
+
+#endif
+
+#if NTDDI_VERSION >= NTDDI_VISTA
+
+CLFSUSER_API
+BOOLEAN
+ClfsValidTopLevelContext(
+  PIRP pirpTopLevelContext);
+
+CLFSUSER_API
+NTSTATUS
+ClfsQueryLogFileInformation(
+  PLOG_FILE_OBJECT plfoLog,
+  CLFS_LOG_INFORMATION_CLASS eInformationClass,
+  PVOID pinfoInputBuffer,
+  ULONG cbinfoInputBuffer,
+  PVOID pinfoBuffer,
+  PULONG pcbInfoBuffer);
+
+#endif
+
+#if NTDDI_VERSION >= NTDDI_WIN8
+
+CLFSUSER_API
+NTSTATUS
+ClfsCreateMarshallingAreaEx(
+  PLOG_FILE_OBJECT plfoLog,
+  POOL_TYPE ePoolType,
+  PALLOCATE_FUNCTION pfnAllocBuffer,
+  PFREE_FUNCTION pfnFreeBuffer,
+  ULONG cbMarshallingBuffer,
+  ULONG cMaxWriteBuffers,
+  ULONG cMaxReadBuffers,
+  ULONG cAlignmentSize,
+  ULONGLONG fFlags,
+  PVOID* ppvMarshalContext);
+
+#endif
+
+#endif /* __CLFSPROC_H__ */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* !_WDMDDK_ */
