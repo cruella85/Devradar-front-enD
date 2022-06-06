@@ -571,4 +571,310 @@ test "suspension points inside branching control flow" {
 
 test "call async function which has struct return type" {
     if (true) return error.SkipZigTest; // TODO
-    if (builtin.os.tag == .wasi) return er
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+
+        fn doTheTest() void {
+            _ = async atest();
+            resume frame;
+        }
+
+        fn atest() void {
+            const result = func();
+            expect(result.x == 5) catch @panic("test failed");
+            expect(result.y == 6) catch @panic("test failed");
+        }
+
+        const Point = struct {
+            x: usize,
+            y: usize,
+        };
+
+        fn func() Point {
+            suspend {
+                frame = @frame();
+            }
+            return Point{
+                .x = 5,
+                .y = 6,
+            };
+        }
+    };
+    S.doTheTest();
+}
+
+test "pass string literal to async function" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+        var ok: bool = false;
+
+        fn doTheTest() !void {
+            _ = async hello("hello");
+            resume frame;
+            try expect(ok);
+        }
+
+        fn hello(msg: []const u8) void {
+            frame = @frame();
+            suspend {}
+            expectEqualStrings("hello", msg) catch @panic("test failed");
+            ok = true;
+        }
+    };
+    try S.doTheTest();
+}
+
+test "await inside an errdefer" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+
+        fn doTheTest() !void {
+            _ = async amainWrap();
+            resume frame;
+        }
+
+        fn amainWrap() !void {
+            var foo = async func();
+            errdefer await foo;
+            return error.Bad;
+        }
+
+        fn func() void {
+            frame = @frame();
+            suspend {}
+        }
+    };
+    try S.doTheTest();
+}
+
+test "try in an async function with error union and non-zero-bit payload" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+        var ok = false;
+
+        fn doTheTest() !void {
+            _ = async amain();
+            resume frame;
+            try expect(ok);
+        }
+
+        fn amain() void {
+            std.testing.expectError(error.Bad, theProblem()) catch @panic("test failed");
+            ok = true;
+        }
+
+        fn theProblem() ![]u8 {
+            frame = @frame();
+            suspend {}
+            const result = try other();
+            return result;
+        }
+
+        fn other() ![]u8 {
+            return error.Bad;
+        }
+    };
+    try S.doTheTest();
+}
+
+test "returning a const error from async function" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+        var ok = false;
+
+        fn doTheTest() !void {
+            _ = async amain();
+            resume frame;
+            try expect(ok);
+        }
+
+        fn amain() !void {
+            var download_frame = async fetchUrl(10, "a string");
+            const download_text = try await download_frame;
+            _ = download_text;
+
+            @panic("should not get here");
+        }
+
+        fn fetchUrl(unused: i32, url: []const u8) ![]u8 {
+            _ = unused;
+            _ = url;
+            frame = @frame();
+            suspend {}
+            ok = true;
+            return error.OutOfMemory;
+        }
+    };
+    try S.doTheTest();
+}
+
+test "async/await typical usage" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    inline for ([_]bool{ false, true }) |b1| {
+        inline for ([_]bool{ false, true }) |b2| {
+            inline for ([_]bool{ false, true }) |b3| {
+                inline for ([_]bool{ false, true }) |b4| {
+                    testAsyncAwaitTypicalUsage(b1, b2, b3, b4).doTheTest();
+                }
+            }
+        }
+    }
+}
+
+fn testAsyncAwaitTypicalUsage(
+    comptime simulate_fail_download: bool,
+    comptime simulate_fail_file: bool,
+    comptime suspend_download: bool,
+    comptime suspend_file: bool,
+) type {
+    return struct {
+        fn doTheTest() void {
+            _ = async amainWrap();
+            if (suspend_file) {
+                resume global_file_frame;
+            }
+            if (suspend_download) {
+                resume global_download_frame;
+            }
+        }
+        fn amainWrap() void {
+            if (amain()) |_| {
+                expect(!simulate_fail_download) catch @panic("test failure");
+                expect(!simulate_fail_file) catch @panic("test failure");
+            } else |e| switch (e) {
+                error.NoResponse => expect(simulate_fail_download) catch @panic("test failure"),
+                error.FileNotFound => expect(simulate_fail_file) catch @panic("test failure"),
+                else => @panic("test failure"),
+            }
+        }
+
+        fn amain() !void {
+            const allocator = std.testing.allocator;
+            var download_frame = async fetchUrl(allocator, "https://example.com/");
+            var download_awaited = false;
+            errdefer if (!download_awaited) {
+                if (await download_frame) |x| allocator.free(x) else |_| {}
+            };
+
+            var file_frame = async readFile(allocator, "something.txt");
+            var file_awaited = false;
+            errdefer if (!file_awaited) {
+                if (await file_frame) |x| allocator.free(x) else |_| {}
+            };
+
+            download_awaited = true;
+            const download_text = try await download_frame;
+            defer allocator.free(download_text);
+
+            file_awaited = true;
+            const file_text = try await file_frame;
+            defer allocator.free(file_text);
+
+            try expect(std.mem.eql(u8, "expected download text", download_text));
+            try expect(std.mem.eql(u8, "expected file text", file_text));
+        }
+
+        var global_download_frame: anyframe = undefined;
+        fn fetchUrl(allocator: std.mem.Allocator, url: []const u8) anyerror![]u8 {
+            _ = url;
+            const result = try allocator.dupe(u8, "expected download text");
+            errdefer allocator.free(result);
+            if (suspend_download) {
+                suspend {
+                    global_download_frame = @frame();
+                }
+            }
+            if (simulate_fail_download) return error.NoResponse;
+            return result;
+        }
+
+        var global_file_frame: anyframe = undefined;
+        fn readFile(allocator: std.mem.Allocator, filename: []const u8) anyerror![]u8 {
+            _ = filename;
+            const result = try allocator.dupe(u8, "expected file text");
+            errdefer allocator.free(result);
+            if (suspend_file) {
+                suspend {
+                    global_file_frame = @frame();
+                }
+            }
+            if (simulate_fail_file) return error.FileNotFound;
+            return result;
+        }
+    };
+}
+
+test "alignment of local variables in async functions" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn doTheTest() !void {
+            var y: u8 = 123;
+            _ = y;
+            var x: u8 align(128) = 1;
+            try expect(@ptrToInt(&x) % 128 == 0);
+        }
+    };
+    try S.doTheTest();
+}
+
+test "no reason to resolve frame still works" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    _ = async simpleNothing();
+}
+fn simpleNothing() void {
+    var x: i32 = 1234;
+    _ = x;
+}
+
+test "async call a generic function" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn doTheTest() !void {
+            var f = async func(i32, 2);
+            const result = await f;
+            try expect(result == 3);
+        }
+
+        fn func(comptime T: type, inc: T) T {
+            var x: T = 1;
+            suspend {
+                resume @frame();
+            }
+            x += inc;
+            return x;
+        }
+    };
+    _ = async S.doTheTest();
+}
+
+test "return from suspend block" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn doTheTest() !void {
+            expect(func() == 1234) catch @panic("test failure");
+        }
+        fn func() i32
