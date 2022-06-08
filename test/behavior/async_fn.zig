@@ -1516,4 +1516,331 @@ test "async function passed 0-bit arg after non-0-bit arg" {
             bar(1, .{}) catch unreachable;
         }
 
-       
+        fn bar(x: i32, args: anytype) anyerror!void {
+            _ = args;
+            global_frame = @frame();
+            suspend {}
+            global_int = x;
+        }
+    };
+    _ = async S.foo();
+    resume S.global_frame;
+    try expect(S.global_int == 1);
+}
+
+test "async function passed align(16) arg after align(8) arg" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+        var global_int: u128 = 0;
+
+        fn foo() void {
+            var a: u128 = 99;
+            bar(10, .{a}) catch unreachable;
+        }
+
+        fn bar(x: u64, args: anytype) anyerror!void {
+            try expect(x == 10);
+            global_frame = @frame();
+            suspend {}
+            global_int = args[0];
+        }
+    };
+    _ = async S.foo();
+    resume S.global_frame;
+    try expect(S.global_int == 99);
+}
+
+test "async function call resolves target fn frame, comptime func" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+        var global_int: i32 = 9;
+
+        fn foo() anyerror!void {
+            const stack_size = 1000;
+            var stack_frame: [stack_size]u8 align(std.Target.stack_align) = undefined;
+            return await @asyncCall(&stack_frame, {}, bar, .{});
+        }
+
+        fn bar() anyerror!void {
+            global_frame = @frame();
+            suspend {}
+            global_int += 1;
+        }
+    };
+    _ = async S.foo();
+    resume S.global_frame;
+    try expect(S.global_int == 10);
+}
+
+test "async function call resolves target fn frame, runtime func" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+        var global_int: i32 = 9;
+
+        fn foo() anyerror!void {
+            const stack_size = 1000;
+            var stack_frame: [stack_size]u8 align(std.Target.stack_align) = undefined;
+            var func: fn () callconv(.Async) anyerror!void = bar;
+            return await @asyncCall(&stack_frame, {}, func, .{});
+        }
+
+        fn bar() anyerror!void {
+            global_frame = @frame();
+            suspend {}
+            global_int += 1;
+        }
+    };
+    _ = async S.foo();
+    resume S.global_frame;
+    try expect(S.global_int == 10);
+}
+
+test "properly spill optional payload capture value" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+        var global_int: usize = 2;
+
+        fn foo() void {
+            var opt: ?usize = 1234;
+            if (opt) |x| {
+                bar();
+                global_int += x;
+            }
+        }
+
+        fn bar() void {
+            global_frame = @frame();
+            suspend {}
+            global_int += 1;
+        }
+    };
+    _ = async S.foo();
+    resume S.global_frame;
+    try expect(S.global_int == 1237);
+}
+
+test "handle defer interfering with return value spill" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame1: anyframe = undefined;
+        var global_frame2: anyframe = undefined;
+        var finished = false;
+        var baz_happened = false;
+
+        fn doTheTest() !void {
+            _ = async testFoo();
+            resume global_frame1;
+            resume global_frame2;
+            try expect(baz_happened);
+            try expect(finished);
+        }
+
+        fn testFoo() void {
+            expectError(error.Bad, foo()) catch @panic("test failure");
+            finished = true;
+        }
+
+        fn foo() anyerror!void {
+            defer baz();
+            return bar() catch |err| return err;
+        }
+
+        fn bar() anyerror!void {
+            global_frame1 = @frame();
+            suspend {}
+            return error.Bad;
+        }
+
+        fn baz() void {
+            global_frame2 = @frame();
+            suspend {}
+            baz_happened = true;
+        }
+    };
+    try S.doTheTest();
+}
+
+test "take address of temporary async frame" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+        var finished = false;
+
+        fn doTheTest() !void {
+            _ = async asyncDoTheTest();
+            resume global_frame;
+            try expect(finished);
+        }
+
+        fn asyncDoTheTest() void {
+            expect(finishIt(&async foo(10)) == 1245) catch @panic("test failure");
+            finished = true;
+        }
+
+        fn foo(arg: i32) i32 {
+            global_frame = @frame();
+            suspend {}
+            return arg + 1234;
+        }
+
+        fn finishIt(frame: anyframe->i32) i32 {
+            return (await frame) + 1;
+        }
+    };
+    try S.doTheTest();
+}
+
+test "nosuspend await" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var finished = false;
+
+        fn doTheTest() !void {
+            var frame = async foo(false);
+            try expect(nosuspend await frame == 42);
+            finished = true;
+        }
+
+        fn foo(want_suspend: bool) i32 {
+            if (want_suspend) {
+                suspend {}
+            }
+            return 42;
+        }
+    };
+    try S.doTheTest();
+    try expect(S.finished);
+}
+
+test "nosuspend on function calls" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S0 = struct {
+        b: i32 = 42,
+    };
+    const S1 = struct {
+        fn c() S0 {
+            return S0{};
+        }
+        fn d() !S0 {
+            return S0{};
+        }
+    };
+    try expectEqual(@as(i32, 42), nosuspend S1.c().b);
+    try expectEqual(@as(i32, 42), (try nosuspend S1.d()).b);
+}
+
+test "nosuspend on async function calls" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S0 = struct {
+        b: i32 = 42,
+    };
+    const S1 = struct {
+        fn c() S0 {
+            return S0{};
+        }
+        fn d() !S0 {
+            return S0{};
+        }
+    };
+    var frame_c = nosuspend async S1.c();
+    try expectEqual(@as(i32, 42), (await frame_c).b);
+    var frame_d = nosuspend async S1.d();
+    try expectEqual(@as(i32, 42), (try await frame_d).b);
+}
+
+// test "resume nosuspend async function calls" {
+// if (true) return error.SkipZigTest; // if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+//     const S0 = struct {
+//         b: i32 = 42,
+//     };
+//     const S1 = struct {
+//         fn c() S0 {
+//             suspend {}
+//             return S0{};
+//         }
+//         fn d() !S0 {
+//             suspend {}
+//             return S0{};
+//         }
+//     };
+//     var frame_c = nosuspend async S1.c();
+//     resume frame_c;
+// try expectEqual(@as(i32, 42), (await frame_c).b);
+//     var frame_d = nosuspend async S1.d();
+//     resume frame_d;
+// try expectEqual(@as(i32, 42), (try await frame_d).b);
+// }
+
+test "nosuspend resume async function calls" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S0 = struct {
+        b: i32 = 42,
+    };
+    const S1 = struct {
+        fn c() S0 {
+            suspend {}
+            return S0{};
+        }
+        fn d() !S0 {
+            suspend {}
+            return S0{};
+        }
+    };
+    var frame_c = async S1.c();
+    nosuspend resume frame_c;
+    try expectEqual(@as(i32, 42), (await frame_c).b);
+    var frame_d = async S1.d();
+    nosuspend resume frame_d;
+    try expectEqual(@as(i32, 42), (try await frame_d).b);
+}
+
+test "avoid forcing frame alignment resolution implicit cast to *anyopaque" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var x: ?*anyopaque = null;
+
+        fn foo() bool {
+            suspend {
+                x = @frame();
+            }
+            return true;
+        }
+    };
+    var frame = async S.foo();
+    resume @ptrCast(anyframe->bool, @alignCast(@alignOf(@Frame(S.foo)), S.x));
+    try expect(nosuspend await frame);
+}
+
+test "@asyncCall with pass-by-value arguments" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const F0: u64 = 0xbeefbeefbeefbeef;
+    const F1: u64 = 0xf00df00df00df00d;
+    const F
