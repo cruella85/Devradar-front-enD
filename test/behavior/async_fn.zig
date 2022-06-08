@@ -877,4 +877,320 @@ test "return from suspend block" {
         fn doTheTest() !void {
             expect(func() == 1234) catch @panic("test failure");
         }
-        fn func() i32
+        fn func() i32 {
+            suspend {
+                return 1234;
+            }
+        }
+    };
+    _ = async S.doTheTest();
+}
+
+test "struct parameter to async function is copied to the frame" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        const Point = struct {
+            x: i32,
+            y: i32,
+        };
+
+        var frame: anyframe = undefined;
+
+        fn doTheTest() void {
+            _ = async atest();
+            resume frame;
+        }
+
+        fn atest() void {
+            var f: @Frame(foo) = undefined;
+            bar(&f);
+            clobberStack(10);
+        }
+
+        fn clobberStack(x: i32) void {
+            if (x == 0) return;
+            clobberStack(x - 1);
+            var y: i32 = x;
+            _ = y;
+        }
+
+        fn bar(f: *@Frame(foo)) void {
+            var pt = Point{ .x = 1, .y = 2 };
+            f.* = async foo(pt);
+            var result = await f;
+            expect(result == 1) catch @panic("test failure");
+        }
+
+        fn foo(point: Point) i32 {
+            suspend {
+                frame = @frame();
+            }
+            return point.x;
+        }
+    };
+    S.doTheTest();
+}
+
+test "cast fn to async fn when it is inferred to be async" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+        var ok = false;
+
+        fn doTheTest() void {
+            var ptr: fn () callconv(.Async) i32 = undefined;
+            ptr = func;
+            var buf: [100]u8 align(16) = undefined;
+            var result: i32 = undefined;
+            const f = @asyncCall(&buf, &result, ptr, .{});
+            _ = await f;
+            expect(result == 1234) catch @panic("test failure");
+            ok = true;
+        }
+
+        fn func() i32 {
+            suspend {
+                frame = @frame();
+            }
+            return 1234;
+        }
+    };
+    _ = async S.doTheTest();
+    resume S.frame;
+    try expect(S.ok);
+}
+
+test "cast fn to async fn when it is inferred to be async, awaited directly" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var frame: anyframe = undefined;
+        var ok = false;
+
+        fn doTheTest() void {
+            var ptr: fn () callconv(.Async) i32 = undefined;
+            ptr = func;
+            var buf: [100]u8 align(16) = undefined;
+            var result: i32 = undefined;
+            _ = await @asyncCall(&buf, &result, ptr, .{});
+            expect(result == 1234) catch @panic("test failure");
+            ok = true;
+        }
+
+        fn func() i32 {
+            suspend {
+                frame = @frame();
+            }
+            return 1234;
+        }
+    };
+    _ = async S.doTheTest();
+    resume S.frame;
+    try expect(S.ok);
+}
+
+test "await does not force async if callee is blocking" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn simple() i32 {
+            return 1234;
+        }
+    };
+    var x = async S.simple();
+    try expect(await x == 1234);
+}
+
+test "recursive async function" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    try expect(recursiveAsyncFunctionTest(false).doTheTest() == 55);
+    try expect(recursiveAsyncFunctionTest(true).doTheTest() == 55);
+}
+
+fn recursiveAsyncFunctionTest(comptime suspending_implementation: bool) type {
+    return struct {
+        fn fib(allocator: std.mem.Allocator, x: u32) error{OutOfMemory}!u32 {
+            if (x <= 1) return x;
+
+            if (suspending_implementation) {
+                suspend {
+                    resume @frame();
+                }
+            }
+
+            const f1 = try allocator.create(@Frame(fib));
+            defer allocator.destroy(f1);
+
+            const f2 = try allocator.create(@Frame(fib));
+            defer allocator.destroy(f2);
+
+            f1.* = async fib(allocator, x - 1);
+            var f1_awaited = false;
+            errdefer if (!f1_awaited) {
+                _ = await f1;
+            };
+
+            f2.* = async fib(allocator, x - 2);
+            var f2_awaited = false;
+            errdefer if (!f2_awaited) {
+                _ = await f2;
+            };
+
+            var sum: u32 = 0;
+
+            f1_awaited = true;
+            sum += try await f1;
+
+            f2_awaited = true;
+            sum += try await f2;
+
+            return sum;
+        }
+
+        fn doTheTest() u32 {
+            if (suspending_implementation) {
+                var result: u32 = undefined;
+                _ = async amain(&result);
+                return result;
+            } else {
+                return fib(std.testing.allocator, 10) catch unreachable;
+            }
+        }
+
+        fn amain(result: *u32) void {
+            var x = async fib(std.testing.allocator, 10);
+            result.* = (await x) catch unreachable;
+        }
+    };
+}
+
+test "@asyncCall with comptime-known function, but not awaited directly" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+
+        fn doTheTest() !void {
+            var frame: [1]@Frame(middle) = undefined;
+            var result: @typeInfo(@typeInfo(@TypeOf(middle)).Fn.return_type.?).ErrorUnion.error_set!void = undefined;
+            _ = @asyncCall(std.mem.sliceAsBytes(frame[0..]), &result, middle, .{});
+            resume global_frame;
+            try std.testing.expectError(error.Fail, result);
+        }
+        fn middle() callconv(.Async) !void {
+            var f = async middle2();
+            return await f;
+        }
+
+        fn middle2() !void {
+            return failing();
+        }
+
+        fn failing() !void {
+            global_frame = @frame();
+            suspend {}
+            return error.Fail;
+        }
+    };
+    try S.doTheTest();
+}
+
+test "@asyncCall with actual frame instead of byte buffer" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn func() i32 {
+            suspend {}
+            return 1234;
+        }
+    };
+    var frame: @Frame(S.func) = undefined;
+    var result: i32 = undefined;
+    const ptr = @asyncCall(&frame, &result, S.func, .{});
+    resume ptr;
+    try expect(result == 1234);
+}
+
+test "@asyncCall using the result location inside the frame" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn simple2(y: *i32) callconv(.Async) i32 {
+            defer y.* += 2;
+            y.* += 1;
+            suspend {}
+            return 1234;
+        }
+        fn getAnswer(f: anyframe->i32, out: *i32) void {
+            out.* = await f;
+        }
+    };
+    var data: i32 = 1;
+    const Foo = struct {
+        bar: fn (*i32) callconv(.Async) i32,
+    };
+    var foo = Foo{ .bar = S.simple2 };
+    var bytes: [64]u8 align(16) = undefined;
+    const f = @asyncCall(&bytes, {}, foo.bar, .{&data});
+    comptime try expect(@TypeOf(f) == anyframe->i32);
+    try expect(data == 2);
+    resume f;
+    try expect(data == 4);
+    _ = async S.getAnswer(f, &data);
+    try expect(data == 1234);
+}
+
+test "@TypeOf an async function call of generic fn with error union type" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        fn func(comptime x: anytype) anyerror!i32 {
+            const T = @TypeOf(async func(x));
+            comptime try expect(T == @typeInfo(@TypeOf(@frame())).Pointer.child);
+            return undefined;
+        }
+    };
+    _ = async S.func(i32);
+}
+
+test "using @TypeOf on a generic function call" {
+    if (true) return error.SkipZigTest; // TODO
+    if (builtin.os.tag == .wasi) return error.SkipZigTest; // TODO
+
+    const S = struct {
+        var global_frame: anyframe = undefined;
+        var global_ok = false;
+
+        var buf: [100]u8 align(16) = undefined;
+
+        fn amain(x: anytype) void {
+            if (x == 0) {
+                global_ok = true;
+                return;
+            }
+            suspend {
+                global_frame = @frame();
+            }
+            const F = @TypeOf(async amain(x - 1));
+            const frame = @intToPtr(*F, @ptrToInt(&buf));
+            return await @asyncCall(frame, {}, amain, .{x - 1});
+        }
+    };
+    _ = async S.amain(@as(u32, 1));
+    resume S.global_frame;
+    try expect(S.global_ok);
+}
+
+test "recursive call of await @asyncCall with struct
