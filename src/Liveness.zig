@@ -155,4 +155,283 @@ pub fn categorizeOperand(
         .bit_and,
         .bit_or,
         .xor,
-      
+        .cmp_lt,
+        .cmp_lte,
+        .cmp_eq,
+        .cmp_gte,
+        .cmp_gt,
+        .cmp_neq,
+        .bool_and,
+        .bool_or,
+        .array_elem_val,
+        .slice_elem_val,
+        .ptr_elem_val,
+        .shl,
+        .shl_exact,
+        .shl_sat,
+        .shr,
+        .shr_exact,
+        .min,
+        .max,
+        .add_optimized,
+        .addwrap_optimized,
+        .sub_optimized,
+        .subwrap_optimized,
+        .mul_optimized,
+        .mulwrap_optimized,
+        .div_float_optimized,
+        .div_trunc_optimized,
+        .div_floor_optimized,
+        .div_exact_optimized,
+        .rem_optimized,
+        .mod_optimized,
+        .neg_optimized,
+        .cmp_lt_optimized,
+        .cmp_lte_optimized,
+        .cmp_eq_optimized,
+        .cmp_gte_optimized,
+        .cmp_gt_optimized,
+        .cmp_neq_optimized,
+        => {
+            const o = air_datas[inst].bin_op;
+            if (o.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            if (o.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            return .none;
+        },
+
+        .store,
+        .atomic_store_unordered,
+        .atomic_store_monotonic,
+        .atomic_store_release,
+        .atomic_store_seq_cst,
+        .set_union_tag,
+        => {
+            const o = air_datas[inst].bin_op;
+            if (o.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            if (o.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .write);
+            return .write;
+        },
+
+        .vector_store_elem => {
+            const o = air_datas[inst].vector_store_elem;
+            const extra = air.extraData(Air.Bin, o.payload).data;
+            if (o.vector_ptr == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            if (extra.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            if (extra.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 2, .none);
+            return .write;
+        },
+
+        .arg,
+        .alloc,
+        .ret_ptr,
+        .constant,
+        .const_ty,
+        .trap,
+        .breakpoint,
+        .dbg_stmt,
+        .dbg_inline_begin,
+        .dbg_inline_end,
+        .dbg_block_begin,
+        .dbg_block_end,
+        .unreach,
+        .ret_addr,
+        .frame_addr,
+        .wasm_memory_size,
+        .err_return_trace,
+        .save_err_return_trace_index,
+        .c_va_start,
+        => return .none,
+
+        .fence => return .write,
+
+        .not,
+        .bitcast,
+        .load,
+        .fpext,
+        .fptrunc,
+        .intcast,
+        .trunc,
+        .optional_payload,
+        .optional_payload_ptr,
+        .wrap_optional,
+        .unwrap_errunion_payload,
+        .unwrap_errunion_err,
+        .unwrap_errunion_payload_ptr,
+        .unwrap_errunion_err_ptr,
+        .wrap_errunion_payload,
+        .wrap_errunion_err,
+        .slice_ptr,
+        .slice_len,
+        .ptr_slice_len_ptr,
+        .ptr_slice_ptr_ptr,
+        .struct_field_ptr_index_0,
+        .struct_field_ptr_index_1,
+        .struct_field_ptr_index_2,
+        .struct_field_ptr_index_3,
+        .array_to_slice,
+        .float_to_int,
+        .float_to_int_optimized,
+        .int_to_float,
+        .get_union_tag,
+        .clz,
+        .ctz,
+        .popcount,
+        .byte_swap,
+        .bit_reverse,
+        .splat,
+        .error_set_has_value,
+        .addrspace_cast,
+        .c_va_arg,
+        .c_va_copy,
+        => {
+            const o = air_datas[inst].ty_op;
+            if (o.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+
+        .optional_payload_ptr_set,
+        .errunion_payload_ptr_set,
+        => {
+            const o = air_datas[inst].ty_op;
+            if (o.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            return .write;
+        },
+
+        .is_null,
+        .is_non_null,
+        .is_null_ptr,
+        .is_non_null_ptr,
+        .is_err,
+        .is_non_err,
+        .is_err_ptr,
+        .is_non_err_ptr,
+        .ptrtoint,
+        .bool_to_int,
+        .is_named_enum_value,
+        .tag_name,
+        .error_name,
+        .sqrt,
+        .sin,
+        .cos,
+        .tan,
+        .exp,
+        .exp2,
+        .log,
+        .log2,
+        .log10,
+        .fabs,
+        .floor,
+        .ceil,
+        .round,
+        .trunc_float,
+        .neg,
+        .cmp_lt_errors_len,
+        .c_va_end,
+        => {
+            const o = air_datas[inst].un_op;
+            if (o == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+
+        .ret,
+        .ret_load,
+        => {
+            const o = air_datas[inst].un_op;
+            if (o == operand_ref) return matchOperandSmallIndex(l, inst, 0, .noret);
+            return .noret;
+        },
+
+        .set_err_return_trace => {
+            const o = air_datas[inst].un_op;
+            if (o == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            return .write;
+        },
+
+        .add_with_overflow,
+        .sub_with_overflow,
+        .mul_with_overflow,
+        .shl_with_overflow,
+        .ptr_add,
+        .ptr_sub,
+        .ptr_elem_ptr,
+        .slice_elem_ptr,
+        .slice,
+        => {
+            const ty_pl = air_datas[inst].ty_pl;
+            const extra = air.extraData(Air.Bin, ty_pl.payload).data;
+            if (extra.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            if (extra.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            return .none;
+        },
+
+        .dbg_var_ptr,
+        .dbg_var_val,
+        => {
+            const o = air_datas[inst].pl_op.operand;
+            if (o == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+
+        .prefetch => {
+            const prefetch = air_datas[inst].prefetch;
+            if (prefetch.ptr == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+
+        .call, .call_always_tail, .call_never_tail, .call_never_inline => {
+            const inst_data = air_datas[inst].pl_op;
+            const callee = inst_data.operand;
+            const extra = air.extraData(Air.Call, inst_data.payload);
+            const args = @ptrCast([]const Air.Inst.Ref, air.extra[extra.end..][0..extra.data.args_len]);
+            if (args.len + 1 <= bpi - 1) {
+                if (callee == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+                for (args, 0..) |arg, i| {
+                    if (arg == operand_ref) return matchOperandSmallIndex(l, inst, @intCast(OperandInt, i + 1), .write);
+                }
+                return .write;
+            }
+            var bt = l.iterateBigTomb(inst);
+            if (bt.feed()) {
+                if (callee == operand_ref) return .tomb;
+            } else {
+                if (callee == operand_ref) return .write;
+            }
+            for (args) |arg| {
+                if (bt.feed()) {
+                    if (arg == operand_ref) return .tomb;
+                } else {
+                    if (arg == operand_ref) return .write;
+                }
+            }
+            return .write;
+        },
+        .select => {
+            const pl_op = air_datas[inst].pl_op;
+            const extra = air.extraData(Air.Bin, pl_op.payload).data;
+            if (pl_op.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            if (extra.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            if (extra.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 2, .none);
+            return .none;
+        },
+        .shuffle => {
+            const extra = air.extraData(Air.Shuffle, air_datas[inst].ty_pl.payload).data;
+            if (extra.a == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            if (extra.b == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            return .none;
+        },
+        .reduce, .reduce_optimized => {
+            const reduce = air_datas[inst].reduce;
+            if (reduce.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+        .cmp_vector, .cmp_vector_optimized => {
+            const extra = air.extraData(Air.VectorCmp, air_datas[inst].ty_pl.payload).data;
+            if (extra.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            if (extra.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            return .none;
+        },
+        .aggregate_init => {
+            const ty_pl = air_datas[inst].ty_pl;
+            const aggregate_ty = air.getRefType(ty_pl.ty);
+            const len = @intCast(usize, aggregate_ty.arrayLen());
+            co
