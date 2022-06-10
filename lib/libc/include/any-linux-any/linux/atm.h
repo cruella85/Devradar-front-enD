@@ -152,4 +152,91 @@ struct atm_trafprm {
         unsigned int cdf_pres  :1;    	/* cdf present bit*/
         unsigned int nrm       :3;     	/* Max # of Cells for each forward RM cell (3-bit) */
         unsigned int trm       :3;    	/* Time between forward RM cells (3-bit) */    
-	unsigned int 
+	unsigned int adtf      :10;     /* ACR Decrease Time Factor (10-bit) */
+	unsigned int cdf       :3;      /* Cutoff Decrease Factor (3-bit) */
+        unsigned int spare     :9;      /* spare bits */ 
+};
+
+struct atm_qos {
+	struct atm_trafprm txtp;	/* parameters in TX direction */
+	struct atm_trafprm rxtp __ATM_API_ALIGN;
+					/* parameters in RX direction */
+	unsigned char aal __ATM_API_ALIGN;
+};
+
+/* PVC addressing */
+
+#define ATM_ITF_ANY	-1		/* "magic" PVC address values */
+#define ATM_VPI_ANY	-1
+#define ATM_VCI_ANY	-1
+#define ATM_VPI_UNSPEC	-2
+#define ATM_VCI_UNSPEC	-2
+
+
+struct sockaddr_atmpvc {
+	unsigned short 	sap_family;	/* address family, AF_ATMPVC  */
+	struct {			/* PVC address */
+		short	itf;		/* ATM interface */
+		short	vpi;		/* VPI (only 8 bits at UNI) */
+		int	vci;		/* VCI (only 16 bits at UNI) */
+	} sap_addr __ATM_API_ALIGN;	/* PVC address */
+};
+
+/* SVC addressing */
+
+#define	ATM_ESA_LEN	20		/* ATM End System Address length */
+#define ATM_E164_LEN	12		/* maximum E.164 number length */
+
+#define ATM_AFI_DCC	0x39		/* DCC ATM Format */
+#define ATM_AFI_ICD	0x47		/* ICD ATM Format */
+#define ATM_AFI_E164	0x45		/* E.164 ATM Format */
+#define ATM_AFI_LOCAL	0x49		/* Local ATM Format */ 
+
+#define ATM_AFI_DCC_GROUP	0xBD	/* DCC ATM Group Format */
+#define ATM_AFI_ICD_GROUP	0xC5	/* ICD ATM Group Format */
+#define ATM_AFI_E164_GROUP	0xC3	/* E.164 ATM Group Format */
+#define ATM_AFI_LOCAL_GROUP	0xC7	/* Local ATM Group Format */
+
+#define ATM_LIJ_NONE	0		/* no leaf-initiated join */
+#define ATM_LIJ		1		/* request joining */
+#define ATM_LIJ_RPJ	2		/* set to root-prompted join */
+#define ATM_LIJ_NJ	3		/* set to network join */
+
+
+struct sockaddr_atmsvc {
+    unsigned short 	sas_family;	/* address family, AF_ATMSVC */
+    struct {				/* SVC address */
+        unsigned char	prv[ATM_ESA_LEN];/* private ATM address */
+        char		pub[ATM_E164_LEN+1]; /* public address (E.164) */
+    					/* unused addresses must be bzero'ed */
+	char		lij_type;	/* role in LIJ call; one of ATM_LIJ* */
+	__u32	lij_id;		/* LIJ call identifier */
+    } sas_addr __ATM_API_ALIGN;		/* SVC address */
+};
+
+
+static __inline__ int atmsvc_addr_in_use(struct sockaddr_atmsvc addr)
+{
+	return *addr.sas_addr.prv || *addr.sas_addr.pub;
+}
+
+
+static __inline__ int atmpvc_addr_in_use(struct sockaddr_atmpvc addr)
+{
+	return addr.sap_addr.itf || addr.sap_addr.vpi || addr.sap_addr.vci;
+}
+
+
+/*
+ * Some stuff for linux/sockios.h
+ */
+
+struct atmif_sioc {
+	int number;
+	int length;
+	void *arg;
+};
+
+
+typedef unsigned short atm_backend_t;
+#endif /* _LINUX_ATM_H */
