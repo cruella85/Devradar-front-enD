@@ -434,4 +434,239 @@ pub fn categorizeOperand(
             const ty_pl = air_datas[inst].ty_pl;
             const aggregate_ty = air.getRefType(ty_pl.ty);
             const len = @intCast(usize, aggregate_ty.arrayLen());
-            co
+            const elements = @ptrCast([]const Air.Inst.Ref, air.extra[ty_pl.payload..][0..len]);
+
+            if (elements.len <= bpi - 1) {
+                for (elements, 0..) |elem, i| {
+                    if (elem == operand_ref) return matchOperandSmallIndex(l, inst, @intCast(OperandInt, i), .none);
+                }
+                return .none;
+            }
+
+            var bt = l.iterateBigTomb(inst);
+            for (elements) |elem| {
+                if (bt.feed()) {
+                    if (elem == operand_ref) return .tomb;
+                } else {
+                    if (elem == operand_ref) return .write;
+                }
+            }
+            return .write;
+        },
+        .union_init => {
+            const extra = air.extraData(Air.UnionInit, air_datas[inst].ty_pl.payload).data;
+            if (extra.init == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+        .struct_field_ptr, .struct_field_val => {
+            const extra = air.extraData(Air.StructField, air_datas[inst].ty_pl.payload).data;
+            if (extra.struct_operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+        .field_parent_ptr => {
+            const extra = air.extraData(Air.FieldParentPtr, air_datas[inst].ty_pl.payload).data;
+            if (extra.field_ptr == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+        .cmpxchg_strong, .cmpxchg_weak => {
+            const extra = air.extraData(Air.Cmpxchg, air_datas[inst].ty_pl.payload).data;
+            if (extra.ptr == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            if (extra.expected_value == operand_ref) return matchOperandSmallIndex(l, inst, 1, .write);
+            if (extra.new_value == operand_ref) return matchOperandSmallIndex(l, inst, 2, .write);
+            return .write;
+        },
+        .mul_add => {
+            const pl_op = air_datas[inst].pl_op;
+            const extra = air.extraData(Air.Bin, pl_op.payload).data;
+            if (extra.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            if (extra.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .none);
+            if (pl_op.operand == operand_ref) return matchOperandSmallIndex(l, inst, 2, .none);
+            return .none;
+        },
+        .atomic_load => {
+            const ptr = air_datas[inst].atomic_load.ptr;
+            if (ptr == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+        .atomic_rmw => {
+            const pl_op = air_datas[inst].pl_op;
+            const extra = air.extraData(Air.AtomicRmw, pl_op.payload).data;
+            if (pl_op.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            if (extra.operand == operand_ref) return matchOperandSmallIndex(l, inst, 1, .write);
+            return .write;
+        },
+        .memset,
+        .memcpy,
+        => {
+            const pl_op = air_datas[inst].pl_op;
+            const extra = air.extraData(Air.Bin, pl_op.payload).data;
+            if (pl_op.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .write);
+            if (extra.lhs == operand_ref) return matchOperandSmallIndex(l, inst, 1, .write);
+            if (extra.rhs == operand_ref) return matchOperandSmallIndex(l, inst, 2, .write);
+            return .write;
+        },
+
+        .br => {
+            const br = air_datas[inst].br;
+            if (br.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .noret);
+            return .noret;
+        },
+        .assembly => {
+            return .complex;
+        },
+        .block => {
+            const extra = air.extraData(Air.Block, air_datas[inst].ty_pl.payload);
+            const body = air.extra[extra.end..][0..extra.data.body_len];
+
+            if (body.len == 1 and air_tags[body[0]] == .cond_br) {
+                // Peephole optimization for "panic-like" conditionals, which have
+                // one empty branch and another which calls a `noreturn` function.
+                // This allows us to infer that safety checks do not modify memory,
+                // as far as control flow successors are concerned.
+
+                const inst_data = air_datas[body[0]].pl_op;
+                const cond_extra = air.extraData(Air.CondBr, inst_data.payload);
+                if (inst_data.operand == operand_ref and operandDies(l, body[0], 0))
+                    return .tomb;
+
+                if (cond_extra.data.then_body_len != 1 or cond_extra.data.else_body_len != 1)
+                    return .complex;
+
+                var operand_live: bool = true;
+                for (air.extra[cond_extra.end..][0..2]) |cond_inst| {
+                    if (l.categorizeOperand(air, cond_inst, operand) == .tomb)
+                        operand_live = false;
+
+                    switch (air_tags[cond_inst]) {
+                        .br => { // Breaks immediately back to block
+                            const br = air_datas[cond_inst].br;
+                            if (br.block_inst != inst)
+                                return .complex;
+                        },
+                        .call => {}, // Calls a noreturn function
+                        else => return .complex,
+                    }
+                }
+                return if (operand_live) .none else .tomb;
+            }
+
+            return .complex;
+        },
+        .@"try" => {
+            return .complex;
+        },
+        .try_ptr => {
+            return .complex;
+        },
+        .loop => {
+            return .complex;
+        },
+        .cond_br => {
+            return .complex;
+        },
+        .switch_br => {
+            return .complex;
+        },
+        .wasm_memory_grow => {
+            const pl_op = air_datas[inst].pl_op;
+            if (pl_op.operand == operand_ref) return matchOperandSmallIndex(l, inst, 0, .none);
+            return .none;
+        },
+    }
+}
+
+fn matchOperandSmallIndex(
+    l: Liveness,
+    inst: Air.Inst.Index,
+    operand: OperandInt,
+    default: OperandCategory,
+) OperandCategory {
+    if (operandDies(l, inst, operand)) {
+        return .tomb;
+    } else {
+        return default;
+    }
+}
+
+/// Higher level API.
+pub const CondBrSlices = struct {
+    then_deaths: []const Air.Inst.Index,
+    else_deaths: []const Air.Inst.Index,
+};
+
+pub fn getCondBr(l: Liveness, inst: Air.Inst.Index) CondBrSlices {
+    var index: usize = l.special.get(inst) orelse return .{
+        .then_deaths = &.{},
+        .else_deaths = &.{},
+    };
+    const then_death_count = l.extra[index];
+    index += 1;
+    const else_death_count = l.extra[index];
+    index += 1;
+    const then_deaths = l.extra[index..][0..then_death_count];
+    index += then_death_count;
+    return .{
+        .then_deaths = then_deaths,
+        .else_deaths = l.extra[index..][0..else_death_count],
+    };
+}
+
+/// Indexed by case number as they appear in AIR.
+/// Else is the last element.
+pub const SwitchBrTable = struct {
+    deaths: []const []const Air.Inst.Index,
+};
+
+/// Caller owns the memory.
+pub fn getSwitchBr(l: Liveness, gpa: Allocator, inst: Air.Inst.Index, cases_len: u32) Allocator.Error!SwitchBrTable {
+    var index: usize = l.special.get(inst) orelse return SwitchBrTable{
+        .deaths = &.{},
+    };
+    const else_death_count = l.extra[index];
+    index += 1;
+
+    var deaths = std.ArrayList([]const Air.Inst.Index).init(gpa);
+    defer deaths.deinit();
+    try deaths.ensureTotalCapacity(cases_len + 1);
+
+    var case_i: u32 = 0;
+    while (case_i < cases_len - 1) : (case_i += 1) {
+        const case_death_count: u32 = l.extra[index];
+        index += 1;
+        const case_deaths = l.extra[index..][0..case_death_count];
+        index += case_death_count;
+        deaths.appendAssumeCapacity(case_deaths);
+    }
+    {
+        // Else
+        const else_deaths = l.extra[index..][0..else_death_count];
+        deaths.appendAssumeCapacity(else_deaths);
+    }
+    return SwitchBrTable{
+        .deaths = try deaths.toOwnedSlice(),
+    };
+}
+
+pub fn deinit(l: *Liveness, gpa: Allocator) void {
+    gpa.free(l.tomb_bits);
+    gpa.free(l.extra);
+    l.special.deinit(gpa);
+    l.* = undefined;
+}
+
+pub fn iterateBigTomb(l: Liveness, inst: Air.Inst.Index) BigTomb {
+    return .{
+        .tomb_bits = l.getTombBits(inst),
+        .extra_start = l.special.get(inst) orelse 0,
+        .extra_offset = 0,
+        .extra = l.extra,
+        .bit_index = 0,
+    };
+}
+
+/// How many tomb bits per AIR instruction.
+pub const bpi = 4;
+pub const Bpi = std.meta.Int(.unsigned, bpi);
+pub const OperandInt = std.math.Log2Int(Bpi);
+
+/// Useful for 
