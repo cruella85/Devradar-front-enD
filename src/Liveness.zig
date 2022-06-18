@@ -669,4 +669,317 @@ pub const bpi = 4;
 pub const Bpi = std.meta.Int(.unsigned, bpi);
 pub const OperandInt = std.math.Log2Int(Bpi);
 
-/// Useful for 
+/// Useful for decoders of Liveness information.
+pub const BigTomb = struct {
+    tomb_bits: Liveness.Bpi,
+    bit_index: u32,
+    extra_start: u32,
+    extra_offset: u32,
+    extra: []const u32,
+
+    /// Returns whether the next operand dies.
+    pub fn feed(bt: *BigTomb) bool {
+        const this_bit_index = bt.bit_index;
+        bt.bit_index += 1;
+
+        const small_tombs = Liveness.bpi - 1;
+        if (this_bit_index < small_tombs) {
+            const dies = @truncate(u1, bt.tomb_bits >> @intCast(Liveness.OperandInt, this_bit_index)) != 0;
+            return dies;
+        }
+
+        const big_bit_index = this_bit_index - small_tombs;
+        while (big_bit_index - bt.extra_offset * 31 >= 31) {
+            bt.extra_offset += 1;
+        }
+        const dies = @truncate(u1, bt.extra[bt.extra_start + bt.extra_offset] >>
+            @intCast(u5, big_bit_index - bt.extra_offset * 31)) != 0;
+        return dies;
+    }
+};
+
+/// In-progress data; on successful analysis converted into `Liveness`.
+const Analysis = struct {
+    gpa: Allocator,
+    air: Air,
+    table: std.AutoHashMapUnmanaged(Air.Inst.Index, void),
+    tomb_bits: []usize,
+    special: std.AutoHashMapUnmanaged(Air.Inst.Index, u32),
+    extra: std.ArrayListUnmanaged(u32),
+
+    fn storeTombBits(a: *Analysis, inst: Air.Inst.Index, tomb_bits: Bpi) void {
+        const usize_index = (inst * bpi) / @bitSizeOf(usize);
+        a.tomb_bits[usize_index] |= @as(usize, tomb_bits) <<
+            @intCast(Log2Int(usize), (inst % (@bitSizeOf(usize) / bpi)) * bpi);
+    }
+
+    fn addExtra(a: *Analysis, extra: anytype) Allocator.Error!u32 {
+        const fields = std.meta.fields(@TypeOf(extra));
+        try a.extra.ensureUnusedCapacity(a.gpa, fields.len);
+        return addExtraAssumeCapacity(a, extra);
+    }
+
+    fn addExtraAssumeCapacity(a: *Analysis, extra: anytype) u32 {
+        const fields = std.meta.fields(@TypeOf(extra));
+        const result = @intCast(u32, a.extra.items.len);
+        inline for (fields) |field| {
+            a.extra.appendAssumeCapacity(switch (field.type) {
+                u32 => @field(extra, field.name),
+                else => @compileError("bad field type"),
+            });
+        }
+        return result;
+    }
+};
+
+fn analyzeWithContext(
+    a: *Analysis,
+    new_set: ?*std.AutoHashMapUnmanaged(Air.Inst.Index, void),
+    body: []const Air.Inst.Index,
+) Allocator.Error!void {
+    var i: usize = body.len;
+
+    if (new_set) |ns| {
+        // We are only interested in doing this for instructions which are born
+        // before a conditional branch, so after obtaining the new set for
+        // each branch we prune the instructions which were born within.
+        while (i != 0) {
+            i -= 1;
+            const inst = body[i];
+            _ = ns.remove(inst);
+            try analyzeInst(a, new_set, inst);
+        }
+    } else {
+        while (i != 0) {
+            i -= 1;
+            const inst = body[i];
+            try analyzeInst(a, new_set, inst);
+        }
+    }
+}
+
+fn analyzeInst(
+    a: *Analysis,
+    new_set: ?*std.AutoHashMapUnmanaged(Air.Inst.Index, void),
+    inst: Air.Inst.Index,
+) Allocator.Error!void {
+    const gpa = a.gpa;
+    const table = &a.table;
+    const inst_tags = a.air.instructions.items(.tag);
+    const inst_datas = a.air.instructions.items(.data);
+
+    // No tombstone for this instruction means it is never referenced,
+    // and its birth marks its own death. Very metal 🤘
+    const main_tomb = !table.contains(inst);
+
+    switch (inst_tags[inst]) {
+        .add,
+        .add_optimized,
+        .addwrap,
+        .addwrap_optimized,
+        .add_sat,
+        .sub,
+        .sub_optimized,
+        .subwrap,
+        .subwrap_optimized,
+        .sub_sat,
+        .mul,
+        .mul_optimized,
+        .mulwrap,
+        .mulwrap_optimized,
+        .mul_sat,
+        .div_float,
+        .div_float_optimized,
+        .div_trunc,
+        .div_trunc_optimized,
+        .div_floor,
+        .div_floor_optimized,
+        .div_exact,
+        .div_exact_optimized,
+        .rem,
+        .rem_optimized,
+        .mod,
+        .mod_optimized,
+        .bit_and,
+        .bit_or,
+        .xor,
+        .cmp_lt,
+        .cmp_lt_optimized,
+        .cmp_lte,
+        .cmp_lte_optimized,
+        .cmp_eq,
+        .cmp_eq_optimized,
+        .cmp_gte,
+        .cmp_gte_optimized,
+        .cmp_gt,
+        .cmp_gt_optimized,
+        .cmp_neq,
+        .cmp_neq_optimized,
+        .bool_and,
+        .bool_or,
+        .store,
+        .array_elem_val,
+        .slice_elem_val,
+        .ptr_elem_val,
+        .shl,
+        .shl_exact,
+        .shl_sat,
+        .shr,
+        .shr_exact,
+        .atomic_store_unordered,
+        .atomic_store_monotonic,
+        .atomic_store_release,
+        .atomic_store_seq_cst,
+        .set_union_tag,
+        .min,
+        .max,
+        => {
+            const o = inst_datas[inst].bin_op;
+            return trackOperands(a, new_set, inst, main_tomb, .{ o.lhs, o.rhs, .none });
+        },
+
+        .vector_store_elem => {
+            const o = inst_datas[inst].vector_store_elem;
+            const extra = a.air.extraData(Air.Bin, o.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ o.vector_ptr, extra.lhs, extra.rhs });
+        },
+
+        .arg,
+        .alloc,
+        .ret_ptr,
+        .constant,
+        .const_ty,
+        .trap,
+        .breakpoint,
+        .dbg_stmt,
+        .dbg_inline_begin,
+        .dbg_inline_end,
+        .dbg_block_begin,
+        .dbg_block_end,
+        .unreach,
+        .fence,
+        .ret_addr,
+        .frame_addr,
+        .wasm_memory_size,
+        .err_return_trace,
+        .save_err_return_trace_index,
+        .c_va_start,
+        => return trackOperands(a, new_set, inst, main_tomb, .{ .none, .none, .none }),
+
+        .not,
+        .bitcast,
+        .load,
+        .fpext,
+        .fptrunc,
+        .intcast,
+        .trunc,
+        .optional_payload,
+        .optional_payload_ptr,
+        .optional_payload_ptr_set,
+        .errunion_payload_ptr_set,
+        .wrap_optional,
+        .unwrap_errunion_payload,
+        .unwrap_errunion_err,
+        .unwrap_errunion_payload_ptr,
+        .unwrap_errunion_err_ptr,
+        .wrap_errunion_payload,
+        .wrap_errunion_err,
+        .slice_ptr,
+        .slice_len,
+        .ptr_slice_len_ptr,
+        .ptr_slice_ptr_ptr,
+        .struct_field_ptr_index_0,
+        .struct_field_ptr_index_1,
+        .struct_field_ptr_index_2,
+        .struct_field_ptr_index_3,
+        .array_to_slice,
+        .float_to_int,
+        .float_to_int_optimized,
+        .int_to_float,
+        .get_union_tag,
+        .clz,
+        .ctz,
+        .popcount,
+        .byte_swap,
+        .bit_reverse,
+        .splat,
+        .error_set_has_value,
+        .addrspace_cast,
+        .c_va_arg,
+        .c_va_copy,
+        => {
+            const o = inst_datas[inst].ty_op;
+            return trackOperands(a, new_set, inst, main_tomb, .{ o.operand, .none, .none });
+        },
+
+        .is_null,
+        .is_non_null,
+        .is_null_ptr,
+        .is_non_null_ptr,
+        .is_err,
+        .is_non_err,
+        .is_err_ptr,
+        .is_non_err_ptr,
+        .ptrtoint,
+        .bool_to_int,
+        .ret,
+        .ret_load,
+        .is_named_enum_value,
+        .tag_name,
+        .error_name,
+        .sqrt,
+        .sin,
+        .cos,
+        .tan,
+        .exp,
+        .exp2,
+        .log,
+        .log2,
+        .log10,
+        .fabs,
+        .floor,
+        .ceil,
+        .round,
+        .trunc_float,
+        .neg,
+        .neg_optimized,
+        .cmp_lt_errors_len,
+        .set_err_return_trace,
+        .c_va_end,
+        => {
+            const operand = inst_datas[inst].un_op;
+            return trackOperands(a, new_set, inst, main_tomb, .{ operand, .none, .none });
+        },
+
+        .add_with_overflow,
+        .sub_with_overflow,
+        .mul_with_overflow,
+        .shl_with_overflow,
+        .ptr_add,
+        .ptr_sub,
+        .ptr_elem_ptr,
+        .slice_elem_ptr,
+        .slice,
+        => {
+            const ty_pl = inst_datas[inst].ty_pl;
+            const extra = a.air.extraData(Air.Bin, ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.lhs, extra.rhs, .none });
+        },
+
+        .dbg_var_ptr,
+        .dbg_var_val,
+        => {
+            const operand = inst_datas[inst].pl_op.operand;
+            return trackOperands(a, new_set, inst, main_tomb, .{ operand, .none, .none });
+        },
+
+        .prefetch => {
+            const prefetch = inst_datas[inst].prefetch;
+            return trackOperands(a, new_set, inst, main_tomb, .{ prefetch.ptr, .none, .none });
+        },
+
+        .call, .call_always_tail, .call_never_tail, .call_never_inline => {
+            const inst_data = inst_datas[inst].pl_op;
+            const callee = inst_data.operand;
+            const extra = a.air.extraData(Air.Call, inst_data.payload);
+            const args = @ptrCast([]const Air.Inst.Ref, a.air.ext
