@@ -982,4 +982,191 @@ fn analyzeInst(
             const inst_data = inst_datas[inst].pl_op;
             const callee = inst_data.operand;
             const extra = a.air.extraData(Air.Call, inst_data.payload);
-            const args = @ptrCast([]const Air.Inst.Ref, a.air.ext
+            const args = @ptrCast([]const Air.Inst.Ref, a.air.extra[extra.end..][0..extra.data.args_len]);
+            if (args.len + 1 <= bpi - 1) {
+                var buf = [1]Air.Inst.Ref{.none} ** (bpi - 1);
+                buf[0] = callee;
+                std.mem.copy(Air.Inst.Ref, buf[1..], args);
+                return trackOperands(a, new_set, inst, main_tomb, buf);
+            }
+            var extra_tombs: ExtraTombs = .{
+                .analysis = a,
+                .new_set = new_set,
+                .inst = inst,
+                .main_tomb = main_tomb,
+            };
+            defer extra_tombs.deinit();
+            try extra_tombs.feed(callee);
+            for (args) |arg| {
+                try extra_tombs.feed(arg);
+            }
+            return extra_tombs.finish();
+        },
+        .select => {
+            const pl_op = inst_datas[inst].pl_op;
+            const extra = a.air.extraData(Air.Bin, pl_op.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ pl_op.operand, extra.lhs, extra.rhs });
+        },
+        .shuffle => {
+            const extra = a.air.extraData(Air.Shuffle, inst_datas[inst].ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.a, extra.b, .none });
+        },
+        .reduce, .reduce_optimized => {
+            const reduce = inst_datas[inst].reduce;
+            return trackOperands(a, new_set, inst, main_tomb, .{ reduce.operand, .none, .none });
+        },
+        .cmp_vector, .cmp_vector_optimized => {
+            const extra = a.air.extraData(Air.VectorCmp, inst_datas[inst].ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.lhs, extra.rhs, .none });
+        },
+        .aggregate_init => {
+            const ty_pl = inst_datas[inst].ty_pl;
+            const aggregate_ty = a.air.getRefType(ty_pl.ty);
+            const len = @intCast(usize, aggregate_ty.arrayLen());
+            const elements = @ptrCast([]const Air.Inst.Ref, a.air.extra[ty_pl.payload..][0..len]);
+
+            if (elements.len <= bpi - 1) {
+                var buf = [1]Air.Inst.Ref{.none} ** (bpi - 1);
+                std.mem.copy(Air.Inst.Ref, &buf, elements);
+                return trackOperands(a, new_set, inst, main_tomb, buf);
+            }
+            var extra_tombs: ExtraTombs = .{
+                .analysis = a,
+                .new_set = new_set,
+                .inst = inst,
+                .main_tomb = main_tomb,
+            };
+            defer extra_tombs.deinit();
+            for (elements) |elem| {
+                try extra_tombs.feed(elem);
+            }
+            return extra_tombs.finish();
+        },
+        .union_init => {
+            const extra = a.air.extraData(Air.UnionInit, inst_datas[inst].ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.init, .none, .none });
+        },
+        .struct_field_ptr, .struct_field_val => {
+            const extra = a.air.extraData(Air.StructField, inst_datas[inst].ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.struct_operand, .none, .none });
+        },
+        .field_parent_ptr => {
+            const extra = a.air.extraData(Air.FieldParentPtr, inst_datas[inst].ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.field_ptr, .none, .none });
+        },
+        .cmpxchg_strong, .cmpxchg_weak => {
+            const extra = a.air.extraData(Air.Cmpxchg, inst_datas[inst].ty_pl.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.ptr, extra.expected_value, extra.new_value });
+        },
+        .mul_add => {
+            const pl_op = inst_datas[inst].pl_op;
+            const extra = a.air.extraData(Air.Bin, pl_op.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.lhs, extra.rhs, pl_op.operand });
+        },
+        .atomic_load => {
+            const ptr = inst_datas[inst].atomic_load.ptr;
+            return trackOperands(a, new_set, inst, main_tomb, .{ ptr, .none, .none });
+        },
+        .atomic_rmw => {
+            const pl_op = inst_datas[inst].pl_op;
+            const extra = a.air.extraData(Air.AtomicRmw, pl_op.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ pl_op.operand, extra.operand, .none });
+        },
+        .memset,
+        .memcpy,
+        => {
+            const pl_op = inst_datas[inst].pl_op;
+            const extra = a.air.extraData(Air.Bin, pl_op.payload).data;
+            return trackOperands(a, new_set, inst, main_tomb, .{ pl_op.operand, extra.lhs, extra.rhs });
+        },
+
+        .br => {
+            const br = inst_datas[inst].br;
+            return trackOperands(a, new_set, inst, main_tomb, .{ br.operand, .none, .none });
+        },
+        .assembly => {
+            const extra = a.air.extraData(Air.Asm, inst_datas[inst].ty_pl.payload);
+            var extra_i: usize = extra.end;
+            const outputs = @ptrCast([]const Air.Inst.Ref, a.air.extra[extra_i..][0..extra.data.outputs_len]);
+            extra_i += outputs.len;
+            const inputs = @ptrCast([]const Air.Inst.Ref, a.air.extra[extra_i..][0..extra.data.inputs_len]);
+            extra_i += inputs.len;
+
+            simple: {
+                var buf = [1]Air.Inst.Ref{.none} ** (bpi - 1);
+                var buf_index: usize = 0;
+                for (outputs) |output| {
+                    if (output != .none) {
+                        if (buf_index >= buf.len) break :simple;
+                        buf[buf_index] = output;
+                        buf_index += 1;
+                    }
+                }
+                if (buf_index + inputs.len > buf.len) break :simple;
+                std.mem.copy(Air.Inst.Ref, buf[buf_index..], inputs);
+                return trackOperands(a, new_set, inst, main_tomb, buf);
+            }
+            var extra_tombs: ExtraTombs = .{
+                .analysis = a,
+                .new_set = new_set,
+                .inst = inst,
+                .main_tomb = main_tomb,
+            };
+            defer extra_tombs.deinit();
+            for (outputs) |output| {
+                if (output != .none) {
+                    try extra_tombs.feed(output);
+                }
+            }
+            for (inputs) |input| {
+                try extra_tombs.feed(input);
+            }
+            return extra_tombs.finish();
+        },
+        .block => {
+            const extra = a.air.extraData(Air.Block, inst_datas[inst].ty_pl.payload);
+            const body = a.air.extra[extra.end..][0..extra.data.body_len];
+            try analyzeWithContext(a, new_set, body);
+            return trackOperands(a, new_set, inst, main_tomb, .{ .none, .none, .none });
+        },
+        .loop => {
+            const extra = a.air.extraData(Air.Block, inst_datas[inst].ty_pl.payload);
+            const body = a.air.extra[extra.end..][0..extra.data.body_len];
+            try analyzeWithContext(a, new_set, body);
+            return; // Loop has no operands and it is always unreferenced.
+        },
+        .@"try" => {
+            const pl_op = inst_datas[inst].pl_op;
+            const extra = a.air.extraData(Air.Try, pl_op.payload);
+            const body = a.air.extra[extra.end..][0..extra.data.body_len];
+            try analyzeWithContext(a, new_set, body);
+            return trackOperands(a, new_set, inst, main_tomb, .{ pl_op.operand, .none, .none });
+        },
+        .try_ptr => {
+            const extra = a.air.extraData(Air.TryPtr, inst_datas[inst].ty_pl.payload);
+            const body = a.air.extra[extra.end..][0..extra.data.body_len];
+            try analyzeWithContext(a, new_set, body);
+            return trackOperands(a, new_set, inst, main_tomb, .{ extra.data.ptr, .none, .none });
+        },
+        .cond_br => {
+            // Each death that occurs inside one branch, but not the other, needs
+            // to be added as a death immediately upon entering the other branch.
+            const inst_data = inst_datas[inst].pl_op;
+            const condition = inst_data.operand;
+            const extra = a.air.extraData(Air.CondBr, inst_data.payload);
+            const then_body = a.air.extra[extra.end..][0..extra.data.then_body_len];
+            const else_body = a.air.extra[extra.end + then_body.len ..][0..extra.data.else_body_len];
+
+            var then_table: std.AutoHashMapUnmanaged(Air.Inst.Index, void) = .{};
+            defer then_table.deinit(gpa);
+            try analyzeWithContext(a, &then_table, then_body);
+
+            // Reset the table back to its state from before the branch.
+            {
+                var it = then_table.keyIterator();
+                while (it.next()) |key| {
+                    assert(table.remove(key.*));
+                }
+            }
+
+            var else_table: std.AutoHashMapUnmanaged(Air.In
