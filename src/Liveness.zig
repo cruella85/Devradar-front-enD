@@ -1169,4 +1169,210 @@ fn analyzeInst(
                 }
             }
 
-            var else_table: std.AutoHashMapUnmanaged(Air.In
+            var else_table: std.AutoHashMapUnmanaged(Air.Inst.Index, void) = .{};
+            defer else_table.deinit(gpa);
+            try analyzeWithContext(a, &else_table, else_body);
+
+            var then_entry_deaths = std.ArrayList(Air.Inst.Index).init(gpa);
+            defer then_entry_deaths.deinit();
+            var else_entry_deaths = std.ArrayList(Air.Inst.Index).init(gpa);
+            defer else_entry_deaths.deinit();
+
+            {
+                var it = else_table.keyIterator();
+                while (it.next()) |key| {
+                    const else_death = key.*;
+                    if (!then_table.contains(else_death)) {
+                        try then_entry_deaths.append(else_death);
+                    }
+                }
+            }
+            // This loop is the same, except it's for the then branch, and it additionally
+            // has to put its items back into the table to undo the reset.
+            {
+                var it = then_table.keyIterator();
+                while (it.next()) |key| {
+                    const then_death = key.*;
+                    if (!else_table.contains(then_death)) {
+                        try else_entry_deaths.append(then_death);
+                    }
+                    try table.put(gpa, then_death, {});
+                }
+            }
+            // Now we have to correctly populate new_set.
+            if (new_set) |ns| {
+                try ns.ensureUnusedCapacity(gpa, @intCast(u32, then_table.count() + else_table.count()));
+                var it = then_table.keyIterator();
+                while (it.next()) |key| {
+                    _ = ns.putAssumeCapacity(key.*, {});
+                }
+                it = else_table.keyIterator();
+                while (it.next()) |key| {
+                    _ = ns.putAssumeCapacity(key.*, {});
+                }
+            }
+            const then_death_count = @intCast(u32, then_entry_deaths.items.len);
+            const else_death_count = @intCast(u32, else_entry_deaths.items.len);
+
+            try a.extra.ensureUnusedCapacity(gpa, std.meta.fields(Air.CondBr).len +
+                then_death_count + else_death_count);
+            const extra_index = a.addExtraAssumeCapacity(CondBr{
+                .then_death_count = then_death_count,
+                .else_death_count = else_death_count,
+            });
+            a.extra.appendSliceAssumeCapacity(then_entry_deaths.items);
+            a.extra.appendSliceAssumeCapacity(else_entry_deaths.items);
+            try a.special.put(gpa, inst, extra_index);
+
+            // Continue on with the instruction analysis. The following code will find the condition
+            // instruction, and the deaths flag for the CondBr instruction will indicate whether the
+            // condition's lifetime ends immediately before entering any branch.
+            return trackOperands(a, new_set, inst, main_tomb, .{ condition, .none, .none });
+        },
+        .switch_br => {
+            const pl_op = inst_datas[inst].pl_op;
+            const condition = pl_op.operand;
+            const switch_br = a.air.extraData(Air.SwitchBr, pl_op.payload);
+
+            const Table = std.AutoHashMapUnmanaged(Air.Inst.Index, void);
+            const case_tables = try gpa.alloc(Table, switch_br.data.cases_len + 1); // +1 for else
+            defer gpa.free(case_tables);
+
+            std.mem.set(Table, case_tables, .{});
+            defer for (case_tables) |*ct| ct.deinit(gpa);
+
+            var air_extra_index: usize = switch_br.end;
+            for (case_tables[0..switch_br.data.cases_len]) |*case_table| {
+                const case = a.air.extraData(Air.SwitchBr.Case, air_extra_index);
+                const case_body = a.air.extra[case.end + case.data.items_len ..][0..case.data.body_len];
+                air_extra_index = case.end + case.data.items_len + case_body.len;
+                try analyzeWithContext(a, case_table, case_body);
+
+                // Reset the table back to its state from before the case.
+                var it = case_table.keyIterator();
+                while (it.next()) |key| {
+                    assert(table.remove(key.*));
+                }
+            }
+            { // else
+                const else_table = &case_tables[case_tables.len - 1];
+                const else_body = a.air.extra[air_extra_index..][0..switch_br.data.else_body_len];
+                try analyzeWithContext(a, else_table, else_body);
+
+                // Reset the table back to its state from before the case.
+                var it = else_table.keyIterator();
+                while (it.next()) |key| {
+                    assert(table.remove(key.*));
+                }
+            }
+
+            const List = std.ArrayListUnmanaged(Air.Inst.Index);
+            const case_deaths = try gpa.alloc(List, case_tables.len); // includes else
+            defer gpa.free(case_deaths);
+
+            std.mem.set(List, case_deaths, .{});
+            defer for (case_deaths) |*cd| cd.deinit(gpa);
+
+            var total_deaths: u32 = 0;
+            for (case_tables, 0..) |*ct, i| {
+                total_deaths += ct.count();
+                var it = ct.keyIterator();
+                while (it.next()) |key| {
+                    const case_death = key.*;
+                    for (case_tables, 0..) |*ct_inner, j| {
+                        if (i == j) continue;
+                        if (!ct_inner.contains(case_death)) {
+                            // instruction is not referenced in this case
+                            try case_deaths[j].append(gpa, case_death);
+                        }
+                    }
+                    // undo resetting the table
+                    try table.put(gpa, case_death, {});
+                }
+            }
+
+            // Now we have to correctly populate new_set.
+            if (new_set) |ns| {
+                try ns.ensureUnusedCapacity(gpa, total_deaths);
+                for (case_tables) |*ct| {
+                    var it = ct.keyIterator();
+                    while (it.next()) |key| {
+                        _ = ns.putAssumeCapacity(key.*, {});
+                    }
+                }
+            }
+
+            const else_death_count = @intCast(u32, case_deaths[case_deaths.len - 1].items.len);
+            const extra_index = try a.addExtra(SwitchBr{
+                .else_death_count = else_death_count,
+            });
+            for (case_deaths[0 .. case_deaths.len - 1]) |*cd| {
+                const case_death_count = @intCast(u32, cd.items.len);
+                try a.extra.ensureUnusedCapacity(gpa, 1 + case_death_count + else_death_count);
+                a.extra.appendAssumeCapacity(case_death_count);
+                a.extra.appendSliceAssumeCapacity(cd.items);
+            }
+            a.extra.appendSliceAssumeCapacity(case_deaths[case_deaths.len - 1].items);
+            try a.special.put(gpa, inst, extra_index);
+
+            return trackOperands(a, new_set, inst, main_tomb, .{ condition, .none, .none });
+        },
+        .wasm_memory_grow => {
+            const pl_op = inst_datas[inst].pl_op;
+            return trackOperands(a, new_set, inst, main_tomb, .{ pl_op.operand, .none, .none });
+        },
+    }
+}
+
+fn trackOperands(
+    a: *Analysis,
+    new_set: ?*std.AutoHashMapUnmanaged(Air.Inst.Index, void),
+    inst: Air.Inst.Index,
+    main_tomb: bool,
+    operands: [bpi - 1]Air.Inst.Ref,
+) Allocator.Error!void {
+    const table = &a.table;
+    const gpa = a.gpa;
+
+    var tomb_bits: Bpi = @boolToInt(main_tomb);
+    var i = operands.len;
+
+    while (i > 0) {
+        i -= 1;
+        tomb_bits <<= 1;
+        const op_int = @enumToInt(operands[i]);
+        if (op_int < Air.Inst.Ref.typed_value_map.len) continue;
+        const operand: Air.Inst.Index = op_int - @intCast(u32, Air.Inst.Ref.typed_value_map.len);
+        const prev = try table.fetchPut(gpa, operand, {});
+        if (prev == null) {
+            // Death.
+            tomb_bits |= 1;
+            if (new_set) |ns| try ns.putNoClobber(gpa, operand, {});
+        }
+    }
+    a.storeTombBits(inst, tomb_bits);
+}
+
+const ExtraTombs = struct {
+    analysis: *Analysis,
+    new_set: ?*std.AutoHashMapUnmanaged(Air.Inst.Index, void),
+    inst: Air.Inst.Index,
+    main_tomb: bool,
+    bit_index: usize = 0,
+    tomb_bits: Bpi = 0,
+    big_tomb_bits: u32 = 0,
+    big_tomb_bits_extra: std.ArrayListUnmanaged(u32) = .{},
+
+    fn feed(et: *ExtraTombs, op_ref: Air.Inst.Ref) !void {
+        const this_bit_index = et.bit_index;
+        et.bit_index += 1;
+        const gpa = et.analysis.gpa;
+        const op_index = Air.refToIndex(op_ref) orelse return;
+        const prev = try et.analysis.table.fetchPut(gpa, op_index, {});
+        if (prev == null) {
+            // Death.
+            if (et.new_set) |ns| try ns.putNoClobber(gpa, op_index, {});
+            const available_tomb_bits = bpi - 1;
+            if (this_bit_index < available_tomb_bits) {
+                et.tomb_bits |= @as(Bpi, 1) << @intCast(OperandInt, this_bit_index);
+            } else {
