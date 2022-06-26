@@ -1376,3 +1376,33 @@ const ExtraTombs = struct {
             if (this_bit_index < available_tomb_bits) {
                 et.tomb_bits |= @as(Bpi, 1) << @intCast(OperandInt, this_bit_index);
             } else {
+                const big_bit_index = this_bit_index - available_tomb_bits;
+                while (big_bit_index >= (et.big_tomb_bits_extra.items.len + 1) * 31) {
+                    // We need another element in the extra array.
+                    try et.big_tomb_bits_extra.append(gpa, et.big_tomb_bits);
+                    et.big_tomb_bits = 0;
+                } else {
+                    const final_bit_index = big_bit_index - et.big_tomb_bits_extra.items.len * 31;
+                    et.big_tomb_bits |= @as(u32, 1) << @intCast(u5, final_bit_index);
+                }
+            }
+        }
+    }
+
+    fn finish(et: *ExtraTombs) !void {
+        et.tomb_bits |= @as(Bpi, @boolToInt(et.main_tomb)) << (bpi - 1);
+        // Signal the terminal big_tomb_bits element.
+        et.big_tomb_bits |= @as(u32, 1) << 31;
+
+        et.analysis.storeTombBits(et.inst, et.tomb_bits);
+        const extra_index = @intCast(u32, et.analysis.extra.items.len);
+        try et.analysis.extra.ensureUnusedCapacity(et.analysis.gpa, et.big_tomb_bits_extra.items.len + 1);
+        try et.analysis.special.put(et.analysis.gpa, et.inst, extra_index);
+        et.analysis.extra.appendSliceAssumeCapacity(et.big_tomb_bits_extra.items);
+        et.analysis.extra.appendAssumeCapacity(et.big_tomb_bits);
+    }
+
+    fn deinit(et: *ExtraTombs) void {
+        et.big_tomb_bits_extra.deinit(et.analysis.gpa);
+    }
+};
