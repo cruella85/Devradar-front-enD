@@ -249,3 +249,254 @@ typedef struct D3D11_UNORDERED_ACCESS_VIEW_DESC1 {
         D3D11_BUFFER_UAV Buffer;
         D3D11_TEX1D_UAV Texture1D;
         D3D11_TEX1D_ARRAY_UAV Texture1DArray;
+        D3D11_TEX2D_UAV1 Texture2D;
+        D3D11_TEX2D_ARRAY_UAV1 Texture2DArray;
+        D3D11_TEX3D_UAV Texture3D;
+    } __C89_NAMELESSUNIONNAME;
+} D3D11_UNORDERED_ACCESS_VIEW_DESC1;
+typedef struct D3D11_QUERY_DESC1 {
+    D3D11_QUERY Query;
+    UINT MiscFlags;
+    D3D11_CONTEXT_TYPE ContextType;
+} D3D11_QUERY_DESC1;
+/*****************************************************************************
+ * ID3D11Texture2D1 interface
+ */
+#ifndef __ID3D11Texture2D1_INTERFACE_DEFINED__
+#define __ID3D11Texture2D1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Texture2D1, 0x51218251, 0x1e33, 0x4617, 0x9c,0xcb, 0x4d,0x3a,0x43,0x67,0xe7,0xbb);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("51218251-1e33-4617-9ccb-4d3a4367e7bb")
+ID3D11Texture2D1 : public ID3D11Texture2D
+{
+    virtual void STDMETHODCALLTYPE GetDesc1(
+        D3D11_TEXTURE2D_DESC1 *desc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11Texture2D1, 0x51218251, 0x1e33, 0x4617, 0x9c,0xcb, 0x4d,0x3a,0x43,0x67,0xe7,0xbb)
+#endif
+#else
+typedef struct ID3D11Texture2D1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11Texture2D1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11Texture2D1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11Texture2D1 *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11Texture2D1 *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11Texture2D1 *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11Texture2D1 *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11Texture2D1 *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11Resource methods ***/
+    void (STDMETHODCALLTYPE *GetType)(
+        ID3D11Texture2D1 *This,
+        D3D11_RESOURCE_DIMENSION *pResourceDimension);
+
+    void (STDMETHODCALLTYPE *SetEvictionPriority)(
+        ID3D11Texture2D1 *This,
+        UINT EvictionPriority);
+
+    UINT (STDMETHODCALLTYPE *GetEvictionPriority)(
+        ID3D11Texture2D1 *This);
+
+    /*** ID3D11Texture2D methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11Texture2D1 *This,
+        D3D11_TEXTURE2D_DESC *pDesc);
+
+    /*** ID3D11Texture2D1 methods ***/
+    void (STDMETHODCALLTYPE *GetDesc1)(
+        ID3D11Texture2D1 *This,
+        D3D11_TEXTURE2D_DESC1 *desc);
+
+    END_INTERFACE
+} ID3D11Texture2D1Vtbl;
+
+interface ID3D11Texture2D1 {
+    CONST_VTBL ID3D11Texture2D1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11Texture2D1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11Texture2D1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11Texture2D1_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11Texture2D1_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11Texture2D1_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11Texture2D1_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11Texture2D1_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11Resource methods ***/
+#define ID3D11Texture2D1_GetType(This,pResourceDimension) (This)->lpVtbl->GetType(This,pResourceDimension)
+#define ID3D11Texture2D1_SetEvictionPriority(This,EvictionPriority) (This)->lpVtbl->SetEvictionPriority(This,EvictionPriority)
+#define ID3D11Texture2D1_GetEvictionPriority(This) (This)->lpVtbl->GetEvictionPriority(This)
+/*** ID3D11Texture2D methods ***/
+#define ID3D11Texture2D1_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+/*** ID3D11Texture2D1 methods ***/
+#define ID3D11Texture2D1_GetDesc1(This,desc) (This)->lpVtbl->GetDesc1(This,desc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11Texture2D1_QueryInterface(ID3D11Texture2D1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11Texture2D1_AddRef(ID3D11Texture2D1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11Texture2D1_Release(ID3D11Texture2D1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11Texture2D1_GetDevice(ID3D11Texture2D1* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11Texture2D1_GetPrivateData(ID3D11Texture2D1* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Texture2D1_SetPrivateData(ID3D11Texture2D1* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Texture2D1_SetPrivateDataInterface(ID3D11Texture2D1* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11Resource methods ***/
+static FORCEINLINE void ID3D11Texture2D1_GetType(ID3D11Texture2D1* This,D3D11_RESOURCE_DIMENSION *pResourceDimension) {
+    This->lpVtbl->GetType(This,pResourceDimension);
+}
+static FORCEINLINE void ID3D11Texture2D1_SetEvictionPriority(ID3D11Texture2D1* This,UINT EvictionPriority) {
+    This->lpVtbl->SetEvictionPriority(This,EvictionPriority);
+}
+static FORCEINLINE UINT ID3D11Texture2D1_GetEvictionPriority(ID3D11Texture2D1* This) {
+    return This->lpVtbl->GetEvictionPriority(This);
+}
+/*** ID3D11Texture2D methods ***/
+static FORCEINLINE void ID3D11Texture2D1_GetDesc(ID3D11Texture2D1* This,D3D11_TEXTURE2D_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+/*** ID3D11Texture2D1 methods ***/
+static FORCEINLINE void ID3D11Texture2D1_GetDesc1(ID3D11Texture2D1* This,D3D11_TEXTURE2D_DESC1 *desc) {
+    This->lpVtbl->GetDesc1(This,desc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11Texture2D1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11Texture3D1 interface
+ */
+#ifndef __ID3D11Texture3D1_INTERFACE_DEFINED__
+#define __ID3D11Texture3D1_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Texture3D1, 0x0c711683, 0x2853, 0x4846, 0x9b,0xb0, 0xf3,0xe6,0x06,0x39,0xe4,0x6a);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("0c711683-2853-4846-9bb0-f3e60639e46a")
+ID3D11Texture3D1 : public ID3D11Texture3D
+{
+    virtual void STDMETHODCALLTYPE GetDesc1(
+        D3D11_TEXTURE3D_DESC1 *desc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11Texture3D1, 0x0c711683, 0x2853, 0x4846, 0x9b,0xb0, 0xf3,0xe6,0x06,0x39,0xe4,0x6a)
+#endif
+#else
+typedef struct ID3D11Texture3D1Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11Texture3D1 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11Texture3D1 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11Texture3D1 *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11Texture3D1 *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11Texture3D1 *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11Texture3D1 *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11Texture3D1 *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11Resource methods ***/
+    void (STDMETHODCALLTYPE *GetType)(
+        ID3D11Texture3D1 *This,
+        D3D11_RESOURCE_DIMENSION *pResourceDimension);
+
+    void (STDMETHODCALLTYPE *SetEvictionPriority)(
+        ID3D11Texture3D1 *This,
+        UINT EvictionPriority);
+
+    UINT (STDMETHODCALLTYPE *GetEvictionPriority)(
+        ID3D11Texture3D1 *This);
+
+    /*** ID3D11Texture3D methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11Texture3D1 *This,
+        D3D11_TEXTURE3D_DESC *pDesc);
+
+    /*** ID3D11Texture3D1 methods ***/
+    void (STDMETHODCALLTYPE *GetDesc1)(
+        ID3D11Texture3D1 *This,
+        D3D11_TEXTURE3D_DESC1 *desc);
+
+    END_INTERFACE
+} ID3D11Texture3D1Vtbl;
+
+interface ID3D11Texture3D1 {
+    CONST_VTBL ID3D11Texture3D1Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#i
