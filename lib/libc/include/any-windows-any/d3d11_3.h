@@ -499,4 +499,196 @@ interface ID3D11Texture3D1 {
 };
 
 #ifdef COBJMACROS
-#i
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11Texture3D1_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11Texture3D1_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11Texture3D1_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11Texture3D1_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11Texture3D1_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11Texture3D1_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11Texture3D1_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11Resource methods ***/
+#define ID3D11Texture3D1_GetType(This,pResourceDimension) (This)->lpVtbl->GetType(This,pResourceDimension)
+#define ID3D11Texture3D1_SetEvictionPriority(This,EvictionPriority) (This)->lpVtbl->SetEvictionPriority(This,EvictionPriority)
+#define ID3D11Texture3D1_GetEvictionPriority(This) (This)->lpVtbl->GetEvictionPriority(This)
+/*** ID3D11Texture3D methods ***/
+#define ID3D11Texture3D1_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+/*** ID3D11Texture3D1 methods ***/
+#define ID3D11Texture3D1_GetDesc1(This,desc) (This)->lpVtbl->GetDesc1(This,desc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11Texture3D1_QueryInterface(ID3D11Texture3D1* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11Texture3D1_AddRef(ID3D11Texture3D1* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11Texture3D1_Release(ID3D11Texture3D1* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11Texture3D1_GetDevice(ID3D11Texture3D1* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11Texture3D1_GetPrivateData(ID3D11Texture3D1* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Texture3D1_SetPrivateData(ID3D11Texture3D1* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Texture3D1_SetPrivateDataInterface(ID3D11Texture3D1* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11Resource methods ***/
+static FORCEINLINE void ID3D11Texture3D1_GetType(ID3D11Texture3D1* This,D3D11_RESOURCE_DIMENSION *pResourceDimension) {
+    This->lpVtbl->GetType(This,pResourceDimension);
+}
+static FORCEINLINE void ID3D11Texture3D1_SetEvictionPriority(ID3D11Texture3D1* This,UINT EvictionPriority) {
+    This->lpVtbl->SetEvictionPriority(This,EvictionPriority);
+}
+static FORCEINLINE UINT ID3D11Texture3D1_GetEvictionPriority(ID3D11Texture3D1* This) {
+    return This->lpVtbl->GetEvictionPriority(This);
+}
+/*** ID3D11Texture3D methods ***/
+static FORCEINLINE void ID3D11Texture3D1_GetDesc(ID3D11Texture3D1* This,D3D11_TEXTURE3D_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+/*** ID3D11Texture3D1 methods ***/
+static FORCEINLINE void ID3D11Texture3D1_GetDesc1(ID3D11Texture3D1* This,D3D11_TEXTURE3D_DESC1 *desc) {
+    This->lpVtbl->GetDesc1(This,desc);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11Texture3D1_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11RasterizerState2 interface
+ */
+#ifndef __ID3D11RasterizerState2_INTERFACE_DEFINED__
+#define __ID3D11RasterizerState2_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11RasterizerState2, 0x6fbd02fb, 0x209f, 0x46c4, 0xb0,0x59, 0x2e,0xd1,0x55,0x86,0xa6,0xac);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("6fbd02fb-209f-46c4-b059-2ed15586a6ac")
+ID3D11RasterizerState2 : public ID3D11RasterizerState1
+{
+    virtual void STDMETHODCALLTYPE GetDesc2(
+        D3D11_RASTERIZER_DESC2 *desc) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11RasterizerState2, 0x6fbd02fb, 0x209f, 0x46c4, 0xb0,0x59, 0x2e,0xd1,0x55,0x86,0xa6,0xac)
+#endif
+#else
+typedef struct ID3D11RasterizerState2Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11RasterizerState2 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11RasterizerState2 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11RasterizerState2 *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11RasterizerState2 *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11RasterizerState2 *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11RasterizerState2 *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11RasterizerState2 *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11RasterizerState methods ***/
+    void (STDMETHODCALLTYPE *GetDesc)(
+        ID3D11RasterizerState2 *This,
+        D3D11_RASTERIZER_DESC *pDesc);
+
+    /*** ID3D11RasterizerState1 methods ***/
+    void (STDMETHODCALLTYPE *GetDesc1)(
+        ID3D11RasterizerState2 *This,
+        D3D11_RASTERIZER_DESC1 *pDesc);
+
+    /*** ID3D11RasterizerState2 methods ***/
+    void (STDMETHODCALLTYPE *GetDesc2)(
+        ID3D11RasterizerState2 *This,
+        D3D11_RASTERIZER_DESC2 *desc);
+
+    END_INTERFACE
+} ID3D11RasterizerState2Vtbl;
+
+interface ID3D11RasterizerState2 {
+    CONST_VTBL ID3D11RasterizerState2Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11RasterizerState2_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11RasterizerState2_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11RasterizerState2_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11RasterizerState2_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11RasterizerState2_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11RasterizerState2_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11RasterizerState2_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11RasterizerState methods ***/
+#define ID3D11RasterizerState2_GetDesc(This,pDesc) (This)->lpVtbl->GetDesc(This,pDesc)
+/*** ID3D11RasterizerState1 methods ***/
+#define ID3D11RasterizerState2_GetDesc1(This,pDesc) (This)->lpVtbl->GetDesc1(This,pDesc)
+/*** ID3D11RasterizerState2 methods ***/
+#define ID3D11RasterizerState2_GetDesc2(This,desc) (This)->lpVtbl->GetDesc2(This,desc)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11RasterizerState2_QueryInterface(ID3D11RasterizerState2* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11RasterizerState2_AddRef(ID3D11RasterizerState2* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11RasterizerState2_Release(ID3D11RasterizerState2* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11RasterizerState2_GetDevice(ID3D11RasterizerState2* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11RasterizerState2_GetPrivateData(ID3D11RasterizerState2* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11RasterizerState2_SetPrivateData(ID3D11RasterizerState2* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11RasterizerState2_SetPrivateDataInterface(ID3D11RasterizerState2* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11RasterizerState methods ***/
+static FORCEINLINE void ID3D11RasterizerState2_GetDesc(ID3D11RasterizerState2* This,D3D11_RASTERIZER_DESC *pDesc) {
+    This->lpVtbl->GetDesc(This,pDesc);
+}
+/*** ID3D11RasterizerState1 methods ***/
+static FORCEINLINE void ID3D11R
