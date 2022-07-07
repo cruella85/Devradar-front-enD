@@ -1381,4 +1381,284 @@ typedef struct ID3D11DeviceContext3Vtbl {
 
     void (STDMETHODCALLTYPE *PSSetConstantBuffers)(
         ID3D11DeviceContext3 *This,
-        U
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *IASetInputLayout)(
+        ID3D11DeviceContext3 *This,
+        ID3D11InputLayout *pInputLayout);
+
+    void (STDMETHODCALLTYPE *IASetVertexBuffers)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppVertexBuffers,
+        const UINT *pStrides,
+        const UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *IASetIndexBuffer)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Buffer *pIndexBuffer,
+        DXGI_FORMAT Format,
+        UINT Offset);
+
+    void (STDMETHODCALLTYPE *DrawIndexedInstanced)(
+        ID3D11DeviceContext3 *This,
+        UINT IndexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation,
+        UINT StartInstanceLocation);
+
+    void (STDMETHODCALLTYPE *DrawInstanced)(
+        ID3D11DeviceContext3 *This,
+        UINT VertexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartVertexLocation,
+        UINT StartInstanceLocation);
+
+    void (STDMETHODCALLTYPE *GSSetConstantBuffers)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *GSSetShader)(
+        ID3D11DeviceContext3 *This,
+        ID3D11GeometryShader *pShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances);
+
+    void (STDMETHODCALLTYPE *IASetPrimitiveTopology)(
+        ID3D11DeviceContext3 *This,
+        D3D11_PRIMITIVE_TOPOLOGY Topology);
+
+    void (STDMETHODCALLTYPE *VSSetShaderResources)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *VSSetSamplers)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *Begin)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Asynchronous *pAsync);
+
+    void (STDMETHODCALLTYPE *End)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Asynchronous *pAsync);
+
+    HRESULT (STDMETHODCALLTYPE *GetData)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Asynchronous *pAsync,
+        void *pData,
+        UINT DataSize,
+        UINT GetDataFlags);
+
+    void (STDMETHODCALLTYPE *SetPredication)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Predicate *pPredicate,
+        WINBOOL PredicateValue);
+
+    void (STDMETHODCALLTYPE *GSSetShaderResources)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *GSSetSamplers)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *OMSetRenderTargets)(
+        ID3D11DeviceContext3 *This,
+        UINT NumViews,
+        ID3D11RenderTargetView *const *ppRenderTargetViews,
+        ID3D11DepthStencilView *pDepthStencilView);
+
+    void (STDMETHODCALLTYPE *OMSetRenderTargetsAndUnorderedAccessViews)(
+        ID3D11DeviceContext3 *This,
+        UINT NumRTVs,
+        ID3D11RenderTargetView *const *ppRenderTargetViews,
+        ID3D11DepthStencilView *pDepthStencilView,
+        UINT UAVStartSlot,
+        UINT NumUAVs,
+        ID3D11UnorderedAccessView *const *ppUnorderedAccessViews,
+        const UINT *pUAVInitialCounts);
+
+    void (STDMETHODCALLTYPE *OMSetBlendState)(
+        ID3D11DeviceContext3 *This,
+        ID3D11BlendState *pBlendState,
+        const FLOAT BlendFactor[4],
+        UINT SampleMask);
+
+    void (STDMETHODCALLTYPE *OMSetDepthStencilState)(
+        ID3D11DeviceContext3 *This,
+        ID3D11DepthStencilState *pDepthStencilState,
+        UINT StencilRef);
+
+    void (STDMETHODCALLTYPE *SOSetTargets)(
+        ID3D11DeviceContext3 *This,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppSOTargets,
+        const UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *DrawAuto)(
+        ID3D11DeviceContext3 *This);
+
+    void (STDMETHODCALLTYPE *DrawIndexedInstancedIndirect)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Buffer *pBufferForArgs,
+        UINT AlignedByteOffsetForArgs);
+
+    void (STDMETHODCALLTYPE *DrawInstancedIndirect)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Buffer *pBufferForArgs,
+        UINT AlignedByteOffsetForArgs);
+
+    void (STDMETHODCALLTYPE *Dispatch)(
+        ID3D11DeviceContext3 *This,
+        UINT ThreadGroupCountX,
+        UINT ThreadGroupCountY,
+        UINT ThreadGroupCountZ);
+
+    void (STDMETHODCALLTYPE *DispatchIndirect)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Buffer *pBufferForArgs,
+        UINT AlignedByteOffsetForArgs);
+
+    void (STDMETHODCALLTYPE *RSSetState)(
+        ID3D11DeviceContext3 *This,
+        ID3D11RasterizerState *pRasterizerState);
+
+    void (STDMETHODCALLTYPE *RSSetViewports)(
+        ID3D11DeviceContext3 *This,
+        UINT NumViewports,
+        const D3D11_VIEWPORT *pViewports);
+
+    void (STDMETHODCALLTYPE *RSSetScissorRects)(
+        ID3D11DeviceContext3 *This,
+        UINT NumRects,
+        const D3D11_RECT *pRects);
+
+    void (STDMETHODCALLTYPE *CopySubresourceRegion)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        UINT DstX,
+        UINT DstY,
+        UINT DstZ,
+        ID3D11Resource *pSrcResource,
+        UINT SrcSubresource,
+        const D3D11_BOX *pSrcBox);
+
+    void (STDMETHODCALLTYPE *CopyResource)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pDstResource,
+        ID3D11Resource *pSrcResource);
+
+    void (STDMETHODCALLTYPE *UpdateSubresource)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        const D3D11_BOX *pDstBox,
+        const void *pSrcData,
+        UINT SrcRowPitch,
+        UINT SrcDepthPitch);
+
+    void (STDMETHODCALLTYPE *CopyStructureCount)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Buffer *pDstBuffer,
+        UINT DstAlignedByteOffset,
+        ID3D11UnorderedAccessView *pSrcView);
+
+    void (STDMETHODCALLTYPE *ClearRenderTargetView)(
+        ID3D11DeviceContext3 *This,
+        ID3D11RenderTargetView *pRenderTargetView,
+        const FLOAT ColorRGBA[4]);
+
+    void (STDMETHODCALLTYPE *ClearUnorderedAccessViewUint)(
+        ID3D11DeviceContext3 *This,
+        ID3D11UnorderedAccessView *pUnorderedAccessView,
+        const UINT Values[4]);
+
+    void (STDMETHODCALLTYPE *ClearUnorderedAccessViewFloat)(
+        ID3D11DeviceContext3 *This,
+        ID3D11UnorderedAccessView *pUnorderedAccessView,
+        const FLOAT Values[4]);
+
+    void (STDMETHODCALLTYPE *ClearDepthStencilView)(
+        ID3D11DeviceContext3 *This,
+        ID3D11DepthStencilView *pDepthStencilView,
+        UINT ClearFlags,
+        FLOAT Depth,
+        UINT8 Stencil);
+
+    void (STDMETHODCALLTYPE *GenerateMips)(
+        ID3D11DeviceContext3 *This,
+        ID3D11ShaderResourceView *pShaderResourceView);
+
+    void (STDMETHODCALLTYPE *SetResourceMinLOD)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pResource,
+        FLOAT MinLOD);
+
+    FLOAT (STDMETHODCALLTYPE *GetResourceMinLOD)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pResource);
+
+    void (STDMETHODCALLTYPE *ResolveSubresource)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        ID3D11Resource *pSrcResource,
+        UINT SrcSubresource,
+        DXGI_FORMAT Format);
+
+    void (STDMETHODCALLTYPE *ExecuteCommandList)(
+        ID3D11DeviceContext3 *This,
+        ID3D11CommandList *pCommandList,
+        WINBOOL RestoreContextState);
+
+    void (STDMETHODCALLTYPE *HSSetShaderResources)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *HSSetShader)(
+        ID3D11DeviceContext3 *This,
+        ID3D11HullShader *pHullShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances);
+
+    void (STDMETHODCALLTYPE *HSSetSamplers)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *HSSetConstantBuffers)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *DSSetShaderResources)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *DSSetShader)(
+        ID3D11DeviceContext3 *This,
+        ID3D11DomainShader *pDomainShader,
+        ID3D11ClassIn
