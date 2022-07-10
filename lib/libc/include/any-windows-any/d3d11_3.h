@@ -1936,4 +1936,260 @@ typedef struct ID3D11DeviceContext3Vtbl {
         ID3D11DeviceContext3 *This);
 
     D3D11_DEVICE_CONTEXT_TYPE (STDMETHODCALLTYPE *GetType)(
-        ID3D11De
+        ID3D11DeviceContext3 *This);
+
+    UINT (STDMETHODCALLTYPE *GetContextFlags)(
+        ID3D11DeviceContext3 *This);
+
+    HRESULT (STDMETHODCALLTYPE *FinishCommandList)(
+        ID3D11DeviceContext3 *This,
+        WINBOOL RestoreDeferredContextState,
+        ID3D11CommandList **ppCommandList);
+
+    /*** ID3D11DeviceContext1 methods ***/
+    void (STDMETHODCALLTYPE *CopySubresourceRegion1)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        UINT DstX,
+        UINT DstY,
+        UINT DstZ,
+        ID3D11Resource *pSrcResource,
+        UINT SrcSubresource,
+        const D3D11_BOX *pSrcBox,
+        UINT CopyFlags);
+
+    void (STDMETHODCALLTYPE *UpdateSubresource1)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pDstResource,
+        UINT DstSubresource,
+        const D3D11_BOX *pDstBox,
+        const void *pSrcData,
+        UINT SrcRowPitch,
+        UINT SrcDepthPitch,
+        UINT CopyFlags);
+
+    void (STDMETHODCALLTYPE *DiscardResource)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *pResource);
+
+    void (STDMETHODCALLTYPE *DiscardView)(
+        ID3D11DeviceContext3 *This,
+        ID3D11View *pResourceView);
+
+    void (STDMETHODCALLTYPE *VSSetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers,
+        const UINT *pFirstConstant,
+        const UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *HSSetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers,
+        const UINT *pFirstConstant,
+        const UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *DSSetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers,
+        const UINT *pFirstConstant,
+        const UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *GSSetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers,
+        const UINT *pFirstConstant,
+        const UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *PSSetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers,
+        const UINT *pFirstConstant,
+        const UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *CSSetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers,
+        const UINT *pFirstConstant,
+        const UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *VSGetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers,
+        UINT *pFirstConstant,
+        UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *HSGetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers,
+        UINT *pFirstConstant,
+        UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *DSGetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers,
+        UINT *pFirstConstant,
+        UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *GSGetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers,
+        UINT *pFirstConstant,
+        UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *PSGetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers,
+        UINT *pFirstConstant,
+        UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *CSGetConstantBuffers1)(
+        ID3D11DeviceContext3 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer **ppConstantBuffers,
+        UINT *pFirstConstant,
+        UINT *pNumConstants);
+
+    void (STDMETHODCALLTYPE *SwapDeviceContextState)(
+        ID3D11DeviceContext3 *This,
+        ID3DDeviceContextState *pState,
+        ID3DDeviceContextState **ppPreviousState);
+
+    void (STDMETHODCALLTYPE *ClearView)(
+        ID3D11DeviceContext3 *This,
+        ID3D11View *pView,
+        const FLOAT Color[4],
+        const D3D11_RECT *pRect,
+        UINT NumRects);
+
+    void (STDMETHODCALLTYPE *DiscardView1)(
+        ID3D11DeviceContext3 *This,
+        ID3D11View *pResourceView,
+        const D3D11_RECT *pRects,
+        UINT NumRects);
+
+    /*** ID3D11DeviceContext2 methods ***/
+    HRESULT (STDMETHODCALLTYPE *UpdateTileMappings)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *resource,
+        UINT region_count,
+        const D3D11_TILED_RESOURCE_COORDINATE *region_start_coordinates,
+        const D3D11_TILE_REGION_SIZE *region_sizes,
+        ID3D11Buffer *pool,
+        UINT range_count,
+        const UINT *range_flags,
+        const UINT *pool_start_offsets,
+        const UINT *range_tile_counts,
+        UINT flags);
+
+    HRESULT (STDMETHODCALLTYPE *CopyTileMappings)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *dst_resource,
+        const D3D11_TILED_RESOURCE_COORDINATE *dst_start_coordinate,
+        ID3D11Resource *src_resource,
+        const D3D11_TILED_RESOURCE_COORDINATE *src_start_coordinate,
+        const D3D11_TILE_REGION_SIZE *region_size,
+        UINT flags);
+
+    void (STDMETHODCALLTYPE *CopyTiles)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *resource,
+        const D3D11_TILED_RESOURCE_COORDINATE *start_coordinate,
+        const D3D11_TILE_REGION_SIZE *size,
+        ID3D11Buffer *buffer,
+        UINT64 start_offset,
+        UINT flags);
+
+    void (STDMETHODCALLTYPE *UpdateTiles)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Resource *dst_resource,
+        const D3D11_TILED_RESOURCE_COORDINATE *dst_start_coordinate,
+        const D3D11_TILE_REGION_SIZE *dst_region_size,
+        const void *src_data,
+        UINT flags);
+
+    HRESULT (STDMETHODCALLTYPE *ResizeTilePool)(
+        ID3D11DeviceContext3 *This,
+        ID3D11Buffer *pool,
+        UINT64 size);
+
+    void (STDMETHODCALLTYPE *TiledResourceBarrier)(
+        ID3D11DeviceContext3 *This,
+        ID3D11DeviceChild *before_barrier,
+        ID3D11DeviceChild *after_barrier);
+
+    WINBOOL (STDMETHODCALLTYPE *IsAnnotationEnabled)(
+        ID3D11DeviceContext3 *This);
+
+    void (STDMETHODCALLTYPE *SetMarkerInt)(
+        ID3D11DeviceContext3 *This,
+        const WCHAR *label,
+        int data);
+
+    void (STDMETHODCALLTYPE *BeginEventInt)(
+        ID3D11DeviceContext3 *This,
+        const WCHAR *label,
+        int data);
+
+    void (STDMETHODCALLTYPE *EndEvent)(
+        ID3D11DeviceContext3 *This);
+
+    /*** ID3D11DeviceContext3 methods ***/
+    void (STDMETHODCALLTYPE *Flush1)(
+        ID3D11DeviceContext3 *This,
+        D3D11_CONTEXT_TYPE type,
+        HANDLE event);
+
+    void (STDMETHODCALLTYPE *SetHardwareProtectionState)(
+        ID3D11DeviceContext3 *This,
+        WINBOOL enable);
+
+    void (STDMETHODCALLTYPE *GetHardwareProtectionState)(
+        ID3D11DeviceContext3 *This,
+        WINBOOL *enable);
+
+    END_INTERFACE
+} ID3D11DeviceContext3Vtbl;
+
+interface ID3D11DeviceContext3 {
+    CONST_VTBL ID3D11DeviceContext3Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11DeviceContext3_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11DeviceContext3_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11DeviceContext3_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11DeviceContext3_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11DeviceContext3_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11DeviceContext3_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11DeviceContext3_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11DeviceContext methods ***/
+#define ID3D11DeviceContext3_VSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers) (This)->lpVtbl->VSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers)
+#define ID3D11DeviceContext3_PSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews) (This)->lpVtbl->PSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews)
+#define ID3D11DeviceContext3_PSSetShader(This,pPixelShader,ppClassInstances,NumClassInstan
