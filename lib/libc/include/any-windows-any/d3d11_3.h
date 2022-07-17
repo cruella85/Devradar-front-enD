@@ -2698,4 +2698,137 @@ static FORCEINLINE void ID3D11DeviceContext3_DiscardView(ID3D11DeviceContext3* T
 static FORCEINLINE void ID3D11DeviceContext3_VSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
     This->lpVtbl->VSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
 }
-static FORCEINLINE void ID3D11DeviceContext3_HSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBu
+static FORCEINLINE void ID3D11DeviceContext3_HSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->HSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_DSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->DSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_GSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->GSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_PSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->PSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_CSSetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->CSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_VSGetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->VSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_HSGetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->HSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_DSGetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->DSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_GSGetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->GSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_PSGetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->PSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_CSGetConstantBuffers1(ID3D11DeviceContext3* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->CSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext3_SwapDeviceContextState(ID3D11DeviceContext3* This,ID3DDeviceContextState *pState,ID3DDeviceContextState **ppPreviousState) {
+    This->lpVtbl->SwapDeviceContextState(This,pState,ppPreviousState);
+}
+static FORCEINLINE void ID3D11DeviceContext3_ClearView(ID3D11DeviceContext3* This,ID3D11View *pView,const FLOAT Color[4],const D3D11_RECT *pRect,UINT NumRects) {
+    This->lpVtbl->ClearView(This,pView,Color,pRect,NumRects);
+}
+static FORCEINLINE void ID3D11DeviceContext3_DiscardView1(ID3D11DeviceContext3* This,ID3D11View *pResourceView,const D3D11_RECT *pRects,UINT NumRects) {
+    This->lpVtbl->DiscardView1(This,pResourceView,pRects,NumRects);
+}
+/*** ID3D11DeviceContext2 methods ***/
+static FORCEINLINE HRESULT ID3D11DeviceContext3_UpdateTileMappings(ID3D11DeviceContext3* This,ID3D11Resource *resource,UINT region_count,const D3D11_TILED_RESOURCE_COORDINATE *region_start_coordinates,const D3D11_TILE_REGION_SIZE *region_sizes,ID3D11Buffer *pool,UINT range_count,const UINT *range_flags,const UINT *pool_start_offsets,const UINT *range_tile_counts,UINT flags) {
+    return This->lpVtbl->UpdateTileMappings(This,resource,region_count,region_start_coordinates,region_sizes,pool,range_count,range_flags,pool_start_offsets,range_tile_counts,flags);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext3_CopyTileMappings(ID3D11DeviceContext3* This,ID3D11Resource *dst_resource,const D3D11_TILED_RESOURCE_COORDINATE *dst_start_coordinate,ID3D11Resource *src_resource,const D3D11_TILED_RESOURCE_COORDINATE *src_start_coordinate,const D3D11_TILE_REGION_SIZE *region_size,UINT flags) {
+    return This->lpVtbl->CopyTileMappings(This,dst_resource,dst_start_coordinate,src_resource,src_start_coordinate,region_size,flags);
+}
+static FORCEINLINE void ID3D11DeviceContext3_CopyTiles(ID3D11DeviceContext3* This,ID3D11Resource *resource,const D3D11_TILED_RESOURCE_COORDINATE *start_coordinate,const D3D11_TILE_REGION_SIZE *size,ID3D11Buffer *buffer,UINT64 start_offset,UINT flags) {
+    This->lpVtbl->CopyTiles(This,resource,start_coordinate,size,buffer,start_offset,flags);
+}
+static FORCEINLINE void ID3D11DeviceContext3_UpdateTiles(ID3D11DeviceContext3* This,ID3D11Resource *dst_resource,const D3D11_TILED_RESOURCE_COORDINATE *dst_start_coordinate,const D3D11_TILE_REGION_SIZE *dst_region_size,const void *src_data,UINT flags) {
+    This->lpVtbl->UpdateTiles(This,dst_resource,dst_start_coordinate,dst_region_size,src_data,flags);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext3_ResizeTilePool(ID3D11DeviceContext3* This,ID3D11Buffer *pool,UINT64 size) {
+    return This->lpVtbl->ResizeTilePool(This,pool,size);
+}
+static FORCEINLINE void ID3D11DeviceContext3_TiledResourceBarrier(ID3D11DeviceContext3* This,ID3D11DeviceChild *before_barrier,ID3D11DeviceChild *after_barrier) {
+    This->lpVtbl->TiledResourceBarrier(This,before_barrier,after_barrier);
+}
+static FORCEINLINE WINBOOL ID3D11DeviceContext3_IsAnnotationEnabled(ID3D11DeviceContext3* This) {
+    return This->lpVtbl->IsAnnotationEnabled(This);
+}
+static FORCEINLINE void ID3D11DeviceContext3_SetMarkerInt(ID3D11DeviceContext3* This,const WCHAR *label,int data) {
+    This->lpVtbl->SetMarkerInt(This,label,data);
+}
+static FORCEINLINE void ID3D11DeviceContext3_BeginEventInt(ID3D11DeviceContext3* This,const WCHAR *label,int data) {
+    This->lpVtbl->BeginEventInt(This,label,data);
+}
+static FORCEINLINE void ID3D11DeviceContext3_EndEvent(ID3D11DeviceContext3* This) {
+    This->lpVtbl->EndEvent(This);
+}
+/*** ID3D11DeviceContext3 methods ***/
+static FORCEINLINE void ID3D11DeviceContext3_Flush1(ID3D11DeviceContext3* This,D3D11_CONTEXT_TYPE type,HANDLE event) {
+    This->lpVtbl->Flush1(This,type,event);
+}
+static FORCEINLINE void ID3D11DeviceContext3_SetHardwareProtectionState(ID3D11DeviceContext3* This,WINBOOL enable) {
+    This->lpVtbl->SetHardwareProtectionState(This,enable);
+}
+static FORCEINLINE void ID3D11DeviceContext3_GetHardwareProtectionState(ID3D11DeviceContext3* This,WINBOOL *enable) {
+    This->lpVtbl->GetHardwareProtectionState(This,enable);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DeviceContext3_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11Fence interface
+ */
+#ifndef __ID3D11Fence_INTERFACE_DEFINED__
+#define __ID3D11Fence_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Fence, 0xaffde9d1, 0x1df7, 0x4bb7, 0x8a,0x34, 0x0f,0x46,0x25,0x1d,0xab,0x80);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("affde9d1-1df7-4bb7-8a34-0f46251dab80")
+ID3D11Fence : public ID3D11DeviceChild
+{
+    virtual HRESULT STDMETHODCALLTYPE CreateSharedHandle(
+        const SECURITY_ATTRIBUTES *attributes,
+        DWORD access,
+        const WCHAR *name,
+        HANDLE *handle) = 0;
+
+    virtual UINT64 STDMETHODCALLTYPE GetCompletedValue(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetEventOnCompletion(
+        UINT64 value,
+        HANDLE event) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11Fence, 0xaffde9d1, 0x1df7, 0x4bb7, 0x8a,0x34, 0x0f,0x46,0x25,0x1d,0xab,0x80)
+#endif
+#else
+typedef struct ID3D11FenceVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11Fence *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11Fence *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+      
