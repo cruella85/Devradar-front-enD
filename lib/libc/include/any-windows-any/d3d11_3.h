@@ -2831,4 +2831,254 @@ typedef struct ID3D11FenceVtbl {
         ID3D11Fence *This);
 
     ULONG (STDMETHODCALLTYPE *Release)(
-      
+        ID3D11Fence *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11Fence *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11Fence *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11Fence *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11Fence *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11Fence methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateSharedHandle)(
+        ID3D11Fence *This,
+        const SECURITY_ATTRIBUTES *attributes,
+        DWORD access,
+        const WCHAR *name,
+        HANDLE *handle);
+
+    UINT64 (STDMETHODCALLTYPE *GetCompletedValue)(
+        ID3D11Fence *This);
+
+    HRESULT (STDMETHODCALLTYPE *SetEventOnCompletion)(
+        ID3D11Fence *This,
+        UINT64 value,
+        HANDLE event);
+
+    END_INTERFACE
+} ID3D11FenceVtbl;
+
+interface ID3D11Fence {
+    CONST_VTBL ID3D11FenceVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11Fence_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11Fence_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11Fence_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11DeviceChild methods ***/
+#define ID3D11Fence_GetDevice(This,ppDevice) (This)->lpVtbl->GetDevice(This,ppDevice)
+#define ID3D11Fence_GetPrivateData(This,guid,pDataSize,pData) (This)->lpVtbl->GetPrivateData(This,guid,pDataSize,pData)
+#define ID3D11Fence_SetPrivateData(This,guid,DataSize,pData) (This)->lpVtbl->SetPrivateData(This,guid,DataSize,pData)
+#define ID3D11Fence_SetPrivateDataInterface(This,guid,pData) (This)->lpVtbl->SetPrivateDataInterface(This,guid,pData)
+/*** ID3D11Fence methods ***/
+#define ID3D11Fence_CreateSharedHandle(This,attributes,access,name,handle) (This)->lpVtbl->CreateSharedHandle(This,attributes,access,name,handle)
+#define ID3D11Fence_GetCompletedValue(This) (This)->lpVtbl->GetCompletedValue(This)
+#define ID3D11Fence_SetEventOnCompletion(This,value,event) (This)->lpVtbl->SetEventOnCompletion(This,value,event)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11Fence_QueryInterface(ID3D11Fence* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11Fence_AddRef(ID3D11Fence* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11Fence_Release(ID3D11Fence* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11Fence_GetDevice(ID3D11Fence* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11Fence_GetPrivateData(ID3D11Fence* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Fence_SetPrivateData(ID3D11Fence* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11Fence_SetPrivateDataInterface(ID3D11Fence* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11Fence methods ***/
+static FORCEINLINE HRESULT ID3D11Fence_CreateSharedHandle(ID3D11Fence* This,const SECURITY_ATTRIBUTES *attributes,DWORD access,const WCHAR *name,HANDLE *handle) {
+    return This->lpVtbl->CreateSharedHandle(This,attributes,access,name,handle);
+}
+static FORCEINLINE UINT64 ID3D11Fence_GetCompletedValue(ID3D11Fence* This) {
+    return This->lpVtbl->GetCompletedValue(This);
+}
+static FORCEINLINE HRESULT ID3D11Fence_SetEventOnCompletion(ID3D11Fence* This,UINT64 value,HANDLE event) {
+    return This->lpVtbl->SetEventOnCompletion(This,value,event);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11Fence_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11DeviceContext4 interface
+ */
+#ifndef __ID3D11DeviceContext4_INTERFACE_DEFINED__
+#define __ID3D11DeviceContext4_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11DeviceContext4, 0x917600da, 0xf58c, 0x4c33, 0x98,0xd8, 0x3e,0x15,0xb3,0x90,0xfa,0x24);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("917600da-f58c-4c33-98d8-3e15b390fa24")
+ID3D11DeviceContext4 : public ID3D11DeviceContext3
+{
+    virtual HRESULT STDMETHODCALLTYPE Signal(
+        ID3D11Fence *fence,
+        UINT64 value) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Wait(
+        ID3D11Fence *fence,
+        UINT64 value) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ID3D11DeviceContext4, 0x917600da, 0xf58c, 0x4c33, 0x98,0xd8, 0x3e,0x15,0xb3,0x90,0xfa,0x24)
+#endif
+#else
+typedef struct ID3D11DeviceContext4Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ID3D11DeviceContext4 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ID3D11DeviceContext4 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ID3D11DeviceContext4 *This);
+
+    /*** ID3D11DeviceChild methods ***/
+    void (STDMETHODCALLTYPE *GetDevice)(
+        ID3D11DeviceContext4 *This,
+        ID3D11Device **ppDevice);
+
+    HRESULT (STDMETHODCALLTYPE *GetPrivateData)(
+        ID3D11DeviceContext4 *This,
+        REFGUID guid,
+        UINT *pDataSize,
+        void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateData)(
+        ID3D11DeviceContext4 *This,
+        REFGUID guid,
+        UINT DataSize,
+        const void *pData);
+
+    HRESULT (STDMETHODCALLTYPE *SetPrivateDataInterface)(
+        ID3D11DeviceContext4 *This,
+        REFGUID guid,
+        const IUnknown *pData);
+
+    /*** ID3D11DeviceContext methods ***/
+    void (STDMETHODCALLTYPE *VSSetConstantBuffers)(
+        ID3D11DeviceContext4 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *PSSetShaderResources)(
+        ID3D11DeviceContext4 *This,
+        UINT StartSlot,
+        UINT NumViews,
+        ID3D11ShaderResourceView *const *ppShaderResourceViews);
+
+    void (STDMETHODCALLTYPE *PSSetShader)(
+        ID3D11DeviceContext4 *This,
+        ID3D11PixelShader *pPixelShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances);
+
+    void (STDMETHODCALLTYPE *PSSetSamplers)(
+        ID3D11DeviceContext4 *This,
+        UINT StartSlot,
+        UINT NumSamplers,
+        ID3D11SamplerState *const *ppSamplers);
+
+    void (STDMETHODCALLTYPE *VSSetShader)(
+        ID3D11DeviceContext4 *This,
+        ID3D11VertexShader *pVertexShader,
+        ID3D11ClassInstance *const *ppClassInstances,
+        UINT NumClassInstances);
+
+    void (STDMETHODCALLTYPE *DrawIndexed)(
+        ID3D11DeviceContext4 *This,
+        UINT IndexCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation);
+
+    void (STDMETHODCALLTYPE *Draw)(
+        ID3D11DeviceContext4 *This,
+        UINT VertexCount,
+        UINT StartVertexLocation);
+
+    HRESULT (STDMETHODCALLTYPE *Map)(
+        ID3D11DeviceContext4 *This,
+        ID3D11Resource *pResource,
+        UINT Subresource,
+        D3D11_MAP MapType,
+        UINT MapFlags,
+        D3D11_MAPPED_SUBRESOURCE *pMappedResource);
+
+    void (STDMETHODCALLTYPE *Unmap)(
+        ID3D11DeviceContext4 *This,
+        ID3D11Resource *pResource,
+        UINT Subresource);
+
+    void (STDMETHODCALLTYPE *PSSetConstantBuffers)(
+        ID3D11DeviceContext4 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppConstantBuffers);
+
+    void (STDMETHODCALLTYPE *IASetInputLayout)(
+        ID3D11DeviceContext4 *This,
+        ID3D11InputLayout *pInputLayout);
+
+    void (STDMETHODCALLTYPE *IASetVertexBuffers)(
+        ID3D11DeviceContext4 *This,
+        UINT StartSlot,
+        UINT NumBuffers,
+        ID3D11Buffer *const *ppVertexBuffers,
+        const UINT *pStrides,
+        const UINT *pOffsets);
+
+    void (STDMETHODCALLTYPE *IASetIndexBuffer)(
+        ID3D11DeviceContext4 *This,
+        ID3D11Buffer *pIndexBuffer,
+        DXGI_FORMAT Format,
+        UINT Offset);
+
+    void (STDMETHODCALLTYPE *DrawIndexedInstanced)(
+        ID3D11DeviceContext4 *This,
+        UINT IndexCountPerInstance,
+        UINT InstanceCount,
+        UINT StartIndexLocation,
+        INT BaseVertexLocation,
+        UINT StartInstanceLocation)
