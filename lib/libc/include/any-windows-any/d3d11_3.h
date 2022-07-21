@@ -3986,4 +3986,86 @@ interface ID3D11DeviceContext4 {
 #define ID3D11DeviceContext4_UpdateSubresource1(This,pDstResource,DstSubresource,pDstBox,pSrcData,SrcRowPitch,SrcDepthPitch,CopyFlags) (This)->lpVtbl->UpdateSubresource1(This,pDstResource,DstSubresource,pDstBox,pSrcData,SrcRowPitch,SrcDepthPitch,CopyFlags)
 #define ID3D11DeviceContext4_DiscardResource(This,pResource) (This)->lpVtbl->DiscardResource(This,pResource)
 #define ID3D11DeviceContext4_DiscardView(This,pResourceView) (This)->lpVtbl->DiscardView(This,pResourceView)
-#define ID3D11DeviceContext4_VSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->VSSetConstantBu
+#define ID3D11DeviceContext4_VSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->VSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_HSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->HSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_DSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->DSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_GSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->GSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_PSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->PSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_CSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->CSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_VSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->VSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_HSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->HSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_DSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->DSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_GSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->GSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_PSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->PSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_CSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants) (This)->lpVtbl->CSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants)
+#define ID3D11DeviceContext4_SwapDeviceContextState(This,pState,ppPreviousState) (This)->lpVtbl->SwapDeviceContextState(This,pState,ppPreviousState)
+#define ID3D11DeviceContext4_ClearView(This,pView,Color,pRect,NumRects) (This)->lpVtbl->ClearView(This,pView,Color,pRect,NumRects)
+#define ID3D11DeviceContext4_DiscardView1(This,pResourceView,pRects,NumRects) (This)->lpVtbl->DiscardView1(This,pResourceView,pRects,NumRects)
+/*** ID3D11DeviceContext2 methods ***/
+#define ID3D11DeviceContext4_UpdateTileMappings(This,resource,region_count,region_start_coordinates,region_sizes,pool,range_count,range_flags,pool_start_offsets,range_tile_counts,flags) (This)->lpVtbl->UpdateTileMappings(This,resource,region_count,region_start_coordinates,region_sizes,pool,range_count,range_flags,pool_start_offsets,range_tile_counts,flags)
+#define ID3D11DeviceContext4_CopyTileMappings(This,dst_resource,dst_start_coordinate,src_resource,src_start_coordinate,region_size,flags) (This)->lpVtbl->CopyTileMappings(This,dst_resource,dst_start_coordinate,src_resource,src_start_coordinate,region_size,flags)
+#define ID3D11DeviceContext4_CopyTiles(This,resource,start_coordinate,size,buffer,start_offset,flags) (This)->lpVtbl->CopyTiles(This,resource,start_coordinate,size,buffer,start_offset,flags)
+#define ID3D11DeviceContext4_UpdateTiles(This,dst_resource,dst_start_coordinate,dst_region_size,src_data,flags) (This)->lpVtbl->UpdateTiles(This,dst_resource,dst_start_coordinate,dst_region_size,src_data,flags)
+#define ID3D11DeviceContext4_ResizeTilePool(This,pool,size) (This)->lpVtbl->ResizeTilePool(This,pool,size)
+#define ID3D11DeviceContext4_TiledResourceBarrier(This,before_barrier,after_barrier) (This)->lpVtbl->TiledResourceBarrier(This,before_barrier,after_barrier)
+#define ID3D11DeviceContext4_IsAnnotationEnabled(This) (This)->lpVtbl->IsAnnotationEnabled(This)
+#define ID3D11DeviceContext4_SetMarkerInt(This,label,data) (This)->lpVtbl->SetMarkerInt(This,label,data)
+#define ID3D11DeviceContext4_BeginEventInt(This,label,data) (This)->lpVtbl->BeginEventInt(This,label,data)
+#define ID3D11DeviceContext4_EndEvent(This) (This)->lpVtbl->EndEvent(This)
+/*** ID3D11DeviceContext3 methods ***/
+#define ID3D11DeviceContext4_Flush1(This,type,event) (This)->lpVtbl->Flush1(This,type,event)
+#define ID3D11DeviceContext4_SetHardwareProtectionState(This,enable) (This)->lpVtbl->SetHardwareProtectionState(This,enable)
+#define ID3D11DeviceContext4_GetHardwareProtectionState(This,enable) (This)->lpVtbl->GetHardwareProtectionState(This,enable)
+/*** ID3D11DeviceContext4 methods ***/
+#define ID3D11DeviceContext4_Signal(This,fence,value) (This)->lpVtbl->Signal(This,fence,value)
+#define ID3D11DeviceContext4_Wait(This,fence,value) (This)->lpVtbl->Wait(This,fence,value)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ID3D11DeviceContext4_QueryInterface(ID3D11DeviceContext4* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ID3D11DeviceContext4_AddRef(ID3D11DeviceContext4* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ID3D11DeviceContext4_Release(ID3D11DeviceContext4* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ID3D11DeviceChild methods ***/
+static FORCEINLINE void ID3D11DeviceContext4_GetDevice(ID3D11DeviceContext4* This,ID3D11Device **ppDevice) {
+    This->lpVtbl->GetDevice(This,ppDevice);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_GetPrivateData(ID3D11DeviceContext4* This,REFGUID guid,UINT *pDataSize,void *pData) {
+    return This->lpVtbl->GetPrivateData(This,guid,pDataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_SetPrivateData(ID3D11DeviceContext4* This,REFGUID guid,UINT DataSize,const void *pData) {
+    return This->lpVtbl->SetPrivateData(This,guid,DataSize,pData);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_SetPrivateDataInterface(ID3D11DeviceContext4* This,REFGUID guid,const IUnknown *pData) {
+    return This->lpVtbl->SetPrivateDataInterface(This,guid,pData);
+}
+/*** ID3D11DeviceContext methods ***/
+static FORCEINLINE void ID3D11DeviceContext4_VSSetConstantBuffers(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers) {
+    This->lpVtbl->VSSetConstantBuffers(This,StartSlot,NumBuffers,ppConstantBuffers);
+}
+static FORCEINLINE void ID3D11DeviceContext4_PSSetShaderResources(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumViews,ID3D11ShaderResourceView *const *ppShaderResourceViews) {
+    This->lpVtbl->PSSetShaderResources(This,StartSlot,NumViews,ppShaderResourceViews);
+}
+static FORCEINLINE void ID3D11DeviceContext4_PSSetShader(ID3D11DeviceContext4* This,ID3D11PixelShader *pPixelShader,ID3D11ClassInstance *const *ppClassInstances,UINT NumClassInstances) {
+    This->lpVtbl->PSSetShader(This,pPixelShader,ppClassInstances,NumClassInstances);
+}
+static FORCEINLINE void ID3D11DeviceContext4_PSSetSamplers(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumSamplers,ID3D11SamplerState *const *ppSamplers) {
+    This->lpVtbl->PSSetSamplers(This,StartSlot,NumSamplers,ppSamplers);
+}
+static FORCEINLINE void ID3D11DeviceContext4_VSSetShader(ID3D11DeviceContext4* This,ID3D11VertexShader *pVertexShader,ID3D11ClassInstance *const *ppClassInstances,UINT NumClassInstances) {
+    This->lpVtbl->VSSetShader(This,pVertexShader,ppClassInstances,NumClassInstances);
+}
+static FORCEINLINE void ID3D11DeviceContext4_DrawIndexed(ID3D11DeviceContext4* This,UINT IndexCount,UINT StartIndexLocation,INT BaseVertexLocation) {
+    This->lpVtbl->DrawIndexed(This,IndexCount,StartIndexLocation,BaseVertexLocation);
+}
+static FORCEINLINE void ID3D11DeviceContext4_Draw(ID3D11DeviceContext4* This,UINT VertexCount,UINT StartVertexLocation) {
+    This->lpVtbl->Draw(This,VertexCount,StartVertexLocation);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_Map(ID3D11DeviceContext4* This,ID3D11Resource *pResource,UINT Subresource,D3D11_MAP MapType,UINT MapFlags,D3D11_MAPPED_SUBRESOURCE *pMappedResource) {
+    return This->lpVtbl->Map(This,pResource,Subresource,MapType,MapFlags,pMappedResource);
+}
+static FORCEINLINE void ID3D11DeviceContext4_Unmap(ID3D11DeviceContext4* This,ID3D11Resource *pResource,UINT Subresour
