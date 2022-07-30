@@ -4387,4 +4387,129 @@ static FORCEINLINE void ID3D11DeviceContext4_VSSetConstantBuffers1(ID3D11DeviceC
 static FORCEINLINE void ID3D11DeviceContext4_HSSetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
     This->lpVtbl->HSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
 }
-stat
+static FORCEINLINE void ID3D11DeviceContext4_DSSetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->DSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_GSSetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->GSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_PSSetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->PSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_CSSetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer *const *ppConstantBuffers,const UINT *pFirstConstant,const UINT *pNumConstants) {
+    This->lpVtbl->CSSetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_VSGetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->VSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_HSGetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->HSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_DSGetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->DSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_GSGetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->GSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_PSGetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->PSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_CSGetConstantBuffers1(ID3D11DeviceContext4* This,UINT StartSlot,UINT NumBuffers,ID3D11Buffer **ppConstantBuffers,UINT *pFirstConstant,UINT *pNumConstants) {
+    This->lpVtbl->CSGetConstantBuffers1(This,StartSlot,NumBuffers,ppConstantBuffers,pFirstConstant,pNumConstants);
+}
+static FORCEINLINE void ID3D11DeviceContext4_SwapDeviceContextState(ID3D11DeviceContext4* This,ID3DDeviceContextState *pState,ID3DDeviceContextState **ppPreviousState) {
+    This->lpVtbl->SwapDeviceContextState(This,pState,ppPreviousState);
+}
+static FORCEINLINE void ID3D11DeviceContext4_ClearView(ID3D11DeviceContext4* This,ID3D11View *pView,const FLOAT Color[4],const D3D11_RECT *pRect,UINT NumRects) {
+    This->lpVtbl->ClearView(This,pView,Color,pRect,NumRects);
+}
+static FORCEINLINE void ID3D11DeviceContext4_DiscardView1(ID3D11DeviceContext4* This,ID3D11View *pResourceView,const D3D11_RECT *pRects,UINT NumRects) {
+    This->lpVtbl->DiscardView1(This,pResourceView,pRects,NumRects);
+}
+/*** ID3D11DeviceContext2 methods ***/
+static FORCEINLINE HRESULT ID3D11DeviceContext4_UpdateTileMappings(ID3D11DeviceContext4* This,ID3D11Resource *resource,UINT region_count,const D3D11_TILED_RESOURCE_COORDINATE *region_start_coordinates,const D3D11_TILE_REGION_SIZE *region_sizes,ID3D11Buffer *pool,UINT range_count,const UINT *range_flags,const UINT *pool_start_offsets,const UINT *range_tile_counts,UINT flags) {
+    return This->lpVtbl->UpdateTileMappings(This,resource,region_count,region_start_coordinates,region_sizes,pool,range_count,range_flags,pool_start_offsets,range_tile_counts,flags);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_CopyTileMappings(ID3D11DeviceContext4* This,ID3D11Resource *dst_resource,const D3D11_TILED_RESOURCE_COORDINATE *dst_start_coordinate,ID3D11Resource *src_resource,const D3D11_TILED_RESOURCE_COORDINATE *src_start_coordinate,const D3D11_TILE_REGION_SIZE *region_size,UINT flags) {
+    return This->lpVtbl->CopyTileMappings(This,dst_resource,dst_start_coordinate,src_resource,src_start_coordinate,region_size,flags);
+}
+static FORCEINLINE void ID3D11DeviceContext4_CopyTiles(ID3D11DeviceContext4* This,ID3D11Resource *resource,const D3D11_TILED_RESOURCE_COORDINATE *start_coordinate,const D3D11_TILE_REGION_SIZE *size,ID3D11Buffer *buffer,UINT64 start_offset,UINT flags) {
+    This->lpVtbl->CopyTiles(This,resource,start_coordinate,size,buffer,start_offset,flags);
+}
+static FORCEINLINE void ID3D11DeviceContext4_UpdateTiles(ID3D11DeviceContext4* This,ID3D11Resource *dst_resource,const D3D11_TILED_RESOURCE_COORDINATE *dst_start_coordinate,const D3D11_TILE_REGION_SIZE *dst_region_size,const void *src_data,UINT flags) {
+    This->lpVtbl->UpdateTiles(This,dst_resource,dst_start_coordinate,dst_region_size,src_data,flags);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_ResizeTilePool(ID3D11DeviceContext4* This,ID3D11Buffer *pool,UINT64 size) {
+    return This->lpVtbl->ResizeTilePool(This,pool,size);
+}
+static FORCEINLINE void ID3D11DeviceContext4_TiledResourceBarrier(ID3D11DeviceContext4* This,ID3D11DeviceChild *before_barrier,ID3D11DeviceChild *after_barrier) {
+    This->lpVtbl->TiledResourceBarrier(This,before_barrier,after_barrier);
+}
+static FORCEINLINE WINBOOL ID3D11DeviceContext4_IsAnnotationEnabled(ID3D11DeviceContext4* This) {
+    return This->lpVtbl->IsAnnotationEnabled(This);
+}
+static FORCEINLINE void ID3D11DeviceContext4_SetMarkerInt(ID3D11DeviceContext4* This,const WCHAR *label,int data) {
+    This->lpVtbl->SetMarkerInt(This,label,data);
+}
+static FORCEINLINE void ID3D11DeviceContext4_BeginEventInt(ID3D11DeviceContext4* This,const WCHAR *label,int data) {
+    This->lpVtbl->BeginEventInt(This,label,data);
+}
+static FORCEINLINE void ID3D11DeviceContext4_EndEvent(ID3D11DeviceContext4* This) {
+    This->lpVtbl->EndEvent(This);
+}
+/*** ID3D11DeviceContext3 methods ***/
+static FORCEINLINE void ID3D11DeviceContext4_Flush1(ID3D11DeviceContext4* This,D3D11_CONTEXT_TYPE type,HANDLE event) {
+    This->lpVtbl->Flush1(This,type,event);
+}
+static FORCEINLINE void ID3D11DeviceContext4_SetHardwareProtectionState(ID3D11DeviceContext4* This,WINBOOL enable) {
+    This->lpVtbl->SetHardwareProtectionState(This,enable);
+}
+static FORCEINLINE void ID3D11DeviceContext4_GetHardwareProtectionState(ID3D11DeviceContext4* This,WINBOOL *enable) {
+    This->lpVtbl->GetHardwareProtectionState(This,enable);
+}
+/*** ID3D11DeviceContext4 methods ***/
+static FORCEINLINE HRESULT ID3D11DeviceContext4_Signal(ID3D11DeviceContext4* This,ID3D11Fence *fence,UINT64 value) {
+    return This->lpVtbl->Signal(This,fence,value);
+}
+static FORCEINLINE HRESULT ID3D11DeviceContext4_Wait(ID3D11DeviceContext4* This,ID3D11Fence *fence,UINT64 value) {
+    return This->lpVtbl->Wait(This,fence,value);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11DeviceContext4_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ID3D11Device3 interface
+ */
+#ifndef __ID3D11Device3_INTERFACE_DEFINED__
+#define __ID3D11Device3_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ID3D11Device3, 0xa05c8c37, 0xd2c6, 0x4732, 0xb3,0xa0, 0x9c,0xe0,0xb0,0xdc,0x9a,0xe6);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("a05c8c37-d2c6-4732-b3a0-9ce0b0dc9ae6")
+ID3D11Device3 : public ID3D11Device2
+{
+    virtual HRESULT STDMETHODCALLTYPE CreateTexture2D1(
+        const D3D11_TEXTURE2D_DESC1 *desc,
+        const D3D11_SUBRESOURCE_DATA *initial_data,
+        ID3D11Texture2D1 **texture) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateTexture3D1(
+        const D3D11_TEXTURE3D_DESC1 *desc,
+        const D3D11_SUBRESOURCE_DATA *initial_data,
+        ID3D11Texture3D1 **texture) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateRasterizerState2(
+        const D3D11_RASTERIZER_DESC2 *desc,
+        ID3D11RasterizerState2 **state) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateShaderResourceView1(
+        ID3D11Resource *resource,
+        const D3D11_SHADER_RESOURCE_VIEW_DESC1 *desc,
+        ID3D11ShaderResourceView1 **view) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateUno
