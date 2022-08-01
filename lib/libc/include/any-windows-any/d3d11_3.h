@@ -4783,4 +4783,191 @@ typedef struct ID3D11Device3Vtbl {
     D3D_FEATURE_LEVEL (STDMETHODCALLTYPE *GetFeatureLevel)(
         ID3D11Device3 *This);
 
-    UINT (STDMETHODCALLTYPE *GetCreatio
+    UINT (STDMETHODCALLTYPE *GetCreationFlags)(
+        ID3D11Device3 *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetDeviceRemovedReason)(
+        ID3D11Device3 *This);
+
+    void (STDMETHODCALLTYPE *GetImmediateContext)(
+        ID3D11Device3 *This,
+        ID3D11DeviceContext **ppImmediateContext);
+
+    HRESULT (STDMETHODCALLTYPE *SetExceptionMode)(
+        ID3D11Device3 *This,
+        UINT RaiseFlags);
+
+    UINT (STDMETHODCALLTYPE *GetExceptionMode)(
+        ID3D11Device3 *This);
+
+    /*** ID3D11Device1 methods ***/
+    void (STDMETHODCALLTYPE *GetImmediateContext1)(
+        ID3D11Device3 *This,
+        ID3D11DeviceContext1 **ppImmediateContext);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDeferredContext1)(
+        ID3D11Device3 *This,
+        UINT ContextFlags,
+        ID3D11DeviceContext1 **ppDeferredContext);
+
+    HRESULT (STDMETHODCALLTYPE *CreateBlendState1)(
+        ID3D11Device3 *This,
+        const D3D11_BLEND_DESC1 *pBlendStateDesc,
+        ID3D11BlendState1 **ppBlendState);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRasterizerState1)(
+        ID3D11Device3 *This,
+        const D3D11_RASTERIZER_DESC1 *pRasterizerDesc,
+        ID3D11RasterizerState1 **ppRasterizerState);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDeviceContextState)(
+        ID3D11Device3 *This,
+        UINT Flags,
+        const D3D_FEATURE_LEVEL *pFeatureLevels,
+        UINT FeatureLevels,
+        UINT SDKVersion,
+        REFIID EmulatedInterface,
+        D3D_FEATURE_LEVEL *pChosenFeatureLevel,
+        ID3DDeviceContextState **ppContextState);
+
+    HRESULT (STDMETHODCALLTYPE *OpenSharedResource1)(
+        ID3D11Device3 *This,
+        HANDLE hResource,
+        REFIID returnedInterface,
+        void **ppResource);
+
+    HRESULT (STDMETHODCALLTYPE *OpenSharedResourceByName)(
+        ID3D11Device3 *This,
+        LPCWSTR lpName,
+        DWORD dwDesiredAccess,
+        REFIID returnedInterface,
+        void **ppResource);
+
+    /*** ID3D11Device2 methods ***/
+    void (STDMETHODCALLTYPE *GetImmediateContext2)(
+        ID3D11Device3 *This,
+        ID3D11DeviceContext2 **context);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDeferredContext2)(
+        ID3D11Device3 *This,
+        UINT flags,
+        ID3D11DeviceContext2 **context);
+
+    void (STDMETHODCALLTYPE *GetResourceTiling)(
+        ID3D11Device3 *This,
+        ID3D11Resource *resource,
+        UINT *tile_count,
+        D3D11_PACKED_MIP_DESC *mip_desc,
+        D3D11_TILE_SHAPE *tile_shape,
+        UINT *subresource_tiling_count,
+        UINT first_subresource_tiling,
+        D3D11_SUBRESOURCE_TILING *subresource_tiling);
+
+    HRESULT (STDMETHODCALLTYPE *CheckMultisampleQualityLevels1)(
+        ID3D11Device3 *This,
+        DXGI_FORMAT format,
+        UINT sample_count,
+        UINT flags,
+        UINT *quality_level_count);
+
+    /*** ID3D11Device3 methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateTexture2D1)(
+        ID3D11Device3 *This,
+        const D3D11_TEXTURE2D_DESC1 *desc,
+        const D3D11_SUBRESOURCE_DATA *initial_data,
+        ID3D11Texture2D1 **texture);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTexture3D1)(
+        ID3D11Device3 *This,
+        const D3D11_TEXTURE3D_DESC1 *desc,
+        const D3D11_SUBRESOURCE_DATA *initial_data,
+        ID3D11Texture3D1 **texture);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRasterizerState2)(
+        ID3D11Device3 *This,
+        const D3D11_RASTERIZER_DESC2 *desc,
+        ID3D11RasterizerState2 **state);
+
+    HRESULT (STDMETHODCALLTYPE *CreateShaderResourceView1)(
+        ID3D11Device3 *This,
+        ID3D11Resource *resource,
+        const D3D11_SHADER_RESOURCE_VIEW_DESC1 *desc,
+        ID3D11ShaderResourceView1 **view);
+
+    HRESULT (STDMETHODCALLTYPE *CreateUnorderedAccessView1)(
+        ID3D11Device3 *This,
+        ID3D11Resource *resource,
+        const D3D11_UNORDERED_ACCESS_VIEW_DESC1 *desc,
+        ID3D11UnorderedAccessView1 **view);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRenderTargetView1)(
+        ID3D11Device3 *This,
+        ID3D11Resource *resource,
+        const D3D11_RENDER_TARGET_VIEW_DESC1 *desc,
+        ID3D11RenderTargetView1 **view);
+
+    HRESULT (STDMETHODCALLTYPE *CreateQuery1)(
+        ID3D11Device3 *This,
+        const D3D11_QUERY_DESC1 *desc,
+        ID3D11Query1 **query);
+
+    void (STDMETHODCALLTYPE *GetImmediateContext3)(
+        ID3D11Device3 *This,
+        ID3D11DeviceContext3 **context);
+
+    HRESULT (STDMETHODCALLTYPE *CreateDeferredContext3)(
+        ID3D11Device3 *This,
+        UINT flags,
+        ID3D11DeviceContext3 **context);
+
+    void (STDMETHODCALLTYPE *WriteToSubresource)(
+        ID3D11Device3 *This,
+        ID3D11Resource *dst_resource,
+        UINT dst_subresource,
+        const D3D11_BOX *dst_box,
+        const void *src_data,
+        UINT src_row_pitch,
+        UINT src_depth_pitch);
+
+    void (STDMETHODCALLTYPE *ReadFromSubresource)(
+        ID3D11Device3 *This,
+        void *dst_data,
+        UINT dst_row_pitch,
+        UINT dst_depth_pitch,
+        ID3D11Resource *src_resource,
+        UINT src_subresource,
+        const D3D11_BOX *src_box);
+
+    END_INTERFACE
+} ID3D11Device3Vtbl;
+
+interface ID3D11Device3 {
+    CONST_VTBL ID3D11Device3Vtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ID3D11Device3_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ID3D11Device3_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ID3D11Device3_Release(This) (This)->lpVtbl->Release(This)
+/*** ID3D11Device methods ***/
+#define ID3D11Device3_CreateBuffer(This,pDesc,pInitialData,ppBuffer) (This)->lpVtbl->CreateBuffer(This,pDesc,pInitialData,ppBuffer)
+#define ID3D11Device3_CreateTexture1D(This,pDesc,pInitialData,ppTexture1D) (This)->lpVtbl->CreateTexture1D(This,pDesc,pInitialData,ppTexture1D)
+#define ID3D11Device3_CreateTexture2D(This,pDesc,pInitialData,ppTexture2D) (This)->lpVtbl->CreateTexture2D(This,pDesc,pInitialData,ppTexture2D)
+#define ID3D11Device3_CreateTexture3D(This,pDesc,pInitialData,ppTexture3D) (This)->lpVtbl->CreateTexture3D(This,pDesc,pInitialData,ppTexture3D)
+#define ID3D11Device3_CreateShaderResourceView(This,pResource,pDesc,ppSRView) (This)->lpVtbl->CreateShaderResourceView(This,pResource,pDesc,ppSRView)
+#define ID3D11Device3_CreateUnorderedAccessView(This,pResource,pDesc,ppUAView) (This)->lpVtbl->CreateUnorderedAccessView(This,pResource,pDesc,ppUAView)
+#define ID3D11Device3_CreateRenderTargetView(This,pResource,pDesc,ppRTView) (This)->lpVtbl->CreateRenderTargetView(This,pResource,pDesc,ppRTView)
+#define ID3D11Device3_CreateDepthStencilView(This,pResource,pDesc,ppDepthStencilView) (This)->lpVtbl->CreateDepthStencilView(This,pResource,pDesc,ppDepthStencilView)
+#define ID3D11Device3_CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout) (This)->lpVtbl->CreateInputLayout(This,pInputElementDescs,NumElements,pShaderBytecodeWithInputSignature,BytecodeLength,ppInputLayout)
+#define ID3D11Device3_CreateVertexShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppVertexShader) (This)->lpVtbl->CreateVertexShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppVertexShader)
+#define ID3D11Device3_CreateGeometryShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppGeometryShader) (This)->lpVtbl->CreateGeometryShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppGeometryShader)
+#define ID3D11Device3_CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStrides,RasterizedStream,pClassLinkage,ppGeometryShader) (This)->lpVtbl->CreateGeometryShaderWithStreamOutput(This,pShaderBytecode,BytecodeLength,pSODeclaration,NumEntries,pBufferStrides,NumStrides,RasterizedStream,pClassLinkage,ppGeometryShader)
+#define ID3D11Device3_CreatePixelShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppPixelShader) (This)->lpVtbl->CreatePixelShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppPixelShader)
+#define ID3D11Device3_CreateHullShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppHullShader) (This)->lpVtbl->CreateHullShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppHullShader)
+#define ID3D11Device3_CreateDomainShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppDomainShader) (This)->lpVtbl->CreateDomainShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppDomainShader)
+#define ID3D11Device3_CreateComputeShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppComputeShader) (This)->lpVtbl->CreateComputeShader(This,pShaderBytecode,BytecodeLength,pClassLinkage,ppComputeShader)
+#define ID3D11Device3_CreateClassLinkage(This,ppLinkage) (This)->lpVtbl->CreateClassLinkage(This,ppLinkage)
+#define ID3D11Device3_CreateBlendState(This,pBlendStateDesc,ppBlendState) (This)->lpVtbl->CreateBlendState(This,pBlendStateDesc,ppBlendState)
+#de
