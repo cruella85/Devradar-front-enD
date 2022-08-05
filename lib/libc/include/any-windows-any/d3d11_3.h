@@ -5153,4 +5153,86 @@ static FORCEINLINE UINT ID3D11Device3_GetExceptionMode(ID3D11Device3* This) {
 static FORCEINLINE void ID3D11Device3_GetImmediateContext1(ID3D11Device3* This,ID3D11DeviceContext1 **ppImmediateContext) {
     This->lpVtbl->GetImmediateContext1(This,ppImmediateContext);
 }
-static FORCEINLINE HRESULT ID3D11Device3_CreateDeferredContext
+static FORCEINLINE HRESULT ID3D11Device3_CreateDeferredContext1(ID3D11Device3* This,UINT ContextFlags,ID3D11DeviceContext1 **ppDeferredContext) {
+    return This->lpVtbl->CreateDeferredContext1(This,ContextFlags,ppDeferredContext);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateBlendState1(ID3D11Device3* This,const D3D11_BLEND_DESC1 *pBlendStateDesc,ID3D11BlendState1 **ppBlendState) {
+    return This->lpVtbl->CreateBlendState1(This,pBlendStateDesc,ppBlendState);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateRasterizerState1(ID3D11Device3* This,const D3D11_RASTERIZER_DESC1 *pRasterizerDesc,ID3D11RasterizerState1 **ppRasterizerState) {
+    return This->lpVtbl->CreateRasterizerState1(This,pRasterizerDesc,ppRasterizerState);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateDeviceContextState(ID3D11Device3* This,UINT Flags,const D3D_FEATURE_LEVEL *pFeatureLevels,UINT FeatureLevels,UINT SDKVersion,REFIID EmulatedInterface,D3D_FEATURE_LEVEL *pChosenFeatureLevel,ID3DDeviceContextState **ppContextState) {
+    return This->lpVtbl->CreateDeviceContextState(This,Flags,pFeatureLevels,FeatureLevels,SDKVersion,EmulatedInterface,pChosenFeatureLevel,ppContextState);
+}
+static FORCEINLINE HRESULT ID3D11Device3_OpenSharedResource1(ID3D11Device3* This,HANDLE hResource,REFIID returnedInterface,void **ppResource) {
+    return This->lpVtbl->OpenSharedResource1(This,hResource,returnedInterface,ppResource);
+}
+static FORCEINLINE HRESULT ID3D11Device3_OpenSharedResourceByName(ID3D11Device3* This,LPCWSTR lpName,DWORD dwDesiredAccess,REFIID returnedInterface,void **ppResource) {
+    return This->lpVtbl->OpenSharedResourceByName(This,lpName,dwDesiredAccess,returnedInterface,ppResource);
+}
+/*** ID3D11Device2 methods ***/
+static FORCEINLINE void ID3D11Device3_GetImmediateContext2(ID3D11Device3* This,ID3D11DeviceContext2 **context) {
+    This->lpVtbl->GetImmediateContext2(This,context);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateDeferredContext2(ID3D11Device3* This,UINT flags,ID3D11DeviceContext2 **context) {
+    return This->lpVtbl->CreateDeferredContext2(This,flags,context);
+}
+static FORCEINLINE void ID3D11Device3_GetResourceTiling(ID3D11Device3* This,ID3D11Resource *resource,UINT *tile_count,D3D11_PACKED_MIP_DESC *mip_desc,D3D11_TILE_SHAPE *tile_shape,UINT *subresource_tiling_count,UINT first_subresource_tiling,D3D11_SUBRESOURCE_TILING *subresource_tiling) {
+    This->lpVtbl->GetResourceTiling(This,resource,tile_count,mip_desc,tile_shape,subresource_tiling_count,first_subresource_tiling,subresource_tiling);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CheckMultisampleQualityLevels1(ID3D11Device3* This,DXGI_FORMAT format,UINT sample_count,UINT flags,UINT *quality_level_count) {
+    return This->lpVtbl->CheckMultisampleQualityLevels1(This,format,sample_count,flags,quality_level_count);
+}
+/*** ID3D11Device3 methods ***/
+static FORCEINLINE HRESULT ID3D11Device3_CreateTexture2D1(ID3D11Device3* This,const D3D11_TEXTURE2D_DESC1 *desc,const D3D11_SUBRESOURCE_DATA *initial_data,ID3D11Texture2D1 **texture) {
+    return This->lpVtbl->CreateTexture2D1(This,desc,initial_data,texture);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateTexture3D1(ID3D11Device3* This,const D3D11_TEXTURE3D_DESC1 *desc,const D3D11_SUBRESOURCE_DATA *initial_data,ID3D11Texture3D1 **texture) {
+    return This->lpVtbl->CreateTexture3D1(This,desc,initial_data,texture);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateRasterizerState2(ID3D11Device3* This,const D3D11_RASTERIZER_DESC2 *desc,ID3D11RasterizerState2 **state) {
+    return This->lpVtbl->CreateRasterizerState2(This,desc,state);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateShaderResourceView1(ID3D11Device3* This,ID3D11Resource *resource,const D3D11_SHADER_RESOURCE_VIEW_DESC1 *desc,ID3D11ShaderResourceView1 **view) {
+    return This->lpVtbl->CreateShaderResourceView1(This,resource,desc,view);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateUnorderedAccessView1(ID3D11Device3* This,ID3D11Resource *resource,const D3D11_UNORDERED_ACCESS_VIEW_DESC1 *desc,ID3D11UnorderedAccessView1 **view) {
+    return This->lpVtbl->CreateUnorderedAccessView1(This,resource,desc,view);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateRenderTargetView1(ID3D11Device3* This,ID3D11Resource *resource,const D3D11_RENDER_TARGET_VIEW_DESC1 *desc,ID3D11RenderTargetView1 **view) {
+    return This->lpVtbl->CreateRenderTargetView1(This,resource,desc,view);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateQuery1(ID3D11Device3* This,const D3D11_QUERY_DESC1 *desc,ID3D11Query1 **query) {
+    return This->lpVtbl->CreateQuery1(This,desc,query);
+}
+static FORCEINLINE void ID3D11Device3_GetImmediateContext3(ID3D11Device3* This,ID3D11DeviceContext3 **context) {
+    This->lpVtbl->GetImmediateContext3(This,context);
+}
+static FORCEINLINE HRESULT ID3D11Device3_CreateDeferredContext3(ID3D11Device3* This,UINT flags,ID3D11DeviceContext3 **context) {
+    return This->lpVtbl->CreateDeferredContext3(This,flags,context);
+}
+static FORCEINLINE void ID3D11Device3_WriteToSubresource(ID3D11Device3* This,ID3D11Resource *dst_resource,UINT dst_subresource,const D3D11_BOX *dst_box,const void *src_data,UINT src_row_pitch,UINT src_depth_pitch) {
+    This->lpVtbl->WriteToSubresource(This,dst_resource,dst_subresource,dst_box,src_data,src_row_pitch,src_depth_pitch);
+}
+static FORCEINLINE void ID3D11Device3_ReadFromSubresource(ID3D11Device3* This,void *dst_data,UINT dst_row_pitch,UINT dst_depth_pitch,ID3D11Resource *src_resource,UINT src_subresource,const D3D11_BOX *src_box) {
+    This->lpVtbl->ReadFromSubresource(This,dst_data,dst_row_pitch,dst_depth_pitch,src_resource,src_subresource,src_box);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ID3D11Device3_INTERFACE_DEFINED__ */
+
+/* Begin additional prototypes for all interfaces */
+
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __d3d11_3_h__ */
