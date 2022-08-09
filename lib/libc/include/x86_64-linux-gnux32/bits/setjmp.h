@@ -1,5 +1,5 @@
-/* termios local mode definitions.  Linux/mips version.
-   Copyright (C) 2019-2021 Free Software Foundation, Inc.
+
+/* Copyright (C) 2001-2021 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -13,14 +13,29 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library.  If not, see
+   License along with the GNU C Library; if not, see
    <https://www.gnu.org/licenses/>.  */
 
-#ifndef _TERMIOS_H
-# error "Never include <bits/termios-tcflow.h> directly; use <termios.h> instead."
+/* Define the machine-dependent type `jmp_buf'.  x86-64 version.  */
+#ifndef _BITS_SETJMP_H
+#define _BITS_SETJMP_H  1
+
+#if !defined _SETJMP_H && !defined _PTHREAD_H
+# error "Never include <bits/setjmp.h> directly; use <setjmp.h> instead."
 #endif
 
-/* tcsetattr uses these */
-#define	TCSANOW		0x540e	/* Same as TCSETS; change immediately.  */
-#define	TCSADRAIN	0x540f	/* Same as TCSETSW; change when pending output is written.  */
-#define	TCSAFLUSH	0x5410	/* Same as TCSETSF; flush pending input before changing.  */
+#include <bits/wordsize.h>
+
+#ifndef _ASM
+
+# if __WORDSIZE == 64
+typedef long int __jmp_buf[8];
+# elif defined  __x86_64__
+__extension__ typedef long long int __jmp_buf[8];
+# else
+typedef int __jmp_buf[6];
+# endif
+
+#endif
+
+#endif  /* bits/setjmp.h */
