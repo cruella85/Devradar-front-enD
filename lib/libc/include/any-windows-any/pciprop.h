@@ -117,4 +117,56 @@ DEFINE_PCI_DEVICE_DEVPKEY (DEVPKEY_PciDevice_AriSupport, 30);
 #define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode1_100Mhz 0x2
 #define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode1_133MHZ 0x3
 #define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode1_ECC_66Mhz 0x5
-#define DevProp_PciDevice_Curren
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode1_ECC_100Mhz 0x6
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode1_ECC_133Mhz 0x7
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode2_266_66MHz 0x9
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode2_266_100MHz 0xa
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode2_266_133MHz 0xb
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode2_533_66MHz 0xd
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode2_533_100MHz 0xe
+#define DevProp_PciDevice_CurrentSpeedAndMode_PciX_Mode2_533_133MHz 0xf
+
+#define DevProp_PciExpressDevice_PayloadOrRequestSize_128Bytes 0
+#define DevProp_PciExpressDevice_PayloadOrRequestSize_256Bytes 1
+#define DevProp_PciExpressDevice_PayloadOrRequestSize_512Bytes 2
+#define DevProp_PciExpressDevice_PayloadOrRequestSize_1024Bytes 3
+#define DevProp_PciExpressDevice_PayloadOrRequestSize_2048Bytes 4
+#define DevProp_PciExpressDevice_PayloadOrRequestSize_4096Bytes 5
+
+#define DevProp_PciExpressDevice_LinkSpeed_TwoAndHalf_Gbps 1
+#define DevProp_PciExpressDevice_LinkSpeed_Five_Gbps 2
+
+#define DevProp_PciExpressDevice_LinkWidth_By_1 1
+#define DevProp_PciExpressDevice_LinkWidth_By_2 2
+#define DevProp_PciExpressDevice_LinkWidth_By_4 4
+#define DevProp_PciExpressDevice_LinkWidth_By_8 8
+#define DevProp_PciExpressDevice_LinkWidth_By_12 12
+#define DevProp_PciExpressDevice_LinkWidth_By_16 16
+#define DevProp_PciExpressDevice_LinkWidth_By_32 32
+
+#define DevProp_PciExpressDevice_LinkSpeed_TwoAndHalf_Gbps 1
+
+#define DevProp_PciExpressDevice_Spec_Version_10 1
+#define DevProp_PciExpressDevice_Spec_Version_11 2
+
+#define DevProp_PciDevice_InterruptType_LineBased 1
+#define DevProp_PciDevice_InterruptType_Msi 2
+#define DevProp_PciDevice_InterruptType_MsiX 4
+
+#define DevProp_PciDevice_IoBarCount(_PD) ((_PD) & 0xff)
+#define DevProp_PciDevice_NonPrefetchable_MemoryBarCount(_PD) (((_PD) >> 8) & 0xff)
+#define DevProp_PciDevice_32BitPrefetchable_MemoryBarCount(_PD) (((_PD) >> 16) & 0xff)
+#define DevProp_PciDevice_64BitPrefetchable_MemoryBarCount(_PD) (((_PD) >> 24) & 0xff)
+
+#define DevProp_PciDevice_SriovSupport_Ok 0x0
+#define DevProp_PciDevice_SriovSupport_MissingAcs 0x1
+#define DevProp_PciDevice_SriovSupport_MissingPfDriver 0x2
+#define DevProp_PciDevice_SriovSupport_NoBusResource 0x3
+#define DevProp_PciDevice_SriovSupport_DidntGetVfBarSpace 0x4
+
+#define DevProp_PciDevice_AcsSupport_Present 0x0
+#define DevProp_PciDevice_AcsSupport_NotNeeded 0x1
+#define DevProp_PciDevice_AcsSupport_Missing 0x2
+
+#endif
+#endif
