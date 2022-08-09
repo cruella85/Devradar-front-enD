@@ -54,4 +54,7 @@ extern enum mcheck_status mprobe (void *__ptr) __THROW;
 
 /* Activate a standard collection of tracing hooks.  */
 extern void mtrace (void) __THROW;
-extern void mu
+extern void muntrace (void) __THROW;
+
+__END_DECLS
+#endif /* mcheck.h */
