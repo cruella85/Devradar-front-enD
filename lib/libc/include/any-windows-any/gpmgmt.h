@@ -1007,4 +1007,105 @@ extern "C"{
 #define IGPMSecurityInfo_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 #define IGPMSecurityInfo_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
 #define IGPMSecurityInfo_get_Item(This,lIndex,pVal) (This)->lpVtbl->get_Item(This,lIndex,pVal)
-#def
+#define IGPMSecurityInfo_get__NewEnum(This,ppEnum) (This)->lpVtbl->get__NewEnum(This,ppEnum)
+#define IGPMSecurityInfo_Add(This,pPerm) (This)->lpVtbl->Add(This,pPerm)
+#define IGPMSecurityInfo_Remove(This,pPerm) (This)->lpVtbl->Remove(This,pPerm)
+#define IGPMSecurityInfo_RemoveTrustee(This,bstrTrustee) (This)->lpVtbl->RemoveTrustee(This,bstrTrustee)
+#endif
+#endif
+  HRESULT WINAPI IGPMSecurityInfo_get_Count_Proxy(IGPMSecurityInfo *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMSecurityInfo_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSecurityInfo_get_Item_Proxy(IGPMSecurityInfo *This,__LONG32 lIndex,VARIANT *pVal);
+  void __RPC_STUB IGPMSecurityInfo_get_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSecurityInfo_get__NewEnum_Proxy(IGPMSecurityInfo *This,IEnumVARIANT **ppEnum);
+  void __RPC_STUB IGPMSecurityInfo_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSecurityInfo_Add_Proxy(IGPMSecurityInfo *This,IGPMPermission *pPerm);
+  void __RPC_STUB IGPMSecurityInfo_Add_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSecurityInfo_Remove_Proxy(IGPMSecurityInfo *This,IGPMPermission *pPerm);
+  void __RPC_STUB IGPMSecurityInfo_Remove_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSecurityInfo_RemoveTrustee_Proxy(IGPMSecurityInfo *This,BSTR bstrTrustee);
+  void __RPC_STUB IGPMSecurityInfo_RemoveTrustee_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMBackup_INTERFACE_DEFINED__
+#define __IGPMBackup_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMBackup;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMBackup : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_ID(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_GPOID(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_GPODomain(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_GPODisplayName(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_Timestamp(DATE *pVal) = 0;
+    virtual HRESULT WINAPI get_Comment(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_BackupDir(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI Delete(void) = 0;
+    virtual HRESULT WINAPI GenerateReport(GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI GenerateReportToFile(GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult) = 0;
+  };
+#else
+  typedef struct IGPMBackupVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMBackup *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMBackup *This);
+      ULONG (WINAPI *Release)(IGPMBackup *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMBackup *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMBackup *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMBackup *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMBackup *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_ID)(IGPMBackup *This,BSTR *pVal);
+      HRESULT (WINAPI *get_GPOID)(IGPMBackup *This,BSTR *pVal);
+      HRESULT (WINAPI *get_GPODomain)(IGPMBackup *This,BSTR *pVal);
+      HRESULT (WINAPI *get_GPODisplayName)(IGPMBackup *This,BSTR *pVal);
+      HRESULT (WINAPI *get_Timestamp)(IGPMBackup *This,DATE *pVal);
+      HRESULT (WINAPI *get_Comment)(IGPMBackup *This,BSTR *pVal);
+      HRESULT (WINAPI *get_BackupDir)(IGPMBackup *This,BSTR *pVal);
+      HRESULT (WINAPI *Delete)(IGPMBackup *This);
+      HRESULT (WINAPI *GenerateReport)(IGPMBackup *This,GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *GenerateReportToFile)(IGPMBackup *This,GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult);
+    END_INTERFACE
+  } IGPMBackupVtbl;
+  struct IGPMBackup {
+    CONST_VTBL struct IGPMBackupVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMBackup_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMBackup_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMBackup_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMBackup_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMBackup_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMBackup_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMBackup_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMBackup_get_ID(This,pVal) (This)->lpVtbl->get_ID(This,pVal)
+#define IGPMBackup_get_GPOID(This,pVal) (This)->lpVtbl->get_GPOID(This,pVal)
+#define IGPMBackup_get_GPODomain(This,pVal) (This)->lpVtbl->get_GPODomain(This,pVal)
+#define IGPMBackup_get_GPODisplayName(This,pVal) (This)->lpVtbl->get_GPODisplayName(This,pVal)
+#define IGPMBackup_get_Timestamp(This,pVal) (This)->lpVtbl->get_Timestamp(This,pVal)
+#define IGPMBackup_get_Comment(This,pVal) (This)->lpVtbl->get_Comment(This,pVal)
+#define IGPMBackup_get_BackupDir(This,pVal) (This)->lpVtbl->get_BackupDir(This,pVal)
+#define IGPMBackup_Delete(This) (This)->lpVtbl->Delete(This)
+#define IGPMBackup_GenerateReport(This,gpmReportType,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->GenerateReport(This,gpmReportType,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMBackup_GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult) (This)->lpVtbl->GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)
+#endif
+#endif
+  HRESULT WINAPI IGPMBackup_get_ID_Proxy(IGPMBackup *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackup_get_ID_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_get_GPOID_Proxy(IGPMBackup *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackup_get_GPOID_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_get_GPODomain_Proxy(IGPMBackup *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackup_get_GPODomain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_get_GPODisplayName_Proxy(IGPMBackup *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackup_get_GPODisplayName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_get_Timestamp_Proxy(IGPMBackup *This,DATE *pVal);
+  void __RPC_STUB IGPMBackup_get_Timestamp_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_get_Comment_Proxy(IGPMBackup *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackup_get_Comment_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_get_BackupDir_Proxy(IGPMBackup *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackup_get_BackupDir_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_Delete_Proxy(IGPMBackup *This);
+  void __RPC_STUB IGPMBackup_Delete_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_GenerateReport_Proxy(IGPMBackup *This,GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMBackup_GenerateReport_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackup_GenerateReportToFile_Proxy(IGPMBackup *This,GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMBackup_GenerateReportToFile_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpc
