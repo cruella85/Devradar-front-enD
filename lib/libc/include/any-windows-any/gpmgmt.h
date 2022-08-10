@@ -773,4 +773,119 @@ extern "C"{
       HRESULT (WINAPI *get_Domain)(IGPMSitesContainer *This,BSTR *pVal);
       HRESULT (WINAPI *get_Forest)(IGPMSitesContainer *This,BSTR *pVal);
       HRESULT (WINAPI *GetSite)(IGPMSitesContainer *This,BSTR bstrSiteName,IGPMSOM **ppSOM);
-      HRESULT (WINAPI *S
+      HRESULT (WINAPI *SearchSites)(IGPMSitesContainer *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMSOMCollection **ppIGPMSOMCollection);
+    END_INTERFACE
+  } IGPMSitesContainerVtbl;
+  struct IGPMSitesContainer {
+    CONST_VTBL struct IGPMSitesContainerVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMSitesContainer_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMSitesContainer_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMSitesContainer_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMSitesContainer_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMSitesContainer_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMSitesContainer_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMSitesContainer_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMSitesContainer_get_DomainController(This,pVal) (This)->lpVtbl->get_DomainController(This,pVal)
+#define IGPMSitesContainer_get_Domain(This,pVal) (This)->lpVtbl->get_Domain(This,pVal)
+#define IGPMSitesContainer_get_Forest(This,pVal) (This)->lpVtbl->get_Forest(This,pVal)
+#define IGPMSitesContainer_GetSite(This,bstrSiteName,ppSOM) (This)->lpVtbl->GetSite(This,bstrSiteName,ppSOM)
+#define IGPMSitesContainer_SearchSites(This,pIGPMSearchCriteria,ppIGPMSOMCollection) (This)->lpVtbl->SearchSites(This,pIGPMSearchCriteria,ppIGPMSOMCollection)
+#endif
+#endif
+  HRESULT WINAPI IGPMSitesContainer_get_DomainController_Proxy(IGPMSitesContainer *This,BSTR *pVal);
+  void __RPC_STUB IGPMSitesContainer_get_DomainController_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSitesContainer_get_Domain_Proxy(IGPMSitesContainer *This,BSTR *pVal);
+  void __RPC_STUB IGPMSitesContainer_get_Domain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSitesContainer_get_Forest_Proxy(IGPMSitesContainer *This,BSTR *pVal);
+  void __RPC_STUB IGPMSitesContainer_get_Forest_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSitesContainer_GetSite_Proxy(IGPMSitesContainer *This,BSTR bstrSiteName,IGPMSOM **ppSOM);
+  void __RPC_STUB IGPMSitesContainer_GetSite_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMSitesContainer_SearchSites_Proxy(IGPMSitesContainer *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMSOMCollection **ppIGPMSOMCollection);
+  void __RPC_STUB IGPMSitesContainer_SearchSites_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMSearchCriteria_INTERFACE_DEFINED__
+#define __IGPMSearchCriteria_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMSearchCriteria;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMSearchCriteria : public IDispatch {
+  public:
+    virtual HRESULT WINAPI Add(GPMSearchProperty searchProperty,GPMSearchOperation searchOperation,VARIANT varValue) = 0;
+  };
+#else
+  typedef struct IGPMSearchCriteriaVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMSearchCriteria *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMSearchCriteria *This);
+      ULONG (WINAPI *Release)(IGPMSearchCriteria *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMSearchCriteria *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMSearchCriteria *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMSearchCriteria *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMSearchCriteria *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *Add)(IGPMSearchCriteria *This,GPMSearchProperty searchProperty,GPMSearchOperation searchOperation,VARIANT varValue);
+    END_INTERFACE
+  } IGPMSearchCriteriaVtbl;
+  struct IGPMSearchCriteria {
+    CONST_VTBL struct IGPMSearchCriteriaVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMSearchCriteria_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMSearchCriteria_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMSearchCriteria_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMSearchCriteria_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMSearchCriteria_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMSearchCriteria_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMSearchCriteria_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMSearchCriteria_Add(This,searchProperty,searchOperation,varValue) (This)->lpVtbl->Add(This,searchProperty,searchOperation,varValue)
+#endif
+#endif
+  HRESULT WINAPI IGPMSearchCriteria_Add_Proxy(IGPMSearchCriteria *This,GPMSearchProperty searchProperty,GPMSearchOperation searchOperation,VARIANT varValue);
+  void __RPC_STUB IGPMSearchCriteria_Add_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMTrustee_INTERFACE_DEFINED__
+#define __IGPMTrustee_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMTrustee;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMTrustee : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_TrusteeSid(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI get_TrusteeName(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI get_TrusteeDomain(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI get_TrusteeDSPath(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_TrusteeType(__LONG32 *lVal) = 0;
+  };
+#else
+  typedef struct IGPMTrusteeVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMTrustee *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMTrustee *This);
+      ULONG (WINAPI *Release)(IGPMTrustee *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMTrustee *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMTrustee *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMTrustee *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMTrustee *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_TrusteeSid)(IGPMTrustee *This,BSTR *bstrVal);
+      HRESULT (WINAPI *get_TrusteeName)(IGPMTrustee *This,BSTR *bstrVal);
+      HRESULT (WINAPI *get_TrusteeDomain)(IGPMTrustee *This,BSTR *bstrVal);
+      HRESULT (WINAPI *get_TrusteeDSPath)(IGPMTrustee *This,BSTR *pVal);
+      HRESULT (WINAPI *get_TrusteeType)(IGPMTrustee *This,__LONG32 *lVal);
+    END_INTERFACE
+  } IGPMTrusteeVtbl;
+  struct IGPMTrustee {
+    CONST_VTBL struct IGPMTrusteeVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMTrustee_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMTrustee_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMTrustee_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMTrustee_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMTrustee_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMTrustee_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMTrustee_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMTrustee_get_TrusteeSid(This,bstrVal) (This)->lpVtbl->get_TrusteeSid(This,bstrVal)
+#define IGPMTrustee_get_TrusteeName(This,bstrVal) (This)->lpVtbl->get_TrusteeName(This,bstrVal)
+#define IGPMTrustee_get_TrusteeDomain(This,bstrVal) (This)->lpVtbl->get_TrusteeDomain(This,bstrVal)
+#define IGPMTrustee_get_TrusteeDSPath(This,pVal) (This)->lpV
