@@ -669,4 +669,108 @@ extern "C"{
 #define IGPMDomain_CreateGPO(This,ppNewGPO) (This)->lpVtbl->CreateGPO(This,ppNewGPO)
 #define IGPMDomain_GetGPO(This,bstrGuid,ppGPO) (This)->lpVtbl->GetGPO(This,bstrGuid,ppGPO)
 #define IGPMDomain_SearchGPOs(This,pIGPMSearchCriteria,ppIGPMGPOCollection) (This)->lpVtbl->SearchGPOs(This,pIGPMSearchCriteria,ppIGPMGPOCollection)
-#define IGPMDomain_RestoreGPO(This,pIGPMBackup,lDCFlags,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->RestoreGPO(This,pIGPMBackup,lDCFlags,pvarGPMP
+#define IGPMDomain_RestoreGPO(This,pIGPMBackup,lDCFlags,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->RestoreGPO(This,pIGPMBackup,lDCFlags,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMDomain_GetSOM(This,bstrPath,ppSOM) (This)->lpVtbl->GetSOM(This,bstrPath,ppSOM)
+#define IGPMDomain_SearchSOMs(This,pIGPMSearchCriteria,ppIGPMSOMCollection) (This)->lpVtbl->SearchSOMs(This,pIGPMSearchCriteria,ppIGPMSOMCollection)
+#define IGPMDomain_GetWMIFilter(This,bstrPath,ppWMIFilter) (This)->lpVtbl->GetWMIFilter(This,bstrPath,ppWMIFilter)
+#define IGPMDomain_SearchWMIFilters(This,pIGPMSearchCriteria,ppIGPMWMIFilterCollection) (This)->lpVtbl->SearchWMIFilters(This,pIGPMSearchCriteria,ppIGPMWMIFilterCollection)
+#endif
+#endif
+  HRESULT WINAPI IGPMDomain_get_DomainController_Proxy(IGPMDomain *This,BSTR *pVal);
+  void __RPC_STUB IGPMDomain_get_DomainController_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_get_Domain_Proxy(IGPMDomain *This,BSTR *pVal);
+  void __RPC_STUB IGPMDomain_get_Domain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_CreateGPO_Proxy(IGPMDomain *This,IGPMGPO **ppNewGPO);
+  void __RPC_STUB IGPMDomain_CreateGPO_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_GetGPO_Proxy(IGPMDomain *This,BSTR bstrGuid,IGPMGPO **ppGPO);
+  void __RPC_STUB IGPMDomain_GetGPO_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_SearchGPOs_Proxy(IGPMDomain *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMGPOCollection **ppIGPMGPOCollection);
+  void __RPC_STUB IGPMDomain_SearchGPOs_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_RestoreGPO_Proxy(IGPMDomain *This,IGPMBackup *pIGPMBackup,__LONG32 lDCFlags,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMDomain_RestoreGPO_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_GetSOM_Proxy(IGPMDomain *This,BSTR bstrPath,IGPMSOM **ppSOM);
+  void __RPC_STUB IGPMDomain_GetSOM_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_SearchSOMs_Proxy(IGPMDomain *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMSOMCollection **ppIGPMSOMCollection);
+  void __RPC_STUB IGPMDomain_SearchSOMs_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_GetWMIFilter_Proxy(IGPMDomain *This,BSTR bstrPath,IGPMWMIFilter **ppWMIFilter);
+  void __RPC_STUB IGPMDomain_GetWMIFilter_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMDomain_SearchWMIFilters_Proxy(IGPMDomain *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMWMIFilterCollection **ppIGPMWMIFilterCollection);
+  void __RPC_STUB IGPMDomain_SearchWMIFilters_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMBackupDir_INTERFACE_DEFINED__
+#define __IGPMBackupDir_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMBackupDir;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMBackupDir : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_BackupDirectory(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI GetBackup(BSTR bstrID,IGPMBackup **ppBackup) = 0;
+    virtual HRESULT WINAPI SearchBackups(IGPMSearchCriteria *pIGPMSearchCriteria,IGPMBackupCollection **ppIGPMBackupCollection) = 0;
+  };
+#else
+  typedef struct IGPMBackupDirVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMBackupDir *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMBackupDir *This);
+      ULONG (WINAPI *Release)(IGPMBackupDir *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMBackupDir *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMBackupDir *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMBackupDir *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMBackupDir *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_BackupDirectory)(IGPMBackupDir *This,BSTR *pVal);
+      HRESULT (WINAPI *GetBackup)(IGPMBackupDir *This,BSTR bstrID,IGPMBackup **ppBackup);
+      HRESULT (WINAPI *SearchBackups)(IGPMBackupDir *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMBackupCollection **ppIGPMBackupCollection);
+    END_INTERFACE
+  } IGPMBackupDirVtbl;
+  struct IGPMBackupDir {
+    CONST_VTBL struct IGPMBackupDirVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMBackupDir_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMBackupDir_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMBackupDir_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMBackupDir_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMBackupDir_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMBackupDir_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMBackupDir_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMBackupDir_get_BackupDirectory(This,pVal) (This)->lpVtbl->get_BackupDirectory(This,pVal)
+#define IGPMBackupDir_GetBackup(This,bstrID,ppBackup) (This)->lpVtbl->GetBackup(This,bstrID,ppBackup)
+#define IGPMBackupDir_SearchBackups(This,pIGPMSearchCriteria,ppIGPMBackupCollection) (This)->lpVtbl->SearchBackups(This,pIGPMSearchCriteria,ppIGPMBackupCollection)
+#endif
+#endif
+  HRESULT WINAPI IGPMBackupDir_get_BackupDirectory_Proxy(IGPMBackupDir *This,BSTR *pVal);
+  void __RPC_STUB IGPMBackupDir_get_BackupDirectory_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackupDir_GetBackup_Proxy(IGPMBackupDir *This,BSTR bstrID,IGPMBackup **ppBackup);
+  void __RPC_STUB IGPMBackupDir_GetBackup_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMBackupDir_SearchBackups_Proxy(IGPMBackupDir *This,IGPMSearchCriteria *pIGPMSearchCriteria,IGPMBackupCollection **ppIGPMBackupCollection);
+  void __RPC_STUB IGPMBackupDir_SearchBackups_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMSitesContainer_INTERFACE_DEFINED__
+#define __IGPMSitesContainer_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMSitesContainer;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMSitesContainer : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_DomainController(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_Domain(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_Forest(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI GetSite(BSTR bstrSiteName,IGPMSOM **ppSOM) = 0;
+    virtual HRESULT WINAPI SearchSites(IGPMSearchCriteria *pIGPMSearchCriteria,IGPMSOMCollection **ppIGPMSOMCollection) = 0;
+  };
+#else
+  typedef struct IGPMSitesContainerVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMSitesContainer *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMSitesContainer *This);
+      ULONG (WINAPI *Release)(IGPMSitesContainer *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMSitesContainer *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMSitesContainer *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMSitesContainer *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMSitesContainer *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_DomainController)(IGPMSitesContainer *This,BSTR *pVal);
+      HRESULT (WINAPI *get_Domain)(IGPMSitesContainer *This,BSTR *pVal);
+      HRESULT (WINAPI *get_Forest)(IGPMSitesContainer *This,BSTR *pVal);
+      HRESULT (WINAPI *GetSite)(IGPMSitesContainer *This,BSTR bstrSiteName,IGPMSOM **ppSOM);
+      HRESULT (WINAPI *S
