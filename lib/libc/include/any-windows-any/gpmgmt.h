@@ -888,4 +888,123 @@ extern "C"{
 #define IGPMTrustee_get_TrusteeSid(This,bstrVal) (This)->lpVtbl->get_TrusteeSid(This,bstrVal)
 #define IGPMTrustee_get_TrusteeName(This,bstrVal) (This)->lpVtbl->get_TrusteeName(This,bstrVal)
 #define IGPMTrustee_get_TrusteeDomain(This,bstrVal) (This)->lpVtbl->get_TrusteeDomain(This,bstrVal)
-#define IGPMTrustee_get_TrusteeDSPath(This,pVal) (This)->lpV
+#define IGPMTrustee_get_TrusteeDSPath(This,pVal) (This)->lpVtbl->get_TrusteeDSPath(This,pVal)
+#define IGPMTrustee_get_TrusteeType(This,lVal) (This)->lpVtbl->get_TrusteeType(This,lVal)
+#endif
+#endif
+  HRESULT WINAPI IGPMTrustee_get_TrusteeSid_Proxy(IGPMTrustee *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMTrustee_get_TrusteeSid_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMTrustee_get_TrusteeName_Proxy(IGPMTrustee *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMTrustee_get_TrusteeName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMTrustee_get_TrusteeDomain_Proxy(IGPMTrustee *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMTrustee_get_TrusteeDomain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMTrustee_get_TrusteeDSPath_Proxy(IGPMTrustee *This,BSTR *pVal);
+  void __RPC_STUB IGPMTrustee_get_TrusteeDSPath_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMTrustee_get_TrusteeType_Proxy(IGPMTrustee *This,__LONG32 *lVal);
+  void __RPC_STUB IGPMTrustee_get_TrusteeType_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMPermission_INTERFACE_DEFINED__
+#define __IGPMPermission_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMPermission;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMPermission : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Inherited(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI get_Inheritable(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI get_Denied(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI get_Permission(GPMPermissionType *pVal) = 0;
+    virtual HRESULT WINAPI get_Trustee(IGPMTrustee **ppIGPMTrustee) = 0;
+  };
+#else
+  typedef struct IGPMPermissionVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMPermission *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMPermission *This);
+      ULONG (WINAPI *Release)(IGPMPermission *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMPermission *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMPermission *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMPermission *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMPermission *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Inherited)(IGPMPermission *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *get_Inheritable)(IGPMPermission *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *get_Denied)(IGPMPermission *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *get_Permission)(IGPMPermission *This,GPMPermissionType *pVal);
+      HRESULT (WINAPI *get_Trustee)(IGPMPermission *This,IGPMTrustee **ppIGPMTrustee);
+    END_INTERFACE
+  } IGPMPermissionVtbl;
+  struct IGPMPermission {
+    CONST_VTBL struct IGPMPermissionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMPermission_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMPermission_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMPermission_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMPermission_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMPermission_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMPermission_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMPermission_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMPermission_get_Inherited(This,pVal) (This)->lpVtbl->get_Inherited(This,pVal)
+#define IGPMPermission_get_Inheritable(This,pVal) (This)->lpVtbl->get_Inheritable(This,pVal)
+#define IGPMPermission_get_Denied(This,pVal) (This)->lpVtbl->get_Denied(This,pVal)
+#define IGPMPermission_get_Permission(This,pVal) (This)->lpVtbl->get_Permission(This,pVal)
+#define IGPMPermission_get_Trustee(This,ppIGPMTrustee) (This)->lpVtbl->get_Trustee(This,ppIGPMTrustee)
+#endif
+#endif
+  HRESULT WINAPI IGPMPermission_get_Inherited_Proxy(IGPMPermission *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IGPMPermission_get_Inherited_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMPermission_get_Inheritable_Proxy(IGPMPermission *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IGPMPermission_get_Inheritable_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMPermission_get_Denied_Proxy(IGPMPermission *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IGPMPermission_get_Denied_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMPermission_get_Permission_Proxy(IGPMPermission *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMPermission_get_Permission_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMPermission_get_Trustee_Proxy(IGPMPermission *This,IGPMTrustee **ppIGPMTrustee);
+  void __RPC_STUB IGPMPermission_get_Trustee_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMSecurityInfo_INTERFACE_DEFINED__
+#define __IGPMSecurityInfo_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMSecurityInfo;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMSecurityInfo : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Count(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_Item(__LONG32 lIndex,VARIANT *pVal) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IEnumVARIANT **ppEnum) = 0;
+    virtual HRESULT WINAPI Add(IGPMPermission *pPerm) = 0;
+    virtual HRESULT WINAPI Remove(IGPMPermission *pPerm) = 0;
+    virtual HRESULT WINAPI RemoveTrustee(BSTR bstrTrustee) = 0;
+  };
+#else
+  typedef struct IGPMSecurityInfoVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMSecurityInfo *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMSecurityInfo *This);
+      ULONG (WINAPI *Release)(IGPMSecurityInfo *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMSecurityInfo *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMSecurityInfo *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMSecurityInfo *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMSecurityInfo *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Count)(IGPMSecurityInfo *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_Item)(IGPMSecurityInfo *This,__LONG32 lIndex,VARIANT *pVal);
+      HRESULT (WINAPI *get__NewEnum)(IGPMSecurityInfo *This,IEnumVARIANT **ppEnum);
+      HRESULT (WINAPI *Add)(IGPMSecurityInfo *This,IGPMPermission *pPerm);
+      HRESULT (WINAPI *Remove)(IGPMSecurityInfo *This,IGPMPermission *pPerm);
+      HRESULT (WINAPI *RemoveTrustee)(IGPMSecurityInfo *This,BSTR bstrTrustee);
+    END_INTERFACE
+  } IGPMSecurityInfoVtbl;
+  struct IGPMSecurityInfo {
+    CONST_VTBL struct IGPMSecurityInfoVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMSecurityInfo_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMSecurityInfo_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMSecurityInfo_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMSecurityInfo_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMSecurityInfo_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMSecurityInfo_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMSecurityInfo_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMSecurityInfo_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
+#define IGPMSecurityInfo_get_Item(This,lIndex,pVal) (This)->lpVtbl->get_Item(This,lIndex,pVal)
+#def
