@@ -1346,4 +1346,117 @@ extern "C"{
 #define IGPMWMIFilter_get_Path(This,pVal) (This)->lpVtbl->get_Path(This,pVal)
 #define IGPMWMIFilter_put_Name(This,newVal) (This)->lpVtbl->put_Name(This,newVal)
 #define IGPMWMIFilter_get_Name(This,pVal) (This)->lpVtbl->get_Name(This,pVal)
-#define IGPMWMIFilter_put_Description(This,newVal) (This)->lpVtbl->put_Description(This,new
+#define IGPMWMIFilter_put_Description(This,newVal) (This)->lpVtbl->put_Description(This,newVal)
+#define IGPMWMIFilter_get_Description(This,pVal) (This)->lpVtbl->get_Description(This,pVal)
+#define IGPMWMIFilter_GetQueryList(This,pQryList) (This)->lpVtbl->GetQueryList(This,pQryList)
+#define IGPMWMIFilter_GetSecurityInfo(This,ppSecurityInfo) (This)->lpVtbl->GetSecurityInfo(This,ppSecurityInfo)
+#define IGPMWMIFilter_SetSecurityInfo(This,pSecurityInfo) (This)->lpVtbl->SetSecurityInfo(This,pSecurityInfo)
+#endif
+#endif
+  HRESULT WINAPI IGPMWMIFilter_get_Path_Proxy(IGPMWMIFilter *This,BSTR *pVal);
+  void __RPC_STUB IGPMWMIFilter_get_Path_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_put_Name_Proxy(IGPMWMIFilter *This,BSTR newVal);
+  void __RPC_STUB IGPMWMIFilter_put_Name_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_get_Name_Proxy(IGPMWMIFilter *This,BSTR *pVal);
+  void __RPC_STUB IGPMWMIFilter_get_Name_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_put_Description_Proxy(IGPMWMIFilter *This,BSTR newVal);
+  void __RPC_STUB IGPMWMIFilter_put_Description_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_get_Description_Proxy(IGPMWMIFilter *This,BSTR *pVal);
+  void __RPC_STUB IGPMWMIFilter_get_Description_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_GetQueryList_Proxy(IGPMWMIFilter *This,VARIANT *pQryList);
+  void __RPC_STUB IGPMWMIFilter_GetQueryList_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_GetSecurityInfo_Proxy(IGPMWMIFilter *This,IGPMSecurityInfo **ppSecurityInfo);
+  void __RPC_STUB IGPMWMIFilter_GetSecurityInfo_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilter_SetSecurityInfo_Proxy(IGPMWMIFilter *This,IGPMSecurityInfo *pSecurityInfo);
+  void __RPC_STUB IGPMWMIFilter_SetSecurityInfo_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMWMIFilterCollection_INTERFACE_DEFINED__
+#define __IGPMWMIFilterCollection_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMWMIFilterCollection;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMWMIFilterCollection : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Count(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_Item(__LONG32 lIndex,VARIANT *pVal) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IEnumVARIANT **pVal) = 0;
+  };
+#else
+  typedef struct IGPMWMIFilterCollectionVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMWMIFilterCollection *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMWMIFilterCollection *This);
+      ULONG (WINAPI *Release)(IGPMWMIFilterCollection *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMWMIFilterCollection *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMWMIFilterCollection *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMWMIFilterCollection *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMWMIFilterCollection *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Count)(IGPMWMIFilterCollection *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_Item)(IGPMWMIFilterCollection *This,__LONG32 lIndex,VARIANT *pVal);
+      HRESULT (WINAPI *get__NewEnum)(IGPMWMIFilterCollection *This,IEnumVARIANT **pVal);
+    END_INTERFACE
+  } IGPMWMIFilterCollectionVtbl;
+  struct IGPMWMIFilterCollection {
+    CONST_VTBL struct IGPMWMIFilterCollectionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMWMIFilterCollection_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMWMIFilterCollection_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMWMIFilterCollection_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMWMIFilterCollection_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMWMIFilterCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMWMIFilterCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMWMIFilterCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMWMIFilterCollection_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
+#define IGPMWMIFilterCollection_get_Item(This,lIndex,pVal) (This)->lpVtbl->get_Item(This,lIndex,pVal)
+#define IGPMWMIFilterCollection_get__NewEnum(This,pVal) (This)->lpVtbl->get__NewEnum(This,pVal)
+#endif
+#endif
+  HRESULT WINAPI IGPMWMIFilterCollection_get_Count_Proxy(IGPMWMIFilterCollection *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMWMIFilterCollection_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilterCollection_get_Item_Proxy(IGPMWMIFilterCollection *This,__LONG32 lIndex,VARIANT *pVal);
+  void __RPC_STUB IGPMWMIFilterCollection_get_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMWMIFilterCollection_get__NewEnum_Proxy(IGPMWMIFilterCollection *This,IEnumVARIANT **pVal);
+  void __RPC_STUB IGPMWMIFilterCollection_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMRSOP_INTERFACE_DEFINED__
+#define __IGPMRSOP_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMRSOP;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMRSOP : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Mode(GPMRSOPMode *pVal) = 0;
+    virtual HRESULT WINAPI get_Namespace(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_LoggingComputer(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_LoggingComputer(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_LoggingUser(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_LoggingUser(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_LoggingFlags(__LONG32 lVal) = 0;
+    virtual HRESULT WINAPI get_LoggingFlags(__LONG32 *lVal) = 0;
+    virtual HRESULT WINAPI put_PlanningFlags(__LONG32 lVal) = 0;
+    virtual HRESULT WINAPI get_PlanningFlags(__LONG32 *lVal) = 0;
+    virtual HRESULT WINAPI put_PlanningDomainController(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_PlanningDomainController(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_PlanningSiteName(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_PlanningSiteName(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_PlanningUser(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_PlanningUser(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_PlanningUserSOM(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_PlanningUserSOM(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_PlanningUserWMIFilters(VARIANT varVal) = 0;
+    virtual HRESULT WINAPI get_PlanningUserWMIFilters(VARIANT *varVal) = 0;
+    virtual HRESULT WINAPI put_PlanningUserSecurityGroups(VARIANT varVal) = 0;
+    virtual HRESULT WINAPI get_PlanningUserSecurityGroups(VARIANT *varVal) = 0;
+    virtual HRESULT WINAPI put_PlanningComputer(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_PlanningComputer(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_PlanningComputerSOM(BSTR bstrVal) = 0;
+    virtual HRESULT WINAPI get_PlanningComputerSOM(BSTR *bstrVal) = 0;
+    virtual HRESULT WINAPI put_PlanningComputerWMIFilters(VARIANT varVal) = 0;
+    virtual HRESULT WINAPI get_PlanningComputerWMIFilters(VARIANT *varVal) = 0;
+    virtual HRESULT WINAPI put_PlanningComputerSecurityGroups(VARIANT varVal) = 0;
+    virtual HRESULT WINAPI get_PlanningComputerSecurityGroups(VARIANT *varVal) = 0;
+    virtual HRESULT WINAPI LoggingEnumerateUsers(VARIANT *varVal) = 0;
+    virtual HRESULT WINAPI CreateQueryResults(void) = 0;
+    virtual HRESULT WINAPI ReleaseQueryResults(void) = 0;
+    virtual HRESULT WINAPI GenerateReport(GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,
