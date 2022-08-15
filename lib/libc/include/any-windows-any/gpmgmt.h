@@ -2170,4 +2170,122 @@ extern "C"{
 #define __IGPMStatusMsgCollection_INTERFACE_DEFINED__
   EXTERN_C const IID IID_IGPMStatusMsgCollection;
 #if defined(__cplusplus) && !defined(CINTERFACE)
-  struct IGP
+  struct IGPMStatusMsgCollection : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Count(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_Item(__LONG32 lIndex,VARIANT *pVal) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IEnumVARIANT **pVal) = 0;
+  };
+#else
+  typedef struct IGPMStatusMsgCollectionVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMStatusMsgCollection *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMStatusMsgCollection *This);
+      ULONG (WINAPI *Release)(IGPMStatusMsgCollection *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMStatusMsgCollection *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMStatusMsgCollection *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMStatusMsgCollection *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMStatusMsgCollection *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Count)(IGPMStatusMsgCollection *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_Item)(IGPMStatusMsgCollection *This,__LONG32 lIndex,VARIANT *pVal);
+      HRESULT (WINAPI *get__NewEnum)(IGPMStatusMsgCollection *This,IEnumVARIANT **pVal);
+    END_INTERFACE
+  } IGPMStatusMsgCollectionVtbl;
+  struct IGPMStatusMsgCollection {
+    CONST_VTBL struct IGPMStatusMsgCollectionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMStatusMsgCollection_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMStatusMsgCollection_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMStatusMsgCollection_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMStatusMsgCollection_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMStatusMsgCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMStatusMsgCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMStatusMsgCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMStatusMsgCollection_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
+#define IGPMStatusMsgCollection_get_Item(This,lIndex,pVal) (This)->lpVtbl->get_Item(This,lIndex,pVal)
+#define IGPMStatusMsgCollection_get__NewEnum(This,pVal) (This)->lpVtbl->get__NewEnum(This,pVal)
+#endif
+#endif
+  HRESULT WINAPI IGPMStatusMsgCollection_get_Count_Proxy(IGPMStatusMsgCollection *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMStatusMsgCollection_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMsgCollection_get_Item_Proxy(IGPMStatusMsgCollection *This,__LONG32 lIndex,VARIANT *pVal);
+  void __RPC_STUB IGPMStatusMsgCollection_get_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMsgCollection_get__NewEnum_Proxy(IGPMStatusMsgCollection *This,IEnumVARIANT **pVal);
+  void __RPC_STUB IGPMStatusMsgCollection_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMStatusMessage_INTERFACE_DEFINED__
+#define __IGPMStatusMessage_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMStatusMessage;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMStatusMessage : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_ObjectPath(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI ErrorCode(void) = 0;
+    virtual HRESULT WINAPI get_ExtensionName(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_SettingsName(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI OperationCode(void) = 0;
+    virtual HRESULT WINAPI get_Message(BSTR *pVal) = 0;
+  };
+#else
+  typedef struct IGPMStatusMessageVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMStatusMessage *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMStatusMessage *This);
+      ULONG (WINAPI *Release)(IGPMStatusMessage *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMStatusMessage *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMStatusMessage *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMStatusMessage *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMStatusMessage *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_ObjectPath)(IGPMStatusMessage *This,BSTR *pVal);
+      HRESULT (WINAPI *ErrorCode)(IGPMStatusMessage *This);
+      HRESULT (WINAPI *get_ExtensionName)(IGPMStatusMessage *This,BSTR *pVal);
+      HRESULT (WINAPI *get_SettingsName)(IGPMStatusMessage *This,BSTR *pVal);
+      HRESULT (WINAPI *OperationCode)(IGPMStatusMessage *This);
+      HRESULT (WINAPI *get_Message)(IGPMStatusMessage *This,BSTR *pVal);
+    END_INTERFACE
+  } IGPMStatusMessageVtbl;
+  struct IGPMStatusMessage {
+    CONST_VTBL struct IGPMStatusMessageVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMStatusMessage_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMStatusMessage_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMStatusMessage_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMStatusMessage_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMStatusMessage_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMStatusMessage_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMStatusMessage_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMStatusMessage_get_ObjectPath(This,pVal) (This)->lpVtbl->get_ObjectPath(This,pVal)
+#define IGPMStatusMessage_ErrorCode(This) (This)->lpVtbl->ErrorCode(This)
+#define IGPMStatusMessage_get_ExtensionName(This,pVal) (This)->lpVtbl->get_ExtensionName(This,pVal)
+#define IGPMStatusMessage_get_SettingsName(This,pVal) (This)->lpVtbl->get_SettingsName(This,pVal)
+#define IGPMStatusMessage_OperationCode(This) (This)->lpVtbl->OperationCode(This)
+#define IGPMStatusMessage_get_Message(This,pVal) (This)->lpVtbl->get_Message(This,pVal)
+#endif
+#endif
+  HRESULT WINAPI IGPMStatusMessage_get_ObjectPath_Proxy(IGPMStatusMessage *This,BSTR *pVal);
+  void __RPC_STUB IGPMStatusMessage_get_ObjectPath_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMessage_ErrorCode_Proxy(IGPMStatusMessage *This);
+  void __RPC_STUB IGPMStatusMessage_ErrorCode_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMessage_get_ExtensionName_Proxy(IGPMStatusMessage *This,BSTR *pVal);
+  void __RPC_STUB IGPMStatusMessage_get_ExtensionName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMessage_get_SettingsName_Proxy(IGPMStatusMessage *This,BSTR *pVal);
+  void __RPC_STUB IGPMStatusMessage_get_SettingsName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMessage_OperationCode_Proxy(IGPMStatusMessage *This);
+  void __RPC_STUB IGPMStatusMessage_OperationCode_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMStatusMessage_get_Message_Proxy(IGPMStatusMessage *This,BSTR *pVal);
+  void __RPC_STUB IGPMStatusMessage_get_Message_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMConstants_INTERFACE_DEFINED__
+#define __IGPMConstants_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMConstants;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMConstants : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_PermGPOApply(GPMPermissionType *pVal) = 0;
+    virtual HRESULT WINAPI get_PermGPORead(GPMPermissionType *pVal) = 0;
+    virtual HRESULT WINAPI get_PermGPOEdit(GPMPermissionType *pVal) = 0;
+    v
