@@ -1738,4 +1738,78 @@ extern "C"{
 #define IGPMGPO_SetSecurityInfo(This,pSecurityInfo) (This)->lpVtbl->SetSecurityInfo(This,pSecurityInfo)
 #define IGPMGPO_Delete(This) (This)->lpVtbl->Delete(This)
 #define IGPMGPO_Backup(This,bstrBackupDir,bstrComment,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->Backup(This,bstrBackupDir,bstrComment,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
-#define IGPMGPO_Import(This,lFlags,pIGPMBackup,pvarMigrationTable,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->Import(This,lFlags,pIGPMBackup,pvarMigrationTable,
+#define IGPMGPO_Import(This,lFlags,pIGPMBackup,pvarMigrationTable,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->Import(This,lFlags,pIGPMBackup,pvarMigrationTable,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMGPO_GenerateReport(This,gpmReportType,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->GenerateReport(This,gpmReportType,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMGPO_GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult) (This)->lpVtbl->GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)
+#define IGPMGPO_CopyTo(This,lFlags,pIGPMDomain,pvarNewDisplayName,pvarMigrationTable,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->CopyTo(This,lFlags,pIGPMDomain,pvarNewDisplayName,pvarMigrationTable,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMGPO_SetSecurityDescriptor(This,lFlags,pSD) (This)->lpVtbl->SetSecurityDescriptor(This,lFlags,pSD)
+#define IGPMGPO_GetSecurityDescriptor(This,lFlags,ppSD) (This)->lpVtbl->GetSecurityDescriptor(This,lFlags,ppSD)
+#define IGPMGPO_IsACLConsistent(This,pvbConsistent) (This)->lpVtbl->IsACLConsistent(This,pvbConsistent)
+#define IGPMGPO_MakeACLConsistent(This) (This)->lpVtbl->MakeACLConsistent(This)
+#endif
+#endif
+  HRESULT WINAPI IGPMGPO_get_DisplayName_Proxy(IGPMGPO *This,BSTR *pVal);
+  void __RPC_STUB IGPMGPO_get_DisplayName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_put_DisplayName_Proxy(IGPMGPO *This,BSTR newVal);
+  void __RPC_STUB IGPMGPO_put_DisplayName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_Path_Proxy(IGPMGPO *This,BSTR *pVal);
+  void __RPC_STUB IGPMGPO_get_Path_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_ID_Proxy(IGPMGPO *This,BSTR *pVal);
+  void __RPC_STUB IGPMGPO_get_ID_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_DomainName_Proxy(IGPMGPO *This,BSTR *pVal);
+  void __RPC_STUB IGPMGPO_get_DomainName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_CreationTime_Proxy(IGPMGPO *This,DATE *pDate);
+  void __RPC_STUB IGPMGPO_get_CreationTime_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_ModificationTime_Proxy(IGPMGPO *This,DATE *pDate);
+  void __RPC_STUB IGPMGPO_get_ModificationTime_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_UserDSVersionNumber_Proxy(IGPMGPO *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMGPO_get_UserDSVersionNumber_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_ComputerDSVersionNumber_Proxy(IGPMGPO *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMGPO_get_ComputerDSVersionNumber_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_UserSysvolVersionNumber_Proxy(IGPMGPO *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMGPO_get_UserSysvolVersionNumber_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_get_ComputerSysvolVersionNumber_Proxy(IGPMGPO *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMGPO_get_ComputerSysvolVersionNumber_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_GetWMIFilter_Proxy(IGPMGPO *This,IGPMWMIFilter **ppIGPMWMIFilter);
+  void __RPC_STUB IGPMGPO_GetWMIFilter_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_SetWMIFilter_Proxy(IGPMGPO *This,IGPMWMIFilter *pIGPMWMIFilter);
+  void __RPC_STUB IGPMGPO_SetWMIFilter_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_SetUserEnabled_Proxy(IGPMGPO *This,VARIANT_BOOL vbEnabled);
+  void __RPC_STUB IGPMGPO_SetUserEnabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_SetComputerEnabled_Proxy(IGPMGPO *This,VARIANT_BOOL vbEnabled);
+  void __RPC_STUB IGPMGPO_SetComputerEnabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_IsUserEnabled_Proxy(IGPMGPO *This,VARIANT_BOOL *pvbEnabled);
+  void __RPC_STUB IGPMGPO_IsUserEnabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_IsComputerEnabled_Proxy(IGPMGPO *This,VARIANT_BOOL *pvbEnabled);
+  void __RPC_STUB IGPMGPO_IsComputerEnabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_GetSecurityInfo_Proxy(IGPMGPO *This,IGPMSecurityInfo **ppSecurityInfo);
+  void __RPC_STUB IGPMGPO_GetSecurityInfo_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_SetSecurityInfo_Proxy(IGPMGPO *This,IGPMSecurityInfo *pSecurityInfo);
+  void __RPC_STUB IGPMGPO_SetSecurityInfo_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_Delete_Proxy(IGPMGPO *This);
+  void __RPC_STUB IGPMGPO_Delete_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_Backup_Proxy(IGPMGPO *This,BSTR bstrBackupDir,BSTR bstrComment,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMGPO_Backup_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_Import_Proxy(IGPMGPO *This,__LONG32 lFlags,IGPMBackup *pIGPMBackup,VARIANT *pvarMigrationTable,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMGPO_Import_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_GenerateReport_Proxy(IGPMGPO *This,GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMGPO_GenerateReport_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_GenerateReportToFile_Proxy(IGPMGPO *This,GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMGPO_GenerateReportToFile_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_CopyTo_Proxy(IGPMGPO *This,__LONG32 lFlags,IGPMDomain *pIGPMDomain,VARIANT *pvarNewDisplayName,VARIANT *pvarMigrationTable,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMGPO_CopyTo_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_SetSecurityDescriptor_Proxy(IGPMGPO *This,__LONG32 lFlags,IDispatch *pSD);
+  void __RPC_STUB IGPMGPO_SetSecurityDescriptor_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_GetSecurityDescriptor_Proxy(IGPMGPO *This,__LONG32 lFlags,IDispatch **ppSD);
+  void __RPC_STUB IGPMGPO_GetSecurityDescriptor_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_IsACLConsistent_Proxy(IGPMGPO *This,VARIANT_BOOL *pvbConsistent);
+  void __RPC_STUB IGPMGPO_IsACLConsistent_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPO_MakeACLConsistent_Proxy(IGPMGPO *This);
+  void __RPC_STUB IGPMGPO_MakeACLConsistent_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMGPOCollection_INTERFACE_DEFINED__
+#define __IGPMGPOCollection_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMGPOCollection;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMGPOCollection : public IDisp
