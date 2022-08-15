@@ -1639,4 +1639,103 @@ extern "C"{
     virtual HRESULT WINAPI put_DisplayName(BSTR newVal) = 0;
     virtual HRESULT WINAPI get_Path(BSTR *pVal) = 0;
     virtual HRESULT WINAPI get_ID(BSTR *pVal) = 0;
-    virtual HRE
+    virtual HRESULT WINAPI get_DomainName(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_CreationTime(DATE *pDate) = 0;
+    virtual HRESULT WINAPI get_ModificationTime(DATE *pDate) = 0;
+    virtual HRESULT WINAPI get_UserDSVersionNumber(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_ComputerDSVersionNumber(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_UserSysvolVersionNumber(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_ComputerSysvolVersionNumber(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI GetWMIFilter(IGPMWMIFilter **ppIGPMWMIFilter) = 0;
+    virtual HRESULT WINAPI SetWMIFilter(IGPMWMIFilter *pIGPMWMIFilter) = 0;
+    virtual HRESULT WINAPI SetUserEnabled(VARIANT_BOOL vbEnabled) = 0;
+    virtual HRESULT WINAPI SetComputerEnabled(VARIANT_BOOL vbEnabled) = 0;
+    virtual HRESULT WINAPI IsUserEnabled(VARIANT_BOOL *pvbEnabled) = 0;
+    virtual HRESULT WINAPI IsComputerEnabled(VARIANT_BOOL *pvbEnabled) = 0;
+    virtual HRESULT WINAPI GetSecurityInfo(IGPMSecurityInfo **ppSecurityInfo) = 0;
+    virtual HRESULT WINAPI SetSecurityInfo(IGPMSecurityInfo *pSecurityInfo) = 0;
+    virtual HRESULT WINAPI Delete(void) = 0;
+    virtual HRESULT WINAPI Backup(BSTR bstrBackupDir,BSTR bstrComment,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI Import(__LONG32 lFlags,IGPMBackup *pIGPMBackup,VARIANT *pvarMigrationTable,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI GenerateReport(GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI GenerateReportToFile(GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI CopyTo(__LONG32 lFlags,IGPMDomain *pIGPMDomain,VARIANT *pvarNewDisplayName,VARIANT *pvarMigrationTable,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI SetSecurityDescriptor(__LONG32 lFlags,IDispatch *pSD) = 0;
+    virtual HRESULT WINAPI GetSecurityDescriptor(__LONG32 lFlags,IDispatch **ppSD) = 0;
+    virtual HRESULT WINAPI IsACLConsistent(VARIANT_BOOL *pvbConsistent) = 0;
+    virtual HRESULT WINAPI MakeACLConsistent(void) = 0;
+  };
+#else
+  typedef struct IGPMGPOVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMGPO *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMGPO *This);
+      ULONG (WINAPI *Release)(IGPMGPO *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMGPO *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMGPO *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMGPO *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMGPO *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_DisplayName)(IGPMGPO *This,BSTR *pVal);
+      HRESULT (WINAPI *put_DisplayName)(IGPMGPO *This,BSTR newVal);
+      HRESULT (WINAPI *get_Path)(IGPMGPO *This,BSTR *pVal);
+      HRESULT (WINAPI *get_ID)(IGPMGPO *This,BSTR *pVal);
+      HRESULT (WINAPI *get_DomainName)(IGPMGPO *This,BSTR *pVal);
+      HRESULT (WINAPI *get_CreationTime)(IGPMGPO *This,DATE *pDate);
+      HRESULT (WINAPI *get_ModificationTime)(IGPMGPO *This,DATE *pDate);
+      HRESULT (WINAPI *get_UserDSVersionNumber)(IGPMGPO *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_ComputerDSVersionNumber)(IGPMGPO *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_UserSysvolVersionNumber)(IGPMGPO *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_ComputerSysvolVersionNumber)(IGPMGPO *This,__LONG32 *pVal);
+      HRESULT (WINAPI *GetWMIFilter)(IGPMGPO *This,IGPMWMIFilter **ppIGPMWMIFilter);
+      HRESULT (WINAPI *SetWMIFilter)(IGPMGPO *This,IGPMWMIFilter *pIGPMWMIFilter);
+      HRESULT (WINAPI *SetUserEnabled)(IGPMGPO *This,VARIANT_BOOL vbEnabled);
+      HRESULT (WINAPI *SetComputerEnabled)(IGPMGPO *This,VARIANT_BOOL vbEnabled);
+      HRESULT (WINAPI *IsUserEnabled)(IGPMGPO *This,VARIANT_BOOL *pvbEnabled);
+      HRESULT (WINAPI *IsComputerEnabled)(IGPMGPO *This,VARIANT_BOOL *pvbEnabled);
+      HRESULT (WINAPI *GetSecurityInfo)(IGPMGPO *This,IGPMSecurityInfo **ppSecurityInfo);
+      HRESULT (WINAPI *SetSecurityInfo)(IGPMGPO *This,IGPMSecurityInfo *pSecurityInfo);
+      HRESULT (WINAPI *Delete)(IGPMGPO *This);
+      HRESULT (WINAPI *Backup)(IGPMGPO *This,BSTR bstrBackupDir,BSTR bstrComment,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *Import)(IGPMGPO *This,__LONG32 lFlags,IGPMBackup *pIGPMBackup,VARIANT *pvarMigrationTable,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *GenerateReport)(IGPMGPO *This,GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *GenerateReportToFile)(IGPMGPO *This,GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *CopyTo)(IGPMGPO *This,__LONG32 lFlags,IGPMDomain *pIGPMDomain,VARIANT *pvarNewDisplayName,VARIANT *pvarMigrationTable,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *SetSecurityDescriptor)(IGPMGPO *This,__LONG32 lFlags,IDispatch *pSD);
+      HRESULT (WINAPI *GetSecurityDescriptor)(IGPMGPO *This,__LONG32 lFlags,IDispatch **ppSD);
+      HRESULT (WINAPI *IsACLConsistent)(IGPMGPO *This,VARIANT_BOOL *pvbConsistent);
+      HRESULT (WINAPI *MakeACLConsistent)(IGPMGPO *This);
+    END_INTERFACE
+  } IGPMGPOVtbl;
+  struct IGPMGPO {
+    CONST_VTBL struct IGPMGPOVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMGPO_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMGPO_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMGPO_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMGPO_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMGPO_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMGPO_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMGPO_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMGPO_get_DisplayName(This,pVal) (This)->lpVtbl->get_DisplayName(This,pVal)
+#define IGPMGPO_put_DisplayName(This,newVal) (This)->lpVtbl->put_DisplayName(This,newVal)
+#define IGPMGPO_get_Path(This,pVal) (This)->lpVtbl->get_Path(This,pVal)
+#define IGPMGPO_get_ID(This,pVal) (This)->lpVtbl->get_ID(This,pVal)
+#define IGPMGPO_get_DomainName(This,pVal) (This)->lpVtbl->get_DomainName(This,pVal)
+#define IGPMGPO_get_CreationTime(This,pDate) (This)->lpVtbl->get_CreationTime(This,pDate)
+#define IGPMGPO_get_ModificationTime(This,pDate) (This)->lpVtbl->get_ModificationTime(This,pDate)
+#define IGPMGPO_get_UserDSVersionNumber(This,pVal) (This)->lpVtbl->get_UserDSVersionNumber(This,pVal)
+#define IGPMGPO_get_ComputerDSVersionNumber(This,pVal) (This)->lpVtbl->get_ComputerDSVersionNumber(This,pVal)
+#define IGPMGPO_get_UserSysvolVersionNumber(This,pVal) (This)->lpVtbl->get_UserSysvolVersionNumber(This,pVal)
+#define IGPMGPO_get_ComputerSysvolVersionNumber(This,pVal) (This)->lpVtbl->get_ComputerSysvolVersionNumber(This,pVal)
+#define IGPMGPO_GetWMIFilter(This,ppIGPMWMIFilter) (This)->lpVtbl->GetWMIFilter(This,ppIGPMWMIFilter)
+#define IGPMGPO_SetWMIFilter(This,pIGPMWMIFilter) (This)->lpVtbl->SetWMIFilter(This,pIGPMWMIFilter)
+#define IGPMGPO_SetUserEnabled(This,vbEnabled) (This)->lpVtbl->SetUserEnabled(This,vbEnabled)
+#define IGPMGPO_SetComputerEnabled(This,vbEnabled) (This)->lpVtbl->SetComputerEnabled(This,vbEnabled)
+#define IGPMGPO_IsUserEnabled(This,pvbEnabled) (This)->lpVtbl->IsUserEnabled(This,pvbEnabled)
+#define IGPMGPO_IsComputerEnabled(This,pvbEnabled) (This)->lpVtbl->IsComputerEnabled(This,pvbEnabled)
+#define IGPMGPO_GetSecurityInfo(This,ppSecurityInfo) (This)->lpVtbl->GetSecurityInfo(This,ppSecurityInfo)
+#define IGPMGPO_SetSecurityInfo(This,pSecurityInfo) (This)->lpVtbl->SetSecurityInfo(This,pSecurityInfo)
+#define IGPMGPO_Delete(This) (This)->lpVtbl->Delete(This)
+#define IGPMGPO_Backup(This,bstrBackupDir,bstrComment,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->Backup(This,bstrBackupDir,bstrComment,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMGPO_Import(This,lFlags,pIGPMBackup,pvarMigrationTable,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->Import(This,lFlags,pIGPMBackup,pvarMigrationTable,
