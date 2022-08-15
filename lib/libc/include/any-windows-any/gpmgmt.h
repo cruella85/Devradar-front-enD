@@ -1459,4 +1459,106 @@ extern "C"{
     virtual HRESULT WINAPI LoggingEnumerateUsers(VARIANT *varVal) = 0;
     virtual HRESULT WINAPI CreateQueryResults(void) = 0;
     virtual HRESULT WINAPI ReleaseQueryResults(void) = 0;
-    virtual HRESULT WINAPI GenerateReport(GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,
+    virtual HRESULT WINAPI GenerateReport(GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult) = 0;
+    virtual HRESULT WINAPI GenerateReportToFile(GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult) = 0;
+  };
+#else
+  typedef struct IGPMRSOPVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMRSOP *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMRSOP *This);
+      ULONG (WINAPI *Release)(IGPMRSOP *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMRSOP *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMRSOP *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMRSOP *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMRSOP *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Mode)(IGPMRSOP *This,GPMRSOPMode *pVal);
+      HRESULT (WINAPI *get_Namespace)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_LoggingComputer)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_LoggingComputer)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_LoggingUser)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_LoggingUser)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_LoggingFlags)(IGPMRSOP *This,__LONG32 lVal);
+      HRESULT (WINAPI *get_LoggingFlags)(IGPMRSOP *This,__LONG32 *lVal);
+      HRESULT (WINAPI *put_PlanningFlags)(IGPMRSOP *This,__LONG32 lVal);
+      HRESULT (WINAPI *get_PlanningFlags)(IGPMRSOP *This,__LONG32 *lVal);
+      HRESULT (WINAPI *put_PlanningDomainController)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_PlanningDomainController)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_PlanningSiteName)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_PlanningSiteName)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_PlanningUser)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_PlanningUser)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_PlanningUserSOM)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_PlanningUserSOM)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_PlanningUserWMIFilters)(IGPMRSOP *This,VARIANT varVal);
+      HRESULT (WINAPI *get_PlanningUserWMIFilters)(IGPMRSOP *This,VARIANT *varVal);
+      HRESULT (WINAPI *put_PlanningUserSecurityGroups)(IGPMRSOP *This,VARIANT varVal);
+      HRESULT (WINAPI *get_PlanningUserSecurityGroups)(IGPMRSOP *This,VARIANT *varVal);
+      HRESULT (WINAPI *put_PlanningComputer)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_PlanningComputer)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_PlanningComputerSOM)(IGPMRSOP *This,BSTR bstrVal);
+      HRESULT (WINAPI *get_PlanningComputerSOM)(IGPMRSOP *This,BSTR *bstrVal);
+      HRESULT (WINAPI *put_PlanningComputerWMIFilters)(IGPMRSOP *This,VARIANT varVal);
+      HRESULT (WINAPI *get_PlanningComputerWMIFilters)(IGPMRSOP *This,VARIANT *varVal);
+      HRESULT (WINAPI *put_PlanningComputerSecurityGroups)(IGPMRSOP *This,VARIANT varVal);
+      HRESULT (WINAPI *get_PlanningComputerSecurityGroups)(IGPMRSOP *This,VARIANT *varVal);
+      HRESULT (WINAPI *LoggingEnumerateUsers)(IGPMRSOP *This,VARIANT *varVal);
+      HRESULT (WINAPI *CreateQueryResults)(IGPMRSOP *This);
+      HRESULT (WINAPI *ReleaseQueryResults)(IGPMRSOP *This);
+      HRESULT (WINAPI *GenerateReport)(IGPMRSOP *This,GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+      HRESULT (WINAPI *GenerateReportToFile)(IGPMRSOP *This,GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult);
+    END_INTERFACE
+  } IGPMRSOPVtbl;
+  struct IGPMRSOP {
+    CONST_VTBL struct IGPMRSOPVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMRSOP_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMRSOP_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMRSOP_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMRSOP_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMRSOP_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMRSOP_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMRSOP_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMRSOP_get_Mode(This,pVal) (This)->lpVtbl->get_Mode(This,pVal)
+#define IGPMRSOP_get_Namespace(This,bstrVal) (This)->lpVtbl->get_Namespace(This,bstrVal)
+#define IGPMRSOP_put_LoggingComputer(This,bstrVal) (This)->lpVtbl->put_LoggingComputer(This,bstrVal)
+#define IGPMRSOP_get_LoggingComputer(This,bstrVal) (This)->lpVtbl->get_LoggingComputer(This,bstrVal)
+#define IGPMRSOP_put_LoggingUser(This,bstrVal) (This)->lpVtbl->put_LoggingUser(This,bstrVal)
+#define IGPMRSOP_get_LoggingUser(This,bstrVal) (This)->lpVtbl->get_LoggingUser(This,bstrVal)
+#define IGPMRSOP_put_LoggingFlags(This,lVal) (This)->lpVtbl->put_LoggingFlags(This,lVal)
+#define IGPMRSOP_get_LoggingFlags(This,lVal) (This)->lpVtbl->get_LoggingFlags(This,lVal)
+#define IGPMRSOP_put_PlanningFlags(This,lVal) (This)->lpVtbl->put_PlanningFlags(This,lVal)
+#define IGPMRSOP_get_PlanningFlags(This,lVal) (This)->lpVtbl->get_PlanningFlags(This,lVal)
+#define IGPMRSOP_put_PlanningDomainController(This,bstrVal) (This)->lpVtbl->put_PlanningDomainController(This,bstrVal)
+#define IGPMRSOP_get_PlanningDomainController(This,bstrVal) (This)->lpVtbl->get_PlanningDomainController(This,bstrVal)
+#define IGPMRSOP_put_PlanningSiteName(This,bstrVal) (This)->lpVtbl->put_PlanningSiteName(This,bstrVal)
+#define IGPMRSOP_get_PlanningSiteName(This,bstrVal) (This)->lpVtbl->get_PlanningSiteName(This,bstrVal)
+#define IGPMRSOP_put_PlanningUser(This,bstrVal) (This)->lpVtbl->put_PlanningUser(This,bstrVal)
+#define IGPMRSOP_get_PlanningUser(This,bstrVal) (This)->lpVtbl->get_PlanningUser(This,bstrVal)
+#define IGPMRSOP_put_PlanningUserSOM(This,bstrVal) (This)->lpVtbl->put_PlanningUserSOM(This,bstrVal)
+#define IGPMRSOP_get_PlanningUserSOM(This,bstrVal) (This)->lpVtbl->get_PlanningUserSOM(This,bstrVal)
+#define IGPMRSOP_put_PlanningUserWMIFilters(This,varVal) (This)->lpVtbl->put_PlanningUserWMIFilters(This,varVal)
+#define IGPMRSOP_get_PlanningUserWMIFilters(This,varVal) (This)->lpVtbl->get_PlanningUserWMIFilters(This,varVal)
+#define IGPMRSOP_put_PlanningUserSecurityGroups(This,varVal) (This)->lpVtbl->put_PlanningUserSecurityGroups(This,varVal)
+#define IGPMRSOP_get_PlanningUserSecurityGroups(This,varVal) (This)->lpVtbl->get_PlanningUserSecurityGroups(This,varVal)
+#define IGPMRSOP_put_PlanningComputer(This,bstrVal) (This)->lpVtbl->put_PlanningComputer(This,bstrVal)
+#define IGPMRSOP_get_PlanningComputer(This,bstrVal) (This)->lpVtbl->get_PlanningComputer(This,bstrVal)
+#define IGPMRSOP_put_PlanningComputerSOM(This,bstrVal) (This)->lpVtbl->put_PlanningComputerSOM(This,bstrVal)
+#define IGPMRSOP_get_PlanningComputerSOM(This,bstrVal) (This)->lpVtbl->get_PlanningComputerSOM(This,bstrVal)
+#define IGPMRSOP_put_PlanningComputerWMIFilters(This,varVal) (This)->lpVtbl->put_PlanningComputerWMIFilters(This,varVal)
+#define IGPMRSOP_get_PlanningComputerWMIFilters(This,varVal) (This)->lpVtbl->get_PlanningComputerWMIFilters(This,varVal)
+#define IGPMRSOP_put_PlanningComputerSecurityGroups(This,varVal) (This)->lpVtbl->put_PlanningComputerSecurityGroups(This,varVal)
+#define IGPMRSOP_get_PlanningComputerSecurityGroups(This,varVal) (This)->lpVtbl->get_PlanningComputerSecurityGroups(This,varVal)
+#define IGPMRSOP_LoggingEnumerateUsers(This,varVal) (This)->lpVtbl->LoggingEnumerateUsers(This,varVal)
+#define IGPMRSOP_CreateQueryResults(This) (This)->lpVtbl->CreateQueryResults(This)
+#define IGPMRSOP_ReleaseQueryResults(This) (This)->lpVtbl->ReleaseQueryResults(This)
+#define IGPMRSOP_GenerateReport(This,gpmReportType,pvarGPMProgress,pvarGPMCancel,ppIGPMResult) (This)->lpVtbl->GenerateReport(This,gpmReportType,pvarGPMProgress,pvarGPMCancel,ppIGPMResult)
+#define IGPMRSOP_GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult) (This)->lpVtbl->GenerateReportToFile(This,gpmReportType,bstrTargetFilePath,ppIGPMResult)
+#endif
+#endif
+  HRESULT WINAPI IGPMRSOP_get_Mode_Proxy(IGPMRSOP *This,GPMRSOPMode *pVal);
+  void __RPC_STUB IGPMRSOP_get_Mode_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_Namespace_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_Namespace_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRES
