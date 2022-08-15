@@ -1812,4 +1812,121 @@ extern "C"{
 #define __IGPMGPOCollection_INTERFACE_DEFINED__
   EXTERN_C const IID IID_IGPMGPOCollection;
 #if defined(__cplusplus) && !defined(CINTERFACE)
-  struct IGPMGPOCollection : public IDisp
+  struct IGPMGPOCollection : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Count(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_Item(__LONG32 lIndex,VARIANT *pVal) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IEnumVARIANT **ppIGPMGPOs) = 0;
+  };
+#else
+  typedef struct IGPMGPOCollectionVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMGPOCollection *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMGPOCollection *This);
+      ULONG (WINAPI *Release)(IGPMGPOCollection *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMGPOCollection *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMGPOCollection *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMGPOCollection *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMGPOCollection *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Count)(IGPMGPOCollection *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_Item)(IGPMGPOCollection *This,__LONG32 lIndex,VARIANT *pVal);
+      HRESULT (WINAPI *get__NewEnum)(IGPMGPOCollection *This,IEnumVARIANT **ppIGPMGPOs);
+    END_INTERFACE
+  } IGPMGPOCollectionVtbl;
+  struct IGPMGPOCollection {
+    CONST_VTBL struct IGPMGPOCollectionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMGPOCollection_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMGPOCollection_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMGPOCollection_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMGPOCollection_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMGPOCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMGPOCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMGPOCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMGPOCollection_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
+#define IGPMGPOCollection_get_Item(This,lIndex,pVal) (This)->lpVtbl->get_Item(This,lIndex,pVal)
+#define IGPMGPOCollection_get__NewEnum(This,ppIGPMGPOs) (This)->lpVtbl->get__NewEnum(This,ppIGPMGPOs)
+#endif
+#endif
+  HRESULT WINAPI IGPMGPOCollection_get_Count_Proxy(IGPMGPOCollection *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMGPOCollection_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOCollection_get_Item_Proxy(IGPMGPOCollection *This,__LONG32 lIndex,VARIANT *pVal);
+  void __RPC_STUB IGPMGPOCollection_get_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOCollection_get__NewEnum_Proxy(IGPMGPOCollection *This,IEnumVARIANT **ppIGPMGPOs);
+  void __RPC_STUB IGPMGPOCollection_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMGPOLink_INTERFACE_DEFINED__
+#define __IGPMGPOLink_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMGPOLink;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMGPOLink : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_GPOID(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_GPODomain(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_Enabled(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI put_Enabled(VARIANT_BOOL newVal) = 0;
+    virtual HRESULT WINAPI get_Enforced(VARIANT_BOOL *pVal) = 0;
+    virtual HRESULT WINAPI put_Enforced(VARIANT_BOOL newVal) = 0;
+    virtual HRESULT WINAPI get_SOMLinkOrder(__LONG32 *lVal) = 0;
+    virtual HRESULT WINAPI get_SOM(IGPMSOM **ppIGPMSOM) = 0;
+    virtual HRESULT WINAPI Delete(void) = 0;
+  };
+#else
+  typedef struct IGPMGPOLinkVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMGPOLink *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMGPOLink *This);
+      ULONG (WINAPI *Release)(IGPMGPOLink *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMGPOLink *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMGPOLink *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMGPOLink *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMGPOLink *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_GPOID)(IGPMGPOLink *This,BSTR *pVal);
+      HRESULT (WINAPI *get_GPODomain)(IGPMGPOLink *This,BSTR *pVal);
+      HRESULT (WINAPI *get_Enabled)(IGPMGPOLink *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *put_Enabled)(IGPMGPOLink *This,VARIANT_BOOL newVal);
+      HRESULT (WINAPI *get_Enforced)(IGPMGPOLink *This,VARIANT_BOOL *pVal);
+      HRESULT (WINAPI *put_Enforced)(IGPMGPOLink *This,VARIANT_BOOL newVal);
+      HRESULT (WINAPI *get_SOMLinkOrder)(IGPMGPOLink *This,__LONG32 *lVal);
+      HRESULT (WINAPI *get_SOM)(IGPMGPOLink *This,IGPMSOM **ppIGPMSOM);
+      HRESULT (WINAPI *Delete)(IGPMGPOLink *This);
+    END_INTERFACE
+  } IGPMGPOLinkVtbl;
+  struct IGPMGPOLink {
+    CONST_VTBL struct IGPMGPOLinkVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMGPOLink_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMGPOLink_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMGPOLink_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMGPOLink_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMGPOLink_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMGPOLink_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMGPOLink_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMGPOLink_get_GPOID(This,pVal) (This)->lpVtbl->get_GPOID(This,pVal)
+#define IGPMGPOLink_get_GPODomain(This,pVal) (This)->lpVtbl->get_GPODomain(This,pVal)
+#define IGPMGPOLink_get_Enabled(This,pVal) (This)->lpVtbl->get_Enabled(This,pVal)
+#define IGPMGPOLink_put_Enabled(This,newVal) (This)->lpVtbl->put_Enabled(This,newVal)
+#define IGPMGPOLink_get_Enforced(This,pVal) (This)->lpVtbl->get_Enforced(This,pVal)
+#define IGPMGPOLink_put_Enforced(This,newVal) (This)->lpVtbl->put_Enforced(This,newVal)
+#define IGPMGPOLink_get_SOMLinkOrder(This,lVal) (This)->lpVtbl->get_SOMLinkOrder(This,lVal)
+#define IGPMGPOLink_get_SOM(This,ppIGPMSOM) (This)->lpVtbl->get_SOM(This,ppIGPMSOM)
+#define IGPMGPOLink_Delete(This) (This)->lpVtbl->Delete(This)
+#endif
+#endif
+  HRESULT WINAPI IGPMGPOLink_get_GPOID_Proxy(IGPMGPOLink *This,BSTR *pVal);
+  void __RPC_STUB IGPMGPOLink_get_GPOID_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOLink_get_GPODomain_Proxy(IGPMGPOLink *This,BSTR *pVal);
+  void __RPC_STUB IGPMGPOLink_get_GPODomain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOLink_get_Enabled_Proxy(IGPMGPOLink *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IGPMGPOLink_get_Enabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOLink_put_Enabled_Proxy(IGPMGPOLink *This,VARIANT_BOOL newVal);
+  void __RPC_STUB IGPMGPOLink_put_Enabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOLink_get_Enforced_Proxy(IGPMGPOLink *This,VARIANT_BOOL *pVal);
+  void __RPC_STUB IGPMGPOLink_get_Enforced_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOLink_put_Enforced_Proxy(IGPMGPOLink *This,VARIANT_BOOL newVal);
+  void __RPC_STUB IGPMGPOLink_put_Enforced_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMGPOLink_get_SOMLinkOrder_Proxy(IGPMGPOLink *This,__LONG32 *lVal);
+  void __RPC_STUB IGPMGPOLink_get_SOMLinkOrder_Stub(IRpcStubBuf
