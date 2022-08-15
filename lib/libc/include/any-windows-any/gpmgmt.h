@@ -1561,4 +1561,82 @@ extern "C"{
   void __RPC_STUB IGPMRSOP_get_Mode_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
   HRESULT WINAPI IGPMRSOP_get_Namespace_Proxy(IGPMRSOP *This,BSTR *bstrVal);
   void __RPC_STUB IGPMRSOP_get_Namespace_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
-  HRES
+  HRESULT WINAPI IGPMRSOP_put_LoggingComputer_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_LoggingComputer_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_LoggingComputer_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_LoggingComputer_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_LoggingUser_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_LoggingUser_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_LoggingUser_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_LoggingUser_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_LoggingFlags_Proxy(IGPMRSOP *This,__LONG32 lVal);
+  void __RPC_STUB IGPMRSOP_put_LoggingFlags_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_LoggingFlags_Proxy(IGPMRSOP *This,__LONG32 *lVal);
+  void __RPC_STUB IGPMRSOP_get_LoggingFlags_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningFlags_Proxy(IGPMRSOP *This,__LONG32 lVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningFlags_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningFlags_Proxy(IGPMRSOP *This,__LONG32 *lVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningFlags_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningDomainController_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningDomainController_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningDomainController_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningDomainController_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningSiteName_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningSiteName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningSiteName_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningSiteName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningUser_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningUser_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningUser_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningUser_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningUserSOM_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningUserSOM_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningUserSOM_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningUserSOM_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningUserWMIFilters_Proxy(IGPMRSOP *This,VARIANT varVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningUserWMIFilters_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningUserWMIFilters_Proxy(IGPMRSOP *This,VARIANT *varVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningUserWMIFilters_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningUserSecurityGroups_Proxy(IGPMRSOP *This,VARIANT varVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningUserSecurityGroups_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningUserSecurityGroups_Proxy(IGPMRSOP *This,VARIANT *varVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningUserSecurityGroups_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningComputer_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningComputer_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningComputer_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningComputer_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningComputerSOM_Proxy(IGPMRSOP *This,BSTR bstrVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningComputerSOM_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningComputerSOM_Proxy(IGPMRSOP *This,BSTR *bstrVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningComputerSOM_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningComputerWMIFilters_Proxy(IGPMRSOP *This,VARIANT varVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningComputerWMIFilters_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningComputerWMIFilters_Proxy(IGPMRSOP *This,VARIANT *varVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningComputerWMIFilters_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_put_PlanningComputerSecurityGroups_Proxy(IGPMRSOP *This,VARIANT varVal);
+  void __RPC_STUB IGPMRSOP_put_PlanningComputerSecurityGroups_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_get_PlanningComputerSecurityGroups_Proxy(IGPMRSOP *This,VARIANT *varVal);
+  void __RPC_STUB IGPMRSOP_get_PlanningComputerSecurityGroups_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_LoggingEnumerateUsers_Proxy(IGPMRSOP *This,VARIANT *varVal);
+  void __RPC_STUB IGPMRSOP_LoggingEnumerateUsers_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_CreateQueryResults_Proxy(IGPMRSOP *This);
+  void __RPC_STUB IGPMRSOP_CreateQueryResults_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_ReleaseQueryResults_Proxy(IGPMRSOP *This);
+  void __RPC_STUB IGPMRSOP_ReleaseQueryResults_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_GenerateReport_Proxy(IGPMRSOP *This,GPMReportType gpmReportType,VARIANT *pvarGPMProgress,VARIANT *pvarGPMCancel,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMRSOP_GenerateReport_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMRSOP_GenerateReportToFile_Proxy(IGPMRSOP *This,GPMReportType gpmReportType,BSTR bstrTargetFilePath,IGPMResult **ppIGPMResult);
+  void __RPC_STUB IGPMRSOP_GenerateReportToFile_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMGPO_INTERFACE_DEFINED__
+#define __IGPMGPO_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMGPO;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMGPO : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_DisplayName(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI put_DisplayName(BSTR newVal) = 0;
+    virtual HRESULT WINAPI get_Path(BSTR *pVal) = 0;
+    virtual HRESULT WINAPI get_ID(BSTR *pVal) = 0;
+    virtual HRE
