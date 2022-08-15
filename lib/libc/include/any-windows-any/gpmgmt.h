@@ -2053,4 +2053,121 @@ extern "C"{
       ULONG (WINAPI *Release)(IGPMClientSideExtension *This);
       HRESULT (WINAPI *GetTypeInfoCount)(IGPMClientSideExtension *This,UINT *pctinfo);
       HRESULT (WINAPI *GetTypeInfo)(IGPMClientSideExtension *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
-      HRESULT (WINAPI *GetIDsOfNames)(IGPMClientSideExtension *This,REFIID riid,LPOLESTR *
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMClientSideExtension *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMClientSideExtension *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_ID)(IGPMClientSideExtension *This,BSTR *pVal);
+      HRESULT (WINAPI *get_DisplayName)(IGPMClientSideExtension *This,BSTR *pVal);
+      HRESULT (WINAPI *IsUserEnabled)(IGPMClientSideExtension *This,VARIANT_BOOL *pvbEnabled);
+      HRESULT (WINAPI *IsComputerEnabled)(IGPMClientSideExtension *This,VARIANT_BOOL *pvbEnabled);
+    END_INTERFACE
+  } IGPMClientSideExtensionVtbl;
+  struct IGPMClientSideExtension {
+    CONST_VTBL struct IGPMClientSideExtensionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMClientSideExtension_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMClientSideExtension_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMClientSideExtension_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMClientSideExtension_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMClientSideExtension_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMClientSideExtension_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMClientSideExtension_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMClientSideExtension_get_ID(This,pVal) (This)->lpVtbl->get_ID(This,pVal)
+#define IGPMClientSideExtension_get_DisplayName(This,pVal) (This)->lpVtbl->get_DisplayName(This,pVal)
+#define IGPMClientSideExtension_IsUserEnabled(This,pvbEnabled) (This)->lpVtbl->IsUserEnabled(This,pvbEnabled)
+#define IGPMClientSideExtension_IsComputerEnabled(This,pvbEnabled) (This)->lpVtbl->IsComputerEnabled(This,pvbEnabled)
+#endif
+#endif
+  HRESULT WINAPI IGPMClientSideExtension_get_ID_Proxy(IGPMClientSideExtension *This,BSTR *pVal);
+  void __RPC_STUB IGPMClientSideExtension_get_ID_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMClientSideExtension_get_DisplayName_Proxy(IGPMClientSideExtension *This,BSTR *pVal);
+  void __RPC_STUB IGPMClientSideExtension_get_DisplayName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMClientSideExtension_IsUserEnabled_Proxy(IGPMClientSideExtension *This,VARIANT_BOOL *pvbEnabled);
+  void __RPC_STUB IGPMClientSideExtension_IsUserEnabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMClientSideExtension_IsComputerEnabled_Proxy(IGPMClientSideExtension *This,VARIANT_BOOL *pvbEnabled);
+  void __RPC_STUB IGPMClientSideExtension_IsComputerEnabled_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMAsyncCancel_INTERFACE_DEFINED__
+#define __IGPMAsyncCancel_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMAsyncCancel;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMAsyncCancel : public IDispatch {
+  public:
+    virtual HRESULT WINAPI Cancel(void) = 0;
+  };
+#else
+  typedef struct IGPMAsyncCancelVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMAsyncCancel *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMAsyncCancel *This);
+      ULONG (WINAPI *Release)(IGPMAsyncCancel *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMAsyncCancel *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMAsyncCancel *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMAsyncCancel *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMAsyncCancel *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *Cancel)(IGPMAsyncCancel *This);
+    END_INTERFACE
+  } IGPMAsyncCancelVtbl;
+  struct IGPMAsyncCancel {
+    CONST_VTBL struct IGPMAsyncCancelVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMAsyncCancel_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMAsyncCancel_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMAsyncCancel_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMAsyncCancel_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMAsyncCancel_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMAsyncCancel_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMAsyncCancel_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMAsyncCancel_Cancel(This) (This)->lpVtbl->Cancel(This)
+#endif
+#endif
+  HRESULT WINAPI IGPMAsyncCancel_Cancel_Proxy(IGPMAsyncCancel *This);
+  void __RPC_STUB IGPMAsyncCancel_Cancel_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMAsyncProgress_INTERFACE_DEFINED__
+#define __IGPMAsyncProgress_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMAsyncProgress;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMAsyncProgress : public IDispatch {
+  public:
+    virtual HRESULT WINAPI Status(__LONG32 lProgressNumerator,__LONG32 lProgressDenominator,HRESULT hrStatus,VARIANT *pResult,IGPMStatusMsgCollection *ppIGPMStatusMsgCollection) = 0;
+  };
+#else
+  typedef struct IGPMAsyncProgressVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMAsyncProgress *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMAsyncProgress *This);
+      ULONG (WINAPI *Release)(IGPMAsyncProgress *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMAsyncProgress *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMAsyncProgress *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMAsyncProgress *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMAsyncProgress *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *Status)(IGPMAsyncProgress *This,__LONG32 lProgressNumerator,__LONG32 lProgressDenominator,HRESULT hrStatus,VARIANT *pResult,IGPMStatusMsgCollection *ppIGPMStatusMsgCollection);
+    END_INTERFACE
+  } IGPMAsyncProgressVtbl;
+  struct IGPMAsyncProgress {
+    CONST_VTBL struct IGPMAsyncProgressVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMAsyncProgress_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMAsyncProgress_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMAsyncProgress_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMAsyncProgress_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMAsyncProgress_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMAsyncProgress_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMAsyncProgress_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMAsyncProgress_Status(This,lProgressNumerator,lProgressDenominator,hrStatus,pResult,ppIGPMStatusMsgCollection) (This)->lpVtbl->Status(This,lProgressNumerator,lProgressDenominator,hrStatus,pResult,ppIGPMStatusMsgCollection)
+#endif
+#endif
+  HRESULT WINAPI IGPMAsyncProgress_Status_Proxy(IGPMAsyncProgress *This,__LONG32 lProgressNumerator,__LONG32 lProgressDenominator,HRESULT hrStatus,VARIANT *pResult,IGPMStatusMsgCollection *ppIGPMStatusMsgCollection);
+  void __RPC_STUB IGPMAsyncProgress_Status_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMStatusMsgCollection_INTERFACE_DEFINED__
+#define __IGPMStatusMsgCollection_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMStatusMsgCollection;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGP
