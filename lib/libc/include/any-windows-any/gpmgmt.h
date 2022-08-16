@@ -2483,4 +2483,69 @@ extern "C"{
 #define IGPMConstants_get_DestinationOptionSet(This,pVal) (This)->lpVtbl->get_DestinationOptionSet(This,pVal)
 #define IGPMConstants_get_MigrationTableOnly(This,pVal) (This)->lpVtbl->get_MigrationTableOnly(This,pVal)
 #define IGPMConstants_get_ProcessSecurity(This,pVal) (This)->lpVtbl->get_ProcessSecurity(This,pVal)
-#define IGPMConstants_get_RsopLoggin
+#define IGPMConstants_get_RsopLoggingNoComputer(This,pVal) (This)->lpVtbl->get_RsopLoggingNoComputer(This,pVal)
+#define IGPMConstants_get_RsopLoggingNoUser(This,pVal) (This)->lpVtbl->get_RsopLoggingNoUser(This,pVal)
+#define IGPMConstants_get_RsopPlanningAssumeSlowLink(This,pVal) (This)->lpVtbl->get_RsopPlanningAssumeSlowLink(This,pVal)
+#define IGPMConstants_get_RsopPlanningLoopbackOption(This,vbMerge,pVal) (This)->lpVtbl->get_RsopPlanningLoopbackOption(This,vbMerge,pVal)
+#define IGPMConstants_get_RsopPlanningAssumeUserWQLFilterTrue(This,pVal) (This)->lpVtbl->get_RsopPlanningAssumeUserWQLFilterTrue(This,pVal)
+#define IGPMConstants_get_RsopPlanningAssumeCompWQLFilterTrue(This,pVal) (This)->lpVtbl->get_RsopPlanningAssumeCompWQLFilterTrue(This,pVal)
+#endif
+#endif
+  HRESULT WINAPI IGPMConstants_get_PermGPOApply_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermGPOApply_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermGPORead_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermGPORead_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermGPOEdit_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermGPOEdit_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermGPOEditSecurityAndDelete_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermGPOEditSecurityAndDelete_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermGPOCustom_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermGPOCustom_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermWMIFilterEdit_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermWMIFilterEdit_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermWMIFilterFullControl_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermWMIFilterFullControl_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermWMIFilterCustom_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermWMIFilterCustom_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermSOMLink_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermSOMLink_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermSOMLogging_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermSOMLogging_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermSOMPlanning_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermSOMPlanning_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermSOMGPOCreate_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermSOMGPOCreate_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermSOMWMICreate_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermSOMWMICreate_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_PermSOMWMIFullControl_Proxy(IGPMConstants *This,GPMPermissionType *pVal);
+  void __RPC_STUB IGPMConstants_get_PermSOMWMIFullControl_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPOPermissions_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPOPermissions_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPOEffectivePermissions_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPOEffectivePermissions_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPODisplayName_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPODisplayName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPOWMIFilter_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPOWMIFilter_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPOID_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPOID_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPOComputerExtensions_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPOComputerExtensions_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPOUserExtensions_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPOUserExtensions_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertySOMLinks_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertySOMLinks_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyGPODomain_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyGPODomain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchPropertyBackupMostRecent_Proxy(IGPMConstants *This,GPMSearchProperty *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchPropertyBackupMostRecent_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchOpEquals_Proxy(IGPMConstants *This,GPMSearchOperation *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchOpEquals_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchOpContains_Proxy(IGPMConstants *This,GPMSearchOperation *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchOpContains_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchOpNotContains_Proxy(IGPMConstants *This,GPMSearchOperation *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchOpNotContains_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SearchOpNotEquals_Proxy(IGPMConstants *This,GPMSearchOperation *pVal);
+  void __RPC_STUB IGPMConstants_get_SearchOpNotEquals_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_UsePDC_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_UsePDC_Stub(IR
