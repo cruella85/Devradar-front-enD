@@ -2393,4 +2393,94 @@ extern "C"{
       HRESULT (WINAPI *get_SecurityFlags)(IGPMConstants *This,VARIANT_BOOL vbOwner,VARIANT_BOOL vbGroup,VARIANT_BOOL vbDACL,VARIANT_BOOL vbSACL,__LONG32 *pVal);
       HRESULT (WINAPI *get_DoNotValidateDC)(IGPMConstants *This,__LONG32 *pVal);
       HRESULT (WINAPI *get_ReportHTML)(IGPMConstants *This,GPMReportType *pVal);
-      HRESULT (WINAPI *get_ReportXML)(IGPMConstants *This,GPMReport
+      HRESULT (WINAPI *get_ReportXML)(IGPMConstants *This,GPMReportType *pVal);
+      HRESULT (WINAPI *get_RSOPModeUnknown)(IGPMConstants *This,GPMRSOPMode *pVal);
+      HRESULT (WINAPI *get_RSOPModePlanning)(IGPMConstants *This,GPMRSOPMode *pVal);
+      HRESULT (WINAPI *get_RSOPModeLogging)(IGPMConstants *This,GPMRSOPMode *pVal);
+      HRESULT (WINAPI *get_EntryTypeUser)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_EntryTypeComputer)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_EntryTypeLocalGroup)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_EntryTypeGlobalGroup)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_EntryTypeUniversalGroup)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_EntryTypeUNCPath)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_EntryTypeUnknown)(IGPMConstants *This,GPMEntryType *pVal);
+      HRESULT (WINAPI *get_DestinationOptionSameAsSource)(IGPMConstants *This,GPMDestinationOption *pVal);
+      HRESULT (WINAPI *get_DestinationOptionNone)(IGPMConstants *This,GPMDestinationOption *pVal);
+      HRESULT (WINAPI *get_DestinationOptionByRelativeName)(IGPMConstants *This,GPMDestinationOption *pVal);
+      HRESULT (WINAPI *get_DestinationOptionSet)(IGPMConstants *This,GPMDestinationOption *pVal);
+      HRESULT (WINAPI *get_MigrationTableOnly)(IGPMConstants *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_ProcessSecurity)(IGPMConstants *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_RsopLoggingNoComputer)(IGPMConstants *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_RsopLoggingNoUser)(IGPMConstants *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_RsopPlanningAssumeSlowLink)(IGPMConstants *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_RsopPlanningLoopbackOption)(IGPMConstants *This,VARIANT_BOOL vbMerge,__LONG32 *pVal);
+      HRESULT (WINAPI *get_RsopPlanningAssumeUserWQLFilterTrue)(IGPMConstants *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_RsopPlanningAssumeCompWQLFilterTrue)(IGPMConstants *This,__LONG32 *pVal);
+    END_INTERFACE
+  } IGPMConstantsVtbl;
+  struct IGPMConstants {
+    CONST_VTBL struct IGPMConstantsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMConstants_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMConstants_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMConstants_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMConstants_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMConstants_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMConstants_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMConstants_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMConstants_get_PermGPOApply(This,pVal) (This)->lpVtbl->get_PermGPOApply(This,pVal)
+#define IGPMConstants_get_PermGPORead(This,pVal) (This)->lpVtbl->get_PermGPORead(This,pVal)
+#define IGPMConstants_get_PermGPOEdit(This,pVal) (This)->lpVtbl->get_PermGPOEdit(This,pVal)
+#define IGPMConstants_get_PermGPOEditSecurityAndDelete(This,pVal) (This)->lpVtbl->get_PermGPOEditSecurityAndDelete(This,pVal)
+#define IGPMConstants_get_PermGPOCustom(This,pVal) (This)->lpVtbl->get_PermGPOCustom(This,pVal)
+#define IGPMConstants_get_PermWMIFilterEdit(This,pVal) (This)->lpVtbl->get_PermWMIFilterEdit(This,pVal)
+#define IGPMConstants_get_PermWMIFilterFullControl(This,pVal) (This)->lpVtbl->get_PermWMIFilterFullControl(This,pVal)
+#define IGPMConstants_get_PermWMIFilterCustom(This,pVal) (This)->lpVtbl->get_PermWMIFilterCustom(This,pVal)
+#define IGPMConstants_get_PermSOMLink(This,pVal) (This)->lpVtbl->get_PermSOMLink(This,pVal)
+#define IGPMConstants_get_PermSOMLogging(This,pVal) (This)->lpVtbl->get_PermSOMLogging(This,pVal)
+#define IGPMConstants_get_PermSOMPlanning(This,pVal) (This)->lpVtbl->get_PermSOMPlanning(This,pVal)
+#define IGPMConstants_get_PermSOMGPOCreate(This,pVal) (This)->lpVtbl->get_PermSOMGPOCreate(This,pVal)
+#define IGPMConstants_get_PermSOMWMICreate(This,pVal) (This)->lpVtbl->get_PermSOMWMICreate(This,pVal)
+#define IGPMConstants_get_PermSOMWMIFullControl(This,pVal) (This)->lpVtbl->get_PermSOMWMIFullControl(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPOPermissions(This,pVal) (This)->lpVtbl->get_SearchPropertyGPOPermissions(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPOEffectivePermissions(This,pVal) (This)->lpVtbl->get_SearchPropertyGPOEffectivePermissions(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPODisplayName(This,pVal) (This)->lpVtbl->get_SearchPropertyGPODisplayName(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPOWMIFilter(This,pVal) (This)->lpVtbl->get_SearchPropertyGPOWMIFilter(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPOID(This,pVal) (This)->lpVtbl->get_SearchPropertyGPOID(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPOComputerExtensions(This,pVal) (This)->lpVtbl->get_SearchPropertyGPOComputerExtensions(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPOUserExtensions(This,pVal) (This)->lpVtbl->get_SearchPropertyGPOUserExtensions(This,pVal)
+#define IGPMConstants_get_SearchPropertySOMLinks(This,pVal) (This)->lpVtbl->get_SearchPropertySOMLinks(This,pVal)
+#define IGPMConstants_get_SearchPropertyGPODomain(This,pVal) (This)->lpVtbl->get_SearchPropertyGPODomain(This,pVal)
+#define IGPMConstants_get_SearchPropertyBackupMostRecent(This,pVal) (This)->lpVtbl->get_SearchPropertyBackupMostRecent(This,pVal)
+#define IGPMConstants_get_SearchOpEquals(This,pVal) (This)->lpVtbl->get_SearchOpEquals(This,pVal)
+#define IGPMConstants_get_SearchOpContains(This,pVal) (This)->lpVtbl->get_SearchOpContains(This,pVal)
+#define IGPMConstants_get_SearchOpNotContains(This,pVal) (This)->lpVtbl->get_SearchOpNotContains(This,pVal)
+#define IGPMConstants_get_SearchOpNotEquals(This,pVal) (This)->lpVtbl->get_SearchOpNotEquals(This,pVal)
+#define IGPMConstants_get_UsePDC(This,pVal) (This)->lpVtbl->get_UsePDC(This,pVal)
+#define IGPMConstants_get_UseAnyDC(This,pVal) (This)->lpVtbl->get_UseAnyDC(This,pVal)
+#define IGPMConstants_get_DoNotUseW2KDC(This,pVal) (This)->lpVtbl->get_DoNotUseW2KDC(This,pVal)
+#define IGPMConstants_get_SOMSite(This,pVal) (This)->lpVtbl->get_SOMSite(This,pVal)
+#define IGPMConstants_get_SOMDomain(This,pVal) (This)->lpVtbl->get_SOMDomain(This,pVal)
+#define IGPMConstants_get_SOMOU(This,pVal) (This)->lpVtbl->get_SOMOU(This,pVal)
+#define IGPMConstants_get_SecurityFlags(This,vbOwner,vbGroup,vbDACL,vbSACL,pVal) (This)->lpVtbl->get_SecurityFlags(This,vbOwner,vbGroup,vbDACL,vbSACL,pVal)
+#define IGPMConstants_get_DoNotValidateDC(This,pVal) (This)->lpVtbl->get_DoNotValidateDC(This,pVal)
+#define IGPMConstants_get_ReportHTML(This,pVal) (This)->lpVtbl->get_ReportHTML(This,pVal)
+#define IGPMConstants_get_ReportXML(This,pVal) (This)->lpVtbl->get_ReportXML(This,pVal)
+#define IGPMConstants_get_RSOPModeUnknown(This,pVal) (This)->lpVtbl->get_RSOPModeUnknown(This,pVal)
+#define IGPMConstants_get_RSOPModePlanning(This,pVal) (This)->lpVtbl->get_RSOPModePlanning(This,pVal)
+#define IGPMConstants_get_RSOPModeLogging(This,pVal) (This)->lpVtbl->get_RSOPModeLogging(This,pVal)
+#define IGPMConstants_get_EntryTypeUser(This,pVal) (This)->lpVtbl->get_EntryTypeUser(This,pVal)
+#define IGPMConstants_get_EntryTypeComputer(This,pVal) (This)->lpVtbl->get_EntryTypeComputer(This,pVal)
+#define IGPMConstants_get_EntryTypeLocalGroup(This,pVal) (This)->lpVtbl->get_EntryTypeLocalGroup(This,pVal)
+#define IGPMConstants_get_EntryTypeGlobalGroup(This,pVal) (This)->lpVtbl->get_EntryTypeGlobalGroup(This,pVal)
+#define IGPMConstants_get_EntryTypeUniversalGroup(This,pVal) (This)->lpVtbl->get_EntryTypeUniversalGroup(This,pVal)
+#define IGPMConstants_get_EntryTypeUNCPath(This,pVal) (This)->lpVtbl->get_EntryTypeUNCPath(This,pVal)
+#define IGPMConstants_get_EntryTypeUnknown(This,pVal) (This)->lpVtbl->get_EntryTypeUnknown(This,pVal)
+#define IGPMConstants_get_DestinationOptionSameAsSource(This,pVal) (This)->lpVtbl->get_DestinationOptionSameAsSource(This,pVal)
+#define IGPMConstants_get_DestinationOptionNone(This,pVal) (This)->lpVtbl->get_DestinationOptionNone(This,pVal)
+#define IGPMConstants_get_DestinationOptionByRelativeName(This,pVal) (This)->lpVtbl->get_DestinationOptionByRelativeName(This,pVal)
+#define IGPMConstants_get_DestinationOptionSet(This,pVal) (This)->lpVtbl->get_DestinationOptionSet(This,pVal)
+#define IGPMConstants_get_MigrationTableOnly(This,pVal) (This)->lpVtbl->get_MigrationTableOnly(This,pVal)
+#define IGPMConstants_get_ProcessSecurity(This,pVal) (This)->lpVtbl->get_ProcessSecurity(This,pVal)
+#define IGPMConstants_get_RsopLoggin
