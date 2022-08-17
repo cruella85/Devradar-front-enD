@@ -2618,4 +2618,133 @@ extern "C"{
   EXTERN_C const IID IID_IGPMResult;
 #if defined(__cplusplus) && !defined(CINTERFACE)
   struct IGPMResult : public IDispatch {
-  publi
+  public:
+    virtual HRESULT WINAPI get_Status(IGPMStatusMsgCollection **ppIGPMStatusMsgCollection) = 0;
+    virtual HRESULT WINAPI get_Result(VARIANT *pvarResult) = 0;
+    virtual HRESULT WINAPI OverallStatus(void) = 0;
+  };
+#else
+  typedef struct IGPMResultVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMResult *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMResult *This);
+      ULONG (WINAPI *Release)(IGPMResult *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMResult *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMResult *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMResult *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMResult *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Status)(IGPMResult *This,IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+      HRESULT (WINAPI *get_Result)(IGPMResult *This,VARIANT *pvarResult);
+      HRESULT (WINAPI *OverallStatus)(IGPMResult *This);
+    END_INTERFACE
+  } IGPMResultVtbl;
+  struct IGPMResult {
+    CONST_VTBL struct IGPMResultVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMResult_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMResult_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMResult_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMResult_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMResult_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMResult_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMResult_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMResult_get_Status(This,ppIGPMStatusMsgCollection) (This)->lpVtbl->get_Status(This,ppIGPMStatusMsgCollection)
+#define IGPMResult_get_Result(This,pvarResult) (This)->lpVtbl->get_Result(This,pvarResult)
+#define IGPMResult_OverallStatus(This) (This)->lpVtbl->OverallStatus(This)
+#endif
+#endif
+  HRESULT WINAPI IGPMResult_get_Status_Proxy(IGPMResult *This,IGPMStatusMsgCollection **ppIGPMStatusMsgCollection);
+  void __RPC_STUB IGPMResult_get_Status_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMResult_get_Result_Proxy(IGPMResult *This,VARIANT *pvarResult);
+  void __RPC_STUB IGPMResult_get_Result_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMResult_OverallStatus_Proxy(IGPMResult *This);
+  void __RPC_STUB IGPMResult_OverallStatus_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMMapEntryCollection_INTERFACE_DEFINED__
+#define __IGPMMapEntryCollection_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMMapEntryCollection;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMMapEntryCollection : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Count(__LONG32 *pVal) = 0;
+    virtual HRESULT WINAPI get_Item(__LONG32 lIndex,VARIANT *pVal) = 0;
+    virtual HRESULT WINAPI get__NewEnum(IEnumVARIANT **pVal) = 0;
+  };
+#else
+  typedef struct IGPMMapEntryCollectionVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMMapEntryCollection *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMMapEntryCollection *This);
+      ULONG (WINAPI *Release)(IGPMMapEntryCollection *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMMapEntryCollection *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMMapEntryCollection *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMMapEntryCollection *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMMapEntryCollection *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Count)(IGPMMapEntryCollection *This,__LONG32 *pVal);
+      HRESULT (WINAPI *get_Item)(IGPMMapEntryCollection *This,__LONG32 lIndex,VARIANT *pVal);
+      HRESULT (WINAPI *get__NewEnum)(IGPMMapEntryCollection *This,IEnumVARIANT **pVal);
+    END_INTERFACE
+  } IGPMMapEntryCollectionVtbl;
+  struct IGPMMapEntryCollection {
+    CONST_VTBL struct IGPMMapEntryCollectionVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMMapEntryCollection_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMMapEntryCollection_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMMapEntryCollection_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMMapEntryCollection_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMMapEntryCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMMapEntryCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMMapEntryCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMMapEntryCollection_get_Count(This,pVal) (This)->lpVtbl->get_Count(This,pVal)
+#define IGPMMapEntryCollection_get_Item(This,lIndex,pVal) (This)->lpVtbl->get_Item(This,lIndex,pVal)
+#define IGPMMapEntryCollection_get__NewEnum(This,pVal) (This)->lpVtbl->get__NewEnum(This,pVal)
+#endif
+#endif
+  HRESULT WINAPI IGPMMapEntryCollection_get_Count_Proxy(IGPMMapEntryCollection *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMMapEntryCollection_get_Count_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMapEntryCollection_get_Item_Proxy(IGPMMapEntryCollection *This,__LONG32 lIndex,VARIANT *pVal);
+  void __RPC_STUB IGPMMapEntryCollection_get_Item_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMapEntryCollection_get__NewEnum_Proxy(IGPMMapEntryCollection *This,IEnumVARIANT **pVal);
+  void __RPC_STUB IGPMMapEntryCollection_get__NewEnum_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMMapEntry_INTERFACE_DEFINED__
+#define __IGPMMapEntry_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMMapEntry;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMMapEntry : public IDispatch {
+  public:
+    virtual HRESULT WINAPI get_Source(BSTR *pbstrSource) = 0;
+    virtual HRESULT WINAPI get_Destination(BSTR *pbstrDestination) = 0;
+    virtual HRESULT WINAPI get_DestinationOption(GPMDestinationOption *pgpmDestOption) = 0;
+    virtual HRESULT WINAPI get_EntryType(GPMEntryType *pgpmEntryType) = 0;
+  };
+#else
+  typedef struct IGPMMapEntryVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMMapEntry *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMMapEntry *This);
+      ULONG (WINAPI *Release)(IGPMMapEntry *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMMapEntry *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMMapEntry *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMMapEntry *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMMapEntry *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *get_Source)(IGPMMapEntry *This,BSTR *pbstrSource);
+      HRESULT (WINAPI *get_Destination)(IGPMMapEntry *This,BSTR *pbstrDestination);
+      HRESULT (WINAPI *get_DestinationOption)(IGPMMapEntry *This,GPMDestinationOption *pgpmDestOption);
+      HRESULT (WINAPI *get_EntryType)(IGPMMapEntry *This,GPMEntryType *pgpmEntryType);
+    END_INTERFACE
+  } IGPMMapEntryVtbl;
+  struct IGPMMapEntry {
+    CONST_VTBL struct IGPMMapEntryVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMMapEntry_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMMapEntry_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMMapEntry_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMMapEntry_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMMapEntry_Get
