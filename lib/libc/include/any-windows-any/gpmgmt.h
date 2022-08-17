@@ -2548,4 +2548,74 @@ extern "C"{
   HRESULT WINAPI IGPMConstants_get_SearchOpNotEquals_Proxy(IGPMConstants *This,GPMSearchOperation *pVal);
   void __RPC_STUB IGPMConstants_get_SearchOpNotEquals_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
   HRESULT WINAPI IGPMConstants_get_UsePDC_Proxy(IGPMConstants *This,__LONG32 *pVal);
-  void __RPC_STUB IGPMConstants_get_UsePDC_Stub(IR
+  void __RPC_STUB IGPMConstants_get_UsePDC_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_UseAnyDC_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_UseAnyDC_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_DoNotUseW2KDC_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_DoNotUseW2KDC_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SOMSite_Proxy(IGPMConstants *This,GPMSOMType *pVal);
+  void __RPC_STUB IGPMConstants_get_SOMSite_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SOMDomain_Proxy(IGPMConstants *This,GPMSOMType *pVal);
+  void __RPC_STUB IGPMConstants_get_SOMDomain_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SOMOU_Proxy(IGPMConstants *This,GPMSOMType *pVal);
+  void __RPC_STUB IGPMConstants_get_SOMOU_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_SecurityFlags_Proxy(IGPMConstants *This,VARIANT_BOOL vbOwner,VARIANT_BOOL vbGroup,VARIANT_BOOL vbDACL,VARIANT_BOOL vbSACL,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_SecurityFlags_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_DoNotValidateDC_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_DoNotValidateDC_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_ReportHTML_Proxy(IGPMConstants *This,GPMReportType *pVal);
+  void __RPC_STUB IGPMConstants_get_ReportHTML_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_ReportXML_Proxy(IGPMConstants *This,GPMReportType *pVal);
+  void __RPC_STUB IGPMConstants_get_ReportXML_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RSOPModeUnknown_Proxy(IGPMConstants *This,GPMRSOPMode *pVal);
+  void __RPC_STUB IGPMConstants_get_RSOPModeUnknown_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RSOPModePlanning_Proxy(IGPMConstants *This,GPMRSOPMode *pVal);
+  void __RPC_STUB IGPMConstants_get_RSOPModePlanning_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RSOPModeLogging_Proxy(IGPMConstants *This,GPMRSOPMode *pVal);
+  void __RPC_STUB IGPMConstants_get_RSOPModeLogging_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeUser_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeUser_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeComputer_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeComputer_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeLocalGroup_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeLocalGroup_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeGlobalGroup_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeGlobalGroup_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeUniversalGroup_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeUniversalGroup_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeUNCPath_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeUNCPath_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_EntryTypeUnknown_Proxy(IGPMConstants *This,GPMEntryType *pVal);
+  void __RPC_STUB IGPMConstants_get_EntryTypeUnknown_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_DestinationOptionSameAsSource_Proxy(IGPMConstants *This,GPMDestinationOption *pVal);
+  void __RPC_STUB IGPMConstants_get_DestinationOptionSameAsSource_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_DestinationOptionNone_Proxy(IGPMConstants *This,GPMDestinationOption *pVal);
+  void __RPC_STUB IGPMConstants_get_DestinationOptionNone_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_DestinationOptionByRelativeName_Proxy(IGPMConstants *This,GPMDestinationOption *pVal);
+  void __RPC_STUB IGPMConstants_get_DestinationOptionByRelativeName_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_DestinationOptionSet_Proxy(IGPMConstants *This,GPMDestinationOption *pVal);
+  void __RPC_STUB IGPMConstants_get_DestinationOptionSet_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_MigrationTableOnly_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_MigrationTableOnly_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_ProcessSecurity_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_ProcessSecurity_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RsopLoggingNoComputer_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_RsopLoggingNoComputer_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RsopLoggingNoUser_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_RsopLoggingNoUser_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RsopPlanningAssumeSlowLink_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_RsopPlanningAssumeSlowLink_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RsopPlanningLoopbackOption_Proxy(IGPMConstants *This,VARIANT_BOOL vbMerge,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_RsopPlanningLoopbackOption_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RsopPlanningAssumeUserWQLFilterTrue_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_RsopPlanningAssumeUserWQLFilterTrue_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMConstants_get_RsopPlanningAssumeCompWQLFilterTrue_Proxy(IGPMConstants *This,__LONG32 *pVal);
+  void __RPC_STUB IGPMConstants_get_RsopPlanningAssumeCompWQLFilterTrue_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMResult_INTERFACE_DEFINED__
+#define __IGPMResult_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMResult;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMResult : public IDispatch {
+  publi
