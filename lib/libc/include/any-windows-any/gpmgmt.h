@@ -2747,4 +2747,105 @@ extern "C"{
 #define IGPMMapEntry_AddRef(This) (This)->lpVtbl->AddRef(This)
 #define IGPMMapEntry_Release(This) (This)->lpVtbl->Release(This)
 #define IGPMMapEntry_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
-#define IGPMMapEntry_Get
+#define IGPMMapEntry_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMMapEntry_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMMapEntry_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMMapEntry_get_Source(This,pbstrSource) (This)->lpVtbl->get_Source(This,pbstrSource)
+#define IGPMMapEntry_get_Destination(This,pbstrDestination) (This)->lpVtbl->get_Destination(This,pbstrDestination)
+#define IGPMMapEntry_get_DestinationOption(This,pgpmDestOption) (This)->lpVtbl->get_DestinationOption(This,pgpmDestOption)
+#define IGPMMapEntry_get_EntryType(This,pgpmEntryType) (This)->lpVtbl->get_EntryType(This,pgpmEntryType)
+#endif
+#endif
+  HRESULT WINAPI IGPMMapEntry_get_Source_Proxy(IGPMMapEntry *This,BSTR *pbstrSource);
+  void __RPC_STUB IGPMMapEntry_get_Source_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMapEntry_get_Destination_Proxy(IGPMMapEntry *This,BSTR *pbstrDestination);
+  void __RPC_STUB IGPMMapEntry_get_Destination_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMapEntry_get_DestinationOption_Proxy(IGPMMapEntry *This,GPMDestinationOption *pgpmDestOption);
+  void __RPC_STUB IGPMMapEntry_get_DestinationOption_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMapEntry_get_EntryType_Proxy(IGPMMapEntry *This,GPMEntryType *pgpmEntryType);
+  void __RPC_STUB IGPMMapEntry_get_EntryType_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __IGPMMigrationTable_INTERFACE_DEFINED__
+#define __IGPMMigrationTable_INTERFACE_DEFINED__
+  EXTERN_C const IID IID_IGPMMigrationTable;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IGPMMigrationTable : public IDispatch {
+  public:
+    virtual HRESULT WINAPI Save(BSTR bstrMigrationTablePath) = 0;
+    virtual HRESULT WINAPI Add(__LONG32 lFlags,VARIANT var) = 0;
+    virtual HRESULT WINAPI AddEntry(BSTR bstrSource,GPMEntryType gpmEntryType,VARIANT *pvarDestination,IGPMMapEntry **ppEntry) = 0;
+    virtual HRESULT WINAPI GetEntry(BSTR bstrSource,IGPMMapEntry **ppEntry) = 0;
+    virtual HRESULT WINAPI DeleteEntry(BSTR bstrSource) = 0;
+    virtual HRESULT WINAPI UpdateDestination(BSTR bstrSource,VARIANT *pvarDestination,IGPMMapEntry **ppEntry) = 0;
+    virtual HRESULT WINAPI Validate(IGPMResult **ppResult) = 0;
+    virtual HRESULT WINAPI GetEntries(IGPMMapEntryCollection **ppEntries) = 0;
+  };
+#else
+  typedef struct IGPMMigrationTableVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IGPMMigrationTable *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IGPMMigrationTable *This);
+      ULONG (WINAPI *Release)(IGPMMigrationTable *This);
+      HRESULT (WINAPI *GetTypeInfoCount)(IGPMMigrationTable *This,UINT *pctinfo);
+      HRESULT (WINAPI *GetTypeInfo)(IGPMMigrationTable *This,UINT iTInfo,LCID lcid,ITypeInfo **ppTInfo);
+      HRESULT (WINAPI *GetIDsOfNames)(IGPMMigrationTable *This,REFIID riid,LPOLESTR *rgszNames,UINT cNames,LCID lcid,DISPID *rgDispId);
+      HRESULT (WINAPI *Invoke)(IGPMMigrationTable *This,DISPID dispIdMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS *pDispParams,VARIANT *pVarResult,EXCEPINFO *pExcepInfo,UINT *puArgErr);
+      HRESULT (WINAPI *Save)(IGPMMigrationTable *This,BSTR bstrMigrationTablePath);
+      HRESULT (WINAPI *Add)(IGPMMigrationTable *This,__LONG32 lFlags,VARIANT var);
+      HRESULT (WINAPI *AddEntry)(IGPMMigrationTable *This,BSTR bstrSource,GPMEntryType gpmEntryType,VARIANT *pvarDestination,IGPMMapEntry **ppEntry);
+      HRESULT (WINAPI *GetEntry)(IGPMMigrationTable *This,BSTR bstrSource,IGPMMapEntry **ppEntry);
+      HRESULT (WINAPI *DeleteEntry)(IGPMMigrationTable *This,BSTR bstrSource);
+      HRESULT (WINAPI *UpdateDestination)(IGPMMigrationTable *This,BSTR bstrSource,VARIANT *pvarDestination,IGPMMapEntry **ppEntry);
+      HRESULT (WINAPI *Validate)(IGPMMigrationTable *This,IGPMResult **ppResult);
+      HRESULT (WINAPI *GetEntries)(IGPMMigrationTable *This,IGPMMapEntryCollection **ppEntries);
+    END_INTERFACE
+  } IGPMMigrationTableVtbl;
+  struct IGPMMigrationTable {
+    CONST_VTBL struct IGPMMigrationTableVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IGPMMigrationTable_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IGPMMigrationTable_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IGPMMigrationTable_Release(This) (This)->lpVtbl->Release(This)
+#define IGPMMigrationTable_GetTypeInfoCount(This,pctinfo) (This)->lpVtbl->GetTypeInfoCount(This,pctinfo)
+#define IGPMMigrationTable_GetTypeInfo(This,iTInfo,lcid,ppTInfo) (This)->lpVtbl->GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+#define IGPMMigrationTable_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) (This)->lpVtbl->GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+#define IGPMMigrationTable_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) (This)->lpVtbl->Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+#define IGPMMigrationTable_Save(This,bstrMigrationTablePath) (This)->lpVtbl->Save(This,bstrMigrationTablePath)
+#define IGPMMigrationTable_Add(This,lFlags,var) (This)->lpVtbl->Add(This,lFlags,var)
+#define IGPMMigrationTable_AddEntry(This,bstrSource,gpmEntryType,pvarDestination,ppEntry) (This)->lpVtbl->AddEntry(This,bstrSource,gpmEntryType,pvarDestination,ppEntry)
+#define IGPMMigrationTable_GetEntry(This,bstrSource,ppEntry) (This)->lpVtbl->GetEntry(This,bstrSource,ppEntry)
+#define IGPMMigrationTable_DeleteEntry(This,bstrSource) (This)->lpVtbl->DeleteEntry(This,bstrSource)
+#define IGPMMigrationTable_UpdateDestination(This,bstrSource,pvarDestination,ppEntry) (This)->lpVtbl->UpdateDestination(This,bstrSource,pvarDestination,ppEntry)
+#define IGPMMigrationTable_Validate(This,ppResult) (This)->lpVtbl->Validate(This,ppResult)
+#define IGPMMigrationTable_GetEntries(This,ppEntries) (This)->lpVtbl->GetEntries(This,ppEntries)
+#endif
+#endif
+  HRESULT WINAPI IGPMMigrationTable_Save_Proxy(IGPMMigrationTable *This,BSTR bstrMigrationTablePath);
+  void __RPC_STUB IGPMMigrationTable_Save_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_Add_Proxy(IGPMMigrationTable *This,__LONG32 lFlags,VARIANT var);
+  void __RPC_STUB IGPMMigrationTable_Add_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_AddEntry_Proxy(IGPMMigrationTable *This,BSTR bstrSource,GPMEntryType gpmEntryType,VARIANT *pvarDestination,IGPMMapEntry **ppEntry);
+  void __RPC_STUB IGPMMigrationTable_AddEntry_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_GetEntry_Proxy(IGPMMigrationTable *This,BSTR bstrSource,IGPMMapEntry **ppEntry);
+  void __RPC_STUB IGPMMigrationTable_GetEntry_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_DeleteEntry_Proxy(IGPMMigrationTable *This,BSTR bstrSource);
+  void __RPC_STUB IGPMMigrationTable_DeleteEntry_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_UpdateDestination_Proxy(IGPMMigrationTable *This,BSTR bstrSource,VARIANT *pvarDestination,IGPMMapEntry **ppEntry);
+  void __RPC_STUB IGPMMigrationTable_UpdateDestination_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_Validate_Proxy(IGPMMigrationTable *This,IGPMResult **ppResult);
+  void __RPC_STUB IGPMMigrationTable_Validate_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IGPMMigrationTable_GetEntries_Proxy(IGPMMigrationTable *This,IGPMMapEntryCollection **ppEntries);
+  void __RPC_STUB IGPMMigrationTable_GetEntries_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+#ifndef __GPMGMTLib_LIBRARY_DEFINED__
+#define __GPMGMTLib_LIBRARY_DEFINED__
+
+  EXTERN_C const IID LIBID_GPMGMTLib;
+  EXTERN_C const CLSID CLSID_GPM;
+#ifdef __cplusplus
+  class GPM;
+#endif
+  EXTERN_C const CLS
