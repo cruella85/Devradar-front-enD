@@ -2848,4 +2848,139 @@ extern "C"{
 #ifdef __cplusplus
   class GPM;
 #endif
-  EXTERN_C const CLS
+  EXTERN_C const CLSID CLSID_GPMDomain;
+#ifdef __cplusplus
+  class GPMDomain;
+#endif
+  EXTERN_C const CLSID CLSID_GPMSitesContainer;
+#ifdef __cplusplus
+  class GPMSitesContainer;
+#endif
+  EXTERN_C const CLSID CLSID_GPMBackupDir;
+#ifdef __cplusplus
+  class GPMBackupDir;
+#endif
+  EXTERN_C const CLSID CLSID_GPMSOM;
+#ifdef __cplusplus
+  class GPMSOM;
+#endif
+  EXTERN_C const CLSID CLSID_GPMSearchCriteria;
+#ifdef __cplusplus
+  class GPMSearchCriteria;
+#endif
+  EXTERN_C const CLSID CLSID_GPMPermission;
+#ifdef __cplusplus
+  class GPMPermission;
+#endif
+  EXTERN_C const CLSID CLSID_GPMSecurityInfo;
+#ifdef __cplusplus
+  class GPMSecurityInfo;
+#endif
+  EXTERN_C const CLSID CLSID_GPMBackup;
+#ifdef __cplusplus
+  class GPMBackup;
+#endif
+  EXTERN_C const CLSID CLSID_GPMBackupCollection;
+#ifdef __cplusplus
+  class GPMBackupCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMSOMCollection;
+#ifdef __cplusplus
+  class GPMSOMCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMWMIFilter;
+#ifdef __cplusplus
+  class GPMWMIFilter;
+#endif
+  EXTERN_C const CLSID CLSID_GPMWMIFilterCollection;
+#ifdef __cplusplus
+  class GPMWMIFilterCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMRSOP;
+#ifdef __cplusplus
+  class GPMRSOP;
+#endif
+  EXTERN_C const CLSID CLSID_GPMGPO;
+#ifdef __cplusplus
+  class GPMGPO;
+#endif
+  EXTERN_C const CLSID CLSID_GPMGPOCollection;
+#ifdef __cplusplus
+  class GPMGPOCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMGPOLink;
+#ifdef __cplusplus
+  class GPMGPOLink;
+#endif
+  EXTERN_C const CLSID CLSID_GPMGPOLinksCollection;
+#ifdef __cplusplus
+  class GPMGPOLinksCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMAsyncCancel;
+#ifdef __cplusplus
+  class GPMAsyncCancel;
+#endif
+  EXTERN_C const CLSID CLSID_GPMStatusMsgCollection;
+#ifdef __cplusplus
+  class GPMStatusMsgCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMStatusMessage;
+#ifdef __cplusplus
+  class GPMStatusMessage;
+#endif
+  EXTERN_C const CLSID CLSID_GPMEnum;
+#ifdef __cplusplus
+  class GPMEnum;
+#endif
+  EXTERN_C const CLSID CLSID_GPMTrustee;
+#ifdef __cplusplus
+  class GPMTrustee;
+#endif
+  EXTERN_C const CLSID CLSID_GPMClientSideExtension;
+#ifdef __cplusplus
+  class GPMClientSideExtension;
+#endif
+  EXTERN_C const CLSID CLSID_GPMCSECollection;
+#ifdef __cplusplus
+  class GPMCSECollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMConstants;
+#ifdef __cplusplus
+  class GPMConstants;
+#endif
+  EXTERN_C const CLSID CLSID_GPMResult;
+#ifdef __cplusplus
+  class GPMResult;
+#endif
+  EXTERN_C const CLSID CLSID_GPMMapEntryCollection;
+#ifdef __cplusplus
+  class GPMMapEntryCollection;
+#endif
+  EXTERN_C const CLSID CLSID_GPMMapEntry;
+#ifdef __cplusplus
+  class GPMMapEntry;
+#endif
+  EXTERN_C const CLSID CLSID_GPMMigrationTable;
+#ifdef __cplusplus
+  class GPMMigrationTable;
+#endif
+  EXTERN_C const CLSID CLSID_GPOReportProvider;
+#ifdef __cplusplus
+  class GPOReportProvider;
+#endif
+#endif
+
+  ULONG __RPC_API BSTR_UserSize(ULONG *,ULONG,BSTR *);
+  unsigned char *__RPC_API BSTR_UserMarshal(ULONG *,unsigned char *,BSTR *);
+  unsigned char *__RPC_API BSTR_UserUnmarshal(ULONG *,unsigned char *,BSTR *);
+  void __RPC_API BSTR_UserFree(ULONG *,BSTR *);
+  ULONG __RPC_API VARIANT_UserSize(ULONG *,ULONG,VARIANT *);
+  unsigned char *__RPC_API VARIANT_UserMarshal(ULONG *,unsigned char *,VARIANT *);
+  unsigned char *__RPC_API VARIANT_UserUnmarshal(ULONG *,unsigned char *,VARIANT *);
+  void __RPC_API VARIANT_UserFree(ULONG *,VARIANT *);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
