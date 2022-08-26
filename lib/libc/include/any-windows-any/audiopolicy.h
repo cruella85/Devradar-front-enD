@@ -760,4 +760,237 @@ IAudioVolumeDuckNotification : public IUnknown
 __CRT_UUID_DECL(IAudioVolumeDuckNotification, 0xc3b284d4, 0x6d39, 0x4359, 0xb3,0xcf, 0xb5,0x6d,0xdb,0x3b,0xb3,0x9c)
 #endif
 #else
-typedef struc
+typedef struct IAudioVolumeDuckNotificationVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAudioVolumeDuckNotification *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAudioVolumeDuckNotification *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAudioVolumeDuckNotification *This);
+
+    /*** IAudioVolumeDuckNotification methods ***/
+    HRESULT (STDMETHODCALLTYPE *OnVolumeDuckNotification)(
+        IAudioVolumeDuckNotification *This,
+        LPCWSTR sessionID,
+        UINT32 countCommunicationSessions);
+
+    HRESULT (STDMETHODCALLTYPE *OnVolumeUnduckNotification)(
+        IAudioVolumeDuckNotification *This,
+        LPCWSTR sessionID);
+
+    END_INTERFACE
+} IAudioVolumeDuckNotificationVtbl;
+
+interface IAudioVolumeDuckNotification {
+    CONST_VTBL IAudioVolumeDuckNotificationVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAudioVolumeDuckNotification_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAudioVolumeDuckNotification_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAudioVolumeDuckNotification_Release(This) (This)->lpVtbl->Release(This)
+/*** IAudioVolumeDuckNotification methods ***/
+#define IAudioVolumeDuckNotification_OnVolumeDuckNotification(This,sessionID,countCommunicationSessions) (This)->lpVtbl->OnVolumeDuckNotification(This,sessionID,countCommunicationSessions)
+#define IAudioVolumeDuckNotification_OnVolumeUnduckNotification(This,sessionID) (This)->lpVtbl->OnVolumeUnduckNotification(This,sessionID)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAudioVolumeDuckNotification_QueryInterface(IAudioVolumeDuckNotification* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAudioVolumeDuckNotification_AddRef(IAudioVolumeDuckNotification* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAudioVolumeDuckNotification_Release(IAudioVolumeDuckNotification* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAudioVolumeDuckNotification methods ***/
+static FORCEINLINE HRESULT IAudioVolumeDuckNotification_OnVolumeDuckNotification(IAudioVolumeDuckNotification* This,LPCWSTR sessionID,UINT32 countCommunicationSessions) {
+    return This->lpVtbl->OnVolumeDuckNotification(This,sessionID,countCommunicationSessions);
+}
+static FORCEINLINE HRESULT IAudioVolumeDuckNotification_OnVolumeUnduckNotification(IAudioVolumeDuckNotification* This,LPCWSTR sessionID) {
+    return This->lpVtbl->OnVolumeUnduckNotification(This,sessionID);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAudioVolumeDuckNotification_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IAudioSessionNotification interface
+ */
+#ifndef __IAudioSessionNotification_INTERFACE_DEFINED__
+#define __IAudioSessionNotification_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAudioSessionNotification, 0x641dd20b, 0x4d41, 0x49cc, 0xab,0xa3, 0x17,0x4b,0x94,0x77,0xbb,0x08);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("641dd20b-4d41-49cc-aba3-174b9477bb08")
+IAudioSessionNotification : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE OnSessionCreated(
+        IAudioSessionControl *NewSession) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAudioSessionNotification, 0x641dd20b, 0x4d41, 0x49cc, 0xab,0xa3, 0x17,0x4b,0x94,0x77,0xbb,0x08)
+#endif
+#else
+typedef struct IAudioSessionNotificationVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAudioSessionNotification *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAudioSessionNotification *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAudioSessionNotification *This);
+
+    /*** IAudioSessionNotification methods ***/
+    HRESULT (STDMETHODCALLTYPE *OnSessionCreated)(
+        IAudioSessionNotification *This,
+        IAudioSessionControl *NewSession);
+
+    END_INTERFACE
+} IAudioSessionNotificationVtbl;
+
+interface IAudioSessionNotification {
+    CONST_VTBL IAudioSessionNotificationVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAudioSessionNotification_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAudioSessionNotification_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAudioSessionNotification_Release(This) (This)->lpVtbl->Release(This)
+/*** IAudioSessionNotification methods ***/
+#define IAudioSessionNotification_OnSessionCreated(This,NewSession) (This)->lpVtbl->OnSessionCreated(This,NewSession)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAudioSessionNotification_QueryInterface(IAudioSessionNotification* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAudioSessionNotification_AddRef(IAudioSessionNotification* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAudioSessionNotification_Release(IAudioSessionNotification* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAudioSessionNotification methods ***/
+static FORCEINLINE HRESULT IAudioSessionNotification_OnSessionCreated(IAudioSessionNotification* This,IAudioSessionControl *NewSession) {
+    return This->lpVtbl->OnSessionCreated(This,NewSession);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAudioSessionNotification_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IAudioSessionEnumerator interface
+ */
+#ifndef __IAudioSessionEnumerator_INTERFACE_DEFINED__
+#define __IAudioSessionEnumerator_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAudioSessionEnumerator, 0xe2f5bb11, 0x0570, 0x40ca, 0xac,0xdd, 0x3a,0xa0,0x12,0x77,0xde,0xe8);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("e2f5bb11-0570-40ca-acdd-3aa01277dee8")
+IAudioSessionEnumerator : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetCount(
+        int *SessionCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSession(
+        int SessionCount,
+        IAudioSessionControl **Session) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAudioSessionEnumerator, 0xe2f5bb11, 0x0570, 0x40ca, 0xac,0xdd, 0x3a,0xa0,0x12,0x77,0xde,0xe8)
+#endif
+#else
+typedef struct IAudioSessionEnumeratorVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAudioSessionEnumerator *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAudioSessionEnumerator *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAudioSessionEnumerator *This);
+
+    /*** IAudioSessionEnumerator methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IAudioSessionEnumerator *This,
+        int *SessionCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetSession)(
+        IAudioSessionEnumerator *This,
+        int SessionCount,
+        IAudioSessionControl **Session);
+
+    END_INTERFACE
+} IAudioSessionEnumeratorVtbl;
+
+interface IAudioSessionEnumerator {
+    CONST_VTBL IAudioSessionEnumeratorVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAudioSessionEnumerator_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAudioSessionEnumerator_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAudioSessionEnumerator_Release(This) (This)->lpVtbl->Release(This)
+/*** IAudioSessionEnumerator methods ***/
+#define IAudioSessionEnumerator_GetCount(This,SessionCount) (This)->lpVtbl->GetCount(This,SessionCount)
+#define IAudioSessionEnumerator_GetSession(This,SessionCount,Session) (This)->lpVtbl->GetSession(This,SessionCount,Session)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAudioSessionEnumerator_QueryInterface(IAudioSessionEnumerator* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAudioSessionEnumerator_AddRef(IAudioSessionEnumerator* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAudioSessionEnumerator_Release(IAudioSessionEnumerator* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAudioSessionEnumerator methods ***/
+static FORCEINLINE HRESULT IAudioSessionEnumerator_GetCount(IAudioSessionEnumerator* This,int *SessionCount) {
+    return This->lpVtbl->GetCount(This,SessionCount);
+}
+static FORCEINLINE HRESULT IAudioSessionEnumerator_GetSession(IAudioSessionEnumerator* This,int SessionCount,IAudioSessionControl **Session) {
+    return This->lpVtbl->GetSession(This,SessionCount,Session);
+}
+#endif
+#endif
+
+#endif
+
+
