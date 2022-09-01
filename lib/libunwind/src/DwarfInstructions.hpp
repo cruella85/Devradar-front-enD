@@ -640,4 +640,252 @@ DwarfInstructions<A, R>::evaluateExpression(pint_t expression, A &addressSpace,
 
     case DW_OP_xor:
       value = *sp--;
-      *sp ^= 
+      *sp ^= value;
+      if (log)
+        fprintf(stderr, "xor\n");
+      break;
+
+    case DW_OP_skip:
+      svalue = (int16_t) addressSpace.get16(p);
+      p += 2;
+      p = (pint_t)((sint_t)p + svalue);
+      if (log)
+        fprintf(stderr, "skip %" PRIu64 "\n", (uint64_t)svalue);
+      break;
+
+    case DW_OP_bra:
+      svalue = (int16_t) addressSpace.get16(p);
+      p += 2;
+      if (*sp--)
+        p = (pint_t)((sint_t)p + svalue);
+      if (log)
+        fprintf(stderr, "bra %" PRIu64 "\n", (uint64_t)svalue);
+      break;
+
+    case DW_OP_eq:
+      value = *sp--;
+      *sp = (*sp == value);
+      if (log)
+        fprintf(stderr, "eq\n");
+      break;
+
+    case DW_OP_ge:
+      value = *sp--;
+      *sp = (*sp >= value);
+      if (log)
+        fprintf(stderr, "ge\n");
+      break;
+
+    case DW_OP_gt:
+      value = *sp--;
+      *sp = (*sp > value);
+      if (log)
+        fprintf(stderr, "gt\n");
+      break;
+
+    case DW_OP_le:
+      value = *sp--;
+      *sp = (*sp <= value);
+      if (log)
+        fprintf(stderr, "le\n");
+      break;
+
+    case DW_OP_lt:
+      value = *sp--;
+      *sp = (*sp < value);
+      if (log)
+        fprintf(stderr, "lt\n");
+      break;
+
+    case DW_OP_ne:
+      value = *sp--;
+      *sp = (*sp != value);
+      if (log)
+        fprintf(stderr, "ne\n");
+      break;
+
+    case DW_OP_lit0:
+    case DW_OP_lit1:
+    case DW_OP_lit2:
+    case DW_OP_lit3:
+    case DW_OP_lit4:
+    case DW_OP_lit5:
+    case DW_OP_lit6:
+    case DW_OP_lit7:
+    case DW_OP_lit8:
+    case DW_OP_lit9:
+    case DW_OP_lit10:
+    case DW_OP_lit11:
+    case DW_OP_lit12:
+    case DW_OP_lit13:
+    case DW_OP_lit14:
+    case DW_OP_lit15:
+    case DW_OP_lit16:
+    case DW_OP_lit17:
+    case DW_OP_lit18:
+    case DW_OP_lit19:
+    case DW_OP_lit20:
+    case DW_OP_lit21:
+    case DW_OP_lit22:
+    case DW_OP_lit23:
+    case DW_OP_lit24:
+    case DW_OP_lit25:
+    case DW_OP_lit26:
+    case DW_OP_lit27:
+    case DW_OP_lit28:
+    case DW_OP_lit29:
+    case DW_OP_lit30:
+    case DW_OP_lit31:
+      value = static_cast<pint_t>(opcode - DW_OP_lit0);
+      *(++sp) = value;
+      if (log)
+        fprintf(stderr, "push literal 0x%" PRIx64 "\n", (uint64_t)value);
+      break;
+
+    case DW_OP_reg0:
+    case DW_OP_reg1:
+    case DW_OP_reg2:
+    case DW_OP_reg3:
+    case DW_OP_reg4:
+    case DW_OP_reg5:
+    case DW_OP_reg6:
+    case DW_OP_reg7:
+    case DW_OP_reg8:
+    case DW_OP_reg9:
+    case DW_OP_reg10:
+    case DW_OP_reg11:
+    case DW_OP_reg12:
+    case DW_OP_reg13:
+    case DW_OP_reg14:
+    case DW_OP_reg15:
+    case DW_OP_reg16:
+    case DW_OP_reg17:
+    case DW_OP_reg18:
+    case DW_OP_reg19:
+    case DW_OP_reg20:
+    case DW_OP_reg21:
+    case DW_OP_reg22:
+    case DW_OP_reg23:
+    case DW_OP_reg24:
+    case DW_OP_reg25:
+    case DW_OP_reg26:
+    case DW_OP_reg27:
+    case DW_OP_reg28:
+    case DW_OP_reg29:
+    case DW_OP_reg30:
+    case DW_OP_reg31:
+      reg = static_cast<uint32_t>(opcode - DW_OP_reg0);
+      *(++sp) = registers.getRegister((int)reg);
+      if (log)
+        fprintf(stderr, "push reg %d\n", reg);
+      break;
+
+    case DW_OP_regx:
+      reg = static_cast<uint32_t>(addressSpace.getULEB128(p, expressionEnd));
+      *(++sp) = registers.getRegister((int)reg);
+      if (log)
+        fprintf(stderr, "push reg %d + 0x%" PRIx64 "\n", reg, (uint64_t)svalue);
+      break;
+
+    case DW_OP_breg0:
+    case DW_OP_breg1:
+    case DW_OP_breg2:
+    case DW_OP_breg3:
+    case DW_OP_breg4:
+    case DW_OP_breg5:
+    case DW_OP_breg6:
+    case DW_OP_breg7:
+    case DW_OP_breg8:
+    case DW_OP_breg9:
+    case DW_OP_breg10:
+    case DW_OP_breg11:
+    case DW_OP_breg12:
+    case DW_OP_breg13:
+    case DW_OP_breg14:
+    case DW_OP_breg15:
+    case DW_OP_breg16:
+    case DW_OP_breg17:
+    case DW_OP_breg18:
+    case DW_OP_breg19:
+    case DW_OP_breg20:
+    case DW_OP_breg21:
+    case DW_OP_breg22:
+    case DW_OP_breg23:
+    case DW_OP_breg24:
+    case DW_OP_breg25:
+    case DW_OP_breg26:
+    case DW_OP_breg27:
+    case DW_OP_breg28:
+    case DW_OP_breg29:
+    case DW_OP_breg30:
+    case DW_OP_breg31:
+      reg = static_cast<uint32_t>(opcode - DW_OP_breg0);
+      svalue = (sint_t)addressSpace.getSLEB128(p, expressionEnd);
+      svalue += static_cast<sint_t>(registers.getRegister((int)reg));
+      *(++sp) = (pint_t)(svalue);
+      if (log)
+        fprintf(stderr, "push reg %d + 0x%" PRIx64 "\n", reg, (uint64_t)svalue);
+      break;
+
+    case DW_OP_bregx:
+      reg = static_cast<uint32_t>(addressSpace.getULEB128(p, expressionEnd));
+      svalue = (sint_t)addressSpace.getSLEB128(p, expressionEnd);
+      svalue += static_cast<sint_t>(registers.getRegister((int)reg));
+      *(++sp) = (pint_t)(svalue);
+      if (log)
+        fprintf(stderr, "push reg %d + 0x%" PRIx64 "\n", reg, (uint64_t)svalue);
+      break;
+
+    case DW_OP_fbreg:
+      _LIBUNWIND_ABORT("DW_OP_fbreg not implemented");
+      break;
+
+    case DW_OP_piece:
+      _LIBUNWIND_ABORT("DW_OP_piece not implemented");
+      break;
+
+    case DW_OP_deref_size:
+      // pop stack, dereference, push result
+      value = *sp--;
+      switch (addressSpace.get8(p++)) {
+      case 1:
+        value = addressSpace.get8(value);
+        break;
+      case 2:
+        value = addressSpace.get16(value);
+        break;
+      case 4:
+        value = addressSpace.get32(value);
+        break;
+      case 8:
+        value = (pint_t)addressSpace.get64(value);
+        break;
+      default:
+        _LIBUNWIND_ABORT("DW_OP_deref_size with bad size");
+      }
+      *(++sp) = value;
+      if (log)
+        fprintf(stderr, "sized dereference 0x%" PRIx64 "\n", (uint64_t)value);
+      break;
+
+    case DW_OP_xderef_size:
+    case DW_OP_nop:
+    case DW_OP_push_object_addres:
+    case DW_OP_call2:
+    case DW_OP_call4:
+    case DW_OP_call_ref:
+    default:
+      _LIBUNWIND_ABORT("DWARF opcode not implemented");
+    }
+
+  }
+  if (log)
+    fprintf(stderr, "expression evaluates to 0x%" PRIx64 "\n", (uint64_t)*sp);
+  return *sp;
+}
+
+
+
+} // namespace libunwind
+
+#endif // __DWARF_INSTRUCTIONS_HPP__
