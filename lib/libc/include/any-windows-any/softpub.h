@@ -64,4 +64,60 @@ extern "C" {
     PCERT_CHAIN_PARA pChainPara;
     DWORD dwFlags;
     void *pvReserved;
-  } WTD_GENERIC_CHAI
+  } WTD_GENERIC_CHAIN_POLICY_CREATE_INFO,*PWTD_GENERIC_CHAIN_POLICY_CREATE_INFO;
+
+  typedef struct _WTD_GENERIC_CHAIN_POLICY_DATA {
+    __C89_NAMELESS union {
+      DWORD cbStruct;
+      DWORD cbSize;
+    };
+    PWTD_GENERIC_CHAIN_POLICY_CREATE_INFO pSignerChainInfo;
+    PWTD_GENERIC_CHAIN_POLICY_CREATE_INFO pCounterSignerChainInfo;
+    PFN_WTD_GENERIC_CHAIN_POLICY_CALLBACK pfnPolicyCallback;
+    void *pvPolicyArg;
+  } WTD_GENERIC_CHAIN_POLICY_DATA,*PWTD_GENERIC_CHAIN_POLICY_DATA;
+
+#define HTTPSPROV_ACTION { 0x573e31f8,0xaaba,0x11d0,{ 0x8c,0xcb,0x0,0xc0,0x4f,0xc2,0x95,0xee } }
+
+#define HTTPS_FINALPOLICY_FUNCTION L"HTTPSFinalProv"
+#define HTTPS_CHKCERT_FUNCTION L"HTTPSCheckCertProv"
+#define HTTPS_CERTTRUST_FUNCTION L"HTTPSCertificateTrust"
+
+#define OFFICESIGN_ACTION_VERIFY { 0x5555c2cd,0x17fb,0x11d1,{ 0x85,0xc4,0x0,0xc0,0x4f,0xc2,0x95,0xee } }
+
+#define OFFICE_POLICY_PROVIDER_DLL_NAME SP_POLICY_PROVIDER_DLL_NAME
+#define OFFICE_INITPROV_FUNCTION L"OfficeInitializePolicy"
+#define OFFICE_CLEANUPPOLICY_FUNCTION L"OfficeCleanupPolicy"
+
+#define DRIVER_ACTION_VERIFY { 0xf750e6c3,0x38ee,0x11d1,{ 0x85,0xe5,0x0,0xc0,0x4f,0xc2,0x95,0xee } }
+
+#define DRIVER_INITPROV_FUNCTION L"DriverInitializePolicy"
+#define DRIVER_FINALPOLPROV_FUNCTION L"DriverFinalPolicy"
+#define DRIVER_CLEANUPPOLICY_FUNCTION L"DriverCleanupPolicy"
+
+  typedef struct DRIVER_VER_MAJORMINOR_ {
+    DWORD dwMajor;
+    DWORD dwMinor;
+  } DRIVER_VER_MAJORMINOR;
+
+  typedef struct DRIVER_VER_INFO_ {
+    DWORD cbStruct;
+    ULONG_PTR dwReserved1;
+    ULONG_PTR dwReserved2;
+    DWORD dwPlatform;
+    DWORD dwVersion;
+    WCHAR wszVersion[MAX_PATH];
+    WCHAR wszSignedBy[MAX_PATH];
+    PCCERT_CONTEXT pcSignerCertContext;
+    DRIVER_VER_MAJORMINOR sOSVersionLow;
+    DRIVER_VER_MAJORMINOR sOSVersionHigh;
+    DWORD dwBuildNumberLow;
+    DWORD dwBuildNumberHigh;
+  } DRIVER_VER_INFO,*PDRIVER_VER_INFO;
+
+#include <poppack.h>
+
+#ifdef __cplusplus
+}
+#endif
+#endif
