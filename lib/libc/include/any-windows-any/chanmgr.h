@@ -135,3 +135,69 @@ extern "C"{
 #endif
 
 #ifndef __IEnumChannels_INTERFACE_DEFINED__
+#define __IEnumChannels_INTERFACE_DEFINED__
+  typedef enum _tagSubcriptionState {
+    SUBSTATE_NOTSUBSCRIBED = 0,SUBSTATE_PARTIALSUBSCRIPTION,SUBSTATE_FULLSUBSCRIPTION
+  } SUBSCRIPTIONSTATE;
+
+  typedef struct _tagChannelInfo {
+    LPOLESTR pszTitle;
+    LPOLESTR pszPath;
+    LPOLESTR pszURL;
+    SUBSCRIPTIONSTATE stSubscriptionState;
+  } CHANNELENUMINFO;
+
+  EXTERN_C const IID IID_IEnumChannels;
+#if defined(__cplusplus) && !defined(CINTERFACE)
+  struct IEnumChannels : public IUnknown {
+  public:
+    virtual HRESULT WINAPI Next(ULONG celt,CHANNELENUMINFO *rgChanInf,ULONG *pceltFetched) = 0;
+    virtual HRESULT WINAPI Skip(ULONG celt) = 0;
+    virtual HRESULT WINAPI Reset(void) = 0;
+    virtual HRESULT WINAPI Clone(IEnumChannels **ppenum) = 0;
+  };
+#else
+  typedef struct IEnumChannelsVtbl {
+    BEGIN_INTERFACE
+      HRESULT (WINAPI *QueryInterface)(IEnumChannels *This,REFIID riid,void **ppvObject);
+      ULONG (WINAPI *AddRef)(IEnumChannels *This);
+      ULONG (WINAPI *Release)(IEnumChannels *This);
+      HRESULT (WINAPI *Next)(IEnumChannels *This,ULONG celt,CHANNELENUMINFO *rgChanInf,ULONG *pceltFetched);
+      HRESULT (WINAPI *Skip)(IEnumChannels *This,ULONG celt);
+      HRESULT (WINAPI *Reset)(IEnumChannels *This);
+      HRESULT (WINAPI *Clone)(IEnumChannels *This,IEnumChannels **ppenum);
+    END_INTERFACE
+  } IEnumChannelsVtbl;
+  struct IEnumChannels {
+    CONST_VTBL struct IEnumChannelsVtbl *lpVtbl;
+  };
+#ifdef COBJMACROS
+#define IEnumChannels_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IEnumChannels_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IEnumChannels_Release(This) (This)->lpVtbl->Release(This)
+#define IEnumChannels_Next(This,celt,rgChanInf,pceltFetched) (This)->lpVtbl->Next(This,celt,rgChanInf,pceltFetched)
+#define IEnumChannels_Skip(This,celt) (This)->lpVtbl->Skip(This,celt)
+#define IEnumChannels_Reset(This) (This)->lpVtbl->Reset(This)
+#define IEnumChannels_Clone(This,ppenum) (This)->lpVtbl->Clone(This,ppenum)
+#endif
+#endif
+  HRESULT WINAPI IEnumChannels_Next_Proxy(IEnumChannels *This,ULONG celt,CHANNELENUMINFO *rgChanInf,ULONG *pceltFetched);
+  void __RPC_STUB IEnumChannels_Next_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IEnumChannels_Skip_Proxy(IEnumChannels *This,ULONG celt);
+  void __RPC_STUB IEnumChannels_Skip_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IEnumChannels_Reset_Proxy(IEnumChannels *This);
+  void __RPC_STUB IEnumChannels_Reset_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+  HRESULT WINAPI IEnumChannels_Clone_Proxy(IEnumChannels *This,IEnumChannels **ppenum);
+  void __RPC_STUB IEnumChannels_Clone_Stub(IRpcStubBuffer *This,IRpcChannelBuffer *_pRpcChannelBuffer,PRPC_MESSAGE _pRpcMessage,DWORD *_pdwStubPhase);
+#endif
+
+  EXTERN_C const CLSID CLSID_ChannelMgr;
+#ifdef __cplusplus
+  class ChannelMgr;
+#endif
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+#endif
