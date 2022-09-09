@@ -8,4 +8,318 @@
 #include <rpcndr.h>
 #endif
 
-#if
+#ifndef COM_NO_WINDOWS_H
+#include <windows.h>
+#include <ole2.h>
+#endif
+
+#ifndef __qedit_h__
+#define __qedit_h__
+
+/* Forward declarations */
+
+#ifndef __ISampleGrabberCB_FWD_DEFINED__
+#define __ISampleGrabberCB_FWD_DEFINED__
+typedef interface ISampleGrabberCB ISampleGrabberCB;
+#ifdef __cplusplus
+interface ISampleGrabberCB;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ISampleGrabber_FWD_DEFINED__
+#define __ISampleGrabber_FWD_DEFINED__
+typedef interface ISampleGrabber ISampleGrabber;
+#ifdef __cplusplus
+interface ISampleGrabber;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IMediaDet_FWD_DEFINED__
+#define __IMediaDet_FWD_DEFINED__
+typedef interface IMediaDet IMediaDet;
+#ifdef __cplusplus
+interface IMediaDet;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __MediaDet_FWD_DEFINED__
+#define __MediaDet_FWD_DEFINED__
+#ifdef __cplusplus
+typedef class MediaDet MediaDet;
+#else
+typedef struct MediaDet MediaDet;
+#endif /* defined __cplusplus */
+#endif /* defined __MediaDet_FWD_DEFINED__ */
+
+#ifndef __IMediaLocator_FWD_DEFINED__
+#define __IMediaLocator_FWD_DEFINED__
+typedef interface IMediaLocator IMediaLocator;
+#ifdef __cplusplus
+interface IMediaLocator;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IPropertySetter_FWD_DEFINED__
+#define __IPropertySetter_FWD_DEFINED__
+typedef interface IPropertySetter IPropertySetter;
+#ifdef __cplusplus
+interface IPropertySetter;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IAMErrorLog_FWD_DEFINED__
+#define __IAMErrorLog_FWD_DEFINED__
+typedef interface IAMErrorLog IAMErrorLog;
+#ifdef __cplusplus
+interface IAMErrorLog;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IAMSetErrorLog_FWD_DEFINED__
+#define __IAMSetErrorLog_FWD_DEFINED__
+typedef interface IAMSetErrorLog IAMSetErrorLog;
+#ifdef __cplusplus
+interface IAMSetErrorLog;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IAMTimeline_FWD_DEFINED__
+#define __IAMTimeline_FWD_DEFINED__
+typedef interface IAMTimeline IAMTimeline;
+#ifdef __cplusplus
+interface IAMTimeline;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __AMTimeline_FWD_DEFINED__
+#define __AMTimeline_FWD_DEFINED__
+#ifdef __cplusplus
+typedef class AMTimeline AMTimeline;
+#else
+typedef struct AMTimeline AMTimeline;
+#endif /* defined __cplusplus */
+#endif /* defined __AMTimeline_FWD_DEFINED__ */
+
+#ifndef __IAMTimelineGroup_FWD_DEFINED__
+#define __IAMTimelineGroup_FWD_DEFINED__
+typedef interface IAMTimelineGroup IAMTimelineGroup;
+#ifdef __cplusplus
+interface IAMTimelineGroup;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IAMTimelineObj_FWD_DEFINED__
+#define __IAMTimelineObj_FWD_DEFINED__
+typedef interface IAMTimelineObj IAMTimelineObj;
+#ifdef __cplusplus
+interface IAMTimelineObj;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IAMTimelineSrc_FWD_DEFINED__
+#define __IAMTimelineSrc_FWD_DEFINED__
+typedef interface IAMTimelineSrc IAMTimelineSrc;
+#ifdef __cplusplus
+interface IAMTimelineSrc;
+#endif /* __cplusplus */
+#endif
+
+/* Headers for imported files */
+
+#include <oaidl.h>
+#include <ocidl.h>
+#include <amstream.h>
+#include <msxml.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*****************************************************************************
+ * ISampleGrabberCB interface
+ */
+#ifndef __ISampleGrabberCB_INTERFACE_DEFINED__
+#define __ISampleGrabberCB_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISampleGrabberCB, 0x0579154a, 0x2b53, 0x4994, 0xb0,0xd0, 0xe7,0x73,0x14,0x8e,0xff,0x85);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("0579154a-2b53-4994-b0d0-e773148eff85")
+ISampleGrabberCB : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SampleCB(
+        double SampleTime,
+        IMediaSample *pSample) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE BufferCB(
+        double SampleTime,
+        BYTE *pBuffer,
+        LONG BufferLen) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISampleGrabberCB, 0x0579154a, 0x2b53, 0x4994, 0xb0,0xd0, 0xe7,0x73,0x14,0x8e,0xff,0x85)
+#endif
+#else
+typedef struct ISampleGrabberCBVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISampleGrabberCB *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISampleGrabberCB *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISampleGrabberCB *This);
+
+    /*** ISampleGrabberCB methods ***/
+    HRESULT (STDMETHODCALLTYPE *SampleCB)(
+        ISampleGrabberCB *This,
+        double SampleTime,
+        IMediaSample *pSample);
+
+    HRESULT (STDMETHODCALLTYPE *BufferCB)(
+        ISampleGrabberCB *This,
+        double SampleTime,
+        BYTE *pBuffer,
+        LONG BufferLen);
+
+    END_INTERFACE
+} ISampleGrabberCBVtbl;
+
+interface ISampleGrabberCB {
+    CONST_VTBL ISampleGrabberCBVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISampleGrabberCB_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISampleGrabberCB_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISampleGrabberCB_Release(This) (This)->lpVtbl->Release(This)
+/*** ISampleGrabberCB methods ***/
+#define ISampleGrabberCB_SampleCB(This,SampleTime,pSample) (This)->lpVtbl->SampleCB(This,SampleTime,pSample)
+#define ISampleGrabberCB_BufferCB(This,SampleTime,pBuffer,BufferLen) (This)->lpVtbl->BufferCB(This,SampleTime,pBuffer,BufferLen)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISampleGrabberCB_QueryInterface(ISampleGrabberCB* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISampleGrabberCB_AddRef(ISampleGrabberCB* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISampleGrabberCB_Release(ISampleGrabberCB* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ISampleGrabberCB methods ***/
+static FORCEINLINE HRESULT ISampleGrabberCB_SampleCB(ISampleGrabberCB* This,double SampleTime,IMediaSample *pSample) {
+    return This->lpVtbl->SampleCB(This,SampleTime,pSample);
+}
+static FORCEINLINE HRESULT ISampleGrabberCB_BufferCB(ISampleGrabberCB* This,double SampleTime,BYTE *pBuffer,LONG BufferLen) {
+    return This->lpVtbl->BufferCB(This,SampleTime,pBuffer,BufferLen);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISampleGrabberCB_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * ISampleGrabber interface
+ */
+#ifndef __ISampleGrabber_INTERFACE_DEFINED__
+#define __ISampleGrabber_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_ISampleGrabber, 0x6b652fff, 0x11fe, 0x4fce, 0x92,0xad, 0x02,0x66,0xb5,0xd7,0xc7,0x8f);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("6b652fff-11fe-4fce-92ad-0266b5d7c78f")
+ISampleGrabber : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetOneShot(
+        WINBOOL OneShot) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaType(
+        const AM_MEDIA_TYPE *pType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType(
+        AM_MEDIA_TYPE *pType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetBufferSamples(
+        WINBOOL BufferThem) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer(
+        LONG *pBufferSize,
+        LONG *pBuffer) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentSample(
+        IMediaSample **ppSample) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetCallback(
+        ISampleGrabberCB *pCallback,
+        LONG WhichMethodToCallback) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(ISampleGrabber, 0x6b652fff, 0x11fe, 0x4fce, 0x92,0xad, 0x02,0x66,0xb5,0xd7,0xc7,0x8f)
+#endif
+#else
+typedef struct ISampleGrabberVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        ISampleGrabber *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ISampleGrabber *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ISampleGrabber *This);
+
+    /*** ISampleGrabber methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetOneShot)(
+        ISampleGrabber *This,
+        WINBOOL OneShot);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaType)(
+        ISampleGrabber *This,
+        const AM_MEDIA_TYPE *pType);
+
+    HRESULT (STDMETHODCALLTYPE *GetConnectedMediaType)(
+        ISampleGrabber *This,
+        AM_MEDIA_TYPE *pType);
+
+    HRESULT (STDMETHODCALLTYPE *SetBufferSamples)(
+        ISampleGrabber *This,
+        WINBOOL BufferThem);
+
+    HRESULT (STDMETHODCALLTYPE *GetCurrentBuffer)(
+        ISampleGrabber *This,
+        LONG *pBufferSize,
+        LONG *pBuffer);
+
+    HRESULT (STDMETHODCALLTYPE *GetCurrentSample)(
+        ISampleGrabber *This,
+        IMediaSample **ppSample);
+
+    HRESULT (STDMETHODCALLTYPE *SetCallback)(
+        ISampleGrabber *This,
+        ISampleGrabberCB *pCallback,
+        LONG WhichMethodToCallback);
+
+    END_INTERFACE
+} ISampleGrabberVtbl;
+
+interface ISampleGrabber {
+    CONST_VTBL ISampleGrabberVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef
