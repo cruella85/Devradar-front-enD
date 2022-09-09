@@ -322,4 +322,244 @@ interface ISampleGrabber {
 };
 
 #ifdef COBJMACROS
-#ifndef
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ISampleGrabber_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ISampleGrabber_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ISampleGrabber_Release(This) (This)->lpVtbl->Release(This)
+/*** ISampleGrabber methods ***/
+#define ISampleGrabber_SetOneShot(This,OneShot) (This)->lpVtbl->SetOneShot(This,OneShot)
+#define ISampleGrabber_SetMediaType(This,pType) (This)->lpVtbl->SetMediaType(This,pType)
+#define ISampleGrabber_GetConnectedMediaType(This,pType) (This)->lpVtbl->GetConnectedMediaType(This,pType)
+#define ISampleGrabber_SetBufferSamples(This,BufferThem) (This)->lpVtbl->SetBufferSamples(This,BufferThem)
+#define ISampleGrabber_GetCurrentBuffer(This,pBufferSize,pBuffer) (This)->lpVtbl->GetCurrentBuffer(This,pBufferSize,pBuffer)
+#define ISampleGrabber_GetCurrentSample(This,ppSample) (This)->lpVtbl->GetCurrentSample(This,ppSample)
+#define ISampleGrabber_SetCallback(This,pCallback,WhichMethodToCallback) (This)->lpVtbl->SetCallback(This,pCallback,WhichMethodToCallback)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ISampleGrabber_QueryInterface(ISampleGrabber* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ISampleGrabber_AddRef(ISampleGrabber* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ISampleGrabber_Release(ISampleGrabber* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ISampleGrabber methods ***/
+static FORCEINLINE HRESULT ISampleGrabber_SetOneShot(ISampleGrabber* This,WINBOOL OneShot) {
+    return This->lpVtbl->SetOneShot(This,OneShot);
+}
+static FORCEINLINE HRESULT ISampleGrabber_SetMediaType(ISampleGrabber* This,const AM_MEDIA_TYPE *pType) {
+    return This->lpVtbl->SetMediaType(This,pType);
+}
+static FORCEINLINE HRESULT ISampleGrabber_GetConnectedMediaType(ISampleGrabber* This,AM_MEDIA_TYPE *pType) {
+    return This->lpVtbl->GetConnectedMediaType(This,pType);
+}
+static FORCEINLINE HRESULT ISampleGrabber_SetBufferSamples(ISampleGrabber* This,WINBOOL BufferThem) {
+    return This->lpVtbl->SetBufferSamples(This,BufferThem);
+}
+static FORCEINLINE HRESULT ISampleGrabber_GetCurrentBuffer(ISampleGrabber* This,LONG *pBufferSize,LONG *pBuffer) {
+    return This->lpVtbl->GetCurrentBuffer(This,pBufferSize,pBuffer);
+}
+static FORCEINLINE HRESULT ISampleGrabber_GetCurrentSample(ISampleGrabber* This,IMediaSample **ppSample) {
+    return This->lpVtbl->GetCurrentSample(This,ppSample);
+}
+static FORCEINLINE HRESULT ISampleGrabber_SetCallback(ISampleGrabber* This,ISampleGrabberCB *pCallback,LONG WhichMethodToCallback) {
+    return This->lpVtbl->SetCallback(This,pCallback,WhichMethodToCallback);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ISampleGrabber_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IMediaDet interface
+ */
+#ifndef __IMediaDet_INTERFACE_DEFINED__
+#define __IMediaDet_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IMediaDet, 0x65bd0710, 0x24d2, 0x4ff7, 0x93,0x24, 0xed,0x2e,0x5d,0x3a,0xba,0xfa);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("65bd0710-24d2-4ff7-9324-ed2e5d3abafa")
+IMediaDet : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE get_Filter(
+        IUnknown **pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_Filter(
+        IUnknown *newVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_OutputStreams(
+        LONG *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_CurrentStream(
+        LONG *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_CurrentStream(
+        LONG newVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_StreamType(
+        GUID *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_StreamTypeB(
+        BSTR *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_StreamLength(
+        double *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_Filename(
+        BSTR *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_Filename(
+        BSTR newVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetBitmapBits(
+        double StreamTime,
+        LONG *pBufferSize,
+        char *pBuffer,
+        LONG Width,
+        LONG Height) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE WriteBitmapBits(
+        double StreamTime,
+        LONG Width,
+        LONG Height,
+        BSTR Filename) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_StreamMediaType(
+        AM_MEDIA_TYPE *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSampleGrabber(
+        ISampleGrabber **ppVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE get_FrameRate(
+        double *pVal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE EnterBitmapGrabMode(
+        double SeekTime) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IMediaDet, 0x65bd0710, 0x24d2, 0x4ff7, 0x93,0x24, 0xed,0x2e,0x5d,0x3a,0xba,0xfa)
+#endif
+#else
+typedef struct IMediaDetVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IMediaDet *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IMediaDet *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IMediaDet *This);
+
+    /*** IMediaDet methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_Filter)(
+        IMediaDet *This,
+        IUnknown **pVal);
+
+    HRESULT (STDMETHODCALLTYPE *put_Filter)(
+        IMediaDet *This,
+        IUnknown *newVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_OutputStreams)(
+        IMediaDet *This,
+        LONG *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_CurrentStream)(
+        IMediaDet *This,
+        LONG *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *put_CurrentStream)(
+        IMediaDet *This,
+        LONG newVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_StreamType)(
+        IMediaDet *This,
+        GUID *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_StreamTypeB)(
+        IMediaDet *This,
+        BSTR *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_StreamLength)(
+        IMediaDet *This,
+        double *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_Filename)(
+        IMediaDet *This,
+        BSTR *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *put_Filename)(
+        IMediaDet *This,
+        BSTR newVal);
+
+    HRESULT (STDMETHODCALLTYPE *GetBitmapBits)(
+        IMediaDet *This,
+        double StreamTime,
+        LONG *pBufferSize,
+        char *pBuffer,
+        LONG Width,
+        LONG Height);
+
+    HRESULT (STDMETHODCALLTYPE *WriteBitmapBits)(
+        IMediaDet *This,
+        double StreamTime,
+        LONG Width,
+        LONG Height,
+        BSTR Filename);
+
+    HRESULT (STDMETHODCALLTYPE *get_StreamMediaType)(
+        IMediaDet *This,
+        AM_MEDIA_TYPE *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *GetSampleGrabber)(
+        IMediaDet *This,
+        ISampleGrabber **ppVal);
+
+    HRESULT (STDMETHODCALLTYPE *get_FrameRate)(
+        IMediaDet *This,
+        double *pVal);
+
+    HRESULT (STDMETHODCALLTYPE *EnterBitmapGrabMode)(
+        IMediaDet *This,
+        double SeekTime);
+
+    END_INTERFACE
+} IMediaDetVtbl;
+
+interface IMediaDet {
+    CONST_VTBL IMediaDetVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IMediaDet_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMediaDet_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMediaDet_Release(This) (This)->lpVtbl->Release(This)
+/*** IMediaDet methods ***/
+#define IMediaDet_get_Filter(This,pVal) (This)->lpVtbl->get_Filter(This,pVal)
+#define IMediaDet_put_Filter(This,newVal) (This)->lpVtbl->put_Filter(This,newVal)
+#define IMediaDet_get_OutputStreams(This,pVal) (This)->lpVtbl->get_OutputStreams(This,pVal)
+#define IMediaDet_get_CurrentStream(This,pVal) (This)->lpVtbl->get_CurrentStream(This,pVal)
+#define IMediaDet_put_CurrentStream(This,newVal) (This)->lpVtbl->put_CurrentStream(This,newVal)
+#define IMediaDet_get_StreamType(This,pVal) (This)->lpVtbl->get_StreamType(This,pVal)
+#define IMediaDet_get_StreamTypeB(This,pVal) (This)->lpVtbl->get_StreamTypeB(This,pVal)
+#define IMediaDet_get_StreamLength(This,pVal) (This)->lpVtbl->get_StreamLength(This,pVal)
+#define IMediaDet_get_Filename(This,pVal) (This)->lpVtbl->get_Filename(This,pVal)
+#define IMediaDet_put_Filename(This,newVal) (This)->lpVtbl->put_Filename(This,newVal)
+#define IMediaDet_GetBitmapBits(This,StreamTime,pBufferSize,pBuffer,Width,Height) (This)->lpVtbl->GetBitmapBits(This,StreamTime,pBufferSize,pBuffer,Width,Height)
+#define IMediaDet_WriteBitmapBits(This,StreamTime,Width,Height,Filename) (This)->lpVtbl->WriteBitmapBits(This,StreamTime,Width,Height,Filename)
+#define IMediaDet_get_StreamMediaType(This,pVal) (This)->lpVtbl->get_StreamMediaType(This,pVal)
+#define IMediaDet_GetSampleGrabber(This,ppVal) (This)->lpVtbl->GetSampleGrabber(This,ppVal)
+#define IMediaDet_get_FrameRa
