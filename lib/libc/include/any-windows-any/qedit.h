@@ -821,3 +821,256 @@ typedef struct IPropertySetterVtbl {
         IPropertySetter *This);
 
     ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertySetter *This);
+
+    /*** IPropertySetter methods ***/
+    HRESULT (STDMETHODCALLTYPE *LoadXML)(
+        IPropertySetter *This,
+        IUnknown *pxml);
+
+    HRESULT (STDMETHODCALLTYPE *PrintXML)(
+        IPropertySetter *This,
+        char *xml,
+        int size,
+        int *printed,
+        int indent);
+
+    HRESULT (STDMETHODCALLTYPE *CloneProps)(
+        IPropertySetter *This,
+        IPropertySetter **setter,
+        REFERENCE_TIME start,
+        REFERENCE_TIME stop);
+
+    HRESULT (STDMETHODCALLTYPE *AddProp)(
+        IPropertySetter *This,
+        DEXTER_PARAM param,
+        DEXTER_VALUE *value);
+
+    HRESULT (STDMETHODCALLTYPE *GetProps)(
+        IPropertySetter *This,
+        LONG *params,
+        DEXTER_PARAM **param,
+        DEXTER_VALUE **value);
+
+    HRESULT (STDMETHODCALLTYPE *FreeProps)(
+        IPropertySetter *This,
+        LONG params,
+        DEXTER_PARAM *param,
+        DEXTER_VALUE *value);
+
+    HRESULT (STDMETHODCALLTYPE *ClearProps)(
+        IPropertySetter *This);
+
+    HRESULT (STDMETHODCALLTYPE *SaveToBlob)(
+        IPropertySetter *This,
+        LONG *size,
+        BYTE **blob);
+
+    HRESULT (STDMETHODCALLTYPE *LoadFromBlob)(
+        IPropertySetter *This,
+        LONG size,
+        BYTE *blob);
+
+    HRESULT (STDMETHODCALLTYPE *SetProps)(
+        IPropertySetter *This,
+        IUnknown *target,
+        REFERENCE_TIME now);
+
+    END_INTERFACE
+} IPropertySetterVtbl;
+
+interface IPropertySetter {
+    CONST_VTBL IPropertySetterVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertySetter_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertySetter_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertySetter_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertySetter methods ***/
+#define IPropertySetter_LoadXML(This,pxml) (This)->lpVtbl->LoadXML(This,pxml)
+#define IPropertySetter_PrintXML(This,xml,size,printed,indent) (This)->lpVtbl->PrintXML(This,xml,size,printed,indent)
+#define IPropertySetter_CloneProps(This,setter,start,stop) (This)->lpVtbl->CloneProps(This,setter,start,stop)
+#define IPropertySetter_AddProp(This,param,value) (This)->lpVtbl->AddProp(This,param,value)
+#define IPropertySetter_GetProps(This,params,param,value) (This)->lpVtbl->GetProps(This,params,param,value)
+#define IPropertySetter_FreeProps(This,params,param,value) (This)->lpVtbl->FreeProps(This,params,param,value)
+#define IPropertySetter_ClearProps(This) (This)->lpVtbl->ClearProps(This)
+#define IPropertySetter_SaveToBlob(This,size,blob) (This)->lpVtbl->SaveToBlob(This,size,blob)
+#define IPropertySetter_LoadFromBlob(This,size,blob) (This)->lpVtbl->LoadFromBlob(This,size,blob)
+#define IPropertySetter_SetProps(This,target,now) (This)->lpVtbl->SetProps(This,target,now)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertySetter_QueryInterface(IPropertySetter* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertySetter_AddRef(IPropertySetter* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertySetter_Release(IPropertySetter* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertySetter methods ***/
+static FORCEINLINE HRESULT IPropertySetter_LoadXML(IPropertySetter* This,IUnknown *pxml) {
+    return This->lpVtbl->LoadXML(This,pxml);
+}
+static FORCEINLINE HRESULT IPropertySetter_PrintXML(IPropertySetter* This,char *xml,int size,int *printed,int indent) {
+    return This->lpVtbl->PrintXML(This,xml,size,printed,indent);
+}
+static FORCEINLINE HRESULT IPropertySetter_CloneProps(IPropertySetter* This,IPropertySetter **setter,REFERENCE_TIME start,REFERENCE_TIME stop) {
+    return This->lpVtbl->CloneProps(This,setter,start,stop);
+}
+static FORCEINLINE HRESULT IPropertySetter_AddProp(IPropertySetter* This,DEXTER_PARAM param,DEXTER_VALUE *value) {
+    return This->lpVtbl->AddProp(This,param,value);
+}
+static FORCEINLINE HRESULT IPropertySetter_GetProps(IPropertySetter* This,LONG *params,DEXTER_PARAM **param,DEXTER_VALUE **value) {
+    return This->lpVtbl->GetProps(This,params,param,value);
+}
+static FORCEINLINE HRESULT IPropertySetter_FreeProps(IPropertySetter* This,LONG params,DEXTER_PARAM *param,DEXTER_VALUE *value) {
+    return This->lpVtbl->FreeProps(This,params,param,value);
+}
+static FORCEINLINE HRESULT IPropertySetter_ClearProps(IPropertySetter* This) {
+    return This->lpVtbl->ClearProps(This);
+}
+static FORCEINLINE HRESULT IPropertySetter_SaveToBlob(IPropertySetter* This,LONG *size,BYTE **blob) {
+    return This->lpVtbl->SaveToBlob(This,size,blob);
+}
+static FORCEINLINE HRESULT IPropertySetter_LoadFromBlob(IPropertySetter* This,LONG size,BYTE *blob) {
+    return This->lpVtbl->LoadFromBlob(This,size,blob);
+}
+static FORCEINLINE HRESULT IPropertySetter_SetProps(IPropertySetter* This,IUnknown *target,REFERENCE_TIME now) {
+    return This->lpVtbl->SetProps(This,target,now);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertySetter_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IAMErrorLog interface
+ */
+#ifndef __IAMErrorLog_INTERFACE_DEFINED__
+#define __IAMErrorLog_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAMErrorLog, 0xe43e73a2, 0x0efa, 0x11d3, 0x96,0x01, 0x00,0xa0,0xc9,0x44,0x1e,0x20);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("e43e73a2-0efa-11d3-9601-00a0c9441e20")
+IAMErrorLog : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE LogError(
+        LONG severity,
+        BSTR error_str,
+        LONG error_code,
+        LONG hresult,
+        VARIANT *extra) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAMErrorLog, 0xe43e73a2, 0x0efa, 0x11d3, 0x96,0x01, 0x00,0xa0,0xc9,0x44,0x1e,0x20)
+#endif
+#else
+typedef struct IAMErrorLogVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAMErrorLog *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAMErrorLog *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAMErrorLog *This);
+
+    /*** IAMErrorLog methods ***/
+    HRESULT (STDMETHODCALLTYPE *LogError)(
+        IAMErrorLog *This,
+        LONG severity,
+        BSTR error_str,
+        LONG error_code,
+        LONG hresult,
+        VARIANT *extra);
+
+    END_INTERFACE
+} IAMErrorLogVtbl;
+
+interface IAMErrorLog {
+    CONST_VTBL IAMErrorLogVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAMErrorLog_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAMErrorLog_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAMErrorLog_Release(This) (This)->lpVtbl->Release(This)
+/*** IAMErrorLog methods ***/
+#define IAMErrorLog_LogError(This,severity,error_str,error_code,hresult,extra) (This)->lpVtbl->LogError(This,severity,error_str,error_code,hresult,extra)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAMErrorLog_QueryInterface(IAMErrorLog* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAMErrorLog_AddRef(IAMErrorLog* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAMErrorLog_Release(IAMErrorLog* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAMErrorLog methods ***/
+static FORCEINLINE HRESULT IAMErrorLog_LogError(IAMErrorLog* This,LONG severity,BSTR error_str,LONG error_code,LONG hresult,VARIANT *extra) {
+    return This->lpVtbl->LogError(This,severity,error_str,error_code,hresult,extra);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAMErrorLog_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IAMSetErrorLog interface
+ */
+#ifndef __IAMSetErrorLog_INTERFACE_DEFINED__
+#define __IAMSetErrorLog_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAMSetErrorLog, 0x963566da, 0xbe21, 0x4eaf, 0x88,0xe9, 0x35,0x70,0x4f,0x8f,0x52,0xa1);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("963566da-be21-4eaf-88e9-35704f8f52a1")
+IAMSetErrorLog : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE get_ErrorLog(
+        IAMErrorLog **log) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE put_ErrorLog(
+        IAMErrorLog *log) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAMSetErrorLog, 0x963566da, 0xbe21, 0x4eaf, 0x88,0xe9, 0x35,0x70,0x4f,0x8f,0x52,0xa1)
+#endif
+#else
+typedef struct IAMSetErrorLogVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAMSetErrorLog *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAMSetErrorLog *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAMSetErrorLog *This);
+
+    /*** IAMSetErrorLog methods ***/
+    HRESULT (STDMETHODCALLTYPE *get_ErrorL
