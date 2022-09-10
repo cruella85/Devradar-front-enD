@@ -562,4 +562,262 @@ interface IMediaDet {
 #define IMediaDet_WriteBitmapBits(This,StreamTime,Width,Height,Filename) (This)->lpVtbl->WriteBitmapBits(This,StreamTime,Width,Height,Filename)
 #define IMediaDet_get_StreamMediaType(This,pVal) (This)->lpVtbl->get_StreamMediaType(This,pVal)
 #define IMediaDet_GetSampleGrabber(This,ppVal) (This)->lpVtbl->GetSampleGrabber(This,ppVal)
-#define IMediaDet_get_FrameRa
+#define IMediaDet_get_FrameRate(This,pVal) (This)->lpVtbl->get_FrameRate(This,pVal)
+#define IMediaDet_EnterBitmapGrabMode(This,SeekTime) (This)->lpVtbl->EnterBitmapGrabMode(This,SeekTime)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IMediaDet_QueryInterface(IMediaDet* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IMediaDet_AddRef(IMediaDet* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IMediaDet_Release(IMediaDet* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IMediaDet methods ***/
+static FORCEINLINE HRESULT IMediaDet_get_Filter(IMediaDet* This,IUnknown **pVal) {
+    return This->lpVtbl->get_Filter(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_put_Filter(IMediaDet* This,IUnknown *newVal) {
+    return This->lpVtbl->put_Filter(This,newVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_OutputStreams(IMediaDet* This,LONG *pVal) {
+    return This->lpVtbl->get_OutputStreams(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_CurrentStream(IMediaDet* This,LONG *pVal) {
+    return This->lpVtbl->get_CurrentStream(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_put_CurrentStream(IMediaDet* This,LONG newVal) {
+    return This->lpVtbl->put_CurrentStream(This,newVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_StreamType(IMediaDet* This,GUID *pVal) {
+    return This->lpVtbl->get_StreamType(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_StreamTypeB(IMediaDet* This,BSTR *pVal) {
+    return This->lpVtbl->get_StreamTypeB(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_StreamLength(IMediaDet* This,double *pVal) {
+    return This->lpVtbl->get_StreamLength(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_Filename(IMediaDet* This,BSTR *pVal) {
+    return This->lpVtbl->get_Filename(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_put_Filename(IMediaDet* This,BSTR newVal) {
+    return This->lpVtbl->put_Filename(This,newVal);
+}
+static FORCEINLINE HRESULT IMediaDet_GetBitmapBits(IMediaDet* This,double StreamTime,LONG *pBufferSize,char *pBuffer,LONG Width,LONG Height) {
+    return This->lpVtbl->GetBitmapBits(This,StreamTime,pBufferSize,pBuffer,Width,Height);
+}
+static FORCEINLINE HRESULT IMediaDet_WriteBitmapBits(IMediaDet* This,double StreamTime,LONG Width,LONG Height,BSTR Filename) {
+    return This->lpVtbl->WriteBitmapBits(This,StreamTime,Width,Height,Filename);
+}
+static FORCEINLINE HRESULT IMediaDet_get_StreamMediaType(IMediaDet* This,AM_MEDIA_TYPE *pVal) {
+    return This->lpVtbl->get_StreamMediaType(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_GetSampleGrabber(IMediaDet* This,ISampleGrabber **ppVal) {
+    return This->lpVtbl->GetSampleGrabber(This,ppVal);
+}
+static FORCEINLINE HRESULT IMediaDet_get_FrameRate(IMediaDet* This,double *pVal) {
+    return This->lpVtbl->get_FrameRate(This,pVal);
+}
+static FORCEINLINE HRESULT IMediaDet_EnterBitmapGrabMode(IMediaDet* This,double SeekTime) {
+    return This->lpVtbl->EnterBitmapGrabMode(This,SeekTime);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IMediaDet_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * MediaDet coclass
+ */
+
+DEFINE_GUID(CLSID_MediaDet, 0x65bd0711, 0x24d2, 0x4ff7, 0x93,0x24, 0xed,0x2e,0x5d,0x3a,0xba,0xfa);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("65bd0711-24d2-4ff7-9324-ed2e5d3abafa") MediaDet;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(MediaDet, 0x65bd0711, 0x24d2, 0x4ff7, 0x93,0x24, 0xed,0x2e,0x5d,0x3a,0xba,0xfa)
+#endif
+#endif
+
+/*****************************************************************************
+ * IMediaLocator interface
+ */
+#ifndef __IMediaLocator_INTERFACE_DEFINED__
+#define __IMediaLocator_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IMediaLocator, 0x288581e0, 0x66ce, 0x11d2, 0x91,0x8f, 0x00,0xc0,0xdf,0x10,0xd4,0x34);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("288581e0-66ce-11d2-918f-00c0df10d434")
+IMediaLocator : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE FindMediaFile(
+        BSTR input,
+        BSTR filter,
+        BSTR *output,
+        LONG flags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AddFoundLocation(
+        BSTR dir) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IMediaLocator, 0x288581e0, 0x66ce, 0x11d2, 0x91,0x8f, 0x00,0xc0,0xdf,0x10,0xd4,0x34)
+#endif
+#else
+typedef struct IMediaLocatorVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IMediaLocator *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IMediaLocator *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IMediaLocator *This);
+
+    /*** IMediaLocator methods ***/
+    HRESULT (STDMETHODCALLTYPE *FindMediaFile)(
+        IMediaLocator *This,
+        BSTR input,
+        BSTR filter,
+        BSTR *output,
+        LONG flags);
+
+    HRESULT (STDMETHODCALLTYPE *AddFoundLocation)(
+        IMediaLocator *This,
+        BSTR dir);
+
+    END_INTERFACE
+} IMediaLocatorVtbl;
+
+interface IMediaLocator {
+    CONST_VTBL IMediaLocatorVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IMediaLocator_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IMediaLocator_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IMediaLocator_Release(This) (This)->lpVtbl->Release(This)
+/*** IMediaLocator methods ***/
+#define IMediaLocator_FindMediaFile(This,input,filter,output,flags) (This)->lpVtbl->FindMediaFile(This,input,filter,output,flags)
+#define IMediaLocator_AddFoundLocation(This,dir) (This)->lpVtbl->AddFoundLocation(This,dir)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IMediaLocator_QueryInterface(IMediaLocator* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IMediaLocator_AddRef(IMediaLocator* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IMediaLocator_Release(IMediaLocator* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IMediaLocator methods ***/
+static FORCEINLINE HRESULT IMediaLocator_FindMediaFile(IMediaLocator* This,BSTR input,BSTR filter,BSTR *output,LONG flags) {
+    return This->lpVtbl->FindMediaFile(This,input,filter,output,flags);
+}
+static FORCEINLINE HRESULT IMediaLocator_AddFoundLocation(IMediaLocator* This,BSTR dir) {
+    return This->lpVtbl->AddFoundLocation(This,dir);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IMediaLocator_INTERFACE_DEFINED__ */
+
+typedef struct __WIDL_qedit_generated_name_0000002B {
+    BSTR name;
+    DISPID dispID;
+    LONG nValues;
+} DEXTER_PARAM;
+typedef struct __WIDL_qedit_generated_name_0000002C {
+    VARIANT v;
+    REFERENCE_TIME rt;
+    DWORD dwInterp;
+} DEXTER_VALUE;
+/*****************************************************************************
+ * IPropertySetter interface
+ */
+#ifndef __IPropertySetter_INTERFACE_DEFINED__
+#define __IPropertySetter_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertySetter, 0xae9472bd, 0xb0c3, 0x11d2, 0x8d,0x24, 0x00,0xa0,0xc9,0x44,0x1e,0x20);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("ae9472bd-b0c3-11d2-8d24-00a0c9441e20")
+IPropertySetter : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE LoadXML(
+        IUnknown *pxml) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE PrintXML(
+        char *xml,
+        int size,
+        int *printed,
+        int indent) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CloneProps(
+        IPropertySetter **setter,
+        REFERENCE_TIME start,
+        REFERENCE_TIME stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AddProp(
+        DEXTER_PARAM param,
+        DEXTER_VALUE *value) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetProps(
+        LONG *params,
+        DEXTER_PARAM **param,
+        DEXTER_VALUE **value) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FreeProps(
+        LONG params,
+        DEXTER_PARAM *param,
+        DEXTER_VALUE *value) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ClearProps(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SaveToBlob(
+        LONG *size,
+        BYTE **blob) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE LoadFromBlob(
+        LONG size,
+        BYTE *blob) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetProps(
+        IUnknown *target,
+        REFERENCE_TIME now) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertySetter, 0xae9472bd, 0xb0c3, 0x11d2, 0x8d,0x24, 0x00,0xa0,0xc9,0x44,0x1e,0x20)
+#endif
+#else
+typedef struct IPropertySetterVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertySetter *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertySetter *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
