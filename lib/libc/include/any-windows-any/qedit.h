@@ -1379,4 +1379,176 @@ typedef struct IAMTimelineVtbl {
 
     HRESULT (STDMETHODCALLTYPE *ValidateSourceNames)(
         IAMTimeline *This,
-        LONG flags
+        LONG flags,
+        IMediaLocator *override,
+        LONG_PTR notify_event);
+
+    HRESULT (STDMETHODCALLTYPE *SetDefaultTransition)(
+        IAMTimeline *This,
+        GUID *guid);
+
+    HRESULT (STDMETHODCALLTYPE *GetDefaultTransition)(
+        IAMTimeline *This,
+        GUID *guid);
+
+    HRESULT (STDMETHODCALLTYPE *SetDefaultEffect)(
+        IAMTimeline *This,
+        GUID *guid);
+
+    HRESULT (STDMETHODCALLTYPE *GetDefaultEffect)(
+        IAMTimeline *This,
+        GUID *guid);
+
+    HRESULT (STDMETHODCALLTYPE *SetDefaultTransitionB)(
+        IAMTimeline *This,
+        BSTR guidb);
+
+    HRESULT (STDMETHODCALLTYPE *GetDefaultTransitionB)(
+        IAMTimeline *This,
+        BSTR *guidb);
+
+    HRESULT (STDMETHODCALLTYPE *SetDefaultEffectB)(
+        IAMTimeline *This,
+        BSTR guidb);
+
+    HRESULT (STDMETHODCALLTYPE *GetDefaultEffectB)(
+        IAMTimeline *This,
+        BSTR *guidb);
+
+    END_INTERFACE
+} IAMTimelineVtbl;
+
+interface IAMTimeline {
+    CONST_VTBL IAMTimelineVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAMTimeline_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAMTimeline_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAMTimeline_Release(This) (This)->lpVtbl->Release(This)
+/*** IAMTimeline methods ***/
+#define IAMTimeline_CreateEmptyNode(This,obj,type) (This)->lpVtbl->CreateEmptyNode(This,obj,type)
+#define IAMTimeline_AddGroup(This,group) (This)->lpVtbl->AddGroup(This,group)
+#define IAMTimeline_RemGroupFromList(This,group) (This)->lpVtbl->RemGroupFromList(This,group)
+#define IAMTimeline_GetGroup(This,group,index) (This)->lpVtbl->GetGroup(This,group,index)
+#define IAMTimeline_GetGroupCount(This,count) (This)->lpVtbl->GetGroupCount(This,count)
+#define IAMTimeline_ClearAllGroups(This) (This)->lpVtbl->ClearAllGroups(This)
+#define IAMTimeline_GetInsertMode(This,mode) (This)->lpVtbl->GetInsertMode(This,mode)
+#define IAMTimeline_SetInsertMode(This,mode) (This)->lpVtbl->SetInsertMode(This,mode)
+#define IAMTimeline_EnableTransitions(This,enabled) (This)->lpVtbl->EnableTransitions(This,enabled)
+#define IAMTimeline_TransitionsEnabled(This,enabled) (This)->lpVtbl->TransitionsEnabled(This,enabled)
+#define IAMTimeline_EnableEffects(This,enabled) (This)->lpVtbl->EnableEffects(This,enabled)
+#define IAMTimeline_EffectsEnabled(This,enabled) (This)->lpVtbl->EffectsEnabled(This,enabled)
+#define IAMTimeline_SetInterestRange(This,start,stop) (This)->lpVtbl->SetInterestRange(This,start,stop)
+#define IAMTimeline_GetDuration(This,duration) (This)->lpVtbl->GetDuration(This,duration)
+#define IAMTimeline_GetDuration2(This,duration) (This)->lpVtbl->GetDuration2(This,duration)
+#define IAMTimeline_SetDefaultFPS(This,fps) (This)->lpVtbl->SetDefaultFPS(This,fps)
+#define IAMTimeline_GetDefaultFPS(This,fps) (This)->lpVtbl->GetDefaultFPS(This,fps)
+#define IAMTimeline_IsDirty(This,dirty) (This)->lpVtbl->IsDirty(This,dirty)
+#define IAMTimeline_GetDirtyRange(This,start,stop) (This)->lpVtbl->GetDirtyRange(This,start,stop)
+#define IAMTimeline_GetCountOfType(This,group,value,value_with_comps,type) (This)->lpVtbl->GetCountOfType(This,group,value,value_with_comps,type)
+#define IAMTimeline_ValidateSourceNames(This,flags,override,notify_event) (This)->lpVtbl->ValidateSourceNames(This,flags,override,notify_event)
+#define IAMTimeline_SetDefaultTransition(This,guid) (This)->lpVtbl->SetDefaultTransition(This,guid)
+#define IAMTimeline_GetDefaultTransition(This,guid) (This)->lpVtbl->GetDefaultTransition(This,guid)
+#define IAMTimeline_SetDefaultEffect(This,guid) (This)->lpVtbl->SetDefaultEffect(This,guid)
+#define IAMTimeline_GetDefaultEffect(This,guid) (This)->lpVtbl->GetDefaultEffect(This,guid)
+#define IAMTimeline_SetDefaultTransitionB(This,guidb) (This)->lpVtbl->SetDefaultTransitionB(This,guidb)
+#define IAMTimeline_GetDefaultTransitionB(This,guidb) (This)->lpVtbl->GetDefaultTransitionB(This,guidb)
+#define IAMTimeline_SetDefaultEffectB(This,guidb) (This)->lpVtbl->SetDefaultEffectB(This,guidb)
+#define IAMTimeline_GetDefaultEffectB(This,guidb) (This)->lpVtbl->GetDefaultEffectB(This,guidb)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAMTimeline_QueryInterface(IAMTimeline* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAMTimeline_AddRef(IAMTimeline* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAMTimeline_Release(IAMTimeline* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAMTimeline methods ***/
+static FORCEINLINE HRESULT IAMTimeline_CreateEmptyNode(IAMTimeline* This,IAMTimelineObj **obj,TIMELINE_MAJOR_TYPE type) {
+    return This->lpVtbl->CreateEmptyNode(This,obj,type);
+}
+static FORCEINLINE HRESULT IAMTimeline_AddGroup(IAMTimeline* This,IAMTimelineObj *group) {
+    return This->lpVtbl->AddGroup(This,group);
+}
+static FORCEINLINE HRESULT IAMTimeline_RemGroupFromList(IAMTimeline* This,IAMTimelineObj *group) {
+    return This->lpVtbl->RemGroupFromList(This,group);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetGroup(IAMTimeline* This,IAMTimelineObj **group,LONG index) {
+    return This->lpVtbl->GetGroup(This,group,index);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetGroupCount(IAMTimeline* This,LONG *count) {
+    return This->lpVtbl->GetGroupCount(This,count);
+}
+static FORCEINLINE HRESULT IAMTimeline_ClearAllGroups(IAMTimeline* This) {
+    return This->lpVtbl->ClearAllGroups(This);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetInsertMode(IAMTimeline* This,LONG *mode) {
+    return This->lpVtbl->GetInsertMode(This,mode);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetInsertMode(IAMTimeline* This,LONG mode) {
+    return This->lpVtbl->SetInsertMode(This,mode);
+}
+static FORCEINLINE HRESULT IAMTimeline_EnableTransitions(IAMTimeline* This,WINBOOL enabled) {
+    return This->lpVtbl->EnableTransitions(This,enabled);
+}
+static FORCEINLINE HRESULT IAMTimeline_TransitionsEnabled(IAMTimeline* This,WINBOOL *enabled) {
+    return This->lpVtbl->TransitionsEnabled(This,enabled);
+}
+static FORCEINLINE HRESULT IAMTimeline_EnableEffects(IAMTimeline* This,WINBOOL enabled) {
+    return This->lpVtbl->EnableEffects(This,enabled);
+}
+static FORCEINLINE HRESULT IAMTimeline_EffectsEnabled(IAMTimeline* This,WINBOOL *enabled) {
+    return This->lpVtbl->EffectsEnabled(This,enabled);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetInterestRange(IAMTimeline* This,REFERENCE_TIME start,REFERENCE_TIME stop) {
+    return This->lpVtbl->SetInterestRange(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDuration(IAMTimeline* This,REFERENCE_TIME *duration) {
+    return This->lpVtbl->GetDuration(This,duration);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDuration2(IAMTimeline* This,double *duration) {
+    return This->lpVtbl->GetDuration2(This,duration);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetDefaultFPS(IAMTimeline* This,double fps) {
+    return This->lpVtbl->SetDefaultFPS(This,fps);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDefaultFPS(IAMTimeline* This,double *fps) {
+    return This->lpVtbl->GetDefaultFPS(This,fps);
+}
+static FORCEINLINE HRESULT IAMTimeline_IsDirty(IAMTimeline* This,WINBOOL *dirty) {
+    return This->lpVtbl->IsDirty(This,dirty);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDirtyRange(IAMTimeline* This,REFERENCE_TIME *start,REFERENCE_TIME *stop) {
+    return This->lpVtbl->GetDirtyRange(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetCountOfType(IAMTimeline* This,LONG group,LONG *value,LONG *value_with_comps,TIMELINE_MAJOR_TYPE type) {
+    return This->lpVtbl->GetCountOfType(This,group,value,value_with_comps,type);
+}
+static FORCEINLINE HRESULT IAMTimeline_ValidateSourceNames(IAMTimeline* This,LONG flags,IMediaLocator *override,LONG_PTR notify_event) {
+    return This->lpVtbl->ValidateSourceNames(This,flags,override,notify_event);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetDefaultTransition(IAMTimeline* This,GUID *guid) {
+    return This->lpVtbl->SetDefaultTransition(This,guid);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDefaultTransition(IAMTimeline* This,GUID *guid) {
+    return This->lpVtbl->GetDefaultTransition(This,guid);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetDefaultEffect(IAMTimeline* This,GUID *guid) {
+    return This->lpVtbl->SetDefaultEffect(This,guid);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDefaultEffect(IAMTimeline* This,GUID *guid) {
+    return This->lpVtbl->GetDefaultEffect(This,guid);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetDefaultTransitionB(IAMTimeline* This,BSTR guidb) {
+    return This->lpVtbl->SetDefaultTransitionB(This,guidb);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDefaultTransitionB(IAMTimeline* This,BSTR *guidb) {
+    return This->lpVtbl->GetDefaultTransitionB(This,guidb);
+}
+static FORCEINLINE HRESULT IAMTimeline_SetDefaultEffectB(IAMTimeline* This,BS
