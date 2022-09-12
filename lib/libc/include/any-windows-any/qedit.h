@@ -1551,4 +1551,251 @@ static FORCEINLINE HRESULT IAMTimeline_SetDefaultTransitionB(IAMTimeline* This,B
 static FORCEINLINE HRESULT IAMTimeline_GetDefaultTransitionB(IAMTimeline* This,BSTR *guidb) {
     return This->lpVtbl->GetDefaultTransitionB(This,guidb);
 }
-static FORCEINLINE HRESULT IAMTimeline_SetDefaultEffectB(IAMTimeline* This,BS
+static FORCEINLINE HRESULT IAMTimeline_SetDefaultEffectB(IAMTimeline* This,BSTR guidb) {
+    return This->lpVtbl->SetDefaultEffectB(This,guidb);
+}
+static FORCEINLINE HRESULT IAMTimeline_GetDefaultEffectB(IAMTimeline* This,BSTR *guidb) {
+    return This->lpVtbl->GetDefaultEffectB(This,guidb);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAMTimeline_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * AMTimeline coclass
+ */
+
+DEFINE_GUID(CLSID_AMTimeline, 0x78530b75, 0x61f9, 0x11d2, 0x8c,0xad, 0x00,0xa0,0x24,0x58,0x09,0x02);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("78530b75-61f9-11d2-8cad-00a024580902") AMTimeline;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(AMTimeline, 0x78530b75, 0x61f9, 0x11d2, 0x8c,0xad, 0x00,0xa0,0x24,0x58,0x09,0x02)
+#endif
+#endif
+
+/*****************************************************************************
+ * IAMTimelineGroup interface
+ */
+#ifndef __IAMTimelineGroup_INTERFACE_DEFINED__
+#define __IAMTimelineGroup_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAMTimelineGroup, 0x9eed4f00, 0xb8a6, 0x11d2, 0x80,0x23, 0x00,0xc0,0xdf,0x10,0xd4,0x34);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9eed4f00-b8a6-11d2-8023-00c0df10d434")
+IAMTimelineGroup : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetTimeline(
+        IAMTimeline *timeline) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetTimeline(
+        IAMTimeline **timeline) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPriority(
+        LONG *priority) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMediaType(
+        AM_MEDIA_TYPE *a) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaType(
+        AM_MEDIA_TYPE *a) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetOutputFPS(
+        double fps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOutputFPS(
+        double *fps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetGroupName(
+        BSTR name) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetGroupName(
+        BSTR *name) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetPreviewMode(
+        WINBOOL preview) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPreviewMode(
+        WINBOOL *preview) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaTypeForVB(
+        LONG type) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOutputBuffering(
+        int *buffer) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetOutputBuffering(
+        int buffer) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetSmartRecompressFormat(
+        LONG *format) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSmartRecompressFormat(
+        LONG **format) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IsSmartRecompressFormatSet(
+        WINBOOL *set) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IsRecompressFormatDirty(
+        WINBOOL *dirty) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ClearRecompressFormatDirty(
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetRecompFormatFromSource(
+        IAMTimelineSrc *source) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAMTimelineGroup, 0x9eed4f00, 0xb8a6, 0x11d2, 0x80,0x23, 0x00,0xc0,0xdf,0x10,0xd4,0x34)
+#endif
+#else
+typedef struct IAMTimelineGroupVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAMTimelineGroup *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAMTimelineGroup *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAMTimelineGroup *This);
+
+    /*** IAMTimelineGroup methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetTimeline)(
+        IAMTimelineGroup *This,
+        IAMTimeline *timeline);
+
+    HRESULT (STDMETHODCALLTYPE *GetTimeline)(
+        IAMTimelineGroup *This,
+        IAMTimeline **timeline);
+
+    HRESULT (STDMETHODCALLTYPE *GetPriority)(
+        IAMTimelineGroup *This,
+        LONG *priority);
+
+    HRESULT (STDMETHODCALLTYPE *GetMediaType)(
+        IAMTimelineGroup *This,
+        AM_MEDIA_TYPE *a);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaType)(
+        IAMTimelineGroup *This,
+        AM_MEDIA_TYPE *a);
+
+    HRESULT (STDMETHODCALLTYPE *SetOutputFPS)(
+        IAMTimelineGroup *This,
+        double fps);
+
+    HRESULT (STDMETHODCALLTYPE *GetOutputFPS)(
+        IAMTimelineGroup *This,
+        double *fps);
+
+    HRESULT (STDMETHODCALLTYPE *SetGroupName)(
+        IAMTimelineGroup *This,
+        BSTR name);
+
+    HRESULT (STDMETHODCALLTYPE *GetGroupName)(
+        IAMTimelineGroup *This,
+        BSTR *name);
+
+    HRESULT (STDMETHODCALLTYPE *SetPreviewMode)(
+        IAMTimelineGroup *This,
+        WINBOOL preview);
+
+    HRESULT (STDMETHODCALLTYPE *GetPreviewMode)(
+        IAMTimelineGroup *This,
+        WINBOOL *preview);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaTypeForVB)(
+        IAMTimelineGroup *This,
+        LONG type);
+
+    HRESULT (STDMETHODCALLTYPE *GetOutputBuffering)(
+        IAMTimelineGroup *This,
+        int *buffer);
+
+    HRESULT (STDMETHODCALLTYPE *SetOutputBuffering)(
+        IAMTimelineGroup *This,
+        int buffer);
+
+    HRESULT (STDMETHODCALLTYPE *SetSmartRecompressFormat)(
+        IAMTimelineGroup *This,
+        LONG *format);
+
+    HRESULT (STDMETHODCALLTYPE *GetSmartRecompressFormat)(
+        IAMTimelineGroup *This,
+        LONG **format);
+
+    HRESULT (STDMETHODCALLTYPE *IsSmartRecompressFormatSet)(
+        IAMTimelineGroup *This,
+        WINBOOL *set);
+
+    HRESULT (STDMETHODCALLTYPE *IsRecompressFormatDirty)(
+        IAMTimelineGroup *This,
+        WINBOOL *dirty);
+
+    HRESULT (STDMETHODCALLTYPE *ClearRecompressFormatDirty)(
+        IAMTimelineGroup *This);
+
+    HRESULT (STDMETHODCALLTYPE *SetRecompFormatFromSource)(
+        IAMTimelineGroup *This,
+        IAMTimelineSrc *source);
+
+    END_INTERFACE
+} IAMTimelineGroupVtbl;
+
+interface IAMTimelineGroup {
+    CONST_VTBL IAMTimelineGroupVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAMTimelineGroup_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAMTimelineGroup_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAMTimelineGroup_Release(This) (This)->lpVtbl->Release(This)
+/*** IAMTimelineGroup methods ***/
+#define IAMTimelineGroup_SetTimeline(This,timeline) (This)->lpVtbl->SetTimeline(This,timeline)
+#define IAMTimelineGroup_GetTimeline(This,timeline) (This)->lpVtbl->GetTimeline(This,timeline)
+#define IAMTimelineGroup_GetPriority(This,priority) (This)->lpVtbl->GetPriority(This,priority)
+#define IAMTimelineGroup_GetMediaType(This,a) (This)->lpVtbl->GetMediaType(This,a)
+#define IAMTimelineGroup_SetMediaType(This,a) (This)->lpVtbl->SetMediaType(This,a)
+#define IAMTimelineGroup_SetOutputFPS(This,fps) (This)->lpVtbl->SetOutputFPS(This,fps)
+#define IAMTimelineGroup_GetOutputFPS(This,fps) (This)->lpVtbl->GetOutputFPS(This,fps)
+#define IAMTimelineGroup_SetGroupName(This,name) (This)->lpVtbl->SetGroupName(This,name)
+#define IAMTimelineGroup_GetGroupName(This,name) (This)->lpVtbl->GetGroupName(This,name)
+#define IAMTimelineGroup_SetPreviewMode(This,preview) (This)->lpVtbl->SetPreviewMode(This,preview)
+#define IAMTimelineGroup_GetPreviewMode(This,preview) (This)->lpVtbl->GetPreviewMode(This,preview)
+#define IAMTimelineGroup_SetMediaTypeForVB(This,type) (This)->lpVtbl->SetMediaTypeForVB(This,type)
+#define IAMTimelineGroup_GetOutputBuffering(This,buffer) (This)->lpVtbl->GetOutputBuffering(This,buffer)
+#define IAMTimelineGroup_SetOutputBuffering(This,buffer) (This)->lpVtbl->SetOutputBuffering(This,buffer)
+#define IAMTimelineGroup_SetSmartRecompressFormat(This,format) (This)->lpVtbl->SetSmartRecompressFormat(This,format)
+#define IAMTimelineGroup_GetSmartRecompressFormat(This,format) (This)->lpVtbl->GetSmartRecompressFormat(This,format)
+#define IAMTimelineGroup_IsSmartRecompressFormatSet(This,set) (This)->lpVtbl->IsSmartRecompressFormatSet(This,set)
+#define IAMTimelineGroup_IsRecompressFormatDirty(This,dirty) (This)->lpVtbl->IsRecompressFormatDirty(This,dirty)
+#define IAMTimelineGroup_ClearRecompressFormatDirty(This) (This)->lpVtbl->ClearRecompressFormatDirty(This)
+#define IAMTimelineGroup_SetRecompFormatFromSource(This,source) (This)->lpVtbl->SetRecompFormatFromSource(This,source)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAMTimelineGroup_QueryInterface(IAMTimelineGroup* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAMTimelineGroup_AddRef(IAMTimelineGroup* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAMTimelineGroup_Release(IAMTimelineGroup* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAMTimelineGroup methods ***/
+static FORCEINLINE HRESULT IAMTimelineGroup_SetTimeline(IAMTimelineGroup* This,IAMTimeline *timeline) {
+    return This->lpVtbl->SetTimeline(This,timeline);
+}
+static FORCEINLINE HRESULT IAMTimelineGroup_GetTimeline(IAMTimelineGroup
