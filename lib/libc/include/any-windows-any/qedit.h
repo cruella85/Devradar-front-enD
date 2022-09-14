@@ -2273,4 +2273,257 @@ static FORCEINLINE HRESULT IAMTimelineObj_SetPropertySetter(IAMTimelineObj* This
 static FORCEINLINE HRESULT IAMTimelineObj_GetSubObject(IAMTimelineObj* This,IUnknown **obj) {
     return This->lpVtbl->GetSubObject(This,obj);
 }
-static FORC
+static FORCEINLINE HRESULT IAMTimelineObj_SetSubObject(IAMTimelineObj* This,IUnknown *obj) {
+    return This->lpVtbl->SetSubObject(This,obj);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetSubObjectGUID(IAMTimelineObj* This,GUID guid) {
+    return This->lpVtbl->SetSubObjectGUID(This,guid);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetSubObjectGUIDB(IAMTimelineObj* This,BSTR guidb) {
+    return This->lpVtbl->SetSubObjectGUIDB(This,guidb);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetSubObjectGUID(IAMTimelineObj* This,GUID *guid) {
+    return This->lpVtbl->GetSubObjectGUID(This,guid);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetSubObjectGUIDB(IAMTimelineObj* This,BSTR *guidb) {
+    return This->lpVtbl->GetSubObjectGUIDB(This,guidb);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetSubObjectLoaded(IAMTimelineObj* This,WINBOOL *loaded) {
+    return This->lpVtbl->GetSubObjectLoaded(This,loaded);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetTimelineType(IAMTimelineObj* This,TIMELINE_MAJOR_TYPE *type) {
+    return This->lpVtbl->GetTimelineType(This,type);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetTimelineType(IAMTimelineObj* This,TIMELINE_MAJOR_TYPE type) {
+    return This->lpVtbl->SetTimelineType(This,type);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetUserID(IAMTimelineObj* This,LONG *id) {
+    return This->lpVtbl->GetUserID(This,id);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetUserID(IAMTimelineObj* This,LONG id) {
+    return This->lpVtbl->SetUserID(This,id);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetGenID(IAMTimelineObj* This,LONG *id) {
+    return This->lpVtbl->GetGenID(This,id);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetUserName(IAMTimelineObj* This,BSTR *name) {
+    return This->lpVtbl->GetUserName(This,name);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetUserName(IAMTimelineObj* This,BSTR name) {
+    return This->lpVtbl->SetUserName(This,name);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetUserData(IAMTimelineObj* This,BYTE *data,LONG *size) {
+    return This->lpVtbl->GetUserData(This,data,size);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetUserData(IAMTimelineObj* This,BYTE *data,LONG size) {
+    return This->lpVtbl->SetUserData(This,data,size);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetMuted(IAMTimelineObj* This,WINBOOL *muted) {
+    return This->lpVtbl->GetMuted(This,muted);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetMuted(IAMTimelineObj* This,WINBOOL muted) {
+    return This->lpVtbl->SetMuted(This,muted);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetLocked(IAMTimelineObj* This,WINBOOL *locked) {
+    return This->lpVtbl->GetLocked(This,locked);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetLocked(IAMTimelineObj* This,WINBOOL locked) {
+    return This->lpVtbl->SetLocked(This,locked);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetDirtyRange(IAMTimelineObj* This,REFERENCE_TIME *start,REFERENCE_TIME *stop) {
+    return This->lpVtbl->GetDirtyRange(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetDirtyRange2(IAMTimelineObj* This,REFTIME *start,REFTIME *stop) {
+    return This->lpVtbl->GetDirtyRange2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetDirtyRange(IAMTimelineObj* This,REFERENCE_TIME start,REFERENCE_TIME stop) {
+    return This->lpVtbl->SetDirtyRange(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetDirtyRange2(IAMTimelineObj* This,REFTIME start,REFTIME stop) {
+    return This->lpVtbl->SetDirtyRange2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_ClearDirty(IAMTimelineObj* This) {
+    return This->lpVtbl->ClearDirty(This);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_Remove(IAMTimelineObj* This) {
+    return This->lpVtbl->Remove(This);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_RemoveAll(IAMTimelineObj* This) {
+    return This->lpVtbl->RemoveAll(This);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetTimelineNoRef(IAMTimelineObj* This,IAMTimeline **timeline) {
+    return This->lpVtbl->GetTimelineNoRef(This,timeline);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetGroupIBelongTo(IAMTimelineObj* This,IAMTimelineGroup **group) {
+    return This->lpVtbl->GetGroupIBelongTo(This,group);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetEmbedDepth(IAMTimelineObj* This,LONG *depth) {
+    return This->lpVtbl->GetEmbedDepth(This,depth);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAMTimelineObj_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IAMTimelineSrc interface
+ */
+#ifndef __IAMTimelineSrc_INTERFACE_DEFINED__
+#define __IAMTimelineSrc_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IAMTimelineSrc, 0x78530b79, 0x61f9, 0x11d2, 0x8c,0xad, 0x00,0xa0,0x24,0x58,0x09,0x02);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("78530b79-61f9-11d2-8cad-00a024580902")
+IAMTimelineSrc : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetMediaTimes(
+        REFERENCE_TIME *start,
+        REFERENCE_TIME *stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMediaTimes2(
+        REFTIME *start,
+        REFTIME *stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ModifyStopTime(
+        REFERENCE_TIME stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ModifyStopTime2(
+        REFTIME stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FixMediaTimes(
+        REFERENCE_TIME *start,
+        REFERENCE_TIME *stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FixMediaTimes2(
+        REFTIME *start,
+        REFTIME *stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaTimes(
+        REFERENCE_TIME Start,
+        REFERENCE_TIME Stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaTimes2(
+        REFTIME Start,
+        REFTIME Stop) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaLength(
+        REFERENCE_TIME length) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaLength2(
+        REFTIME length) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMediaLength(
+        REFERENCE_TIME *length) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMediaLength2(
+        REFTIME *length) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMediaName(
+        BSTR *name) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMediaName(
+        BSTR name) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SpliceWithNext(
+        IAMTimelineObj *next) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetStreamNumber(
+        LONG *num) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetStreamNumber(
+        LONG num) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IsNormalRate(
+        WINBOOL *normal) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDefaultFPS(
+        double *fps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetDefaultFPS(
+        double fps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetStretchMode(
+        int *mode) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetStretchMode(
+        int mode) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IAMTimelineSrc, 0x78530b79, 0x61f9, 0x11d2, 0x8c,0xad, 0x00,0xa0,0x24,0x58,0x09,0x02)
+#endif
+#else
+typedef struct IAMTimelineSrcVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IAMTimelineSrc *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IAMTimelineSrc *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IAMTimelineSrc *This);
+
+    /*** IAMTimelineSrc methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetMediaTimes)(
+        IAMTimelineSrc *This,
+        REFERENCE_TIME *start,
+        REFERENCE_TIME *stop);
+
+    HRESULT (STDMETHODCALLTYPE *GetMediaTimes2)(
+        IAMTimelineSrc *This,
+        REFTIME *start,
+        REFTIME *stop);
+
+    HRESULT (STDMETHODCALLTYPE *ModifyStopTime)(
+        IAMTimelineSrc *This,
+        REFERENCE_TIME stop);
+
+    HRESULT (STDMETHODCALLTYPE *ModifyStopTime2)(
+        IAMTimelineSrc *This,
+        REFTIME stop);
+
+    HRESULT (STDMETHODCALLTYPE *FixMediaTimes)(
+        IAMTimelineSrc *This,
+        REFERENCE_TIME *start,
+        REFERENCE_TIME *stop);
+
+    HRESULT (STDMETHODCALLTYPE *FixMediaTimes2)(
+        IAMTimelineSrc *This,
+        REFTIME *start,
+        REFTIME *stop);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaTimes)(
+        IAMTimelineSrc *This,
+        REFERENCE_TIME Start,
+        REFERENCE_TIME Stop);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaTimes2)(
+        IAMTimelineSrc *This,
+        REFTIME Start,
+        REFTIME Stop);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaLength)(
+        IAMTimelineSrc *This,
+        REFERENCE_TIME length);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaLength2)(
+        IAMTimelineSrc *This,
+        REFTIME length);
+
+    HRESULT (STDMETHODCALLTYPE *GetMediaLength)(
+        IAMTimelineSrc *This,
+        REFERENCE_TIME *length);
+
+    HRESULT (STDMETHODCALLTYPE *GetMediaLength2)(
+        IAMTimelineSrc *This,
+        REFTIME *length);
+
+    HRESULT (STDMETHODCALLTYPE *
