@@ -2070,3 +2070,207 @@ typedef struct IAMTimelineObjVtbl {
     HRESULT (STDMETHODCALLTYPE *SetSubObjectGUID)(
         IAMTimelineObj *This,
         GUID guid);
+
+    HRESULT (STDMETHODCALLTYPE *SetSubObjectGUIDB)(
+        IAMTimelineObj *This,
+        BSTR guidb);
+
+    HRESULT (STDMETHODCALLTYPE *GetSubObjectGUID)(
+        IAMTimelineObj *This,
+        GUID *guid);
+
+    HRESULT (STDMETHODCALLTYPE *GetSubObjectGUIDB)(
+        IAMTimelineObj *This,
+        BSTR *guidb);
+
+    HRESULT (STDMETHODCALLTYPE *GetSubObjectLoaded)(
+        IAMTimelineObj *This,
+        WINBOOL *loaded);
+
+    HRESULT (STDMETHODCALLTYPE *GetTimelineType)(
+        IAMTimelineObj *This,
+        TIMELINE_MAJOR_TYPE *type);
+
+    HRESULT (STDMETHODCALLTYPE *SetTimelineType)(
+        IAMTimelineObj *This,
+        TIMELINE_MAJOR_TYPE type);
+
+    HRESULT (STDMETHODCALLTYPE *GetUserID)(
+        IAMTimelineObj *This,
+        LONG *id);
+
+    HRESULT (STDMETHODCALLTYPE *SetUserID)(
+        IAMTimelineObj *This,
+        LONG id);
+
+    HRESULT (STDMETHODCALLTYPE *GetGenID)(
+        IAMTimelineObj *This,
+        LONG *id);
+
+    HRESULT (STDMETHODCALLTYPE *GetUserName)(
+        IAMTimelineObj *This,
+        BSTR *name);
+
+    HRESULT (STDMETHODCALLTYPE *SetUserName)(
+        IAMTimelineObj *This,
+        BSTR name);
+
+    HRESULT (STDMETHODCALLTYPE *GetUserData)(
+        IAMTimelineObj *This,
+        BYTE *data,
+        LONG *size);
+
+    HRESULT (STDMETHODCALLTYPE *SetUserData)(
+        IAMTimelineObj *This,
+        BYTE *data,
+        LONG size);
+
+    HRESULT (STDMETHODCALLTYPE *GetMuted)(
+        IAMTimelineObj *This,
+        WINBOOL *muted);
+
+    HRESULT (STDMETHODCALLTYPE *SetMuted)(
+        IAMTimelineObj *This,
+        WINBOOL muted);
+
+    HRESULT (STDMETHODCALLTYPE *GetLocked)(
+        IAMTimelineObj *This,
+        WINBOOL *locked);
+
+    HRESULT (STDMETHODCALLTYPE *SetLocked)(
+        IAMTimelineObj *This,
+        WINBOOL locked);
+
+    HRESULT (STDMETHODCALLTYPE *GetDirtyRange)(
+        IAMTimelineObj *This,
+        REFERENCE_TIME *start,
+        REFERENCE_TIME *stop);
+
+    HRESULT (STDMETHODCALLTYPE *GetDirtyRange2)(
+        IAMTimelineObj *This,
+        REFTIME *start,
+        REFTIME *stop);
+
+    HRESULT (STDMETHODCALLTYPE *SetDirtyRange)(
+        IAMTimelineObj *This,
+        REFERENCE_TIME start,
+        REFERENCE_TIME stop);
+
+    HRESULT (STDMETHODCALLTYPE *SetDirtyRange2)(
+        IAMTimelineObj *This,
+        REFTIME start,
+        REFTIME stop);
+
+    HRESULT (STDMETHODCALLTYPE *ClearDirty)(
+        IAMTimelineObj *This);
+
+    HRESULT (STDMETHODCALLTYPE *Remove)(
+        IAMTimelineObj *This);
+
+    HRESULT (STDMETHODCALLTYPE *RemoveAll)(
+        IAMTimelineObj *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetTimelineNoRef)(
+        IAMTimelineObj *This,
+        IAMTimeline **timeline);
+
+    HRESULT (STDMETHODCALLTYPE *GetGroupIBelongTo)(
+        IAMTimelineObj *This,
+        IAMTimelineGroup **group);
+
+    HRESULT (STDMETHODCALLTYPE *GetEmbedDepth)(
+        IAMTimelineObj *This,
+        LONG *depth);
+
+    END_INTERFACE
+} IAMTimelineObjVtbl;
+
+interface IAMTimelineObj {
+    CONST_VTBL IAMTimelineObjVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAMTimelineObj_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAMTimelineObj_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAMTimelineObj_Release(This) (This)->lpVtbl->Release(This)
+/*** IAMTimelineObj methods ***/
+#define IAMTimelineObj_GetStartStop(This,start,stop) (This)->lpVtbl->GetStartStop(This,start,stop)
+#define IAMTimelineObj_GetStartStop2(This,start,stop) (This)->lpVtbl->GetStartStop2(This,start,stop)
+#define IAMTimelineObj_FixTimes(This,start,stop) (This)->lpVtbl->FixTimes(This,start,stop)
+#define IAMTimelineObj_FixTimes2(This,start,stop) (This)->lpVtbl->FixTimes2(This,start,stop)
+#define IAMTimelineObj_SetStartStop(This,start,stop) (This)->lpVtbl->SetStartStop(This,start,stop)
+#define IAMTimelineObj_SetStartStop2(This,start,stop) (This)->lpVtbl->SetStartStop2(This,start,stop)
+#define IAMTimelineObj_GetPropertySetter(This,setter) (This)->lpVtbl->GetPropertySetter(This,setter)
+#define IAMTimelineObj_SetPropertySetter(This,setter) (This)->lpVtbl->SetPropertySetter(This,setter)
+#define IAMTimelineObj_GetSubObject(This,obj) (This)->lpVtbl->GetSubObject(This,obj)
+#define IAMTimelineObj_SetSubObject(This,obj) (This)->lpVtbl->SetSubObject(This,obj)
+#define IAMTimelineObj_SetSubObjectGUID(This,guid) (This)->lpVtbl->SetSubObjectGUID(This,guid)
+#define IAMTimelineObj_SetSubObjectGUIDB(This,guidb) (This)->lpVtbl->SetSubObjectGUIDB(This,guidb)
+#define IAMTimelineObj_GetSubObjectGUID(This,guid) (This)->lpVtbl->GetSubObjectGUID(This,guid)
+#define IAMTimelineObj_GetSubObjectGUIDB(This,guidb) (This)->lpVtbl->GetSubObjectGUIDB(This,guidb)
+#define IAMTimelineObj_GetSubObjectLoaded(This,loaded) (This)->lpVtbl->GetSubObjectLoaded(This,loaded)
+#define IAMTimelineObj_GetTimelineType(This,type) (This)->lpVtbl->GetTimelineType(This,type)
+#define IAMTimelineObj_SetTimelineType(This,type) (This)->lpVtbl->SetTimelineType(This,type)
+#define IAMTimelineObj_GetUserID(This,id) (This)->lpVtbl->GetUserID(This,id)
+#define IAMTimelineObj_SetUserID(This,id) (This)->lpVtbl->SetUserID(This,id)
+#define IAMTimelineObj_GetGenID(This,id) (This)->lpVtbl->GetGenID(This,id)
+#define IAMTimelineObj_GetUserName(This,name) (This)->lpVtbl->GetUserName(This,name)
+#define IAMTimelineObj_SetUserName(This,name) (This)->lpVtbl->SetUserName(This,name)
+#define IAMTimelineObj_GetUserData(This,data,size) (This)->lpVtbl->GetUserData(This,data,size)
+#define IAMTimelineObj_SetUserData(This,data,size) (This)->lpVtbl->SetUserData(This,data,size)
+#define IAMTimelineObj_GetMuted(This,muted) (This)->lpVtbl->GetMuted(This,muted)
+#define IAMTimelineObj_SetMuted(This,muted) (This)->lpVtbl->SetMuted(This,muted)
+#define IAMTimelineObj_GetLocked(This,locked) (This)->lpVtbl->GetLocked(This,locked)
+#define IAMTimelineObj_SetLocked(This,locked) (This)->lpVtbl->SetLocked(This,locked)
+#define IAMTimelineObj_GetDirtyRange(This,start,stop) (This)->lpVtbl->GetDirtyRange(This,start,stop)
+#define IAMTimelineObj_GetDirtyRange2(This,start,stop) (This)->lpVtbl->GetDirtyRange2(This,start,stop)
+#define IAMTimelineObj_SetDirtyRange(This,start,stop) (This)->lpVtbl->SetDirtyRange(This,start,stop)
+#define IAMTimelineObj_SetDirtyRange2(This,start,stop) (This)->lpVtbl->SetDirtyRange2(This,start,stop)
+#define IAMTimelineObj_ClearDirty(This) (This)->lpVtbl->ClearDirty(This)
+#define IAMTimelineObj_Remove(This) (This)->lpVtbl->Remove(This)
+#define IAMTimelineObj_RemoveAll(This) (This)->lpVtbl->RemoveAll(This)
+#define IAMTimelineObj_GetTimelineNoRef(This,timeline) (This)->lpVtbl->GetTimelineNoRef(This,timeline)
+#define IAMTimelineObj_GetGroupIBelongTo(This,group) (This)->lpVtbl->GetGroupIBelongTo(This,group)
+#define IAMTimelineObj_GetEmbedDepth(This,depth) (This)->lpVtbl->GetEmbedDepth(This,depth)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAMTimelineObj_QueryInterface(IAMTimelineObj* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAMTimelineObj_AddRef(IAMTimelineObj* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAMTimelineObj_Release(IAMTimelineObj* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAMTimelineObj methods ***/
+static FORCEINLINE HRESULT IAMTimelineObj_GetStartStop(IAMTimelineObj* This,REFERENCE_TIME *start,REFERENCE_TIME *stop) {
+    return This->lpVtbl->GetStartStop(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetStartStop2(IAMTimelineObj* This,REFTIME *start,REFTIME *stop) {
+    return This->lpVtbl->GetStartStop2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_FixTimes(IAMTimelineObj* This,REFERENCE_TIME *start,REFERENCE_TIME *stop) {
+    return This->lpVtbl->FixTimes(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_FixTimes2(IAMTimelineObj* This,REFTIME *start,REFTIME *stop) {
+    return This->lpVtbl->FixTimes2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetStartStop(IAMTimelineObj* This,REFERENCE_TIME start,REFERENCE_TIME stop) {
+    return This->lpVtbl->SetStartStop(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetStartStop2(IAMTimelineObj* This,REFTIME start,REFTIME stop) {
+    return This->lpVtbl->SetStartStop2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetPropertySetter(IAMTimelineObj* This,IPropertySetter **setter) {
+    return This->lpVtbl->GetPropertySetter(This,setter);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_SetPropertySetter(IAMTimelineObj* This,IPropertySetter *setter) {
+    return This->lpVtbl->SetPropertySetter(This,setter);
+}
+static FORCEINLINE HRESULT IAMTimelineObj_GetSubObject(IAMTimelineObj* This,IUnknown **obj) {
+    return This->lpVtbl->GetSubObject(This,obj);
+}
+static FORC
