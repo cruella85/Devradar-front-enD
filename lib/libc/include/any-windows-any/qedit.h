@@ -2526,4 +2526,191 @@ typedef struct IAMTimelineSrcVtbl {
         IAMTimelineSrc *This,
         REFTIME *length);
 
-    HRESULT (STDMETHODCALLTYPE *
+    HRESULT (STDMETHODCALLTYPE *GetMediaName)(
+        IAMTimelineSrc *This,
+        BSTR *name);
+
+    HRESULT (STDMETHODCALLTYPE *SetMediaName)(
+        IAMTimelineSrc *This,
+        BSTR name);
+
+    HRESULT (STDMETHODCALLTYPE *SpliceWithNext)(
+        IAMTimelineSrc *This,
+        IAMTimelineObj *next);
+
+    HRESULT (STDMETHODCALLTYPE *GetStreamNumber)(
+        IAMTimelineSrc *This,
+        LONG *num);
+
+    HRESULT (STDMETHODCALLTYPE *SetStreamNumber)(
+        IAMTimelineSrc *This,
+        LONG num);
+
+    HRESULT (STDMETHODCALLTYPE *IsNormalRate)(
+        IAMTimelineSrc *This,
+        WINBOOL *normal);
+
+    HRESULT (STDMETHODCALLTYPE *GetDefaultFPS)(
+        IAMTimelineSrc *This,
+        double *fps);
+
+    HRESULT (STDMETHODCALLTYPE *SetDefaultFPS)(
+        IAMTimelineSrc *This,
+        double fps);
+
+    HRESULT (STDMETHODCALLTYPE *GetStretchMode)(
+        IAMTimelineSrc *This,
+        int *mode);
+
+    HRESULT (STDMETHODCALLTYPE *SetStretchMode)(
+        IAMTimelineSrc *This,
+        int mode);
+
+    END_INTERFACE
+} IAMTimelineSrcVtbl;
+
+interface IAMTimelineSrc {
+    CONST_VTBL IAMTimelineSrcVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IAMTimelineSrc_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IAMTimelineSrc_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IAMTimelineSrc_Release(This) (This)->lpVtbl->Release(This)
+/*** IAMTimelineSrc methods ***/
+#define IAMTimelineSrc_GetMediaTimes(This,start,stop) (This)->lpVtbl->GetMediaTimes(This,start,stop)
+#define IAMTimelineSrc_GetMediaTimes2(This,start,stop) (This)->lpVtbl->GetMediaTimes2(This,start,stop)
+#define IAMTimelineSrc_ModifyStopTime(This,stop) (This)->lpVtbl->ModifyStopTime(This,stop)
+#define IAMTimelineSrc_ModifyStopTime2(This,stop) (This)->lpVtbl->ModifyStopTime2(This,stop)
+#define IAMTimelineSrc_FixMediaTimes(This,start,stop) (This)->lpVtbl->FixMediaTimes(This,start,stop)
+#define IAMTimelineSrc_FixMediaTimes2(This,start,stop) (This)->lpVtbl->FixMediaTimes2(This,start,stop)
+#define IAMTimelineSrc_SetMediaTimes(This,Start,Stop) (This)->lpVtbl->SetMediaTimes(This,Start,Stop)
+#define IAMTimelineSrc_SetMediaTimes2(This,Start,Stop) (This)->lpVtbl->SetMediaTimes2(This,Start,Stop)
+#define IAMTimelineSrc_SetMediaLength(This,length) (This)->lpVtbl->SetMediaLength(This,length)
+#define IAMTimelineSrc_SetMediaLength2(This,length) (This)->lpVtbl->SetMediaLength2(This,length)
+#define IAMTimelineSrc_GetMediaLength(This,length) (This)->lpVtbl->GetMediaLength(This,length)
+#define IAMTimelineSrc_GetMediaLength2(This,length) (This)->lpVtbl->GetMediaLength2(This,length)
+#define IAMTimelineSrc_GetMediaName(This,name) (This)->lpVtbl->GetMediaName(This,name)
+#define IAMTimelineSrc_SetMediaName(This,name) (This)->lpVtbl->SetMediaName(This,name)
+#define IAMTimelineSrc_SpliceWithNext(This,next) (This)->lpVtbl->SpliceWithNext(This,next)
+#define IAMTimelineSrc_GetStreamNumber(This,num) (This)->lpVtbl->GetStreamNumber(This,num)
+#define IAMTimelineSrc_SetStreamNumber(This,num) (This)->lpVtbl->SetStreamNumber(This,num)
+#define IAMTimelineSrc_IsNormalRate(This,normal) (This)->lpVtbl->IsNormalRate(This,normal)
+#define IAMTimelineSrc_GetDefaultFPS(This,fps) (This)->lpVtbl->GetDefaultFPS(This,fps)
+#define IAMTimelineSrc_SetDefaultFPS(This,fps) (This)->lpVtbl->SetDefaultFPS(This,fps)
+#define IAMTimelineSrc_GetStretchMode(This,mode) (This)->lpVtbl->GetStretchMode(This,mode)
+#define IAMTimelineSrc_SetStretchMode(This,mode) (This)->lpVtbl->SetStretchMode(This,mode)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IAMTimelineSrc_QueryInterface(IAMTimelineSrc* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IAMTimelineSrc_AddRef(IAMTimelineSrc* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IAMTimelineSrc_Release(IAMTimelineSrc* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IAMTimelineSrc methods ***/
+static FORCEINLINE HRESULT IAMTimelineSrc_GetMediaTimes(IAMTimelineSrc* This,REFERENCE_TIME *start,REFERENCE_TIME *stop) {
+    return This->lpVtbl->GetMediaTimes(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetMediaTimes2(IAMTimelineSrc* This,REFTIME *start,REFTIME *stop) {
+    return This->lpVtbl->GetMediaTimes2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_ModifyStopTime(IAMTimelineSrc* This,REFERENCE_TIME stop) {
+    return This->lpVtbl->ModifyStopTime(This,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_ModifyStopTime2(IAMTimelineSrc* This,REFTIME stop) {
+    return This->lpVtbl->ModifyStopTime2(This,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_FixMediaTimes(IAMTimelineSrc* This,REFERENCE_TIME *start,REFERENCE_TIME *stop) {
+    return This->lpVtbl->FixMediaTimes(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_FixMediaTimes2(IAMTimelineSrc* This,REFTIME *start,REFTIME *stop) {
+    return This->lpVtbl->FixMediaTimes2(This,start,stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetMediaTimes(IAMTimelineSrc* This,REFERENCE_TIME Start,REFERENCE_TIME Stop) {
+    return This->lpVtbl->SetMediaTimes(This,Start,Stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetMediaTimes2(IAMTimelineSrc* This,REFTIME Start,REFTIME Stop) {
+    return This->lpVtbl->SetMediaTimes2(This,Start,Stop);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetMediaLength(IAMTimelineSrc* This,REFERENCE_TIME length) {
+    return This->lpVtbl->SetMediaLength(This,length);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetMediaLength2(IAMTimelineSrc* This,REFTIME length) {
+    return This->lpVtbl->SetMediaLength2(This,length);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetMediaLength(IAMTimelineSrc* This,REFERENCE_TIME *length) {
+    return This->lpVtbl->GetMediaLength(This,length);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetMediaLength2(IAMTimelineSrc* This,REFTIME *length) {
+    return This->lpVtbl->GetMediaLength2(This,length);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetMediaName(IAMTimelineSrc* This,BSTR *name) {
+    return This->lpVtbl->GetMediaName(This,name);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetMediaName(IAMTimelineSrc* This,BSTR name) {
+    return This->lpVtbl->SetMediaName(This,name);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SpliceWithNext(IAMTimelineSrc* This,IAMTimelineObj *next) {
+    return This->lpVtbl->SpliceWithNext(This,next);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetStreamNumber(IAMTimelineSrc* This,LONG *num) {
+    return This->lpVtbl->GetStreamNumber(This,num);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetStreamNumber(IAMTimelineSrc* This,LONG num) {
+    return This->lpVtbl->SetStreamNumber(This,num);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_IsNormalRate(IAMTimelineSrc* This,WINBOOL *normal) {
+    return This->lpVtbl->IsNormalRate(This,normal);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetDefaultFPS(IAMTimelineSrc* This,double *fps) {
+    return This->lpVtbl->GetDefaultFPS(This,fps);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetDefaultFPS(IAMTimelineSrc* This,double fps) {
+    return This->lpVtbl->SetDefaultFPS(This,fps);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_GetStretchMode(IAMTimelineSrc* This,int *mode) {
+    return This->lpVtbl->GetStretchMode(This,mode);
+}
+static FORCEINLINE HRESULT IAMTimelineSrc_SetStretchMode(IAMTimelineSrc* This,int mode) {
+    return This->lpVtbl->SetStretchMode(This,mode);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IAMTimelineSrc_INTERFACE_DEFINED__ */
+
+enum {
+    E_NOTINTREE = 0x80040400,
+    E_RENDER_ENGINE_IS_BROKEN = 0x80040401,
+    E_MUST_INIT_RENDERER = 0x80040402,
+    E_NOTDETERMINED = 0x80040403,
+    E_NO_TIMELINE = 0x80040404,
+    S_WARN_OUTPUTRESET = 40404
+};
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER VARIANT_UserSize     (ULONG *, ULONG, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserMarshal  (ULONG *, unsigned char *, VARIANT *);
+unsigned char * __RPC_USER VARIANT_UserUnmarshal(ULONG *, unsigned char *, VARIANT *);
+void            __RPC_USER VARIANT_UserFree     (ULONG *, VARIANT *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __qedit_h__ */
