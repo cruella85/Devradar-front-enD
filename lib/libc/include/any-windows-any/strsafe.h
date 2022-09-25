@@ -2049,3 +2049,30 @@ STRSAFE_INLINE_API StringGetsExWorkerW(STRSAFE_LPWSTR pszDest,size_t cchDest,siz
 #define wvsprintf wvsprintf_instead_use_StringCbVPrintf_or_StringCchVPrintf;
 
 #undef wvsprintfA
+#define wvsprintfA wvsprintfA_instead_use_StringCbVPrintfA_or_StringCchVPrintfA;
+
+#undef wvsprintfW
+#define wvsprintfW wvsprintfW_instead_use_StringCbVPrintfW_or_StringCchVPrintfW;
+
+#undef _vstprintf
+#define _vstprintf _vstprintf_instead_use_StringCbVPrintf_or_StringCchVPrintf;
+
+#undef _vsntprintf
+#define _vsntprintf _vsntprintf_instead_use_StringCbVPrintf_or_StringCchVPrintf;
+
+#undef _stprintf
+#define _stprintf _stprintf_instead_use_StringCbPrintf_or_StringCchPrintf;
+
+#undef _sntprintf
+#define _sntprintf _sntprintf_instead_use_StringCbPrintf_or_StringCchPrintf;
+
+#undef _getts
+#define _getts _getts_instead_use_StringCbGets_or_StringCchGets;
+
+#undef gets
+#define gets _gets_instead_use_StringCbGetsA_or_StringCchGetsA;
+
+#undef _getws
+#define _getws _getws_instead_use_StringCbGetsW_or_StringCchGetsW;
+#endif
+#endif
