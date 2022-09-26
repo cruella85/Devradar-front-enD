@@ -247,4 +247,36 @@ long sysconf(int name)
 	case JT_SEM_VALUE_MAX & 255:
 		return SEM_VALUE_MAX;
 #endif
-	case JT_DEL
+	case JT_DELAYTIMER_MAX & 255:
+		return DELAYTIMER_MAX;
+	case JT_NPROCESSORS_CONF & 255:
+	case JT_NPROCESSORS_ONLN & 255: ;
+#ifdef __wasilibc_unmodified_upstream
+		unsigned char set[128] = {1};
+		int i, cnt;
+		__syscall(SYS_sched_getaffinity, 0, sizeof set, set);
+		for (i=cnt=0; i<sizeof set; i++)
+			for (; set[i]; set[i]&=set[i]-1, cnt++);
+		return cnt;
+#else
+		// WASI has no way to query the processor count
+		return 1;
+#endif
+#ifdef __wasilibc_unmodified_upstream // WASI has no sysinfo
+	case JT_PHYS_PAGES & 255:
+	case JT_AVPHYS_PAGES & 255: ;
+		unsigned long long mem;
+		struct sysinfo si;
+		__lsysinfo(&si);
+		if (!si.mem_unit) si.mem_unit = 1;
+		if (name==_SC_PHYS_PAGES) mem = si.totalram;
+		else mem = si.freeram + si.bufferram;
+		mem *= si.mem_unit;
+		mem /= PAGE_SIZE;
+		return (mem > LONG_MAX) ? LONG_MAX : mem;
+#endif
+	case JT_ZERO & 255:
+		return 0;
+	}
+	return values[name];
+}
