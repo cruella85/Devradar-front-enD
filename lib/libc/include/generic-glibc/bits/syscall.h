@@ -516,4 +516,528 @@
 #endif
 
 #ifdef __NR_get_tls
-# define SYS_get
+# define SYS_get_tls __NR_get_tls
+#endif
+
+#ifdef __NR_getcpu
+# define SYS_getcpu __NR_getcpu
+#endif
+
+#ifdef __NR_getcwd
+# define SYS_getcwd __NR_getcwd
+#endif
+
+#ifdef __NR_getdents
+# define SYS_getdents __NR_getdents
+#endif
+
+#ifdef __NR_getdents64
+# define SYS_getdents64 __NR_getdents64
+#endif
+
+#ifdef __NR_getdomainname
+# define SYS_getdomainname __NR_getdomainname
+#endif
+
+#ifdef __NR_getdtablesize
+# define SYS_getdtablesize __NR_getdtablesize
+#endif
+
+#ifdef __NR_getegid
+# define SYS_getegid __NR_getegid
+#endif
+
+#ifdef __NR_getegid32
+# define SYS_getegid32 __NR_getegid32
+#endif
+
+#ifdef __NR_geteuid
+# define SYS_geteuid __NR_geteuid
+#endif
+
+#ifdef __NR_geteuid32
+# define SYS_geteuid32 __NR_geteuid32
+#endif
+
+#ifdef __NR_getgid
+# define SYS_getgid __NR_getgid
+#endif
+
+#ifdef __NR_getgid32
+# define SYS_getgid32 __NR_getgid32
+#endif
+
+#ifdef __NR_getgroups
+# define SYS_getgroups __NR_getgroups
+#endif
+
+#ifdef __NR_getgroups32
+# define SYS_getgroups32 __NR_getgroups32
+#endif
+
+#ifdef __NR_gethostname
+# define SYS_gethostname __NR_gethostname
+#endif
+
+#ifdef __NR_getitimer
+# define SYS_getitimer __NR_getitimer
+#endif
+
+#ifdef __NR_getpagesize
+# define SYS_getpagesize __NR_getpagesize
+#endif
+
+#ifdef __NR_getpeername
+# define SYS_getpeername __NR_getpeername
+#endif
+
+#ifdef __NR_getpgid
+# define SYS_getpgid __NR_getpgid
+#endif
+
+#ifdef __NR_getpgrp
+# define SYS_getpgrp __NR_getpgrp
+#endif
+
+#ifdef __NR_getpid
+# define SYS_getpid __NR_getpid
+#endif
+
+#ifdef __NR_getpmsg
+# define SYS_getpmsg __NR_getpmsg
+#endif
+
+#ifdef __NR_getppid
+# define SYS_getppid __NR_getppid
+#endif
+
+#ifdef __NR_getpriority
+# define SYS_getpriority __NR_getpriority
+#endif
+
+#ifdef __NR_getrandom
+# define SYS_getrandom __NR_getrandom
+#endif
+
+#ifdef __NR_getresgid
+# define SYS_getresgid __NR_getresgid
+#endif
+
+#ifdef __NR_getresgid32
+# define SYS_getresgid32 __NR_getresgid32
+#endif
+
+#ifdef __NR_getresuid
+# define SYS_getresuid __NR_getresuid
+#endif
+
+#ifdef __NR_getresuid32
+# define SYS_getresuid32 __NR_getresuid32
+#endif
+
+#ifdef __NR_getrlimit
+# define SYS_getrlimit __NR_getrlimit
+#endif
+
+#ifdef __NR_getrusage
+# define SYS_getrusage __NR_getrusage
+#endif
+
+#ifdef __NR_getsid
+# define SYS_getsid __NR_getsid
+#endif
+
+#ifdef __NR_getsockname
+# define SYS_getsockname __NR_getsockname
+#endif
+
+#ifdef __NR_getsockopt
+# define SYS_getsockopt __NR_getsockopt
+#endif
+
+#ifdef __NR_gettid
+# define SYS_gettid __NR_gettid
+#endif
+
+#ifdef __NR_gettimeofday
+# define SYS_gettimeofday __NR_gettimeofday
+#endif
+
+#ifdef __NR_getuid
+# define SYS_getuid __NR_getuid
+#endif
+
+#ifdef __NR_getuid32
+# define SYS_getuid32 __NR_getuid32
+#endif
+
+#ifdef __NR_getunwind
+# define SYS_getunwind __NR_getunwind
+#endif
+
+#ifdef __NR_getxattr
+# define SYS_getxattr __NR_getxattr
+#endif
+
+#ifdef __NR_getxgid
+# define SYS_getxgid __NR_getxgid
+#endif
+
+#ifdef __NR_getxpid
+# define SYS_getxpid __NR_getxpid
+#endif
+
+#ifdef __NR_getxuid
+# define SYS_getxuid __NR_getxuid
+#endif
+
+#ifdef __NR_gtty
+# define SYS_gtty __NR_gtty
+#endif
+
+#ifdef __NR_idle
+# define SYS_idle __NR_idle
+#endif
+
+#ifdef __NR_init_module
+# define SYS_init_module __NR_init_module
+#endif
+
+#ifdef __NR_inotify_add_watch
+# define SYS_inotify_add_watch __NR_inotify_add_watch
+#endif
+
+#ifdef __NR_inotify_init
+# define SYS_inotify_init __NR_inotify_init
+#endif
+
+#ifdef __NR_inotify_init1
+# define SYS_inotify_init1 __NR_inotify_init1
+#endif
+
+#ifdef __NR_inotify_rm_watch
+# define SYS_inotify_rm_watch __NR_inotify_rm_watch
+#endif
+
+#ifdef __NR_io_cancel
+# define SYS_io_cancel __NR_io_cancel
+#endif
+
+#ifdef __NR_io_destroy
+# define SYS_io_destroy __NR_io_destroy
+#endif
+
+#ifdef __NR_io_getevents
+# define SYS_io_getevents __NR_io_getevents
+#endif
+
+#ifdef __NR_io_pgetevents
+# define SYS_io_pgetevents __NR_io_pgetevents
+#endif
+
+#ifdef __NR_io_pgetevents_time64
+# define SYS_io_pgetevents_time64 __NR_io_pgetevents_time64
+#endif
+
+#ifdef __NR_io_setup
+# define SYS_io_setup __NR_io_setup
+#endif
+
+#ifdef __NR_io_submit
+# define SYS_io_submit __NR_io_submit
+#endif
+
+#ifdef __NR_io_uring_enter
+# define SYS_io_uring_enter __NR_io_uring_enter
+#endif
+
+#ifdef __NR_io_uring_register
+# define SYS_io_uring_register __NR_io_uring_register
+#endif
+
+#ifdef __NR_io_uring_setup
+# define SYS_io_uring_setup __NR_io_uring_setup
+#endif
+
+#ifdef __NR_ioctl
+# define SYS_ioctl __NR_ioctl
+#endif
+
+#ifdef __NR_ioperm
+# define SYS_ioperm __NR_ioperm
+#endif
+
+#ifdef __NR_iopl
+# define SYS_iopl __NR_iopl
+#endif
+
+#ifdef __NR_ioprio_get
+# define SYS_ioprio_get __NR_ioprio_get
+#endif
+
+#ifdef __NR_ioprio_set
+# define SYS_ioprio_set __NR_ioprio_set
+#endif
+
+#ifdef __NR_ipc
+# define SYS_ipc __NR_ipc
+#endif
+
+#ifdef __NR_kcmp
+# define SYS_kcmp __NR_kcmp
+#endif
+
+#ifdef __NR_kern_features
+# define SYS_kern_features __NR_kern_features
+#endif
+
+#ifdef __NR_kexec_file_load
+# define SYS_kexec_file_load __NR_kexec_file_load
+#endif
+
+#ifdef __NR_kexec_load
+# define SYS_kexec_load __NR_kexec_load
+#endif
+
+#ifdef __NR_keyctl
+# define SYS_keyctl __NR_keyctl
+#endif
+
+#ifdef __NR_kill
+# define SYS_kill __NR_kill
+#endif
+
+#ifdef __NR_landlock_add_rule
+# define SYS_landlock_add_rule __NR_landlock_add_rule
+#endif
+
+#ifdef __NR_landlock_create_ruleset
+# define SYS_landlock_create_ruleset __NR_landlock_create_ruleset
+#endif
+
+#ifdef __NR_landlock_restrict_self
+# define SYS_landlock_restrict_self __NR_landlock_restrict_self
+#endif
+
+#ifdef __NR_lchown
+# define SYS_lchown __NR_lchown
+#endif
+
+#ifdef __NR_lchown32
+# define SYS_lchown32 __NR_lchown32
+#endif
+
+#ifdef __NR_lgetxattr
+# define SYS_lgetxattr __NR_lgetxattr
+#endif
+
+#ifdef __NR_link
+# define SYS_link __NR_link
+#endif
+
+#ifdef __NR_linkat
+# define SYS_linkat __NR_linkat
+#endif
+
+#ifdef __NR_listen
+# define SYS_listen __NR_listen
+#endif
+
+#ifdef __NR_listxattr
+# define SYS_listxattr __NR_listxattr
+#endif
+
+#ifdef __NR_llistxattr
+# define SYS_llistxattr __NR_llistxattr
+#endif
+
+#ifdef __NR_llseek
+# define SYS_llseek __NR_llseek
+#endif
+
+#ifdef __NR_lock
+# define SYS_lock __NR_lock
+#endif
+
+#ifdef __NR_lookup_dcookie
+# define SYS_lookup_dcookie __NR_lookup_dcookie
+#endif
+
+#ifdef __NR_lremovexattr
+# define SYS_lremovexattr __NR_lremovexattr
+#endif
+
+#ifdef __NR_lseek
+# define SYS_lseek __NR_lseek
+#endif
+
+#ifdef __NR_lsetxattr
+# define SYS_lsetxattr __NR_lsetxattr
+#endif
+
+#ifdef __NR_lstat
+# define SYS_lstat __NR_lstat
+#endif
+
+#ifdef __NR_lstat64
+# define SYS_lstat64 __NR_lstat64
+#endif
+
+#ifdef __NR_madvise
+# define SYS_madvise __NR_madvise
+#endif
+
+#ifdef __NR_mbind
+# define SYS_mbind __NR_mbind
+#endif
+
+#ifdef __NR_membarrier
+# define SYS_membarrier __NR_membarrier
+#endif
+
+#ifdef __NR_memfd_create
+# define SYS_memfd_create __NR_memfd_create
+#endif
+
+#ifdef __NR_memory_ordering
+# define SYS_memory_ordering __NR_memory_ordering
+#endif
+
+#ifdef __NR_migrate_pages
+# define SYS_migrate_pages __NR_migrate_pages
+#endif
+
+#ifdef __NR_mincore
+# define SYS_mincore __NR_mincore
+#endif
+
+#ifdef __NR_mkdir
+# define SYS_mkdir __NR_mkdir
+#endif
+
+#ifdef __NR_mkdirat
+# define SYS_mkdirat __NR_mkdirat
+#endif
+
+#ifdef __NR_mknod
+# define SYS_mknod __NR_mknod
+#endif
+
+#ifdef __NR_mknodat
+# define SYS_mknodat __NR_mknodat
+#endif
+
+#ifdef __NR_mlock
+# define SYS_mlock __NR_mlock
+#endif
+
+#ifdef __NR_mlock2
+# define SYS_mlock2 __NR_mlock2
+#endif
+
+#ifdef __NR_mlockall
+# define SYS_mlockall __NR_mlockall
+#endif
+
+#ifdef __NR_mmap
+# define SYS_mmap __NR_mmap
+#endif
+
+#ifdef __NR_mmap2
+# define SYS_mmap2 __NR_mmap2
+#endif
+
+#ifdef __NR_modify_ldt
+# define SYS_modify_ldt __NR_modify_ldt
+#endif
+
+#ifdef __NR_mount
+# define SYS_mount __NR_mount
+#endif
+
+#ifdef __NR_mount_setattr
+# define SYS_mount_setattr __NR_mount_setattr
+#endif
+
+#ifdef __NR_move_mount
+# define SYS_move_mount __NR_move_mount
+#endif
+
+#ifdef __NR_move_pages
+# define SYS_move_pages __NR_move_pages
+#endif
+
+#ifdef __NR_mprotect
+# define SYS_mprotect __NR_mprotect
+#endif
+
+#ifdef __NR_mpx
+# define SYS_mpx __NR_mpx
+#endif
+
+#ifdef __NR_mq_getsetattr
+# define SYS_mq_getsetattr __NR_mq_getsetattr
+#endif
+
+#ifdef __NR_mq_notify
+# define SYS_mq_notify __NR_mq_notify
+#endif
+
+#ifdef __NR_mq_open
+# define SYS_mq_open __NR_mq_open
+#endif
+
+#ifdef __NR_mq_timedreceive
+# define SYS_mq_timedreceive __NR_mq_timedreceive
+#endif
+
+#ifdef __NR_mq_timedreceive_time64
+# define SYS_mq_timedreceive_time64 __NR_mq_timedreceive_time64
+#endif
+
+#ifdef __NR_mq_timedsend
+# define SYS_mq_timedsend __NR_mq_timedsend
+#endif
+
+#ifdef __NR_mq_timedsend_time64
+# define SYS_mq_timedsend_time64 __NR_mq_timedsend_time64
+#endif
+
+#ifdef __NR_mq_unlink
+# define SYS_mq_unlink __NR_mq_unlink
+#endif
+
+#ifdef __NR_mremap
+# define SYS_mremap __NR_mremap
+#endif
+
+#ifdef __NR_msgctl
+# define SYS_msgctl __NR_msgctl
+#endif
+
+#ifdef __NR_msgget
+# define SYS_msgget __NR_msgget
+#endif
+
+#ifdef __NR_msgrcv
+# define SYS_msgrcv __NR_msgrcv
+#endif
+
+#ifdef __NR_msgsnd
+# define SYS_msgsnd __NR_msgsnd
+#endif
+
+#ifdef __NR_msync
+# define SYS_msync __NR_msync
+#endif
+
+#ifdef __NR_multiplexer
+# define SYS_multiplexer __NR_multiplexer
+#endif
+
+#ifdef __NR_munlock
+# define SYS_munlock __NR_munlock
+#endif
+
+#ifdef __NR_munlockall
+# define SYS_munlo
