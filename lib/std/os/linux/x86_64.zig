@@ -321,4 +321,74 @@ pub const timezone = extern struct {
 
 pub const Elf_Symndx = u32;
 
-pub c
+pub const greg_t = usize;
+pub const gregset_t = [23]greg_t;
+pub const fpstate = extern struct {
+    cwd: u16,
+    swd: u16,
+    ftw: u16,
+    fop: u16,
+    rip: usize,
+    rdp: usize,
+    mxcsr: u32,
+    mxcr_mask: u32,
+    st: [8]extern struct {
+        significand: [4]u16,
+        exponent: u16,
+        padding: [3]u16 = undefined,
+    },
+    xmm: [16]extern struct {
+        element: [4]u32,
+    },
+    padding: [24]u32 = undefined,
+};
+pub const fpregset_t = *fpstate;
+pub const sigcontext = extern struct {
+    r8: usize,
+    r9: usize,
+    r10: usize,
+    r11: usize,
+    r12: usize,
+    r13: usize,
+    r14: usize,
+    r15: usize,
+
+    rdi: usize,
+    rsi: usize,
+    rbp: usize,
+    rbx: usize,
+    rdx: usize,
+    rax: usize,
+    rcx: usize,
+    rsp: usize,
+    rip: usize,
+    eflags: usize,
+
+    cs: u16,
+    gs: u16,
+    fs: u16,
+    pad0: u16 = undefined,
+
+    err: usize,
+    trapno: usize,
+    oldmask: usize,
+    cr2: usize,
+
+    fpstate: *fpstate,
+    reserved1: [8]usize = undefined,
+};
+
+pub const mcontext_t = extern struct {
+    gregs: gregset_t,
+    fpregs: fpregset_t,
+    reserved1: [8]usize = undefined,
+};
+
+pub const ucontext_t = extern struct {
+    flags: usize,
+    link: ?*ucontext_t,
+    stack: stack_t,
+    mcontext: mcontext_t,
+    sigmask: sigset_t,
+    fpregs_mem: [64]usize,
+};
