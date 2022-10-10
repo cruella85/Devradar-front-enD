@@ -1040,4 +1040,459 @@
 #endif
 
 #ifdef __NR_munlockall
-# define SYS_munlo
+# define SYS_munlockall __NR_munlockall
+#endif
+
+#ifdef __NR_munmap
+# define SYS_munmap __NR_munmap
+#endif
+
+#ifdef __NR_name_to_handle_at
+# define SYS_name_to_handle_at __NR_name_to_handle_at
+#endif
+
+#ifdef __NR_nanosleep
+# define SYS_nanosleep __NR_nanosleep
+#endif
+
+#ifdef __NR_newfstatat
+# define SYS_newfstatat __NR_newfstatat
+#endif
+
+#ifdef __NR_nfsservctl
+# define SYS_nfsservctl __NR_nfsservctl
+#endif
+
+#ifdef __NR_ni_syscall
+# define SYS_ni_syscall __NR_ni_syscall
+#endif
+
+#ifdef __NR_nice
+# define SYS_nice __NR_nice
+#endif
+
+#ifdef __NR_old_adjtimex
+# define SYS_old_adjtimex __NR_old_adjtimex
+#endif
+
+#ifdef __NR_old_getpagesize
+# define SYS_old_getpagesize __NR_old_getpagesize
+#endif
+
+#ifdef __NR_oldfstat
+# define SYS_oldfstat __NR_oldfstat
+#endif
+
+#ifdef __NR_oldlstat
+# define SYS_oldlstat __NR_oldlstat
+#endif
+
+#ifdef __NR_oldolduname
+# define SYS_oldolduname __NR_oldolduname
+#endif
+
+#ifdef __NR_oldstat
+# define SYS_oldstat __NR_oldstat
+#endif
+
+#ifdef __NR_oldumount
+# define SYS_oldumount __NR_oldumount
+#endif
+
+#ifdef __NR_olduname
+# define SYS_olduname __NR_olduname
+#endif
+
+#ifdef __NR_open
+# define SYS_open __NR_open
+#endif
+
+#ifdef __NR_open_by_handle_at
+# define SYS_open_by_handle_at __NR_open_by_handle_at
+#endif
+
+#ifdef __NR_open_tree
+# define SYS_open_tree __NR_open_tree
+#endif
+
+#ifdef __NR_openat
+# define SYS_openat __NR_openat
+#endif
+
+#ifdef __NR_openat2
+# define SYS_openat2 __NR_openat2
+#endif
+
+#ifdef __NR_osf_adjtime
+# define SYS_osf_adjtime __NR_osf_adjtime
+#endif
+
+#ifdef __NR_osf_afs_syscall
+# define SYS_osf_afs_syscall __NR_osf_afs_syscall
+#endif
+
+#ifdef __NR_osf_alt_plock
+# define SYS_osf_alt_plock __NR_osf_alt_plock
+#endif
+
+#ifdef __NR_osf_alt_setsid
+# define SYS_osf_alt_setsid __NR_osf_alt_setsid
+#endif
+
+#ifdef __NR_osf_alt_sigpending
+# define SYS_osf_alt_sigpending __NR_osf_alt_sigpending
+#endif
+
+#ifdef __NR_osf_asynch_daemon
+# define SYS_osf_asynch_daemon __NR_osf_asynch_daemon
+#endif
+
+#ifdef __NR_osf_audcntl
+# define SYS_osf_audcntl __NR_osf_audcntl
+#endif
+
+#ifdef __NR_osf_audgen
+# define SYS_osf_audgen __NR_osf_audgen
+#endif
+
+#ifdef __NR_osf_chflags
+# define SYS_osf_chflags __NR_osf_chflags
+#endif
+
+#ifdef __NR_osf_execve
+# define SYS_osf_execve __NR_osf_execve
+#endif
+
+#ifdef __NR_osf_exportfs
+# define SYS_osf_exportfs __NR_osf_exportfs
+#endif
+
+#ifdef __NR_osf_fchflags
+# define SYS_osf_fchflags __NR_osf_fchflags
+#endif
+
+#ifdef __NR_osf_fdatasync
+# define SYS_osf_fdatasync __NR_osf_fdatasync
+#endif
+
+#ifdef __NR_osf_fpathconf
+# define SYS_osf_fpathconf __NR_osf_fpathconf
+#endif
+
+#ifdef __NR_osf_fstat
+# define SYS_osf_fstat __NR_osf_fstat
+#endif
+
+#ifdef __NR_osf_fstatfs
+# define SYS_osf_fstatfs __NR_osf_fstatfs
+#endif
+
+#ifdef __NR_osf_fstatfs64
+# define SYS_osf_fstatfs64 __NR_osf_fstatfs64
+#endif
+
+#ifdef __NR_osf_fuser
+# define SYS_osf_fuser __NR_osf_fuser
+#endif
+
+#ifdef __NR_osf_getaddressconf
+# define SYS_osf_getaddressconf __NR_osf_getaddressconf
+#endif
+
+#ifdef __NR_osf_getdirentries
+# define SYS_osf_getdirentries __NR_osf_getdirentries
+#endif
+
+#ifdef __NR_osf_getdomainname
+# define SYS_osf_getdomainname __NR_osf_getdomainname
+#endif
+
+#ifdef __NR_osf_getfh
+# define SYS_osf_getfh __NR_osf_getfh
+#endif
+
+#ifdef __NR_osf_getfsstat
+# define SYS_osf_getfsstat __NR_osf_getfsstat
+#endif
+
+#ifdef __NR_osf_gethostid
+# define SYS_osf_gethostid __NR_osf_gethostid
+#endif
+
+#ifdef __NR_osf_getitimer
+# define SYS_osf_getitimer __NR_osf_getitimer
+#endif
+
+#ifdef __NR_osf_getlogin
+# define SYS_osf_getlogin __NR_osf_getlogin
+#endif
+
+#ifdef __NR_osf_getmnt
+# define SYS_osf_getmnt __NR_osf_getmnt
+#endif
+
+#ifdef __NR_osf_getrusage
+# define SYS_osf_getrusage __NR_osf_getrusage
+#endif
+
+#ifdef __NR_osf_getsysinfo
+# define SYS_osf_getsysinfo __NR_osf_getsysinfo
+#endif
+
+#ifdef __NR_osf_gettimeofday
+# define SYS_osf_gettimeofday __NR_osf_gettimeofday
+#endif
+
+#ifdef __NR_osf_kloadcall
+# define SYS_osf_kloadcall __NR_osf_kloadcall
+#endif
+
+#ifdef __NR_osf_kmodcall
+# define SYS_osf_kmodcall __NR_osf_kmodcall
+#endif
+
+#ifdef __NR_osf_lstat
+# define SYS_osf_lstat __NR_osf_lstat
+#endif
+
+#ifdef __NR_osf_memcntl
+# define SYS_osf_memcntl __NR_osf_memcntl
+#endif
+
+#ifdef __NR_osf_mincore
+# define SYS_osf_mincore __NR_osf_mincore
+#endif
+
+#ifdef __NR_osf_mount
+# define SYS_osf_mount __NR_osf_mount
+#endif
+
+#ifdef __NR_osf_mremap
+# define SYS_osf_mremap __NR_osf_mremap
+#endif
+
+#ifdef __NR_osf_msfs_syscall
+# define SYS_osf_msfs_syscall __NR_osf_msfs_syscall
+#endif
+
+#ifdef __NR_osf_msleep
+# define SYS_osf_msleep __NR_osf_msleep
+#endif
+
+#ifdef __NR_osf_mvalid
+# define SYS_osf_mvalid __NR_osf_mvalid
+#endif
+
+#ifdef __NR_osf_mwakeup
+# define SYS_osf_mwakeup __NR_osf_mwakeup
+#endif
+
+#ifdef __NR_osf_naccept
+# define SYS_osf_naccept __NR_osf_naccept
+#endif
+
+#ifdef __NR_osf_nfssvc
+# define SYS_osf_nfssvc __NR_osf_nfssvc
+#endif
+
+#ifdef __NR_osf_ngetpeername
+# define SYS_osf_ngetpeername __NR_osf_ngetpeername
+#endif
+
+#ifdef __NR_osf_ngetsockname
+# define SYS_osf_ngetsockname __NR_osf_ngetsockname
+#endif
+
+#ifdef __NR_osf_nrecvfrom
+# define SYS_osf_nrecvfrom __NR_osf_nrecvfrom
+#endif
+
+#ifdef __NR_osf_nrecvmsg
+# define SYS_osf_nrecvmsg __NR_osf_nrecvmsg
+#endif
+
+#ifdef __NR_osf_nsendmsg
+# define SYS_osf_nsendmsg __NR_osf_nsendmsg
+#endif
+
+#ifdef __NR_osf_ntp_adjtime
+# define SYS_osf_ntp_adjtime __NR_osf_ntp_adjtime
+#endif
+
+#ifdef __NR_osf_ntp_gettime
+# define SYS_osf_ntp_gettime __NR_osf_ntp_gettime
+#endif
+
+#ifdef __NR_osf_old_creat
+# define SYS_osf_old_creat __NR_osf_old_creat
+#endif
+
+#ifdef __NR_osf_old_fstat
+# define SYS_osf_old_fstat __NR_osf_old_fstat
+#endif
+
+#ifdef __NR_osf_old_getpgrp
+# define SYS_osf_old_getpgrp __NR_osf_old_getpgrp
+#endif
+
+#ifdef __NR_osf_old_killpg
+# define SYS_osf_old_killpg __NR_osf_old_killpg
+#endif
+
+#ifdef __NR_osf_old_lstat
+# define SYS_osf_old_lstat __NR_osf_old_lstat
+#endif
+
+#ifdef __NR_osf_old_open
+# define SYS_osf_old_open __NR_osf_old_open
+#endif
+
+#ifdef __NR_osf_old_sigaction
+# define SYS_osf_old_sigaction __NR_osf_old_sigaction
+#endif
+
+#ifdef __NR_osf_old_sigblock
+# define SYS_osf_old_sigblock __NR_osf_old_sigblock
+#endif
+
+#ifdef __NR_osf_old_sigreturn
+# define SYS_osf_old_sigreturn __NR_osf_old_sigreturn
+#endif
+
+#ifdef __NR_osf_old_sigsetmask
+# define SYS_osf_old_sigsetmask __NR_osf_old_sigsetmask
+#endif
+
+#ifdef __NR_osf_old_sigvec
+# define SYS_osf_old_sigvec __NR_osf_old_sigvec
+#endif
+
+#ifdef __NR_osf_old_stat
+# define SYS_osf_old_stat __NR_osf_old_stat
+#endif
+
+#ifdef __NR_osf_old_vadvise
+# define SYS_osf_old_vadvise __NR_osf_old_vadvise
+#endif
+
+#ifdef __NR_osf_old_vtrace
+# define SYS_osf_old_vtrace __NR_osf_old_vtrace
+#endif
+
+#ifdef __NR_osf_old_wait
+# define SYS_osf_old_wait __NR_osf_old_wait
+#endif
+
+#ifdef __NR_osf_oldquota
+# define SYS_osf_oldquota __NR_osf_oldquota
+#endif
+
+#ifdef __NR_osf_pathconf
+# define SYS_osf_pathconf __NR_osf_pathconf
+#endif
+
+#ifdef __NR_osf_pid_block
+# define SYS_osf_pid_block __NR_osf_pid_block
+#endif
+
+#ifdef __NR_osf_pid_unblock
+# define SYS_osf_pid_unblock __NR_osf_pid_unblock
+#endif
+
+#ifdef __NR_osf_plock
+# define SYS_osf_plock __NR_osf_plock
+#endif
+
+#ifdef __NR_osf_priocntlset
+# define SYS_osf_priocntlset __NR_osf_priocntlset
+#endif
+
+#ifdef __NR_osf_profil
+# define SYS_osf_profil __NR_osf_profil
+#endif
+
+#ifdef __NR_osf_proplist_syscall
+# define SYS_osf_proplist_syscall __NR_osf_proplist_syscall
+#endif
+
+#ifdef __NR_osf_reboot
+# define SYS_osf_reboot __NR_osf_reboot
+#endif
+
+#ifdef __NR_osf_revoke
+# define SYS_osf_revoke __NR_osf_revoke
+#endif
+
+#ifdef __NR_osf_sbrk
+# define SYS_osf_sbrk __NR_osf_sbrk
+#endif
+
+#ifdef __NR_osf_security
+# define SYS_osf_security __NR_osf_security
+#endif
+
+#ifdef __NR_osf_select
+# define SYS_osf_select __NR_osf_select
+#endif
+
+#ifdef __NR_osf_set_program_attributes
+# define SYS_osf_set_program_attributes __NR_osf_set_program_attributes
+#endif
+
+#ifdef __NR_osf_set_speculative
+# define SYS_osf_set_speculative __NR_osf_set_speculative
+#endif
+
+#ifdef __NR_osf_sethostid
+# define SYS_osf_sethostid __NR_osf_sethostid
+#endif
+
+#ifdef __NR_osf_setitimer
+# define SYS_osf_setitimer __NR_osf_setitimer
+#endif
+
+#ifdef __NR_osf_setlogin
+# define SYS_osf_setlogin __NR_osf_setlogin
+#endif
+
+#ifdef __NR_osf_setsysinfo
+# define SYS_osf_setsysinfo __NR_osf_setsysinfo
+#endif
+
+#ifdef __NR_osf_settimeofday
+# define SYS_osf_settimeofday __NR_osf_settimeofday
+#endif
+
+#ifdef __NR_osf_shmat
+# define SYS_osf_shmat __NR_osf_shmat
+#endif
+
+#ifdef __NR_osf_signal
+# define SYS_osf_signal __NR_osf_signal
+#endif
+
+#ifdef __NR_osf_sigprocmask
+# define SYS_osf_sigprocmask __NR_osf_sigprocmask
+#endif
+
+#ifdef __NR_osf_sigsendset
+# define SYS_osf_sigsendset __NR_osf_sigsendset
+#endif
+
+#ifdef __NR_osf_sigstack
+# define SYS_osf_sigstack __NR_osf_sigstack
+#endif
+
+#ifdef __NR_osf_sigwaitprim
+# define SYS_osf_sigwaitprim __NR_osf_sigwaitprim
+#endif
+
+#ifdef __NR_osf_sstk
+# define SYS_osf_sstk __NR_osf_sstk
+#endif
+
+#ifdef __NR_osf_stat
+# define SYS_osf_stat __NR_osf_stat
+#endif
+
+#ifdef __NR_osf_st
