@@ -1495,4 +1495,468 @@
 # define SYS_osf_stat __NR_osf_stat
 #endif
 
-#ifdef __NR_osf_st
+#ifdef __NR_osf_statfs
+# define SYS_osf_statfs __NR_osf_statfs
+#endif
+
+#ifdef __NR_osf_statfs64
+# define SYS_osf_statfs64 __NR_osf_statfs64
+#endif
+
+#ifdef __NR_osf_subsys_info
+# define SYS_osf_subsys_info __NR_osf_subsys_info
+#endif
+
+#ifdef __NR_osf_swapctl
+# define SYS_osf_swapctl __NR_osf_swapctl
+#endif
+
+#ifdef __NR_osf_swapon
+# define SYS_osf_swapon __NR_osf_swapon
+#endif
+
+#ifdef __NR_osf_syscall
+# define SYS_osf_syscall __NR_osf_syscall
+#endif
+
+#ifdef __NR_osf_sysinfo
+# define SYS_osf_sysinfo __NR_osf_sysinfo
+#endif
+
+#ifdef __NR_osf_table
+# define SYS_osf_table __NR_osf_table
+#endif
+
+#ifdef __NR_osf_uadmin
+# define SYS_osf_uadmin __NR_osf_uadmin
+#endif
+
+#ifdef __NR_osf_usleep_thread
+# define SYS_osf_usleep_thread __NR_osf_usleep_thread
+#endif
+
+#ifdef __NR_osf_uswitch
+# define SYS_osf_uswitch __NR_osf_uswitch
+#endif
+
+#ifdef __NR_osf_utc_adjtime
+# define SYS_osf_utc_adjtime __NR_osf_utc_adjtime
+#endif
+
+#ifdef __NR_osf_utc_gettime
+# define SYS_osf_utc_gettime __NR_osf_utc_gettime
+#endif
+
+#ifdef __NR_osf_utimes
+# define SYS_osf_utimes __NR_osf_utimes
+#endif
+
+#ifdef __NR_osf_utsname
+# define SYS_osf_utsname __NR_osf_utsname
+#endif
+
+#ifdef __NR_osf_wait4
+# define SYS_osf_wait4 __NR_osf_wait4
+#endif
+
+#ifdef __NR_osf_waitid
+# define SYS_osf_waitid __NR_osf_waitid
+#endif
+
+#ifdef __NR_pause
+# define SYS_pause __NR_pause
+#endif
+
+#ifdef __NR_pciconfig_iobase
+# define SYS_pciconfig_iobase __NR_pciconfig_iobase
+#endif
+
+#ifdef __NR_pciconfig_read
+# define SYS_pciconfig_read __NR_pciconfig_read
+#endif
+
+#ifdef __NR_pciconfig_write
+# define SYS_pciconfig_write __NR_pciconfig_write
+#endif
+
+#ifdef __NR_perf_event_open
+# define SYS_perf_event_open __NR_perf_event_open
+#endif
+
+#ifdef __NR_perfctr
+# define SYS_perfctr __NR_perfctr
+#endif
+
+#ifdef __NR_perfmonctl
+# define SYS_perfmonctl __NR_perfmonctl
+#endif
+
+#ifdef __NR_personality
+# define SYS_personality __NR_personality
+#endif
+
+#ifdef __NR_pidfd_getfd
+# define SYS_pidfd_getfd __NR_pidfd_getfd
+#endif
+
+#ifdef __NR_pidfd_open
+# define SYS_pidfd_open __NR_pidfd_open
+#endif
+
+#ifdef __NR_pidfd_send_signal
+# define SYS_pidfd_send_signal __NR_pidfd_send_signal
+#endif
+
+#ifdef __NR_pipe
+# define SYS_pipe __NR_pipe
+#endif
+
+#ifdef __NR_pipe2
+# define SYS_pipe2 __NR_pipe2
+#endif
+
+#ifdef __NR_pivot_root
+# define SYS_pivot_root __NR_pivot_root
+#endif
+
+#ifdef __NR_pkey_alloc
+# define SYS_pkey_alloc __NR_pkey_alloc
+#endif
+
+#ifdef __NR_pkey_free
+# define SYS_pkey_free __NR_pkey_free
+#endif
+
+#ifdef __NR_pkey_mprotect
+# define SYS_pkey_mprotect __NR_pkey_mprotect
+#endif
+
+#ifdef __NR_poll
+# define SYS_poll __NR_poll
+#endif
+
+#ifdef __NR_ppoll
+# define SYS_ppoll __NR_ppoll
+#endif
+
+#ifdef __NR_ppoll_time64
+# define SYS_ppoll_time64 __NR_ppoll_time64
+#endif
+
+#ifdef __NR_prctl
+# define SYS_prctl __NR_prctl
+#endif
+
+#ifdef __NR_pread64
+# define SYS_pread64 __NR_pread64
+#endif
+
+#ifdef __NR_preadv
+# define SYS_preadv __NR_preadv
+#endif
+
+#ifdef __NR_preadv2
+# define SYS_preadv2 __NR_preadv2
+#endif
+
+#ifdef __NR_prlimit64
+# define SYS_prlimit64 __NR_prlimit64
+#endif
+
+#ifdef __NR_process_madvise
+# define SYS_process_madvise __NR_process_madvise
+#endif
+
+#ifdef __NR_process_vm_readv
+# define SYS_process_vm_readv __NR_process_vm_readv
+#endif
+
+#ifdef __NR_process_vm_writev
+# define SYS_process_vm_writev __NR_process_vm_writev
+#endif
+
+#ifdef __NR_prof
+# define SYS_prof __NR_prof
+#endif
+
+#ifdef __NR_profil
+# define SYS_profil __NR_profil
+#endif
+
+#ifdef __NR_pselect6
+# define SYS_pselect6 __NR_pselect6
+#endif
+
+#ifdef __NR_pselect6_time64
+# define SYS_pselect6_time64 __NR_pselect6_time64
+#endif
+
+#ifdef __NR_ptrace
+# define SYS_ptrace __NR_ptrace
+#endif
+
+#ifdef __NR_putpmsg
+# define SYS_putpmsg __NR_putpmsg
+#endif
+
+#ifdef __NR_pwrite64
+# define SYS_pwrite64 __NR_pwrite64
+#endif
+
+#ifdef __NR_pwritev
+# define SYS_pwritev __NR_pwritev
+#endif
+
+#ifdef __NR_pwritev2
+# define SYS_pwritev2 __NR_pwritev2
+#endif
+
+#ifdef __NR_query_module
+# define SYS_query_module __NR_query_module
+#endif
+
+#ifdef __NR_quotactl
+# define SYS_quotactl __NR_quotactl
+#endif
+
+#ifdef __NR_read
+# define SYS_read __NR_read
+#endif
+
+#ifdef __NR_readahead
+# define SYS_readahead __NR_readahead
+#endif
+
+#ifdef __NR_readdir
+# define SYS_readdir __NR_readdir
+#endif
+
+#ifdef __NR_readlink
+# define SYS_readlink __NR_readlink
+#endif
+
+#ifdef __NR_readlinkat
+# define SYS_readlinkat __NR_readlinkat
+#endif
+
+#ifdef __NR_readv
+# define SYS_readv __NR_readv
+#endif
+
+#ifdef __NR_reboot
+# define SYS_reboot __NR_reboot
+#endif
+
+#ifdef __NR_recv
+# define SYS_recv __NR_recv
+#endif
+
+#ifdef __NR_recvfrom
+# define SYS_recvfrom __NR_recvfrom
+#endif
+
+#ifdef __NR_recvmmsg
+# define SYS_recvmmsg __NR_recvmmsg
+#endif
+
+#ifdef __NR_recvmmsg_time64
+# define SYS_recvmmsg_time64 __NR_recvmmsg_time64
+#endif
+
+#ifdef __NR_recvmsg
+# define SYS_recvmsg __NR_recvmsg
+#endif
+
+#ifdef __NR_remap_file_pages
+# define SYS_remap_file_pages __NR_remap_file_pages
+#endif
+
+#ifdef __NR_removexattr
+# define SYS_removexattr __NR_removexattr
+#endif
+
+#ifdef __NR_rename
+# define SYS_rename __NR_rename
+#endif
+
+#ifdef __NR_renameat
+# define SYS_renameat __NR_renameat
+#endif
+
+#ifdef __NR_renameat2
+# define SYS_renameat2 __NR_renameat2
+#endif
+
+#ifdef __NR_request_key
+# define SYS_request_key __NR_request_key
+#endif
+
+#ifdef __NR_restart_syscall
+# define SYS_restart_syscall __NR_restart_syscall
+#endif
+
+#ifdef __NR_riscv_flush_icache
+# define SYS_riscv_flush_icache __NR_riscv_flush_icache
+#endif
+
+#ifdef __NR_rmdir
+# define SYS_rmdir __NR_rmdir
+#endif
+
+#ifdef __NR_rseq
+# define SYS_rseq __NR_rseq
+#endif
+
+#ifdef __NR_rt_sigaction
+# define SYS_rt_sigaction __NR_rt_sigaction
+#endif
+
+#ifdef __NR_rt_sigpending
+# define SYS_rt_sigpending __NR_rt_sigpending
+#endif
+
+#ifdef __NR_rt_sigprocmask
+# define SYS_rt_sigprocmask __NR_rt_sigprocmask
+#endif
+
+#ifdef __NR_rt_sigqueueinfo
+# define SYS_rt_sigqueueinfo __NR_rt_sigqueueinfo
+#endif
+
+#ifdef __NR_rt_sigreturn
+# define SYS_rt_sigreturn __NR_rt_sigreturn
+#endif
+
+#ifdef __NR_rt_sigsuspend
+# define SYS_rt_sigsuspend __NR_rt_sigsuspend
+#endif
+
+#ifdef __NR_rt_sigtimedwait
+# define SYS_rt_sigtimedwait __NR_rt_sigtimedwait
+#endif
+
+#ifdef __NR_rt_sigtimedwait_time64
+# define SYS_rt_sigtimedwait_time64 __NR_rt_sigtimedwait_time64
+#endif
+
+#ifdef __NR_rt_tgsigqueueinfo
+# define SYS_rt_tgsigqueueinfo __NR_rt_tgsigqueueinfo
+#endif
+
+#ifdef __NR_rtas
+# define SYS_rtas __NR_rtas
+#endif
+
+#ifdef __NR_s390_guarded_storage
+# define SYS_s390_guarded_storage __NR_s390_guarded_storage
+#endif
+
+#ifdef __NR_s390_pci_mmio_read
+# define SYS_s390_pci_mmio_read __NR_s390_pci_mmio_read
+#endif
+
+#ifdef __NR_s390_pci_mmio_write
+# define SYS_s390_pci_mmio_write __NR_s390_pci_mmio_write
+#endif
+
+#ifdef __NR_s390_runtime_instr
+# define SYS_s390_runtime_instr __NR_s390_runtime_instr
+#endif
+
+#ifdef __NR_s390_sthyi
+# define SYS_s390_sthyi __NR_s390_sthyi
+#endif
+
+#ifdef __NR_sched_get_affinity
+# define SYS_sched_get_affinity __NR_sched_get_affinity
+#endif
+
+#ifdef __NR_sched_get_priority_max
+# define SYS_sched_get_priority_max __NR_sched_get_priority_max
+#endif
+
+#ifdef __NR_sched_get_priority_min
+# define SYS_sched_get_priority_min __NR_sched_get_priority_min
+#endif
+
+#ifdef __NR_sched_getaffinity
+# define SYS_sched_getaffinity __NR_sched_getaffinity
+#endif
+
+#ifdef __NR_sched_getattr
+# define SYS_sched_getattr __NR_sched_getattr
+#endif
+
+#ifdef __NR_sched_getparam
+# define SYS_sched_getparam __NR_sched_getparam
+#endif
+
+#ifdef __NR_sched_getscheduler
+# define SYS_sched_getscheduler __NR_sched_getscheduler
+#endif
+
+#ifdef __NR_sched_rr_get_interval
+# define SYS_sched_rr_get_interval __NR_sched_rr_get_interval
+#endif
+
+#ifdef __NR_sched_rr_get_interval_time64
+# define SYS_sched_rr_get_interval_time64 __NR_sched_rr_get_interval_time64
+#endif
+
+#ifdef __NR_sched_set_affinity
+# define SYS_sched_set_affinity __NR_sched_set_affinity
+#endif
+
+#ifdef __NR_sched_setaffinity
+# define SYS_sched_setaffinity __NR_sched_setaffinity
+#endif
+
+#ifdef __NR_sched_setattr
+# define SYS_sched_setattr __NR_sched_setattr
+#endif
+
+#ifdef __NR_sched_setparam
+# define SYS_sched_setparam __NR_sched_setparam
+#endif
+
+#ifdef __NR_sched_setscheduler
+# define SYS_sched_setscheduler __NR_sched_setscheduler
+#endif
+
+#ifdef __NR_sched_yield
+# define SYS_sched_yield __NR_sched_yield
+#endif
+
+#ifdef __NR_seccomp
+# define SYS_seccomp __NR_seccomp
+#endif
+
+#ifdef __NR_security
+# define SYS_security __NR_security
+#endif
+
+#ifdef __NR_select
+# define SYS_select __NR_select
+#endif
+
+#ifdef __NR_semctl
+# define SYS_semctl __NR_semctl
+#endif
+
+#ifdef __NR_semget
+# define SYS_semget __NR_semget
+#endif
+
+#ifdef __NR_semop
+# define SYS_semop __NR_semop
+#endif
+
+#ifdef __NR_semtimedop
+# define SYS_semtimedop __NR_semtimedop
+#endif
+
+#ifdef __NR_semtimedop_time64
+# define SYS_semtimedop_time64 __NR_semtimedop_time64
+#endif
+
+#ifdef __N
