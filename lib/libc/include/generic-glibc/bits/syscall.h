@@ -2480,4 +2480,53 @@
 #endif
 
 #ifdef __NR_utimes
-# define SYS_utimes __NR_
+# define SYS_utimes __NR_utimes
+#endif
+
+#ifdef __NR_utrap_install
+# define SYS_utrap_install __NR_utrap_install
+#endif
+
+#ifdef __NR_vfork
+# define SYS_vfork __NR_vfork
+#endif
+
+#ifdef __NR_vhangup
+# define SYS_vhangup __NR_vhangup
+#endif
+
+#ifdef __NR_vm86
+# define SYS_vm86 __NR_vm86
+#endif
+
+#ifdef __NR_vm86old
+# define SYS_vm86old __NR_vm86old
+#endif
+
+#ifdef __NR_vmsplice
+# define SYS_vmsplice __NR_vmsplice
+#endif
+
+#ifdef __NR_vserver
+# define SYS_vserver __NR_vserver
+#endif
+
+#ifdef __NR_wait4
+# define SYS_wait4 __NR_wait4
+#endif
+
+#ifdef __NR_waitid
+# define SYS_waitid __NR_waitid
+#endif
+
+#ifdef __NR_waitpid
+# define SYS_waitpid __NR_waitpid
+#endif
+
+#ifdef __NR_write
+# define SYS_write __NR_write
+#endif
+
+#ifdef __NR_writev
+# define SYS_writev __NR_writev
+#endif
