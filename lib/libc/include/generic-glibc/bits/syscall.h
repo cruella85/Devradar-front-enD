@@ -1959,4 +1959,525 @@
 # define SYS_semtimedop_time64 __NR_semtimedop_time64
 #endif
 
-#ifdef __N
+#ifdef __NR_send
+# define SYS_send __NR_send
+#endif
+
+#ifdef __NR_sendfile
+# define SYS_sendfile __NR_sendfile
+#endif
+
+#ifdef __NR_sendfile64
+# define SYS_sendfile64 __NR_sendfile64
+#endif
+
+#ifdef __NR_sendmmsg
+# define SYS_sendmmsg __NR_sendmmsg
+#endif
+
+#ifdef __NR_sendmsg
+# define SYS_sendmsg __NR_sendmsg
+#endif
+
+#ifdef __NR_sendto
+# define SYS_sendto __NR_sendto
+#endif
+
+#ifdef __NR_set_mempolicy
+# define SYS_set_mempolicy __NR_set_mempolicy
+#endif
+
+#ifdef __NR_set_robust_list
+# define SYS_set_robust_list __NR_set_robust_list
+#endif
+
+#ifdef __NR_set_thread_area
+# define SYS_set_thread_area __NR_set_thread_area
+#endif
+
+#ifdef __NR_set_tid_address
+# define SYS_set_tid_address __NR_set_tid_address
+#endif
+
+#ifdef __NR_set_tls
+# define SYS_set_tls __NR_set_tls
+#endif
+
+#ifdef __NR_setdomainname
+# define SYS_setdomainname __NR_setdomainname
+#endif
+
+#ifdef __NR_setfsgid
+# define SYS_setfsgid __NR_setfsgid
+#endif
+
+#ifdef __NR_setfsgid32
+# define SYS_setfsgid32 __NR_setfsgid32
+#endif
+
+#ifdef __NR_setfsuid
+# define SYS_setfsuid __NR_setfsuid
+#endif
+
+#ifdef __NR_setfsuid32
+# define SYS_setfsuid32 __NR_setfsuid32
+#endif
+
+#ifdef __NR_setgid
+# define SYS_setgid __NR_setgid
+#endif
+
+#ifdef __NR_setgid32
+# define SYS_setgid32 __NR_setgid32
+#endif
+
+#ifdef __NR_setgroups
+# define SYS_setgroups __NR_setgroups
+#endif
+
+#ifdef __NR_setgroups32
+# define SYS_setgroups32 __NR_setgroups32
+#endif
+
+#ifdef __NR_sethae
+# define SYS_sethae __NR_sethae
+#endif
+
+#ifdef __NR_sethostname
+# define SYS_sethostname __NR_sethostname
+#endif
+
+#ifdef __NR_setitimer
+# define SYS_setitimer __NR_setitimer
+#endif
+
+#ifdef __NR_setns
+# define SYS_setns __NR_setns
+#endif
+
+#ifdef __NR_setpgid
+# define SYS_setpgid __NR_setpgid
+#endif
+
+#ifdef __NR_setpgrp
+# define SYS_setpgrp __NR_setpgrp
+#endif
+
+#ifdef __NR_setpriority
+# define SYS_setpriority __NR_setpriority
+#endif
+
+#ifdef __NR_setregid
+# define SYS_setregid __NR_setregid
+#endif
+
+#ifdef __NR_setregid32
+# define SYS_setregid32 __NR_setregid32
+#endif
+
+#ifdef __NR_setresgid
+# define SYS_setresgid __NR_setresgid
+#endif
+
+#ifdef __NR_setresgid32
+# define SYS_setresgid32 __NR_setresgid32
+#endif
+
+#ifdef __NR_setresuid
+# define SYS_setresuid __NR_setresuid
+#endif
+
+#ifdef __NR_setresuid32
+# define SYS_setresuid32 __NR_setresuid32
+#endif
+
+#ifdef __NR_setreuid
+# define SYS_setreuid __NR_setreuid
+#endif
+
+#ifdef __NR_setreuid32
+# define SYS_setreuid32 __NR_setreuid32
+#endif
+
+#ifdef __NR_setrlimit
+# define SYS_setrlimit __NR_setrlimit
+#endif
+
+#ifdef __NR_setsid
+# define SYS_setsid __NR_setsid
+#endif
+
+#ifdef __NR_setsockopt
+# define SYS_setsockopt __NR_setsockopt
+#endif
+
+#ifdef __NR_settimeofday
+# define SYS_settimeofday __NR_settimeofday
+#endif
+
+#ifdef __NR_setuid
+# define SYS_setuid __NR_setuid
+#endif
+
+#ifdef __NR_setuid32
+# define SYS_setuid32 __NR_setuid32
+#endif
+
+#ifdef __NR_setxattr
+# define SYS_setxattr __NR_setxattr
+#endif
+
+#ifdef __NR_sgetmask
+# define SYS_sgetmask __NR_sgetmask
+#endif
+
+#ifdef __NR_shmat
+# define SYS_shmat __NR_shmat
+#endif
+
+#ifdef __NR_shmctl
+# define SYS_shmctl __NR_shmctl
+#endif
+
+#ifdef __NR_shmdt
+# define SYS_shmdt __NR_shmdt
+#endif
+
+#ifdef __NR_shmget
+# define SYS_shmget __NR_shmget
+#endif
+
+#ifdef __NR_shutdown
+# define SYS_shutdown __NR_shutdown
+#endif
+
+#ifdef __NR_sigaction
+# define SYS_sigaction __NR_sigaction
+#endif
+
+#ifdef __NR_sigaltstack
+# define SYS_sigaltstack __NR_sigaltstack
+#endif
+
+#ifdef __NR_signal
+# define SYS_signal __NR_signal
+#endif
+
+#ifdef __NR_signalfd
+# define SYS_signalfd __NR_signalfd
+#endif
+
+#ifdef __NR_signalfd4
+# define SYS_signalfd4 __NR_signalfd4
+#endif
+
+#ifdef __NR_sigpending
+# define SYS_sigpending __NR_sigpending
+#endif
+
+#ifdef __NR_sigprocmask
+# define SYS_sigprocmask __NR_sigprocmask
+#endif
+
+#ifdef __NR_sigreturn
+# define SYS_sigreturn __NR_sigreturn
+#endif
+
+#ifdef __NR_sigsuspend
+# define SYS_sigsuspend __NR_sigsuspend
+#endif
+
+#ifdef __NR_socket
+# define SYS_socket __NR_socket
+#endif
+
+#ifdef __NR_socketcall
+# define SYS_socketcall __NR_socketcall
+#endif
+
+#ifdef __NR_socketpair
+# define SYS_socketpair __NR_socketpair
+#endif
+
+#ifdef __NR_splice
+# define SYS_splice __NR_splice
+#endif
+
+#ifdef __NR_spu_create
+# define SYS_spu_create __NR_spu_create
+#endif
+
+#ifdef __NR_spu_run
+# define SYS_spu_run __NR_spu_run
+#endif
+
+#ifdef __NR_ssetmask
+# define SYS_ssetmask __NR_ssetmask
+#endif
+
+#ifdef __NR_stat
+# define SYS_stat __NR_stat
+#endif
+
+#ifdef __NR_stat64
+# define SYS_stat64 __NR_stat64
+#endif
+
+#ifdef __NR_statfs
+# define SYS_statfs __NR_statfs
+#endif
+
+#ifdef __NR_statfs64
+# define SYS_statfs64 __NR_statfs64
+#endif
+
+#ifdef __NR_statx
+# define SYS_statx __NR_statx
+#endif
+
+#ifdef __NR_stime
+# define SYS_stime __NR_stime
+#endif
+
+#ifdef __NR_stty
+# define SYS_stty __NR_stty
+#endif
+
+#ifdef __NR_subpage_prot
+# define SYS_subpage_prot __NR_subpage_prot
+#endif
+
+#ifdef __NR_swapcontext
+# define SYS_swapcontext __NR_swapcontext
+#endif
+
+#ifdef __NR_swapoff
+# define SYS_swapoff __NR_swapoff
+#endif
+
+#ifdef __NR_swapon
+# define SYS_swapon __NR_swapon
+#endif
+
+#ifdef __NR_switch_endian
+# define SYS_switch_endian __NR_switch_endian
+#endif
+
+#ifdef __NR_symlink
+# define SYS_symlink __NR_symlink
+#endif
+
+#ifdef __NR_symlinkat
+# define SYS_symlinkat __NR_symlinkat
+#endif
+
+#ifdef __NR_sync
+# define SYS_sync __NR_sync
+#endif
+
+#ifdef __NR_sync_file_range
+# define SYS_sync_file_range __NR_sync_file_range
+#endif
+
+#ifdef __NR_sync_file_range2
+# define SYS_sync_file_range2 __NR_sync_file_range2
+#endif
+
+#ifdef __NR_syncfs
+# define SYS_syncfs __NR_syncfs
+#endif
+
+#ifdef __NR_sys_debug_setcontext
+# define SYS_sys_debug_setcontext __NR_sys_debug_setcontext
+#endif
+
+#ifdef __NR_sys_epoll_create
+# define SYS_sys_epoll_create __NR_sys_epoll_create
+#endif
+
+#ifdef __NR_sys_epoll_ctl
+# define SYS_sys_epoll_ctl __NR_sys_epoll_ctl
+#endif
+
+#ifdef __NR_sys_epoll_wait
+# define SYS_sys_epoll_wait __NR_sys_epoll_wait
+#endif
+
+#ifdef __NR_syscall
+# define SYS_syscall __NR_syscall
+#endif
+
+#ifdef __NR_sysfs
+# define SYS_sysfs __NR_sysfs
+#endif
+
+#ifdef __NR_sysinfo
+# define SYS_sysinfo __NR_sysinfo
+#endif
+
+#ifdef __NR_syslog
+# define SYS_syslog __NR_syslog
+#endif
+
+#ifdef __NR_sysmips
+# define SYS_sysmips __NR_sysmips
+#endif
+
+#ifdef __NR_tee
+# define SYS_tee __NR_tee
+#endif
+
+#ifdef __NR_tgkill
+# define SYS_tgkill __NR_tgkill
+#endif
+
+#ifdef __NR_time
+# define SYS_time __NR_time
+#endif
+
+#ifdef __NR_timer_create
+# define SYS_timer_create __NR_timer_create
+#endif
+
+#ifdef __NR_timer_delete
+# define SYS_timer_delete __NR_timer_delete
+#endif
+
+#ifdef __NR_timer_getoverrun
+# define SYS_timer_getoverrun __NR_timer_getoverrun
+#endif
+
+#ifdef __NR_timer_gettime
+# define SYS_timer_gettime __NR_timer_gettime
+#endif
+
+#ifdef __NR_timer_gettime64
+# define SYS_timer_gettime64 __NR_timer_gettime64
+#endif
+
+#ifdef __NR_timer_settime
+# define SYS_timer_settime __NR_timer_settime
+#endif
+
+#ifdef __NR_timer_settime64
+# define SYS_timer_settime64 __NR_timer_settime64
+#endif
+
+#ifdef __NR_timerfd
+# define SYS_timerfd __NR_timerfd
+#endif
+
+#ifdef __NR_timerfd_create
+# define SYS_timerfd_create __NR_timerfd_create
+#endif
+
+#ifdef __NR_timerfd_gettime
+# define SYS_timerfd_gettime __NR_timerfd_gettime
+#endif
+
+#ifdef __NR_timerfd_gettime64
+# define SYS_timerfd_gettime64 __NR_timerfd_gettime64
+#endif
+
+#ifdef __NR_timerfd_settime
+# define SYS_timerfd_settime __NR_timerfd_settime
+#endif
+
+#ifdef __NR_timerfd_settime64
+# define SYS_timerfd_settime64 __NR_timerfd_settime64
+#endif
+
+#ifdef __NR_times
+# define SYS_times __NR_times
+#endif
+
+#ifdef __NR_tkill
+# define SYS_tkill __NR_tkill
+#endif
+
+#ifdef __NR_truncate
+# define SYS_truncate __NR_truncate
+#endif
+
+#ifdef __NR_truncate64
+# define SYS_truncate64 __NR_truncate64
+#endif
+
+#ifdef __NR_tuxcall
+# define SYS_tuxcall __NR_tuxcall
+#endif
+
+#ifdef __NR_udftrap
+# define SYS_udftrap __NR_udftrap
+#endif
+
+#ifdef __NR_ugetrlimit
+# define SYS_ugetrlimit __NR_ugetrlimit
+#endif
+
+#ifdef __NR_ulimit
+# define SYS_ulimit __NR_ulimit
+#endif
+
+#ifdef __NR_umask
+# define SYS_umask __NR_umask
+#endif
+
+#ifdef __NR_umount
+# define SYS_umount __NR_umount
+#endif
+
+#ifdef __NR_umount2
+# define SYS_umount2 __NR_umount2
+#endif
+
+#ifdef __NR_uname
+# define SYS_uname __NR_uname
+#endif
+
+#ifdef __NR_unlink
+# define SYS_unlink __NR_unlink
+#endif
+
+#ifdef __NR_unlinkat
+# define SYS_unlinkat __NR_unlinkat
+#endif
+
+#ifdef __NR_unshare
+# define SYS_unshare __NR_unshare
+#endif
+
+#ifdef __NR_uselib
+# define SYS_uselib __NR_uselib
+#endif
+
+#ifdef __NR_userfaultfd
+# define SYS_userfaultfd __NR_userfaultfd
+#endif
+
+#ifdef __NR_usr26
+# define SYS_usr26 __NR_usr26
+#endif
+
+#ifdef __NR_usr32
+# define SYS_usr32 __NR_usr32
+#endif
+
+#ifdef __NR_ustat
+# define SYS_ustat __NR_ustat
+#endif
+
+#ifdef __NR_utime
+# define SYS_utime __NR_utime
+#endif
+
+#ifdef __NR_utimensat
+# define SYS_utimensat __NR_utimensat
+#endif
+
+#ifdef __NR_utimensat_time64
+# define SYS_utimensat_time64 __NR_utimensat_time64
+#endif
+
+#ifdef __NR_utimes
+# define SYS_utimes __NR_
