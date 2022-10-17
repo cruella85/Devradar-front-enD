@@ -146,4 +146,101 @@ public:
     const_reverse_iterator rend() const noexcept;                                               // constexpr since C++20
 
     const_iterator         cbegin() const noexcept;                                             // constexpr since C++20
-  
+    const_iterator         cend() const noexcept;                                               // constexpr since C++20
+    const_reverse_iterator crbegin() const noexcept;                                            // constexpr since C++20
+    const_reverse_iterator crend() const noexcept;                                              // constexpr since C++20
+
+    size_type size() const noexcept;                                                            // constexpr since C++20
+    size_type length() const noexcept;                                                          // constexpr since C++20
+    size_type max_size() const noexcept;                                                        // constexpr since C++20
+    size_type capacity() const noexcept;                                                        // constexpr since C++20
+
+    void resize(size_type n, value_type c);                                                     // constexpr since C++20
+    void resize(size_type n);                                                                   // constexpr since C++20
+
+    template<class Operation>
+    constexpr void resize_and_overwrite(size_type n, Operation op); // since C++23
+
+    void reserve(size_type res_arg);                                                            // constexpr since C++20
+    void reserve(); // deprecated in C++20
+    void shrink_to_fit();                                                                       // constexpr since C++20
+    void clear() noexcept;                                                                      // constexpr since C++20
+    bool empty() const noexcept;                                                                // constexpr since C++20
+
+    const_reference operator[](size_type pos) const;                                            // constexpr since C++20
+    reference       operator[](size_type pos);                                                  // constexpr since C++20
+
+    const_reference at(size_type n) const;                                                      // constexpr since C++20
+    reference       at(size_type n);                                                            // constexpr since C++20
+
+    basic_string& operator+=(const basic_string& str);                                          // constexpr since C++20
+    template <class T>
+        basic_string& operator+=(const T& t);                                                   // C++17, constexpr since C++20
+    basic_string& operator+=(const value_type* s);                                              // constexpr since C++20
+    basic_string& operator+=(value_type c);                                                     // constexpr since C++20
+    basic_string& operator+=(initializer_list<value_type>);                                     // constexpr since C++20
+
+    basic_string& append(const basic_string& str);                                              // constexpr since C++20
+    template <class T>
+        basic_string& append(const T& t);                                                       // C++17, constexpr since C++20
+    basic_string& append(const basic_string& str, size_type pos, size_type n=npos);             // C++14, constexpr since C++20
+    template <class T>
+        basic_string& append(const T& t, size_type pos, size_type n=npos);                      // C++17, constexpr since C++20
+    basic_string& append(const value_type* s, size_type n);                                     // constexpr since C++20
+    basic_string& append(const value_type* s);                                                  // constexpr since C++20
+    basic_string& append(size_type n, value_type c);                                            // constexpr since C++20
+    template<class InputIterator>
+        basic_string& append(InputIterator first, InputIterator last);                          // constexpr since C++20
+    basic_string& append(initializer_list<value_type>);                                         // constexpr since C++20
+
+    void push_back(value_type c);                                                               // constexpr since C++20
+    void pop_back();                                                                            // constexpr since C++20
+    reference       front();                                                                    // constexpr since C++20
+    const_reference front() const;                                                              // constexpr since C++20
+    reference       back();                                                                     // constexpr since C++20
+    const_reference back() const;                                                               // constexpr since C++20
+
+    basic_string& assign(const basic_string& str);                                              // constexpr since C++20
+    template <class T>
+        basic_string& assign(const T& t);                                                       // C++17, constexpr since C++20
+    basic_string& assign(basic_string&& str);                                                   // constexpr since C++20
+    basic_string& assign(const basic_string& str, size_type pos, size_type n=npos);             // C++14, constexpr since C++20
+    template <class T>
+        basic_string& assign(const T& t, size_type pos, size_type n=npos);                      // C++17, constexpr since C++20
+    basic_string& assign(const value_type* s, size_type n);                                     // constexpr since C++20
+    basic_string& assign(const value_type* s);                                                  // constexpr since C++20
+    basic_string& assign(size_type n, value_type c);                                            // constexpr since C++20
+    template<class InputIterator>
+        basic_string& assign(InputIterator first, InputIterator last);                          // constexpr since C++20
+    basic_string& assign(initializer_list<value_type>);                                         // constexpr since C++20
+
+    basic_string& insert(size_type pos1, const basic_string& str);                              // constexpr since C++20
+    template <class T>
+        basic_string& insert(size_type pos1, const T& t);                                       // constexpr since C++20
+    basic_string& insert(size_type pos1, const basic_string& str,
+                         size_type pos2, size_type n);                                          // constexpr since C++20
+    template <class T>
+        basic_string& insert(size_type pos1, const T& t, size_type pos2, size_type n);          // C++17, constexpr since C++20
+    basic_string& insert(size_type pos, const value_type* s, size_type n=npos);                 // C++14, constexpr since C++20
+    basic_string& insert(size_type pos, const value_type* s);                                   // constexpr since C++20
+    basic_string& insert(size_type pos, size_type n, value_type c);                             // constexpr since C++20
+    iterator      insert(const_iterator p, value_type c);                                       // constexpr since C++20
+    iterator      insert(const_iterator p, size_type n, value_type c);                          // constexpr since C++20
+    template<class InputIterator>
+        iterator insert(const_iterator p, InputIterator first, InputIterator last);             // constexpr since C++20
+    iterator      insert(const_iterator p, initializer_list<value_type>);                       // constexpr since C++20
+
+    basic_string& erase(size_type pos = 0, size_type n = npos);                                 // constexpr since C++20
+    iterator      erase(const_iterator position);                                               // constexpr since C++20
+    iterator      erase(const_iterator first, const_iterator last);                             // constexpr since C++20
+
+    basic_string& replace(size_type pos1, size_type n1, const basic_string& str);               // constexpr since C++20
+    template <class T>
+    basic_string& replace(size_type pos1, size_type n1, const T& t);                            // C++17, constexpr since C++20
+    basic_string& replace(size_type pos1, size_type n1, const basic_string& str,
+                          size_type pos2, size_type n2=npos);                                   // C++14, constexpr since C++20
+    template <class T>
+        basic_string& replace(size_type pos1, size_type n1, const T& t,
+                              size_type pos2, size_type n);                                     // C++17, constexpr since C++20
+    basic_string& replace(size_type pos, size_type n1, const value_type* s, size_type n2);      // constexpr since C++20
+    basic_string& replace(size_typ
