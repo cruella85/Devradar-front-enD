@@ -110,4 +110,103 @@ __END_DECLS
 
 /*
  * Inline implementations of the legacy OSSpinLock interfaces in terms of the
- * of the <os/lock.h> primitives. Dire
+ * of the <os/lock.h> primitives. Direct use of those primitives is preferred.
+ *
+ * NOTE: the locked value of os_unfair_lock is implementation defined and
+ * subject to change, code that relies on the specific locked value used by the
+ * legacy OSSpinLock interface WILL break when using these inline
+ * implementations in terms of os_unfair_lock.
+ */
+
+#if !OSSPINLOCK_USE_INLINED_TRANSPARENT
+
+#include <os/lock.h>
+
+__BEGIN_DECLS
+
+#if __has_attribute(always_inline)
+#define OSSPINLOCK_INLINE static __inline
+#else
+#define OSSPINLOCK_INLINE static __inline __attribute__((__always_inline__))
+#endif
+
+#define OS_SPINLOCK_INIT 0
+typedef int32_t OSSpinLock;
+
+#if  __has_extension(c_static_assert)
+_Static_assert(sizeof(OSSpinLock) == sizeof(os_unfair_lock),
+		"Incompatible os_unfair_lock type");
+#endif
+
+OSSPINLOCK_INLINE
+void
+OSSpinLockLock(volatile OSSpinLock *__lock)
+{
+	os_unfair_lock_t lock = (os_unfair_lock_t)__lock;
+	return os_unfair_lock_lock(lock);
+}
+
+OSSPINLOCK_INLINE
+bool
+OSSpinLockTry(volatile OSSpinLock *__lock)
+{
+	os_unfair_lock_t lock = (os_unfair_lock_t)__lock;
+	return os_unfair_lock_trylock(lock);
+}
+
+OSSPINLOCK_INLINE
+void
+OSSpinLockUnlock(volatile OSSpinLock *__lock)
+{
+	os_unfair_lock_t lock = (os_unfair_lock_t)__lock;
+	return os_unfair_lock_unlock(lock);
+}
+
+#undef OSSPINLOCK_INLINE
+
+__END_DECLS
+
+#else /* OSSPINLOCK_USE_INLINED_TRANSPARENT */
+
+#include    <sys/cdefs.h>
+#include    <stddef.h>
+#include    <stdint.h>
+#include    <stdbool.h>
+#include    <Availability.h>
+
+#define OS_NOSPIN_LOCK_AVAILABILITY \
+		__OSX_AVAILABLE(10.12) __IOS_AVAILABLE(10.0) \
+		__TVOS_AVAILABLE(10.0) __WATCHOS_AVAILABLE(3.0)
+
+__BEGIN_DECLS
+
+#define OS_SPINLOCK_INIT 0
+typedef int32_t OSSpinLock OSSPINLOCK_DEPRECATED_REPLACE_WITH(os_unfair_lock);
+typedef volatile OSSpinLock *_os_nospin_lock_t
+		OSSPINLOCK_DEPRECATED_REPLACE_WITH(os_unfair_lock_t);
+
+OSSPINLOCK_DEPRECATED_REPLACE_WITH(os_unfair_lock_lock)
+OS_NOSPIN_LOCK_AVAILABILITY
+void _os_nospin_lock_lock(_os_nospin_lock_t lock);
+#undef OSSpinLockLock
+#define OSSpinLockLock(lock) _os_nospin_lock_lock(lock)
+
+OSSPINLOCK_DEPRECATED_REPLACE_WITH(os_unfair_lock_trylock)
+OS_NOSPIN_LOCK_AVAILABILITY
+bool _os_nospin_lock_trylock(_os_nospin_lock_t lock);
+#undef OSSpinLockTry
+#define OSSpinLockTry(lock) _os_nospin_lock_trylock(lock)
+
+OSSPINLOCK_DEPRECATED_REPLACE_WITH(os_unfair_lock_unlock)
+OS_NOSPIN_LOCK_AVAILABILITY
+void _os_nospin_lock_unlock(_os_nospin_lock_t lock);
+#undef OSSpinLockUnlock
+#define OSSpinLockUnlock(lock) _os_nospin_lock_unlock(lock)
+
+__END_DECLS
+
+#endif /* OSSPINLOCK_USE_INLINED_TRANSPARENT */
+
+#endif /* OSSPINLOCK_USE_INLINED */
+
+#endif /* _OSSPINLOCK_DEPRECATED_H_ */
