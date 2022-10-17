@@ -1,0 +1,149 @@
+// -*- C++ -*-
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef _LIBCPP_STRING
+#define _LIBCPP_STRING
+
+/*
+    string synopsis
+
+namespace std
+{
+
+template <class stateT>
+class fpos
+{
+private:
+    stateT st;
+public:
+    fpos(streamoff = streamoff());
+
+    operator streamoff() const;
+
+    stateT state() const;
+    void state(stateT);
+
+    fpos& operator+=(streamoff);
+    fpos  operator+ (streamoff) const;
+    fpos& operator-=(streamoff);
+    fpos  operator- (streamoff) const;
+};
+
+template <class stateT> streamoff operator-(const fpos<stateT>& x, const fpos<stateT>& y);
+
+template <class stateT> bool operator==(const fpos<stateT>& x, const fpos<stateT>& y);
+template <class stateT> bool operator!=(const fpos<stateT>& x, const fpos<stateT>& y);
+
+template <class charT>
+struct char_traits
+{
+    typedef charT     char_type;
+    typedef ...       int_type;
+    typedef streamoff off_type;
+    typedef streampos pos_type;
+    typedef mbstate_t state_type;
+
+    static void assign(char_type& c1, const char_type& c2) noexcept;
+    static constexpr bool eq(char_type c1, char_type c2) noexcept;
+    static constexpr bool lt(char_type c1, char_type c2) noexcept;
+
+    static int              compare(const char_type* s1, const char_type* s2, size_t n);
+    static size_t           length(const char_type* s);
+    static const char_type* find(const char_type* s, size_t n, const char_type& a);
+    static char_type*       move(char_type* s1, const char_type* s2, size_t n);
+    static char_type*       copy(char_type* s1, const char_type* s2, size_t n);
+    static char_type*       assign(char_type* s, size_t n, char_type a);
+
+    static constexpr int_type  not_eof(int_type c) noexcept;
+    static constexpr char_type to_char_type(int_type c) noexcept;
+    static constexpr int_type  to_int_type(char_type c) noexcept;
+    static constexpr bool      eq_int_type(int_type c1, int_type c2) noexcept;
+    static constexpr int_type  eof() noexcept;
+};
+
+template <> struct char_traits<char>;
+template <> struct char_traits<wchar_t>;
+template <> struct char_traits<char8_t>;  // C++20
+template <> struct char_traits<char16_t>;
+template <> struct char_traits<char32_t>;
+
+template<class charT, class traits = char_traits<charT>, class Allocator = allocator<charT> >
+class basic_string
+{
+public:
+// types:
+    typedef traits traits_type;
+    typedef typename traits_type::char_type value_type;
+    typedef Allocator allocator_type;
+    typedef typename allocator_type::size_type size_type;
+    typedef typename allocator_type::difference_type difference_type;
+    typedef typename allocator_type::reference reference;
+    typedef typename allocator_type::const_reference const_reference;
+    typedef typename allocator_type::pointer pointer;
+    typedef typename allocator_type::const_pointer const_pointer;
+    typedef implementation-defined iterator;
+    typedef implementation-defined const_iterator;
+    typedef std::reverse_iterator<iterator> reverse_iterator;
+    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+    static const size_type npos = -1;
+
+    basic_string()
+        noexcept(is_nothrow_default_constructible<allocator_type>::value);                      // constexpr since C++20
+    explicit basic_string(const allocator_type& a);                                             // constexpr since C++20
+    basic_string(const basic_string& str);                                                      // constexpr since C++20
+    basic_string(basic_string&& str)
+        noexcept(is_nothrow_move_constructible<allocator_type>::value);                         // constexpr since C++20
+    basic_string(const basic_string& str, size_type pos,
+                 const allocator_type& a = allocator_type());                                   // constexpr since C++20
+    basic_string(const basic_string& str, size_type pos, size_type n,
+                 const Allocator& a = Allocator());                                             // constexpr since C++20
+    template<class T>
+        basic_string(const T& t, size_type pos, size_type n, const Allocator& a = Allocator()); // C++17, constexpr since C++20
+    template <class T>
+        explicit basic_string(const T& t, const Allocator& a = Allocator());                    // C++17, constexpr since C++20
+    basic_string(const value_type* s, const allocator_type& a = allocator_type());              // constexpr since C++20
+    basic_string(const value_type* s, size_type n, const allocator_type& a = allocator_type()); // constexpr since C++20
+    basic_string(nullptr_t) = delete; // C++2b
+    basic_string(size_type n, value_type c, const allocator_type& a = allocator_type());        // constexpr since C++20
+    template<class InputIterator>
+        basic_string(InputIterator begin, InputIterator end,
+                     const allocator_type& a = allocator_type());                               // constexpr since C++20
+    basic_string(initializer_list<value_type>, const Allocator& = Allocator());                 // constexpr since C++20
+    basic_string(const basic_string&, const Allocator&);                                        // constexpr since C++20
+    basic_string(basic_string&&, const Allocator&);                                             // constexpr since C++20
+
+    ~basic_string();                                                                            // constexpr since C++20
+
+    operator basic_string_view<charT, traits>() const noexcept;                                 // constexpr since C++20
+
+    basic_string& operator=(const basic_string& str);                                           // constexpr since C++20
+    template <class T>
+        basic_string& operator=(const T& t);                                                    // C++17, constexpr since C++20
+    basic_string& operator=(basic_string&& str)
+        noexcept(
+             allocator_type::propagate_on_container_move_assignment::value ||
+             allocator_type::is_always_equal::value );                                          // C++17, constexpr since C++20
+    basic_string& operator=(const value_type* s);                                               // constexpr since C++20
+    basic_string& operator=(nullptr_t) = delete; // C++2b
+    basic_string& operator=(value_type c);                                                      // constexpr since C++20
+    basic_string& operator=(initializer_list<value_type>);                                      // constexpr since C++20
+
+    iterator       begin() noexcept;                                                            // constexpr since C++20
+    const_iterator begin() const noexcept;                                                      // constexpr since C++20
+    iterator       end() noexcept;                                                              // constexpr since C++20
+    const_iterator end() const noexcept;                                                        // constexpr since C++20
+
+    reverse_iterator       rbegin() noexcept;                                                   // constexpr since C++20
+    const_reverse_iterator rbegin() const noexcept;                                             // constexpr since C++20
+    reverse_iterator       rend() noexcept;                                                     // constexpr since C++20
+    const_reverse_iterator rend() const noexcept;                                               // constexpr since C++20
+
+    const_iterator         cbegin() const noexcept;                                             // constexpr since C++20
+  
