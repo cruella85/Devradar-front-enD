@@ -508,4 +508,257 @@ template <> struct hash<wstring>;
 
 basic_string<char>     operator "" s( const char *str,     size_t len );           // C++14, constexpr since C++20
 basic_string<wchar_t>  operator "" s( const wchar_t *str,  size_t len );           // C++14, constexpr since C++20
-constexpr basic_string<char8_t>  operator "" s( const char8_t
+constexpr basic_string<char8_t>  operator "" s( const char8_t *str,  size_t len ); // C++20
+basic_string<char16_t> operator "" s( const char16_t *str, size_t len );           // C++14, constexpr since C++20
+basic_string<char32_t> operator "" s( const char32_t *str, size_t len );           // C++14, constexpr since C++20
+
+}  // std
+
+*/
+
+#include <__algorithm/max.h>
+#include <__algorithm/min.h>
+#include <__algorithm/remove.h>
+#include <__algorithm/remove_if.h>
+#include <__assert> // all public C++ headers provide the assertion handler
+#include <__config>
+#include <__debug>
+#include <__format/enable_insertable.h>
+#include <__functional/hash.h>
+#include <__functional/unary_function.h>
+#include <__ios/fpos.h>
+#include <__iterator/distance.h>
+#include <__iterator/iterator_traits.h>
+#include <__iterator/reverse_iterator.h>
+#include <__iterator/wrap_iter.h>
+#include <__memory/allocate_at_least.h>
+#include <__memory/swap_allocator.h>
+#include <__string/char_traits.h>
+#include <__string/extern_template_lists.h>
+#include <__utility/auto_cast.h>
+#include <__utility/move.h>
+#include <__utility/swap.h>
+#include <__utility/unreachable.h>
+#include <climits>
+#include <cstdint>
+#include <cstdio>  // EOF
+#include <cstdlib>
+#include <cstring>
+#include <iosfwd>
+#include <limits>
+#include <memory>
+#include <stdexcept>
+#include <string_view>
+#include <type_traits>
+#include <version>
+
+#ifndef _LIBCPP_HAS_NO_WIDE_CHARACTERS
+#  include <cwchar>
+#endif
+
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#  include <algorithm>
+#  include <functional>
+#  include <iterator>
+#  include <new>
+#  include <typeinfo>
+#  include <utility>
+#  include <vector>
+#endif
+
+// standard-mandated includes
+
+// [iterator.range]
+#include <__iterator/access.h>
+#include <__iterator/data.h>
+#include <__iterator/empty.h>
+#include <__iterator/reverse_access.h>
+#include <__iterator/size.h>
+
+// [string.syn]
+#include <compare>
+#include <initializer_list>
+
+#if !defined(_LIBCPP_HAS_NO_PRAGMA_SYSTEM_HEADER)
+#  pragma GCC system_header
+#endif
+
+_LIBCPP_PUSH_MACROS
+#include <__undef_macros>
+
+
+_LIBCPP_BEGIN_NAMESPACE_STD
+
+// basic_string
+
+template<class _CharT, class _Traits, class _Allocator>
+basic_string<_CharT, _Traits, _Allocator>
+_LIBCPP_CONSTEXPR_AFTER_CXX17
+operator+(const basic_string<_CharT, _Traits, _Allocator>& __x,
+          const basic_string<_CharT, _Traits, _Allocator>& __y);
+
+template<class _CharT, class _Traits, class _Allocator>
+_LIBCPP_CONSTEXPR_AFTER_CXX17
+basic_string<_CharT, _Traits, _Allocator>
+operator+(const _CharT* __x, const basic_string<_CharT,_Traits,_Allocator>& __y);
+
+template<class _CharT, class _Traits, class _Allocator>
+_LIBCPP_CONSTEXPR_AFTER_CXX17
+basic_string<_CharT, _Traits, _Allocator>
+operator+(_CharT __x, const basic_string<_CharT,_Traits,_Allocator>& __y);
+
+template<class _CharT, class _Traits, class _Allocator>
+inline _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+basic_string<_CharT, _Traits, _Allocator>
+operator+(const basic_string<_CharT, _Traits, _Allocator>& __x, const _CharT* __y);
+
+template<class _CharT, class _Traits, class _Allocator>
+_LIBCPP_CONSTEXPR_AFTER_CXX17
+basic_string<_CharT, _Traits, _Allocator>
+operator+(const basic_string<_CharT, _Traits, _Allocator>& __x, _CharT __y);
+
+extern template _LIBCPP_FUNC_VIS string operator+<char, char_traits<char>, allocator<char> >(char const*, string const&);
+
+template <class _Iter>
+struct __string_is_trivial_iterator : public false_type {};
+
+template <class _Tp>
+struct __string_is_trivial_iterator<_Tp*>
+    : public is_arithmetic<_Tp> {};
+
+template <class _Iter>
+struct __string_is_trivial_iterator<__wrap_iter<_Iter> >
+    : public __string_is_trivial_iterator<_Iter> {};
+
+template <class _CharT, class _Traits, class _Tp>
+struct __can_be_converted_to_string_view : public _BoolConstant<
+      is_convertible<const _Tp&, basic_string_view<_CharT, _Traits> >::value &&
+     !is_convertible<const _Tp&, const _CharT*>::value
+    > {};
+
+#ifndef _LIBCPP_HAS_NO_CHAR8_T
+typedef basic_string<char8_t> u8string;
+#endif
+typedef basic_string<char16_t> u16string;
+typedef basic_string<char32_t> u32string;
+
+struct __uninitialized_size_tag {};
+
+template<class _CharT, class _Traits, class _Allocator>
+class
+    _LIBCPP_TEMPLATE_VIS
+#ifndef _LIBCPP_HAS_NO_CHAR8_T
+    _LIBCPP_PREFERRED_NAME(u8string)
+#endif
+    _LIBCPP_PREFERRED_NAME(u16string)
+    _LIBCPP_PREFERRED_NAME(u32string)
+    basic_string
+{
+public:
+    typedef basic_string                                 __self;
+    typedef basic_string_view<_CharT, _Traits>           __self_view;
+    typedef _Traits                                      traits_type;
+    typedef _CharT                                       value_type;
+    typedef _Allocator                                   allocator_type;
+    typedef allocator_traits<allocator_type>             __alloc_traits;
+    typedef typename __alloc_traits::size_type           size_type;
+    typedef typename __alloc_traits::difference_type     difference_type;
+    typedef value_type&                                  reference;
+    typedef const value_type&                            const_reference;
+    typedef typename __alloc_traits::pointer             pointer;
+    typedef typename __alloc_traits::const_pointer       const_pointer;
+
+    static_assert((!is_array<value_type>::value), "Character type of basic_string must not be an array");
+    static_assert(( is_standard_layout<value_type>::value), "Character type of basic_string must be standard-layout");
+    static_assert(( is_trivial<value_type>::value), "Character type of basic_string must be trivial");
+    static_assert(( is_same<_CharT, typename traits_type::char_type>::value),
+                  "traits_type::char_type must be the same type as CharT");
+    static_assert(( is_same<typename allocator_type::value_type, value_type>::value),
+                  "Allocator::value_type must be same type as value_type");
+
+    typedef __wrap_iter<pointer>                         iterator;
+    typedef __wrap_iter<const_pointer>                   const_iterator;
+    typedef std::reverse_iterator<iterator>              reverse_iterator;
+    typedef std::reverse_iterator<const_iterator>        const_reverse_iterator;
+
+private:
+    static_assert(CHAR_BIT == 8, "This implementation assumes that one byte contains 8 bits");
+
+#ifdef _LIBCPP_ABI_ALTERNATE_STRING_LAYOUT
+
+    struct __long
+    {
+        pointer   __data_;
+        size_type __size_;
+        size_type __cap_ : sizeof(size_type) * CHAR_BIT - 1;
+        size_type __is_long_ : 1;
+    };
+
+    enum {__min_cap = (sizeof(__long) - 1)/sizeof(value_type) > 2 ?
+                      (sizeof(__long) - 1)/sizeof(value_type) : 2};
+
+    struct __short
+    {
+        value_type __data_[__min_cap];
+        unsigned char __padding_[sizeof(value_type) - 1];
+        unsigned char __size_ : 7;
+        unsigned char __is_long_ : 1;
+    };
+
+// The __endian_factor is required because the field we use to store the size
+// has one fewer bit than it would if it were not a bitfield.
+//
+// If the LSB is used to store the short-flag in the short string representation,
+// we have to multiply the size by two when it is stored and divide it by two when
+// it is loaded to make sure that we always store an even number. In the long string
+// representation, we can ignore this because we can assume that we always allocate
+// an even amount of value_types.
+//
+// If the MSB is used for the short-flag, the max_size() is numeric_limits<size_type>::max() / 2.
+// This does not impact the short string representation, since we never need the MSB
+// for representing the size of a short string anyway.
+
+#ifdef _LIBCPP_BIG_ENDIAN
+    static const size_type __endian_factor = 2;
+#else
+    static const size_type __endian_factor = 1;
+#endif
+
+#else // _LIBCPP_ABI_ALTERNATE_STRING_LAYOUT
+
+#ifdef _LIBCPP_BIG_ENDIAN
+    static const size_type __endian_factor = 1;
+#else
+    static const size_type __endian_factor = 2;
+#endif
+
+    // Attribute 'packed' is used to keep the layout compatible with the
+    // previous definition that did not use bit fields. This is because on
+    // some platforms bit fields have a default size rather than the actual
+    // size used, e.g., it is 4 bytes on AIX. See D128285 for details.
+    struct __long
+    {
+        struct _LIBCPP_PACKED {
+            size_type __is_long_ : 1;
+            size_type __cap_ : sizeof(size_type) * CHAR_BIT - 1;
+        };
+        size_type __size_;
+        pointer   __data_;
+    };
+
+    enum {__min_cap = (sizeof(__long) - 1)/sizeof(value_type) > 2 ?
+                      (sizeof(__long) - 1)/sizeof(value_type) : 2};
+
+    struct __short
+    {
+        struct _LIBCPP_PACKED {
+            unsigned char __is_long_ : 1;
+            unsigned char __size_ : 7;
+        };
+        char __padding_[sizeof(value_type) - 1];
+        value_type __data_[__min_cap];
+    };
+
+#endif // _LIBCPP_ABI_ALTERNATE_STRING_LAYOUT
+
+    static_assert(sizeof(__short) == (sizeof(value_type) * 
