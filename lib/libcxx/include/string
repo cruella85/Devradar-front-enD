@@ -243,4 +243,102 @@ public:
         basic_string& replace(size_type pos1, size_type n1, const T& t,
                               size_type pos2, size_type n);                                     // C++17, constexpr since C++20
     basic_string& replace(size_type pos, size_type n1, const value_type* s, size_type n2);      // constexpr since C++20
-    basic_string& replace(size_typ
+    basic_string& replace(size_type pos, size_type n1, const value_type* s);                    // constexpr since C++20
+    basic_string& replace(size_type pos, size_type n1, size_type n2, value_type c);             // constexpr since C++20
+    basic_string& replace(const_iterator i1, const_iterator i2, const basic_string& str);       // constexpr since C++20
+    template <class T>
+        basic_string& replace(const_iterator i1, const_iterator i2, const T& t);                // C++17, constexpr since C++20
+    basic_string& replace(const_iterator i1, const_iterator i2, const value_type* s, size_type n); // constexpr since C++20
+    basic_string& replace(const_iterator i1, const_iterator i2, const value_type* s);           // constexpr since C++20
+    basic_string& replace(const_iterator i1, const_iterator i2, size_type n, value_type c);     // constexpr since C++20
+    template<class InputIterator>
+        basic_string& replace(const_iterator i1, const_iterator i2, InputIterator j1, InputIterator j2); // constexpr since C++20
+    basic_string& replace(const_iterator i1, const_iterator i2, initializer_list<value_type>);  // constexpr since C++20
+
+    size_type copy(value_type* s, size_type n, size_type pos = 0) const;                        // constexpr since C++20
+    basic_string substr(size_type pos = 0, size_type n = npos) const;                           // constexpr since C++20
+
+    void swap(basic_string& str)
+        noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+                 allocator_traits<allocator_type>::is_always_equal::value);                     // C++17, constexpr since C++20
+
+    const value_type* c_str() const noexcept;                                                   // constexpr since C++20
+    const value_type* data() const noexcept;                                                    // constexpr since C++20
+          value_type* data()       noexcept;                                                    // C++17, constexpr since C++20
+
+    allocator_type get_allocator() const noexcept;                                              // constexpr since C++20
+
+    size_type find(const basic_string& str, size_type pos = 0) const noexcept;                  // constexpr since C++20
+    template <class T>
+        size_type find(const T& t, size_type pos = 0) const noexcept;                           // C++17, noexcept as an extension, constexpr since C++20
+    size_type find(const value_type* s, size_type pos, size_type n) const noexcept;             // constexpr since C++20
+    size_type find(const value_type* s, size_type pos = 0) const noexcept;                      // constexpr since C++20
+    size_type find(value_type c, size_type pos = 0) const noexcept;                             // constexpr since C++20
+
+    size_type rfind(const basic_string& str, size_type pos = npos) const noexcept;              // constexpr since C++20
+    template <class T>
+        size_type rfind(const T& t, size_type pos = npos) const noexcept;                       // C++17, noexcept as an extension, constexpr since C++20
+    size_type rfind(const value_type* s, size_type pos, size_type n) const noexcept;            // constexpr since C++20
+    size_type rfind(const value_type* s, size_type pos = npos) const noexcept;                  // constexpr since C++20
+    size_type rfind(value_type c, size_type pos = npos) const noexcept;                         // constexpr since C++20
+
+    size_type find_first_of(const basic_string& str, size_type pos = 0) const noexcept;         // constexpr since C++20
+    template <class T>
+        size_type find_first_of(const T& t, size_type pos = 0) const noexcept;                  // C++17, noexcept as an extension, constexpr since C++20
+    size_type find_first_of(const value_type* s, size_type pos, size_type n) const noexcept;    // constexpr since C++20
+    size_type find_first_of(const value_type* s, size_type pos = 0) const noexcept;             // constexpr since C++20
+    size_type find_first_of(value_type c, size_type pos = 0) const noexcept;                    // constexpr since C++20
+
+    size_type find_last_of(const basic_string& str, size_type pos = npos) const noexcept;       // constexpr since C++20
+    template <class T>
+        size_type find_last_of(const T& t, size_type pos = npos) const noexcept noexcept;       // C++17, noexcept as an extension, constexpr since C++20
+    size_type find_last_of(const value_type* s, size_type pos, size_type n) const noexcept;     // constexpr since C++20
+    size_type find_last_of(const value_type* s, size_type pos = npos) const noexcept;           // constexpr since C++20
+    size_type find_last_of(value_type c, size_type pos = npos) const noexcept;                  // constexpr since C++20
+
+    size_type find_first_not_of(const basic_string& str, size_type pos = 0) const noexcept;     // constexpr since C++20
+    template <class T>
+        size_type find_first_not_of(const T& t, size_type pos = 0) const noexcept;              // C++17, noexcept as an extension, constexpr since C++20
+    size_type find_first_not_of(const value_type* s, size_type pos, size_type n) const noexcept; // constexpr since C++20
+    size_type find_first_not_of(const value_type* s, size_type pos = 0) const noexcept;         // constexpr since C++20
+    size_type find_first_not_of(value_type c, size_type pos = 0) const noexcept;                // constexpr since C++20
+
+    size_type find_last_not_of(const basic_string& str, size_type pos = npos) const noexcept;   // constexpr since C++20
+    template <class T>
+        size_type find_last_not_of(const T& t, size_type pos = npos) const noexcept;            // C++17, noexcept as an extension, constexpr since C++20
+    size_type find_last_not_of(const value_type* s, size_type pos, size_type n) const noexcept; // constexpr since C++20
+    size_type find_last_not_of(const value_type* s, size_type pos = npos) const noexcept;       // constexpr since C++20
+    size_type find_last_not_of(value_type c, size_type pos = npos) const noexcept;              // constexpr since C++20
+
+    int compare(const basic_string& str) const noexcept;                                        // constexpr since C++20
+    template <class T>
+        int compare(const T& t) const noexcept;                                                 // C++17, noexcept as an extension, constexpr since C++20
+    int compare(size_type pos1, size_type n1, const basic_string& str) const;                   // constexpr since C++20
+    template <class T>
+        int compare(size_type pos1, size_type n1, const T& t) const;                            // C++17, constexpr since C++20
+    int compare(size_type pos1, size_type n1, const basic_string& str,
+                size_type pos2, size_type n2=npos) const;                                       // C++14, constexpr since C++20
+    template <class T>
+        int compare(size_type pos1, size_type n1, const T& t,
+                    size_type pos2, size_type n2=npos) const;                                   // C++17, constexpr since C++20
+    int compare(const value_type* s) const noexcept;                                            // constexpr since C++20
+    int compare(size_type pos1, size_type n1, const value_type* s) const;                       // constexpr since C++20
+    int compare(size_type pos1, size_type n1, const value_type* s, size_type n2) const;         // constexpr since C++20
+
+    constexpr bool starts_with(basic_string_view<charT, traits> sv) const noexcept;             // C++20
+    constexpr bool starts_with(charT c) const noexcept;                                         // C++20
+    constexpr bool starts_with(const charT* s) const;                                           // C++20
+    constexpr bool ends_with(basic_string_view<charT, traits> sv) const noexcept;               // C++20
+    constexpr bool ends_with(charT c) const noexcept;                                           // C++20
+    constexpr bool ends_with(const charT* s) const;                                             // C++20
+
+    constexpr bool contains(basic_string_view<charT, traits> sv) const noexcept;                // C++2b
+    constexpr bool contains(charT c) const noexcept;                                            // C++2b
+    constexpr bool contains(const charT* s) const;                                              // C++2b
+};
+
+template<class InputIterator,
+         class Allocator = allocator<typename iterator_traits<InputIterator>::value_type>>
+basic_string(InputIterator, InputIterator, Allocator = Allocator())
+   -> basic_string<typename iterator_traits<InputIterator>::value_type,
+                  char_traits<typename iterator_traits<Input
