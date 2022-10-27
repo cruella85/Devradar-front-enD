@@ -1151,4 +1151,176 @@ public:
 
     template <class _Tp>
     _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
-    __
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            basic_string&
+        >
+                 insert(size_type __pos1, const _Tp& __t)
+    { __self_view __sv = __t; return insert(__pos1, __sv.data(), __sv.size()); }
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value && !__is_same_uncvref<_Tp, basic_string>::value,
+            basic_string&
+        >
+                  insert(size_type __pos1, const _Tp& __t, size_type __pos2, size_type __n=npos);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& insert(size_type __pos1, const basic_string& __str, size_type __pos2, size_type __n=npos);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& insert(size_type __pos, const value_type* __s, size_type __n);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& insert(size_type __pos, const value_type* __s);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& insert(size_type __pos, size_type __n, value_type __c);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 iterator      insert(const_iterator __pos, value_type __c);
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    iterator      insert(const_iterator __pos, size_type __n, value_type __c);
+    template<class _InputIterator>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __is_exactly_cpp17_input_iterator<_InputIterator>::value,
+            iterator
+        >
+        insert(const_iterator __pos, _InputIterator __first, _InputIterator __last);
+    template<class _ForwardIterator>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __is_cpp17_forward_iterator<_ForwardIterator>::value,
+            iterator
+        >
+        insert(const_iterator __pos, _ForwardIterator __first, _ForwardIterator __last);
+#ifndef _LIBCPP_CXX03_LANG
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    iterator insert(const_iterator __pos, initializer_list<value_type> __il)
+                    {return insert(__pos, __il.begin(), __il.end());}
+#endif // _LIBCPP_CXX03_LANG
+
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& erase(size_type __pos = 0, size_type __n = npos);
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    iterator      erase(const_iterator __pos);
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    iterator      erase(const_iterator __first, const_iterator __last);
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(size_type __pos1, size_type __n1, const basic_string& __str);
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            basic_string&
+        >
+                  replace(size_type __pos1, size_type __n1, const _Tp& __t) { __self_view __sv = __t; return replace(__pos1, __n1, __sv.data(), __sv.size()); }
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(size_type __pos1, size_type __n1, const basic_string& __str, size_type __pos2, size_type __n2=npos);
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value  && !__is_same_uncvref<_Tp, basic_string>::value,
+            basic_string&
+        >
+                  replace(size_type __pos1, size_type __n1, const _Tp& __t, size_type __pos2, size_type __n2=npos);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(size_type __pos, size_type __n1, const value_type* __s, size_type __n2);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& replace(size_type __pos, size_type __n1, const value_type* __s);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& replace(size_type __pos, size_type __n1, size_type __n2, value_type __c);
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(const_iterator __i1, const_iterator __i2, const basic_string& __str);
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            basic_string&
+        >
+                  replace(const_iterator __i1, const_iterator __i2, const _Tp& __t) { __self_view __sv = __t; return replace(__i1 - begin(), __i2 - __i1, __sv); }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(const_iterator __i1, const_iterator __i2, const value_type* __s, size_type __n);
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(const_iterator __i1, const_iterator __i2, const value_type* __s);
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(const_iterator __i1, const_iterator __i2, size_type __n, value_type __c);
+    template<class _InputIterator>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __is_cpp17_input_iterator<_InputIterator>::value,
+            basic_string&
+        >
+        replace(const_iterator __i1, const_iterator __i2, _InputIterator __j1, _InputIterator __j2);
+#ifndef _LIBCPP_CXX03_LANG
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string& replace(const_iterator __i1, const_iterator __i2, initializer_list<value_type> __il)
+        {return replace(__i1, __i2, __il.begin(), __il.end());}
+#endif // _LIBCPP_CXX03_LANG
+
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 size_type copy(value_type* __s, size_type __n, size_type __pos = 0) const;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    basic_string substr(size_type __pos = 0, size_type __n = npos) const;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void swap(basic_string& __str)
+#if _LIBCPP_STD_VER >= 14
+        _NOEXCEPT;
+#else
+        _NOEXCEPT_(!__alloc_traits::propagate_on_container_swap::value ||
+                    __is_nothrow_swappable<allocator_type>::value);
+#endif
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    const value_type* c_str() const _NOEXCEPT {return data();}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    const value_type* data() const _NOEXCEPT  {return std::__to_address(__get_pointer());}
+#if _LIBCPP_STD_VER > 14 || defined(_LIBCPP_BUILDING_LIBRARY)
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    value_type* data()             _NOEXCEPT  {return std::__to_address(__get_pointer());}
+#endif
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    allocator_type get_allocator() const _NOEXCEPT {return __alloc();}
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find(const basic_string& __str, size_type __pos = 0) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            size_type
+        >
+              find(const _Tp& __t, size_type __pos = 0) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find(const value_type* __s, size_type __pos, size_type __n) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find(const value_type* __s, size_type __pos = 0) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 size_type find(value_type __c, size_type __pos = 0) const _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type rfind(const basic_string& __str, size_type __pos = npos) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            size_type
+        >
+              rfind(const _Tp& __t, size_type __pos = npos) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type rfind(const value_type* __s, size_type __pos, size_type __n) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type rfind(const value_type* __s, size_type __pos = npos) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 size_type rfind(value_type __c, size_type __pos = npos) const _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_of(const basic_string& __str, size_type __pos = 0) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CON
