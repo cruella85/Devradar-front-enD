@@ -1529,4 +1529,199 @@ private:
     }
 
     _LIBCPP_CONSTEXPR _LIBCPP_HIDE_FROM_ABI static bool __fits_in_sso(size_type __sz) {
-   
+        // SSO is disabled during constant evaluation because `__is_long` isn't constexpr friendly
+        return !__libcpp_is_constant_evaluated() && (__sz < __min_cap);
+    }
+
+    template <class _ForwardIterator>
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX11
+    iterator __insert_from_safe_copy(size_type __n, size_type __ip, _ForwardIterator __first, _ForwardIterator __last) {
+        size_type __sz = size();
+        size_type __cap = capacity();
+        value_type* __p;
+        if (__cap - __sz >= __n)
+        {
+            __p = std::__to_address(__get_pointer());
+            size_type __n_move = __sz - __ip;
+            if (__n_move != 0)
+                traits_type::move(__p + __ip + __n, __p + __ip, __n_move);
+        }
+        else
+        {
+            __grow_by(__cap, __sz + __n - __cap, __sz, __ip, 0, __n);
+            __p = std::__to_address(__get_long_pointer());
+        }
+        __sz += __n;
+        __set_size(__sz);
+        traits_type::assign(__p[__sz], value_type());
+        for (__p += __ip; __first != __last; ++__p, ++__first)
+            traits_type::assign(*__p, *__first);
+
+        return begin() + __ip;
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX11 allocator_type& __alloc() _NOEXCEPT { return __r_.second(); }
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR const allocator_type& __alloc() const _NOEXCEPT { return __r_.second(); }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __set_short_size(size_type __s) _NOEXCEPT {
+        _LIBCPP_ASSERT(__s < __min_cap, "__s should never be greater than or equal to the short string capacity");
+        __r_.first().__s.__size_ = __s;
+        __r_.first().__s.__is_long_ = false;
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type __get_short_size() const _NOEXCEPT {
+        _LIBCPP_ASSERT(!__r_.first().__s.__is_long_, "String has to be short when trying to get the short size");
+        return __r_.first().__s.__size_;
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __set_long_size(size_type __s) _NOEXCEPT
+        {__r_.first().__l.__size_ = __s;}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type __get_long_size() const _NOEXCEPT
+        {return __r_.first().__l.__size_;}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __set_size(size_type __s) _NOEXCEPT
+        {if (__is_long()) __set_long_size(__s); else __set_short_size(__s);}
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __set_long_cap(size_type __s) _NOEXCEPT {
+        __r_.first().__l.__cap_ = __s / __endian_factor;
+        __r_.first().__l.__is_long_ = true;
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type __get_long_cap() const _NOEXCEPT {
+        return __r_.first().__l.__cap_ * __endian_factor;
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __set_long_pointer(pointer __p) _NOEXCEPT
+        {__r_.first().__l.__data_ = __p;}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    pointer __get_long_pointer() _NOEXCEPT
+        {return __r_.first().__l.__data_;}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    const_pointer __get_long_pointer() const _NOEXCEPT
+        {return __r_.first().__l.__data_;}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    pointer __get_short_pointer() _NOEXCEPT
+        {return pointer_traits<pointer>::pointer_to(__r_.first().__s.__data_[0]);}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    const_pointer __get_short_pointer() const _NOEXCEPT
+        {return pointer_traits<const_pointer>::pointer_to(__r_.first().__s.__data_[0]);}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    pointer __get_pointer() _NOEXCEPT
+        {return __is_long() ? __get_long_pointer() : __get_short_pointer();}
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    const_pointer __get_pointer() const _NOEXCEPT
+        {return __is_long() ? __get_long_pointer() : __get_short_pointer();}
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __zero() _NOEXCEPT {
+        __r_.first() = __rep();
+    }
+
+    template <size_type __a> static
+        _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+        size_type __align_it(size_type __s) _NOEXCEPT
+            {return (__s + (__a-1)) & ~(__a-1);}
+    enum {__alignment = 16};
+    static _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type __recommend(size_type __s) _NOEXCEPT
+    {
+        if (__s < __min_cap) {
+            if (__libcpp_is_constant_evaluated())
+                return static_cast<size_type>(__min_cap);
+            else
+                return static_cast<size_type>(__min_cap) - 1;
+        }
+        size_type __guess = __align_it<sizeof(value_type) < __alignment ?
+                     __alignment/sizeof(value_type) : 1 > (__s+1) - 1;
+        if (__guess == __min_cap) ++__guess;
+        return __guess;
+    }
+
+    inline _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __init(const value_type* __s, size_type __sz, size_type __reserve);
+    inline _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __init(const value_type* __s, size_type __sz);
+    inline _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __init(size_type __n, value_type __c);
+
+    // Slow path for the (inlined) copy constructor for 'long' strings.
+    // Always externally instantiated and not inlined.
+    // Requires that __s is zero terminated.
+    // The main reason for this function to exist is because for unstable, we
+    // want to allow inlining of the copy constructor. However, we don't want
+    // to call the __init() functions as those are marked as inline which may
+    // result in over-aggressive inlining by the compiler, where our aim is
+    // to only inline the fast path code directly in the ctor.
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 void __init_copy_ctor_external(const value_type* __s, size_type __sz);
+
+    template <class _InputIterator>
+    inline _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+    <
+        __is_exactly_cpp17_input_iterator<_InputIterator>::value
+    >
+    __init(_InputIterator __first, _InputIterator __last);
+
+    template <class _ForwardIterator>
+    inline _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+    <
+        __is_cpp17_forward_iterator<_ForwardIterator>::value
+    >
+    __init(_ForwardIterator __first, _ForwardIterator __last);
+
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __grow_by(size_type __old_cap, size_type __delta_cap, size_type __old_sz,
+                   size_type __n_copy,  size_type __n_del,     size_type __n_add = 0);
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __grow_by_and_replace(size_type __old_cap, size_type __delta_cap, size_type __old_sz,
+                               size_type __n_copy,  size_type __n_del,
+                               size_type __n_add, const value_type* __p_new_stuff);
+
+    // __assign_no_alias is invoked for assignment operations where we
+    // have proof that the input does not alias the current instance.
+    // For example, operator=(basic_string) performs a 'self' check.
+    template <bool __is_short>
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 basic_string& __assign_no_alias(const value_type* __s, size_type __n);
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __erase_to_end(size_type __pos);
+
+    // __erase_external_with_move is invoked for erase() invocations where
+    // `n ~= npos`, likely requiring memory moves on the string data.
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 void __erase_external_with_move(size_type __pos, size_type __n);
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __copy_assign_alloc(const basic_string& __str)
+        {__copy_assign_alloc(__str, integral_constant<bool,
+                      __alloc_traits::propagate_on_container_copy_assignment::value>());}
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    void __copy_assign_alloc(const basic_string& __str, true_type)
+        {
+            if (__alloc() == __str.__alloc())
+                __alloc() = __str.__alloc();
+            else
+            {
+                if (!__str.__is_long())
+                {
+                    __clear_and_shrink();
+                    __alloc() = __str.__alloc();
+                }
+                else
+                {
+                    allocator_type __a = __str.__alloc();
+                    auto __allocation = std::__allocate_at_least(__a, __str.__get_long_cap());
+                    __begin_lifetime(__allocation.ptr, __allocation.count);
+                    __clear_and_shrink();
+                    __alloc() = std::move(__a);
+                    __set_long_pointer(__allocation.ptr);
+                    __set_long_cap(__allocation.count);
+                    __set_long_size(__str
