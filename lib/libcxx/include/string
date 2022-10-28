@@ -1323,4 +1323,210 @@ public:
     size_type find_first_of(const basic_string& __str, size_type __pos = 0) const _NOEXCEPT;
 
     template <class _Tp>
-    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CON
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            size_type
+        >
+              find_first_of(const _Tp& __t, size_type __pos = 0) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_of(const value_type* __s, size_type __pos, size_type __n) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_of(const value_type* __s, size_type __pos = 0) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_of(value_type __c, size_type __pos = 0) const _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_of(const basic_string& __str, size_type __pos = npos) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            size_type
+        >
+              find_last_of(const _Tp& __t, size_type __pos = npos) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_of(const value_type* __s, size_type __pos, size_type __n) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_of(const value_type* __s, size_type __pos = npos) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_of(value_type __c, size_type __pos = npos) const _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_not_of(const basic_string& __str, size_type __pos = 0) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            size_type
+        >
+              find_first_not_of(const _Tp &__t, size_type __pos = 0) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_not_of(const value_type* __s, size_type __pos, size_type __n) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_not_of(const value_type* __s, size_type __pos = 0) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_first_not_of(value_type __c, size_type __pos = 0) const _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_not_of(const basic_string& __str, size_type __pos = npos) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            size_type
+        >
+              find_last_not_of(const _Tp& __t, size_type __pos = npos) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_not_of(const value_type* __s, size_type __pos, size_type __n) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_not_of(const value_type* __s, size_type __pos = npos) const _NOEXCEPT;
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    size_type find_last_not_of(value_type __c, size_type __pos = npos) const _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    int compare(const basic_string& __str) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            int
+        >
+        compare(const _Tp &__t) const _NOEXCEPT;
+
+    template <class _Tp>
+    _LIBCPP_METHOD_TEMPLATE_IMPLICIT_INSTANTIATION_VIS _LIBCPP_CONSTEXPR_AFTER_CXX17
+    __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value,
+            int
+        >
+         compare(size_type __pos1, size_type __n1, const _Tp& __t) const;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    int compare(size_type __pos1, size_type __n1, const basic_string& __str) const;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    int compare(size_type __pos1, size_type __n1, const basic_string& __str, size_type __pos2,
+                size_type __n2 = npos) const;
+
+    template <class _Tp>
+    inline _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+        __enable_if_t
+        <
+            __can_be_converted_to_string_view<_CharT, _Traits, _Tp>::value  && !__is_same_uncvref<_Tp, basic_string>::value,
+            int
+        >
+        compare(size_type __pos1, size_type __n1, const _Tp& __t, size_type __pos2, size_type __n2=npos) const;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 int compare(const value_type* __s) const _NOEXCEPT;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17 int compare(size_type __pos1, size_type __n1, const value_type* __s) const;
+    _LIBCPP_CONSTEXPR_AFTER_CXX17
+    int compare(size_type __pos1, size_type __n1, const value_type* __s, size_type __n2) const;
+
+#if _LIBCPP_STD_VER > 17
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool starts_with(__self_view __sv) const noexcept
+    { return __self_view(data(), size()).starts_with(__sv); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool starts_with(value_type __c) const noexcept
+    { return !empty() && _Traits::eq(front(), __c); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool starts_with(const value_type* __s) const noexcept
+    { return starts_with(__self_view(__s)); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool ends_with(__self_view __sv) const noexcept
+    { return __self_view(data(), size()).ends_with( __sv); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool ends_with(value_type __c) const noexcept
+    { return !empty() && _Traits::eq(back(), __c); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool ends_with(const value_type* __s) const noexcept
+    { return ends_with(__self_view(__s)); }
+#endif
+
+#if _LIBCPP_STD_VER > 20
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool contains(__self_view __sv) const noexcept
+    { return __self_view(data(), size()).contains(__sv); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool contains(value_type __c) const noexcept
+    { return __self_view(data(), size()).contains(__c); }
+
+    constexpr _LIBCPP_HIDE_FROM_ABI
+    bool contains(const value_type* __s) const
+    { return __self_view(data(), size()).contains(__s); }
+#endif
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17 bool __invariants() const;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17 void __clear_and_shrink() _NOEXCEPT;
+
+#ifdef _LIBCPP_ENABLE_DEBUG_MODE
+
+    bool __dereferenceable(const const_iterator* __i) const;
+    bool __decrementable(const const_iterator* __i) const;
+    bool __addable(const const_iterator* __i, ptrdiff_t __n) const;
+    bool __subscriptable(const const_iterator* __i, ptrdiff_t __n) const;
+
+#endif // _LIBCPP_ENABLE_DEBUG_MODE
+
+private:
+    template<class _Alloc>
+    inline _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    bool friend operator==(const basic_string<char, char_traits<char>, _Alloc>& __lhs,
+                           const basic_string<char, char_traits<char>, _Alloc>& __rhs) _NOEXCEPT;
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17 void __shrink_or_extend(size_type __target_capacity);
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17
+    bool __is_long() const _NOEXCEPT {
+        if (__libcpp_is_constant_evaluated())
+            return true;
+        return __r_.first().__s.__is_long_;
+    }
+
+    static _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17 void __begin_lifetime(pointer __begin, size_type __n) {
+#if _LIBCPP_STD_VER > 17
+        if (__libcpp_is_constant_evaluated()) {
+            for (size_type __i = 0; __i != __n; ++__i)
+                std::construct_at(std::addressof(__begin[__i]));
+        }
+#else
+        (void)__begin;
+        (void)__n;
+#endif // _LIBCPP_STD_VER > 17
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17 void __default_init() {
+        __zero();
+        if (__libcpp_is_constant_evaluated()) {
+            size_type __sz = __recommend(0) + 1;
+            pointer __ptr = __alloc_traits::allocate(__alloc(), __sz);
+            __begin_lifetime(__ptr, __sz);
+            __set_long_pointer(__ptr);
+            __set_long_cap(__sz);
+            __set_long_size(0);
+        }
+    }
+
+    _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_AFTER_CXX17 void __deallocate_constexpr() {
+        if (__libcpp_is_constant_evaluated() && __get_pointer() != nullptr)
+            __alloc_traits::deallocate(__alloc(), __get_pointer(), __get_long_cap());
+    }
+
+    _LIBCPP_CONSTEXPR _LIBCPP_HIDE_FROM_ABI static bool __fits_in_sso(size_type __sz) {
+   
