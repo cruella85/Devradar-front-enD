@@ -120,4 +120,8 @@ pub fn flushModule(self: *NvPtx, comp: *Compilation, prog_node: *std.Progress.No
     };
     defer {
         comp.bin_file.options.emit = outfile;
-    
+        comp.emit_asm = null;
+    }
+
+    try self.llvm_object.flushModule(comp, prog_node);
+}
