@@ -205,4 +205,173 @@ BOOL WINAPI wglQueryPbufferARB (HPBUFFERARB hPbuffer, int iAttribute, int *piVal
 #define WGL_ACCUM_BITS_ARB                0x201D
 #define WGL_ACCUM_RED_BITS_ARB            0x201E
 #define WGL_ACCUM_GREEN_BITS_ARB          0x201F
-#define W
+#define WGL_ACCUM_BLUE_BITS_ARB           0x2020
+#define WGL_ACCUM_ALPHA_BITS_ARB          0x2021
+#define WGL_DEPTH_BITS_ARB                0x2022
+#define WGL_STENCIL_BITS_ARB              0x2023
+#define WGL_AUX_BUFFERS_ARB               0x2024
+#define WGL_NO_ACCELERATION_ARB           0x2025
+#define WGL_GENERIC_ACCELERATION_ARB      0x2026
+#define WGL_FULL_ACCELERATION_ARB         0x2027
+#define WGL_SWAP_EXCHANGE_ARB             0x2028
+#define WGL_SWAP_COPY_ARB                 0x2029
+#define WGL_SWAP_UNDEFINED_ARB            0x202A
+#define WGL_TYPE_RGBA_ARB                 0x202B
+#define WGL_TYPE_COLORINDEX_ARB           0x202C
+typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
+typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBFVARBPROC) (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, FLOAT *pfValues);
+typedef BOOL (WINAPI * PFNWGLCHOOSEPIXELFORMATARBPROC) (HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglGetPixelFormatAttribivARB (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
+BOOL WINAPI wglGetPixelFormatAttribfvARB (HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, FLOAT *pfValues);
+BOOL WINAPI wglChoosePixelFormatARB (HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
+#endif
+#endif /* WGL_ARB_pixel_format */
+
+#ifndef WGL_ARB_pixel_format_float
+#define WGL_ARB_pixel_format_float 1
+#define WGL_TYPE_RGBA_FLOAT_ARB           0x21A0
+#endif /* WGL_ARB_pixel_format_float */
+
+#ifndef WGL_ARB_render_texture
+#define WGL_ARB_render_texture 1
+#define WGL_BIND_TO_TEXTURE_RGB_ARB       0x2070
+#define WGL_BIND_TO_TEXTURE_RGBA_ARB      0x2071
+#define WGL_TEXTURE_FORMAT_ARB            0x2072
+#define WGL_TEXTURE_TARGET_ARB            0x2073
+#define WGL_MIPMAP_TEXTURE_ARB            0x2074
+#define WGL_TEXTURE_RGB_ARB               0x2075
+#define WGL_TEXTURE_RGBA_ARB              0x2076
+#define WGL_NO_TEXTURE_ARB                0x2077
+#define WGL_TEXTURE_CUBE_MAP_ARB          0x2078
+#define WGL_TEXTURE_1D_ARB                0x2079
+#define WGL_TEXTURE_2D_ARB                0x207A
+#define WGL_MIPMAP_LEVEL_ARB              0x207B
+#define WGL_CUBE_MAP_FACE_ARB             0x207C
+#define WGL_TEXTURE_CUBE_MAP_POSITIVE_X_ARB 0x207D
+#define WGL_TEXTURE_CUBE_MAP_NEGATIVE_X_ARB 0x207E
+#define WGL_TEXTURE_CUBE_MAP_POSITIVE_Y_ARB 0x207F
+#define WGL_TEXTURE_CUBE_MAP_NEGATIVE_Y_ARB 0x2080
+#define WGL_TEXTURE_CUBE_MAP_POSITIVE_Z_ARB 0x2081
+#define WGL_TEXTURE_CUBE_MAP_NEGATIVE_Z_ARB 0x2082
+#define WGL_FRONT_LEFT_ARB                0x2083
+#define WGL_FRONT_RIGHT_ARB               0x2084
+#define WGL_BACK_LEFT_ARB                 0x2085
+#define WGL_BACK_RIGHT_ARB                0x2086
+#define WGL_AUX0_ARB                      0x2087
+#define WGL_AUX1_ARB                      0x2088
+#define WGL_AUX2_ARB                      0x2089
+#define WGL_AUX3_ARB                      0x208A
+#define WGL_AUX4_ARB                      0x208B
+#define WGL_AUX5_ARB                      0x208C
+#define WGL_AUX6_ARB                      0x208D
+#define WGL_AUX7_ARB                      0x208E
+#define WGL_AUX8_ARB                      0x208F
+#define WGL_AUX9_ARB                      0x2090
+typedef BOOL (WINAPI * PFNWGLBINDTEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI * PFNWGLRELEASETEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI * PFNWGLSETPBUFFERATTRIBARBPROC) (HPBUFFERARB hPbuffer, const int *piAttribList);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglBindTexImageARB (HPBUFFERARB hPbuffer, int iBuffer);
+BOOL WINAPI wglReleaseTexImageARB (HPBUFFERARB hPbuffer, int iBuffer);
+BOOL WINAPI wglSetPbufferAttribARB (HPBUFFERARB hPbuffer, const int *piAttribList);
+#endif
+#endif /* WGL_ARB_render_texture */
+
+#ifndef WGL_ARB_robustness_application_isolation
+#define WGL_ARB_robustness_application_isolation 1
+#define WGL_CONTEXT_RESET_ISOLATION_BIT_ARB 0x00000008
+#endif /* WGL_ARB_robustness_application_isolation */
+
+#ifndef WGL_ARB_robustness_share_group_isolation
+#define WGL_ARB_robustness_share_group_isolation 1
+#endif /* WGL_ARB_robustness_share_group_isolation */
+
+#ifndef WGL_3DFX_multisample
+#define WGL_3DFX_multisample 1
+#define WGL_SAMPLE_BUFFERS_3DFX           0x2060
+#define WGL_SAMPLES_3DFX                  0x2061
+#endif /* WGL_3DFX_multisample */
+
+#ifndef WGL_3DL_stereo_control
+#define WGL_3DL_stereo_control 1
+#define WGL_STEREO_EMITTER_ENABLE_3DL     0x2055
+#define WGL_STEREO_EMITTER_DISABLE_3DL    0x2056
+#define WGL_STEREO_POLARITY_NORMAL_3DL    0x2057
+#define WGL_STEREO_POLARITY_INVERT_3DL    0x2058
+typedef BOOL (WINAPI * PFNWGLSETSTEREOEMITTERSTATE3DLPROC) (HDC hDC, UINT uState);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglSetStereoEmitterState3DL (HDC hDC, UINT uState);
+#endif
+#endif /* WGL_3DL_stereo_control */
+
+#ifndef WGL_AMD_gpu_association
+#define WGL_AMD_gpu_association 1
+#define WGL_GPU_VENDOR_AMD                0x1F00
+#define WGL_GPU_RENDERER_STRING_AMD       0x1F01
+#define WGL_GPU_OPENGL_VERSION_STRING_AMD 0x1F02
+#define WGL_GPU_FASTEST_TARGET_GPUS_AMD   0x21A2
+#define WGL_GPU_RAM_AMD                   0x21A3
+#define WGL_GPU_CLOCK_AMD                 0x21A4
+#define WGL_GPU_NUM_PIPES_AMD             0x21A5
+#define WGL_GPU_NUM_SIMD_AMD              0x21A6
+#define WGL_GPU_NUM_RB_AMD                0x21A7
+#define WGL_GPU_NUM_SPI_AMD               0x21A8
+typedef UINT (WINAPI * PFNWGLGETGPUIDSAMDPROC) (UINT maxCount, UINT *ids);
+typedef INT (WINAPI * PFNWGLGETGPUINFOAMDPROC) (UINT id, INT property, GLenum dataType, UINT size, void *data);
+typedef UINT (WINAPI * PFNWGLGETCONTEXTGPUIDAMDPROC) (HGLRC hglrc);
+typedef HGLRC (WINAPI * PFNWGLCREATEASSOCIATEDCONTEXTAMDPROC) (UINT id);
+typedef HGLRC (WINAPI * PFNWGLCREATEASSOCIATEDCONTEXTATTRIBSAMDPROC) (UINT id, HGLRC hShareContext, const int *attribList);
+typedef BOOL (WINAPI * PFNWGLDELETEASSOCIATEDCONTEXTAMDPROC) (HGLRC hglrc);
+typedef BOOL (WINAPI * PFNWGLMAKEASSOCIATEDCONTEXTCURRENTAMDPROC) (HGLRC hglrc);
+typedef HGLRC (WINAPI * PFNWGLGETCURRENTASSOCIATEDCONTEXTAMDPROC) (void);
+typedef VOID (WINAPI * PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC) (HGLRC dstCtx, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
+#ifdef WGL_WGLEXT_PROTOTYPES
+UINT WINAPI wglGetGPUIDsAMD (UINT maxCount, UINT *ids);
+INT WINAPI wglGetGPUInfoAMD (UINT id, INT property, GLenum dataType, UINT size, void *data);
+UINT WINAPI wglGetContextGPUIDAMD (HGLRC hglrc);
+HGLRC WINAPI wglCreateAssociatedContextAMD (UINT id);
+HGLRC WINAPI wglCreateAssociatedContextAttribsAMD (UINT id, HGLRC hShareContext, const int *attribList);
+BOOL WINAPI wglDeleteAssociatedContextAMD (HGLRC hglrc);
+BOOL WINAPI wglMakeAssociatedContextCurrentAMD (HGLRC hglrc);
+HGLRC WINAPI wglGetCurrentAssociatedContextAMD (void);
+VOID WINAPI wglBlitContextFramebufferAMD (HGLRC dstCtx, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
+#endif
+#endif /* WGL_AMD_gpu_association */
+
+#ifndef WGL_ATI_pixel_format_float
+#define WGL_ATI_pixel_format_float 1
+#define WGL_TYPE_RGBA_FLOAT_ATI           0x21A0
+#endif /* WGL_ATI_pixel_format_float */
+
+#ifndef WGL_ATI_render_texture_rectangle
+#define WGL_ATI_render_texture_rectangle 1
+#define WGL_TEXTURE_RECTANGLE_ATI         0x21A5
+#endif /* WGL_ATI_render_texture_rectangle */
+
+#ifndef WGL_EXT_colorspace
+#define WGL_EXT_colorspace 1
+#define WGL_COLORSPACE_EXT                0x309D
+#define WGL_COLORSPACE_SRGB_EXT           0x3089
+#define WGL_COLORSPACE_LINEAR_EXT         0x308A
+#endif /* WGL_EXT_colorspace */
+
+#ifndef WGL_EXT_create_context_es2_profile
+#define WGL_EXT_create_context_es2_profile 1
+#define WGL_CONTEXT_ES2_PROFILE_BIT_EXT   0x00000004
+#endif /* WGL_EXT_create_context_es2_profile */
+
+#ifndef WGL_EXT_create_context_es_profile
+#define WGL_EXT_create_context_es_profile 1
+#define WGL_CONTEXT_ES_PROFILE_BIT_EXT    0x00000004
+#endif /* WGL_EXT_create_context_es_profile */
+
+#ifndef WGL_EXT_depth_float
+#define WGL_EXT_depth_float 1
+#define WGL_DEPTH_FLOAT_EXT               0x2040
+#endif /* WGL_EXT_depth_float */
+
+#ifndef WGL_EXT_display_color_table
+#define WGL_EXT_display_color_table 1
+typedef GLboolean (WINAPI * PFNWGLCREATEDISPLAYCOLORTABLEEXTPROC) (GLushort id);
+typedef GLboolean (WINAPI * PFNWGLLOADDISPLAYCOLORTABLEEXTPROC) (const GLushort *table, GLuint length);
