@@ -3,3 +3,7 @@ pub fn main() void {
     b = b and false;
     if (b) unreachable;
     return;
+}
+
+// run
+//
