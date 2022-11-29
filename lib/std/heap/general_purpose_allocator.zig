@@ -192,4 +192,210 @@ pub fn GeneralPurposeAllocator(comptime config: Config) type {
         pub const Error = mem.Allocator.Error;
 
         const small_bucket_count = math.log2(page_size);
-     
+        const largest_bucket_object_size = 1 << (small_bucket_count - 1);
+
+        const LargeAlloc = struct {
+            bytes: []u8,
+            requested_size: if (config.enable_memory_limit) usize else void,
+            stack_addresses: [trace_n][stack_n]usize,
+            freed: if (config.retain_metadata) bool else void,
+            log2_ptr_align: if (config.never_unmap and config.retain_metadata) u8 else void,
+
+            const trace_n = if (config.retain_metadata) traces_per_slot else 1;
+
+            fn dumpStackTrace(self: *LargeAlloc, trace_kind: TraceKind) void {
+                std.debug.dumpStackTrace(self.getStackTrace(trace_kind));
+            }
+
+            fn getStackTrace(self: *LargeAlloc, trace_kind: TraceKind) std.builtin.StackTrace {
+                assert(@enumToInt(trace_kind) < trace_n);
+                const stack_addresses = &self.stack_addresses[@enumToInt(trace_kind)];
+                var len: usize = 0;
+                while (len < stack_n and stack_addresses[len] != 0) {
+                    len += 1;
+                }
+                return .{
+                    .instruction_addresses = stack_addresses,
+                    .index = len,
+                };
+            }
+
+            fn captureStackTrace(self: *LargeAlloc, ret_addr: usize, trace_kind: TraceKind) void {
+                assert(@enumToInt(trace_kind) < trace_n);
+                const stack_addresses = &self.stack_addresses[@enumToInt(trace_kind)];
+                collectStackTrace(ret_addr, stack_addresses);
+            }
+        };
+        const LargeAllocTable = std.AutoHashMapUnmanaged(usize, LargeAlloc);
+
+        // Bucket: In memory, in order:
+        // * BucketHeader
+        // * bucket_used_bits: [N]u8, // 1 bit for every slot; 1 byte for every 8 slots
+        // * stack_trace_addresses: [N]usize, // traces_per_slot for every allocation
+
+        const BucketHeader = struct {
+            prev: *BucketHeader,
+            next: *BucketHeader,
+            page: [*]align(page_size) u8,
+            alloc_cursor: SlotIndex,
+            used_count: SlotIndex,
+
+            fn usedBits(bucket: *BucketHeader, index: usize) *u8 {
+                return @intToPtr(*u8, @ptrToInt(bucket) + @sizeOf(BucketHeader) + index);
+            }
+
+            fn stackTracePtr(
+                bucket: *BucketHeader,
+                size_class: usize,
+                slot_index: SlotIndex,
+                trace_kind: TraceKind,
+            ) *[stack_n]usize {
+                const start_ptr = @ptrCast([*]u8, bucket) + bucketStackFramesStart(size_class);
+                const addr = start_ptr + one_trace_size * traces_per_slot * slot_index +
+                    @enumToInt(trace_kind) * @as(usize, one_trace_size);
+                return @ptrCast(*[stack_n]usize, @alignCast(@alignOf(usize), addr));
+            }
+
+            fn captureStackTrace(
+                bucket: *BucketHeader,
+                ret_addr: usize,
+                size_class: usize,
+                slot_index: SlotIndex,
+                trace_kind: TraceKind,
+            ) void {
+                // Initialize them to 0. When determining the count we must look
+                // for non zero addresses.
+                const stack_addresses = bucket.stackTracePtr(size_class, slot_index, trace_kind);
+                collectStackTrace(ret_addr, stack_addresses);
+            }
+        };
+
+        pub fn allocator(self: *Self) Allocator {
+            return .{
+                .ptr = self,
+                .vtable = &.{
+                    .alloc = alloc,
+                    .resize = resize,
+                    .free = free,
+                },
+            };
+        }
+
+        fn bucketStackTrace(
+            bucket: *BucketHeader,
+            size_class: usize,
+            slot_index: SlotIndex,
+            trace_kind: TraceKind,
+        ) StackTrace {
+            const stack_addresses = bucket.stackTracePtr(size_class, slot_index, trace_kind);
+            var len: usize = 0;
+            while (len < stack_n and stack_addresses[len] != 0) {
+                len += 1;
+            }
+            return StackTrace{
+                .instruction_addresses = stack_addresses,
+                .index = len,
+            };
+        }
+
+        fn bucketStackFramesStart(size_class: usize) usize {
+            return mem.alignForward(
+                @sizeOf(BucketHeader) + usedBitsCount(size_class),
+                @alignOf(usize),
+            );
+        }
+
+        fn bucketSize(size_class: usize) usize {
+            const slot_count = @divExact(page_size, size_class);
+            return bucketStackFramesStart(size_class) + one_trace_size * traces_per_slot * slot_count;
+        }
+
+        fn usedBitsCount(size_class: usize) usize {
+            const slot_count = @divExact(page_size, size_class);
+            if (slot_count < 8) return 1;
+            return @divExact(slot_count, 8);
+        }
+
+        fn detectLeaksInBucket(
+            bucket: *BucketHeader,
+            size_class: usize,
+            used_bits_count: usize,
+        ) bool {
+            var leaks = false;
+            var used_bits_byte: usize = 0;
+            while (used_bits_byte < used_bits_count) : (used_bits_byte += 1) {
+                const used_byte = bucket.usedBits(used_bits_byte).*;
+                if (used_byte != 0) {
+                    var bit_index: u3 = 0;
+                    while (true) : (bit_index += 1) {
+                        const is_used = @truncate(u1, used_byte >> bit_index) != 0;
+                        if (is_used) {
+                            const slot_index = @intCast(SlotIndex, used_bits_byte * 8 + bit_index);
+                            const stack_trace = bucketStackTrace(bucket, size_class, slot_index, .alloc);
+                            const addr = bucket.page + slot_index * size_class;
+                            log.err("memory address 0x{x} leaked: {}", .{
+                                @ptrToInt(addr), stack_trace,
+                            });
+                            leaks = true;
+                        }
+                        if (bit_index == math.maxInt(u3))
+                            break;
+                    }
+                }
+            }
+            return leaks;
+        }
+
+        /// Emits log messages for leaks and then returns whether there were any leaks.
+        pub fn detectLeaks(self: *Self) bool {
+            var leaks = false;
+            for (self.buckets, 0..) |optional_bucket, bucket_i| {
+                const first_bucket = optional_bucket orelse continue;
+                const size_class = @as(usize, 1) << @intCast(math.Log2Int(usize), bucket_i);
+                const used_bits_count = usedBitsCount(size_class);
+                var bucket = first_bucket;
+                while (true) {
+                    leaks = detectLeaksInBucket(bucket, size_class, used_bits_count) or leaks;
+                    bucket = bucket.next;
+                    if (bucket == first_bucket)
+                        break;
+                }
+            }
+            var it = self.large_allocations.valueIterator();
+            while (it.next()) |large_alloc| {
+                if (config.retain_metadata and large_alloc.freed) continue;
+                const stack_trace = large_alloc.getStackTrace(.alloc);
+                log.err("memory address 0x{x} leaked: {}", .{
+                    @ptrToInt(large_alloc.bytes.ptr), stack_trace,
+                });
+                leaks = true;
+            }
+            return leaks;
+        }
+
+        fn freeBucket(self: *Self, bucket: *BucketHeader, size_class: usize) void {
+            const bucket_size = bucketSize(size_class);
+            const bucket_slice = @ptrCast([*]align(@alignOf(BucketHeader)) u8, bucket)[0..bucket_size];
+            self.backing_allocator.free(bucket_slice);
+        }
+
+        fn freeRetainedMetadata(self: *Self) void {
+            if (config.retain_metadata) {
+                if (config.never_unmap) {
+                    // free large allocations that were intentionally leaked by never_unmap
+                    var it = self.large_allocations.iterator();
+                    while (it.next()) |large| {
+                        if (large.value_ptr.freed) {
+                            self.backing_allocator.rawFree(large.value_ptr.bytes, large.value_ptr.log2_ptr_align, @returnAddress());
+                        }
+                    }
+                }
+                // free retained metadata for small allocations
+                if (self.empty_buckets) |first_bucket| {
+                    var bucket = first_bucket;
+                    while (true) {
+                        const prev = bucket.prev;
+                        if (config.never_unmap) {
+                            // free page that was intentionally leaked by never_unmap
+                            self.backing_allocator.free(bucket.page[0..page_size]);
+             
