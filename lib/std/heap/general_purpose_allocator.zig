@@ -398,4 +398,215 @@ pub fn GeneralPurposeAllocator(comptime config: Config) type {
                         if (config.never_unmap) {
                             // free page that was intentionally leaked by never_unmap
                             self.backing_allocator.free(bucket.page[0..page_size]);
-             
+                        }
+                        // alloc_cursor was set to slot count when bucket added to empty_buckets
+                        self.freeBucket(bucket, @divExact(page_size, bucket.alloc_cursor));
+                        bucket = prev;
+                        if (bucket == first_bucket)
+                            break;
+                    }
+                    self.empty_buckets = null;
+                }
+            }
+        }
+
+        pub usingnamespace if (config.retain_metadata) struct {
+            pub fn flushRetainedMetadata(self: *Self) void {
+                self.freeRetainedMetadata();
+                // also remove entries from large_allocations
+                var it = self.large_allocations.iterator();
+                while (it.next()) |large| {
+                    if (large.value_ptr.freed) {
+                        _ = self.large_allocations.remove(@ptrToInt(large.value_ptr.bytes.ptr));
+                    }
+                }
+            }
+        } else struct {};
+
+        /// Returns true if there were leaks; false otherwise.
+        pub fn deinit(self: *Self) bool {
+            const leaks = if (config.safety) self.detectLeaks() else false;
+            if (config.retain_metadata) {
+                self.freeRetainedMetadata();
+            }
+            self.large_allocations.deinit(self.backing_allocator);
+            self.* = undefined;
+            return leaks;
+        }
+
+        fn collectStackTrace(first_trace_addr: usize, addresses: *[stack_n]usize) void {
+            if (stack_n == 0) return;
+            mem.set(usize, addresses, 0);
+            var stack_trace = StackTrace{
+                .instruction_addresses = addresses,
+                .index = 0,
+            };
+            std.debug.captureStackTrace(first_trace_addr, &stack_trace);
+        }
+
+        fn reportDoubleFree(ret_addr: usize, alloc_stack_trace: StackTrace, free_stack_trace: StackTrace) void {
+            var addresses: [stack_n]usize = [1]usize{0} ** stack_n;
+            var second_free_stack_trace = StackTrace{
+                .instruction_addresses = &addresses,
+                .index = 0,
+            };
+            std.debug.captureStackTrace(ret_addr, &second_free_stack_trace);
+            log.err("Double free detected. Allocation: {} First free: {} Second free: {}", .{
+                alloc_stack_trace, free_stack_trace, second_free_stack_trace,
+            });
+        }
+
+        fn allocSlot(self: *Self, size_class: usize, trace_addr: usize) Error![*]u8 {
+            const bucket_index = math.log2(size_class);
+            const first_bucket = self.buckets[bucket_index] orelse try self.createBucket(
+                size_class,
+                bucket_index,
+            );
+            var bucket = first_bucket;
+            const slot_count = @divExact(page_size, size_class);
+            while (bucket.alloc_cursor == slot_count) {
+                const prev_bucket = bucket;
+                bucket = prev_bucket.next;
+                if (bucket == first_bucket) {
+                    // make a new one
+                    bucket = try self.createBucket(size_class, bucket_index);
+                    bucket.prev = prev_bucket;
+                    bucket.next = prev_bucket.next;
+                    prev_bucket.next = bucket;
+                    bucket.next.prev = bucket;
+                }
+            }
+            // change the allocator's current bucket to be this one
+            self.buckets[bucket_index] = bucket;
+
+            const slot_index = bucket.alloc_cursor;
+            bucket.alloc_cursor += 1;
+
+            var used_bits_byte = bucket.usedBits(slot_index / 8);
+            const used_bit_index: u3 = @intCast(u3, slot_index % 8); // TODO cast should be unnecessary
+            used_bits_byte.* |= (@as(u8, 1) << used_bit_index);
+            bucket.used_count += 1;
+            bucket.captureStackTrace(trace_addr, size_class, slot_index, .alloc);
+            return bucket.page + slot_index * size_class;
+        }
+
+        fn searchBucket(
+            bucket_list: ?*BucketHeader,
+            addr: usize,
+        ) ?*BucketHeader {
+            const first_bucket = bucket_list orelse return null;
+            var bucket = first_bucket;
+            while (true) {
+                const in_bucket_range = (addr >= @ptrToInt(bucket.page) and
+                    addr < @ptrToInt(bucket.page) + page_size);
+                if (in_bucket_range) return bucket;
+                bucket = bucket.prev;
+                if (bucket == first_bucket) {
+                    return null;
+                }
+            }
+        }
+
+        /// This function assumes the object is in the large object storage regardless
+        /// of the parameters.
+        fn resizeLarge(
+            self: *Self,
+            old_mem: []u8,
+            log2_old_align: u8,
+            new_size: usize,
+            ret_addr: usize,
+        ) bool {
+            const entry = self.large_allocations.getEntry(@ptrToInt(old_mem.ptr)) orelse {
+                if (config.safety) {
+                    @panic("Invalid free");
+                } else {
+                    unreachable;
+                }
+            };
+
+            if (config.retain_metadata and entry.value_ptr.freed) {
+                if (config.safety) {
+                    reportDoubleFree(ret_addr, entry.value_ptr.getStackTrace(.alloc), entry.value_ptr.getStackTrace(.free));
+                    @panic("Unrecoverable double free");
+                } else {
+                    unreachable;
+                }
+            }
+
+            if (config.safety and old_mem.len != entry.value_ptr.bytes.len) {
+                var addresses: [stack_n]usize = [1]usize{0} ** stack_n;
+                var free_stack_trace = StackTrace{
+                    .instruction_addresses = &addresses,
+                    .index = 0,
+                };
+                std.debug.captureStackTrace(ret_addr, &free_stack_trace);
+                log.err("Allocation size {d} bytes does not match free size {d}. Allocation: {} Free: {}", .{
+                    entry.value_ptr.bytes.len,
+                    old_mem.len,
+                    entry.value_ptr.getStackTrace(.alloc),
+                    free_stack_trace,
+                });
+            }
+
+            // Do memory limit accounting with requested sizes rather than what
+            // backing_allocator returns because if we want to return
+            // error.OutOfMemory, we have to leave allocation untouched, and
+            // that is impossible to guarantee after calling
+            // backing_allocator.rawResize.
+            const prev_req_bytes = self.total_requested_bytes;
+            if (config.enable_memory_limit) {
+                const new_req_bytes = prev_req_bytes + new_size - entry.value_ptr.requested_size;
+                if (new_req_bytes > prev_req_bytes and new_req_bytes > self.requested_memory_limit) {
+                    return false;
+                }
+                self.total_requested_bytes = new_req_bytes;
+            }
+
+            if (!self.backing_allocator.rawResize(old_mem, log2_old_align, new_size, ret_addr)) {
+                if (config.enable_memory_limit) {
+                    self.total_requested_bytes = prev_req_bytes;
+                }
+                return false;
+            }
+
+            if (config.enable_memory_limit) {
+                entry.value_ptr.requested_size = new_size;
+            }
+
+            if (config.verbose_log) {
+                log.info("large resize {d} bytes at {*} to {d}", .{
+                    old_mem.len, old_mem.ptr, new_size,
+                });
+            }
+            entry.value_ptr.bytes = old_mem.ptr[0..new_size];
+            entry.value_ptr.captureStackTrace(ret_addr, .alloc);
+            return true;
+        }
+
+        /// This function assumes the object is in the large object storage regardless
+        /// of the parameters.
+        fn freeLarge(
+            self: *Self,
+            old_mem: []u8,
+            log2_old_align: u8,
+            ret_addr: usize,
+        ) void {
+            const entry = self.large_allocations.getEntry(@ptrToInt(old_mem.ptr)) orelse {
+                if (config.safety) {
+                    @panic("Invalid free");
+                } else {
+                    unreachable;
+                }
+            };
+
+            if (config.retain_metadata and entry.value_ptr.freed) {
+                if (config.safety) {
+                    reportDoubleFree(ret_addr, entry.value_ptr.getStackTrace(.alloc), entry.value_ptr.getStackTrace(.free));
+                    return;
+                } else {
+                    unreachable;
+                }
+            }
+
+            if (config.safety and old_mem.len != entry.value_ptr.bytes.len) {
+                var addresses: [stack_n]usize = [
