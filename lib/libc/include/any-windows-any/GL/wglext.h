@@ -547,4 +547,167 @@ BOOL WINAPI wglSetGammaTableI3D (HDC hDC, int iEntries, const USHORT *puRed, con
 #endif
 #endif /* WGL_I3D_gamma */
 
-#ifndef 
+#ifndef WGL_I3D_genlock
+#define WGL_I3D_genlock 1
+#define WGL_GENLOCK_SOURCE_MULTIVIEW_I3D  0x2044
+#define WGL_GENLOCK_SOURCE_EXTERNAL_SYNC_I3D 0x2045
+#define WGL_GENLOCK_SOURCE_EXTERNAL_FIELD_I3D 0x2046
+#define WGL_GENLOCK_SOURCE_EXTERNAL_TTL_I3D 0x2047
+#define WGL_GENLOCK_SOURCE_DIGITAL_SYNC_I3D 0x2048
+#define WGL_GENLOCK_SOURCE_DIGITAL_FIELD_I3D 0x2049
+#define WGL_GENLOCK_SOURCE_EDGE_FALLING_I3D 0x204A
+#define WGL_GENLOCK_SOURCE_EDGE_RISING_I3D 0x204B
+#define WGL_GENLOCK_SOURCE_EDGE_BOTH_I3D  0x204C
+typedef BOOL (WINAPI * PFNWGLENABLEGENLOCKI3DPROC) (HDC hDC);
+typedef BOOL (WINAPI * PFNWGLDISABLEGENLOCKI3DPROC) (HDC hDC);
+typedef BOOL (WINAPI * PFNWGLISENABLEDGENLOCKI3DPROC) (HDC hDC, BOOL *pFlag);
+typedef BOOL (WINAPI * PFNWGLGENLOCKSOURCEI3DPROC) (HDC hDC, UINT uSource);
+typedef BOOL (WINAPI * PFNWGLGETGENLOCKSOURCEI3DPROC) (HDC hDC, UINT *uSource);
+typedef BOOL (WINAPI * PFNWGLGENLOCKSOURCEEDGEI3DPROC) (HDC hDC, UINT uEdge);
+typedef BOOL (WINAPI * PFNWGLGETGENLOCKSOURCEEDGEI3DPROC) (HDC hDC, UINT *uEdge);
+typedef BOOL (WINAPI * PFNWGLGENLOCKSAMPLERATEI3DPROC) (HDC hDC, UINT uRate);
+typedef BOOL (WINAPI * PFNWGLGETGENLOCKSAMPLERATEI3DPROC) (HDC hDC, UINT *uRate);
+typedef BOOL (WINAPI * PFNWGLGENLOCKSOURCEDELAYI3DPROC) (HDC hDC, UINT uDelay);
+typedef BOOL (WINAPI * PFNWGLGETGENLOCKSOURCEDELAYI3DPROC) (HDC hDC, UINT *uDelay);
+typedef BOOL (WINAPI * PFNWGLQUERYGENLOCKMAXSOURCEDELAYI3DPROC) (HDC hDC, UINT *uMaxLineDelay, UINT *uMaxPixelDelay);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglEnableGenlockI3D (HDC hDC);
+BOOL WINAPI wglDisableGenlockI3D (HDC hDC);
+BOOL WINAPI wglIsEnabledGenlockI3D (HDC hDC, BOOL *pFlag);
+BOOL WINAPI wglGenlockSourceI3D (HDC hDC, UINT uSource);
+BOOL WINAPI wglGetGenlockSourceI3D (HDC hDC, UINT *uSource);
+BOOL WINAPI wglGenlockSourceEdgeI3D (HDC hDC, UINT uEdge);
+BOOL WINAPI wglGetGenlockSourceEdgeI3D (HDC hDC, UINT *uEdge);
+BOOL WINAPI wglGenlockSampleRateI3D (HDC hDC, UINT uRate);
+BOOL WINAPI wglGetGenlockSampleRateI3D (HDC hDC, UINT *uRate);
+BOOL WINAPI wglGenlockSourceDelayI3D (HDC hDC, UINT uDelay);
+BOOL WINAPI wglGetGenlockSourceDelayI3D (HDC hDC, UINT *uDelay);
+BOOL WINAPI wglQueryGenlockMaxSourceDelayI3D (HDC hDC, UINT *uMaxLineDelay, UINT *uMaxPixelDelay);
+#endif
+#endif /* WGL_I3D_genlock */
+
+#ifndef WGL_I3D_image_buffer
+#define WGL_I3D_image_buffer 1
+#define WGL_IMAGE_BUFFER_MIN_ACCESS_I3D   0x00000001
+#define WGL_IMAGE_BUFFER_LOCK_I3D         0x00000002
+typedef LPVOID (WINAPI * PFNWGLCREATEIMAGEBUFFERI3DPROC) (HDC hDC, DWORD dwSize, UINT uFlags);
+typedef BOOL (WINAPI * PFNWGLDESTROYIMAGEBUFFERI3DPROC) (HDC hDC, LPVOID pAddress);
+typedef BOOL (WINAPI * PFNWGLASSOCIATEIMAGEBUFFEREVENTSI3DPROC) (HDC hDC, const HANDLE *pEvent, const LPVOID *pAddress, const DWORD *pSize, UINT count);
+typedef BOOL (WINAPI * PFNWGLRELEASEIMAGEBUFFEREVENTSI3DPROC) (HDC hDC, const LPVOID *pAddress, UINT count);
+#ifdef WGL_WGLEXT_PROTOTYPES
+LPVOID WINAPI wglCreateImageBufferI3D (HDC hDC, DWORD dwSize, UINT uFlags);
+BOOL WINAPI wglDestroyImageBufferI3D (HDC hDC, LPVOID pAddress);
+BOOL WINAPI wglAssociateImageBufferEventsI3D (HDC hDC, const HANDLE *pEvent, const LPVOID *pAddress, const DWORD *pSize, UINT count);
+BOOL WINAPI wglReleaseImageBufferEventsI3D (HDC hDC, const LPVOID *pAddress, UINT count);
+#endif
+#endif /* WGL_I3D_image_buffer */
+
+#ifndef WGL_I3D_swap_frame_lock
+#define WGL_I3D_swap_frame_lock 1
+typedef BOOL (WINAPI * PFNWGLENABLEFRAMELOCKI3DPROC) (void);
+typedef BOOL (WINAPI * PFNWGLDISABLEFRAMELOCKI3DPROC) (void);
+typedef BOOL (WINAPI * PFNWGLISENABLEDFRAMELOCKI3DPROC) (BOOL *pFlag);
+typedef BOOL (WINAPI * PFNWGLQUERYFRAMELOCKMASTERI3DPROC) (BOOL *pFlag);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglEnableFrameLockI3D (void);
+BOOL WINAPI wglDisableFrameLockI3D (void);
+BOOL WINAPI wglIsEnabledFrameLockI3D (BOOL *pFlag);
+BOOL WINAPI wglQueryFrameLockMasterI3D (BOOL *pFlag);
+#endif
+#endif /* WGL_I3D_swap_frame_lock */
+
+#ifndef WGL_I3D_swap_frame_usage
+#define WGL_I3D_swap_frame_usage 1
+typedef BOOL (WINAPI * PFNWGLGETFRAMEUSAGEI3DPROC) (float *pUsage);
+typedef BOOL (WINAPI * PFNWGLBEGINFRAMETRACKINGI3DPROC) (void);
+typedef BOOL (WINAPI * PFNWGLENDFRAMETRACKINGI3DPROC) (void);
+typedef BOOL (WINAPI * PFNWGLQUERYFRAMETRACKINGI3DPROC) (DWORD *pFrameCount, DWORD *pMissedFrames, float *pLastMissedUsage);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglGetFrameUsageI3D (float *pUsage);
+BOOL WINAPI wglBeginFrameTrackingI3D (void);
+BOOL WINAPI wglEndFrameTrackingI3D (void);
+BOOL WINAPI wglQueryFrameTrackingI3D (DWORD *pFrameCount, DWORD *pMissedFrames, float *pLastMissedUsage);
+#endif
+#endif /* WGL_I3D_swap_frame_usage */
+
+#ifndef WGL_NV_DX_interop
+#define WGL_NV_DX_interop 1
+#define WGL_ACCESS_READ_ONLY_NV           0x00000000
+#define WGL_ACCESS_READ_WRITE_NV          0x00000001
+#define WGL_ACCESS_WRITE_DISCARD_NV       0x00000002
+typedef BOOL (WINAPI * PFNWGLDXSETRESOURCESHAREHANDLENVPROC) (void *dxObject, HANDLE shareHandle);
+typedef HANDLE (WINAPI * PFNWGLDXOPENDEVICENVPROC) (void *dxDevice);
+typedef BOOL (WINAPI * PFNWGLDXCLOSEDEVICENVPROC) (HANDLE hDevice);
+typedef HANDLE (WINAPI * PFNWGLDXREGISTEROBJECTNVPROC) (HANDLE hDevice, void *dxObject, GLuint name, GLenum type, GLenum access);
+typedef BOOL (WINAPI * PFNWGLDXUNREGISTEROBJECTNVPROC) (HANDLE hDevice, HANDLE hObject);
+typedef BOOL (WINAPI * PFNWGLDXOBJECTACCESSNVPROC) (HANDLE hObject, GLenum access);
+typedef BOOL (WINAPI * PFNWGLDXLOCKOBJECTSNVPROC) (HANDLE hDevice, GLint count, HANDLE *hObjects);
+typedef BOOL (WINAPI * PFNWGLDXUNLOCKOBJECTSNVPROC) (HANDLE hDevice, GLint count, HANDLE *hObjects);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglDXSetResourceShareHandleNV (void *dxObject, HANDLE shareHandle);
+HANDLE WINAPI wglDXOpenDeviceNV (void *dxDevice);
+BOOL WINAPI wglDXCloseDeviceNV (HANDLE hDevice);
+HANDLE WINAPI wglDXRegisterObjectNV (HANDLE hDevice, void *dxObject, GLuint name, GLenum type, GLenum access);
+BOOL WINAPI wglDXUnregisterObjectNV (HANDLE hDevice, HANDLE hObject);
+BOOL WINAPI wglDXObjectAccessNV (HANDLE hObject, GLenum access);
+BOOL WINAPI wglDXLockObjectsNV (HANDLE hDevice, GLint count, HANDLE *hObjects);
+BOOL WINAPI wglDXUnlockObjectsNV (HANDLE hDevice, GLint count, HANDLE *hObjects);
+#endif
+#endif /* WGL_NV_DX_interop */
+
+#ifndef WGL_NV_DX_interop2
+#define WGL_NV_DX_interop2 1
+#endif /* WGL_NV_DX_interop2 */
+
+#ifndef WGL_NV_copy_image
+#define WGL_NV_copy_image 1
+typedef BOOL (WINAPI * PFNWGLCOPYIMAGESUBDATANVPROC) (HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglCopyImageSubDataNV (HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
+#endif
+#endif /* WGL_NV_copy_image */
+
+#ifndef WGL_NV_delay_before_swap
+#define WGL_NV_delay_before_swap 1
+typedef BOOL (WINAPI * PFNWGLDELAYBEFORESWAPNVPROC) (HDC hDC, GLfloat seconds);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglDelayBeforeSwapNV (HDC hDC, GLfloat seconds);
+#endif
+#endif /* WGL_NV_delay_before_swap */
+
+#ifndef WGL_NV_float_buffer
+#define WGL_NV_float_buffer 1
+#define WGL_FLOAT_COMPONENTS_NV           0x20B0
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_FLOAT_R_NV 0x20B1
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_FLOAT_RG_NV 0x20B2
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_FLOAT_RGB_NV 0x20B3
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_FLOAT_RGBA_NV 0x20B4
+#define WGL_TEXTURE_FLOAT_R_NV            0x20B5
+#define WGL_TEXTURE_FLOAT_RG_NV           0x20B6
+#define WGL_TEXTURE_FLOAT_RGB_NV          0x20B7
+#define WGL_TEXTURE_FLOAT_RGBA_NV         0x20B8
+#endif /* WGL_NV_float_buffer */
+
+#ifndef WGL_NV_gpu_affinity
+#define WGL_NV_gpu_affinity 1
+DECLARE_HANDLE(HGPUNV);
+struct _GPU_DEVICE {
+    DWORD  cb;
+    CHAR   DeviceName[32];
+    CHAR   DeviceString[128];
+    DWORD  Flags;
+    RECT   rcVirtualScreen;
+};
+typedef struct _GPU_DEVICE *PGPU_DEVICE;
+#define ERROR_INCOMPATIBLE_AFFINITY_MASKS_NV 0x20D0
+#define ERROR_MISSING_AFFINITY_MASK_NV    0x20D1
+typedef BOOL (WINAPI * PFNWGLENUMGPUSNVPROC) (UINT iGpuIndex, HGPUNV *phGpu);
+typedef BOOL (WINAPI * PFNWGLENUMGPUDEVICESNVPROC) (HGPUNV hGpu, UINT iDeviceIndex, PGPU_DEVICE lpGpuDevice);
+typedef HDC (WINAPI * PFNWGLCREATEAFFINITYDCNVPROC) (const HGPUNV *phGpuList);
+typedef BOOL (WINAPI * PFNWGLENUMGPUSFROMAFFINITYDCNVPROC) (HDC hAffinityDC, UINT iGpuIndex, HGPUNV *hGpu);
+typedef BOOL (WINAPI * PFNWGLDELETEDCNVPROC) (HDC hdc);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglEnumGpusNV (UINT iGpuIndex, HGPUNV *phGpu);
+BOOL WINAPI wglEnumGpuDevicesNV (HGPUNV hGpu, UINT iDeviceIndex, PGPU_DEVICE lpGpuDevice);
+HDC WINAPI wglCreateAffinityDCNV (const HGPUNV *phGpuList);
+BOOL WINAPI
