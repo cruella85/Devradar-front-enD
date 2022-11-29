@@ -710,4 +710,146 @@ typedef BOOL (WINAPI * PFNWGLDELETEDCNVPROC) (HDC hdc);
 BOOL WINAPI wglEnumGpusNV (UINT iGpuIndex, HGPUNV *phGpu);
 BOOL WINAPI wglEnumGpuDevicesNV (HGPUNV hGpu, UINT iDeviceIndex, PGPU_DEVICE lpGpuDevice);
 HDC WINAPI wglCreateAffinityDCNV (const HGPUNV *phGpuList);
-BOOL WINAPI
+BOOL WINAPI wglEnumGpusFromAffinityDCNV (HDC hAffinityDC, UINT iGpuIndex, HGPUNV *hGpu);
+BOOL WINAPI wglDeleteDCNV (HDC hdc);
+#endif
+#endif /* WGL_NV_gpu_affinity */
+
+#ifndef WGL_NV_multisample_coverage
+#define WGL_NV_multisample_coverage 1
+#define WGL_COVERAGE_SAMPLES_NV           0x2042
+#define WGL_COLOR_SAMPLES_NV              0x20B9
+#endif /* WGL_NV_multisample_coverage */
+
+#ifndef WGL_NV_present_video
+#define WGL_NV_present_video 1
+DECLARE_HANDLE(HVIDEOOUTPUTDEVICENV);
+#define WGL_NUM_VIDEO_SLOTS_NV            0x20F0
+typedef int (WINAPI * PFNWGLENUMERATEVIDEODEVICESNVPROC) (HDC hDc, HVIDEOOUTPUTDEVICENV *phDeviceList);
+typedef BOOL (WINAPI * PFNWGLBINDVIDEODEVICENVPROC) (HDC hDc, unsigned int uVideoSlot, HVIDEOOUTPUTDEVICENV hVideoDevice, const int *piAttribList);
+typedef BOOL (WINAPI * PFNWGLQUERYCURRENTCONTEXTNVPROC) (int iAttribute, int *piValue);
+#ifdef WGL_WGLEXT_PROTOTYPES
+int WINAPI wglEnumerateVideoDevicesNV (HDC hDc, HVIDEOOUTPUTDEVICENV *phDeviceList);
+BOOL WINAPI wglBindVideoDeviceNV (HDC hDc, unsigned int uVideoSlot, HVIDEOOUTPUTDEVICENV hVideoDevice, const int *piAttribList);
+BOOL WINAPI wglQueryCurrentContextNV (int iAttribute, int *piValue);
+#endif
+#endif /* WGL_NV_present_video */
+
+#ifndef WGL_NV_render_depth_texture
+#define WGL_NV_render_depth_texture 1
+#define WGL_BIND_TO_TEXTURE_DEPTH_NV      0x20A3
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_DEPTH_NV 0x20A4
+#define WGL_DEPTH_TEXTURE_FORMAT_NV       0x20A5
+#define WGL_TEXTURE_DEPTH_COMPONENT_NV    0x20A6
+#define WGL_DEPTH_COMPONENT_NV            0x20A7
+#endif /* WGL_NV_render_depth_texture */
+
+#ifndef WGL_NV_render_texture_rectangle
+#define WGL_NV_render_texture_rectangle 1
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_RGB_NV 0x20A0
+#define WGL_BIND_TO_TEXTURE_RECTANGLE_RGBA_NV 0x20A1
+#define WGL_TEXTURE_RECTANGLE_NV          0x20A2
+#endif /* WGL_NV_render_texture_rectangle */
+
+#ifndef WGL_NV_swap_group
+#define WGL_NV_swap_group 1
+typedef BOOL (WINAPI * PFNWGLJOINSWAPGROUPNVPROC) (HDC hDC, GLuint group);
+typedef BOOL (WINAPI * PFNWGLBINDSWAPBARRIERNVPROC) (GLuint group, GLuint barrier);
+typedef BOOL (WINAPI * PFNWGLQUERYSWAPGROUPNVPROC) (HDC hDC, GLuint *group, GLuint *barrier);
+typedef BOOL (WINAPI * PFNWGLQUERYMAXSWAPGROUPSNVPROC) (HDC hDC, GLuint *maxGroups, GLuint *maxBarriers);
+typedef BOOL (WINAPI * PFNWGLQUERYFRAMECOUNTNVPROC) (HDC hDC, GLuint *count);
+typedef BOOL (WINAPI * PFNWGLRESETFRAMECOUNTNVPROC) (HDC hDC);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglJoinSwapGroupNV (HDC hDC, GLuint group);
+BOOL WINAPI wglBindSwapBarrierNV (GLuint group, GLuint barrier);
+BOOL WINAPI wglQuerySwapGroupNV (HDC hDC, GLuint *group, GLuint *barrier);
+BOOL WINAPI wglQueryMaxSwapGroupsNV (HDC hDC, GLuint *maxGroups, GLuint *maxBarriers);
+BOOL WINAPI wglQueryFrameCountNV (HDC hDC, GLuint *count);
+BOOL WINAPI wglResetFrameCountNV (HDC hDC);
+#endif
+#endif /* WGL_NV_swap_group */
+
+#ifndef WGL_NV_vertex_array_range
+#define WGL_NV_vertex_array_range 1
+typedef void *(WINAPI * PFNWGLALLOCATEMEMORYNVPROC) (GLsizei size, GLfloat readfreq, GLfloat writefreq, GLfloat priority);
+typedef void (WINAPI * PFNWGLFREEMEMORYNVPROC) (void *pointer);
+#ifdef WGL_WGLEXT_PROTOTYPES
+void *WINAPI wglAllocateMemoryNV (GLsizei size, GLfloat readfreq, GLfloat writefreq, GLfloat priority);
+void WINAPI wglFreeMemoryNV (void *pointer);
+#endif
+#endif /* WGL_NV_vertex_array_range */
+
+#ifndef WGL_NV_video_capture
+#define WGL_NV_video_capture 1
+DECLARE_HANDLE(HVIDEOINPUTDEVICENV);
+#define WGL_UNIQUE_ID_NV                  0x20CE
+#define WGL_NUM_VIDEO_CAPTURE_SLOTS_NV    0x20CF
+typedef BOOL (WINAPI * PFNWGLBINDVIDEOCAPTUREDEVICENVPROC) (UINT uVideoSlot, HVIDEOINPUTDEVICENV hDevice);
+typedef UINT (WINAPI * PFNWGLENUMERATEVIDEOCAPTUREDEVICESNVPROC) (HDC hDc, HVIDEOINPUTDEVICENV *phDeviceList);
+typedef BOOL (WINAPI * PFNWGLLOCKVIDEOCAPTUREDEVICENVPROC) (HDC hDc, HVIDEOINPUTDEVICENV hDevice);
+typedef BOOL (WINAPI * PFNWGLQUERYVIDEOCAPTUREDEVICENVPROC) (HDC hDc, HVIDEOINPUTDEVICENV hDevice, int iAttribute, int *piValue);
+typedef BOOL (WINAPI * PFNWGLRELEASEVIDEOCAPTUREDEVICENVPROC) (HDC hDc, HVIDEOINPUTDEVICENV hDevice);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglBindVideoCaptureDeviceNV (UINT uVideoSlot, HVIDEOINPUTDEVICENV hDevice);
+UINT WINAPI wglEnumerateVideoCaptureDevicesNV (HDC hDc, HVIDEOINPUTDEVICENV *phDeviceList);
+BOOL WINAPI wglLockVideoCaptureDeviceNV (HDC hDc, HVIDEOINPUTDEVICENV hDevice);
+BOOL WINAPI wglQueryVideoCaptureDeviceNV (HDC hDc, HVIDEOINPUTDEVICENV hDevice, int iAttribute, int *piValue);
+BOOL WINAPI wglReleaseVideoCaptureDeviceNV (HDC hDc, HVIDEOINPUTDEVICENV hDevice);
+#endif
+#endif /* WGL_NV_video_capture */
+
+#ifndef WGL_NV_video_output
+#define WGL_NV_video_output 1
+DECLARE_HANDLE(HPVIDEODEV);
+#define WGL_BIND_TO_VIDEO_RGB_NV          0x20C0
+#define WGL_BIND_TO_VIDEO_RGBA_NV         0x20C1
+#define WGL_BIND_TO_VIDEO_RGB_AND_DEPTH_NV 0x20C2
+#define WGL_VIDEO_OUT_COLOR_NV            0x20C3
+#define WGL_VIDEO_OUT_ALPHA_NV            0x20C4
+#define WGL_VIDEO_OUT_DEPTH_NV            0x20C5
+#define WGL_VIDEO_OUT_COLOR_AND_ALPHA_NV  0x20C6
+#define WGL_VIDEO_OUT_COLOR_AND_DEPTH_NV  0x20C7
+#define WGL_VIDEO_OUT_FRAME               0x20C8
+#define WGL_VIDEO_OUT_FIELD_1             0x20C9
+#define WGL_VIDEO_OUT_FIELD_2             0x20CA
+#define WGL_VIDEO_OUT_STACKED_FIELDS_1_2  0x20CB
+#define WGL_VIDEO_OUT_STACKED_FIELDS_2_1  0x20CC
+typedef BOOL (WINAPI * PFNWGLGETVIDEODEVICENVPROC) (HDC hDC, int numDevices, HPVIDEODEV *hVideoDevice);
+typedef BOOL (WINAPI * PFNWGLRELEASEVIDEODEVICENVPROC) (HPVIDEODEV hVideoDevice);
+typedef BOOL (WINAPI * PFNWGLBINDVIDEOIMAGENVPROC) (HPVIDEODEV hVideoDevice, HPBUFFERARB hPbuffer, int iVideoBuffer);
+typedef BOOL (WINAPI * PFNWGLRELEASEVIDEOIMAGENVPROC) (HPBUFFERARB hPbuffer, int iVideoBuffer);
+typedef BOOL (WINAPI * PFNWGLSENDPBUFFERTOVIDEONVPROC) (HPBUFFERARB hPbuffer, int iBufferType, unsigned long *pulCounterPbuffer, BOOL bBlock);
+typedef BOOL (WINAPI * PFNWGLGETVIDEOINFONVPROC) (HPVIDEODEV hpVideoDevice, unsigned long *pulCounterOutputPbuffer, unsigned long *pulCounterOutputVideo);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglGetVideoDeviceNV (HDC hDC, int numDevices, HPVIDEODEV *hVideoDevice);
+BOOL WINAPI wglReleaseVideoDeviceNV (HPVIDEODEV hVideoDevice);
+BOOL WINAPI wglBindVideoImageNV (HPVIDEODEV hVideoDevice, HPBUFFERARB hPbuffer, int iVideoBuffer);
+BOOL WINAPI wglReleaseVideoImageNV (HPBUFFERARB hPbuffer, int iVideoBuffer);
+BOOL WINAPI wglSendPbufferToVideoNV (HPBUFFERARB hPbuffer, int iBufferType, unsigned long *pulCounterPbuffer, BOOL bBlock);
+BOOL WINAPI wglGetVideoInfoNV (HPVIDEODEV hpVideoDevice, unsigned long *pulCounterOutputPbuffer, unsigned long *pulCounterOutputVideo);
+#endif
+#endif /* WGL_NV_video_output */
+
+#ifndef WGL_OML_sync_control
+#define WGL_OML_sync_control 1
+typedef BOOL (WINAPI * PFNWGLGETSYNCVALUESOMLPROC) (HDC hdc, INT64 *ust, INT64 *msc, INT64 *sbc);
+typedef BOOL (WINAPI * PFNWGLGETMSCRATEOMLPROC) (HDC hdc, INT32 *numerator, INT32 *denominator);
+typedef INT64 (WINAPI * PFNWGLSWAPBUFFERSMSCOMLPROC) (HDC hdc, INT64 target_msc, INT64 divisor, INT64 remainder);
+typedef INT64 (WINAPI * PFNWGLSWAPLAYERBUFFERSMSCOMLPROC) (HDC hdc, INT fuPlanes, INT64 target_msc, INT64 divisor, INT64 remainder);
+typedef BOOL (WINAPI * PFNWGLWAITFORMSCOMLPROC) (HDC hdc, INT64 target_msc, INT64 divisor, INT64 remainder, INT64 *ust, INT64 *msc, INT64 *sbc);
+typedef BOOL (WINAPI * PFNWGLWAITFORSBCOMLPROC) (HDC hdc, INT64 target_sbc, INT64 *ust, INT64 *msc, INT64 *sbc);
+#ifdef WGL_WGLEXT_PROTOTYPES
+BOOL WINAPI wglGetSyncValuesOML (HDC hdc, INT64 *ust, INT64 *msc, INT64 *sbc);
+BOOL WINAPI wglGetMscRateOML (HDC hdc, INT32 *numerator, INT32 *denominator);
+INT64 WINAPI wglSwapBuffersMscOML (HDC hdc, INT64 target_msc, INT64 divisor, INT64 remainder);
+INT64 WINAPI wglSwapLayerBuffersMscOML (HDC hdc, INT fuPlanes, INT64 target_msc, INT64 divisor, INT64 remainder);
+BOOL WINAPI wglWaitForMscOML (HDC hdc, INT64 target_msc, INT64 divisor, INT64 remainder, INT64 *ust, INT64 *msc, INT64 *sbc);
+BOOL WINAPI wglWaitForSbcOML (HDC hdc, INT64 target_sbc, INT64 *ust, INT64 *msc, INT64 *sbc);
+#endif
+#endif /* WGL_OML_sync_control */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
