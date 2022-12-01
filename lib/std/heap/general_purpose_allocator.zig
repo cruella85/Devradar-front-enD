@@ -609,4 +609,199 @@ pub fn GeneralPurposeAllocator(comptime config: Config) type {
             }
 
             if (config.safety and old_mem.len != entry.value_ptr.bytes.len) {
-                var addresses: [stack_n]usize = [
+                var addresses: [stack_n]usize = [1]usize{0} ** stack_n;
+                var free_stack_trace = StackTrace{
+                    .instruction_addresses = &addresses,
+                    .index = 0,
+                };
+                std.debug.captureStackTrace(ret_addr, &free_stack_trace);
+                log.err("Allocation size {d} bytes does not match free size {d}. Allocation: {} Free: {}", .{
+                    entry.value_ptr.bytes.len,
+                    old_mem.len,
+                    entry.value_ptr.getStackTrace(.alloc),
+                    free_stack_trace,
+                });
+            }
+
+            if (!config.never_unmap) {
+                self.backing_allocator.rawFree(old_mem, log2_old_align, ret_addr);
+            }
+
+            if (config.enable_memory_limit) {
+                self.total_requested_bytes -= entry.value_ptr.requested_size;
+            }
+
+            if (config.verbose_log) {
+                log.info("large free {d} bytes at {*}", .{ old_mem.len, old_mem.ptr });
+            }
+
+            if (!config.retain_metadata) {
+                assert(self.large_allocations.remove(@ptrToInt(old_mem.ptr)));
+            } else {
+                entry.value_ptr.freed = true;
+                entry.value_ptr.captureStackTrace(ret_addr, .free);
+            }
+        }
+
+        pub fn setRequestedMemoryLimit(self: *Self, limit: usize) void {
+            self.requested_memory_limit = limit;
+        }
+
+        fn resize(
+            ctx: *anyopaque,
+            old_mem: []u8,
+            log2_old_align_u8: u8,
+            new_size: usize,
+            ret_addr: usize,
+        ) bool {
+            const self = @ptrCast(*Self, @alignCast(@alignOf(Self), ctx));
+            const log2_old_align = @intCast(Allocator.Log2Align, log2_old_align_u8);
+            self.mutex.lock();
+            defer self.mutex.unlock();
+
+            assert(old_mem.len != 0);
+
+            const aligned_size = @max(old_mem.len, @as(usize, 1) << log2_old_align);
+            if (aligned_size > largest_bucket_object_size) {
+                return self.resizeLarge(old_mem, log2_old_align, new_size, ret_addr);
+            }
+            const size_class_hint = math.ceilPowerOfTwoAssert(usize, aligned_size);
+
+            var bucket_index = math.log2(size_class_hint);
+            var size_class: usize = size_class_hint;
+            const bucket = while (bucket_index < small_bucket_count) : (bucket_index += 1) {
+                if (searchBucket(self.buckets[bucket_index], @ptrToInt(old_mem.ptr))) |bucket| {
+                    // move bucket to head of list to optimize search for nearby allocations
+                    self.buckets[bucket_index] = bucket;
+                    break bucket;
+                }
+                size_class *= 2;
+            } else blk: {
+                if (config.retain_metadata) {
+                    if (!self.large_allocations.contains(@ptrToInt(old_mem.ptr))) {
+                        // object not in active buckets or a large allocation, so search empty buckets
+                        if (searchBucket(self.empty_buckets, @ptrToInt(old_mem.ptr))) |bucket| {
+                            // bucket is empty so is_used below will always be false and we exit there
+                            break :blk bucket;
+                        } else {
+                            @panic("Invalid free");
+                        }
+                    }
+                }
+                return self.resizeLarge(old_mem, log2_old_align, new_size, ret_addr);
+            };
+            const byte_offset = @ptrToInt(old_mem.ptr) - @ptrToInt(bucket.page);
+            const slot_index = @intCast(SlotIndex, byte_offset / size_class);
+            const used_byte_index = slot_index / 8;
+            const used_bit_index = @intCast(u3, slot_index % 8);
+            const used_byte = bucket.usedBits(used_byte_index);
+            const is_used = @truncate(u1, used_byte.* >> used_bit_index) != 0;
+            if (!is_used) {
+                if (config.safety) {
+                    reportDoubleFree(ret_addr, bucketStackTrace(bucket, size_class, slot_index, .alloc), bucketStackTrace(bucket, size_class, slot_index, .free));
+                    @panic("Unrecoverable double free");
+                } else {
+                    unreachable;
+                }
+            }
+
+            // Definitely an in-use small alloc now.
+            const prev_req_bytes = self.total_requested_bytes;
+            if (config.enable_memory_limit) {
+                const new_req_bytes = prev_req_bytes + new_size - old_mem.len;
+                if (new_req_bytes > prev_req_bytes and new_req_bytes > self.requested_memory_limit) {
+                    return false;
+                }
+                self.total_requested_bytes = new_req_bytes;
+            }
+
+            const new_aligned_size = @max(new_size, @as(usize, 1) << log2_old_align);
+            const new_size_class = math.ceilPowerOfTwoAssert(usize, new_aligned_size);
+            if (new_size_class <= size_class) {
+                if (old_mem.len > new_size) {
+                    @memset(old_mem.ptr + new_size, undefined, old_mem.len - new_size);
+                }
+                if (config.verbose_log) {
+                    log.info("small resize {d} bytes at {*} to {d}", .{
+                        old_mem.len, old_mem.ptr, new_size,
+                    });
+                }
+                return true;
+            }
+
+            if (config.enable_memory_limit) {
+                self.total_requested_bytes = prev_req_bytes;
+            }
+            return false;
+        }
+
+        fn free(
+            ctx: *anyopaque,
+            old_mem: []u8,
+            log2_old_align_u8: u8,
+            ret_addr: usize,
+        ) void {
+            const self = @ptrCast(*Self, @alignCast(@alignOf(Self), ctx));
+            const log2_old_align = @intCast(Allocator.Log2Align, log2_old_align_u8);
+            self.mutex.lock();
+            defer self.mutex.unlock();
+
+            assert(old_mem.len != 0);
+
+            const aligned_size = @max(old_mem.len, @as(usize, 1) << log2_old_align);
+            if (aligned_size > largest_bucket_object_size) {
+                self.freeLarge(old_mem, log2_old_align, ret_addr);
+                return;
+            }
+            const size_class_hint = math.ceilPowerOfTwoAssert(usize, aligned_size);
+
+            var bucket_index = math.log2(size_class_hint);
+            var size_class: usize = size_class_hint;
+            const bucket = while (bucket_index < small_bucket_count) : (bucket_index += 1) {
+                if (searchBucket(self.buckets[bucket_index], @ptrToInt(old_mem.ptr))) |bucket| {
+                    // move bucket to head of list to optimize search for nearby allocations
+                    self.buckets[bucket_index] = bucket;
+                    break bucket;
+                }
+                size_class *= 2;
+            } else blk: {
+                if (config.retain_metadata) {
+                    if (!self.large_allocations.contains(@ptrToInt(old_mem.ptr))) {
+                        // object not in active buckets or a large allocation, so search empty buckets
+                        if (searchBucket(self.empty_buckets, @ptrToInt(old_mem.ptr))) |bucket| {
+                            // bucket is empty so is_used below will always be false and we exit there
+                            break :blk bucket;
+                        } else {
+                            @panic("Invalid free");
+                        }
+                    }
+                }
+                self.freeLarge(old_mem, log2_old_align, ret_addr);
+                return;
+            };
+            const byte_offset = @ptrToInt(old_mem.ptr) - @ptrToInt(bucket.page);
+            const slot_index = @intCast(SlotIndex, byte_offset / size_class);
+            const used_byte_index = slot_index / 8;
+            const used_bit_index = @intCast(u3, slot_index % 8);
+            const used_byte = bucket.usedBits(used_byte_index);
+            const is_used = @truncate(u1, used_byte.* >> used_bit_index) != 0;
+            if (!is_used) {
+                if (config.safety) {
+                    reportDoubleFree(ret_addr, bucketStackTrace(bucket, size_class, slot_index, .alloc), bucketStackTrace(bucket, size_class, slot_index, .free));
+                    // Recoverable if this is a free.
+                    return;
+                } else {
+                    unreachable;
+                }
+            }
+
+            // Definitely an in-use small alloc now.
+            if (config.enable_memory_limit) {
+                self.total_requested_bytes -= old_mem.len;
+            }
+
+            // Capture stack trace to be the "first free", in case a double free happens.
+            bucket.captureStackTrace(ret_addr, size_class, slot_index, .free);
+
+            used_byte.* &= ~(@as(u8, 1) << used_bit_index);
+      
