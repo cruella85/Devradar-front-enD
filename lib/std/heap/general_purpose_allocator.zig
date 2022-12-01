@@ -1279,4 +1279,52 @@ test "setting a memory cap" {
 test "double frees" {
     // use a GPA to back a GPA to check for leaks of the latter's metadata
     var backing_gpa = GeneralPurposeAllocator(.{ .safety = true }){};
-    defer std.testing.expect(!backing_gpa.deinit()) catch @panic("lea
+    defer std.testing.expect(!backing_gpa.deinit()) catch @panic("leak");
+
+    const GPA = GeneralPurposeAllocator(.{ .safety = true, .never_unmap = true, .retain_metadata = true });
+    var gpa = GPA{ .backing_allocator = backing_gpa.allocator() };
+    defer std.testing.expect(!gpa.deinit()) catch @panic("leak");
+    const allocator = gpa.allocator();
+
+    // detect a small allocation double free, even though bucket is emptied
+    const index: usize = 6;
+    const size_class: usize = @as(usize, 1) << 6;
+    const small = try allocator.alloc(u8, size_class);
+    try std.testing.expect(GPA.searchBucket(gpa.buckets[index], @ptrToInt(small.ptr)) != null);
+    allocator.free(small);
+    try std.testing.expect(GPA.searchBucket(gpa.buckets[index], @ptrToInt(small.ptr)) == null);
+    try std.testing.expect(GPA.searchBucket(gpa.empty_buckets, @ptrToInt(small.ptr)) != null);
+
+    // detect a large allocation double free
+    const large = try allocator.alloc(u8, 2 * page_size);
+    try std.testing.expect(gpa.large_allocations.contains(@ptrToInt(large.ptr)));
+    try std.testing.expectEqual(gpa.large_allocations.getEntry(@ptrToInt(large.ptr)).?.value_ptr.bytes, large);
+    allocator.free(large);
+    try std.testing.expect(gpa.large_allocations.contains(@ptrToInt(large.ptr)));
+    try std.testing.expect(gpa.large_allocations.getEntry(@ptrToInt(large.ptr)).?.value_ptr.freed);
+
+    const normal_small = try allocator.alloc(u8, size_class);
+    defer allocator.free(normal_small);
+    const normal_large = try allocator.alloc(u8, 2 * page_size);
+    defer allocator.free(normal_large);
+
+    // check that flushing retained metadata doesn't disturb live allocations
+    gpa.flushRetainedMetadata();
+    try std.testing.expect(gpa.empty_buckets == null);
+    try std.testing.expect(GPA.searchBucket(gpa.buckets[index], @ptrToInt(normal_small.ptr)) != null);
+    try std.testing.expect(gpa.large_allocations.contains(@ptrToInt(normal_large.ptr)));
+    try std.testing.expect(!gpa.large_allocations.contains(@ptrToInt(large.ptr)));
+}
+
+test "bug 9995 fix, large allocs count requested size not backing size" {
+    // with AtLeast, buffer likely to be larger than requested, especially when shrinking
+    var gpa = GeneralPurposeAllocator(.{ .enable_memory_limit = true }){};
+    const allocator = gpa.allocator();
+
+    var buf = try allocator.alignedAlloc(u8, 1, page_size + 1);
+    try std.testing.expect(gpa.total_requested_bytes == page_size + 1);
+    buf = try allocator.realloc(buf, 1);
+    try std.testing.expect(gpa.total_requested_bytes == 1);
+    buf = try allocator.realloc(buf, 2);
+    try std.testing.expect(gpa.total_requested_bytes == 2);
+}
