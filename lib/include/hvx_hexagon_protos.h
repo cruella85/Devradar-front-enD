@@ -1763,4 +1763,186 @@
    C Intrinsic Prototype: HVX_Vector Q6_Vuh_vmax_VuhVuh(HVX_Vector Vu, HVX_Vector Vv)
    Instruction Type:      CVI_VA
    Execution Slots:       SLOT0123
-   =====================================
+   ========================================================================== */
+
+#define Q6_Vuh_vmax_VuhVuh(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmaxuh)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vd32.w=vmax(Vu32.w,Vv32.w)
+   C Intrinsic Prototype: HVX_Vector Q6_Vw_vmax_VwVw(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VA
+   Execution Slots:       SLOT0123
+   ========================================================================== */
+
+#define Q6_Vw_vmax_VwVw(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmaxw)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vd32.h=vmin(Vu32.h,Vv32.h)
+   C Intrinsic Prototype: HVX_Vector Q6_Vh_vmin_VhVh(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VA
+   Execution Slots:       SLOT0123
+   ========================================================================== */
+
+#define Q6_Vh_vmin_VhVh(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vminh)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vd32.ub=vmin(Vu32.ub,Vv32.ub)
+   C Intrinsic Prototype: HVX_Vector Q6_Vub_vmin_VubVub(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VA
+   Execution Slots:       SLOT0123
+   ========================================================================== */
+
+#define Q6_Vub_vmin_VubVub(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vminub)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vd32.uh=vmin(Vu32.uh,Vv32.uh)
+   C Intrinsic Prototype: HVX_Vector Q6_Vuh_vmin_VuhVuh(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VA
+   Execution Slots:       SLOT0123
+   ========================================================================== */
+
+#define Q6_Vuh_vmin_VuhVuh(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vminuh)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vd32.w=vmin(Vu32.w,Vv32.w)
+   C Intrinsic Prototype: HVX_Vector Q6_Vw_vmin_VwVw(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VA
+   Execution Slots:       SLOT0123
+   ========================================================================== */
+
+#define Q6_Vw_vmin_VwVw(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vminw)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.h=vmpa(Vuu32.ub,Rt32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpa_WubRb(HVX_VectorPair Vuu, Word32 Rt)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpa_WubRb(Vuu,Rt) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpabus)(Vuu,Rt)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vxx32.h+=vmpa(Vuu32.ub,Rt32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpaacc_WhWubRb(HVX_VectorPair Vxx, HVX_VectorPair Vuu, Word32 Rt)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpaacc_WhWubRb(Vxx,Vuu,Rt) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpabus_acc)(Vxx,Vuu,Rt)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.h=vmpa(Vuu32.ub,Vvv32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpa_WubWb(HVX_VectorPair Vuu, HVX_VectorPair Vvv)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpa_WubWb(Vuu,Vvv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpabusv)(Vuu,Vvv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.h=vmpa(Vuu32.ub,Vvv32.ub)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpa_WubWub(HVX_VectorPair Vuu, HVX_VectorPair Vvv)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpa_WubWub(Vuu,Vvv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpabuuv)(Vuu,Vvv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.w=vmpa(Vuu32.h,Rt32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Ww_vmpa_WhRb(HVX_VectorPair Vuu, Word32 Rt)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Ww_vmpa_WhRb(Vuu,Rt) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpahb)(Vuu,Rt)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vxx32.w+=vmpa(Vuu32.h,Rt32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Ww_vmpaacc_WwWhRb(HVX_VectorPair Vxx, HVX_VectorPair Vuu, Word32 Rt)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Ww_vmpaacc_WwWhRb(Vxx,Vuu,Rt) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpahb_acc)(Vxx,Vuu,Rt)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.h=vmpy(Vu32.ub,Rt32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpy_VubRb(HVX_Vector Vu, Word32 Rt)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpy_VubRb(Vu,Rt) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpybus)(Vu,Rt)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vxx32.h+=vmpy(Vu32.ub,Rt32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpyacc_WhVubRb(HVX_VectorPair Vxx, HVX_Vector Vu, Word32 Rt)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpyacc_WhVubRb(Vxx,Vu,Rt) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpybus_acc)(Vxx,Vu,Rt)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.h=vmpy(Vu32.ub,Vv32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpy_VubVb(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpy_VubVb(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpybusv)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vxx32.h+=vmpy(Vu32.ub,Vv32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpyacc_WhVubVb(HVX_VectorPair Vxx, HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpyacc_WhVubVb(Vxx,Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpybusv_acc)(Vxx,Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* ==========================================================================
+   Assembly Syntax:       Vdd32.h=vmpy(Vu32.b,Vv32.b)
+   C Intrinsic Prototype: HVX_VectorPair Q6_Wh_vmpy_VbVb(HVX_Vector Vu, HVX_Vector Vv)
+   Instruction Type:      CVI_VX_DV
+   Execution Slots:       SLOT23
+   ========================================================================== */
+
+#define Q6_Wh_vmpy_VbVb(Vu,Vv) __BUILTIN_VECTOR_WRAP(__builtin_HEXAGON_V6_vmpybv)(Vu,Vv)
+#endif /* __HEXAGON_ARCH___ >= 60 */
+
+#if __HVX_ARCH__ >= 60
+/* =========================================
