@@ -204,4 +204,282 @@ interface IPersistSerializedPropStorage2;
 
 #ifndef __IPropertySystemChangeNotify_FWD_DEFINED__
 #define __IPropertySystemChangeNotify_FWD_DEFINED__
-typedef interfa
+typedef interface IPropertySystemChangeNotify IPropertySystemChangeNotify;
+#ifdef __cplusplus
+interface IPropertySystemChangeNotify;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __ICreateObject_FWD_DEFINED__
+#define __ICreateObject_FWD_DEFINED__
+typedef interface ICreateObject ICreateObject;
+#ifdef __cplusplus
+interface ICreateObject;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __InMemoryPropertyStore_FWD_DEFINED__
+#define __InMemoryPropertyStore_FWD_DEFINED__
+#ifdef __cplusplus
+typedef class InMemoryPropertyStore InMemoryPropertyStore;
+#else
+typedef struct InMemoryPropertyStore InMemoryPropertyStore;
+#endif /* defined __cplusplus */
+#endif /* defined __InMemoryPropertyStore_FWD_DEFINED__ */
+
+#ifndef __PropertySystem_FWD_DEFINED__
+#define __PropertySystem_FWD_DEFINED__
+#ifdef __cplusplus
+typedef class PropertySystem PropertySystem;
+#else
+typedef struct PropertySystem PropertySystem;
+#endif /* defined __cplusplus */
+#endif /* defined __PropertySystem_FWD_DEFINED__ */
+
+/* Headers for imported files */
+
+#include <objidl.h>
+#include <oleidl.h>
+#include <ocidl.h>
+#include <shtypes.h>
+#include <structuredquerycondition.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * This file is part of the mingw-w64 runtime package.
+ * No warranty is given; refer to the file DISCLAIMER within this package.
+ */
+
+#include <winapifamily.h>
+
+
+#ifndef PSSTDAPI
+#ifdef _PROPSYS_
+#define PSSTDAPI STDAPI
+#define PSSTDAPI_(type)   STDAPI_(type)
+#else
+#define PSSTDAPI EXTERN_C DECLSPEC_IMPORT HRESULT STDAPICALLTYPE
+#define PSSTDAPI_(type) EXTERN_C DECLSPEC_IMPORT type STDAPICALLTYPE
+#endif
+#endif
+
+#if 0
+typedef PROPERTYKEY *REFPROPERTYKEY;
+#endif
+
+#include <propkeydef.h>
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+/*****************************************************************************
+ * IInitializeWithFile interface
+ */
+#ifndef __IInitializeWithFile_INTERFACE_DEFINED__
+#define __IInitializeWithFile_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IInitializeWithFile, 0xb7d14566, 0x0509, 0x4cce, 0xa7,0x1f, 0x0a,0x55,0x42,0x33,0xbd,0x9b);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b7d14566-0509-4cce-a71f-0a554233bd9b")
+IInitializeWithFile : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Initialize(
+        LPCWSTR pszFilePath,
+        DWORD grfMode) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IInitializeWithFile, 0xb7d14566, 0x0509, 0x4cce, 0xa7,0x1f, 0x0a,0x55,0x42,0x33,0xbd,0x9b)
+#endif
+#else
+typedef struct IInitializeWithFileVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IInitializeWithFile *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IInitializeWithFile *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IInitializeWithFile *This);
+
+    /*** IInitializeWithFile methods ***/
+    HRESULT (STDMETHODCALLTYPE *Initialize)(
+        IInitializeWithFile *This,
+        LPCWSTR pszFilePath,
+        DWORD grfMode);
+
+    END_INTERFACE
+} IInitializeWithFileVtbl;
+
+interface IInitializeWithFile {
+    CONST_VTBL IInitializeWithFileVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IInitializeWithFile_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IInitializeWithFile_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IInitializeWithFile_Release(This) (This)->lpVtbl->Release(This)
+/*** IInitializeWithFile methods ***/
+#define IInitializeWithFile_Initialize(This,pszFilePath,grfMode) (This)->lpVtbl->Initialize(This,pszFilePath,grfMode)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IInitializeWithFile_QueryInterface(IInitializeWithFile* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IInitializeWithFile_AddRef(IInitializeWithFile* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IInitializeWithFile_Release(IInitializeWithFile* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IInitializeWithFile methods ***/
+static FORCEINLINE HRESULT IInitializeWithFile_Initialize(IInitializeWithFile* This,LPCWSTR pszFilePath,DWORD grfMode) {
+    return This->lpVtbl->Initialize(This,pszFilePath,grfMode);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IInitializeWithFile_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IInitializeWithStream interface
+ */
+#ifndef __IInitializeWithStream_INTERFACE_DEFINED__
+#define __IInitializeWithStream_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IInitializeWithStream, 0xb824b49d, 0x22ac, 0x4161, 0xac,0x8a, 0x99,0x16,0xe8,0xfa,0x3f,0x7f);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("b824b49d-22ac-4161-ac8a-9916e8fa3f7f")
+IInitializeWithStream : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE Initialize(
+        IStream *pstream,
+        DWORD grfMode) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IInitializeWithStream, 0xb824b49d, 0x22ac, 0x4161, 0xac,0x8a, 0x99,0x16,0xe8,0xfa,0x3f,0x7f)
+#endif
+#else
+typedef struct IInitializeWithStreamVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IInitializeWithStream *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IInitializeWithStream *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IInitializeWithStream *This);
+
+    /*** IInitializeWithStream methods ***/
+    HRESULT (STDMETHODCALLTYPE *Initialize)(
+        IInitializeWithStream *This,
+        IStream *pstream,
+        DWORD grfMode);
+
+    END_INTERFACE
+} IInitializeWithStreamVtbl;
+
+interface IInitializeWithStream {
+    CONST_VTBL IInitializeWithStreamVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IInitializeWithStream_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IInitializeWithStream_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IInitializeWithStream_Release(This) (This)->lpVtbl->Release(This)
+/*** IInitializeWithStream methods ***/
+#define IInitializeWithStream_Initialize(This,pstream,grfMode) (This)->lpVtbl->Initialize(This,pstream,grfMode)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IInitializeWithStream_QueryInterface(IInitializeWithStream* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IInitializeWithStream_AddRef(IInitializeWithStream* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IInitializeWithStream_Release(IInitializeWithStream* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IInitializeWithStream methods ***/
+static FORCEINLINE HRESULT IInitializeWithStream_Initialize(IInitializeWithStream* This,IStream *pstream,DWORD grfMode) {
+    return This->lpVtbl->Initialize(This,pstream,grfMode);
+}
+#endif
+#endif
+
+#endif
+
+HRESULT STDMETHODCALLTYPE IInitializeWithStream_RemoteInitialize_Proxy(
+    IInitializeWithStream* This,
+    IStream *pstream,
+    DWORD grfMode);
+void __RPC_STUB IInitializeWithStream_RemoteInitialize_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IInitializeWithStream_Initialize_Proxy(
+    IInitializeWithStream* This,
+    IStream *pstream,
+    DWORD grfMode);
+HRESULT __RPC_STUB IInitializeWithStream_Initialize_Stub(
+    IInitializeWithStream* This,
+    IStream *pstream,
+    DWORD grfMode);
+
+#endif  /* __IInitializeWithStream_INTERFACE_DEFINED__ */
+
+#endif
+
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
+/*****************************************************************************
+ * IPropertyStore interface
+ */
+#ifndef __IPropertyStore_INTERFACE_DEFINED__
+#define __IPropertyStore_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertyStore, 0x886d8eeb, 0x8cf2, 0x4446, 0x8d,0x02, 0xcd,0xba,0x1d,0xbd,0xcf,0x99);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("886d8eeb-8cf2-4446-8d02-cdba1dbdcf99")
+IPropertyStore : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetCount(
+        DWORD *cProps) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetAt(
+        DWORD iProp,
+        PROPERTYKEY *pkey) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetValue(
+        REFPROPERTYKEY key,
+        PROPVARIANT *pv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetValue(
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Commit(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyStore, 0x886d8eeb, 0x8cf2, 0x4446
