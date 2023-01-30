@@ -1008,4 +1008,250 @@ interface IPropertyChangeArray {
 /*** IUnknown methods ***/
 #define IPropertyChangeArray_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
 #define IPropertyChangeArray_AddRef(This) (This)->lpVtbl->AddRef(This)
-#define IPropertyChangeArray_Release(This) (This)->lpVtbl->Relea
+#define IPropertyChangeArray_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyChangeArray methods ***/
+#define IPropertyChangeArray_GetCount(This,pcOperations) (This)->lpVtbl->GetCount(This,pcOperations)
+#define IPropertyChangeArray_GetAt(This,iIndex,riid,ppv) (This)->lpVtbl->GetAt(This,iIndex,riid,ppv)
+#define IPropertyChangeArray_InsertAt(This,iIndex,ppropChange) (This)->lpVtbl->InsertAt(This,iIndex,ppropChange)
+#define IPropertyChangeArray_Append(This,ppropChange) (This)->lpVtbl->Append(This,ppropChange)
+#define IPropertyChangeArray_AppendOrReplace(This,ppropChange) (This)->lpVtbl->AppendOrReplace(This,ppropChange)
+#define IPropertyChangeArray_RemoveAt(This,iIndex) (This)->lpVtbl->RemoveAt(This,iIndex)
+#define IPropertyChangeArray_IsKeyInArray(This,key) (This)->lpVtbl->IsKeyInArray(This,key)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyChangeArray_QueryInterface(IPropertyChangeArray* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyChangeArray_AddRef(IPropertyChangeArray* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyChangeArray_Release(IPropertyChangeArray* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyChangeArray methods ***/
+static FORCEINLINE HRESULT IPropertyChangeArray_GetCount(IPropertyChangeArray* This,UINT *pcOperations) {
+    return This->lpVtbl->GetCount(This,pcOperations);
+}
+static FORCEINLINE HRESULT IPropertyChangeArray_GetAt(IPropertyChangeArray* This,UINT iIndex,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetAt(This,iIndex,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertyChangeArray_InsertAt(IPropertyChangeArray* This,UINT iIndex,IPropertyChange *ppropChange) {
+    return This->lpVtbl->InsertAt(This,iIndex,ppropChange);
+}
+static FORCEINLINE HRESULT IPropertyChangeArray_Append(IPropertyChangeArray* This,IPropertyChange *ppropChange) {
+    return This->lpVtbl->Append(This,ppropChange);
+}
+static FORCEINLINE HRESULT IPropertyChangeArray_AppendOrReplace(IPropertyChangeArray* This,IPropertyChange *ppropChange) {
+    return This->lpVtbl->AppendOrReplace(This,ppropChange);
+}
+static FORCEINLINE HRESULT IPropertyChangeArray_RemoveAt(IPropertyChangeArray* This,UINT iIndex) {
+    return This->lpVtbl->RemoveAt(This,iIndex);
+}
+static FORCEINLINE HRESULT IPropertyChangeArray_IsKeyInArray(IPropertyChangeArray* This,REFPROPERTYKEY key) {
+    return This->lpVtbl->IsKeyInArray(This,key);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyChangeArray_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyStoreCapabilities interface
+ */
+#ifndef __IPropertyStoreCapabilities_INTERFACE_DEFINED__
+#define __IPropertyStoreCapabilities_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertyStoreCapabilities, 0xc8e2d566, 0x186e, 0x4d49, 0xbf,0x41, 0x69,0x09,0xea,0xd5,0x6a,0xcc);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("c8e2d566-186e-4d49-bf41-6909ead56acc")
+IPropertyStoreCapabilities : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE IsPropertyWritable(
+        REFPROPERTYKEY key) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyStoreCapabilities, 0xc8e2d566, 0x186e, 0x4d49, 0xbf,0x41, 0x69,0x09,0xea,0xd5,0x6a,0xcc)
+#endif
+#else
+typedef struct IPropertyStoreCapabilitiesVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyStoreCapabilities *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyStoreCapabilities *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyStoreCapabilities *This);
+
+    /*** IPropertyStoreCapabilities methods ***/
+    HRESULT (STDMETHODCALLTYPE *IsPropertyWritable)(
+        IPropertyStoreCapabilities *This,
+        REFPROPERTYKEY key);
+
+    END_INTERFACE
+} IPropertyStoreCapabilitiesVtbl;
+
+interface IPropertyStoreCapabilities {
+    CONST_VTBL IPropertyStoreCapabilitiesVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyStoreCapabilities_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyStoreCapabilities_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyStoreCapabilities_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyStoreCapabilities methods ***/
+#define IPropertyStoreCapabilities_IsPropertyWritable(This,key) (This)->lpVtbl->IsPropertyWritable(This,key)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyStoreCapabilities_QueryInterface(IPropertyStoreCapabilities* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyStoreCapabilities_AddRef(IPropertyStoreCapabilities* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyStoreCapabilities_Release(IPropertyStoreCapabilities* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyStoreCapabilities methods ***/
+static FORCEINLINE HRESULT IPropertyStoreCapabilities_IsPropertyWritable(IPropertyStoreCapabilities* This,REFPROPERTYKEY key) {
+    return This->lpVtbl->IsPropertyWritable(This,key);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyStoreCapabilities_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyStoreCache interface
+ */
+#ifndef __IPropertyStoreCache_INTERFACE_DEFINED__
+#define __IPropertyStoreCache_INTERFACE_DEFINED__
+
+typedef enum PSC_STATE {
+    PSC_NORMAL = 0,
+    PSC_NOTINSOURCE = 1,
+    PSC_DIRTY = 2,
+    PSC_READONLY = 3
+} PSC_STATE;
+
+DEFINE_GUID(IID_IPropertyStoreCache, 0x3017056d, 0x9a91, 0x4e90, 0x93,0x7d, 0x74,0x6c,0x72,0xab,0xbf,0x4f);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("3017056d-9a91-4e90-937d-746c72abbf4f")
+IPropertyStoreCache : public IPropertyStore
+{
+    virtual HRESULT STDMETHODCALLTYPE GetState(
+        REFPROPERTYKEY key,
+        PSC_STATE *pstate) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetValueAndState(
+        REFPROPERTYKEY key,
+        PROPVARIANT *ppropvar,
+        PSC_STATE *pstate) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetState(
+        REFPROPERTYKEY key,
+        PSC_STATE state) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetValueAndState(
+        REFPROPERTYKEY key,
+        const PROPVARIANT *ppropvar,
+        PSC_STATE state) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyStoreCache, 0x3017056d, 0x9a91, 0x4e90, 0x93,0x7d, 0x74,0x6c,0x72,0xab,0xbf,0x4f)
+#endif
+#else
+typedef struct IPropertyStoreCacheVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyStoreCache *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyStoreCache *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyStoreCache *This);
+
+    /*** IPropertyStore methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IPropertyStoreCache *This,
+        DWORD *cProps);
+
+    HRESULT (STDMETHODCALLTYPE *GetAt)(
+        IPropertyStoreCache *This,
+        DWORD iProp,
+        PROPERTYKEY *pkey);
+
+    HRESULT (STDMETHODCALLTYPE *GetValue)(
+        IPropertyStoreCache *This,
+        REFPROPERTYKEY key,
+        PROPVARIANT *pv);
+
+    HRESULT (STDMETHODCALLTYPE *SetValue)(
+        IPropertyStoreCache *This,
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar);
+
+    HRESULT (STDMETHODCALLTYPE *Commit)(
+        IPropertyStoreCache *This);
+
+    /*** IPropertyStoreCache methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetState)(
+        IPropertyStoreCache *This,
+        REFPROPERTYKEY key,
+        PSC_STATE *pstate);
+
+    HRESULT (STDMETHODCALLTYPE *GetValueAndState)(
+        IPropertyStoreCache *This,
+        REFPROPERTYKEY key,
+        PROPVARIANT *ppropvar,
+        PSC_STATE *pstate);
+
+    HRESULT (STDMETHODCALLTYPE *SetState)(
+        IPropertyStoreCache *This,
+        REFPROPERTYKEY key,
+        PSC_STATE state);
+
+    HRESULT (STDMETHODCALLTYPE *SetValueAndState)(
+        IPropertyStoreCache *This,
+        REFPROPERTYKEY key,
+        const PROPVARIANT *ppropvar,
+        PSC_STATE state);
+
+    END_INTERFACE
+} IPropertyStoreCacheVtbl;
+
+interface IPropertyStoreCache {
+    CONST_VTBL IPropertyStoreCacheVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyStoreCache_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyStoreCache_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyStoreCache_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyStore methods ***/
+#define IPropertyStoreCache_GetCount(This,cProps) (This)->lpVtbl->GetCount(This,cProps)
+#define IPro
