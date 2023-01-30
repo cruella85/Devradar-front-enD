@@ -482,4 +482,264 @@ IPropertyStore : public IUnknown
 
 };
 #ifdef __CRT_UUID_DECL
-__CRT_UUID_DECL(IPropertyStore, 0x886d8eeb, 0x8cf2, 0x4446
+__CRT_UUID_DECL(IPropertyStore, 0x886d8eeb, 0x8cf2, 0x4446, 0x8d,0x02, 0xcd,0xba,0x1d,0xbd,0xcf,0x99)
+#endif
+#else
+typedef struct IPropertyStoreVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyStore *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyStore *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyStore *This);
+
+    /*** IPropertyStore methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IPropertyStore *This,
+        DWORD *cProps);
+
+    HRESULT (STDMETHODCALLTYPE *GetAt)(
+        IPropertyStore *This,
+        DWORD iProp,
+        PROPERTYKEY *pkey);
+
+    HRESULT (STDMETHODCALLTYPE *GetValue)(
+        IPropertyStore *This,
+        REFPROPERTYKEY key,
+        PROPVARIANT *pv);
+
+    HRESULT (STDMETHODCALLTYPE *SetValue)(
+        IPropertyStore *This,
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar);
+
+    HRESULT (STDMETHODCALLTYPE *Commit)(
+        IPropertyStore *This);
+
+    END_INTERFACE
+} IPropertyStoreVtbl;
+
+interface IPropertyStore {
+    CONST_VTBL IPropertyStoreVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyStore_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyStore_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyStore_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyStore methods ***/
+#define IPropertyStore_GetCount(This,cProps) (This)->lpVtbl->GetCount(This,cProps)
+#define IPropertyStore_GetAt(This,iProp,pkey) (This)->lpVtbl->GetAt(This,iProp,pkey)
+#define IPropertyStore_GetValue(This,key,pv) (This)->lpVtbl->GetValue(This,key,pv)
+#define IPropertyStore_SetValue(This,key,propvar) (This)->lpVtbl->SetValue(This,key,propvar)
+#define IPropertyStore_Commit(This) (This)->lpVtbl->Commit(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyStore_QueryInterface(IPropertyStore* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyStore_AddRef(IPropertyStore* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyStore_Release(IPropertyStore* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyStore methods ***/
+static FORCEINLINE HRESULT IPropertyStore_GetCount(IPropertyStore* This,DWORD *cProps) {
+    return This->lpVtbl->GetCount(This,cProps);
+}
+static FORCEINLINE HRESULT IPropertyStore_GetAt(IPropertyStore* This,DWORD iProp,PROPERTYKEY *pkey) {
+    return This->lpVtbl->GetAt(This,iProp,pkey);
+}
+static FORCEINLINE HRESULT IPropertyStore_GetValue(IPropertyStore* This,REFPROPERTYKEY key,PROPVARIANT *pv) {
+    return This->lpVtbl->GetValue(This,key,pv);
+}
+static FORCEINLINE HRESULT IPropertyStore_SetValue(IPropertyStore* This,REFPROPERTYKEY key,REFPROPVARIANT propvar) {
+    return This->lpVtbl->SetValue(This,key,propvar);
+}
+static FORCEINLINE HRESULT IPropertyStore_Commit(IPropertyStore* This) {
+    return This->lpVtbl->Commit(This);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyStore_INTERFACE_DEFINED__ */
+
+
+typedef IPropertyStore *LPPROPERTYSTORE;
+#endif
+
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+/*****************************************************************************
+ * INamedPropertyStore interface
+ */
+#ifndef __INamedPropertyStore_INTERFACE_DEFINED__
+#define __INamedPropertyStore_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_INamedPropertyStore, 0x71604b0f, 0x97b0, 0x4764, 0x85,0x77, 0x2f,0x13,0xe9,0x8a,0x14,0x22);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("71604b0f-97b0-4764-8577-2f13e98a1422")
+INamedPropertyStore : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetNamedValue(
+        LPCWSTR pszName,
+        PROPVARIANT *ppropvar) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetNamedValue(
+        LPCWSTR pszName,
+        REFPROPVARIANT propvar) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetNameCount(
+        DWORD *pdwCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetNameAt(
+        DWORD iProp,
+        BSTR *pbstrName) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(INamedPropertyStore, 0x71604b0f, 0x97b0, 0x4764, 0x85,0x77, 0x2f,0x13,0xe9,0x8a,0x14,0x22)
+#endif
+#else
+typedef struct INamedPropertyStoreVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        INamedPropertyStore *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        INamedPropertyStore *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        INamedPropertyStore *This);
+
+    /*** INamedPropertyStore methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetNamedValue)(
+        INamedPropertyStore *This,
+        LPCWSTR pszName,
+        PROPVARIANT *ppropvar);
+
+    HRESULT (STDMETHODCALLTYPE *SetNamedValue)(
+        INamedPropertyStore *This,
+        LPCWSTR pszName,
+        REFPROPVARIANT propvar);
+
+    HRESULT (STDMETHODCALLTYPE *GetNameCount)(
+        INamedPropertyStore *This,
+        DWORD *pdwCount);
+
+    HRESULT (STDMETHODCALLTYPE *GetNameAt)(
+        INamedPropertyStore *This,
+        DWORD iProp,
+        BSTR *pbstrName);
+
+    END_INTERFACE
+} INamedPropertyStoreVtbl;
+
+interface INamedPropertyStore {
+    CONST_VTBL INamedPropertyStoreVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define INamedPropertyStore_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define INamedPropertyStore_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define INamedPropertyStore_Release(This) (This)->lpVtbl->Release(This)
+/*** INamedPropertyStore methods ***/
+#define INamedPropertyStore_GetNamedValue(This,pszName,ppropvar) (This)->lpVtbl->GetNamedValue(This,pszName,ppropvar)
+#define INamedPropertyStore_SetNamedValue(This,pszName,propvar) (This)->lpVtbl->SetNamedValue(This,pszName,propvar)
+#define INamedPropertyStore_GetNameCount(This,pdwCount) (This)->lpVtbl->GetNameCount(This,pdwCount)
+#define INamedPropertyStore_GetNameAt(This,iProp,pbstrName) (This)->lpVtbl->GetNameAt(This,iProp,pbstrName)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT INamedPropertyStore_QueryInterface(INamedPropertyStore* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG INamedPropertyStore_AddRef(INamedPropertyStore* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG INamedPropertyStore_Release(INamedPropertyStore* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** INamedPropertyStore methods ***/
+static FORCEINLINE HRESULT INamedPropertyStore_GetNamedValue(INamedPropertyStore* This,LPCWSTR pszName,PROPVARIANT *ppropvar) {
+    return This->lpVtbl->GetNamedValue(This,pszName,ppropvar);
+}
+static FORCEINLINE HRESULT INamedPropertyStore_SetNamedValue(INamedPropertyStore* This,LPCWSTR pszName,REFPROPVARIANT propvar) {
+    return This->lpVtbl->SetNamedValue(This,pszName,propvar);
+}
+static FORCEINLINE HRESULT INamedPropertyStore_GetNameCount(INamedPropertyStore* This,DWORD *pdwCount) {
+    return This->lpVtbl->GetNameCount(This,pdwCount);
+}
+static FORCEINLINE HRESULT INamedPropertyStore_GetNameAt(INamedPropertyStore* This,DWORD iProp,BSTR *pbstrName) {
+    return This->lpVtbl->GetNameAt(This,iProp,pbstrName);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __INamedPropertyStore_INTERFACE_DEFINED__ */
+
+
+typedef enum GETPROPERTYSTOREFLAGS {
+    GPS_DEFAULT = 0x0,
+    GPS_HANDLERPROPERTIESONLY = 0x1,
+    GPS_READWRITE = 0x2,
+    GPS_TEMPORARY = 0x4,
+    GPS_FASTPROPERTIESONLY = 0x8,
+    GPS_OPENSLOWITEM = 0x10,
+    GPS_DELAYCREATION = 0x20,
+    GPS_BESTEFFORT = 0x40,
+    GPS_NO_OPLOCK = 0x80,
+    GPS_PREFERQUERYPROPERTIES = 0x100,
+    GPS_MASK_VALID = 0x1ff
+} GETPROPERTYSTOREFLAGS;
+
+DEFINE_ENUM_FLAG_OPERATORS(GETPROPERTYSTOREFLAGS)
+
+/*****************************************************************************
+ * IObjectWithPropertyKey interface
+ */
+#ifndef __IObjectWithPropertyKey_INTERFACE_DEFINED__
+#define __IObjectWithPropertyKey_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IObjectWithPropertyKey, 0xfc0ca0a7, 0xc316, 0x4fd2, 0x90,0x31, 0x3e,0x62,0x8e,0x6d,0x4f,0x23);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("fc0ca0a7-c316-4fd2-9031-3e628e6d4f23")
+IObjectWithPropertyKey : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetPropertyKey(
+        REFPROPERTYKEY key) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyKey(
+        PROPERTYKEY *pkey) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IObjectWithPropertyKey, 0xfc0ca0a7, 0xc316, 0x4fd2, 0x90,0x31, 0x3e,0x62,0x8e,0x6d,0x4f,0x23)
+#endif
+#else
+typedef struct IObjectWithPropertyKeyVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        
