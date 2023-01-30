@@ -742,4 +742,270 @@ typedef struct IObjectWithPropertyKeyVtbl {
 
     /*** IUnknown methods ***/
     HRESULT (STDMETHODCALLTYPE *QueryInterface)(
-        
+        IObjectWithPropertyKey *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IObjectWithPropertyKey *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IObjectWithPropertyKey *This);
+
+    /*** IObjectWithPropertyKey methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetPropertyKey)(
+        IObjectWithPropertyKey *This,
+        REFPROPERTYKEY key);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyKey)(
+        IObjectWithPropertyKey *This,
+        PROPERTYKEY *pkey);
+
+    END_INTERFACE
+} IObjectWithPropertyKeyVtbl;
+
+interface IObjectWithPropertyKey {
+    CONST_VTBL IObjectWithPropertyKeyVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IObjectWithPropertyKey_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IObjectWithPropertyKey_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IObjectWithPropertyKey_Release(This) (This)->lpVtbl->Release(This)
+/*** IObjectWithPropertyKey methods ***/
+#define IObjectWithPropertyKey_SetPropertyKey(This,key) (This)->lpVtbl->SetPropertyKey(This,key)
+#define IObjectWithPropertyKey_GetPropertyKey(This,pkey) (This)->lpVtbl->GetPropertyKey(This,pkey)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IObjectWithPropertyKey_QueryInterface(IObjectWithPropertyKey* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IObjectWithPropertyKey_AddRef(IObjectWithPropertyKey* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IObjectWithPropertyKey_Release(IObjectWithPropertyKey* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IObjectWithPropertyKey methods ***/
+static FORCEINLINE HRESULT IObjectWithPropertyKey_SetPropertyKey(IObjectWithPropertyKey* This,REFPROPERTYKEY key) {
+    return This->lpVtbl->SetPropertyKey(This,key);
+}
+static FORCEINLINE HRESULT IObjectWithPropertyKey_GetPropertyKey(IObjectWithPropertyKey* This,PROPERTYKEY *pkey) {
+    return This->lpVtbl->GetPropertyKey(This,pkey);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IObjectWithPropertyKey_INTERFACE_DEFINED__ */
+
+
+typedef enum PKA_FLAGS {
+    PKA_SET = 0,
+    PKA_APPEND = 1,
+    PKA_DELETE = 2
+} PKA_FLAGS;
+
+/*****************************************************************************
+ * IPropertyChange interface
+ */
+#ifndef __IPropertyChange_INTERFACE_DEFINED__
+#define __IPropertyChange_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertyChange, 0xf917bc8a, 0x1bba, 0x4478, 0xa2,0x45, 0x1b,0xde,0x03,0xeb,0x94,0x31);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("f917bc8a-1bba-4478-a245-1bde03eb9431")
+IPropertyChange : public IObjectWithPropertyKey
+{
+    virtual HRESULT STDMETHODCALLTYPE ApplyToPropVariant(
+        REFPROPVARIANT propvarIn,
+        PROPVARIANT *ppropvarOut) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyChange, 0xf917bc8a, 0x1bba, 0x4478, 0xa2,0x45, 0x1b,0xde,0x03,0xeb,0x94,0x31)
+#endif
+#else
+typedef struct IPropertyChangeVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyChange *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyChange *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyChange *This);
+
+    /*** IObjectWithPropertyKey methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetPropertyKey)(
+        IPropertyChange *This,
+        REFPROPERTYKEY key);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyKey)(
+        IPropertyChange *This,
+        PROPERTYKEY *pkey);
+
+    /*** IPropertyChange methods ***/
+    HRESULT (STDMETHODCALLTYPE *ApplyToPropVariant)(
+        IPropertyChange *This,
+        REFPROPVARIANT propvarIn,
+        PROPVARIANT *ppropvarOut);
+
+    END_INTERFACE
+} IPropertyChangeVtbl;
+
+interface IPropertyChange {
+    CONST_VTBL IPropertyChangeVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyChange_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyChange_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyChange_Release(This) (This)->lpVtbl->Release(This)
+/*** IObjectWithPropertyKey methods ***/
+#define IPropertyChange_SetPropertyKey(This,key) (This)->lpVtbl->SetPropertyKey(This,key)
+#define IPropertyChange_GetPropertyKey(This,pkey) (This)->lpVtbl->GetPropertyKey(This,pkey)
+/*** IPropertyChange methods ***/
+#define IPropertyChange_ApplyToPropVariant(This,propvarIn,ppropvarOut) (This)->lpVtbl->ApplyToPropVariant(This,propvarIn,ppropvarOut)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyChange_QueryInterface(IPropertyChange* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyChange_AddRef(IPropertyChange* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyChange_Release(IPropertyChange* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IObjectWithPropertyKey methods ***/
+static FORCEINLINE HRESULT IPropertyChange_SetPropertyKey(IPropertyChange* This,REFPROPERTYKEY key) {
+    return This->lpVtbl->SetPropertyKey(This,key);
+}
+static FORCEINLINE HRESULT IPropertyChange_GetPropertyKey(IPropertyChange* This,PROPERTYKEY *pkey) {
+    return This->lpVtbl->GetPropertyKey(This,pkey);
+}
+/*** IPropertyChange methods ***/
+static FORCEINLINE HRESULT IPropertyChange_ApplyToPropVariant(IPropertyChange* This,REFPROPVARIANT propvarIn,PROPVARIANT *ppropvarOut) {
+    return This->lpVtbl->ApplyToPropVariant(This,propvarIn,ppropvarOut);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyChange_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyChangeArray interface
+ */
+#ifndef __IPropertyChangeArray_INTERFACE_DEFINED__
+#define __IPropertyChangeArray_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertyChangeArray, 0x380f5cad, 0x1b5e, 0x42f2, 0x80,0x5d, 0x63,0x7f,0xd3,0x92,0xd3,0x1e);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("380f5cad-1b5e-42f2-805d-637fd392d31e")
+IPropertyChangeArray : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetCount(
+        UINT *pcOperations) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetAt(
+        UINT iIndex,
+        REFIID riid,
+        void **ppv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE InsertAt(
+        UINT iIndex,
+        IPropertyChange *ppropChange) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Append(
+        IPropertyChange *ppropChange) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AppendOrReplace(
+        IPropertyChange *ppropChange) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE RemoveAt(
+        UINT iIndex) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IsKeyInArray(
+        REFPROPERTYKEY key) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyChangeArray, 0x380f5cad, 0x1b5e, 0x42f2, 0x80,0x5d, 0x63,0x7f,0xd3,0x92,0xd3,0x1e)
+#endif
+#else
+typedef struct IPropertyChangeArrayVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyChangeArray *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyChangeArray *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyChangeArray *This);
+
+    /*** IPropertyChangeArray methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetCount)(
+        IPropertyChangeArray *This,
+        UINT *pcOperations);
+
+    HRESULT (STDMETHODCALLTYPE *GetAt)(
+        IPropertyChangeArray *This,
+        UINT iIndex,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *InsertAt)(
+        IPropertyChangeArray *This,
+        UINT iIndex,
+        IPropertyChange *ppropChange);
+
+    HRESULT (STDMETHODCALLTYPE *Append)(
+        IPropertyChangeArray *This,
+        IPropertyChange *ppropChange);
+
+    HRESULT (STDMETHODCALLTYPE *AppendOrReplace)(
+        IPropertyChangeArray *This,
+        IPropertyChange *ppropChange);
+
+    HRESULT (STDMETHODCALLTYPE *RemoveAt)(
+        IPropertyChangeArray *This,
+        UINT iIndex);
+
+    HRESULT (STDMETHODCALLTYPE *IsKeyInArray)(
+        IPropertyChangeArray *This,
+        REFPROPERTYKEY key);
+
+    END_INTERFACE
+} IPropertyChangeArrayVtbl;
+
+interface IPropertyChangeArray {
+    CONST_VTBL IPropertyChangeArrayVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyChangeArray_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyChangeArray_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyChangeArray_Release(This) (This)->lpVtbl->Relea
