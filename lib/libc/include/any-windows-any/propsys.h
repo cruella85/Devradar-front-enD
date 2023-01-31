@@ -1720,4 +1720,299 @@ typedef enum PROPDESC_VIEW_FLAGS {
     PDVF_SHOWINPRIMARYLIST = 0x80,
     PDVF_SHOWINSECONDARYLIST = 0x100,
     PDVF_HIDELABEL = 0x200,
-    PDVF_H
+    PDVF_HIDDEN = 0x800,
+    PDVF_CANWRAP = 0x1000,
+    PDVF_MASK_ALL = 0x1bff
+} PROPDESC_VIEW_FLAGS;
+
+DEFINE_ENUM_FLAG_OPERATORS(PROPDESC_VIEW_FLAGS)
+
+typedef enum PROPDESC_DISPLAYTYPE {
+    PDDT_STRING = 0,
+    PDDT_NUMBER = 1,
+    PDDT_BOOLEAN = 2,
+    PDDT_DATETIME = 3,
+    PDDT_ENUMERATED = 4
+} PROPDESC_DISPLAYTYPE;
+
+typedef enum PROPDESC_GROUPING_RANGE {
+    PDGR_DISCRETE = 0,
+    PDGR_ALPHANUMERIC = 1,
+    PDGR_SIZE = 2,
+    PDGR_DYNAMIC = 3,
+    PDGR_DATE = 4,
+    PDGR_PERCENT = 5,
+    PDGR_ENUMERATED = 6
+} PROPDESC_GROUPING_RANGE;
+
+typedef enum PROPDESC_FORMAT_FLAGS {
+    PDFF_DEFAULT = 0x0,
+    PDFF_PREFIXNAME = 0x1,
+    PDFF_FILENAME = 0x2,
+    PDFF_ALWAYSKB = 0x4,
+    PDFF_RESERVED_RIGHTTOLEFT = 0x8,
+    PDFF_SHORTTIME = 0x10,
+    PDFF_LONGTIME = 0x20,
+    PDFF_HIDETIME = 0x40,
+    PDFF_SHORTDATE = 0x80,
+    PDFF_LONGDATE = 0x100,
+    PDFF_HIDEDATE = 0x200,
+    PDFF_RELATIVEDATE = 0x400,
+    PDFF_USEEDITINVITATION = 0x800,
+    PDFF_READONLY = 0x1000,
+    PDFF_NOAUTOREADINGORDER = 0x2000
+} PROPDESC_FORMAT_FLAGS;
+
+DEFINE_ENUM_FLAG_OPERATORS(PROPDESC_FORMAT_FLAGS)
+
+typedef enum PROPDESC_SORTDESCRIPTION {
+    PDSD_GENERAL = 0,
+    PDSD_A_Z = 1,
+    PDSD_LOWEST_HIGHEST = 2,
+    PDSD_SMALLEST_BIGGEST = 3,
+    PDSD_OLDEST_NEWEST = 4
+} PROPDESC_SORTDESCRIPTION;
+
+typedef enum PROPDESC_RELATIVEDESCRIPTION_TYPE {
+    PDRDT_GENERAL = 0,
+    PDRDT_DATE = 1,
+    PDRDT_SIZE = 2,
+    PDRDT_COUNT = 3,
+    PDRDT_REVISION = 4,
+    PDRDT_LENGTH = 5,
+    PDRDT_DURATION = 6,
+    PDRDT_SPEED = 7,
+    PDRDT_RATE = 8,
+    PDRDT_RATING = 9,
+    PDRDT_PRIORITY = 10
+} PROPDESC_RELATIVEDESCRIPTION_TYPE;
+
+typedef enum PROPDESC_AGGREGATION_TYPE {
+    PDAT_DEFAULT = 0,
+    PDAT_FIRST = 1,
+    PDAT_SUM = 2,
+    PDAT_AVERAGE = 3,
+    PDAT_DATERANGE = 4,
+    PDAT_UNION = 5,
+    PDAT_MAX = 6,
+    PDAT_MIN = 7
+} PROPDESC_AGGREGATION_TYPE;
+
+typedef enum PROPDESC_CONDITION_TYPE {
+    PDCOT_NONE = 0,
+    PDCOT_STRING = 1,
+    PDCOT_SIZE = 2,
+    PDCOT_DATETIME = 3,
+    PDCOT_BOOLEAN = 4,
+    PDCOT_NUMBER = 5
+} PROPDESC_CONDITION_TYPE;
+
+DEFINE_GUID(IID_IPropertyDescription, 0x6f79d558, 0x3e96, 0x4549, 0xa1,0xd1, 0x7d,0x75,0xd2,0x28,0x88,0x14);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("6f79d558-3e96-4549-a1d1-7d75d2288814")
+IPropertyDescription : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyKey(
+        PROPERTYKEY *pkey) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCanonicalName(
+        LPWSTR *ppszName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyType(
+        VARTYPE *pvartype) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDisplayName(
+        LPWSTR *ppszName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetEditInvitation(
+        LPWSTR *ppszInvite) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetTypeFlags(
+        PROPDESC_TYPE_FLAGS mask,
+        PROPDESC_TYPE_FLAGS *ppdtFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetViewFlags(
+        PROPDESC_VIEW_FLAGS *ppdvFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDefaultColumnWidth(
+        UINT *pcxChars) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDisplayType(
+        PROPDESC_DISPLAYTYPE *pdisplaytype) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetColumnState(
+        SHCOLSTATEF *pcsFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetGroupingRange(
+        PROPDESC_GROUPING_RANGE *pgr) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetRelativeDescriptionType(
+        PROPDESC_RELATIVEDESCRIPTION_TYPE *prdt) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetRelativeDescription(
+        REFPROPVARIANT propvar1,
+        REFPROPVARIANT propvar2,
+        LPWSTR *ppszDesc1,
+        LPWSTR *ppszDesc2) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSortDescription(
+        PROPDESC_SORTDESCRIPTION *psd) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSortDescriptionLabel(
+        WINBOOL fDescending,
+        LPWSTR *ppszDescription) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetAggregationType(
+        PROPDESC_AGGREGATION_TYPE *paggtype) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetConditionType(
+        PROPDESC_CONDITION_TYPE *pcontype,
+        CONDITION_OPERATION *popDefault) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetEnumTypeList(
+        REFIID riid,
+        void **ppv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CoerceToCanonicalValue(
+        PROPVARIANT *ppropvar) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FormatForDisplay(
+        REFPROPVARIANT propvar,
+        PROPDESC_FORMAT_FLAGS pdfFlags,
+        LPWSTR *ppszDisplay) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE IsValueCanonical(
+        REFPROPVARIANT propvar) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyDescription, 0x6f79d558, 0x3e96, 0x4549, 0xa1,0xd1, 0x7d,0x75,0xd2,0x28,0x88,0x14)
+#endif
+#else
+typedef struct IPropertyDescriptionVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyDescription *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyDescription *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyDescription *This);
+
+    /*** IPropertyDescription methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetPropertyKey)(
+        IPropertyDescription *This,
+        PROPERTYKEY *pkey);
+
+    HRESULT (STDMETHODCALLTYPE *GetCanonicalName)(
+        IPropertyDescription *This,
+        LPWSTR *ppszName);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyType)(
+        IPropertyDescription *This,
+        VARTYPE *pvartype);
+
+    HRESULT (STDMETHODCALLTYPE *GetDisplayName)(
+        IPropertyDescription *This,
+        LPWSTR *ppszName);
+
+    HRESULT (STDMETHODCALLTYPE *GetEditInvitation)(
+        IPropertyDescription *This,
+        LPWSTR *ppszInvite);
+
+    HRESULT (STDMETHODCALLTYPE *GetTypeFlags)(
+        IPropertyDescription *This,
+        PROPDESC_TYPE_FLAGS mask,
+        PROPDESC_TYPE_FLAGS *ppdtFlags);
+
+    HRESULT (STDMETHODCALLTYPE *GetViewFlags)(
+        IPropertyDescription *This,
+        PROPDESC_VIEW_FLAGS *ppdvFlags);
+
+    HRESULT (STDMETHODCALLTYPE *GetDefaultColumnWidth)(
+        IPropertyDescription *This,
+        UINT *pcxChars);
+
+    HRESULT (STDMETHODCALLTYPE *GetDisplayType)(
+        IPropertyDescription *This,
+        PROPDESC_DISPLAYTYPE *pdisplaytype);
+
+    HRESULT (STDMETHODCALLTYPE *GetColumnState)(
+        IPropertyDescription *This,
+        SHCOLSTATEF *pcsFlags);
+
+    HRESULT (STDMETHODCALLTYPE *GetGroupingRange)(
+        IPropertyDescription *This,
+        PROPDESC_GROUPING_RANGE *pgr);
+
+    HRESULT (STDMETHODCALLTYPE *GetRelativeDescriptionType)(
+        IPropertyDescription *This,
+        PROPDESC_RELATIVEDESCRIPTION_TYPE *prdt);
+
+    HRESULT (STDMETHODCALLTYPE *GetRelativeDescription)(
+        IPropertyDescription *This,
+        REFPROPVARIANT propvar1,
+        REFPROPVARIANT propvar2,
+        LPWSTR *ppszDesc1,
+        LPWSTR *ppszDesc2);
+
+    HRESULT (STDMETHODCALLTYPE *GetSortDescription)(
+        IPropertyDescription *This,
+        PROPDESC_SORTDESCRIPTION *psd);
+
+    HRESULT (STDMETHODCALLTYPE *GetSortDescriptionLabel)(
+        IPropertyDescription *This,
+        WINBOOL fDescending,
+        LPWSTR *ppszDescription);
+
+    HRESULT (STDMETHODCALLTYPE *GetAggregationType)(
+        IPropertyDescription *This,
+        PROPDESC_AGGREGATION_TYPE *paggtype);
+
+    HRESULT (STDMETHODCALLTYPE *GetConditionType)(
+        IPropertyDescription *This,
+        PROPDESC_CONDITION_TYPE *pcontype,
+        CONDITION_OPERATION *popDefault);
+
+    HRESULT (STDMETHODCALLTYPE *GetEnumTypeList)(
+        IPropertyDescription *This,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *CoerceToCanonicalValue)(
+        IPropertyDescription *This,
+        PROPVARIANT *ppropvar);
+
+    HRESULT (STDMETHODCALLTYPE *FormatForDisplay)(
+        IPropertyDescription *This,
+        REFPROPVARIANT propvar,
+        PROPDESC_FORMAT_FLAGS pdfFlags,
+        LPWSTR *ppszDisplay);
+
+    HRESULT (STDMETHODCALLTYPE *IsValueCanonical)(
+        IPropertyDescription *This,
+        REFPROPVARIANT propvar);
+
+    END_INTERFACE
+} IPropertyDescriptionVtbl;
+
+interface IPropertyDescription {
+    CONST_VTBL IPropertyDescriptionVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyDescription_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyDescription_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyDescription_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyDescription methods ***/
+#define IPropertyDescription_GetPropertyKey(This,pkey) (This)->lpVtbl->GetPropertyKey(This,pkey)
+#define IPropertyDescription_GetCanonicalName(This,ppszName) (This)->lpVtbl->GetCanonicalName(This,ppszName)
+#define IPropertyDescription_GetPropertyType(This,pvartype) (This)->lpVtbl->GetPropertyType(This,pvartype)
+#define IPrope
