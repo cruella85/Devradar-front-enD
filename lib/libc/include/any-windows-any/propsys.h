@@ -1254,4 +1254,230 @@ interface IPropertyStoreCache {
 #define IPropertyStoreCache_Release(This) (This)->lpVtbl->Release(This)
 /*** IPropertyStore methods ***/
 #define IPropertyStoreCache_GetCount(This,cProps) (This)->lpVtbl->GetCount(This,cProps)
-#define IPro
+#define IPropertyStoreCache_GetAt(This,iProp,pkey) (This)->lpVtbl->GetAt(This,iProp,pkey)
+#define IPropertyStoreCache_GetValue(This,key,pv) (This)->lpVtbl->GetValue(This,key,pv)
+#define IPropertyStoreCache_SetValue(This,key,propvar) (This)->lpVtbl->SetValue(This,key,propvar)
+#define IPropertyStoreCache_Commit(This) (This)->lpVtbl->Commit(This)
+/*** IPropertyStoreCache methods ***/
+#define IPropertyStoreCache_GetState(This,key,pstate) (This)->lpVtbl->GetState(This,key,pstate)
+#define IPropertyStoreCache_GetValueAndState(This,key,ppropvar,pstate) (This)->lpVtbl->GetValueAndState(This,key,ppropvar,pstate)
+#define IPropertyStoreCache_SetState(This,key,state) (This)->lpVtbl->SetState(This,key,state)
+#define IPropertyStoreCache_SetValueAndState(This,key,ppropvar,state) (This)->lpVtbl->SetValueAndState(This,key,ppropvar,state)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyStoreCache_QueryInterface(IPropertyStoreCache* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyStoreCache_AddRef(IPropertyStoreCache* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyStoreCache_Release(IPropertyStoreCache* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyStore methods ***/
+static FORCEINLINE HRESULT IPropertyStoreCache_GetCount(IPropertyStoreCache* This,DWORD *cProps) {
+    return This->lpVtbl->GetCount(This,cProps);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_GetAt(IPropertyStoreCache* This,DWORD iProp,PROPERTYKEY *pkey) {
+    return This->lpVtbl->GetAt(This,iProp,pkey);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_GetValue(IPropertyStoreCache* This,REFPROPERTYKEY key,PROPVARIANT *pv) {
+    return This->lpVtbl->GetValue(This,key,pv);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_SetValue(IPropertyStoreCache* This,REFPROPERTYKEY key,REFPROPVARIANT propvar) {
+    return This->lpVtbl->SetValue(This,key,propvar);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_Commit(IPropertyStoreCache* This) {
+    return This->lpVtbl->Commit(This);
+}
+/*** IPropertyStoreCache methods ***/
+static FORCEINLINE HRESULT IPropertyStoreCache_GetState(IPropertyStoreCache* This,REFPROPERTYKEY key,PSC_STATE *pstate) {
+    return This->lpVtbl->GetState(This,key,pstate);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_GetValueAndState(IPropertyStoreCache* This,REFPROPERTYKEY key,PROPVARIANT *ppropvar,PSC_STATE *pstate) {
+    return This->lpVtbl->GetValueAndState(This,key,ppropvar,pstate);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_SetState(IPropertyStoreCache* This,REFPROPERTYKEY key,PSC_STATE state) {
+    return This->lpVtbl->SetState(This,key,state);
+}
+static FORCEINLINE HRESULT IPropertyStoreCache_SetValueAndState(IPropertyStoreCache* This,REFPROPERTYKEY key,const PROPVARIANT *ppropvar,PSC_STATE state) {
+    return This->lpVtbl->SetValueAndState(This,key,ppropvar,state);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyStoreCache_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyEnumType interface
+ */
+#ifndef __IPropertyEnumType_INTERFACE_DEFINED__
+#define __IPropertyEnumType_INTERFACE_DEFINED__
+
+typedef enum PROPENUMTYPE {
+    PET_DISCRETEVALUE = 0,
+    PET_RANGEDVALUE = 1,
+    PET_DEFAULTVALUE = 2,
+    PET_ENDRANGE = 3
+} PROPENUMTYPE;
+
+DEFINE_GUID(IID_IPropertyEnumType, 0x11e1fbf9, 0x2d56, 0x4a6b, 0x8d,0xb3, 0x7c,0xd1,0x93,0xa4,0x71,0xf2);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("11e1fbf9-2d56-4a6b-8db3-7cd193a471f2")
+IPropertyEnumType : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetEnumType(
+        PROPENUMTYPE *penumtype) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetValue(
+        PROPVARIANT *ppropvar) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetRangeMinValue(
+        PROPVARIANT *ppropvarMin) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetRangeSetValue(
+        PROPVARIANT *ppropvarSet) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDisplayText(
+        LPWSTR *ppszDisplay) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyEnumType, 0x11e1fbf9, 0x2d56, 0x4a6b, 0x8d,0xb3, 0x7c,0xd1,0x93,0xa4,0x71,0xf2)
+#endif
+#else
+typedef struct IPropertyEnumTypeVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyEnumType *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyEnumType *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyEnumType *This);
+
+    /*** IPropertyEnumType methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetEnumType)(
+        IPropertyEnumType *This,
+        PROPENUMTYPE *penumtype);
+
+    HRESULT (STDMETHODCALLTYPE *GetValue)(
+        IPropertyEnumType *This,
+        PROPVARIANT *ppropvar);
+
+    HRESULT (STDMETHODCALLTYPE *GetRangeMinValue)(
+        IPropertyEnumType *This,
+        PROPVARIANT *ppropvarMin);
+
+    HRESULT (STDMETHODCALLTYPE *GetRangeSetValue)(
+        IPropertyEnumType *This,
+        PROPVARIANT *ppropvarSet);
+
+    HRESULT (STDMETHODCALLTYPE *GetDisplayText)(
+        IPropertyEnumType *This,
+        LPWSTR *ppszDisplay);
+
+    END_INTERFACE
+} IPropertyEnumTypeVtbl;
+
+interface IPropertyEnumType {
+    CONST_VTBL IPropertyEnumTypeVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertyEnumType_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertyEnumType_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertyEnumType_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyEnumType methods ***/
+#define IPropertyEnumType_GetEnumType(This,penumtype) (This)->lpVtbl->GetEnumType(This,penumtype)
+#define IPropertyEnumType_GetValue(This,ppropvar) (This)->lpVtbl->GetValue(This,ppropvar)
+#define IPropertyEnumType_GetRangeMinValue(This,ppropvarMin) (This)->lpVtbl->GetRangeMinValue(This,ppropvarMin)
+#define IPropertyEnumType_GetRangeSetValue(This,ppropvarSet) (This)->lpVtbl->GetRangeSetValue(This,ppropvarSet)
+#define IPropertyEnumType_GetDisplayText(This,ppszDisplay) (This)->lpVtbl->GetDisplayText(This,ppszDisplay)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyEnumType_QueryInterface(IPropertyEnumType* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyEnumType_AddRef(IPropertyEnumType* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyEnumType_Release(IPropertyEnumType* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyEnumType methods ***/
+static FORCEINLINE HRESULT IPropertyEnumType_GetEnumType(IPropertyEnumType* This,PROPENUMTYPE *penumtype) {
+    return This->lpVtbl->GetEnumType(This,penumtype);
+}
+static FORCEINLINE HRESULT IPropertyEnumType_GetValue(IPropertyEnumType* This,PROPVARIANT *ppropvar) {
+    return This->lpVtbl->GetValue(This,ppropvar);
+}
+static FORCEINLINE HRESULT IPropertyEnumType_GetRangeMinValue(IPropertyEnumType* This,PROPVARIANT *ppropvarMin) {
+    return This->lpVtbl->GetRangeMinValue(This,ppropvarMin);
+}
+static FORCEINLINE HRESULT IPropertyEnumType_GetRangeSetValue(IPropertyEnumType* This,PROPVARIANT *ppropvarSet) {
+    return This->lpVtbl->GetRangeSetValue(This,ppropvarSet);
+}
+static FORCEINLINE HRESULT IPropertyEnumType_GetDisplayText(IPropertyEnumType* This,LPWSTR *ppszDisplay) {
+    return This->lpVtbl->GetDisplayText(This,ppszDisplay);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyEnumType_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyEnumType2 interface
+ */
+#ifndef __IPropertyEnumType2_INTERFACE_DEFINED__
+#define __IPropertyEnumType2_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertyEnumType2, 0x9b6e051c, 0x5ddd, 0x4321, 0x90,0x70, 0xfe,0x2a,0xcb,0x55,0xe7,0x94);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("9b6e051c-5ddd-4321-9070-fe2acb55e794")
+IPropertyEnumType2 : public IPropertyEnumType
+{
+    virtual HRESULT STDMETHODCALLTYPE GetImageReference(
+        LPWSTR *ppszImageRes) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyEnumType2, 0x9b6e051c, 0x5ddd, 0x4321, 0x90,0x70, 0xfe,0x2a,0xcb,0x55,0xe7,0x94)
+#endif
+#else
+typedef struct IPropertyEnumType2Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyEnumType2 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyEnumType2 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyEnumType2 *This);
+
+    /*** IPropertyEnumType methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetEnumType)(
+        IPropertyEnumType2 *This,
+        PROPENUMTYPE *penumtype);
+
+    HRESULT (STDMETHODCAL
