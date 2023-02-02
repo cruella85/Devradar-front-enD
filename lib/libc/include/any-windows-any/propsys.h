@@ -2015,4 +2015,166 @@ interface IPropertyDescription {
 #define IPropertyDescription_GetPropertyKey(This,pkey) (This)->lpVtbl->GetPropertyKey(This,pkey)
 #define IPropertyDescription_GetCanonicalName(This,ppszName) (This)->lpVtbl->GetCanonicalName(This,ppszName)
 #define IPropertyDescription_GetPropertyType(This,pvartype) (This)->lpVtbl->GetPropertyType(This,pvartype)
-#define IPrope
+#define IPropertyDescription_GetDisplayName(This,ppszName) (This)->lpVtbl->GetDisplayName(This,ppszName)
+#define IPropertyDescription_GetEditInvitation(This,ppszInvite) (This)->lpVtbl->GetEditInvitation(This,ppszInvite)
+#define IPropertyDescription_GetTypeFlags(This,mask,ppdtFlags) (This)->lpVtbl->GetTypeFlags(This,mask,ppdtFlags)
+#define IPropertyDescription_GetViewFlags(This,ppdvFlags) (This)->lpVtbl->GetViewFlags(This,ppdvFlags)
+#define IPropertyDescription_GetDefaultColumnWidth(This,pcxChars) (This)->lpVtbl->GetDefaultColumnWidth(This,pcxChars)
+#define IPropertyDescription_GetDisplayType(This,pdisplaytype) (This)->lpVtbl->GetDisplayType(This,pdisplaytype)
+#define IPropertyDescription_GetColumnState(This,pcsFlags) (This)->lpVtbl->GetColumnState(This,pcsFlags)
+#define IPropertyDescription_GetGroupingRange(This,pgr) (This)->lpVtbl->GetGroupingRange(This,pgr)
+#define IPropertyDescription_GetRelativeDescriptionType(This,prdt) (This)->lpVtbl->GetRelativeDescriptionType(This,prdt)
+#define IPropertyDescription_GetRelativeDescription(This,propvar1,propvar2,ppszDesc1,ppszDesc2) (This)->lpVtbl->GetRelativeDescription(This,propvar1,propvar2,ppszDesc1,ppszDesc2)
+#define IPropertyDescription_GetSortDescription(This,psd) (This)->lpVtbl->GetSortDescription(This,psd)
+#define IPropertyDescription_GetSortDescriptionLabel(This,fDescending,ppszDescription) (This)->lpVtbl->GetSortDescriptionLabel(This,fDescending,ppszDescription)
+#define IPropertyDescription_GetAggregationType(This,paggtype) (This)->lpVtbl->GetAggregationType(This,paggtype)
+#define IPropertyDescription_GetConditionType(This,pcontype,popDefault) (This)->lpVtbl->GetConditionType(This,pcontype,popDefault)
+#define IPropertyDescription_GetEnumTypeList(This,riid,ppv) (This)->lpVtbl->GetEnumTypeList(This,riid,ppv)
+#define IPropertyDescription_CoerceToCanonicalValue(This,ppropvar) (This)->lpVtbl->CoerceToCanonicalValue(This,ppropvar)
+#define IPropertyDescription_FormatForDisplay(This,propvar,pdfFlags,ppszDisplay) (This)->lpVtbl->FormatForDisplay(This,propvar,pdfFlags,ppszDisplay)
+#define IPropertyDescription_IsValueCanonical(This,propvar) (This)->lpVtbl->IsValueCanonical(This,propvar)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyDescription_QueryInterface(IPropertyDescription* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyDescription_AddRef(IPropertyDescription* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyDescription_Release(IPropertyDescription* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyDescription methods ***/
+static FORCEINLINE HRESULT IPropertyDescription_GetPropertyKey(IPropertyDescription* This,PROPERTYKEY *pkey) {
+    return This->lpVtbl->GetPropertyKey(This,pkey);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetCanonicalName(IPropertyDescription* This,LPWSTR *ppszName) {
+    return This->lpVtbl->GetCanonicalName(This,ppszName);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetPropertyType(IPropertyDescription* This,VARTYPE *pvartype) {
+    return This->lpVtbl->GetPropertyType(This,pvartype);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetDisplayName(IPropertyDescription* This,LPWSTR *ppszName) {
+    return This->lpVtbl->GetDisplayName(This,ppszName);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetEditInvitation(IPropertyDescription* This,LPWSTR *ppszInvite) {
+    return This->lpVtbl->GetEditInvitation(This,ppszInvite);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetTypeFlags(IPropertyDescription* This,PROPDESC_TYPE_FLAGS mask,PROPDESC_TYPE_FLAGS *ppdtFlags) {
+    return This->lpVtbl->GetTypeFlags(This,mask,ppdtFlags);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetViewFlags(IPropertyDescription* This,PROPDESC_VIEW_FLAGS *ppdvFlags) {
+    return This->lpVtbl->GetViewFlags(This,ppdvFlags);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetDefaultColumnWidth(IPropertyDescription* This,UINT *pcxChars) {
+    return This->lpVtbl->GetDefaultColumnWidth(This,pcxChars);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetDisplayType(IPropertyDescription* This,PROPDESC_DISPLAYTYPE *pdisplaytype) {
+    return This->lpVtbl->GetDisplayType(This,pdisplaytype);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetColumnState(IPropertyDescription* This,SHCOLSTATEF *pcsFlags) {
+    return This->lpVtbl->GetColumnState(This,pcsFlags);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetGroupingRange(IPropertyDescription* This,PROPDESC_GROUPING_RANGE *pgr) {
+    return This->lpVtbl->GetGroupingRange(This,pgr);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetRelativeDescriptionType(IPropertyDescription* This,PROPDESC_RELATIVEDESCRIPTION_TYPE *prdt) {
+    return This->lpVtbl->GetRelativeDescriptionType(This,prdt);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetRelativeDescription(IPropertyDescription* This,REFPROPVARIANT propvar1,REFPROPVARIANT propvar2,LPWSTR *ppszDesc1,LPWSTR *ppszDesc2) {
+    return This->lpVtbl->GetRelativeDescription(This,propvar1,propvar2,ppszDesc1,ppszDesc2);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetSortDescription(IPropertyDescription* This,PROPDESC_SORTDESCRIPTION *psd) {
+    return This->lpVtbl->GetSortDescription(This,psd);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetSortDescriptionLabel(IPropertyDescription* This,WINBOOL fDescending,LPWSTR *ppszDescription) {
+    return This->lpVtbl->GetSortDescriptionLabel(This,fDescending,ppszDescription);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetAggregationType(IPropertyDescription* This,PROPDESC_AGGREGATION_TYPE *paggtype) {
+    return This->lpVtbl->GetAggregationType(This,paggtype);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetConditionType(IPropertyDescription* This,PROPDESC_CONDITION_TYPE *pcontype,CONDITION_OPERATION *popDefault) {
+    return This->lpVtbl->GetConditionType(This,pcontype,popDefault);
+}
+static FORCEINLINE HRESULT IPropertyDescription_GetEnumTypeList(IPropertyDescription* This,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetEnumTypeList(This,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertyDescription_CoerceToCanonicalValue(IPropertyDescription* This,PROPVARIANT *ppropvar) {
+    return This->lpVtbl->CoerceToCanonicalValue(This,ppropvar);
+}
+static FORCEINLINE HRESULT IPropertyDescription_FormatForDisplay(IPropertyDescription* This,REFPROPVARIANT propvar,PROPDESC_FORMAT_FLAGS pdfFlags,LPWSTR *ppszDisplay) {
+    return This->lpVtbl->FormatForDisplay(This,propvar,pdfFlags,ppszDisplay);
+}
+static FORCEINLINE HRESULT IPropertyDescription_IsValueCanonical(IPropertyDescription* This,REFPROPVARIANT propvar) {
+    return This->lpVtbl->IsValueCanonical(This,propvar);
+}
+#endif
+#endif
+
+#endif
+
+HRESULT STDMETHODCALLTYPE IPropertyDescription_RemoteCoerceToCanonicalValue_Proxy(
+    IPropertyDescription* This,
+    REFPROPVARIANT propvar,
+    PROPVARIANT *ppropvar);
+void __RPC_STUB IPropertyDescription_RemoteCoerceToCanonicalValue_Stub(
+    IRpcStubBuffer* This,
+    IRpcChannelBuffer* pRpcChannelBuffer,
+    PRPC_MESSAGE pRpcMessage,
+    DWORD* pdwStubPhase);
+HRESULT CALLBACK IPropertyDescription_CoerceToCanonicalValue_Proxy(
+    IPropertyDescription* This,
+    PROPVARIANT *ppropvar);
+HRESULT __RPC_STUB IPropertyDescription_CoerceToCanonicalValue_Stub(
+    IPropertyDescription* This,
+    REFPROPVARIANT propvar,
+    PROPVARIANT *ppropvar);
+
+#endif  /* __IPropertyDescription_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyDescription2 interface
+ */
+#ifndef __IPropertyDescription2_INTERFACE_DEFINED__
+#define __IPropertyDescription2_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertyDescription2, 0x57d2eded, 0x5062, 0x400e, 0xb1,0x07, 0x5d,0xae,0x79,0xfe,0x57,0xa6);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("57d2eded-5062-400e-b107-5dae79fe57a6")
+IPropertyDescription2 : public IPropertyDescription
+{
+    virtual HRESULT STDMETHODCALLTYPE GetImageReferenceForValue(
+        REFPROPVARIANT propvar,
+        LPWSTR *ppszImageRes) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyDescription2, 0x57d2eded, 0x5062, 0x400e, 0xb1,0x07, 0x5d,0xae,0x79,0xfe,0x57,0xa6)
+#endif
+#else
+typedef struct IPropertyDescription2Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertyDescription2 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertyDescription2 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertyDescription2 *This);
+
+    /*** IPropertyDescription methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetPropertyKey)(
+        IPropertyDescription2 *This,
+        PROPERTYKEY *pkey);
+
+    HRESULT (STDMETHODCALLTYPE *GetCanonicalName)(
+        IPropertyDescription2 *This,
+        LPWSTR *ppszName);
+
+    HRESULT (STDMETHODCALLTYPE
