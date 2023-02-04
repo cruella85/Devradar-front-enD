@@ -2563,4 +2563,156 @@ interface IPropertyDescriptionAliasInfo {
 #define IPropertyDescriptionAliasInfo_GetColumnState(This,pcsFlags) (This)->lpVtbl->GetColumnState(This,pcsFlags)
 #define IPropertyDescriptionAliasInfo_GetGroupingRange(This,pgr) (This)->lpVtbl->GetGroupingRange(This,pgr)
 #define IPropertyDescriptionAliasInfo_GetRelativeDescriptionType(This,prdt) (This)->lpVtbl->GetRelativeDescriptionType(This,prdt)
-#define IPropertyDescriptionAliasInfo_GetR
+#define IPropertyDescriptionAliasInfo_GetRelativeDescription(This,propvar1,propvar2,ppszDesc1,ppszDesc2) (This)->lpVtbl->GetRelativeDescription(This,propvar1,propvar2,ppszDesc1,ppszDesc2)
+#define IPropertyDescriptionAliasInfo_GetSortDescription(This,psd) (This)->lpVtbl->GetSortDescription(This,psd)
+#define IPropertyDescriptionAliasInfo_GetSortDescriptionLabel(This,fDescending,ppszDescription) (This)->lpVtbl->GetSortDescriptionLabel(This,fDescending,ppszDescription)
+#define IPropertyDescriptionAliasInfo_GetAggregationType(This,paggtype) (This)->lpVtbl->GetAggregationType(This,paggtype)
+#define IPropertyDescriptionAliasInfo_GetConditionType(This,pcontype,popDefault) (This)->lpVtbl->GetConditionType(This,pcontype,popDefault)
+#define IPropertyDescriptionAliasInfo_GetEnumTypeList(This,riid,ppv) (This)->lpVtbl->GetEnumTypeList(This,riid,ppv)
+#define IPropertyDescriptionAliasInfo_CoerceToCanonicalValue(This,ppropvar) (This)->lpVtbl->CoerceToCanonicalValue(This,ppropvar)
+#define IPropertyDescriptionAliasInfo_FormatForDisplay(This,propvar,pdfFlags,ppszDisplay) (This)->lpVtbl->FormatForDisplay(This,propvar,pdfFlags,ppszDisplay)
+#define IPropertyDescriptionAliasInfo_IsValueCanonical(This,propvar) (This)->lpVtbl->IsValueCanonical(This,propvar)
+/*** IPropertyDescriptionAliasInfo methods ***/
+#define IPropertyDescriptionAliasInfo_GetSortByAlias(This,riid,ppv) (This)->lpVtbl->GetSortByAlias(This,riid,ppv)
+#define IPropertyDescriptionAliasInfo_GetAdditionalSortByAliases(This,riid,ppv) (This)->lpVtbl->GetAdditionalSortByAliases(This,riid,ppv)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_QueryInterface(IPropertyDescriptionAliasInfo* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertyDescriptionAliasInfo_AddRef(IPropertyDescriptionAliasInfo* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertyDescriptionAliasInfo_Release(IPropertyDescriptionAliasInfo* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyDescription methods ***/
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetPropertyKey(IPropertyDescriptionAliasInfo* This,PROPERTYKEY *pkey) {
+    return This->lpVtbl->GetPropertyKey(This,pkey);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetCanonicalName(IPropertyDescriptionAliasInfo* This,LPWSTR *ppszName) {
+    return This->lpVtbl->GetCanonicalName(This,ppszName);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetPropertyType(IPropertyDescriptionAliasInfo* This,VARTYPE *pvartype) {
+    return This->lpVtbl->GetPropertyType(This,pvartype);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetDisplayName(IPropertyDescriptionAliasInfo* This,LPWSTR *ppszName) {
+    return This->lpVtbl->GetDisplayName(This,ppszName);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetEditInvitation(IPropertyDescriptionAliasInfo* This,LPWSTR *ppszInvite) {
+    return This->lpVtbl->GetEditInvitation(This,ppszInvite);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetTypeFlags(IPropertyDescriptionAliasInfo* This,PROPDESC_TYPE_FLAGS mask,PROPDESC_TYPE_FLAGS *ppdtFlags) {
+    return This->lpVtbl->GetTypeFlags(This,mask,ppdtFlags);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetViewFlags(IPropertyDescriptionAliasInfo* This,PROPDESC_VIEW_FLAGS *ppdvFlags) {
+    return This->lpVtbl->GetViewFlags(This,ppdvFlags);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetDefaultColumnWidth(IPropertyDescriptionAliasInfo* This,UINT *pcxChars) {
+    return This->lpVtbl->GetDefaultColumnWidth(This,pcxChars);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetDisplayType(IPropertyDescriptionAliasInfo* This,PROPDESC_DISPLAYTYPE *pdisplaytype) {
+    return This->lpVtbl->GetDisplayType(This,pdisplaytype);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetColumnState(IPropertyDescriptionAliasInfo* This,SHCOLSTATEF *pcsFlags) {
+    return This->lpVtbl->GetColumnState(This,pcsFlags);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetGroupingRange(IPropertyDescriptionAliasInfo* This,PROPDESC_GROUPING_RANGE *pgr) {
+    return This->lpVtbl->GetGroupingRange(This,pgr);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetRelativeDescriptionType(IPropertyDescriptionAliasInfo* This,PROPDESC_RELATIVEDESCRIPTION_TYPE *prdt) {
+    return This->lpVtbl->GetRelativeDescriptionType(This,prdt);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetRelativeDescription(IPropertyDescriptionAliasInfo* This,REFPROPVARIANT propvar1,REFPROPVARIANT propvar2,LPWSTR *ppszDesc1,LPWSTR *ppszDesc2) {
+    return This->lpVtbl->GetRelativeDescription(This,propvar1,propvar2,ppszDesc1,ppszDesc2);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetSortDescription(IPropertyDescriptionAliasInfo* This,PROPDESC_SORTDESCRIPTION *psd) {
+    return This->lpVtbl->GetSortDescription(This,psd);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetSortDescriptionLabel(IPropertyDescriptionAliasInfo* This,WINBOOL fDescending,LPWSTR *ppszDescription) {
+    return This->lpVtbl->GetSortDescriptionLabel(This,fDescending,ppszDescription);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetAggregationType(IPropertyDescriptionAliasInfo* This,PROPDESC_AGGREGATION_TYPE *paggtype) {
+    return This->lpVtbl->GetAggregationType(This,paggtype);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetConditionType(IPropertyDescriptionAliasInfo* This,PROPDESC_CONDITION_TYPE *pcontype,CONDITION_OPERATION *popDefault) {
+    return This->lpVtbl->GetConditionType(This,pcontype,popDefault);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetEnumTypeList(IPropertyDescriptionAliasInfo* This,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetEnumTypeList(This,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_CoerceToCanonicalValue(IPropertyDescriptionAliasInfo* This,PROPVARIANT *ppropvar) {
+    return This->lpVtbl->CoerceToCanonicalValue(This,ppropvar);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_FormatForDisplay(IPropertyDescriptionAliasInfo* This,REFPROPVARIANT propvar,PROPDESC_FORMAT_FLAGS pdfFlags,LPWSTR *ppszDisplay) {
+    return This->lpVtbl->FormatForDisplay(This,propvar,pdfFlags,ppszDisplay);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_IsValueCanonical(IPropertyDescriptionAliasInfo* This,REFPROPVARIANT propvar) {
+    return This->lpVtbl->IsValueCanonical(This,propvar);
+}
+/*** IPropertyDescriptionAliasInfo methods ***/
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetSortByAlias(IPropertyDescriptionAliasInfo* This,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetSortByAlias(This,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionAliasInfo_GetAdditionalSortByAliases(IPropertyDescriptionAliasInfo* This,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetAdditionalSortByAliases(This,riid,ppv);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyDescriptionAliasInfo_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPropertyDescriptionSearchInfo interface
+ */
+#ifndef __IPropertyDescriptionSearchInfo_INTERFACE_DEFINED__
+#define __IPropertyDescriptionSearchInfo_INTERFACE_DEFINED__
+
+typedef enum PROPDESC_SEARCHINFO_FLAGS {
+    PDSIF_DEFAULT = 0x0,
+    PDSIF_ININVERTEDINDEX = 0x1,
+    PDSIF_ISCOLUMN = 0x2,
+    PDSIF_ISCOLUMNSPARSE = 0x4,
+    PDSIF_ALWAYSINCLUDE = 0x8,
+    PDSIF_USEFORTYPEAHEAD = 0x10
+} PROPDESC_SEARCHINFO_FLAGS;
+
+DEFINE_ENUM_FLAG_OPERATORS(PROPDESC_SEARCHINFO_FLAGS)
+
+typedef enum PROPDESC_COLUMNINDEX_TYPE {
+    PDCIT_NONE = 0,
+    PDCIT_ONDISK = 1,
+    PDCIT_INMEMORY = 2,
+    PDCIT_ONDEMAND = 3,
+    PDCIT_ONDISKALL = 4,
+    PDCIT_ONDISKVECTOR = 5
+} PROPDESC_COLUMNINDEX_TYPE;
+
+DEFINE_GUID(IID_IPropertyDescriptionSearchInfo, 0x078f91bd, 0x29a2, 0x440f, 0x92,0x4e, 0x46,0xa2,0x91,0x52,0x45,0x20);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("078f91bd-29a2-440f-924e-46a291524520")
+IPropertyDescriptionSearchInfo : public IPropertyDescription
+{
+    virtual HRESULT STDMETHODCALLTYPE GetSearchInfoFlags(
+        PROPDESC_SEARCHINFO_FLAGS *ppdsiFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetColumnIndexType(
+        PROPDESC_COLUMNINDEX_TYPE *ppdciType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetProjectionString(
+        LPWSTR *ppszProjection) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMaxSize(
+        UINT *pcbMaxSize) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertyDescriptionSearchInfo, 0x078f91bd, 0x29a2, 0x440f, 0x92,0x4e, 0x46,0xa2,0x91,0x52,0x45,0x20)
+#endif
+#else
+typedef struct IPropertyDescriptionSearchInfoVtbl {
+    
