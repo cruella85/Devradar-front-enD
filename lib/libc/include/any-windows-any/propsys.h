@@ -3205,4 +3205,214 @@ static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetRelativeDe
 static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetSortDescription(IPropertyDescriptionRelatedPropertyInfo* This,PROPDESC_SORTDESCRIPTION *psd) {
     return This->lpVtbl->GetSortDescription(This,psd);
 }
-static FO
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetSortDescriptionLabel(IPropertyDescriptionRelatedPropertyInfo* This,WINBOOL fDescending,LPWSTR *ppszDescription) {
+    return This->lpVtbl->GetSortDescriptionLabel(This,fDescending,ppszDescription);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetAggregationType(IPropertyDescriptionRelatedPropertyInfo* This,PROPDESC_AGGREGATION_TYPE *paggtype) {
+    return This->lpVtbl->GetAggregationType(This,paggtype);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetConditionType(IPropertyDescriptionRelatedPropertyInfo* This,PROPDESC_CONDITION_TYPE *pcontype,CONDITION_OPERATION *popDefault) {
+    return This->lpVtbl->GetConditionType(This,pcontype,popDefault);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetEnumTypeList(IPropertyDescriptionRelatedPropertyInfo* This,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetEnumTypeList(This,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_CoerceToCanonicalValue(IPropertyDescriptionRelatedPropertyInfo* This,PROPVARIANT *ppropvar) {
+    return This->lpVtbl->CoerceToCanonicalValue(This,ppropvar);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_FormatForDisplay(IPropertyDescriptionRelatedPropertyInfo* This,REFPROPVARIANT propvar,PROPDESC_FORMAT_FLAGS pdfFlags,LPWSTR *ppszDisplay) {
+    return This->lpVtbl->FormatForDisplay(This,propvar,pdfFlags,ppszDisplay);
+}
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_IsValueCanonical(IPropertyDescriptionRelatedPropertyInfo* This,REFPROPVARIANT propvar) {
+    return This->lpVtbl->IsValueCanonical(This,propvar);
+}
+/*** IPropertyDescriptionRelatedPropertyInfo methods ***/
+static FORCEINLINE HRESULT IPropertyDescriptionRelatedPropertyInfo_GetRelatedProperty(IPropertyDescriptionRelatedPropertyInfo* This,LPCWSTR pszRelationshipName,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetRelatedProperty(This,pszRelationshipName,riid,ppv);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPropertyDescriptionRelatedPropertyInfo_INTERFACE_DEFINED__ */
+
+
+typedef enum PROPDESC_ENUMFILTER {
+    PDEF_ALL = 0,
+    PDEF_SYSTEM = 1,
+    PDEF_NONSYSTEM = 2,
+    PDEF_VIEWABLE = 3,
+    PDEF_QUERYABLE = 4,
+    PDEF_INFULLTEXTQUERY = 5,
+    PDEF_COLUMN = 6
+} PROPDESC_ENUMFILTER;
+
+/*****************************************************************************
+ * IPropertySystem interface
+ */
+#ifndef __IPropertySystem_INTERFACE_DEFINED__
+#define __IPropertySystem_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPropertySystem, 0xca724e8a, 0xc3e6, 0x442b, 0x88,0xa4, 0x6f,0xb0,0xdb,0x80,0x35,0xa3);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("ca724e8a-c3e6-442b-88a4-6fb0db8035a3")
+IPropertySystem : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyDescription(
+        REFPROPERTYKEY propkey,
+        REFIID riid,
+        void **ppv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyDescriptionByName(
+        LPCWSTR pszCanonicalName,
+        REFIID riid,
+        void **ppv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyDescriptionListFromString(
+        LPCWSTR pszPropList,
+        REFIID riid,
+        void **ppv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE EnumeratePropertyDescriptions(
+        PROPDESC_ENUMFILTER filterOn,
+        REFIID riid,
+        void **ppv) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FormatForDisplay(
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar,
+        PROPDESC_FORMAT_FLAGS pdff,
+        LPWSTR pszText,
+        DWORD cchText) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FormatForDisplayAlloc(
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar,
+        PROPDESC_FORMAT_FLAGS pdff,
+        LPWSTR *ppszDisplay) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE RegisterPropertySchema(
+        LPCWSTR pszPath) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE UnregisterPropertySchema(
+        LPCWSTR pszPath) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE RefreshPropertySchema(
+        ) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPropertySystem, 0xca724e8a, 0xc3e6, 0x442b, 0x88,0xa4, 0x6f,0xb0,0xdb,0x80,0x35,0xa3)
+#endif
+#else
+typedef struct IPropertySystemVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPropertySystem *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPropertySystem *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPropertySystem *This);
+
+    /*** IPropertySystem methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetPropertyDescription)(
+        IPropertySystem *This,
+        REFPROPERTYKEY propkey,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyDescriptionByName)(
+        IPropertySystem *This,
+        LPCWSTR pszCanonicalName,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyDescriptionListFromString)(
+        IPropertySystem *This,
+        LPCWSTR pszPropList,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *EnumeratePropertyDescriptions)(
+        IPropertySystem *This,
+        PROPDESC_ENUMFILTER filterOn,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *FormatForDisplay)(
+        IPropertySystem *This,
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar,
+        PROPDESC_FORMAT_FLAGS pdff,
+        LPWSTR pszText,
+        DWORD cchText);
+
+    HRESULT (STDMETHODCALLTYPE *FormatForDisplayAlloc)(
+        IPropertySystem *This,
+        REFPROPERTYKEY key,
+        REFPROPVARIANT propvar,
+        PROPDESC_FORMAT_FLAGS pdff,
+        LPWSTR *ppszDisplay);
+
+    HRESULT (STDMETHODCALLTYPE *RegisterPropertySchema)(
+        IPropertySystem *This,
+        LPCWSTR pszPath);
+
+    HRESULT (STDMETHODCALLTYPE *UnregisterPropertySchema)(
+        IPropertySystem *This,
+        LPCWSTR pszPath);
+
+    HRESULT (STDMETHODCALLTYPE *RefreshPropertySchema)(
+        IPropertySystem *This);
+
+    END_INTERFACE
+} IPropertySystemVtbl;
+
+interface IPropertySystem {
+    CONST_VTBL IPropertySystemVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPropertySystem_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPropertySystem_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPropertySystem_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertySystem methods ***/
+#define IPropertySystem_GetPropertyDescription(This,propkey,riid,ppv) (This)->lpVtbl->GetPropertyDescription(This,propkey,riid,ppv)
+#define IPropertySystem_GetPropertyDescriptionByName(This,pszCanonicalName,riid,ppv) (This)->lpVtbl->GetPropertyDescriptionByName(This,pszCanonicalName,riid,ppv)
+#define IPropertySystem_GetPropertyDescriptionListFromString(This,pszPropList,riid,ppv) (This)->lpVtbl->GetPropertyDescriptionListFromString(This,pszPropList,riid,ppv)
+#define IPropertySystem_EnumeratePropertyDescriptions(This,filterOn,riid,ppv) (This)->lpVtbl->EnumeratePropertyDescriptions(This,filterOn,riid,ppv)
+#define IPropertySystem_FormatForDisplay(This,key,propvar,pdff,pszText,cchText) (This)->lpVtbl->FormatForDisplay(This,key,propvar,pdff,pszText,cchText)
+#define IPropertySystem_FormatForDisplayAlloc(This,key,propvar,pdff,ppszDisplay) (This)->lpVtbl->FormatForDisplayAlloc(This,key,propvar,pdff,ppszDisplay)
+#define IPropertySystem_RegisterPropertySchema(This,pszPath) (This)->lpVtbl->RegisterPropertySchema(This,pszPath)
+#define IPropertySystem_UnregisterPropertySchema(This,pszPath) (This)->lpVtbl->UnregisterPropertySchema(This,pszPath)
+#define IPropertySystem_RefreshPropertySchema(This) (This)->lpVtbl->RefreshPropertySchema(This)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPropertySystem_QueryInterface(IPropertySystem* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPropertySystem_AddRef(IPropertySystem* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPropertySystem_Release(IPropertySystem* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertySystem methods ***/
+static FORCEINLINE HRESULT IPropertySystem_GetPropertyDescription(IPropertySystem* This,REFPROPERTYKEY propkey,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetPropertyDescription(This,propkey,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertySystem_GetPropertyDescriptionByName(IPropertySystem* This,LPCWSTR pszCanonicalName,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetPropertyDescriptionByName(This,pszCanonicalName,riid,ppv);
+}
+static FORCEINLINE HRESULT IPropertySystem_GetPropertyDescriptionListFromString(IPropertySystem* This,LPCWSTR pszPropList,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetPropertyDescriptionListFromString(This,pszPropList,riid,pp
