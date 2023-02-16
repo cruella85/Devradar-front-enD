@@ -3648,4 +3648,224 @@ static FORCEINLINE HRESULT IPropertyStoreFactory_GetPropertyStoreForKeys(IProper
 
 DEFINE_GUID(IID_IDelayedPropertyStoreFactory, 0x40d4577f, 0xe237, 0x4bdb, 0xbd,0x69, 0x58,0xf0,0x89,0x43,0x1b,0x6a);
 #if defined(__cplusplus) && !defined(CINTERFACE)
-MIDL_INTERFACE("40d4577f-e237-4bdb-bd69-58f0
+MIDL_INTERFACE("40d4577f-e237-4bdb-bd69-58f089431b6a")
+IDelayedPropertyStoreFactory : public IPropertyStoreFactory
+{
+    virtual HRESULT STDMETHODCALLTYPE GetDelayedPropertyStore(
+        GETPROPERTYSTOREFLAGS flags,
+        DWORD dwStoreId,
+        REFIID riid,
+        void **ppv) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDelayedPropertyStoreFactory, 0x40d4577f, 0xe237, 0x4bdb, 0xbd,0x69, 0x58,0xf0,0x89,0x43,0x1b,0x6a)
+#endif
+#else
+typedef struct IDelayedPropertyStoreFactoryVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDelayedPropertyStoreFactory *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDelayedPropertyStoreFactory *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDelayedPropertyStoreFactory *This);
+
+    /*** IPropertyStoreFactory methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetPropertyStore)(
+        IDelayedPropertyStoreFactory *This,
+        GETPROPERTYSTOREFLAGS flags,
+        IUnknown *pUnkFactory,
+        REFIID riid,
+        void **ppv);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyStoreForKeys)(
+        IDelayedPropertyStoreFactory *This,
+        const PROPERTYKEY *rgKeys,
+        UINT cKeys,
+        GETPROPERTYSTOREFLAGS flags,
+        REFIID riid,
+        void **ppv);
+
+    /*** IDelayedPropertyStoreFactory methods ***/
+    HRESULT (STDMETHODCALLTYPE *GetDelayedPropertyStore)(
+        IDelayedPropertyStoreFactory *This,
+        GETPROPERTYSTOREFLAGS flags,
+        DWORD dwStoreId,
+        REFIID riid,
+        void **ppv);
+
+    END_INTERFACE
+} IDelayedPropertyStoreFactoryVtbl;
+
+interface IDelayedPropertyStoreFactory {
+    CONST_VTBL IDelayedPropertyStoreFactoryVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDelayedPropertyStoreFactory_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDelayedPropertyStoreFactory_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDelayedPropertyStoreFactory_Release(This) (This)->lpVtbl->Release(This)
+/*** IPropertyStoreFactory methods ***/
+#define IDelayedPropertyStoreFactory_GetPropertyStore(This,flags,pUnkFactory,riid,ppv) (This)->lpVtbl->GetPropertyStore(This,flags,pUnkFactory,riid,ppv)
+#define IDelayedPropertyStoreFactory_GetPropertyStoreForKeys(This,rgKeys,cKeys,flags,riid,ppv) (This)->lpVtbl->GetPropertyStoreForKeys(This,rgKeys,cKeys,flags,riid,ppv)
+/*** IDelayedPropertyStoreFactory methods ***/
+#define IDelayedPropertyStoreFactory_GetDelayedPropertyStore(This,flags,dwStoreId,riid,ppv) (This)->lpVtbl->GetDelayedPropertyStore(This,flags,dwStoreId,riid,ppv)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IDelayedPropertyStoreFactory_QueryInterface(IDelayedPropertyStoreFactory* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IDelayedPropertyStoreFactory_AddRef(IDelayedPropertyStoreFactory* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IDelayedPropertyStoreFactory_Release(IDelayedPropertyStoreFactory* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPropertyStoreFactory methods ***/
+static FORCEINLINE HRESULT IDelayedPropertyStoreFactory_GetPropertyStore(IDelayedPropertyStoreFactory* This,GETPROPERTYSTOREFLAGS flags,IUnknown *pUnkFactory,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetPropertyStore(This,flags,pUnkFactory,riid,ppv);
+}
+static FORCEINLINE HRESULT IDelayedPropertyStoreFactory_GetPropertyStoreForKeys(IDelayedPropertyStoreFactory* This,const PROPERTYKEY *rgKeys,UINT cKeys,GETPROPERTYSTOREFLAGS flags,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetPropertyStoreForKeys(This,rgKeys,cKeys,flags,riid,ppv);
+}
+/*** IDelayedPropertyStoreFactory methods ***/
+static FORCEINLINE HRESULT IDelayedPropertyStoreFactory_GetDelayedPropertyStore(IDelayedPropertyStoreFactory* This,GETPROPERTYSTOREFLAGS flags,DWORD dwStoreId,REFIID riid,void **ppv) {
+    return This->lpVtbl->GetDelayedPropertyStore(This,flags,dwStoreId,riid,ppv);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IDelayedPropertyStoreFactory_INTERFACE_DEFINED__ */
+
+
+enum _PERSIST_SPROPSTORE_FLAGS {
+    FPSPS_DEFAULT = 0x0,
+    FPSPS_READONLY = 0x1,
+    FPSPS_TREAT_NEW_VALUES_AS_DIRTY = 0x2
+};
+
+typedef int PERSIST_SPROPSTORE_FLAGS;
+typedef struct tagSERIALIZEDPROPSTORAGE SERIALIZEDPROPSTORAGE;
+typedef SERIALIZEDPROPSTORAGE *PUSERIALIZEDPROPSTORAGE;
+typedef const SERIALIZEDPROPSTORAGE *PCUSERIALIZEDPROPSTORAGE;
+
+/*****************************************************************************
+ * IPersistSerializedPropStorage interface
+ */
+#ifndef __IPersistSerializedPropStorage_INTERFACE_DEFINED__
+#define __IPersistSerializedPropStorage_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IPersistSerializedPropStorage, 0xe318ad57, 0x0aa0, 0x450f, 0xac,0xa5, 0x6f,0xab,0x71,0x03,0xd9,0x17);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("e318ad57-0aa0-450f-aca5-6fab7103d917")
+IPersistSerializedPropStorage : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE SetFlags(
+        PERSIST_SPROPSTORE_FLAGS flags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetPropertyStorage(
+        PCUSERIALIZEDPROPSTORAGE psps,
+        DWORD cb) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetPropertyStorage(
+        SERIALIZEDPROPSTORAGE **ppsps,
+        DWORD *pcb) = 0;
+
+};
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IPersistSerializedPropStorage, 0xe318ad57, 0x0aa0, 0x450f, 0xac,0xa5, 0x6f,0xab,0x71,0x03,0xd9,0x17)
+#endif
+#else
+typedef struct IPersistSerializedPropStorageVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IPersistSerializedPropStorage *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IPersistSerializedPropStorage *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IPersistSerializedPropStorage *This);
+
+    /*** IPersistSerializedPropStorage methods ***/
+    HRESULT (STDMETHODCALLTYPE *SetFlags)(
+        IPersistSerializedPropStorage *This,
+        PERSIST_SPROPSTORE_FLAGS flags);
+
+    HRESULT (STDMETHODCALLTYPE *SetPropertyStorage)(
+        IPersistSerializedPropStorage *This,
+        PCUSERIALIZEDPROPSTORAGE psps,
+        DWORD cb);
+
+    HRESULT (STDMETHODCALLTYPE *GetPropertyStorage)(
+        IPersistSerializedPropStorage *This,
+        SERIALIZEDPROPSTORAGE **ppsps,
+        DWORD *pcb);
+
+    END_INTERFACE
+} IPersistSerializedPropStorageVtbl;
+
+interface IPersistSerializedPropStorage {
+    CONST_VTBL IPersistSerializedPropStorageVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IPersistSerializedPropStorage_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IPersistSerializedPropStorage_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IPersistSerializedPropStorage_Release(This) (This)->lpVtbl->Release(This)
+/*** IPersistSerializedPropStorage methods ***/
+#define IPersistSerializedPropStorage_SetFlags(This,flags) (This)->lpVtbl->SetFlags(This,flags)
+#define IPersistSerializedPropStorage_SetPropertyStorage(This,psps,cb) (This)->lpVtbl->SetPropertyStorage(This,psps,cb)
+#define IPersistSerializedPropStorage_GetPropertyStorage(This,ppsps,pcb) (This)->lpVtbl->GetPropertyStorage(This,ppsps,pcb)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT IPersistSerializedPropStorage_QueryInterface(IPersistSerializedPropStorage* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG IPersistSerializedPropStorage_AddRef(IPersistSerializedPropStorage* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG IPersistSerializedPropStorage_Release(IPersistSerializedPropStorage* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IPersistSerializedPropStorage methods ***/
+static FORCEINLINE HRESULT IPersistSerializedPropStorage_SetFlags(IPersistSerializedPropStorage* This,PERSIST_SPROPSTORE_FLAGS flags) {
+    return This->lpVtbl->SetFlags(This,flags);
+}
+static FORCEINLINE HRESULT IPersistSerializedPropStorage_SetPropertyStorage(IPersistSerializedPropStorage* This,PCUSERIALIZEDPROPSTORAGE psps,DWORD cb) {
+    return This->lpVtbl->SetPropertyStorage(This,psps,cb);
+}
+static FORCEINLINE HRESULT IPersistSerializedPropStorage_GetPropertyStorage(IPersistSerializedPropStorage* This,SERIALIZEDPROPSTORAGE **ppsps,DWORD *pcb) {
+    return This->lpVtbl->GetPropertyStorage(This,ppsps,pcb);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __IPersistSerializedPropStorage_INTERFACE_DEFINED__ */
+
+
+/*****************************************************************************
+ * IPersistSerializedPropStorage2 interface
+ */
+#ifndef __IPersistSerializedPr
