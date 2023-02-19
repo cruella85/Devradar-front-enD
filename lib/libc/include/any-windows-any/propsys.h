@@ -4091,4 +4091,149 @@ typedef struct ICreateObjectVtbl {
 
     /*** IUnknown methods ***/
     HRESULT (STDMETHODCALLTYPE *QueryInterface)(
-      
+        ICreateObject *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        ICreateObject *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        ICreateObject *This);
+
+    /*** ICreateObject methods ***/
+    HRESULT (STDMETHODCALLTYPE *CreateObject)(
+        ICreateObject *This,
+        REFCLSID clsid,
+        IUnknown *pUnkOuter,
+        REFIID riid,
+        void **ppv);
+
+    END_INTERFACE
+} ICreateObjectVtbl;
+
+interface ICreateObject {
+    CONST_VTBL ICreateObjectVtbl* lpVtbl;
+};
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define ICreateObject_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define ICreateObject_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define ICreateObject_Release(This) (This)->lpVtbl->Release(This)
+/*** ICreateObject methods ***/
+#define ICreateObject_CreateObject(This,clsid,pUnkOuter,riid,ppv) (This)->lpVtbl->CreateObject(This,clsid,pUnkOuter,riid,ppv)
+#else
+/*** IUnknown methods ***/
+static FORCEINLINE HRESULT ICreateObject_QueryInterface(ICreateObject* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static FORCEINLINE ULONG ICreateObject_AddRef(ICreateObject* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static FORCEINLINE ULONG ICreateObject_Release(ICreateObject* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** ICreateObject methods ***/
+static FORCEINLINE HRESULT ICreateObject_CreateObject(ICreateObject* This,REFCLSID clsid,IUnknown *pUnkOuter,REFIID riid,void **ppv) {
+    return This->lpVtbl->CreateObject(This,clsid,pUnkOuter,riid,ppv);
+}
+#endif
+#endif
+
+#endif
+
+
+#endif  /* __ICreateObject_INTERFACE_DEFINED__ */
+
+
+#define PKEY_PIDSTR_MAX 10
+#define GUIDSTRING_MAX (39)
+#define PKEYSTR_MAX (GUIDSTRING_MAX + 1 + PKEY_PIDSTR_MAX)
+
+PSSTDAPI PSCoerceToCanonicalValue(REFPROPERTYKEY key, PROPVARIANT *ppropvar);
+PSSTDAPI PSCreateAdapterFromPropertyStore(IPropertyStore *pps, REFIID riid, void **ppv);
+PSSTDAPI PSCreateDelayedMultiplexPropertyStore(GETPROPERTYSTOREFLAGS flags, IDelayedPropertyStoreFactory *pdpsf, const DWORD *rgStoreIds, DWORD cStores, REFIID riid, void **ppv);
+PSSTDAPI PSCreateMemoryPropertyStore(REFIID riid, void **ppv);
+PSSTDAPI PSCreateMultiplexPropertyStore(IUnknown **prgpunkStores, DWORD cStores, REFIID riid, void **ppv);
+PSSTDAPI PSCreatePropertyChangeArray(const PROPERTYKEY *rgpropkey, const PKA_FLAGS *rgflags, const PROPVARIANT *rgpropvar, UINT cChanges, REFIID riid, void **ppv);
+PSSTDAPI PSCreatePropertyStoreFromObject(IUnknown *punk, DWORD grfMode, REFIID riid, void **ppv);
+PSSTDAPI PSCreatePropertyStoreFromPropertySetStorage(IPropertySetStorage *ppss, DWORD grfMode, REFIID riid, void **ppv);
+PSSTDAPI PSCreateSimplePropertyChange(PKA_FLAGS flags, REFPROPERTYKEY key, REFPROPVARIANT propvar, REFIID riid, void **ppv);
+PSSTDAPI PSEnumeratePropertyDescriptions(PROPDESC_ENUMFILTER filterOn, REFIID riid, void **ppv);
+PSSTDAPI PSFormatForDisplay(REFPROPERTYKEY propkey, REFPROPVARIANT propvar, PROPDESC_FORMAT_FLAGS pdfFlags, LPWSTR pwszText, DWORD cchText);
+PSSTDAPI PSFormatForDisplayAlloc(REFPROPERTYKEY key, REFPROPVARIANT propvar, PROPDESC_FORMAT_FLAGS pdff, PWSTR *ppszDisplay);
+PSSTDAPI PSFormatPropertyValue(IPropertyStore *pps, IPropertyDescription *ppd, PROPDESC_FORMAT_FLAGS pdff, LPWSTR *ppszDisplay);
+PSSTDAPI PSGetImageReferenceForValue(REFPROPERTYKEY propkey, REFPROPVARIANT propvar, PWSTR *ppszImageRes);
+PSSTDAPI PSGetItemPropertyHandler(IUnknown *punkItem, BOOL fReadWrite, REFIID riid, void **ppv);
+PSSTDAPI PSGetItemPropertyHandlerWithCreateObject(IUnknown *punkItem, BOOL fReadWrite, IUnknown *punkCreateObject, REFIID riid, void **ppv);
+PSSTDAPI PSGetNamedPropertyFromPropertyStorage(PCUSERIALIZEDPROPSTORAGE psps, DWORD cb, LPCWSTR pszName, PROPVARIANT *ppropvar);
+PSSTDAPI PSGetNameFromPropertyKey(REFPROPERTYKEY propkey, PWSTR *ppszCanonicalName);
+PSSTDAPI PSGetPropertyDescription(REFPROPERTYKEY propkey, REFIID riid, void **ppv);
+PSSTDAPI PSGetPropertyDescriptionByName(LPCWSTR pszCanonicalName, REFIID riid, void **ppv);
+PSSTDAPI PSGetPropertyDescriptionListFromString(LPCWSTR pszPropList, REFIID riid, void **ppv);
+PSSTDAPI PSGetPropertyFromPropertyStorage(PCUSERIALIZEDPROPSTORAGE psps, DWORD cb, REFPROPERTYKEY rpkey, PROPVARIANT *ppropvar);
+PSSTDAPI PSGetPropertyKeyFromName(PCWSTR pszName, PROPERTYKEY *ppropkey);
+PSSTDAPI PSGetPropertySystem(REFIID riid, void **ppv);
+PSSTDAPI PSGetPropertyValue(IPropertyStore *pps, IPropertyDescription *ppd, PROPVARIANT *ppropvar);
+PSSTDAPI PSLookupPropertyHandlerCLSID(PCWSTR pszFilePath, CLSID *pclsid);
+PSSTDAPI PSPropertyBag_Delete(IPropertyBag *propBag, LPCWSTR propName);
+PSSTDAPI PSPropertyBag_ReadBOOL(IPropertyBag *propBag, LPCWSTR propName, BOOL *value);
+PSSTDAPI PSPropertyBag_ReadBSTR(IPropertyBag *propBag, LPCWSTR propName, BSTR *value);
+PSSTDAPI PSPropertyBag_ReadDWORD(IPropertyBag *propBag, LPCWSTR propName, DWORD *value);
+PSSTDAPI PSPropertyBag_ReadGUID(IPropertyBag *propBag, LPCWSTR propName, GUID *value);
+PSSTDAPI PSPropertyBag_ReadInt(IPropertyBag *propBag, LPCWSTR propName, INT *value);
+PSSTDAPI PSPropertyBag_ReadLONG(IPropertyBag *propBag, LPCWSTR propName, LONG *value);
+PSSTDAPI PSPropertyBag_ReadPOINTL(IPropertyBag *propBag, LPCWSTR propName, POINTL *value);
+PSSTDAPI PSPropertyBag_ReadPOINTS(IPropertyBag *propBag, LPCWSTR propName, POINTS *value);
+PSSTDAPI PSPropertyBag_ReadPropertyKey(IPropertyBag *propBag, LPCWSTR propName, PROPERTYKEY *value);
+PSSTDAPI PSPropertyBag_ReadRECTL(IPropertyBag *propBag, LPCWSTR propName, RECTL *value);
+PSSTDAPI PSPropertyBag_ReadSHORT(IPropertyBag *propBag, LPCWSTR propName, SHORT *value);
+PSSTDAPI PSPropertyBag_ReadStr(IPropertyBag *propBag, LPCWSTR propName, LPWSTR value, int characterCount);
+PSSTDAPI PSPropertyBag_ReadStrAlloc(IPropertyBag *propBag, LPCWSTR propName, PWSTR *value);
+PSSTDAPI PSPropertyBag_ReadStream(IPropertyBag *propBag, LPCWSTR propName, IStream **value);
+PSSTDAPI PSPropertyBag_ReadType(IPropertyBag *propBag, LPCWSTR propName, VARIANT *var, VARTYPE type);
+PSSTDAPI PSPropertyBag_ReadULONGLONG(IPropertyBag *propBag, LPCWSTR propName, ULONGLONG *value);
+PSSTDAPI PSPropertyBag_ReadUnknown(IPropertyBag *propBag, LPCWSTR propName, REFIID riid, void **ppv);
+PSSTDAPI PSPropertyBag_WriteBOOL(IPropertyBag *propBag, LPCWSTR propName, BOOL value);
+PSSTDAPI PSPropertyBag_WriteBSTR(IPropertyBag *propBag, LPCWSTR propName, BSTR value);
+PSSTDAPI PSPropertyBag_WriteDWORD(IPropertyBag *propBag, LPCWSTR propName, DWORD value);
+PSSTDAPI PSPropertyBag_WriteGUID(IPropertyBag *propBag, LPCWSTR propName, const GUID *value);
+PSSTDAPI PSPropertyBag_WriteInt(IPropertyBag *propBag, LPCWSTR propName, INT value);
+PSSTDAPI PSPropertyBag_WriteLONG(IPropertyBag *propBag, LPCWSTR propName, LONG value);
+PSSTDAPI PSPropertyBag_WritePOINTL(IPropertyBag *propBag, LPCWSTR propName, const POINTL *value);
+PSSTDAPI PSPropertyBag_WritePOINTS(IPropertyBag *propBag, LPCWSTR propName, const POINTS *value);
+PSSTDAPI PSPropertyBag_WritePropertyKey(IPropertyBag *propBag, LPCWSTR propName, REFPROPERTYKEY value);
+PSSTDAPI PSPropertyBag_WriteRECTL(IPropertyBag *propBag, LPCWSTR propName, const RECTL *value);
+PSSTDAPI PSPropertyBag_WriteSHORT(IPropertyBag *propBag, LPCWSTR propName, SHORT value);
+PSSTDAPI PSPropertyBag_WriteStr(IPropertyBag *propBag, LPCWSTR propName, LPCWSTR value);
+PSSTDAPI PSPropertyBag_WriteStream(IPropertyBag *propBag, LPCWSTR propName, IStream *value);
+PSSTDAPI PSPropertyBag_WriteULONGLONG(IPropertyBag *propBag, LPCWSTR propName, ULONGLONG value);
+PSSTDAPI PSPropertyBag_WriteUnknown(IPropertyBag *propBag, LPCWSTR propName, IUnknown *punk);
+PSSTDAPI PSPropertyKeyFromString(LPCWSTR pszString, PROPERTYKEY *pkey);
+PSSTDAPI PSRefreshPropertySchema(void);
+PSSTDAPI PSRegisterPropertySchema(PCWSTR pszPath);
+PSSTDAPI PSSetPropertyValue(IPropertyStore *pps, IPropertyDescription *ppd, REFPROPVARIANT propvar);
+PSSTDAPI PSStringFromPropertyKey(REFPROPERTYKEY pkey, LPWSTR psz, UINT cch);
+PSSTDAPI PSUnregisterPropertySchema(PCWSTR pszPath);
+
+#ifndef __PropSysObjects_LIBRARY_DEFINED__
+#define __PropSysObjects_LIBRARY_DEFINED__
+
+DEFINE_GUID(LIBID_PropSysObjects, 0x2cda3294, 0x6c4f, 0x4020, 0xb1,0x61, 0x27,0xc5,0x30,0xc8,0x1f,0xa6);
+
+/*****************************************************************************
+ * InMemoryPropertyStore coclass
+ */
+
+DEFINE_GUID(CLSID_InMemoryPropertyStore, 0x9a02e012, 0x6303, 0x4e1e, 0xb9,0xa1, 0x63,0x0f,0x80,0x25,0x92,0xc5);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("9a02e012-6303-4e1e-b9a1-630f802592c5") InMemoryPropertyStore;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(InMemoryPropertyStore, 0x9a02e012, 0x6303, 0x4e1e, 0xb9,0xa1, 0x63,0x0f,0x80,0x25,0x92,0xc5)
+#endif
+#endif
+
+/**
