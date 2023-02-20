@@ -31,4 +31,9 @@ typedef struct __jmp_buf_internal_tag
     /* Callee-saved floating point registers.  */
 #if defined __riscv_float_abi_double
    double __fpregs[12];
-#elif !defin
+#elif !defined __riscv_float_abi_soft
+# error unsupported FLEN
+#endif
+  } __jmp_buf[1];
+
+#endif /* _RISCV_BITS_SETJMP_H */
