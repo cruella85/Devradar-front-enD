@@ -4236,4 +4236,36 @@ __CRT_UUID_DECL(InMemoryPropertyStore, 0x9a02e012, 0x6303, 0x4e1e, 0xb9,0xa1, 0x
 #endif
 #endif
 
-/**
+/*****************************************************************************
+ * PropertySystem coclass
+ */
+
+DEFINE_GUID(CLSID_PropertySystem, 0xb8967f85, 0x58ae, 0x4f46, 0x9f,0xb2, 0x5d,0x79,0x04,0x79,0x8f,0x4b);
+
+#ifdef __cplusplus
+class DECLSPEC_UUID("b8967f85-58ae-4f46-9fb2-5d7904798f4b") PropertySystem;
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(PropertySystem, 0xb8967f85, 0x58ae, 0x4f46, 0x9f,0xb2, 0x5d,0x79,0x04,0x79,0x8f,0x4b)
+#endif
+#endif
+
+#endif /* __PropSysObjects_LIBRARY_DEFINED__ */
+#endif
+/* Begin additional prototypes for all interfaces */
+
+ULONG           __RPC_USER BSTR_UserSize     (ULONG *, ULONG, BSTR *);
+unsigned char * __RPC_USER BSTR_UserMarshal  (ULONG *, unsigned char *, BSTR *);
+unsigned char * __RPC_USER BSTR_UserUnmarshal(ULONG *, unsigned char *, BSTR *);
+void            __RPC_USER BSTR_UserFree     (ULONG *, BSTR *);
+ULONG           __RPC_USER LPSAFEARRAY_UserSize     (ULONG *, ULONG, LPSAFEARRAY *);
+unsigned char * __RPC_USER LPSAFEARRAY_UserMarshal  (ULONG *, unsigned char *, LPSAFEARRAY *);
+unsigned char * __RPC_USER LPSAFEARRAY_UserUnmarshal(ULONG *, unsigned char *, LPSAFEARRAY *);
+void            __RPC_USER LPSAFEARRAY_UserFree     (ULONG *, LPSAFEARRAY *);
+
+/* End additional prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __propsys_h__ */
