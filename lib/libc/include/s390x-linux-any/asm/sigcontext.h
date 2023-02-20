@@ -42,4 +42,43 @@ typedef struct
 {
         unsigned long mask;
         unsigned long addr;
-} __
+} __attribute__ ((aligned(8))) _psw_t;
+
+typedef struct
+{
+	_psw_t psw;
+	unsigned long gprs[__NUM_GPRS];
+	unsigned int  acrs[__NUM_ACRS];
+} _s390_regs_common;
+
+typedef struct
+{
+	unsigned int fpc;
+	unsigned int pad;
+	double   fprs[__NUM_FPRS];
+} _s390_fp_regs;
+
+typedef struct
+{
+	_s390_regs_common regs;
+	_s390_fp_regs     fpregs;
+} _sigregs;
+
+typedef struct
+{
+#ifndef __s390x__
+	unsigned long gprs_high[__NUM_GPRS];
+#endif
+	unsigned long long vxrs_low[__NUM_VXRS_LOW];
+	__vector128 vxrs_high[__NUM_VXRS_HIGH];
+	unsigned char __reserved[128];
+} _sigregs_ext;
+
+struct sigcontext
+{
+	unsigned long	oldmask[_SIGCONTEXT_NSIG_WORDS];
+	_sigregs        *sregs;
+};
+
+
+#endif
