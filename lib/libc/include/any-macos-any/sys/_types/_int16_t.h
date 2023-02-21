@@ -23,4 +23,9 @@
  * Please see the License for the specific language governing rights and
  * limitations under the License.
  *
- * @APPLE_OSREFE
+ * @APPLE_OSREFERENCE_LICENSE_HEADER_END@
+ */
+#ifndef _INT16_T
+#define _INT16_T
+typedef short                   int16_t;
+#endif /* _INT16_T */
