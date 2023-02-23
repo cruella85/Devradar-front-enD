@@ -337,4 +337,44 @@ struct sigcontext {
 
 	/*
 	 * Prior to 2.5.64 ("[PATCH] x86-64 updates for 2.5.64-bk3"),
-	 * Linux saved and re
+	 * Linux saved and restored fs and gs in these slots.  This
+	 * was counterproductive, as fsbase and gsbase were never
+	 * saved, so arch_prctl was presumably unreliable.
+	 *
+	 * These slots should never be reused without extreme caution:
+	 *
+	 *  - Some DOSEMU versions stash fs and gs in these slots manually,
+	 *    thus overwriting anything the kernel expects to be preserved
+	 *    in these slots.
+	 *
+	 *  - If these slots are ever needed for any other purpose,
+	 *    there is some risk that very old 64-bit binaries could get
+	 *    confused.  I doubt that many such binaries still work,
+	 *    though, since the same patch in 2.5.64 also removed the
+	 *    64-bit set_thread_area syscall, so it appears that there
+	 *    is no TLS API beyond modify_ldt that works in both pre-
+	 *    and post-2.5.64 kernels.
+	 *
+	 * If the kernel ever adds explicit fs, gs, fsbase, and gsbase
+	 * save/restore, it will most likely need to be opt-in and use
+	 * different context slots.
+	 */
+	__u16				gs;
+	__u16				fs;
+	union {
+		__u16			ss;	/* If UC_SIGCONTEXT_SS */
+		__u16			__pad0;	/* Alias name for old (!UC_SIGCONTEXT_SS) user-space */
+	};
+	__u64				err;
+	__u64				trapno;
+	__u64				oldmask;
+	__u64				cr2;
+	struct _fpstate 	*fpstate;	/* Zero when no FPU context */
+#  ifdef __ILP32__
+	__u32				__fpstate_pad;
+#  endif
+	__u64				reserved1[8];
+};
+# endif /* __x86_64__ */
+
+#endif /* _ASM_X86_SIGCONTEXT_H */
